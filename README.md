@@ -1,8 +1,8 @@
-## Amazon Elasticsearch Developer Guide
+# Amazon Elasticsearch Developer Guide
 
-Content for the Amazon Elasticsearch Service Developer Guide (https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/). Issues and pull requests appreciated.
+Content for the [Amazon Elasticsearch Service Developer Guide](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/). Issues and pull requests appreciated.
 
-## License Summary
+# License Summary
 
 The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License. See the LICENSE file.
 
