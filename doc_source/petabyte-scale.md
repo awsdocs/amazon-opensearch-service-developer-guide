@@ -13,7 +13,7 @@ The `i3` instance types are specifically designed to provide fast, local non\-vo
 
 **Shard size**  
 A common Elasticsearch guideline is not to exceed 50 GB per shard\. Given the number of shards necessary to accommodate a 1\.5 PB storage requirement, we recommend a shard size of *at least* 100 GB\.  
-For example, if you have 450 TB of source data and want one replica, your *minimum* storage requirement is closer to 450 TB \* 2 \* 1\.1/0\.85 = 1\.16 PB\. For an explanation of this calculation, see [[ERROR] BAD/MISSING LINK TEXT](sizing-domains.md#aes-bp-storage)\. Although 1\.16 PB/15 TB = 78 instances, you might select 85 or more `i3.16xlarge.elasticsearch` instances to give yourself a storage safety net and account for some variance in the amount of data over time\.  
+For example, if you have 450 TB of source data and want one replica, your *minimum* storage requirement is closer to 450 TB \* 2 \* 1\.1 / 0\.95 / 0\.85 = 1\.23 PB\. For an explanation of this calculation, see [[ERROR] BAD/MISSING LINK TEXT](sizing-domains.md#aes-bp-storage)\. Although 1\.23 PB/15 TB = 82 instances, you might select 90 or more `i3.16xlarge.elasticsearch` instances to give yourself a storage safety net and account for some variance in the amount of data over time\.  
 To calculate the number of primary shards, use this formula: 450,000 GB \* 1\.1/150 GB per shard = 3,300 shards\. As always, the most important step of sizing and configuring your domain is to perform representative client testing using a realistic data set\.
 
 **Dedicated master nodes**  

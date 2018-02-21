@@ -210,6 +210,9 @@ After receiving your request, Amazon ES recalculates the signature using the sam
 
 Amazon ES supports authentication using AWS Signature Version 4\. For more information, see [Signature Version 4 Signing Process](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)\.
 
+**Note**  
+The service ignores parameters passed in URLs for HTTP POST requests that are signed with Signature Version 4\.
+
 ## When Policies Collide<a name="es-ac-conflict"></a>
 
 Complexities arise when policies disagree or make no explicit mention of a user\. [Understanding How IAM Works](http://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html#intro-structure-authorization) in the *IAM User Guide* provides a concise summary of policy evaluation logic:

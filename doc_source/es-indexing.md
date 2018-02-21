@@ -268,7 +268,9 @@ public class JavaRestClientExample {
 }
 ```
 
-The next example sends a signed request to Amazon ES using the [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/)\. Note the two helper classes for response and error handling\. You must provide values for `host` and `region`:
+The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains examples to help you get started\. You must change the region string in `Sample.java` and the Amazon ES endpoint in `AmazonElasticsearchServiceSample.java`\.
+
+A more complex way of sending a signed request to Amazon ES is to use the [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/)\. Note the two helper classes for response and error handling\. You must provide values for `host` and `region`:
 
 ```
 import java.io.ByteArrayInputStream;

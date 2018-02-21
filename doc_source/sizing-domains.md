@@ -25,6 +25,8 @@ The size of your source data, however, is just one aspect of your storage requir
 
 1. Elasticsearch indexing overhead: The on\-disk size of an index varies, but is often 10% larger than the source data\. After indexing your data, you can use the [https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-indices.html#cat-indices](https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-indices.html#cat-indices) API and `pri.store.size` value to calculate the exact overhead\. The [https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-allocation.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-allocation.html) API also provides a useful summary\.
 
+1. Operating system reserved space: By default, Linux reserves 5% of the file system for the `root` user for critical processes, system recovery, and to safeguard against disk fragmentation problems\.
+
 1. Elasticsearch watermarks: Elasticsearch has a default "low watermark" of 85%, meaning that when disk usage exceeds 85%, Elasticsearch no longer allocates shards to that node\. Elasticsearch also has a default "high watermark" of 90%, at which point it attempts to relocate shards to other nodes\. If no nodes have enough storage space to accommodate shard relocation, basic write operations like adding documents and creating indices might begin to fail\.
 
 1. Amazon ES overhead: Amazon ES reserves 20% of the storage space of each instance \(up to 20 GB\) for segment merges, logs, and other internal operations\.
@@ -33,9 +35,13 @@ The size of your source data, however, is just one aspect of your storage requir
 
    Amazon ES overhead does *not* stack with the Elasticsearch watermarks\. You need to consider only the larger of the two\. In the first example, the Amazon ES overhead is only 60/1500 = 4%, so you need to be aware of the Elasticsearch watermarks\. In the second example, the overhead is 200/1000 = 20%, so you shouldn't encounter watermark issues\. In the following formula, we apply a "worst\-case" estimate for overhead that is accurate for domains with less than 100 GB of storage space per instance and over\-allocates for larger instances\.
 
-In summary, if you have 67 GB of data at any given time and want one replica, your *minimum* storage requirement is closer to 67 \* 2 \* 1\.1/0\.8 = 184 GB\. You can generalize this calculation as follows:
+In summary, if you have 67 GB of data at any given time and want one replica, your *minimum* storage requirement is closer to 67 \* 2 \* 1\.1 / \.95 / 0\.8 = 194 GB\. You can generalize this calculation as follows:
 
-**Source Data \* \(1 \+ Number of Replicas\) \* \(1 \+ Indexing Overhead\) / \(1 \- Amazon ES Overhead\) = Minimum Storage Requirement**
+**Source Data \* \(1 \+ Number of Replicas\) \* \(1 \+ Indexing Overhead\) / \(1 \- Linux Reserved Space\) / \(1 \- Amazon ES Overhead\) = Minimum Storage Requirement**
+
+Or you can use this simplified version:
+
+**Source Data \* \(1 \+ Number of Replicas\) \* 1\.45 = Minimum Storage Requirement**
 
 Insufficient storage space is one of the most common causes of cluster instability, so you should cross\-check the numbers when you choose instance types, instance counts, and storage volumes\.
 

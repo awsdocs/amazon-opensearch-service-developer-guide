@@ -68,7 +68,7 @@ For Elasticsearch 6\.0, Amazon ES supports the following operations\.
 
 1. Cluster configuration changes might interrupt these operations before completion\. We recommend that you use the `/_tasks` operation along with these operations to verify that the requests completed successfully\.
 
-1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\.
+1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\. To avoid a problem with `=` characters in `scroll_id` values, use the request body, not the query string, to pass `scroll_id` values to Amazon ES\.
 
 1. For considerations about using scripts, see [[ERROR] BAD/MISSING LINK TEXT](aes-supported-resources.md)\.
 
@@ -87,7 +87,7 @@ For Elasticsearch 5\.5, Amazon ES supports the following operations\.
 
 1. Cluster configuration changes might interrupt these operations before completion\. We recommend that you use the `/_tasks` operation along with these operations to verify that the requests completed successfully\.
 
-1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\.
+1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\. To avoid a problem with `=` characters in `scroll_id` values, use the request body, not the query string, to pass `scroll_id` values to Amazon ES\.
 
 1. For considerations about using scripts, see [[ERROR] BAD/MISSING LINK TEXT](aes-supported-resources.md)\.
 
@@ -106,7 +106,7 @@ For Elasticsearch 5\.3, Amazon ES supports the following operations\.
 
 1. Cluster configuration changes might interrupt these operations before completion\. We recommend that you use the `/_tasks` operation along with these operations to verify that the requests completed successfully\.
 
-1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\.
+1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\. To avoid a problem with `=` characters in `scroll_id` values, use the request body, not the query string, to pass `scroll_id` values to Amazon ES\.
 
 1. For considerations about using scripts, see [[ERROR] BAD/MISSING LINK TEXT](aes-supported-resources.md)\.
 
@@ -125,7 +125,7 @@ For Elasticsearch 5\.1, Amazon ES supports the following operations\.
 
 1. Cluster configuration changes might interrupt these operations before completion\. We recommend that you use the `/_tasks` operation along with these operations to verify that the requests completed successfully\.
 
-1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\.
+1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\. To avoid a problem with `=` characters in `scroll_id` values, use the request body, not the query string, to pass `scroll_id` values to Amazon ES\.
 
 1. For considerations about using scripts, see [[ERROR] BAD/MISSING LINK TEXT](aes-supported-resources.md)\.
 

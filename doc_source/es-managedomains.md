@@ -68,7 +68,7 @@ For more information, see [Regions and Availability Zones](http://docs.aws.amazo
 
 ## Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)<a name="es-managedomains-cloudwatchmetrics"></a>
 
-An Elasticsearch cluster is a collection of one or more data nodes, optional dedicated master nodes, and storage required to run Elasticsearch and operate your Amazon ES domain\. Each node in an Elasticsearch cluster automatically sends performance metrics to Amazon CloudWatch in one\-minute intervals\. Use the **Monitoring** tab in the Amazon Elasticsearch Service console to view these metrics, provided at no charge\. 
+Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. If you use general purpose or magnetic EBS volumes, the EBS volume metrics only update every five minutes\. Use the **Monitoring** tab in the Amazon Elasticsearch Service console to view these metrics, provided at no extra charge\.
 
 Statistics provide you with broader insight into each metric\. For example, view the **Average** statistic for the **CPUUtilization** metric to compute the average CPU utilization for all nodes in the cluster\. Each of the metrics falls into one of three categories:
 
