@@ -3,17 +3,17 @@
 Amazon Elasticsearch Service offers several ways of controlling access to your domains\. This section covers the various policy types, how they interact with each other, and how to create your own, custom policies\.
 
 **Important**  
-VPC support introduces some additional considerations to Amazon ES access control\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md#es-vpc-security)\.
+VPC support introduces some additional considerations to Amazon ES access control\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 ## Types of Policies<a name="es-ac-types"></a>
 
 Amazon ES supports three types of access policies:
 
-+ [[ERROR] BAD/MISSING LINK TEXT](#es-ac-types-resource)
++ [Resource\-based Policies](#es-ac-types-resource)
 
-+ [[ERROR] BAD/MISSING LINK TEXT](#es-ac-types-identity)
++ [Identity\-based policies](#es-ac-types-identity)
 
-+ [[ERROR] BAD/MISSING LINK TEXT](#es-ac-types-ip)
++ [IP\-based Policies](#es-ac-types-ip)
 
 ### Resource\-based Policies<a name="es-ac-types-resource"></a>
 
@@ -47,7 +47,7 @@ Two important considerations apply to this policy:
 
 + The trailing `/*` in the `Resource` element is significant\. Despite having full access, `test-user` can perform these actions only on the domain's subresources, not on the domain's configuration\.
 
-  For example, `test-user` can make requests against an index \(`GET https://search-test-domain.us-west-1.es.amazonaws.com/test-index`\), but can't update the domain's configuration \(`POST https://es.us-west-1.amazonaws.com/2015-01-01/es/domain/test-domain/config`\)\. Note the difference between the two endpoints\. Accessing the configuration API requires an identity\-based policy\.
+  For example, `test-user` can make requests against an index \(`GET https://search-test-domain.us-west-1.es.amazonaws.com/test-index`\), but can't update the domain's configuration \(`POST https://es.us-west-1.amazonaws.com/2015-01-01/es/domain/test-domain/config`\)\. Note the difference between the two endpoints\. Accessing the [configuration API](es-configuration-api.md) requires an [identity\-based policy](#es-ac-types-identity)\.
 
 To further restrict `test-user`, you can apply the following policy:
 
@@ -111,11 +111,11 @@ Next, you might decide to configure a role for power users\. This policy allows 
 }
 ```
 
-For information about all available actions, see [[ERROR] BAD/MISSING LINK TEXT](#es-ac-reference)\.
+For information about all available actions, see [Policy Element Reference](#es-ac-reference)\.
 
 ### Identity\-based policies<a name="es-ac-types-identity"></a>
 
-Unlike resource\-based policies, which you attach to domains in Amazon ES, you attach identity\-based policies to users or roles using the AWS Identity and Access Management \(IAM\) service\. Just like resource\-based policies, identity\-based policies specify who can access a service, which actions they can perform, and if applicable, the resources on which they can perform those actions\.
+Unlike resource\-based policies, which you attach to domains in Amazon ES, you attach identity\-based policies to users or roles using the AWS Identity and Access Management \(IAM\) service\. Just like [resource\-based policies](#es-ac-types-resource), identity\-based policies specify who can access a service, which actions they can perform, and if applicable, the resources on which they can perform those actions\.
 
 While they certainly don't have to be, identify\-based policies tend to be more generic\. They often govern the basic, service\-level actions a user can perform\. After you have these policies in place, you can use resource\-based policies in Amazon ES to offer users additional permissions\.
 
@@ -164,10 +164,10 @@ Users with the AWS managed `AmazonESReadOnlyAccess` policy can't see cluster hea
 
 IP\-based policies restrict access to a domain to one or more IP addresses or CIDR blocks\. Technically, IP\-based policies are not a distinct type of policy\. Instead, they are just resource\-based policies that specify an anonymous principal and include a special [http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) element\.
 
-The primary appeal of IP\-based policies is that they allow unsigned requests to an Amazon ES domain, which lets you use clients like [curl](https://curl.haxx.se/) and [[ERROR] BAD/MISSING LINK TEXT](es-kibana.md#es-managedomains-kibana) or access the domain through a proxy server\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](es-kibana.md#es-kibana-proxy)\.
+The primary appeal of IP\-based policies is that they allow unsigned requests to an Amazon ES domain, which lets you use clients like [curl](https://curl.haxx.se/) and [Kibana](es-kibana.md#es-managedomains-kibana) or access the domain through a proxy server\. To learn more, see [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
 
 **Note**  
-If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md#es-vpc-security)\.
+If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 The following IP\-based access policy grants all requests that originate from `12.345.678.901` access to `test-domain`:
 
@@ -202,7 +202,7 @@ Even if you configure a completely open resource\-based access policy, *all* req
 
 + To make calls to the Amazon ES configuration API, we recommend that you use one of the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\. The SDKs greatly simplify the process and can save you a significant amount of time compared to creating and signing your own requests\.
 
-+ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [[ERROR] BAD/MISSING LINK TEXT](es-indexing.md#es-indexing-programmatic)\.
++ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Programmatic Indexing](es-indexing.md#es-indexing-programmatic)\.
 
 To sign a request, you calculate a digital signature using a cryptographic hash function, which returns a hash value based on the input\. The input includes the text of your request and your secret access key\. The hash function returns a hash value that you include in the request as your signature\. The signature is part of the `Authorization` header of your request\.
 
@@ -246,79 +246,8 @@ Amazon ES supports all the policy elements that are documented in the [IAM Polic
 | Version | The current version of the policy language is `2012-10-17`\. All access policies should specify this value\. | 
 | Effect | This element specifies whether the statement allows or denies access to the specified actions\. Valid values are `Allow` or `Deny`\. | 
 | Principal |  This element specifies the AWS account or IAM user or role that is allowed or denied access to a resource and can take several forms: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-ac.html) Specifying the `*` wildcard enables anonymous access to the domain, which we don't recommend unless you add an IP\-based condition\.  | 
-| Action  | Amazon ES uses the following actions for HTTP methods:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-ac.html)Amazon ES uses the following actions for the configuration API:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-ac.html)  You can use wildcards to specify a subset of actions, such as `"Action":"es:*"` or `"Action":"es:Describe*"`\. Certain `es:` actions support resource\-level permissions\. For example, you can give a user permissions to delete one particular domain without giving that user permissions to delete *any* domain\. Other actions apply only to the service itself\. For example, `es:ListDomainNames` makes no sense in the context of a single domain and thus requires a wildcard\.  Resource\-based policies differ from resource\-level permissions\. Resource\-based policies are full JSON policies that attach to domains\. Resource\-level permissions let you restrict actions to particular domains or subresources\. In practice, you can think of resource\-level permissions as an optional part of a resource\- or identity\-based policy\. The following identity\-based policy lists all `es:` actions and groups them according to whether they apply to the domain subresources \(`test-domain/*`\), to the domain configuration \(`test-domain`\), or only to the service \(`*`\):
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "es:ESHttpDelete",
-        "es:ESHttpGet",
-        "es:ESHttpHead",
-        "es:ESHttpPost",
-        "es:ESHttpPut"
-      ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "es:CreateElasticsearchDomain",
-        "es:DeleteElasticsearchDomain",
-        "es:DescribeElasticsearchDomain",
-        "es:DescribeElasticsearchDomainConfig",
-        "es:DescribeElasticsearchDomains",
-        "es:UpdateElasticsearchDomainConfig"
-      ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "es:AddTags",
-        "es:DeleteElasticsearchServiceRole",
-        "es:DescribeElasticsearchInstanceTypeLimits",
-        "es:ListDomainNames",
-        "es:ListElasticsearchInstanceTypes",
-        "es:ListElasticsearchVersions",
-        "es:ListTags",
-        "es:RemoveTags"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```  While resource\-level permissions for `es:CreateElasticsearchDomain` might seem unintuitive—after all, why give a user permissions to create a domain that already exists?—the use of a wildcard lets you enforce a simple naming scheme for your domains, such as `"Resource": "arn:aws:es:us-west-1:987654321098:domain/my-team-name-*"`\.  Of course, nothing prevents you from including actions alongside less restrictive resource elements, such as the following:
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "es:ESHttpGet",
-        "es:DescribeElasticsearchDomain"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-``` To learn more about pairing actions and resources, see the `Resource` element in this table\. | 
-| Condition |  Amazon ES supports all the conditions that are described in [Available Global Condition Keys](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#AvailableKeys) in the *IAM User Guide*\. When configuring an IP\-based policy, you specify the IP addresses or CIDR block as a condition, such as the following: 
-
-```
-"Condition": {
-  "IpAddress": {
-    "aws:SourceIp": [
-      "192.0.2.0/32"
-    ]
-  }
-}
-```  | 
+| Action  | Amazon ES uses the following actions for HTTP methods:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-ac.html)Amazon ES uses the following actions for the [configuration API](es-configuration-api.md):[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-ac.html)  You can use wildcards to specify a subset of actions, such as `"Action":"es:*"` or `"Action":"es:Describe*"`\. Certain `es:` actions support resource\-level permissions\. For example, you can give a user permissions to delete one particular domain without giving that user permissions to delete *any* domain\. Other actions apply only to the service itself\. For example, `es:ListDomainNames` makes no sense in the context of a single domain and thus requires a wildcard\.  Resource\-based policies differ from resource\-level permissions\. [Resource\-based policies](#es-ac-types-resource) are full JSON policies that attach to domains\. Resource\-level permissions let you restrict actions to particular domains or subresources\. In practice, you can think of resource\-level permissions as an optional part of a resource\- or identity\-based policy\. The following [identity\-based policy](#es-ac-types-identity) lists all `es:` actions and groups them according to whether they apply to the domain subresources \(`test-domain/*`\), to the domain configuration \(`test-domain`\), or only to the service \(`*`\):<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpDelete",<br />        "es:ESHttpGet",<br />        "es:ESHttpHead",<br />        "es:ESHttpPost",<br />        "es:ESHttpPut"<br />      ],<br />      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/*"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:CreateElasticsearchDomain",<br />        "es:DeleteElasticsearchDomain",<br />        "es:DescribeElasticsearchDomain",<br />        "es:DescribeElasticsearchDomainConfig",<br />        "es:DescribeElasticsearchDomains",<br />        "es:UpdateElasticsearchDomainConfig"<br />      ],<br />      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:AddTags",<br />        "es:DeleteElasticsearchServiceRole",<br />        "es:DescribeElasticsearchInstanceTypeLimits",<br />        "es:ListDomainNames",<br />        "es:ListElasticsearchInstanceTypes",<br />        "es:ListElasticsearchVersions",<br />        "es:ListTags",<br />        "es:RemoveTags"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre>  While resource\-level permissions for `es:CreateElasticsearchDomain` might seem unintuitive—after all, why give a user permissions to create a domain that already exists?—the use of a wildcard lets you enforce a simple naming scheme for your domains, such as `"Resource": "arn:aws:es:us-west-1:987654321098:domain/my-team-name-*"`\.  Of course, nothing prevents you from including actions alongside less restrictive resource elements, such as the following:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpGet",<br />        "es:DescribeElasticsearchDomain"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre> To learn more about pairing actions and resources, see the `Resource` element in this table\. | 
+| Condition |  Amazon ES supports all the conditions that are described in [Available Global Condition Keys](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#AvailableKeys) in the *IAM User Guide*\. When configuring an [IP\-based policy](#es-ac-types-ip), you specify the IP addresses or CIDR block as a condition, such as the following: <pre>"Condition": {<br />  "IpAddress": {<br />    "aws:SourceIp": [<br />      "192.0.2.0/32"<br />    ]<br />  }<br />}</pre>  | 
 | Resource |  Amazon ES uses `Resource` elements in three basic ways: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-ac.html) For details about which actions support resource\-level permissions, see the `Action` element in this table\.  | 
 
 ## Advanced Options and API Considerations<a name="es-ac-advanced"></a>
@@ -385,9 +314,9 @@ POST https://search-test-domain.us-west-1.es.amazonaws.com/_bulk
 
 In this situation, the access policy fails to fulfill its intent\. To prevent users from bypassing these kinds of restrictions, you can change `rest.action.multi.allow_explicit_index` to false\. If this value is false, all calls to the bulk, [mget](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html), and [msearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html) APIs that specify index names in the request body stop working\. In other words, calls to `_bulk` no longer work, but calls to `test-index/_bulk` do\. This second endpoint contains an index name, so you don't need to specify one in the request body\.
 
-Kibana relies heavily on mget and msearch, so it is unlikely to work properly after this change\. For partial remediation, you can leave `rest.action.multi.allow_explicit` as true and deny certain users access to one or more of these APIs\.
+[Kibana](es-kibana.md#es-managedomains-kibana) relies heavily on mget and msearch, so it is unlikely to work properly after this change\. For partial remediation, you can leave `rest.action.multi.allow_explicit` as true and deny certain users access to one or more of these APIs\.
 
-For information about changing this setting, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\.
+For information about changing this setting, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\.
 
 Similarly, the following resource\-based policy contains two subtle issues:
 
@@ -423,7 +352,7 @@ Rather than mixing broad allows and focused denies, the safest approach is to fo
 
 ## Configuring Access Policies<a name="es-ac-creating"></a>
 
-+ For instructions on creating or modifying resource\- and IP\-based policies in Amazon ES, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
++ For instructions on creating or modifying resource\- and IP\-based policies in Amazon ES, see [Configuring Access Policies ](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
 
 + For instructions on creating or modifying identity\-based policies in IAM, see [Creating IAM Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html) in the *IAM User Guide*\.
 

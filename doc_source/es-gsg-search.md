@@ -1,6 +1,6 @@
 # Step 3: Search Documents in an Amazon ES Domain<a name="es-gsg-search"></a>
 
-To search documents in an Amazon ES domain, use the Elasticsearch [search](https://www.elastic.co/guide/en/elasticsearch/reference/current/_the_search_api.html) API\. Alternatively, you can use Kibana to search documents in the domain\.
+To search documents in an Amazon ES domain, use the Elasticsearch [search](https://www.elastic.co/guide/en/elasticsearch/reference/current/_the_search_api.html) API\. Alternatively, you can use [Kibana](es-kibana.md#es-managedomains-kibana) to search documents in the domain\.
 
 **Note**  
 Requests using curl are unauthenticated and rely on an IP\-based access policy\.

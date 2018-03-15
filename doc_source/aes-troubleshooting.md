@@ -11,7 +11,7 @@ The following sections offer solutions to common problems that you might encount
 + [Domain Creation: Stuck at Loading After Choosing VPC Access](#es-vpc-sts)
 + [SDKs: I Get Certificate Errors When I Try to Use an SDK](#aes-troubleshooting-certificates)
 
-For information about service\-specific errors, see Handling AWS Service Errors in this guide\.
+For information about service\-specific errors, see [Handling AWS Service Errors](aes-handling-errors.md) in this guide\.
 
 ## Kibana: I Can't Sign AWS Service Requests to the Kibana Service Endpoint<a name="aes-troubleshooting-kibana-configure-anonymous-access"></a>
 
@@ -118,7 +118,7 @@ Your browser wraps service error messages in HTTP response objects when you use 
 
 ## Integrations: I Don't See a Service Role for Amazon ES in the IAM Console<a name="aes-troubleshooting-integrations"></a>
 
-You can integrate Amazon ES with other services, such as Amazon S3 and Kinesis, as described in Loading Streaming Data into Amazon ES from Amazon S3 and Loading Streaming Data into Amazon ES from Kinesis in this guide\. Both of these integrations use AWS Lambda as an event handler in the cloud\. When you create a Lambda function using the AWS Lambda console, the console automatically opens the IAM console to help you create the required execution role\. You don't need to open the IAM console yourself and select a service role\. However, you must open the IAM console after AWS Lambda helps you to create the new role and attach the following IAM policy to it:
+You can integrate Amazon ES with other services, such as Amazon S3 and Kinesis, as described in [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es) and [Loading Streaming Data into Amazon ES from Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis-lambda-es) in this guide\. Both of these integrations use AWS Lambda as an event handler in the cloud\. When you create a Lambda function using the AWS Lambda console, the console automatically opens the IAM console to help you create the required execution role\. You don't need to open the IAM console yourself and select a service role\. However, you must open the IAM console after AWS Lambda helps you to create the new role and attach the following IAM policy to it:
 
 ```
 {
@@ -135,7 +135,7 @@ You can integrate Amazon ES with other services, such as Amazon S3 and Kinesis, 
 }
 ```
 
-For step\-by\-step procedures, see Loading Streaming Data into Amazon ES from Amazon S3 and Loading Streaming Data into Amazon ES from Kinesis in this guide\. 
+For step\-by\-step procedures, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es) and [Loading Streaming Data into Amazon ES from Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis-lambda-es) in this guide\. 
 
 ## Domain Creation: Unauthorized Operation When Selecting VPC Access<a name="es-vpc-permissions"></a>
 

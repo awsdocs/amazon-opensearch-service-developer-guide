@@ -1,8 +1,8 @@
 # Supported Instance Types<a name="aes-supported-instance-types"></a>
 
-An *instance* is a virtual computing environment\. An *instance type* is a specific configuration of CPU, memory, storage, and networking capacity\. Choose an instance type for your Amazon ES domain that is based on the requirements of the application or software that you plan to run on your instance\. If you have enabled dedicated master nodes, you can choose an instance type for the master nodes that differs from the instance type that you choose for the data nodes\.
+An *instance* is a virtual computing environment\. An *instance type* is a specific configuration of CPU, memory, storage, and networking capacity\. Choose an instance type for your Amazon ES domain that is based on the requirements of the application or software that you plan to run on your instance\. If you have enabled [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), you can choose an instance type for the master nodes that differs from the instance type that you choose for the data nodes\.
 
-To learn more, see [[ERROR] BAD/MISSING LINK TEXT](sizing-domains.md), [[ERROR] BAD/MISSING LINK TEXT](aes-limits.md#clusterresource), and [[ERROR] BAD/MISSING LINK TEXT](aes-limits.md#ebsresource)\.
+To learn more, see [Sizing Amazon ES Domains](sizing-domains.md), [Cluster and Instance Limits](aes-limits.md#clusterresource), and [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
 
 Amazon ES supports the following instance types\.
 
@@ -16,7 +16,7 @@ Amazon ES supports the following instance types\.
 
 **Note**  
 You can use the `t2` instance types only if the instance count for your domain is 10 or fewer\.
-The `t2.micro.elasticsearch` instance type only supports Elasticsearch 2\.3 and 1\.5\.
+The `t2.micro.elasticsearch` instance type supports only Elasticsearch 2\.3 and 1\.5\.
 The `t2` instance types do not support encryption of data at rest\.
 
 **M3 Instance Types**
@@ -117,5 +117,5 @@ The `i2` instance types are not available in the sa\-east\-1, ca\-central\-1, eu
 + `i3.16xlarge.elasticsearch`
 
 **Note**  
-The `i3` instance types do not support EBS storage volumes and are not available in the eu\-west\-3 region\.
+The `i3` instance types do not support EBS storage volumes\.
 The `i3` instance types do not support Elasticsearch 2\.3 or 1\.5\.

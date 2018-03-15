@@ -1,10 +1,10 @@
 # Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
 
-Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has [low\-level clients for many programming languages](https://www.elastic.co/guide/en/elasticsearch/client/index.html)\. Advanced users can skip directly to [[ERROR] BAD/MISSING LINK TEXT](#es-indexing-programmatic)\.
+Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has [low\-level clients for many programming languages](https://www.elastic.co/guide/en/elasticsearch/client/index.html)\. Advanced users can skip directly to [Programmatic Indexing](#es-indexing-programmatic)\.
 
 For situations in which new data arrives incrementally \(for example, customer orders from a small business\), you might use the `_index` API to index documents as they arrive\. For situations in which the flow of data is less frequent \(for example, weekly updates to a marketing website\), you might prefer to generate a file and send it to the `_bulk` API\. For large numbers of documents, lumping requests together and using the `_bulk` API offers superior performance\. If your documents are enormous, however, you might need to index them individually using the `_index` API\.
 
-For information about integrating data from other AWS services, see [[ERROR] BAD/MISSING LINK TEXT](es-aws-integrations.md)\.
+For information about integrating data from other AWS services, see [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
 
 ## Introduction to Indexing<a name="es-indexing-intro"></a>
 
@@ -34,7 +34,7 @@ optional_document\n
 ...
 ```
 
-For a short sample file, see [[ERROR] BAD/MISSING LINK TEXT](es-gsg-upload-data.md)\.
+For a short sample file, see [Step 2: Upload Data to an Amazon ES Domain for Indexing](es-gsg-upload-data.md)\.
 
 Elasticsearch features [automatic index creation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#index-creation) when you add a document to an index that doesn't already exist\. It also features [automatic ID generation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#_automatic_id_generation) if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, establishes the document type of `movie`, indexes the document, and assigns it a unique ID:
 
@@ -80,7 +80,7 @@ curl -XPUT elasticsearch_domain_endpoint/movies -d '{"settings": {"number_of_sha
 ```
 
 **Note**  
-Requests using curl are unauthenticated and rely on an IP\-based access policy\. For examples of signed requests, see [[ERROR] BAD/MISSING LINK TEXT](#es-indexing-programmatic)\.
+Requests using curl are unauthenticated and rely on an IP\-based access policy\. For examples of signed requests, see [Programmatic Indexing](#es-indexing-programmatic)\.
 
 Elasticsearch indices have the following naming restrictions:
 

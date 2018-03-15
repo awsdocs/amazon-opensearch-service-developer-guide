@@ -27,4 +27,4 @@ Deleting a domain deletes all billable Amazon ES resources\. However, any manual
 
 **To delete an Amazon ES domain \(AWS SDKs\)**
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the Amazon ES Configuration API Reference, including the `DeleteElasticsearchDomain` action\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `DeleteElasticsearchDomain` action\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.

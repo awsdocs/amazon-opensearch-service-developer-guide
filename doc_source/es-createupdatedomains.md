@@ -2,7 +2,7 @@
 
 This chapter describes how to create and configure Amazon Elasticsearch Service \(Amazon ES\) domains\. An Amazon ES domain is the hardware, software, and data exposed by Amazon Elasticsearch Service endpoints\.
 
-Unlike the brief instructions in the Getting Started tutorial, this chapter describes all options and provides relevant reference information\. You can complete each procedure by using instructions for the Amazon ES console, the AWS Command Line Interface \(AWS CLI\), or the AWS SDKs\.
+Unlike the brief instructions in the [Getting Started](es-gsg.md) tutorial, this chapter describes all options and provides relevant reference information\. You can complete each procedure by using instructions for the Amazon ES console, the AWS Command Line Interface \(AWS CLI\), or the AWS SDKs\.
 
 
 + [Creating Amazon ES Domains](#es-createdomains)
@@ -42,25 +42,25 @@ Use the following procedure to create an Amazon ES domain by using the console\.
 
    + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
 
-1. For **Version**, choose an Elasticsearch version for your domain\. We recommend that you choose the latest version\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
+1. For **Version**, choose an Elasticsearch version for your domain\. We recommend that you choose the latest version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
 
 1. Choose **Next**\.
 
 1. For **Instance count**, choose the number of instances that you want\.
 
-   The default is one\. For maximum values, see [[ERROR] BAD/MISSING LINK TEXT](aes-limits.md#clusterresource)\. We recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the [split brain](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain) issue\. If you have three dedicated master nodes, we still recommend a minimum of two data nodes for [replication](https://www.elastic.co/guide/en/elasticsearch/reference/current/_basic_concepts.html#getting-started-shards-and-replicas)\. Single node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [[ERROR] BAD/MISSING LINK TEXT](sizing-domains.md)\.
+   The default is one\. For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. We recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the [split brain](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain) issue\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for [replication](https://www.elastic.co/guide/en/elasticsearch/reference/current/_basic_concepts.html#getting-started-shards-and-replicas)\. Single node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md)\.
 
 1. For **Instance type**, choose an instance type for the data nodes\.
 
-   To see a list of the instance types that Amazon ES supports, see Supported Instance Types\.
+   To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
-1. \(Optional\) If you must ensure cluster stability or if you have a domain that has more than 10 instances, enable a dedicated master node\. Dedicated master nodes increase cluster stability and are required for a domain that has an instance count greater than 10\. For more information, see About Dedicated Master Nodes\.
+1. \(Optional\) If you must ensure cluster stability or if you have a domain that has more than 10 instances, enable a dedicated master node\. Dedicated master nodes increase cluster stability and are required for a domain that has an instance count greater than 10\. For more information, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
 
    1. Select the **Enable dedicated master** check box\.
 
    1. For **Dedicated master instance type**, choose an instance type for the dedicated master node\. 
 
-      For a list of the instance types that Amazon ES supports, see Supported Instance Types\.
+      For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 **Note**  
 You can choose an instance type for the dedicated master node that differs from the instance type that you choose for the data nodes\. For example, you might select general purpose or storage\-optimized instances for your data nodes, but compute\-optimized instances for your dedicated master nodes\.
 
@@ -70,11 +70,11 @@ You can choose an instance type for the dedicated master node that differs from 
 
 1. \(Optional\) To provide high availability for data nodes, select the **Enable zone awareness** check box\.
 
-   Zone awareness distributes Amazon ES data nodes across two Availability Zones in the same region\. If you enable zone awareness, you must have an even number of instances in the instance count, and you must use the native Elasticsearch API to create replica shards for your cluster\. This process allows for the even distribution of shards across two Availability Zones\. For more information, see Enabling Zone Awareness\.
+   Zone awareness distributes Amazon ES data nodes across two Availability Zones in the same region\. If you enable zone awareness, you must have an even number of instances in the instance count, and you must use the native Elasticsearch API to create replica shards for your cluster\. This process allows for the even distribution of shards across two Availability Zones\. For more information, see [Enabling Zone Awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
 
 1. For **Storage type**, choose either **Instance** \(the default\) or **EBS**\. 
 
-   If your Amazon ES domain requires more storage, use an EBS volume for storage rather than the storage that is attached to the selected instance type\. Domains with large indices or large numbers of indices often benefit from the increased storage capacity of EBS volumes\. For guidance on creating especially large domains, see Petabyte Scale\. If you choose **EBS**, the following boxes appear:
+   If your Amazon ES domain requires more storage, use an EBS volume for storage rather than the storage that is attached to the selected instance type\. Domains with large indices or large numbers of indices often benefit from the increased storage capacity of EBS volumes\. For guidance on creating especially large domains, see [Petabyte Scale](petabyte-scale.md)\. If you choose **EBS**, the following boxes appear:
 
    1. For **EBS volume type**, choose an EBS volume type\.
 
@@ -82,21 +82,21 @@ You can choose an instance type for the dedicated master node that differs from 
 
    1.  For **EBS volume size**, type the size of the EBS volume that you want to attach to each data node\.
 
-      **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain using the following formula: \(number of data nodes\) \* \(EBS volume size\)\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type that it's attached to\. To learn more, see EBS Volume Size Limits\.
+      **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain using the following formula: \(number of data nodes\) \* \(EBS volume size\)\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type that it's attached to\. To learn more, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
 
 1. \(Optional\) To enable encryption of data at rest, select the **Enable encryption at rest** check box\.
 
-   Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](encryption-at-rest.md)\.
+   Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
 1. For **Automated snapshot start hour**, choose the hour for automated daily snapshots of domain indices\.
 
-   For more information and recommendations, see [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-snapshots)\.
+   For more information and recommendations, see [Configuring Automatic Snapshots](#es-createdomain-configure-snapshots)\.
 
-1. \(Optional\) Choose **Advanced options**\. For a summary of options, see [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-advanced-options)
+1. \(Optional\) Choose **Advanced options**\. For a summary of options, see [Configuring Advanced Options](#es-createdomain-configure-advanced-options)
 
 1. Choose **Next**\.
 
-1. On the **Set up access** page, in the **Network configuration** section, choose either **Public Access** or **VPC access**\. If you choose **Public access**, skip to step 17\. If you choose **VPC access**, ensure that you have met the prerequisites, and then do the following:
+1. On the **Set up access** page, in the **Network configuration** section, choose either **Public Access** or **VPC access**\. If you choose **Public access**, skip to step 17\. If you choose **VPC access**, ensure that you have met the [prerequisites](es-vpc.md#es-prerequisites-vpc-endpoints), and then do the following:
 
    1. For **VPC**, choose the ID of the VPC that you want to use\.
 **Note**  
@@ -104,15 +104,15 @@ The VPC and domain must be in the same AWS Region, and you must select a VPC wit
 
    1. For **Subnet**, choose a subnet\. If you enabled zone awareness in step 10, you must choose two subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces* \(ENIs\) in the subnet or subnets\.
 **Note**  
-You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see Reserving IP Addresses in a VPC Subnet\.
+You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
-   1. For **Security groups**, choose the VPC security groups that need access to the Amazon ES domain\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md)\.
+   1. For **Security groups**, choose the VPC security groups that need access to the Amazon ES domain\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
-   1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see Service\-Linked Role for VPC Access\.
+   1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-Linked Role for VPC Access](es-vpc.md#es-enabling-slr)\.
 
-1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-ac.md), [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-access-policies), and [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md#es-vpc-security)\.
+1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md), [Configuring Access Policies ](#es-createdomain-configure-access-policies), and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 **Note**  
-If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md#es-vpc-security)\.
+If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 1. Choose **Next**\.
 
@@ -150,17 +150,17 @@ The following table provides more information about each of the optional paramet
 
 | Optional Parameter | Description | 
 | --- | --- | 
-| \-\-elasticsearch\-version | Specifies the Elasticsearch version of the domain\. If not specified, the default value is 1\.5\. For more information, see Choosing an Elasticsearch Version\. | 
-| \-\-elasticsearch\-cluster\-config | Specifies the instance type and count of the domain, whether zone awareness is enabled, and whether the domain uses a dedicated master node\. Dedicated master nodes increase cluster stability and are required for a domain that has an instance count greater than 10\. For more information, see Configuring Amazon ES Domains\. | 
-| \-\-ebs\-options | Specifies whether the domain uses an EBS volume for storage\. If true, this parameter must also specify the EBS volume type, size, and, if applicable, IOPS value\. For more information, see Configuring EBS\-based Storage\. | 
-| \-\-access\-policies | Specifies the access policy for the domain\. For more information, see Configuring Access Policies\. | 
-| \-\-snapshot\-options | Specifies the hour in UTC during which the service performs a daily automated snapshot of the indices in the domain\. The default value is 0, or midnight, which means that the snapshot is taken anytime between midnight and 1:00 AM\. For more information, see Configuring Snapshots\. | 
-| \-\-advanced\-options | Specifies whether to allow references to indices in the bodies of HTTP request objects\. For more information, see  Configuring Advanced Options\.  | 
+| \-\-elasticsearch\-version | Specifies the Elasticsearch version of the domain\. If not specified, the default value is 1\.5\. For more information, see [Choosing an Elasticsearch Version](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. | 
+| \-\-elasticsearch\-cluster\-config | Specifies the instance type and count of the domain, whether zone awareness is enabled, and whether the domain uses a dedicated master node\. Dedicated master nodes increase cluster stability and are required for a domain that has an instance count greater than 10\. For more information, see [Configuring Amazon ES Domains](#es-createdomains-configure-cluster-cli)\. | 
+| \-\-ebs\-options | Specifies whether the domain uses an EBS volume for storage\. If true, this parameter must also specify the EBS volume type, size, and, if applicable, IOPS value\. For more information, see [Configuring EBS\-based Storage](#es-createdomain-configure-ebs-cli)\. | 
+| \-\-access\-policies | Specifies the access policy for the domain\. For more information, see [Configuring Access Policies](#es-createdomain-configure-access-policies-cli)\. | 
+| \-\-snapshot\-options | Specifies the hour in UTC during which the service performs a daily automated snapshot of the indices in the domain\. The default value is 0, or midnight, which means that the snapshot is taken anytime between midnight and 1:00 AM\. For more information, see [Configuring Snapshots](#es-createdomain-configure-snapshots-cli)\. | 
+| \-\-advanced\-options | Specifies whether to allow references to indices in the bodies of HTTP request objects\. For more information, see [ Configuring Advanced Options](#es-createdomain-configure-advanced-options-cli)\.  | 
 | \-\-generate\-cli\-skeleton | Displays JSON for all specified parameters\. Save the output to a file so that you can later read the file with the \-\-cli\-input\-json parameter rather than typing the parameters at the command line\. For more information, see [Generate CLI Skeleton and CLI Input JSON Parameters](http://docs.aws.amazon.com/cli/latest/userguide/generate-cli-skeleton.html) in the AWS Command Line Interface User Guide\. | 
 | \-\-cli\-input\-json | Specifies the name of a JSON file that contains a set of CLI parameters\. For more information, see [Generate CLI Skeleton and CLI Input JSON Parameters](http://docs.aws.amazon.com/cli/latest/userguide/generate-cli-skeleton.html) in the AWS Command Line Interface User Guide\. | 
-| \-\-log\-publishing\-options | Specifies whether Amazon ES should publish Elasticsearch slow logs to CloudWatch\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-slow-logs)\. | 
-| \-\-vpc\-options | Specifies whether to launch the Amazon ES domain within an Amazon VPC \(VPC\)\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md)\. | 
-| \-\-encryption\-at\-rest\-options | Specifies whether to enable encryption of data at rest\. | 
+| \-\-log\-publishing\-options | Specifies whether Amazon ES should publish Elasticsearch slow logs to CloudWatch\. For more information, see [Configuring Slow Logs](#es-createdomain-configure-slow-logs)\. | 
+| \-\-vpc\-options | Specifies whether to launch the Amazon ES domain within an Amazon VPC \(VPC\)\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
+| \-\-encryption\-at\-rest\-options | Specifies whether to enable [encryption of data at rest](encryption-at-rest.md)\. | 
 
 **Examples**
 
@@ -217,7 +217,7 @@ If you attempt to create an Amazon ES domain and a domain with the same name alr
 
 ### Creating Amazon ES Domains \(AWS SDKs\)<a name="es-createdomains-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the Amazon ES Configuration API Reference, including `CreateElasticsearchDomain`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including `CreateElasticsearchDomain`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
 
 ## Configuring Amazon ES Domains<a name="es-createdomains-configure-cluster"></a>
 
@@ -240,7 +240,7 @@ To meet the demands of increased traffic and data, you can update your Amazon ES
 + Configure advanced options
 
 **Note**  
-For information about configuring a domain to use an EBS volume for storage, see Configuring EBS\-based Storage\. 
+For information about configuring a domain to use an EBS volume for storage, see [Configuring EBS\-based Storage](#es-createdomain-configure-ebs)\. 
 
 ### Configuring Amazon ES Domains \(Console\)<a name="es-createdomains-configure-cluster-console"></a>
 
@@ -262,11 +262,11 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
    1. If you want to change the instance type for data nodes, for **Instance type**, choose a new instance type\. 
 
-      To see a list of the instance types that Amazon ES supports, see Supported Instance Types\.
+      To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
    1. If you want to change the instance count, for **Instance count**, choose an integer from one to twenty\. To request an increase up to 100 instances per domain, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. 
 
-   1. If you want to improve cluster stability or if your domain has an instance count greater than 10, enable a dedicated master node for your cluster\. For more information, see About Dedicated Master Nodes\.
+   1. If you want to improve cluster stability or if your domain has an instance count greater than 10, enable a dedicated master node for your cluster\. For more information, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
 
       1. Select the **Enable dedicated master** check box\.
 
@@ -274,7 +274,7 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
          You can choose an instance type for the dedicated master node that differs from the instance type that you choose for the data nodes\.
 
-         To see a list of the instance types that Amazon ES supports, see Supported Instance Types\. 
+         To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\. 
 
       1. For **Dedicated master instance count**, choose the number of instances for the dedicated master node\.
 
@@ -286,11 +286,11 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
    1. If you didn't enable VPC access when you created the domain, skip to step 7\. If you enabled VPC access, you can change the subnet that the VPC endpoint is placed in, and you can change the security groups:
 
-      1. For **Subnets**, choose a subnet\. The subnet must have a sufficient number of IP addresses reserved for the network interfaces\. If you enabled zone awareness, you must choose two subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md)\.
+      1. For **Subnets**, choose a subnet\. The subnet must have a sufficient number of IP addresses reserved for the network interfaces\. If you enabled zone awareness, you must choose two subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
       1. For **Security groups**, add the security groups that need access to the domain\.
 
-   1. \(Optional\) Choose **Advanced options**\. For a summary of options, see [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-advanced-options)
+   1. \(Optional\) Choose **Advanced options**\. For a summary of options, see [Configuring Advanced Options](#es-createdomain-configure-advanced-options)
 
    1. Choose **Submit**\.
 
@@ -337,7 +337,7 @@ aws es update-elasticsearch-domain-config --domain-name mylogs --elasticsearch-c
 
 ### Configuring Amazon ES Domains \(AWS SDKs\)<a name="es-createdomains-configure-cluster-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the Amazon ES Configuration API Reference, including `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
 ## Configuring EBS\-based Storage<a name="es-createdomain-configure-ebs"></a>
 
@@ -377,7 +377,7 @@ Use the following procedure to enable EBS\-based storage by using the console\.
 
 1. For **EBS volume size**, type the size that you want for the EBS volume\.
 
-   **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain using the following formula: \(number of data nodes\) \* \(EBS volume size\)\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type to which it is attached\. To learn more, see EBS Volume Size Limits\.
+   **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain using the following formula: \(number of data nodes\) \* \(EBS volume size\)\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type to which it is attached\. To learn more, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
 
 1. Choose **Submit**\. 
 
@@ -425,11 +425,11 @@ aws es update-elasticsearch-domain-config --domain-name=mylogs --ebs-options EBS
 
 ### Configuring EBS\-based Storage \(AWS SDKs\)<a name="es-createdomain-configure-ebs-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the Amazon ES Configuration API Reference, including the `--ebs-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--ebs-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
 ## Modifying VPC Access Configuration<a name="es-createdomain-configure-vpc-endpoints"></a>
 
-If you configured a domain to reside within a VPC, you can modify the configuration using the Amazon ES console\. To migrate a public domain to a VPC domain, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md#es-migrating-public-to-vpc)\.
+If you configured a domain to reside within a VPC, you can modify the configuration using the Amazon ES console\. To migrate a public domain to a VPC domain, see [Migrating from Public Access to VPC Access](es-vpc.md#es-migrating-public-to-vpc)\.
 
 ### Configuring VPC Access \(Console\)<a name="es-createdomain-configure-vpc-endpoints-console"></a>
 
@@ -445,9 +445,9 @@ Use the following procedure to configure VPC access by using the console\.
 
 1. Choose **Configure cluster**\.
 
-1. In the **Network configuration** section, for **Subnets**, choose a subnet\. If you enabled zone awareness, you must choose two subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md)\.
+1. In the **Network configuration** section, for **Subnets**, choose a subnet\. If you enabled zone awareness, you must choose two subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 **Note**  
-You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
+You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
 1. For **Security groups**, add the security groups that need access to the domain\. 
 
@@ -455,9 +455,9 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
 ## Configuring Access Policies<a name="es-createdomain-configure-access-policies"></a>
 
-Amazon Elasticsearch Service offers several ways to configure access to your Amazon ES domains\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-ac.md)\.
+Amazon Elasticsearch Service offers several ways to configure access to your Amazon ES domains\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md)\.
 
-The console provides preconfigured access policies that you can customize for the specific needs of your domain\. You also can import access policies from other Amazon ES domains\. For information on how these access policies interact with VPC access, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md#es-vpc-security)\.
+The console provides preconfigured access policies that you can customize for the specific needs of your domain\. You also can import access policies from other Amazon ES domains\. For information on how these access policies interact with VPC access, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 ### Configuring Access Policies \(Console\)<a name="es-createdomain-configure-access-policies-console"></a>
 
@@ -511,13 +511,13 @@ If you configure access policies using the AWS CLI, you can use one of many onli
 
 ### Configuring Access Policies \(AWS SDKs\)<a name="es-createdomain-configure-access-policies-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the Amazon ES Configuration API Reference, including the `--access-policies` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--access-policies` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
 ## Configuring Automatic Snapshots<a name="es-createdomain-configure-snapshots"></a>
 
 Amazon Elasticsearch Service provides automatic daily snapshots of a domain's primary index shards and the number of replica shards\. By default, the service takes automatic snapshots at midnight, but you should choose a time when the service is under minimal load\.
 
-For information on working with these snapshots, see [[ERROR] BAD/MISSING LINK TEXT](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
+For information on working with these snapshots, see [Restoring Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
 
 **Warning**  
 The service stops taking snapshots of Amazon ES indices while the health of a cluster is red\. Any documents that you add to a red cluster, even to indices with a health status of green, can be lost in the event of a cluster failure due to this lack of backups\. To prevent loss of data, return the health of your cluster to green before uploading additional data to any index in the cluster\.
@@ -567,14 +567,14 @@ aws es update-elasticsearch-domain-config --domain-name mylogs --region us-east-
 
 ### Configuring Snapshots \(AWS SDKs\)<a name="es-createdomain-configure-snapshots-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions that are defined in the Amazon ES Configuration API Reference\. This includes the `--snapshots-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions that are defined in the [Amazon ES Configuration API Reference](es-configuration-api.md)\. This includes the `--snapshots-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
 
 ## Configuring Advanced Options<a name="es-createdomain-configure-advanced-options"></a>
 
 Use advanced options to configure the following:
 
 **rest\.action\.multi\.allow\_explicit**  
-Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to false prevents users from bypassing access control for subresources\. By default, the value is true\. For more information, see [URL\-based access control](https://www.elastic.co/guide/en/elasticsearch/reference/current/url-access-control.html) and [[ERROR] BAD/MISSING LINK TEXT](es-ac.md#es-ac-advanced)\.
+Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to false prevents users from bypassing access control for subresources\. By default, the value is true\. For more information, see [URL\-based access control](https://www.elastic.co/guide/en/elasticsearch/reference/current/url-access-control.html) and [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
 
 **indices\.fielddata\.cache\.size**  
 Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is unbounded\.   
@@ -623,7 +623,7 @@ aws es update-elasticsearch-domain-config --domain-name mylogs --region us-east-
 
 ### Configuring Advanced Options \(AWS SDKs\)<a name="es-createdomain-configure-advanced-options-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all of the actions defined in the Amazon ES Configuration API Reference, including the `--advanced-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all of the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--advanced-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
 ## Configuring Slow Logs<a name="es-createdomain-configure-slow-logs"></a>
 
@@ -676,7 +676,7 @@ CloudWatch Logs supports [10 resource policies per region](http://docs.aws.amazo
 
    The status of your domain changes from **Active** to **Processing**\. The status must return to **Active** before log publishing is enabled\. This process can take up to 30 minutes\.
 
-After you enable log publishing, see [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-slow-logs-indices)\.
+After you enable log publishing, see [Setting Elasticsearch Logging Thresholds](#es-createdomain-configure-slow-logs-indices)\.
 
 ### Enabling Slow Logs Publishing \(AWS CLI\)<a name="es-createdomain-configure-slow-logs-cli"></a>
 
@@ -720,7 +720,7 @@ aws es update-elasticsearch-domain-config --domain-name my-domain --log-publishi
 
 To disable publishing to CloudWatch, run the same command with `Enabled=false`\.
 
-After you enable log publishing, see [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-slow-logs-indices)\.
+After you enable log publishing, see [Setting Elasticsearch Logging Thresholds](#es-createdomain-configure-slow-logs-indices)\.
 
 ### Enabling Slow Logs Publishing \(AWS SDKs\)<a name="es-createdomain-configure-slow-logs-sdk"></a>
 
@@ -734,9 +734,9 @@ Before you can enable slow logs publishing, you must first create a CloudWatch l
 
 You can access these operations using the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\.
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in the Amazon ES Configuration API Reference, including the `--log-publishing-options` option for `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig`\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--log-publishing-options` option for `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig`\.
 
-After you enable log publishing, see [[ERROR] BAD/MISSING LINK TEXT](#es-createdomain-configure-slow-logs-indices)\.
+After you enable log publishing, see [Setting Elasticsearch Logging Thresholds](#es-createdomain-configure-slow-logs-indices)\.
 
 ### Setting Elasticsearch Logging Thresholds<a name="es-createdomain-configure-slow-logs-indices"></a>
 

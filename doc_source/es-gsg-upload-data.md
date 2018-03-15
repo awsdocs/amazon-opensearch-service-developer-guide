@@ -6,7 +6,7 @@ You can upload data to an Amazon ES domain for indexing using the Elasticsearch 
 
 + Use the bulk API to add or update multiple Elasticsearch documents that are described in the same JSON file\.
 
-The following example requests use [curl](https://curl.haxx.se/), a common HTTP client\. Clients like curl can't perform the request signing that is required if your access policies specify IAM users or roles\. To successfully perform the instructions in this step, you must use an IP address\-based access policy that allows unauthenticated access, like you configured in step 1\.
+The following example requests use [curl](https://curl.haxx.se/), a common HTTP client\. Clients like curl can't perform the request signing that is required if your access policies specify IAM users or roles\. To successfully perform the instructions in this step, you must use an IP address\-based access policy that allows unauthenticated access, like you configured in [step 1](es-gsg-create-domain.md)\.
 
 You can install curl on Windows and use it from the command prompt, but Windows users might find it more convenient to use a tool like [Cygwin](https://www.cygwin.com/) or [the Windows Subsystem for Linux](https://msdn.microsoft.com/en-us/commandline/wsl/about)\. macOS and most Linux distributions come with curl pre\-installed\.
 
@@ -18,7 +18,7 @@ You can install curl on Windows and use it from the command prompt, but Windows 
   curl -XPUT elasticsearch_domain_endpoint/movies/movie/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
   ```
 
-For a detailed explanation of this command and how to make signed requests to Amazon ES, see [[ERROR] BAD/MISSING LINK TEXT](es-indexing.md)\.
+For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 **To upload a JSON file that contains multiple documents to an Amazon ES domain**
 
@@ -39,7 +39,7 @@ For a detailed explanation of this command and how to make signed requests to Am
    curl -XPOST elasticsearch_domain_endpoint/_bulk --data-binary @bulk_movies.json -H 'Content-Type: application/json'
    ```
 
-For more information about the bulk file format, see [[ERROR] BAD/MISSING LINK TEXT](es-indexing.md)\.
+For more information about the bulk file format, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 **Note**  
-The service supports migrating data from manual snapshots taken on both Amazon ES and self\-managed Elasticsearch clusters\. Restoring indices from a self\-managed Elasticsearch cluster is a common way to migrate data into Amazon ES\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
+The service supports migrating data from manual snapshots taken on both Amazon ES and self\-managed Elasticsearch clusters\. Restoring indices from a self\-managed Elasticsearch cluster is a common way to migrate data into Amazon ES\. For more information, see [Restoring Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.

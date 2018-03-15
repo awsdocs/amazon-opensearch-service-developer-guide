@@ -6,18 +6,21 @@ This topic describes important changes to the documentation for Amazon Elasticse
 
 + **Current product version—**2015\-01\-01
 
-+ **Latest product release—**19 December 2017
++ **Latest product release—**14 March 2018
 
-+ **Latest documentation update—**9 January 2018
++ **Latest documentation update—**14 March 2018
 
 
 | Change | Description | Release Date | 
 | --- | --- | --- | 
-| Petabyte Scale | Amazon ES now supports i3 instance types and total domain storage of up to 1\.5 PB\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](petabyte-scale.md)\. | 19 December 2017 | 
-| Encryption of Data at Rest | Amazon ES now supports encryption of data at rest\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](encryption-at-rest.md)\. | 7 December 2017 | 
-| Elasticsearch 6\.0 Support | Amazon Elasticsearch Service now supports Elasticsearch version 6\.0\. For a summary of changes, see the [Elasticsearch 6\.0 release notes](https://www.elastic.co/guide/en/elasticsearch/reference/current/release-notes-6.0.0.html)\. For migration considerations and instructions, see [[ERROR] BAD/MISSING LINK TEXT](es-version-migration.md)\. | 6 December 2017 | 
-| VPC Support | Amazon Elasticsearch Service now lets you launch domains within an Amazon Virtual Private Cloud\. VPC support provides an additional layer of security and simplifies communications between Amazon ES and other services within a VPC\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md)\. | 17 October 2017 | 
-| Slow Logs Publishing | Amazon Elasticsearch Service now supports the publishing of slow logs to CloudWatch Logs\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomain-configure-slow-logs)\. | 16 October 2017 | 
+| Elasticsearch 6\.2 Support |  Amazon Elasticsearch Service now supports Elasticsearch version 6\.2\. For a summary of changes since 6\.0, see the release notes for [Elasticsearch 6\.1](https://www.elastic.co/blog/elasticsearch-6-1-0-released), [Elasticsearch 6\.2](https://www.elastic.co/blog/elasticsearch-6-2-0-released), [Kibana 6\.1](https://www.elastic.co/blog/kibana-6-1-0-released), and [Kibana 6\.2](https://www.elastic.co/blog/kibana-6-2-0-released)\.  | 14 March 2018 | 
+| Korean Analysis Plugin | Amazon ES now supports a memory\-optimized version of the [seunjeon](https://bitbucket.org/eunjeon/seunjeon/raw/master/elasticsearch/) Korean analysis plugin\. | 13 March 2018 | 
+| Instant Access Control Updates | Changes to the access control policies on Amazon ES domains now take effect instantly\. | 7 March 2018 | 
+| Petabyte Scale | Amazon ES now supports i3 instance types and total domain storage of up to 1\.5 PB\. To learn more, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\. | 19 December 2017 | 
+| Encryption of Data at Rest | Amazon ES now supports encryption of data at rest\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\. | 7 December 2017 | 
+| Elasticsearch 6\.0 Support | Amazon Elasticsearch Service now supports Elasticsearch version 6\.0\. For a summary of changes, see the [Elasticsearch 6\.0 release notes](https://www.elastic.co/guide/en/elasticsearch/reference/current/release-notes-6.0.0.html)\. For migration considerations and instructions, see [Migrating to a Different Elasticsearch Version](es-version-migration.md)\. | 6 December 2017 | 
+| VPC Support | Amazon Elasticsearch Service now lets you launch domains within an Amazon Virtual Private Cloud\. VPC support provides an additional layer of security and simplifies communications between Amazon ES and other services within a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 17 October 2017 | 
+| Slow Logs Publishing | Amazon Elasticsearch Service now supports the publishing of slow logs to CloudWatch Logs\. To learn more, see [Configuring Slow Logs](es-createupdatedomains.md#es-createdomain-configure-slow-logs)\. | 16 October 2017 | 
 | Elasticsearch 5\.5 Support | Amazon Elasticsearch Service now supports Elasticsearch version 5\.5\. For new feature summaries, see the [Amazon announcement](https://aws.amazon.com/about-aws/whats-new/2017/09/elasticsearch-5_5-now-available-on-amazon-elasticsearch-service/) of availability, the [Elasticsearch 5\.5 release announcement](https://www.elastic.co/blog/elasticsearch-5-5-0-released), and the [Kibana 5\.5 release announcement](https://www.elastic.co/blog/kibana-5-5-0-released)\. You can now restore automated snapshots without contacting AWS Support and store scripts using the Elasticsearch `_scripts` API\. | 7 September 2017 | 
 | Elasticsearch 5\.3 Support | Amazon Elasticsearch Service added support for Elasticsearch version 5\.3\. | 1 June 2017 | 
 | More Instances and EBS Capacity per Cluster | Amazon Elasticsearch Service now supports up to 100 nodes and 150 TB EBS capacity per cluster\. | 5 April 2017 | 

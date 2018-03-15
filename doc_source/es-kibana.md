@@ -13,15 +13,15 @@ This chapter describes some considerations for using Kibana and Logstash with Am
 For information about using Kibana to visualize your data, see the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/index.html)\.
 
 **Note**  
-To prevent public access to Kibana, you must configure an IP\-based access policy\. The default installation of Kibana does not support IAM user authentication at this time\. To learn more about IP\-based access policies, see Configuring Access Policies\.
+To prevent public access to Kibana, you must configure an IP\-based access policy\. The default installation of Kibana does not support IAM user authentication at this time\. To learn more about IP\-based access policies, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
 
 The following sections address some common Kibana use cases:
 
-+ [[ERROR] BAD/MISSING LINK TEXT](#es-kibana-proxy)
++ [Using a Proxy to Access Amazon ES from Kibana](#es-kibana-proxy)
 
-+ [[ERROR] BAD/MISSING LINK TEXT](#es-kibana-map-server)
++ [Configuring Kibana to Use a WMS Map Server](#es-kibana-map-server)
 
-+ [[ERROR] BAD/MISSING LINK TEXT](#es-kibana-local)
++ [Connecting a Local Kibana Server to Amazon ES](#es-kibana-local)
 
 ### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
 
@@ -33,7 +33,7 @@ Because Kibana is a JavaScript application, requests originate from the user's I
 
 1. This is the proxy server, residing in a VPC subnet and running on an Amazon EC2 instance\.
 
-1. Other applications running on EC2 instances can use the Signature Version 4 signing process to send authenticated requests to Amazon ES\. For sample code that makes signed requests to Amazon ES, see [[ERROR] BAD/MISSING LINK TEXT](es-indexing.md#es-indexing-programmatic)\.
+1. Other applications running on EC2 instances can use the Signature Version 4 signing process to send authenticated requests to Amazon ES\. For sample code that makes signed requests to Amazon ES, see [Programmatic Indexing](es-indexing.md#es-indexing-programmatic)\.
 
 1. Kibana clients connect to your Amazon ES domain through the proxy\.
 
@@ -180,4 +180,4 @@ output{
 ```
 
 **Note**  
-The service request in the preceding example must be signed\. For more information about signing requests, see [[ERROR] BAD/MISSING LINK TEXT](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.
+The service request in the preceding example must be signed\. For more information about signing requests, see [Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.

@@ -11,9 +11,9 @@ The following table shows Amazon ES limits for clusters and instances\.
 | --- | --- | 
 | Maximum Number of Instances \(Instance Count\) per Cluster | 20 \(except for T2 instance types, which have a maximum of 10\) The default limit is 20 instances per domain\. To request an increase up to 100 instances per domain \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.   For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.   | 
 | Maximum Number of Dedicated Master Nodes | 5  You can use a T2 instance type as a dedicated master node only if the instance count is 10 or fewer\.  | 
-| Smallest Instance Type Supported by Elasticsearch Version | t2\.micro\.elasticsearch \(versions 1\.5 and 2\.3\) and t2\.small\.elasticsearch \(version 5\.x and 6\.0\)\. | 
+| Smallest Instance Type Supported by Elasticsearch Version | t2\.micro\.elasticsearch \(versions 1\.5 and 2\.3\) and t2\.small\.elasticsearch \(version 5\.x and 6\.x\)\. | 
 
-For a list of the instance types that Amazon ES supports, see Supported Instance Types\.
+For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
 ## EBS Volume Size Limits<a name="ebsresource"></a>
 
@@ -114,4 +114,4 @@ The following table shows the maximum size of HTTP request payloads\.
 
 ## Java Process Limit<a name="aes-java-process-limit"></a>
 
-Amazon ES limits Java processes to a heap size of 32 GB\. Advanced users can specify the percentage of the heap used for [field data](https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html)\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [[ERROR] BAD/MISSING LINK TEXT](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
+Amazon ES limits Java processes to a heap size of 32 GB\. Advanced users can specify the percentage of the heap used for [field data](https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html)\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.

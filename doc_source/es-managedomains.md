@@ -18,16 +18,16 @@ Domain updates occur when you make most configuration changes, but they also occ
 
 ![\[Number of nodes doubling from 11 to 22 during a domain configuration change.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/NodesDoubled.png)
 
-This temporary doubling can strain the cluster's dedicated master nodes, which suddenly have twice as many nodes to manage\. It is important to maintain sufficient capacity on dedicated master nodes to handle the overheard that is associated with these blue/green deployments\.
+This temporary doubling can strain the cluster's [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), which suddenly have twice as many nodes to manage\. It is important to maintain sufficient capacity on dedicated master nodes to handle the overhead that is associated with these blue/green deployments\.
 
 **Important**  
-You do *not* incur any additional charges during configuration changes and service maintenance\. You are billed only for the number of nodes that you request for your cluster\. For specifics, see [[ERROR] BAD/MISSING LINK TEXT](#es-managedomains-config-charges)\.
+You do *not* incur any additional charges during configuration changes and service maintenance\. You are billed only for the number of nodes that you request for your cluster\. For specifics, see [Charges for Configuration Changes](#es-managedomains-config-charges)\.
 
-To prevent overloading dedicated master nodes, you can monitor usage with the Amazon CloudWatch metrics\. For recommended maximum values, see [[ERROR] BAD/MISSING LINK TEXT](cloudwatch-alarms.md)\.
+To prevent overloading dedicated master nodes, you can [monitor usage with the Amazon CloudWatch metrics](#es-managedomains-cloudwatchmetrics)\. For recommended maximum values, see [Recommended CloudWatch Alarms](cloudwatch-alarms.md)\.
 
 ## Charges for Configuration Changes<a name="es-managedomains-config-charges"></a>
 
-If you change the configuration for a domain, Amazon ES creates a new cluster as described in [[ERROR] BAD/MISSING LINK TEXT](#es-managedomains-configuration-changes)\. During the migration of old to new, you incur the following charges:
+If you change the configuration for a domain, Amazon ES creates a new cluster as described in [About Configuration Changes](#es-managedomains-configuration-changes)\. During the migration of old to new, you incur the following charges:
 
 + If you change the instance type, you are charged for both clusters for the first hour\. After the first hour, you are charged only for the new cluster\.
 
@@ -44,7 +44,7 @@ Each AWS Region is a separate geographic area with multiple, isolated locations 
 **Important**  
  Zone awareness requires an even number of instances in the instance count\. The default configuration for any index is a replica count of 1\. If you specify a replica count of 0 for an index, zone awareness doesn't replicate the shards to the second Availability Zone\. Without replica shards, there are no replicas to distribute to a second Availability Zone, and enabling the feature doesn't provide protection from data loss\. 
 
-If you enable [zone awareness](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-zoneawareness) and you use a VPC endpoint to connect to your domain, you must specify Availability Zones for the domain\. Some instance types might not be available in some Availability Zones\. For more information about using VPC endpoints, see VPCs and VPC Endpoints for Amazon ES Domains\.
+If you enable [zone awareness](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-zoneawareness) and you use a VPC endpoint to connect to your domain, you must specify Availability Zones for the domain\. Some instance types might not be available in some Availability Zones\. For more information about using VPC endpoints, see [VPCs and VPC Endpoints for Amazon ES Domains](es-vpc.md)\.
 
 The following illustration shows a four\-node cluster with zone awareness enabled\. The service places all the primary index shards in one Availability Zone and all the replica shards in the second Availability Zone\.
 
@@ -72,11 +72,11 @@ Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. I
 
 Statistics provide you with broader insight into each metric\. For example, view the **Average** statistic for the **CPUUtilization** metric to compute the average CPU utilization for all nodes in the cluster\. Each of the metrics falls into one of three categories:
 
-+ Cluster metrics
++ [Cluster metrics](#es-managedomains-cloudwatchmetrics-cluster-metrics)
 
-+ Dedicated master node metrics
++ [Dedicated master node metrics](#es-managedomains-cloudwatchmetrics-master-node-metrics)
 
-+ EBS volume metrics
++ [EBS volume metrics](#es-managedomains-cloudwatchmetrics-master-ebs-metrics)
 
 **Note**  
 The service archives the metrics for two weeks before discarding them\.
@@ -95,7 +95,7 @@ The service archives the metrics for two weeks before discarding them\.
 
 1. From the **Statistic** list, select a statistic\.
 
-   For a list of relevant statistics for each metric, see the tables in Cluster Metrics\. Some statistics are not relevant for a given metric\. For example, the **Sum** statistic is not meaningful for the **Nodes** metric\.
+   For a list of relevant statistics for each metric, see the tables in [Cluster Metrics](#es-managedomains-cloudwatchmetrics-cluster-metrics)\. Some statistics are not relevant for a given metric\. For example, the **Sum** statistic is not meaningful for the **Nodes** metric\.
 
 1. Choose **Update graph**\.
 
@@ -111,7 +111,7 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 | --- | --- | 
 | ClusterStatus\.green | Indicates that all index shards are allocated to nodes in the cluster\. Relevant statistics: Minimum, Maximum | 
 | ClusterStatus\.yellow | Indicates that the primary shards for all indices are allocated to nodes in a cluster, but the replica shards for at least one index are not\. Single node clusters always initialize with this cluster status because there is no second node to which a replica can be assigned\. You can either increase your node count to obtain a green cluster status, or you can use the Elasticsearch API to set the number\_of\_replicas setting for your index to 0\. For more information, see [Configuring Amazon Elasticsearch Service Domains](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains-configure-cluster) and [Update Indices Settings](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/indices-update-settings.html) in the Elasticsearch documentation\.Relevant statistics: Minimum, Maximum | 
-| ClusterStatus\.red | Indicates that the primary and replica shards of at least one index are not allocated to nodes in a cluster\. A common cause for this state is a lack of free storage space on one or more of the data nodes in the cluster\. In turn, a lack of free storage space prevents the service from distributing replica shards to the affected data node or nodes, and all new indices to start with a red cluster status\. To recover, you must add EBS\-based storage to existing data nodes, use larger instance types, or delete the indices and restore them from a snapshot\. For more information, see [Red Cluster Status](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-red-cluster-status)\. Relevant statistics: Minimum, Maximum | 
+| ClusterStatus\.red | Indicates that the primary and replica shards of at least one index are not allocated to nodes in a cluster\. To recover, you must delete the indices or restore a snapsnot and then add EBS\-based storage, use larger instance types, or add instances\. For more information, see [Red Cluster Status](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-red-cluster-status)\. Relevant statistics: Minimum, Maximum | 
 | Nodes | The number of nodes in the Amazon ES cluster\. Relevant Statistics: Minimum, Maximum, Average | 
 | SearchableDocuments | The total number of searchable documents across all indices in the cluster\. Relevant statistics: Minimum, Maximum, Average | 
 | DeletedDocuments | The total number of deleted documents across all indices in the cluster\. Relevant statistics: Minimum, Maximum, Average | 
@@ -381,4 +381,4 @@ aws es list-tags --arn arn:aws:es:us-east-1:379931976431:domain/logs
 
 ### Working with Tags \(AWS SDKs\)<a name="es-managedomains-awsresourcetagging-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the Amazon ES Configuration API Reference, including the `AddTags`, `ListTags`, and `RemoveTags` operations\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `AddTags`, `ListTags`, and `RemoveTags` operations\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 

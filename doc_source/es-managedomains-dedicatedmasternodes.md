@@ -8,13 +8,13 @@ We recommend that you allocate **three** dedicated master nodes for each product
 
 1. Two dedicated master nodes means that your cluster does not have the necessary quorum of nodes to elect a new master node in the event of a failure\.
 
-   A quorum is Number of Dedicated Master Nodes/2 \+ 1 \(rounded down to the nearest whole number\), which Amazon ES sets to `discovery.zen.minimum_master_nodes` when you create your domain\.
+   A quorum is Number of Dedicated Master Nodes / 2 \+ 1 \(rounded down to the nearest whole number\), which Amazon ES sets to `discovery.zen.minimum_master_nodes` when you create your domain\.
 
-   In this case, 2/2 \+ 1 = 2\. Because one dedicated master node has failed and only one backup exists, the cluster does not have a quorum and cannot elect a new master\.
+   In this case, 2 / 2 \+ 1 = 2\. Because one dedicated master node has failed and only one backup exists, the cluster does not have a quorum and cannot elect a new master\.
 
 1. Three dedicated master nodes, the recommended number, provides two backup nodes in the event of a master node failure and the necessary quorum \(2\) to elect a new master\.
 
-1. Four dedicated master nodes is no better than three and can cause issues if you use zone awareness\.
+1. Four dedicated master nodes is no better than three and can cause issues if you use [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
 
    + If one master node fails, you have the quorum \(3\) to elect a new master\. If two nodes fail, you lose that quorum, just as you do with three dedicated master nodes\.
 
@@ -54,10 +54,10 @@ Although dedicated master nodes do not process search and query requests, their 
 | 20–50 |  `c4.xlarge.elasticsearch`  | 
 |  50–100  |  `c4.2xlarge.elasticsearch`  | 
 
-+ For recommendations on dedicated master nodes for large clusters, see [[ERROR] BAD/MISSING LINK TEXT](petabyte-scale.md)\.
++ For recommendations on dedicated master nodes for large clusters, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
 
-+ For information about how certain configuration changes can affect dedicated master nodes, see [[ERROR] BAD/MISSING LINK TEXT](es-managedomains.md#es-managedomains-configuration-changes)\.
++ For information about how certain configuration changes can affect dedicated master nodes, see [About Configuration Changes](es-managedomains.md#es-managedomains-configuration-changes)\.
 
-+ For clarification on instance count limits, see [[ERROR] BAD/MISSING LINK TEXT](aes-limits.md#clusterresource)\.
++ For clarification on instance count limits, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\.
 
 + For more information about specific instance types, including vCPU, memory, and pricing, see [Amazon Elasticsearch Instance Prices](https://aws.amazon.com/elasticsearch-service/pricing/)\.

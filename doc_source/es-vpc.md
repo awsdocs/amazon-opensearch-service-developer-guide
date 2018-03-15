@@ -4,7 +4,7 @@ A *virtual private cloud* \(VPC\) is a virtual network that is dedicated to your
 
 Placing an Amazon ES domain within a VPC enables secure communication between Amazon ES and other services within the VPC without the need for an internet gateway, NAT device, or VPN connection\. All traffic remains securely within the AWS Cloud\. Because of their logical isolation, domains that reside within a VPC have an extra layer of security when compared to domains that use public endpoints\.
 
-To support VPCs, Amazon ES places an endpoint into either one or two subnets of your VPC\. A *subnet* is a range of IP addresses in your VPC\. If you enable zone awareness for your domain, Amazon ES places an endpoint into two subnets\. The subnets must be in different Availability Zones in the same region\. If you don't enable zone awareness, Amazon ES places an endpoint into only one subnet\.
+To support VPCs, Amazon ES places an endpoint into either one or two subnets of your VPC\. A *subnet* is a range of IP addresses in your VPC\. If you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness) for your domain, Amazon ES places an endpoint into two subnets\. The subnets must be in different Availability Zones in the same region\. If you don't enable zone awareness, Amazon ES places an endpoint into only one subnet\.
 
 The following illustration shows the VPC architecture if zone awareness is not enabled\.
 
@@ -51,7 +51,7 @@ Currently, operating an Amazon ES domain within a VPC has the following limitati
 
 + Currently, Amazon ES does not support integration with Amazon Kinesis Data Firehose for domains that reside within a VPC\. To use this service with Amazon ES, you must use a domain with public access\.
 
-+ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](#es-vpc-security), the [Amazon VPC User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/), and [[ERROR] BAD/MISSING LINK TEXT](es-kibana.md#es-kibana-proxy)\.
++ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/), and [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
 
 ## About Access Policies on VPC Domains<a name="es-vpc-security"></a>
 
@@ -61,7 +61,7 @@ Placing your Amazon ES domain within a VPC provides an inherent, strong layer of
 https://search-domain-name-identifier.region.es.amazonaws.com
 ```
 
-As the "public" label suggests, this endpoint is accessible from any internet\-connected device, though you can \(and should\) control access to it\. If you access the endpoint in a web browser, you might receive a `Not Authorized` message, but the request reaches the domain\.
+As the "public" label suggests, this endpoint is accessible from any internet\-connected device, though you can \(and should\) [control access to it](es-ac.md)\. If you access the endpoint in a web browser, you might receive a `Not Authorized` message, but the request reaches the domain\.
 
 When you create a domain with VPC access, the endpoint *looks* similar to a public endpoint:
 
@@ -86,15 +86,15 @@ Before you can enable a connection between a VPC and your new Amazon ES domain, 
 
 + **Create a VPC**
 
-  To create your VPC, you can use the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. You must create a subnet in the VPC, or two subnets if you enable zone awareness\. For more information, see Creating A VPC\. If you already have a VPC, you can skip this step\.
+  To create your VPC, you can use the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. You must create a subnet in the VPC, or two subnets if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. For more information, see [Creating A VPC](#es-creating-vpc)\. If you already have a VPC, you can skip this step\.
 
 + **Reserve IP addresses **
 
-  Amazon ES enables the connection of a VPC to a domain by placing network interfaces in a subnet of the VPC\. Each network interface is associated with an IP address\. You must reserve a sufficient number of IP addresses in the subnet for the network interfaces\. For more information, see Reserving IP Addresses in a VPC Subnet\. 
+  Amazon ES enables the connection of a VPC to a domain by placing network interfaces in a subnet of the VPC\. Each network interface is associated with an IP address\. You must reserve a sufficient number of IP addresses in the subnet for the network interfaces\. For more information, see [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)\. 
 
 ## Creating a VPC<a name="es-creating-vpc"></a>
 
-To create your VPC, you can use one of the following: the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. The VPC must have a subnet, or two subnets if you enable zone awareness\. The two subnets must be in different Availability Zones in the same region\.
+To create your VPC, you can use one of the following: the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. The VPC must have a subnet, or two subnets if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. The two subnets must be in different Availability Zones in the same region\.
 
 The following procedure shows how to use the Amazon VPC console to create a VPC with a public subnet, reserve IP addresses for the subnet, and create a security group to control access to your Amazon ES domain\. For other VPC configurations, see [Scenarios and Examples](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\.
 
@@ -112,7 +112,7 @@ The following procedure shows how to use the Amazon VPC console to create a VPC 
 
 1. In the confirmation message that appears, choose **Close**\.
 
-1. If you intend to enable zone awareness for your Amazon ES domain, you must create a second subnet in a different Availability Zone in the same region\. If you don't intend to enable zone awareness, skip to step 8\. 
+1. If you intend to enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness) for your Amazon ES domain, you must create a second subnet in a different Availability Zone in the same region\. If you don't intend to enable zone awareness, skip to step 8\. 
 
    1. In the navigation pane, choose **Subnets\.**
 
@@ -124,7 +124,7 @@ The following procedure shows how to use the Amazon VPC console to create a VPC 
 
    1. For **Availability Zone**, choose an Availability Zone that differs from that of the first subnet\. The Availability Zones for both subnets must be in the same region\.
 
-   1. For **IPv4 CIDR block**, configure a CIDR block large enough to provide sufficient IP addresses for Amazon ES to use during maintenance activities\. For more information, see Reserving IP Addresses in a VPC Subnet\.
+   1. For **IPv4 CIDR block**, configure a CIDR block large enough to provide sufficient IP addresses for Amazon ES to use during maintenance activities\. For more information, see [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)\.
 **Note**  
 Amazon ES domains using VPC access don't support IPv6 addresses\. You can use a VPC that has IPv6 enabled, but the ENIs will have IPv4 addresses\.
 
@@ -156,17 +156,17 @@ Amazon ES domains using VPC access don't support IPv6 addresses\. You can use a 
 
    1. Choose **Save**\.
 
-Now you are ready to launch an Amazon ES domain in your Amazon VPC\.
+Now you are ready to [launch an Amazon ES domain](es-createupdatedomains.md#es-createdomains) in your Amazon VPC\.
 
 ## Reserving IP Addresses in a VPC Subnet<a name="es-reserving-ip-vpc-endpoints"></a>
 
-Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or two subnets of the VPC if you enable zone awareness\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
+Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or two subnets of the VPC if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
 
 The number of IP addresses that Amazon ES requires depends on the following:
 
 + Number of data nodes in your domain\. \(Master nodes are not included in the number\.\) 
 
-+ Whether you enable zone awareness\. If you enable zone awareness, you need only half the number of IP addresses per subnet that you need if you don't enable zone awareness\.
++ Whether you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. If you enable zone awareness, you need only half the number of IP addresses per subnet that you need if you don't enable zone awareness\.
 
 Here is the basic formula: The number of IP addresses reserved in each subnet is three times the number of nodes, divided by two if zone awareness is enabled\.
 
@@ -192,11 +192,11 @@ After Amazon ES creates the role, you can view it \(`AWSServiceRoleForAmazonElas
 **Note**  
 If you create a domain that uses a public endpoint, Amazon ES doesn’t need the service\-linked role and doesn't create it\.
 
-For full information on this role's permissions and how to delete it, see [[ERROR] BAD/MISSING LINK TEXT](slr-es.md)\.
+For full information on this role's permissions and how to delete it, see [Using Service\-Linked Roles for Amazon ES](slr-es.md)\.
 
 ## Migrating from Public Access to VPC Access<a name="es-migrating-public-to-vpc"></a>
 
-When you create a domain, you specify whether it should have a public endpoint or reside within a VPC\. Once created, you cannot switch from one to the other\. Instead, you must create a new domain and either manually reindex or migrate your data\. Snapshots offer a convenient means of migrating data\. For information about taking and restoring snapshots, see [[ERROR] BAD/MISSING LINK TEXT](es-managedomains-snapshots.md)\.
+When you create a domain, you specify whether it should have a public endpoint or reside within a VPC\. Once created, you cannot switch from one to the other\. Instead, you must create a new domain and either manually reindex or migrate your data\. Snapshots offer a convenient means of migrating data\. For information about taking and restoring snapshots, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
 
 ## Amazon VPC Documentation<a name="es-vpc-docs"></a>
 

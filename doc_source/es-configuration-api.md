@@ -1,43 +1,43 @@
 # Amazon Elasticsearch Service Configuration API Reference<a name="es-configuration-api"></a>
 
-This reference describes the actions, data types, and errors in the Amazon Elasticsearch Service Configuration API\. The Configuration API is a REST API that you can use to create and configure Amazon ES domains over HTTP\. You also can use the AWS CLI and the console to configure Amazon ES domains\. For more information, see Creating and Configuring Amazon ES Domains\.
+This reference describes the actions, data types, and errors in the Amazon Elasticsearch Service Configuration API\. The Configuration API is a REST API that you can use to create and configure Amazon ES domains over HTTP\. You also can use the AWS CLI and the console to configure Amazon ES domains\. For more information, see [Creating and Configuring Amazon ES Domains](es-createupdatedomains.md)\.
 
-+ Actions
++ [Actions](#es-configuration-api-actions)
 
-+ Data Types
++ [Data Types](#es-configuration-api-datatypes)
 
-+ Errors
++ [Errors](#es-configuration-api-errors)
 
 ## Actions<a name="es-configuration-api-actions"></a>
 
 The following table provides a quick reference to the HTTP method required for each operation for the REST interface to the Amazon Elasticsearch Service Configuration API\. The description of each operation also includes the required HTTP method\.
 
 **Note**  
-All configuration service requests must be signed\. For more information, see Signing Amazon Elasticsearch Service Requests in this guide and [Signature Version 4 Signing Process](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) in the *AWS General Reference*\.
+All configuration service requests must be signed\. For more information, see [Signing Amazon Elasticsearch Service Requests](es-ac.md#es-managedomains-signing-service-requests) in this guide and [Signature Version 4 Signing Process](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) in the *AWS General Reference*\.
 
 
 ****  
 
 | Action | HTTP Method | 
 | --- | --- | 
-| AddTags | POST | 
-| CreateElasticsearchDomain | POST | 
-| DeleteElasticsearchDomain | DELETE | 
-| DeleteElasticsearchServiceRole | DELETE | 
-| DescribeElasticsearchDomain | GET | 
-| DescribeElasticsearchDomainConfig | GET | 
-| DescribeElasticsearchDomains | POST | 
-| DescribeElasticsearchInstanceTypeLimits | GET | 
-| ListDomainNames | GET | 
-| ListElasticsearchInstanceTypes | GET | 
-| ListElasticsearchVersions | GET | 
-| ListTags | GET | 
-| RemoveTags | POST | 
-| UpdateElasticsearchDomainConfig | POST | 
+| [`AddTags`](#es-configuration-api-actions-addtags) | POST | 
+| [`CreateElasticsearchDomain`](#es-configuration-api-actions-createelasticsearchdomain) | POST | 
+| [`DeleteElasticsearchDomain`](#es-configuration-api-actions-deleteelasticsearchdomain) | DELETE | 
+| [`DeleteElasticsearchServiceRole`](#es-configuration-api-actions-deleteelasticsearchservicerole) | DELETE | 
+| [`DescribeElasticsearchDomain`](#es-configuration-api-actions-describeelasticsearchdomain) | GET | 
+| [`DescribeElasticsearchDomainConfig`](#es-configuration-api-actions-describeelasticsearchdomainconfig) | GET | 
+| [`DescribeElasticsearchDomains`](#es-configuration-api-actions-describeesdomains) | POST | 
+| [`DescribeElasticsearchInstanceTypeLimits`](#es-configuration-api-actions-describeinstancetypelimits) | GET | 
+| [`ListDomainNames`](#es-configuration-api-actions-listdomainnames) | GET | 
+| [`ListElasticsearchInstanceTypes`](#es-configuration-api-actions-listelasticsearchinstancetypes) | GET | 
+| [`ListElasticsearchVersions`](#es-configuration-api-actions-listelasticsearchversions) | GET | 
+| [`ListTags`](#es-configuration-api-actions-listtags) | GET | 
+| [`RemoveTags`](#es-configuration-api-actions-removetags) | POST | 
+| [`UpdateElasticsearchDomainConfig`](#es-configuration-api-actions-updateelasticsearchdomainconfig) | POST | 
 
 ### AddTags<a name="es-configuration-api-actions-addtags"></a>
 
-Attaches resource tags to an Amazon ES domain\. For more information, see Tagging Amazon ES Domains\.
+Attaches resource tags to an Amazon ES domain\. For more information, see [Tagging Amazon ES Domains](es-managedomains.md#es-managedomains-awsresourcetagging)\.
 
 #### Syntax<a name="w3ab1c61b7b9b5"></a>
 
@@ -65,8 +65,8 @@ This operation does not use request parameters\.
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| TagList | TagList | Yes | List of resource tags | 
-| ARN | ARN | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain to which you want to attach resource tags\. | 
+| TagList | [`TagList`](#es-configuration-api-datatypes-taglist) | Yes | List of resource tags | 
+| ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain to which you want to attach resource tags\. | 
 
 #### Response Elements<a name="w3ab1c61b7b9c11"></a>
 
@@ -76,13 +76,13 @@ Not applicable\. The `AddTags` operation does not return a data structure\.
 
 The `AddTags` operation can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `LimitExceededException`
++ [`LimitExceededException`](#es-configuration-api-errors-limitexceeded)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
 #### Example<a name="w3ab1c61b7b9c15"></a>
 
@@ -115,7 +115,7 @@ Date: Sat, 05 Sep 2015 01:20:55 GMT
 
 ### CreateElasticsearchDomain<a name="es-configuration-api-actions-createelasticsearchdomain"></a>
 
-Creates a new Amazon ES domain\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomains)\.
+Creates a new Amazon ES domain\. For more information, see [ Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\.
 
 **Note**  
 If you attempt to create an Amazon ES domain and a domain with the same name already exists, the API does not report an error\. Instead, it returns details for the existing domain\.
@@ -185,16 +185,16 @@ This operation does not use HTTP request parameters\.
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | DomainName | Yes | Name of the Amazon ES domain to create\. | 
-| ElasticsearchVersion | String | No | Version of Elasticsearch\. If not specified, 1\.5 is used as the default\. For the full list of supported versions, see [[ERROR] BAD/MISSING LINK TEXT](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. | 
-| ElasticsearchClusterConfig | ElasticsearchClusterConfig | No | Container for the cluster configuration of an Amazon ES domain\. | 
-| EBSOptions | EBSOptions | No | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see Configuring EBS\-based Storage\. | 
-| VPCOptions | VPCOptions | No | Container for the values required to configure Amazon ES to work with a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
-| AccessPolicies | String | No | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see Configuring Access Policies\. | 
-| SnapshotOptions | SnapshotOptions | No | Container for parameters required to configure automated snapshots of domain indices\. For more information, see Configuring Snapshots\. | 
-| AdvancedOptions | AdvancedOptions | No | Key\-value pairs to specify advanced configuration options\. For more information, see Configuring Advanced Options\. | 
-| LogPublishingOptions | LogPublishingOptions | No | Key\-value pairs to configure slow log publishing\. | 
-| EncryptionAtRestOptions | EncryptionAtRestOptions | No | Key\-value pairs to enable encryption at rest\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain to create\. | 
+| ElasticsearchVersion | String | No | Version of Elasticsearch\. If not specified, 1\.5 is used as the default\. For the full list of supported versions, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. | 
+| ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | No | Container for the cluster configuration of an Amazon ES domain\. | 
+| EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | No | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. | 
+| VPCOptions | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | No | Container for the values required to configure Amazon ES to work with a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
+| AccessPolicies | String | No | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\. | 
+| SnapshotOptions | [`SnapshotOptions`](#es-configuration-api-datatypes-snapshotoptions) | No | Container for parameters required to configure automated snapshots of domain indices\. For more information, see [Configuring Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. | 
+| AdvancedOptions | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\. | 
+| LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | No | Key\-value pairs to configure slow log publishing\. | 
+| EncryptionAtRestOptions | [`EncryptionAtRestOptions`](#es-configuration-api-datatypes-encryptionatrest) | No | Key\-value pairs to enable encryption at rest\. | 
 
 #### Response Elements<a name="w3ab1c61b7c11c13"></a>
 
@@ -203,25 +203,25 @@ This operation does not use HTTP request parameters\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainStatus | ElasticsearchDomainStatus | Specifies the status and configuration of a new Amazon ES domain\. | 
+| DomainStatus | [ElasticsearchDomainStatus](#es-configuration-api-datatypes-elasticsearchdomainstatus) | Specifies the status and configuration of a new Amazon ES domain\. | 
 
 #### Errors<a name="w3ab1c61b7c11c15"></a>
 
 `CreateElasticsearchDomain` can return any of the following errors:
 
-+  `BaseException`
++ [ `BaseException`](#es-configuration-api-errors-baseexception)
 
-+  `DisabledOperationException`
++ [ `DisabledOperationException`](#es-configuration-api-errors-disabledoperation)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `InvalidTypeException`
++ [`InvalidTypeException`](#es-configuration-api-errors-invalidtype)
 
-+ `LimitExceededException`
++ [`LimitExceededException`](#es-configuration-api-errors-limitexceeded)
 
-+ `ResourceAlreadyExistsException`
++ [`ResourceAlreadyExistsException`](#es-configuration-api-errors-resourcealreadyexists)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c11c17"></a>
 
@@ -343,7 +343,7 @@ DELETE /2015-01-01/es/domain/<DOMAIN_NAME>
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | DomainName | Yes | Name of the Amazon ES domain that you want to delete\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to delete\. | 
 
 #### Request Body<a name="w3ab1c61b7c15b9"></a>
 
@@ -356,19 +356,19 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainStatus | ElasticsearchDomainStatus | Specifies the configuration of the specified Amazon ES domain\. | 
+| DomainStatus | [ElasticsearchDomainStatus](#es-configuration-api-datatypes-elasticsearchdomainstatus) | Specifies the configuration of the specified Amazon ES domain\. | 
 
 #### Errors<a name="w3ab1c61b7c15c13"></a>
 
 The `DeleteElasticsearchDomain` operation can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `ResourceNotFoundException`
++ [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c15c15"></a>
 
@@ -468,11 +468,11 @@ Not applicable\. The `DeleteElasticsearchServiceRole` operation does not return 
 
 `DeleteElasticsearchServiceRole` can return any of the following errors:
 
-+  `BaseException`
++ [ `BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c17c17"></a>
 
@@ -505,7 +505,7 @@ GET /2015-01-01/es/domain/<DOMAIN_NAME>
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | DomainName | Yes | Name of the Amazon ES domain that you want to describe\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to describe\. | 
 
 #### Request Body<a name="w3ab1c61b7c19b9"></a>
 
@@ -518,19 +518,19 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainStatus | ElasticsearchDomainStatus | Configuration of the specified Amazon ES domain\. | 
+| DomainStatus | [ElasticsearchDomainStatus](#es-configuration-api-datatypes-elasticsearchdomainstatus) | Configuration of the specified Amazon ES domain\. | 
 
 #### Errors<a name="w3ab1c61b7c19c13"></a>
 
 `DescribeElasticsearchDomain` can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `ResourceNotFoundException`
++ [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c19c15"></a>
 
@@ -604,7 +604,7 @@ GET /2015-01-01/es/domain/<DOMAIN_NAME>/config
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | DomainName | Yes | Name of the Amazon ES domain\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain\. | 
 
 #### Request Body<a name="w3ab1c61b7c21b9"></a>
 
@@ -617,17 +617,17 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainConfig | ElasticsearchDomainConfig | Configuration of the Amazon ES domain\. | 
+| DomainConfig | [`ElasticsearchDomainConfig`](#es-configuration-api-datatypes-esdomainconfig) | Configuration of the Amazon ES domain\. | 
 
 #### Errors<a name="w3ab1c61b7c21c13"></a>
 
 The `DescribeElasticsearchDomainConfig` operation can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `ResourceNotFoundException`
++ [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
 #### Example<a name="w3ab1c61b7c21c15"></a>
 
@@ -808,7 +808,7 @@ This operation does not use HTTP request parameters\.
 
 | Field | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainNames | DomainNameList | Yes | Array of Amazon ES domains in the following format:`{"DomainNames":["<Domain_Name>","<Domain_Name>"...]` | 
+| DomainNames | [DomainNameList](#es-configuration-api-datatypes-domainnamelist) | Yes | Array of Amazon ES domains in the following format:`{"DomainNames":["<Domain_Name>","<Domain_Name>"...]` | 
 
 #### Response Elements<a name="w3ab1c61b7c23c11"></a>
 
@@ -817,17 +817,17 @@ This operation does not use HTTP request parameters\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainStatusList | ElasticsearchDomainStatusList | List that contains the status of each requested Amazon ES domain\. | 
+| DomainStatusList | [`ElasticsearchDomainStatusList`](#es-configuration-api-datatypes-esdomainstatuslist) | List that contains the status of each requested Amazon ES domain\. | 
 
 #### Errors<a name="w3ab1c61b7c23c13"></a>
 
 The `DescribeElasticsearchDomains` operation can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c23c15"></a>
 
@@ -964,9 +964,9 @@ GET 2015-01-01/es/instanceTypeLimits/{ElasticsearchVersion}/{InstanceType}?domai
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| ElasticsearchVersion | String | Yes | Elasticsearch version\. For a list of supported versions, see [[ERROR] BAD/MISSING LINK TEXT](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. | 
+| ElasticsearchVersion | String | Yes | Elasticsearch version\. For a list of supported versions, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. | 
 | InstanceType | String | Yes | Instance type\. To view instance types by region, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. | 
-| DomainName | DomainName | No | The name of an existing domain\. Only specify if you need the limits for an existing domain\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | No | The name of an existing domain\. Only specify if you need the limits for an existing domain\. | 
 
 #### Request Body<a name="w3ab1c61b7c25b9"></a>
 
@@ -985,17 +985,17 @@ This operation does not use the HTTP request body\.
 
 The `DescribeElasticsearchInstanceTypeLimits` operation can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `InvalidTypeException`
++ [`InvalidTypeException`](#es-configuration-api-errors-invalidtype)
 
-+ `LimitExceededException`
++ [`LimitExceededException`](#es-configuration-api-errors-limitexceeded)
 
-+ `ResourceNotFoundException`
++ [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c25c15"></a>
 
@@ -1143,15 +1143,15 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainNameList | DomainNameList | The names of all Amazon ES domains owned by the current user\. | 
+| DomainNameList | [`DomainNameList`](#es-configuration-api-datatypes-domainnamelist) | The names of all Amazon ES domains owned by the current user\. | 
 
 #### Errors<a name="w3ab1c61b7c27c13"></a>
 
 The `ListDomainNames` operation can return any of the following errors:
 
-+ BaseException
++ [BaseException](#es-configuration-api-errors-baseexception)
 
-+ ValidationException
++ [ValidationException](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c27c15"></a>
 
@@ -1218,13 +1218,13 @@ This operation does not use the HTTP request body\.
 
 `ListElasticsearchInstanceTypes` can return any of the following errors:
 
-+  `BaseException`
++ [ `BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `ResourceNotFoundException`
++ [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c29c15"></a>
 
@@ -1300,13 +1300,13 @@ This operation does not use the HTTP request body\.
 
 `ListElasticsearchVersions` can return any of the following errors:
 
-+  `BaseException`
++ [ `BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `ResourceNotFoundException`
++ [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c31c15"></a>
 
@@ -1349,7 +1349,7 @@ GET /2015-01-01/tags?arn=<DOMAIN_ARN>
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| ARN | ARN | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain\. | 
+| ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain\. | 
 
 #### Request Body<a name="w3ab1c61b7c33b9"></a>
 
@@ -1362,19 +1362,19 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| TagList | TagList | List of resource tags\. For more information, see Tagging Amazon Elasticsearch Service Domains\. | 
+| TagList | [`TagList`](#es-configuration-api-datatypes-taglist) | List of resource tags\. For more information, see [Tagging Amazon Elasticsearch Service Domains](es-managedomains.md#es-managedomains-awsresourcetagging)\. | 
 
 #### Errors<a name="w3ab1c61b7c33c13"></a>
 
 The `ListTags` operation can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `ResourceNotFoundException`
++ [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
 #### Example<a name="w3ab1c61b7c33c15"></a>
 
@@ -1433,8 +1433,8 @@ This operation does not use HTTP request parameters\.
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| ARN | ARN | Yes | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
-| TagKeys | TagKey | Yes | List of tag keys for resource tags that you want to remove from an Amazon ES domain\. | 
+| ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
+| TagKeys | [`TagKey`](#es-configuration-api-datatypes-tagkey) | Yes | List of tag keys for resource tags that you want to remove from an Amazon ES domain\. | 
 
 #### Response Elements<a name="w3ab1c61b7c35c11"></a>
 
@@ -1444,11 +1444,11 @@ Not applicable\. The `RemoveTags` operation does not return a response element\.
 
 The `RemoveTags` operation can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
 #### Example<a name="w3ab1c61b7c35c15"></a>
 
@@ -1531,14 +1531,14 @@ This operation does not use HTTP request parameters\.
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | DomainName | Yes | Name of the Amazon ES domain for which you want to update the configuration\. | 
-| ElasticsearchClusterConfig | ElasticsearchClusterConfig | No | Desired changes to the cluster configuration, such as the instance type and number of EC2 instances\. | 
-| EBSOptions | EBSOptions | No | Type and size of EBS volumes attached to data nodes\.  | 
-| VPCOptions | VPCOptions | No | Container for the values required to configure Amazon ES to work with a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
-| SnapshotOptions | SnapshotOptions | No | Hour during which the service takes an automated daily snapshot of the indices in the Amazon ES domain\. | 
-| AdvancedOptions | AdvancedOptions | No | Key\-value pairs to specify advanced configuration options\. For more information, see Configuring Advanced Options\. | 
-| AccessPolicies | String | No | Specifies the access policies for the Amazon ES domain\. For more information, see Configuring Access Policies\. | 
-| LogPublishingOptions | LogPublishingOptions | No | Key\-value string pairs to configure slow log publishing\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain for which you want to update the configuration\. | 
+| ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | No | Desired changes to the cluster configuration, such as the instance type and number of EC2 instances\. | 
+| EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | No | Type and size of EBS volumes attached to data nodes\.  | 
+| VPCOptions | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | No | Container for the values required to configure Amazon ES to work with a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
+| SnapshotOptions | [`SnapshotOptions`](#es-configuration-api-datatypes-snapshotoptions) | No | Hour during which the service takes an automated daily snapshot of the indices in the Amazon ES domain\. | 
+| AdvancedOptions | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\. | 
+| AccessPolicies | String | No | Specifies the access policies for the Amazon ES domain\. For more information, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\. | 
+| LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | No | Key\-value string pairs to configure slow log publishing\. | 
 
 #### Response Elements<a name="w3ab1c61b7c37c11"></a>
 
@@ -1553,15 +1553,15 @@ This operation does not use HTTP request parameters\.
 
 `UpdateElasticsearchDomainConfig` can return any of the following errors:
 
-+ `BaseException`
++ [`BaseException`](#es-configuration-api-errors-baseexception)
 
-+ `InternalException`
++ [`InternalException`](#es-configuration-api-errors-internal)
 
-+ `InvalidTypeException`
++ [`InvalidTypeException`](#es-configuration-api-errors-invalidtype)
 
-+ `LimitExceededException`
++ [`LimitExceededException`](#es-configuration-api-errors-limitexceeded)
 
-+ `ValidationException`
++ [`ValidationException`](#es-configuration-api-errors-validationexception)
 
 #### Example<a name="w3ab1c61b7c37c15"></a>
 
@@ -1724,7 +1724,7 @@ Key\-value string pairs to specify advanced Elasticsearch configuration options\
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| rest\.action\.multi\.allow\_explicit\_index | Key\-value pair:`rest.action.multi.allow_explicit_index=<true|false>` | Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. If you want to configure access policies for domain sub\-resources, such as specific indices and domain APIs, you must disable this property\. For more information, see [URL\-based Access Control](https://www.elastic.co/guide/en/elasticsearch/reference/current/url-access-control.html)\. For more information about access policies for sub\-resources, see Configuring Access Policies\. | 
+| rest\.action\.multi\.allow\_explicit\_index | Key\-value pair:`rest.action.multi.allow_explicit_index=<true|false>` | Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. If you want to configure access policies for domain sub\-resources, such as specific indices and domain APIs, you must disable this property\. For more information, see [URL\-based Access Control](https://www.elastic.co/guide/en/elasticsearch/reference/current/url-access-control.html)\. For more information about access policies for sub\-resources, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\. | 
 | indices\.fielddata\.cache\.size | Key\-value pair:`indices.fielddata.cache.size=<percentage_of_heap>` | Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is unbounded\. For more information, see [Field Data](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-fielddata.html) in the Elasticsearch documentation\. | 
 | indices\.query\.bool\.max\_clause\_count | Key\-value pair:`indices.query.bool.max_clause_count=<int>` | Specifies the maximum number of clauses allowed in a Lucene boolean query\. 1024 is the default\. Queries with more than the permitted number of clauses result in a TooManyClauses error\. To learn more, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\. | 
 
@@ -1737,8 +1737,8 @@ Status of an update to advanced configuration options for an Amazon ES domain\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Options | AdvancedOptions | Key\-value pairs to specify advanced Elasticsearch configuration options\. | 
-| Status | OptionStatus | Status of an update to advanced configuration options for an Amazon ES domain\. | 
+| Options | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | Key\-value pairs to specify advanced Elasticsearch configuration options\. | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to advanced configuration options for an Amazon ES domain\. | 
 
 ### ARN<a name="es-configuration-api-datatypes-arn"></a>
 
@@ -1758,15 +1758,15 @@ Container for the parameters required by the `CreateElasticsearchDomain` service
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainName | DomainName | Name of the Amazon ES domain to create\. | 
-| ElasticsearchClusterConfig | ElasticsearchClusterConfig | Container for the cluster configuration of an Amazon ES domain\. | 
-| EBSOptions | EBSOptions | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see Configuring EBS\-based Storage\. | 
-| AccessPolicies | String | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see Configuring Access Policies\. | 
-| SnapshotOptions | SnapshotOptionsStatus | Container for parameters required to configure automated snapshots of domain indices\. For more information, see Configuring Snapshots\. | 
-| VPCOptions | VPCOptions | Container for the values required to configure Amazon ES to work with a VPC\. | 
-| LogPublishingOptions | LogPublishingOptions | Key\-value string pairs to configure slow log publishing\. | 
-| SnapshotOptions | SnapshotOptionsStatus | Container for parameters required to configure automated snapshots of domain indices\. For more information, see Configuring Snapshots\. | 
-| AdvancedOptions | AdvancedOptionsStatus | Key\-value pairs to specify advanced configuration options\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Name of the Amazon ES domain to create\. | 
+| ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | Container for the cluster configuration of an Amazon ES domain\. | 
+| EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. | 
+| AccessPolicies | String | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\. | 
+| SnapshotOptions | [`SnapshotOptionsStatus`](#es-configuration-api-datatypes-snapshotoptionsstatus) | Container for parameters required to configure automated snapshots of domain indices\. For more information, see [Configuring Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. | 
+| VPCOptions | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | Container for the values required to configure Amazon ES to work with a VPC\. | 
+| LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Key\-value string pairs to configure slow log publishing\. | 
+| SnapshotOptions | [`SnapshotOptionsStatus`](#es-configuration-api-datatypes-snapshotoptionsstatus) | Container for parameters required to configure automated snapshots of domain indices\. For more information, see [Configuring Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. | 
+| AdvancedOptions | [`AdvancedOptionsStatus`](#es-configuration-api-datatypes-advancedoptionsstatus) | Key\-value pairs to specify advanced configuration options\. | 
 
 ### DomainID<a name="es-configuration-api-datatypes-domainid"></a>
 
@@ -1801,7 +1801,7 @@ String of Amazon ES domain names\.
 
 ### EBSOptions<a name="es-configuration-api-datatypes-ebsoptions"></a>
 
-Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see Configuring EBS\-based Storage\.
+Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\.
 
 
 ****  
@@ -1824,10 +1824,10 @@ Container for the cluster configuration of an Amazon ES domain\.
 | --- | --- | --- | 
 | InstanceType | String | Instance type of data nodes in the cluster\. | 
 | InstanceCount | Integer | Number of instances in the cluster\. | 
-| DedicatedMasterEnabled | Boolean | Indicates whether dedicated master nodes are enabled for the cluster\. True if the cluster will use a dedicated master node\. False if the cluster will not\. For more information, see About Dedicated Master Nodes\. | 
+| DedicatedMasterEnabled | Boolean | Indicates whether dedicated master nodes are enabled for the cluster\. True if the cluster will use a dedicated master node\. False if the cluster will not\. For more information, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\. | 
 | DedicatedMasterType | String | Amazon ES instance type of the dedicated master nodes in the cluster\. | 
 | DedicatedMasterCount | Integer | Number of dedicated master nodes in the cluster\. | 
-| ZoneAwarenessEnabled | Boolean | Indicates whether zone awareness is enabled\. Zone awareness allocates the nodes and replica index shards belonging to a cluster across two Availability Zones in the same region\.If you enable zone awareness, you must have an even number of instances in the instance count, and you also must use the Amazon ES Configuration API to replicate your data for your Elasticsearch cluster\. For more information, see Enabling Zone Awareness\. | 
+| ZoneAwarenessEnabled | Boolean | Indicates whether zone awareness is enabled\. Zone awareness allocates the nodes and replica index shards belonging to a cluster across two Availability Zones in the same region\.If you enable zone awareness, you must have an even number of instances in the instance count, and you also must use the Amazon ES Configuration API to replicate your data for your Elasticsearch cluster\. For more information, see [Enabling Zone Awareness](es-managedomains.md#es-managedomains-zoneawareness)\. | 
 
 ### ElasticsearchDomainConfig<a name="es-configuration-api-datatypes-esdomainconfig"></a>
 
@@ -1839,14 +1839,14 @@ Container for the configuration of an Amazon ES domain\.
 | Field | Data Type | Description | 
 | --- | --- | --- | 
 | ElasticsearchVersion | String | Elasticsearch version\. | 
-| ElasticsearchClusterConfig | ElasticsearchClusterConfig | Container for the cluster configuration of an Amazon ES domain\. | 
-| EBSOptions | EBSOptions | Container for EBS options configured for an Amazon ES domain\. | 
-| AccessPolicies | String | Specifies the access policies for the Amazon ES domain\. For more information, see Configuring Access Policies\. | 
-| SnapshotOptions | SnapshotOptionsStatus | Hour during which the service takes an automated daily snapshot of the indices in the Amazon ES domain\. For more information, see Configuring Snapshots\. | 
-| VPCOptions | VPCDerivedInfoStatus | The current VPCOptions for the domain and the status of any updates to their configuration\. | 
-| LogPublishingOptions | LogPublishingOptions | Key\-value pairs to configure slow log publishing\. | 
-| AdvancedOptions | AdvancedOptionsStatus | Key\-value pairs to specify advanced configuration options\. | 
-| EncryptionAtRestOptions | EncryptionAtRestOptionsStatus | Key\-value pairs to enable encryption at rest\. | 
+| ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | Container for the cluster configuration of an Amazon ES domain\. | 
+| EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | Container for EBS options configured for an Amazon ES domain\. | 
+| AccessPolicies | String | Specifies the access policies for the Amazon ES domain\. For more information, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\. | 
+| SnapshotOptions | [`SnapshotOptionsStatus`](#es-configuration-api-datatypes-snapshotoptionsstatus) | Hour during which the service takes an automated daily snapshot of the indices in the Amazon ES domain\. For more information, see [Configuring Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. | 
+| VPCOptions | [`VPCDerivedInfoStatus`](#es-configuration-api-datatypes-vpcderivedinfostatus) | The current [VPCOptions](#es-configuration-api-datatypes-vpcoptions) for the domain and the status of any updates to their configuration\. | 
+| LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Key\-value pairs to configure slow log publishing\. | 
+| AdvancedOptions | [`AdvancedOptionsStatus`](#es-configuration-api-datatypes-advancedoptions) | Key\-value pairs to specify advanced configuration options\. | 
+| EncryptionAtRestOptions | [`EncryptionAtRestOptionsStatus`](#es-configuration-api-datatypes-encryptionatreststatus) | Key\-value pairs to enable encryption at rest\. | 
 
 ### ElasticsearchDomainStatus<a name="es-configuration-api-datatypes-elasticsearchdomainstatus"></a>
 
@@ -1857,23 +1857,23 @@ Container for the contents of a `DomainStatus` data structure\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainID | DomainID | Unique identifier for an Amazon ES domain\. | 
-| DomainName | DomainName | Name of an Amazon ES domain\. Domain names are unique across all domains owned by the same account within an AWS Region\. Domain names must start with a lowercase letter and must be between 3 and 28 characters\. Valid characters are a\-z \(lowercase only\), 0\-9, and – \(hyphen\)\. | 
-| ARN | ARN | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
+| DomainID | [`DomainID`](#es-configuration-api-datatypes-domainid) | Unique identifier for an Amazon ES domain\. | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Name of an Amazon ES domain\. Domain names are unique across all domains owned by the same account within an AWS Region\. Domain names must start with a lowercase letter and must be between 3 and 28 characters\. Valid characters are a\-z \(lowercase only\), 0\-9, and – \(hyphen\)\. | 
+| ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
 | Created | Boolean | Status of the creation of an Amazon ES domain\. True if creation of the domain is complete\. False if domain creation is still in progress\. | 
 | Deleted | Boolean | Status of the deletion of an Amazon ES domain\. True if deletion of the domain is complete\. False if domain deletion is still in progress\. | 
-| Endpoint | ServiceUrl | Domain\-specific endpoint used to submit index, search, and data upload requests to an Amazon ES domain\. | 
-| Endpoints | EndpointsMap | The key\-value pair that exists if the Amazon ES domain uses VPC endpoints\. | 
+| Endpoint | [`ServiceUrl`](#es-configuration-api-datatypes-serviceurl) | Domain\-specific endpoint used to submit index, search, and data upload requests to an Amazon ES domain\. | 
+| Endpoints | [`EndpointsMap`](#es-configuration-api-datatypes-endpointsmap) | The key\-value pair that exists if the Amazon ES domain uses VPC endpoints\. | 
 | Processing | Boolean | Status of a change in the configuration of an Amazon ES domain\. True if the service is still processing the configuration changes\. False if the configuration change is active\. You must wait for a domain to reach active status before submitting index, search, and data upload requests\. | 
 | ElasticsearchVersion | String | Elasticsearch version\. | 
-| ElasticsearchClusterConfig | ElasticsearchClusterConfig | Container for the cluster configuration of an Amazon ES domain\. | 
-| EBSOptions | EBSOptions | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see Configuring EBS\-based Storage\. | 
-| AccessPolicies | String | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see Configuring Access Policies\. | 
-| SnapshotOptions | SnapshotOptions | Container for parameters required to configure the time of daily automated snapshots of Amazon ES domain indices\.  | 
-| VPCOptions | VPCDerivedInfo | Information that Amazon ES derives based on VPCOptions for the domain\. | 
-| LogPublishingOptions | LogPublishingOptions | Key\-value pairs to configure slow log publishing\. | 
-| AdvancedOptions | AdvancedOptions | Key\-value pairs to specify advanced configuration options\. | 
-| EncryptionAtRestOptions | EncryptionAtRestOptions | Key\-value pairs to enable encryption at rest\. | 
+| ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | Container for the cluster configuration of an Amazon ES domain\. | 
+| EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. | 
+| AccessPolicies | String | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\. | 
+| SnapshotOptions | [`SnapshotOptions`](#es-configuration-api-datatypes-snapshotoptions) | Container for parameters required to configure the time of daily automated snapshots of Amazon ES domain indices\.  | 
+| VPCOptions | [`VPCDerivedInfo`](#es-configuration-api-datatypes-vpcoptions) | Information that Amazon ES derives based on [VPCOptions](#es-configuration-api-datatypes-vpcoptions) for the domain\. | 
+| LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Key\-value pairs to configure slow log publishing\. | 
+| AdvancedOptions | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | Key\-value pairs to specify advanced configuration options\. | 
+| EncryptionAtRestOptions | [`EncryptionAtRestOptions`](#es-configuration-api-datatypes-encryptionatrest) | Key\-value pairs to enable encryption at rest\. | 
 
 ### ElasticsearchDomainStatusList<a name="es-configuration-api-datatypes-esdomainstatuslist"></a>
 
@@ -1884,7 +1884,7 @@ List that contains the status of each specified Amazon ES domain\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| DomainStatusList | ElasticsearchDomainStatus | List that contains the status of each specified Amazon ES domain\. | 
+| DomainStatusList | [`ElasticsearchDomainStatus`](#es-configuration-api-datatypes-elasticsearchdomainstatus) | List that contains the status of each specified Amazon ES domain\. | 
 
 ### EncryptionAtRestOptions<a name="es-configuration-api-datatypes-encryptionatrest"></a>
 
@@ -1907,8 +1907,8 @@ Status of the domain's encryption at rest options\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Options | EncryptionAtRestOptions | Encryption at rest options for the domain\. | 
-| Status | OptionStatus | Status of the domain's encryption at rest options\. | 
+| Options | [`EncryptionAtRestOptions`](#es-configuration-api-datatypes-encryptionatrest) | Encryption at rest options for the domain\. | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of the domain's encryption at rest options\. | 
 
 ### EndpointsMap<a name="es-configuration-api-datatypes-endpointsmap"></a>
 
@@ -1923,7 +1923,7 @@ The key\-value pair that contains the VPC endpoint\. Only exists if the Amazon E
 
 ### LogPublishingOptions<a name="es-configuration-api-datatypes-logpublishingoptions"></a>
 
-Specifies whether the Amazon ES domain publishes the [Elasticsearch slow logs](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html) to Amazon CloudWatch\. You still have to enable the *collection* of slow logs using the Elasticsearch REST API\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomain-configure-slow-logs-indices)\.
+Specifies whether the Amazon ES domain publishes the [Elasticsearch slow logs](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html) to Amazon CloudWatch\. You still have to enable the *collection* of slow logs using the Elasticsearch REST API\. To learn more, see [Setting Elasticsearch Logging Thresholds](es-createupdatedomains.md#es-createdomain-configure-slow-logs-indices)\.
 
 
 ****  
@@ -1931,18 +1931,8 @@ Specifies whether the Amazon ES domain publishes the [Elasticsearch slow logs](h
 | Field | Data Type | Description | 
 | --- | --- | --- | 
 | Endpoints | Key\-value: "vpc": "<VPC\_ENDPOINT>" | The VPC endpoint for the domain\. | 
-| INDEX\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether or not the Elasticsearch [index slow log](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html#index-slow-log) should be published there: 
-
-```
-"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",
-"Enabled":true
-``` | 
-| SEARCH\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether or not the Elasticsearch [search slow log](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html#search-slow-log) should be published there: 
-
-```
-"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",
-"Enabled":true
-``` | 
+| INDEX\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether or not the Elasticsearch [index slow log](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html#index-slow-log) should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
+| SEARCH\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether or not the Elasticsearch [search slow log](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html#search-slow-log) should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
 
 ### LogPublishingOptionsStatus<a name="es-configuration-api-datatypes-logpublishingoptions-status"></a>
 
@@ -1953,8 +1943,8 @@ Status of an update to the configuration of the slow log publishing options for 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Options | LogPublishingOptions | Slow log publishing options for the domain | 
-| Status | OptionStatus | Status of an update to snapshot options for an Amazon ES domain | 
+| Options | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Slow log publishing options for the domain | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to snapshot options for an Amazon ES domain | 
 
 ### OptionState<a name="es-configuration-api-datatypes-optionsstate"></a>
 
@@ -1979,7 +1969,7 @@ Status of an update to configuration options for an Amazon ES domain\.
 | CreationDate | Timestamp | Date and time when the Amazon ES domain was created | 
 | UpdateDate | Timestamp | Date and time when the Amazon ES domain was updated | 
 | UpdateVersion | Integer | Whole number that specifies the latest version for the entity | 
-| State | OptionState | State of an update to configuration options for an Amazon ES domain | 
+| State | [`OptionState`](#es-configuration-api-datatypes-optionsstate) | State of an update to configuration options for an Amazon ES domain | 
 | PendingDeletion | Boolean | Indicates whether the service is processing a request to permanently delete the Amazon ES domain and all of its resources | 
 
 ### ServiceURL<a name="es-configuration-api-datatypes-serviceurl"></a>
@@ -2013,8 +2003,8 @@ Status of an update to the configuration of the daily automated snapshot for an 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Options | SnapshotOptions | Container for parameters required to configure the time of daily automated snapshots of indices in an Amazon ES domain | 
-| Status | OptionStatus | Status of an update to snapshot options for an Amazon ES domain | 
+| Options | [`SnapshotOptions`](#es-configuration-api-datatypes-snapshotoptions) | Container for parameters required to configure the time of daily automated snapshots of indices in an Amazon ES domain | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to snapshot options for an Amazon ES domain | 
 
 ### Tag<a name="es-configuration-api-datatypes-tag"></a>
 
@@ -2023,8 +2013,8 @@ Status of an update to the configuration of the daily automated snapshot for an 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Key | TagKey | Required name of the tag\. Tag keys must be unique for the Amazon ES domain to which they are attached\. For more information, see Tagging Amazon Elasticsearch Service Domains\. | 
-| Value | TagValue | Optional string value of the tag\. Tag values can be null and do not have to be unique in a tag set\. For example, you can have a key\-value pair in a tag set of project/Trinity and cost\-center/Trinity\.  | 
+| Key | [`TagKey`](#es-configuration-api-datatypes-tagkey) | Required name of the tag\. Tag keys must be unique for the Amazon ES domain to which they are attached\. For more information, see [Tagging Amazon Elasticsearch Service Domains](es-managedomains.md#es-managedomains-awsresourcetagging)\. | 
+| Value | [`TagValue`](#es-configuration-api-datatypes-tagvalue) | Optional string value of the tag\. Tag values can be null and do not have to be unique in a tag set\. For example, you can have a key\-value pair in a tag set of project/Trinity and cost\-center/Trinity\.  | 
 
 ### TagKey<a name="es-configuration-api-datatypes-tagkey"></a>
 
@@ -2042,7 +2032,7 @@ Status of an update to the configuration of the daily automated snapshot for an 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Tag | Tag | Resource tag attached to an Amazon ES domain\. | 
+| Tag | [`Tag`](#es-configuration-api-datatypes-tag) | Resource tag attached to an Amazon ES domain\. | 
 
 ### TagValue<a name="es-configuration-api-datatypes-tagvalue"></a>
 
@@ -2072,8 +2062,8 @@ Status of an update to the configuration of the daily automated snapshot for an 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Options | VPCDerivedInfo | Information that Amazon ES derives based on VPCOptions for the domain\. | 
-| Status | OptionStatus | Status of an update to VPC configuration options for an Amazon ES domain\. | 
+| Options | [`VPCDerivedInfo`](#es-configuration-api-datatypes-vpcderivedinfo) | Information that Amazon ES derives based on [VPCOptions](#es-configuration-api-datatypes-vpcoptions) for the domain\. | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to VPC configuration options for an Amazon ES domain\. | 
 
 ### VPCOptions<a name="es-configuration-api-datatypes-vpcoptions"></a>
 
@@ -2092,8 +2082,8 @@ Status of an update to the configuration of the daily automated snapshot for an 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Options | VPCOptions | Container for the values required to configure Amazon ES to work with a VPC\. | 
-| Status | OptionStatus | Status of an update to VPC configuration options for an Amazon ES domain\. | 
+| Options | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | Container for the values required to configure Amazon ES to work with a VPC\. | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to VPC configuration options for an Amazon ES domain\. | 
 
 ## Errors<a name="es-configuration-api-errors"></a>
 
@@ -2104,11 +2094,11 @@ Amazon ES throws the following errors:
 
 | Exception | Description | 
 | --- | --- | 
-| BaseException | Thrown for all service errors\. Contains the HTTP status code of the error\. | 
-| ValidationException | Thrown when the HTTP request contains invalid input or is missing required input\. Returns HTTP status code 400\. | 
-| DisabledOperationException | Thrown when the client attempts to perform an unsupported operation\. Returns HTTP status code 409\. | 
-| InternalException | Thrown when an error internal to the service occurs while processing a request\. Returns HTTP status code 500\. | 
-| InvalidTypeException | Thrown when trying to create or access an Amazon ES domain sub\-resource that is either invalid or not supported\. Returns HTTP status code 409\. | 
-| LimitExceededException | Thrown when trying to create more than the allowed number and type of Amazon ES domain resources and sub\-resources\. Returns HTTP status code 409\. | 
-| ResourceNotFoundException | Thrown when accessing or deleting a resource that does not exist\. Returns HTTP status code 400\. | 
-| ResourceAlreadyExistsException | Thrown when a client attempts to create a resource that already exists in an Amazon ES domain\. Returns HTTP status code 400\. | 
+| <a name="es-configuration-api-errors-baseexception"></a>BaseException | Thrown for all service errors\. Contains the HTTP status code of the error\. | 
+| <a name="es-configuration-api-errors-validationexception"></a>ValidationException | Thrown when the HTTP request contains invalid input or is missing required input\. Returns HTTP status code 400\. | 
+| <a name="es-configuration-api-errors-disabledoperation"></a>DisabledOperationException | Thrown when the client attempts to perform an unsupported operation\. Returns HTTP status code 409\. | 
+| <a name="es-configuration-api-errors-internal"></a>InternalException | Thrown when an error internal to the service occurs while processing a request\. Returns HTTP status code 500\. | 
+| <a name="es-configuration-api-errors-invalidtype"></a>InvalidTypeException | Thrown when trying to create or access an Amazon ES domain sub\-resource that is either invalid or not supported\. Returns HTTP status code 409\. | 
+| <a name="es-configuration-api-errors-limitexceeded"></a>LimitExceededException | Thrown when trying to create more than the allowed number and type of Amazon ES domain resources and sub\-resources\. Returns HTTP status code 409\. | 
+| <a name="es-configuration-api-errors-resourcenotfound"></a>ResourceNotFoundException | Thrown when accessing or deleting a resource that does not exist\. Returns HTTP status code 400\. | 
+| <a name="es-configuration-api-errors-resourcealreadyexists"></a>ResourceAlreadyExistsException | Thrown when a client attempts to create a resource that already exists in an Amazon ES domain\. Returns HTTP status code 400\. | 

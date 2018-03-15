@@ -72,4 +72,4 @@ If you are unsure whether Amazon ES is using the AWSServiceRoleForAmazonElastics
 
 ### Manually Delete a Service\-Linked Role<a name="slr-manual-delete"></a>
 
-Use the Amazon ES configuration API to delete the AWSServiceRoleForAmazonElasticsearchService service\-linked role\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-configuration-api.md#es-configuration-api-actions-deleteelasticsearchservicerole)\.
+Use the Amazon ES configuration API to delete the AWSServiceRoleForAmazonElasticsearchService service\-linked role\. For more information, see [DeleteElasticsearchServiceRole](es-configuration-api.md#es-configuration-api-actions-deleteelasticsearchservicerole)\.

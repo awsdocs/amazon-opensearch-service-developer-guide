@@ -82,6 +82,8 @@ Amazon ES includes the following features:
 
 Amazon ES currently supports the following Elasticsearch versions:
 
++ [6\.2](https://www.elastic.co/guide/en/elasticsearch/reference/6.2/index.html)
+
 + [6\.0](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/index.html)
 
 + [5\.5](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/index.html)
@@ -94,57 +96,63 @@ Amazon ES currently supports the following Elasticsearch versions:
 
 + [1\.5](https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index.html)
 
-Compared to earlier versions of Elasticsearch, the 5\.*x* and 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are some highlights:
+Compared to earlier versions of Elasticsearch, the 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are some highlights:
 
-+ **Support for Painless scripting** – Painless is an Elasticsearch built\-in scripting language\. Painless lets you run advanced queries against your data and automate operations like partial index updates in a fast, highly secure way\.
++ **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
 
-+ **Higher indexing performance** – The 5\.*x* and 6\.*x* versions of Elasticsearch provide better indexing capabilities that significantly increase the throughput of data updates\.
++ **Vega visualizations** – Kibana 6\.2 supports the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
 
-+ **Improved aggregations **– The 5\.*x* and 6\.*x* versions of Elasticsearch offer several aggregation improvements, such as recalculating aggregations only when the data changes\. These versions also deliver faster query performance\.
++ **Ranking evaluation** – The `_rank_eval` API lets you measure and track how ranked search results perform against a set of queries to ensure that your searches perform as expected\.
 
-For more information about the differences between Elasticsearch versions and the APIs that Amazon ES supports, see the [[ERROR] BAD/MISSING LINK TEXT](aes-supported-es-operations.md)\.
++ **Composite aggregations** – These aggregations build composite buckets from one or more fields and sort them in "natural order" \(alphabetically for terms, numerically or by date for histograms\)\.
 
-If you start a new Elasticsearch project, we strongly recommend that you choose the latest supported Elasticsearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see Migrating to a Different Elasticsearch Version\.
++ **Higher indexing performance** – Newer versions of Elasticsearch provide superior indexing capabilities that significantly increase the throughput of data updates\.
+
++ **Better safeguards** – The 6\.*x* versions of Elasticsearch offer many safeguards that are designed to prevent overly broad or complex queries from negatively affecting the performance and stability of the cluster\.
+
+For more information about the differences between Elasticsearch versions and the APIs that Amazon ES supports, see [Supported Elasticsearch Operations](aes-supported-es-operations.md)\.
+
+If you start a new Elasticsearch project, we strongly recommend that you choose the latest supported Elasticsearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see [Migrating to a Different Elasticsearch Version](es-version-migration.md)\.
 
 ## Getting Started with Amazon Elasticsearch Service<a name="aes-get-started"></a>
 
-To get started, sign up for an AWS account if you don't already have one\. For more information, see Signing Up for AWS\.
+To get started, sign up for an AWS account if you don't already have one\. For more information, see [Signing Up for AWS](#aws-sign-up)\.
 
-After you are set up with an account, complete the Getting Started tutorial for Amazon Elasticsearch Service\. Consult the following introductory topics if you need more information while learning about the service\.
+After you are set up with an account, complete the [Getting Started](es-gsg.md) tutorial for Amazon Elasticsearch Service\. Consult the following introductory topics if you need more information while learning about the service\.
 
 **Get Up and Running**
 
-+ Signing Up for AWS
++ [Signing Up for AWS](#aws-sign-up)
 
-+ Accessing Amazon ES
++ [Accessing Amazon ES](#accessing-amazon-elasticsearch)
 
-+ Getting Started with Amazon ES Domains
++ [Getting Started with Amazon ES Domains](es-gsg.md)
 
 **Learn the Basics**
 
-+ Regions and Endpoints for Amazon ES
++ [Regions and Endpoints for Amazon ES](#endpoints)
 
 + [Amazon Resource Names and AWS Namespaces](http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
 
-+ Scaling in Amazon ES
++ [Scaling in Amazon ES](#concepts-scaling)
 
-+ Choosing an Elasticsearch Version
++ [Choosing an Elasticsearch Version](#aes-choosing-version)
 
 **Choose Instance Types and Storage**
 
-+ Choosing an Instance Type
++ [Choosing an Instance Type](#aes-choosing-instance-type)
 
-+ Configuring EBS\-based Storage
++ [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)
 
 **Stay Secure**
 
-+ Signing Service Requests
++ [Signing Service Requests](#signing-requests)
 
-+ Configuring Access Policies
++ [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)
 
 ## Signing Up for AWS<a name="aws-sign-up"></a>
 
-If you're not already an AWS customer, your first step is to create an AWS account\. If you already have an AWS account, you are automatically signed up for Amazon ES\. Your AWS account enables you to access Amazon ES and other AWS services such as Amazon S3 and Amazon EC2\. There are no sign\-up fees, and you don't incur charges until you create a domain\. As with other AWS services, you pay only for the resources that you use\.
+If you're not already an AWS customer, your first step is to create an AWS account\. If you already have an AWS account, you are automatically signed up for Amazon ES\. Your AWS account enables you to access Amazon ES and other AWS services such as Amazon S3 and Amazon EC2\. There are no sign\-up fees, and you don't incur charges until you create a domain\. As with other AWS services, you pay only for the resources that you use\.<a name="setting-up-sign-up-for-aws-procedure"></a>
 
 **To create an AWS account**
 
@@ -156,7 +164,7 @@ This might be unavailable in your browser if you previously signed into the AWS 
 
    Part of the sign\-up procedure involves receiving a phone call and entering a PIN using the phone keypad\.
 
-You must enter payment information before you can begin using Amazon ES\. Note your AWS account number, because you'll need it later\.
+You must enter payment information before you can begin using Amazon ES\. Note your AWS account number, because you will need it later\.
 
 ## Accessing Amazon Elasticsearch Service<a name="accessing-amazon-elasticsearch"></a>
 
@@ -172,25 +180,29 @@ You can access Amazon ES through the Amazon ES console, the AWS SDKs, or the AWS
 
 Amazon ES provides regional endpoints for accessing the configuration API and domain\-specific endpoints for accessing the Elasticsearch APIs\. You use the configuration service to create and manage your domains\. The regional configuration service endpoints have this format: 
 
-`es.region.amazonaws.com`
+```
+es.region.amazonaws.com
+```
 
-For example, `es.us-east-1.amazonaws.com`\. For a list of supported regions, see [Regions and Endpoints](http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the *AWS General Reference*\.
+For a list of supported regions, see [Regions and Endpoints](http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the *AWS General Reference*\.
 
- Amazon ES provides a single service endpoint for a domain:
+Domain endpoints have the following format:
 
-+ `http://search-domainname-domainid.us-east-1.es.amazonaws.com`
+```
+http://search-domainname-domainid.us-east-1.es.amazonaws.com
+```
 
-You use a domain's endpoint to upload data, submit search requests, and perform any other supported Elasticsearch operations\.
+You use a domain's endpoint to upload data, submit search requests, and perform any other [supported Elasticsearch operations](aes-supported-es-operations.md)\.
 
 ## Choosing Instance Types<a name="aes-choosing-instance-type"></a>
 
-An instance type defines the CPU, RAM, storage capacity, and hourly cost for an *instance*, the Amazon Machine Image \(AMI\) that runs as a virtual server in the AWS Cloud\. Choose the instance type and the number of instances for your domain based on the amount of data you have and number of requests you anticipate\. For guidance, see [[ERROR] BAD/MISSING LINK TEXT](sizing-domains.md)\.
+An instance type defines the CPU, RAM, storage capacity, and hourly cost for an *instance*, the Amazon Machine Image \(AMI\) that runs as a virtual server in the AWS Cloud\. Choose the instance type and the number of instances for your domain based on the amount of data that you have and number of requests that you anticipate\. For guidance, see [Sizing Amazon ES Domains](sizing-domains.md)\.
 
 For general information about instance types, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
 
 ## Scaling in Amazon Elasticsearch Service<a name="concepts-scaling"></a>
 
-When you create a domain, you choose an initial number of Elasticsearch instances and an instance type\. However, these initial choices might not be adequate over time\. You can easily accommodate growth by scaling your Amazon ES domain horizontally \(more instances\) or vertically \(larger instance types\)\. Scaling is simple and requires no downtime\. To learn more, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomains-configure-cluster) and [[ERROR] BAD/MISSING LINK TEXT](es-managedomains.md#es-managedomains-configuration-changes)\.
+When you create a domain, you choose an initial number of Elasticsearch instances and an instance type\. However, these initial choices might not be adequate over time\. You can easily accommodate growth by scaling your Amazon ES domain horizontally \(more instances\) or vertically \(larger instance types\)\. Scaling is simple and requires no downtime\. To learn more, see [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster) and [About Configuration Changes](es-managedomains.md#es-managedomains-configuration-changes)\.
 
 ## Using Amazon EBS Volumes for Storage<a name="ebs-volumes-storage"></a>
 
@@ -202,7 +214,7 @@ You have the option of configuring your Amazon ES domain to use an Amazon EBS vo
 
 + Provisioned IOPS \(SSD\)
 
-For an overview, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\. For procedures that show you how to use Amazon EBS volumes for your Amazon ES domain, see Configuring EBS\-based Storage\. For information about the minimum and maximum size of supported EBS volumes in an Amazon ES domain, see EBS Volume Size Limits\. 
+For an overview, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\. For procedures that show you how to use Amazon EBS volumes for your Amazon ES domain, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. For information about the minimum and maximum size of supported EBS volumes in an Amazon ES domain, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\. 
 
 ## Signing Service Requests<a name="signing-requests"></a>
 
@@ -214,11 +226,11 @@ If you choose to call the Elasticsearch APIs directly, you must sign your own re
 
    The function returns a hash value based on your input\.
 
-1. Include the digital signature in the Authorization header of your request\.
+1. Include the digital signature in the `Authorization` header of your request\.
 
    The service recalculates the signature using the same hash function and input that you used\. If the resulting signature matches the signature in the request, the service processes the request\. Otherwise, the service rejects the request\.
 
-Amazon ES supports authentication using AWS Signature Version 4\. For more information, see [Signature Version 4 Signing Process](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)\. For some examples of signed requests to the Elasticsearch APIs, see [[ERROR] BAD/MISSING LINK TEXT](es-indexing.md#es-indexing-programmatic)\.
+Amazon ES supports authentication using AWS Signature Version 4\. For more information, see [Signature Version 4 Signing Process](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)\. For some examples of signed requests to the Elasticsearch APIs, see [Programmatic Indexing](es-indexing.md#es-indexing-programmatic)\.
 
 **Note**  
 The service ignores parameters passed in URLs for HTTP POST requests that are signed with Signature Version 4\.
@@ -234,10 +246,10 @@ Use AWS CloudTrail to get a history of the Amazon ES API calls and related event
 An Amazon ES domain automatically sends metrics to Amazon CloudWatch so that you can gather and analyze performance statistics\. You can monitor these metrics by using the AWS CLI or the AWS SDKs\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.
 
 [Kinesis](http://aws.amazon.com/documentation/kinesis/)  
-Kinesis is a managed service that scales elastically for real\-time processing of streaming data at a massive scale\. Amazon ES provides Lambda sample code for integration with Kinesis\. For more information, see Loading Streaming Data into Amazon ES From Kinesis\.
+Kinesis is a managed service that scales elastically for real\-time processing of streaming data at a massive scale\. Amazon ES provides Lambda sample code for integration with Kinesis\. For more information, see [Loading Streaming Data into Amazon ES From Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis-lambda-es)\.
 
 [Amazon S3](http://aws.amazon.com/documentation/s3/)  
-Amazon Simple Storage Service \(Amazon S3\) provides storage for the Internet\. You can use Amazon S3 to store and retrieve any amount of data at any time, from anywhere on the web\. Amazon ES provides Lambda sample code for integration with Amazon S3\. For more information, see Loading Streaming Data into Amazon ES from Amazon S3\.
+Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. You can use Amazon S3 to store and retrieve any amount of data at any time, from anywhere on the web\. Amazon ES provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.
 
 [AWS IAM](http://aws.amazon.com/iam/)  
 AWS Identity and Access Management \(IAM\) is a web service that you can use to manage users and user permissions in AWS\. You can use IAM to create user\-based access policies for your Amazon ES domains\. For more information, see the [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) documentation\.
@@ -245,7 +257,7 @@ AWS Identity and Access Management \(IAM\) is a web service that you can use to 
 Amazon ES integrates with the following services to provide data ingestion:
 
 [AWS Lambda](http://aws.amazon.com/documentation/lambda/)  
-AWS Lambda is a zero\-administration compute platform for backend web developers that runs your code in the AWS Cloud\. Amazon ES provides sample code to run on Lambda that integrates with Kinesis and Amazon S3\. For more information, see Loading Streaming Data into Amazon ES\.
+AWS Lambda is a zero\-administration compute platform for backend web developers that runs your code in the AWS Cloud\. Amazon ES provides sample code to run on Lambda that integrates with Kinesis and Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES](es-aws-integrations.md)\.
 
 [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. Amazon ES provides a Logstash plugin to support DynamoDB Streams and to sign AWS service requests\. 
@@ -254,8 +266,8 @@ Amazon DynamoDB is a fully managed NoSQL database service that provides fast and
 
 With AWS, you pay only for what you use\. For Amazon ES, you pay for each hour of use of an EC2 instance and for the cumulative size of any EBS storage volumes attached to your instances\. [Standard AWS data transfer charges](https://aws.amazon.com/ec2/pricing/) also apply\.
 
-However, a notable data transfer exception exists\. If you use zone awareness, Amazon ES does not bill for traffic between the two Availability Zones in which the domain resides\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\.
+However, a notable data transfer exception exists\. If you use [zone awareness](es-managedomains.md#es-managedomains-zoneawareness), Amazon ES does not bill for traffic between the two Availability Zones in which the domain resides\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\.
 
-For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information on charges incurred during configuration changes, see [[ERROR] BAD/MISSING LINK TEXT](es-managedomains.md#es-managedomains-config-charges)\.
+For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
 
 If you qualify for the AWS Free Tier, you receive up to 750 hours per month of use with the `t2.micro.elasticsearch` or `t2.small.elasticsearch` instance types\. You also receive up to 10 GB of Amazon EBS storage \(Magnetic or General Purpose\)\. For more information, see [AWS Free Tier](http://aws.amazon.com/free/)\.

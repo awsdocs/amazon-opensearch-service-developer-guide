@@ -1,9 +1,9 @@
 # Step 1: Create an Amazon ES Domain<a name="es-gsg-create-domain"></a>
 
 **Important**  
-This process is a concise tutorial for configuring a *test domain*\. It should not be used to create production domains\. For a comprehensive version of the same process, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md)\.
+This process is a concise tutorial for configuring a *test domain*\. It should not be used to create production domains\. For a comprehensive version of the same process, see [Creating and Configuring Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\.
 
-An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsearch engine instances that process HTTP requests to AWS, the indexed data that you want to search, snapshots of the domain, access policies, and metadata\. You can create an Amazon ES domain by using the Amazon ES console, the AWS CLI, or the AWS SDK\. If you don't already have an account, see [[ERROR] BAD/MISSING LINK TEXT](what-is-amazon-elasticsearch-service.md#aws-sign-up)\.
+An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsearch engine instances that process HTTP requests to AWS, the indexed data that you want to search, snapshots of the domain, access policies, and metadata\. You can create an Amazon ES domain by using the Amazon ES console, the AWS CLI, or the AWS SDK\. If you don't already have an account, see [Signing Up for AWS](what-is-amazon-elasticsearch-service.md#aws-sign-up)\.
 
 **To create an Amazon ES domain \(console\)**
 
@@ -13,7 +13,7 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
 1. On the **Define domain** page, for **Elasticsearch domain name**, type a name for the domain\. In this Getting Started tutorial, we use the domain name *movies* for the examples that we provide later in the tutorial\.
 
-1. For **Version**, choose an Elasticsearch version for your domain\. We recommend that you choose the latest supported version\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
+1. For **Version**, choose an Elasticsearch version for your domain\. We recommend that you choose the latest supported version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
 
 1. Choose **Next**\.
 
@@ -21,7 +21,7 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
 1. For **Instance type**, choose an instance type for the Amazon ES domain\. For this tutoral, we recommend `t2.small.elasticsearch`, a small and inexpensive instance type suitable for testing purposes\.
 
-1. For now, you can ignore the **Enable dedicated master** and **Enable zone awareness** check boxes\. For more information about both, see About Dedicated Master Nodes and Enabling Zone Awareness\.
+1. For now, you can ignore the **Enable dedicated master** and **Enable zone awareness** check boxes\. For more information about both, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md) and [Enabling Zone Awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
 
 1. For **Storage type**, choose **EBS**\.
 
@@ -31,9 +31,9 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
    1. For **EBS volume size**, type the size in GB of the external storage for *each* data node\. For this tutorial, you can use the default value of 10\.
 
-1. For now, you can ignore **Enable encryption at rest**\. For more information about the feature, see [[ERROR] BAD/MISSING LINK TEXT](encryption-at-rest.md)\.
+1. For now, you can ignore **Enable encryption at rest**\. For more information about the feature, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
-1. For **Automated snapshot start hour**, use the default value\. For more information, see [[ERROR] BAD/MISSING LINK TEXT](es-createupdatedomains.md#es-createdomain-configure-snapshots)\.
+1. For **Automated snapshot start hour**, use the default value\. For more information, see [Configuring Automatic Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\.
 
 1. Choose **Next**\.
 
@@ -41,7 +41,7 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
 1. For **Set the domain access policy to**, choose **Allow access to the domain from specific IP\(s\)** and enter your public IP address, which you can find by searching for "What is my IP?" on [Google](https://www.google.com)\. Then choose **OK**\.
 
-   To learn more about public access, VPC access, and access policies in general, see [[ERROR] BAD/MISSING LINK TEXT](es-ac.md) and [[ERROR] BAD/MISSING LINK TEXT](es-vpc.md)\.
+   To learn more about public access, VPC access, and access policies in general, see [Amazon Elasticsearch Service Access Control](es-ac.md) and [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
 1. Choose **Next**\.
 
@@ -72,4 +72,4 @@ aws es describe-elasticsearch-domain --domain movies
 
 **To create an Amazon ES domain \(AWS SDKs\)**
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the Amazon ES Configuration API Reference, including the `CreateElasticsearchDomain` action\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `CreateElasticsearchDomain` action\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 

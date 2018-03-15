@@ -10,7 +10,7 @@ The service enables `bootstrap.mlockall` in `elasticsearch.yml`, which locks JVM
 + `t2.medium.elasticsearch`
 
 **Scripting module**  
-The service supports scripting for Elasticsearch 5\.*x* domains\. The service does not support scripting for 1\.5 or 2\.3\.  
+The service supports scripting for Elasticsearch 5\.*x* and newer domains\. The service does not support scripting for 1\.5 or 2\.3\.  
 Supported scripting options include the following:  
 
 + Painless

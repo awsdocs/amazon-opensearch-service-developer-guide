@@ -33,11 +33,11 @@ AWS Lambda is available in limited regions\. For more information, see the list 
 
 You can integrate your Amazon ES domain with Amazon S3 and AWS Lambda\. Any new data sent to an S3 bucket triggers an event notification to Lambda, which then runs your custom Java or Node\.js application code\. After your application processes the data, it streams the data to your domain\. At a high level, setting up to load streaming data to Amazon ES requires the following steps:
 
-1. Creating a Lambda deployment package
+1. [Creating a Lambda deployment package](#es-aws-integrations-s3-lambda-es-deployment-package)
 
-1. Configuring a Lambda function
+1. [Configuring a Lambda function](#es-aws-integrations-s3-lambda-es-function-configuration)
 
-1. Granting authorization to add data to your Amazon ES domain
+1. [Granting authorization to add data to your Amazon ES domain](#es-aws-integrations-s3-lambda-es-authorizations)
 
 You also must create an Amazon S3 bucket and an Amazon ES domain\. Setting up this integration path has the following prerequisites\.
 
@@ -47,10 +47,10 @@ You also must create an Amazon S3 bucket and an Amazon ES domain\. Setting up th
 | Prerequisite | Description | 
 | --- | --- | 
 | Amazon S3 Bucket | The event source that triggers your Lambda function\. For more information, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. The bucket must reside in the same AWS Region as your Amazon ES domain\. | 
-| Amazon ES Domain | The destination for data after it is processed by the application code in your Lambda function\. For more information, see Creating Amazon ES Domains\. | 
+| Amazon ES Domain | The destination for data after it is processed by the application code in your Lambda function\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
 | Lambda Function | The Java or Node\.js application code that runs when S3 pushes an event notification to Lambda\. Amazon ES provides a sample application in Node\.js, s3\_lambda\_es\.js, that you can download to get started\. See the [Lambda sample code for Amazon ES](https://github.com/awslabs/amazon-elasticsearch-lambda-samples)\.  | 
-| Lambda Deployment Package | A \.zip file that consists of your Java or Node\.js application code and any dependencies\. For information about the required folder hierarchy, see Creating a Lambda Deployment Package\. For information about creating specific Lambda deployment packages, see [Creating a Deployment Package \(Node\.js\)](http://docs.aws.amazon.com/lambda/latest/dg/nodejs-create-deployment-pkg.html) and [Creating a Deployment Package \(Java\)](http://docs.aws.amazon.com/lambda/latest/dg/lambda-java-how-to-create-deployment-package.html)\. | 
-| Amazon ES Authorization | An IAM access policy that permits Lambda to add data to your domain\. Attach the policy to the Amazon S3 execution role that you create as part of your Lambda function\. For details, see Granting Authorization to Add Data to Your Amazon ES Domain\. | 
+| Lambda Deployment Package | A \.zip file that consists of your Java or Node\.js application code and any dependencies\. For information about the required folder hierarchy, see [Creating a Lambda Deployment Package](#es-aws-integrations-s3-lambda-es-deployment-package)\. For information about creating specific Lambda deployment packages, see [Creating a Deployment Package \(Node\.js\)](http://docs.aws.amazon.com/lambda/latest/dg/nodejs-create-deployment-pkg.html) and [Creating a Deployment Package \(Java\)](http://docs.aws.amazon.com/lambda/latest/dg/lambda-java-how-to-create-deployment-package.html)\. | 
+| Amazon ES Authorization | An IAM access policy that permits Lambda to add data to your domain\. Attach the policy to the Amazon S3 execution role that you create as part of your Lambda function\. For details, see [Granting Authorization to Add Data to Your Amazon ES Domain](#es-aws-integrations-s3-lambda-es-authorizations)\. | 
 
 ### Setting Up to Load Streaming Data into Amazon ES from Amazon S3<a name="es-aws-integrations-s3-lambda-es-prereq-configurations"></a>
 
@@ -127,12 +127,12 @@ For more information about creating and configuring a Lambda function, see the [
 
 | Function Configuration | Description | 
 | --- | --- | 
-| IAM Execution Role | The name of the IAM role that is used to execute actions on Amazon S3\. While creating your Lambda function, the Lambda console automatically opens the IAM console to help you create the execution role\.  Later, you also must attach an IAM access policy to this role that permits Lambda to add data to your domain\. For details, see Granting Authorization to Add Data to Your Amazon ES Domain\. | 
+| IAM Execution Role | The name of the IAM role that is used to execute actions on Amazon S3\. While creating your Lambda function, the Lambda console automatically opens the IAM console to help you create the execution role\.  Later, you also must attach an IAM access policy to this role that permits Lambda to add data to your domain\. For details, see [Granting Authorization to Add Data to Your Amazon ES Domain](#es-aws-integrations-s3-lambda-es-authorizations)\. | 
 | Event Source | Specifies the S3 bucket as the event source for the Lambda function\. For instructions, see the [Using AWS Lambda with Amazon S3](http://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html) tutorial\. AWS Lambda automatically adds the necessary permissions for Amazon S3 to invoke your Lambda function from this event source\. Optionally, specify a file suffix to filter what kinds of files, such as \.log, trigger the Lambda function\. | 
 | Handler | The name of the file that contains the application source code, but with the \.handler file suffix\. For example, if your application source code resides in a file named s3\_lambda\_es\.js, you must configure the handler as s3\_lambda\_es\.handler\. For more information, see [Getting Started](http://docs.aws.amazon.com/lambda/latest/dg/getting-started.html) in the AWS Lambda Developer Guide\. Amazon ES provides a sample application in Node\.js that you can download to get started: [Lambda Sample Code for Amazon ES](https://github.com/awslabs/amazon-elasticsearch-lambda-samples)\. | 
 | Timeout | The length of time that Lambda should wait before canceling an invocation request\. The default value of three seconds is too short for the Amazon ES use case\. We recommend configuring your timeout for 10 seconds\. | 
 
-For more function configuration details, see Configuring a Lambda Function in this guide\. For general information, see [Lambda Functions](http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction-function.html) in the *AWS Lambda Developer Guide*\.
+For more function configuration details, see [Configuring a Lambda Function](#es-aws-integrations-s3-lambda-es-function-configuration) in this guide\. For general information, see [Lambda Functions](http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction-function.html) in the *AWS Lambda Developer Guide*\.
 
 #### Granting Authorization to Add Data to Your Amazon ES Domain<a name="es-aws-integrations-s3-lambda-es-authorizations"></a>
 
@@ -161,11 +161,11 @@ You can load streaming data from Amazon Kinesis to Amazon ES\. This integration 
 
 At a high level, setting up to streaming data to Amazon ES requires the following steps:
 
-1. Creating a Lambda deployment package\.
+1. [Creating a Lambda deployment package](#es-aws-integrations-kinesis-lambda-es-setting-up-deployment-package)\.
 
-1. Configuring a Lambda function\.
+1. [Configuring a Lambda function](#es-aws-integrations-kinesis-lambda-es-setting-up-function)\.
 
-1. Granting authorization to add data to your Amazon ES domain\.
+1. [Granting authorization to add data to your Amazon ES domain](#es-aws-integrations-kinesis-lambda-es-setting-up-authorizations)\.
 
 You also must create an Amazon Kinesis stream and an Amazon ES domain\. Setting up this integration path has the following prerequisites\.
 
@@ -175,10 +175,10 @@ You also must create an Amazon Kinesis stream and an Amazon ES domain\. Setting 
 | Prerequisite | Description | 
 | --- | --- | 
 | Amazon Kinesis Stream | The event source for your Lambda function\. For instructions about creating Amazon Kinesis streams, see [Amazon Kinesis Streams](https://docs.aws.amazon.com/kinesis/latest/dev/amazon-kinesis-streams.html)\. | 
-| Elasticsearch Domain | The destination for data after it is processed by the application code in your Lambda function\. For more information, see Creating Amazon ES Domains in this guide\. | 
+| Elasticsearch Domain | The destination for data after it is processed by the application code in your Lambda function\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains) in this guide\. | 
 | Lambda Function | The Java or Node\.js application code that runs when Amazon Kinesis pushes an event notification to Lambda\. Amazon ES provides a sample application in Node\.js, kinesis\_lambda\_es\.js, that you can download to get started: [Lambda Sample Code for Amazon ES](https://github.com/awslabs/amazon-elasticsearch-lambda-samples)\.  | 
-| Lambda Deployment Package | A \.zip file that consists of your Java or Node\.js application code and any dependencies\. For information about the required folder hierarchy, see Creating a Lambda Deployment Package\. For general information about creating Lambda deployment packages, see [Creating a Deployment Package \(Node\.js\)](http://docs.aws.amazon.com/lambda/latest/dg/nodejs-create-deployment-pkg.html) and [Creating a Deployment Package \(Java\)](http://docs.aws.amazon.com/lambda/latest/dg/lambda-java-how-to-create-deployment-package.html)\. | 
-| Amazon ES Authorization |  An IAM access policy that permits Lambda to add data to your domain\. Attach the policy to the Amazon Kinesis execution role that you create as part of your Lambda function\. For details, see Granting Authorization to Add Data to Your Amazon ES Domain\.  | 
+| Lambda Deployment Package | A \.zip file that consists of your Java or Node\.js application code and any dependencies\. For information about the required folder hierarchy, see [Creating a Lambda Deployment Package](#es-aws-integrations-s3-lambda-es-deployment-package)\. For general information about creating Lambda deployment packages, see [Creating a Deployment Package \(Node\.js\)](http://docs.aws.amazon.com/lambda/latest/dg/nodejs-create-deployment-pkg.html) and [Creating a Deployment Package \(Java\)](http://docs.aws.amazon.com/lambda/latest/dg/lambda-java-how-to-create-deployment-package.html)\. | 
+| Amazon ES Authorization |  An IAM access policy that permits Lambda to add data to your domain\. Attach the policy to the Amazon Kinesis execution role that you create as part of your Lambda function\. For details, see [Granting Authorization to Add Data to Your Amazon ES Domain](#es-aws-integrations-s3-lambda-es-authorizations)\.  | 
 
 ### Setting Up to Load Streaming Data into Amazon ES from Amazon Kinesis<a name="es-aws-integrations-kinesis-lambda-es-setting-up"></a>
 
@@ -256,7 +256,7 @@ Use AWS Lambda to create and configure your Lambda function\. To do that, you ca
 | Configuration | Description | 
 | --- | --- | 
 | Amazon Kinesis stream | The event source of your Lambda function\. For instructions, see [Amazon Kinesis Streams](http://docs.aws.amazon.com/kinesis/latest/dev/amazon-kinesis-streams.html)\. | 
-| IAM execution role | The name of the IAM role that is used to execute actions on Amazon Kinesis\. While configuring your Lambda function, the Lambda console automatically opens the IAM console to help you create the execution role\.  Later, you also must attach an IAM access policy to this role that permits Lambda to send data to your Amazon ES domain\. For details, see Granting Authorization to Add Data to Your Amazon ES Domain\. | 
+| IAM execution role | The name of the IAM role that is used to execute actions on Amazon Kinesis\. While configuring your Lambda function, the Lambda console automatically opens the IAM console to help you create the execution role\.  Later, you also must attach an IAM access policy to this role that permits Lambda to send data to your Amazon ES domain\. For details, see [Granting Authorization to Add Data to Your Amazon ES Domain](#es-aws-integrations-kinesis-lambda-es-setting-up-authorizations)\. | 
 | Handler | The name of the file that contains the application source code, but with the \.handler file suffix\. For example, if your application source code is in a file named kinesis\_lambda\_es\.js, you must configure the handler as kinesis\_lambda\_es\.handler\. For more information, see [Lambda Function Handler](http://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html)\. Amazon ES provides a sample application in Node\.js that you can download to get started: [Lambda Sample Code for Amazon ES](https://github.com/awslabs/amazon-elasticsearch-lambda-samples)\. | 
 | Timeout | The length of time that Lambda should wait before canceling an invocation request\. The default value of three seconds is too short for this use case\. We recommend configuring your timeout for 10 seconds\. | 
 
