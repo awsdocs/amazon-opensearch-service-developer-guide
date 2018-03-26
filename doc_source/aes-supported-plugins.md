@@ -3,7 +3,7 @@
 Amazon ES domains come prepackaged with plugins that are available from the Elasticsearch community\. The service automatically deploys and manages plugins for you\.
 
 **Note**  
-Kibana is a plugin in order versions of Amazon ES and a Node\.js application in newer versions\. All Amazon ES domains include a preinstalled version of Kibana\.
+Kibana is a plugin in older versions of Amazon ES and a Node\.js application in newer versions\. All Amazon ES domains include a preinstalled version of Kibana\.
 
 
 ****  
