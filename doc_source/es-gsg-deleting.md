@@ -15,7 +15,6 @@ Because the *movies* domain from this tutorial is for test purposes, you should 
 1. Select the **Delete the domain** check box, and then choose **Delete**\.
 
 **To delete an Amazon ES domain \(**AWS CLI****\)
-
 + Run the following command to delete the *movies* domain:
 
   ```

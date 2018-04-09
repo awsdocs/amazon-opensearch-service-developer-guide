@@ -13,21 +13,14 @@ For information about other services that support service\-linked roles, see [AW
 Amazon ES uses the service\-linked role named **AWSServiceRoleForAmazonElasticsearchService**\.
 
 The AWSServiceRoleForAmazonElasticsearchService service\-linked role trusts the following services to assume the role:
-
 + `es.amazonaws.com`
 
 The role permissions policy allows Amazon ES to complete the following actions on the specified resources:
-
 + Action: `ec2:CreateNetworkInterface` on `*`
-
 + Action: `ec2:DeleteNetworkInterface` on `*`
-
 + Action: `ec2:DescribeNetworkInterfaces` on `*`
-
 + Action: `ec2:ModifyNetworkInterfaceAttribute` on `*`
-
 + Action: `ec2:DescribeSecurityGroups` on `*`
-
 + Action: `ec2:DescribeSubnets` on `*`
 
 You must configure permissions to allow an IAM entity \(such as a user, group, or role\) to create, edit, or delete a service\-linked role\. For more information, see [Service\-Linked Role Permissions](http://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#service-linked-role-permissions) in the *IAM User Guide*\.

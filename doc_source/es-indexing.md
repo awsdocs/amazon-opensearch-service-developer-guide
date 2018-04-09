@@ -1,6 +1,6 @@
 # Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
 
-Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has [low\-level clients for many programming languages](https://www.elastic.co/guide/en/elasticsearch/client/index.html)\. Advanced users can skip directly to [Programmatic Indexing](#es-indexing-programmatic)\.
+Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has [clients for many programming languages](https://www.elastic.co/guide/en/elasticsearch/client/index.html)\. Advanced users can skip directly to [Programmatic Indexing](#es-indexing-programmatic)\.
 
 For situations in which new data arrives incrementally \(for example, customer orders from a small business\), you might use the `_index` API to index documents as they arrive\. For situations in which the flow of data is less frequent \(for example, weekly updates to a marketing website\), you might prefer to generate a file and send it to the `_bulk` API\. For large numbers of documents, lumping requests together and using the `_bulk` API offers superior performance\. If your documents are enormous, however, you might need to index them individually using the `_index` API\.
 
@@ -15,16 +15,19 @@ In Elasticsearch, the basic unit of data is a JSON *document*\. Within an index,
 A request to the `_index` API looks like the following:
 
 ```
-PUT elasticsearch_domain_endpoint/index/type/id -d 'document'
+PUT elasticsearch_domain/index/type/id
+{ "A JSON": "document" }
 ```
 
-A request to the `_bulk` API looks a little different, because you specify the index, type, and ID in the bulk data file:
+A request to the `_bulk` API looks a little different, because you specify the index, type, and ID in the bulk data:
 
 ```
-POST elasticsearch_domain_endpoint/_bulk --data-binary @bulk_movies.json
+POST elasticsearch_domain/_bulk
+{ "index": { "_index" : "index", "_type" : "type", "_id" : "id" } }
+{ "A JSON": "document" }
 ```
 
-Bulk data files must conform to a specific file format, which requires a newline character \(`\n`\) at the end of every line, including the last line\. This is the basic format:
+Bulk data must conform to a specific format, which requires a newline character \(`\n`\) at the end of every line, including the last line\. This is the basic format:
 
 ```
 action_and_metadata\n
@@ -39,7 +42,7 @@ For a short sample file, see [Step 2: Upload Data to an Amazon ES Domain for Ind
 Elasticsearch features [automatic index creation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#index-creation) when you add a document to an index that doesn't already exist\. It also features [automatic ID generation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#_automatic_id_generation) if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, establishes the document type of `movie`, indexes the document, and assigns it a unique ID:
 
 ```
-curl -XPOST elasticsearch_domain_endpoint/movies/movie -d '{"title": "Spirited Away"}' -H 'Content-Type: application/json'
+curl -XPOST elasticsearch_domain/movies/movie -d '{"title": "Spirited Away"}' -H 'Content-Type: application/json'
 ```
 
 **Important**  
@@ -48,7 +51,7 @@ To use automatic ID generation, you must use the `POST` method instead of `PUT`\
 To verify that the document exists, you can perform the following search:
 
 ```
-curl -XGET elasticsearch_domain_endpoint/movies/_search?pretty
+curl -XGET elasticsearch_domain/movies/_search?pretty
 ```
 
 The response should contain the following:
@@ -71,23 +74,24 @@ The response should contain the following:
 }
 ```
 
-Automatic ID generation has a clear downside: because the indexing code didn't specify a document ID, you can't easily update the document at a later time\.
+Automatic ID generation has a clear downside: because the indexing code didn't specify a document ID, you can't easily update the document at a later time\. To specify an ID of `7`, use the following request:
+
+```
+curl -XPUT elasticsearch_domain/movies/movie/7 -d '{"title": "Spirited Away"}' -H 'Content-Type: application/json'
+```
 
 Indices default to five primary shards and one replica\. If you want to specify non\-default settings, create the index before adding documents:
 
 ```
-curl -XPUT elasticsearch_domain_endpoint/movies -d '{"settings": {"number_of_shards": 6, "number_of_replicas": 2}}' -H 'Content-Type: application/json'
+curl -XPUT elasticsearch_domain/movies -d '{"settings": {"number_of_shards": 6, "number_of_replicas": 2}}' -H 'Content-Type: application/json'
 ```
 
 **Note**  
 Requests using curl are unauthenticated and rely on an IP\-based access policy\. For examples of signed requests, see [Programmatic Indexing](#es-indexing-programmatic)\.
 
 Elasticsearch indices have the following naming restrictions:
-
 + All letters must be lowercase\.
-
 + Index names cannot begin with `_` or `-`\.
-
 + Index names cannot contain spaces, commas, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `>`, or `<`\.
 
 ## Programmatic Indexing<a name="es-indexing-programmatic"></a>
@@ -231,7 +235,7 @@ print(es.search(q='some test query'))
 
 ### Java<a name="es-indexing-programmatic-java"></a>
 
-This first example uses the [Elasticsearch Java REST Client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html), which you must [configure as a dependency](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/_maven_repository.html)\. The request is unauthenticated and relies on an IP\-based access policy\. You must provide a value for `host`:
+This first example uses the [Elasticsearch low\-level Java REST Client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html), which you must [configure as a dependency](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/_maven_repository.html)\. The request is unauthenticated and relies on an IP\-based access policy\. You must provide a value for `host`:
 
 ```
 import java.io.IOException;
@@ -268,123 +272,61 @@ public class JavaRestClientExample {
 }
 ```
 
-The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains examples to help you get started\. You must change the region string in `Sample.java` and the Amazon ES endpoint in `AmazonElasticsearchServiceSample.java`\.
-
-A more complex way of sending a signed request to Amazon ES is to use the [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/)\. Note the two helper classes for response and error handling\. You must provide values for `host` and `region`:
+The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started\. The following example uses the [Elasticsearch low\-level Java REST client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html) to perform two unrelated actions: registering a snapshot repository and indexing a document\.
 
 ```
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.DefaultRequest;
-import com.amazonaws.Request;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
+import org.elasticsearch.client.Response;
+import org.elasticsearch.client.RestClient;
 import com.amazonaws.auth.AWS4Signer;
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.http.AmazonHttpClient;
-import com.amazonaws.http.ExecutionContext;
-import com.amazonaws.http.HttpMethodName;
+import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 
-public class JavaClientExampleWithAuth {
+public class AmazonElasticsearchServiceSample {
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    private static String serviceName = "es";
+    private static String region = "us-west-1";
+    private static String aesEndpoint = "https://domain.us-west-1.es.amazonaws.com"; 
 
-        // Intentionally verbose.
-        
-        String prefix = "https://";
-        String host = ""; // For example, my-test-domain.us-east-1.es.amazonaws.com
-        String index = "movies";
-        String type = "movie";
-        String id = "6";
-        String endpoint = prefix + host + "/" + index + "/" + type + "/" + id;
+    private static String payload = "{ \"type\": \"s3\", \"settings\": { \"bucket\": \"your-bucket\", \"region\": \"us-west-1\", \"role_arn\": \"arn:aws:iam::123456789012:role/TheServiceRole\" } }";
+    private static String snapshotPath = "/_snapshot/my-snapshot-repo";
 
-        String service = "es";
-        String region = ""; // For example, us-east-1
+    private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
+    private static String indexingPath = "/my-index/my-type";
+    
+    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
+    
+    public static void main(String[] args) throws IOException {
+        RestClient esClient = esClient(serviceName, region);
 
-        // Libraries like Jackson simplify the conversion of objects to JSON. Here, we
-        // just use a string.
+        // Register a snapshot repository
+        HttpEntity entity = new NStringEntity(payload, ContentType.APPLICATION_JSON);
+        Map<String, String> params = Collections.emptyMap();
+        Response response = esClient.performRequest("PUT", snapshotPath, params, entity);
+        System.out.println(response.toString());
 
-        String json = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\""
-                + "}";
-
-        // Builds the request. We need an AWS service, URI, HTTP method, and request
-        // body (in this case, JSON).
-
-        Request<?> request = new DefaultRequest<Void>(service);
-        request.setEndpoint(new URI(endpoint));
-        request.setHttpMethod(HttpMethodName.PUT);
-        request.setContent(new ByteArrayInputStream(json.getBytes()));
-
-        // Retrieves our credentials from the computer. For more information on where
-        // this class looks for credentials, see
-        // http://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/auth/DefaultAWSCredentialsProviderChain.html.
-
-        AWSCredentialsProvider credsProvider = new DefaultAWSCredentialsProviderChain();
-        AWSCredentials creds = credsProvider.getCredentials();
-
-        // Signs the request using our region, service, and credentials. AWS4Signer
-        // modifies the original request rather than returning a new request.
-
+        // Index a document
+        entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
+        String id = "1";
+        response = esClient.performRequest("PUT", indexingPath + "/" + id, params, entity);
+        System.out.println(response.toString());
+    }
+    
+    // Adds the interceptor to the ES REST client
+    public static RestClient esClient(String serviceName, String region) {
         AWS4Signer signer = new AWS4Signer();
+        signer.setServiceName(serviceName);
         signer.setRegionName(region);
-        signer.setServiceName(service);
-        signer.sign(request, creds);
-        request.addHeader("Content-Type", "application/json");
-
-        // Creates and configures the HTTP client, creates the error and response
-        // handlers, and finally executes the request.
-
-        ClientConfiguration config = new ClientConfiguration();
-        AmazonHttpClient client = new AmazonHttpClient(config);
-        ExecutionContext context = new ExecutionContext(true);
-        MyErrorHandler errorHandler = new MyErrorHandler();
-        MyHttpResponseHandler<Void> responseHandler = new MyHttpResponseHandler<Void>();
-        client.requestExecutionBuilder().executionContext(context).errorResponseHandler(errorHandler).request(request)
-                .execute(responseHandler);
-    }
-}
-```
-
-```
-import com.amazonaws.AmazonWebServiceResponse;
-import com.amazonaws.http.HttpResponseHandler;
-
-public class MyHttpResponseHandler<T> implements HttpResponseHandler<AmazonWebServiceResponse<T>> {
-
-    @Override
-    public AmazonWebServiceResponse<T> handle(com.amazonaws.http.HttpResponse response) throws Exception {
-        AmazonWebServiceResponse<T> awsResponse = new AmazonWebServiceResponse<T>();
-        return awsResponse;
-    }
-
-    @Override
-    public boolean needsConnectionLeftOpen() {
-        return false;
-    }
-}
-```
-
-```
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.http.HttpResponseHandler;
-
-public class MyErrorHandler implements HttpResponseHandler<AmazonServiceException> {
-
-    @Override
-    public AmazonServiceException handle(com.amazonaws.http.HttpResponse response) throws Exception {
-        AmazonServiceException ase = new AmazonServiceException("");
-        ase.setStatusCode(response.getStatusCode());
-        ase.setErrorCode(response.getStatusText());
-        return ase;
-    }
-
-    @Override
-    public boolean needsConnectionLeftOpen() {
-        return false;
+        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
+        return RestClient.builder(HttpHost.create(aesEndpoint)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)).build();
     }
 }
 ```

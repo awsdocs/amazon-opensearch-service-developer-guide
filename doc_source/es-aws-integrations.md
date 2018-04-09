@@ -2,7 +2,7 @@
 
 You can load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon ES domain from Amazon S3 buckets, Amazon Kinesis streams, Amazon DynamoDB Streams, and Amazon CloudWatch metrics\. For example, to load streaming data from Amazon S3 and Amazon Kinesis, you use a Lambda function as an event handler in the AWS Cloud\. The Lambda function responds to new data by processing it and streaming the data to your domain\. 
 
-
+**Topics**
 + [Loading Streaming Data into Amazon ES from Amazon S3](#es-aws-integrations-s3-lambda-es)
 + [Loading Streaming Data into Amazon ES from Amazon Kinesis](#es-aws-integrations-kinesis-lambda-es)
 + [Loading Streaming Data into Amazon ES from Amazon Kinesis Firehose](#es-aws-integrations-fh)
@@ -13,17 +13,11 @@ You can load [streaming data](http://aws.amazon.com/streaming-data/) into your A
 Streaming data provides fresh data for search and analytic queries\. Amazon S3 pushes event notifications to AWS Lambda\. For more information, see [Using AWS Lambda with Amazon S3](http://docs.aws.amazon.com/lambda/latest/dg/with-s3.html) in the *AWS Lambda Developer Guide*\. Amazon Kinesis requires AWS Lambda to poll for, or pull, event notifications\. For more information, see [Using AWS Lambda with Amazon Kinesis](http://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html)\. 
 
 You should be familiar with these service integrations before attempting to use them to load streaming data into your Amazon ES domain\. For more information about these services, see the following AWS documentation:
-
 + [AWS Lambda Developer Guide](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
-
 + [Amazon S3 Developer Guide](http://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
-
 + [Amazon Kinesis Developer Guide](http://docs.aws.amazon.com/kinesis/latest/dev/introduction.html)
-
 + [Amazon DynamoDB Developer Guide](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
-
 + [Amazon CloudWatch User Guide](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatch.html)
-
 + [AWS IoT Developer Guide](http://docs.aws.amazon.com/iot/latest/developerguide/)
 
 **Note**  
@@ -74,13 +68,9 @@ To create a deployment package:
 1. Place your application source code in the `eslambda` folder\.
 
 1. Add or edit the following four global variables:
-
    + `endpoint`, the Amazon ES domain endpoint\.
-
    + `region`, the AWS Region in which you created your Amazon ES domain\.
-
    + `index`, the name of the Amazon ES index to use for data that is streamed from Amazon S3\.
-
    + `doctype`, the Amazon ES document type of the streamed data\. For more information, see [Mapping Types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html#all-mapping-types) in the Elasticsearch documentation\.
 
    The following example from `s3_lambda_es.js` configures the sample application to use the `streaming-logs` domain endpoint in the us\-east\-1 AWS Region:
@@ -202,13 +192,9 @@ To create a deployment package:
 1. Place your application source code in the `eslambda` folder\.
 
 1. Add or edit the following global variables in your sample application:
-
    + `endpoint`, the Amazon ES domain endpoint\.
-
    + `region`, the AWS Region in which you created your Amazon ES domain\.
-
    + `index`, the name of the Amazon ES index to use for data that is streamed from Amazon Kinesis\.
-
    + `doctype`, the Amazon ES document type of the streamed data\. For more information, see [Mapping Types](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html#all-mapping-types) in the Elasticsearch documentation\.
 
    The following example from `kinesis_lambda_es.js` configures the sample application to use the `streaming-logs` Amazon ES domain endpoint in the us\-east\-1 AWS Region\.

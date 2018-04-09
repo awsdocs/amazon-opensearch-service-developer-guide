@@ -2,7 +2,7 @@
 
 No surefire method of sizing Amazon ES domains exists, but by starting with an understanding of your storage needs, the service, and Elasticsearch itself, you can make an educated initial estimate on your hardware needs\. This estimate can serve as a useful starting point for the most critical aspect of sizing domains: testing them with representative workloads and monitoring their performance\.
 
-
+**Topics**
 + [Calculating Storage Requirements](#aes-bp-storage)
 + [Choosing the Number of Shards](#aes-bp-sharding)
 + [Choosing Instance Types and Testing](#aes-bp-instances)
@@ -10,9 +10,7 @@ No surefire method of sizing Amazon ES domains exists, but by starting with an u
 ## Calculating Storage Requirements<a name="aes-bp-storage"></a>
 
 Most Elasticsearch workloads fall into one of two broad categories:
-
 + Long\-lived index: You write code that processes data into one or more Elasticsearch indices and then updates those indices periodically as the source data changes\. Some common examples are website, document, and e\-commerce search\.
-
 + Rolling indices: Data continuously flows into a set of temporary indices, with an indexing period and retention window, such as a set of daily indices that is retained for two weeks\. Some common examples are log analytics, time\-series processing, and clickstream analytics\.
 
 For long\-lived index workloads, you can examine the source data on disk and easily determine how much storage space it consumes\. If the data comes from multiple sources, just add those sources together\.
@@ -21,7 +19,7 @@ For rolling indices, you can multiply the amount of data generated during a repr
 
 The size of your source data, however, is just one aspect of your storage requirements\. You also have to consider the following:
 
-1. Number of [replicas](https://www.elastic.co/guide/en/elasticsearch/reference/5.6/_basic_concepts.html#getting-started-shards-and-replicas): Each replica is a full copy of an index and needs the same amount of disk space\. By default, each Elasticsearch index has one replica\. We recommend at least one to prevent against data loss\. Replicas also improve search performance, so you might want more if you have a read\-heavy workload\.
+1. Number of [replicas](https://www.elastic.co/guide/en/elasticsearch/reference/current/_basic_concepts.html#getting-started-shards-and-replicas): Each replica is a full copy of an index and needs the same amount of disk space\. By default, each Elasticsearch index has one replica\. We recommend at least one to prevent against data loss\. Replicas also improve search performance, so you might want more if you have a read\-heavy workload\.
 
 1. Elasticsearch indexing overhead: The on\-disk size of an index varies, but is often 10% larger than the source data\. After indexing your data, you can use the [https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-indices.html#cat-indices](https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-indices.html#cat-indices) API and `pri.store.size` value to calculate the exact overhead\. The [https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-allocation.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-allocation.html) API also provides a useful summary\.
 

@@ -2,7 +2,7 @@
 
 As the size and number of documents in your Amazon Elasticsearch Service \(Amazon ES\) domain grow and as network traffic increases, you likely will need to update the configuration of your Elasticsearch cluster\. To know when it's time to reconfigure your domain, you need to monitor domain metrics\. You might also need to audit data\-related API calls to your domain or assign tags to your domain\. This section describes how to perform these and other tasks related to managing your domains\.
 
-
+**Topics**
 + [About Configuration Changes](#es-managedomains-configuration-changes)
 + [Charges for Configuration Changes](#es-managedomains-config-charges)
 + [Enabling Zone Awareness \(Console\)](#es-managedomains-zoneawareness)
@@ -14,11 +14,11 @@ As the size and number of documents in your Amazon Elasticsearch Service \(Amazo
 
 Amazon ES uses a *blue/green* deployment process when updating domains\. Blue/green typically refers to the practice of running two production environments, one live and one idle, and switching the two as you make software changes\. In the case of Amazon ES, it refers to the practice of creating a new environment for domain updates and routing users to the new environment after those updates are complete\. The practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
 
-Domain updates occur when you make most configuration changes, but they also occur when the Amazon ES team makes certain software changes to the service\. If you make configuration changes, the domain state changes to **Processing**\. If the Amazon ES team makes software changes, the state remains **Active**\. In both cases, you can review the cluster health and Amazon CloudWatch metrics and see that the number of nodes in the cluster temporarily *doubles* while the domain update occurs\. In the following illustration, you can see the number of nodes doubling from 11 to 22 during a configuration change and returning to 11 when the update is complete\.
+Domain updates occur when you make most configuration changes, but they also occur when the Amazon ES team makes certain software changes to the service\. If you make configuration changes, the domain state changes to **Processing**\. If the Amazon ES team makes software changes, the state remains **Active**\. In both cases, you can review the cluster health and Amazon CloudWatch metrics and see that the number of nodes in the cluster temporarily increases—often doubling—while the domain update occurs\. In the following illustration, you can see the number of nodes doubling from 11 to 22 during a configuration change and returning to 11 when the update is complete\.
 
 ![\[Number of nodes doubling from 11 to 22 during a domain configuration change.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/NodesDoubled.png)
 
-This temporary doubling can strain the cluster's [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), which suddenly have twice as many nodes to manage\. It is important to maintain sufficient capacity on dedicated master nodes to handle the overhead that is associated with these blue/green deployments\.
+This temporary increase can strain the cluster's [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), which suddenly have many more nodes to manage\. It is important to maintain sufficient capacity on dedicated master nodes to handle the overhead that is associated with these blue/green deployments\.
 
 **Important**  
 You do *not* incur any additional charges during configuration changes and service maintenance\. You are billed only for the number of nodes that you request for your cluster\. For specifics, see [Charges for Configuration Changes](#es-managedomains-config-charges)\.
@@ -28,11 +28,9 @@ To prevent overloading dedicated master nodes, you can [monitor usage with the A
 ## Charges for Configuration Changes<a name="es-managedomains-config-charges"></a>
 
 If you change the configuration for a domain, Amazon ES creates a new cluster as described in [About Configuration Changes](#es-managedomains-configuration-changes)\. During the migration of old to new, you incur the following charges:
-
 + If you change the instance type, you are charged for both clusters for the first hour\. After the first hour, you are charged only for the new cluster\.
 
   **Example:** You change the configuration from three `m3.xlarge` instances to four `m4.large` instances\. For the first hour, you are charged for both clusters \(3 \* `m3.xlarge` \+ 4 \* `m4.large`\)\. After the first hour, you are charged only for the new cluster \(4 \* `m4.large`\)\.
-
 + If you don’t change the instance type, you are charged only for the largest cluster for the first hour\. After the first hour, you are charged only for the new cluster\.
 
   **Example:** You change the configuration from six `m3.xlarge` instances to three `m3.xlarge` instances\. For the first hour, you are charged for the largest cluster \(6 \* `m3.xlarge`\)\. After the first hour, you are charged only for the new cluster \(3 \* `m3.xlarge`\)\.
@@ -71,11 +69,8 @@ For more information, see [Regions and Availability Zones](http://docs.aws.amazo
 Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. If you use general purpose or magnetic EBS volumes, the EBS volume metrics only update every five minutes\. Use the **Monitoring** tab in the Amazon Elasticsearch Service console to view these metrics, provided at no extra charge\.
 
 Statistics provide you with broader insight into each metric\. For example, view the **Average** statistic for the **CPUUtilization** metric to compute the average CPU utilization for all nodes in the cluster\. Each of the metrics falls into one of three categories:
-
 + [Cluster metrics](#es-managedomains-cloudwatchmetrics-cluster-metrics)
-
 + [Dedicated master node metrics](#es-managedomains-cloudwatchmetrics-master-node-metrics)
-
 + [EBS volume metrics](#es-managedomains-cloudwatchmetrics-master-ebs-metrics)
 
 **Note**  
@@ -116,7 +111,7 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 | SearchableDocuments | The total number of searchable documents across all indices in the cluster\. Relevant statistics: Minimum, Maximum, Average | 
 | DeletedDocuments | The total number of deleted documents across all indices in the cluster\. Relevant statistics: Minimum, Maximum, Average | 
 | CPUUtilization | The maximum percentage of CPU resources used for data nodes in the cluster\. Relevant statistics: Maximum, Average | 
-| FreeStorageSpace | The free space, in megabytes, for all data nodes in the cluster\. Amazon ES throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Recovering from a Lack of Free Storage Space](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-red-cluster-status-lack-of-free-space) `FreeStorageSpace` will always be lower than the value that the Elasticsearch `_cluster/stats` API provides\. Amazon ES reserves a percentage of the storage space on each instance for internal operations\. Relevant statistics: Minimum | 
+| FreeStorageSpace | The free space, in megabytes, for nodes in the cluster\. `Sum` shows total free space for the cluster\. `Minimum`, `Maximum`, and `Average` show free space for individual nodes\. Amazon ES throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Recovering from a Lack of Free Storage Space](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-watermark) `FreeStorageSpace` will always be lower than the value that the Elasticsearch `_cluster/stats` API provides\. Amazon ES reserves a percentage of the storage space on each instance for internal operations\. Relevant statistics: Minimum, Maximum, Average, Sum | 
 | ClusterUsedSpace | The total used space, in megabytes, for a cluster\. You can view this metric in the Amazon CloudWatch console, but not in the Amazon ES console\. Relevant statistics: Minimum, Maximum | 
 | ClusterIndexWritesBlocked | Indicates whether your cluster is accepting or blocking incoming write requests\. A value of 0 means that the cluster is accepting requests\. A value of 1 means that it is blocking requests\. Many factors can cause a cluster to begin blocking requests\. Some common factors include the following: `FreeStorageSpace` is too low, `JVMMemoryPressure` is too high, or `CPUUtilization` is too high\. To alleviate this issue, consider adding more disk space or scaling your cluster\. Relevant statistics: Maximum You can view this metric in the Amazon CloudWatch console, but not the Amazon ES console\. | 
 | JVMMemoryPressure | The maximum percentage of the Java heap used for all data nodes in the cluster\. Relevant statistics: Maximum | 

@@ -9,7 +9,7 @@ You cannot, however, use automated snapshots to migrate to new domains\. Automat
 **Tip**  
 Some users find tools like the [Curator](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/index.html) CLI convenient for index and snapshot management\. The Curator CLI offers advanced filtering functionality that can help simplify tasks on complex clusters\.
 
-
+**Topics**
 + [Manual Snapshot Prerequisites](#es-managedomains-snapshot-prerequisites)
 + [Registering a Manual Snapshot Repository](#es-managedomains-snapshot-registerdirectory)
 + [Taking Manual Snapshots](#es-managedomains-snapshot-create)
@@ -31,9 +31,7 @@ To create index snapshots manually, you must work with IAM and Amazon S3\. Verif
 **S3 Bucket**
 
 You need an S3 bucket to store manual snapshots\. Make a note of its Amazon Resource Name \(ARN\), which takes the form of `arn:aws:s3:::bucket-name`\. You need it in two places:
-
 + `Resource` statement of the IAM policy that is attached to your IAM role
-
 + Python client that is used to register a snapshot repository
 
 For more information, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon S3 Getting Started Guide*\.
@@ -119,6 +117,9 @@ If your domain resides within a VPC, your computer must be connected to the VPC 
 ### Sample Python Client<a name="es-managedomains-snapshot-client-python"></a>
 
 Save the following sample Python code as a Python file, such as `register-repo.py`\. The client requires the [requests](http://docs.python-requests.org/) and [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) packages\.
+
+**Tip**  
+A Java\-based code sample is available in [Indexing Data](es-indexing.md#es-indexing-programmatic-java)\.
 
 Registering a snapshot directory is a one\-time operation, but to migrate from one domain to another, you must register the same snapshot repository on the old domain and the new domain\. The client also contains commented\-out examples for other snapshot operations\.
 
@@ -222,15 +223,12 @@ If the S3 bucket is in the us\-east\-1 region, you need to use `"endpoint": "s3.
 ## Taking Manual Snapshots<a name="es-managedomains-snapshot-create"></a>
 
 You specify two pieces of information when you create a snapshot:
-
 + Name of your snapshot repository
-
 + Name for the snapshot
 
 The examples in this chapter use [curl](https://curl.haxx.se/), a common HTTP client, for convenience and brevity\. If your access policies specify IAM users or roles, however, you must sign your snapshot requests\. You can use the commented\-out examples in the [sample Python client](#es-managedomains-snapshot-client-python) to make signed HTTP requests to the same endpoints that the curl commands use\.
 
 **To manually take a snapshot**
-
 + Run the following command to manually take a snapshot:
 
   ```
@@ -267,9 +265,7 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
 1. Delete or rename all open indices in the Amazon ES domain\.
 
    You can't restore a snapshot of your indices to an Elasticsearch cluster that already contains indices with the same names\. Currently, Amazon ES does not support the Elasticsearch `_close` API, so you must use one of the following alternatives:
-
    + Delete the indices on the same Amazon ES domain, and then restore the snapshot\.
-
    + Restore the snapshot to a different Amazon ES domain \(only possible with manual snapshots\)\.
 
    The following example shows how to delete *all* existing indices for a domain:

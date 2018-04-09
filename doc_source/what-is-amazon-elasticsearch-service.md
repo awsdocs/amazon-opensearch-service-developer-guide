@@ -7,24 +7,18 @@ Amazon ES provisions all the resources for your Elasticsearch cluster and launch
 To get started using the service, you create an Amazon ES domain\. An Amazon ES domain is an Elasticsearch cluster in the AWS Cloud that has the compute and storage resources that you specify\. For example, you can specify the number of instances, instance types, and storage options\.
 
 Additionally, Amazon ES offers the following benefits of a managed service:
-
 + Cluster scaling options
-
 + Self\-healing clusters
-
 + Replication for high availability
-
 + Data durability
-
 + Enhanced security
-
 + Node monitoring
 
 You can use the Amazon ES console to set up and configure your domain in minutes\. If you prefer programmatic access, you can use the [AWS SDKs](http://aws.amazon.com/code) or the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/)\. 
 
 There are no upfront costs to set up clusters, and you pay only for the service resources that you use\.
 
-
+**Topics**
 + [Features of Amazon Elasticsearch Service](#what-is-aes-features)
 + [Supported Elasticsearch Versions](#aes-choosing-version)
 + [Getting Started with Amazon Elasticsearch Service](#aes-get-started)
@@ -34,7 +28,6 @@ There are no upfront costs to set up clusters, and you pay only for the service 
 + [Choosing Instance Types](#aes-choosing-instance-type)
 + [Scaling in Amazon Elasticsearch Service](#concepts-scaling)
 + [Using Amazon EBS Volumes for Storage](#ebs-volumes-storage)
-+ [Signing Service Requests](#signing-requests)
 + [Related Services](#aes-related-services)
 + [Pricing for Amazon Elasticsearch Service](#aes-pricing)
 
@@ -43,71 +36,45 @@ There are no upfront costs to set up clusters, and you pay only for the service 
 Amazon ES includes the following features:
 
 **Scale**
-
 + Numerous configurations of CPU, memory, and storage capacity, known as *instance types*
-
 + Up to 1\.5 PB of instance storage
-
 + Amazon EBS storage volumes
 
 **Security**
-
 + AWS Identity and Access Management \(IAM\) access control
-
 + Easy integration with Amazon VPC and VPC security groups
-
 + Encryption of data at rest
++ Amazon Cognito authentication for Kibana
 
 **Stability**
-
 + Multiple geographical locations for your resources, known as *regions* and *Availability Zones*
-
 + Dedicated master nodes to offload cluster management tasks
-
 + Automated snapshots to back up and restore Amazon ES domains and replicate domains across Availability Zones
-
 + Cluster node allocation across two Availability Zones in the same region, known as *zone awareness*
 
 **Integration with Popular Services**
-
 + Data visualization using Kibana
-
 + Integration with Amazon CloudWatch for monitoring Amazon ES domain metrics and setting alarms
-
 + Integration with AWS CloudTrail for auditing configuration API calls to Amazon ES domains
-
 + Integration with Amazon S3, Amazon Kinesis, and Amazon DynamoDB for loading streaming data into Amazon ES
 
 ## Supported Elasticsearch Versions<a name="aes-choosing-version"></a>
 
 Amazon ES currently supports the following Elasticsearch versions:
-
 + [6\.2](https://www.elastic.co/guide/en/elasticsearch/reference/6.2/index.html)
-
 + [6\.0](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/index.html)
-
 + [5\.5](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/index.html)
-
 + [5\.3](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/index.html)
-
 + [5\.1](https://www.elastic.co/guide/en/elasticsearch/reference/5.1/index.html)
-
 + [2\.3](https://www.elastic.co/guide/en/elasticsearch/reference/2.3/index.html)
-
 + [1\.5](https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index.html)
 
 Compared to earlier versions of Elasticsearch, the 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are some highlights:
-
 + **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
-
 + **Vega visualizations** – Kibana 6\.2 supports the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
-
 + **Ranking evaluation** – The `_rank_eval` API lets you measure and track how ranked search results perform against a set of queries to ensure that your searches perform as expected\.
-
 + **Composite aggregations** – These aggregations build composite buckets from one or more fields and sort them in "natural order" \(alphabetically for terms, numerically or by date for histograms\)\.
-
 + **Higher indexing performance** – Newer versions of Elasticsearch provide superior indexing capabilities that significantly increase the throughput of data updates\.
-
 + **Better safeguards** – The 6\.*x* versions of Elasticsearch offer many safeguards that are designed to prevent overly broad or complex queries from negatively affecting the performance and stability of the cluster\.
 
 For more information about the differences between Elasticsearch versions and the APIs that Amazon ES supports, see [Supported Elasticsearch Operations](aes-supported-es-operations.md)\.
@@ -121,34 +88,23 @@ To get started, sign up for an AWS account if you don't already have one\. For m
 After you are set up with an account, complete the [Getting Started](es-gsg.md) tutorial for Amazon Elasticsearch Service\. Consult the following introductory topics if you need more information while learning about the service\.
 
 **Get Up and Running**
-
 + [Signing Up for AWS](#aws-sign-up)
-
 + [Accessing Amazon ES](#accessing-amazon-elasticsearch)
-
 + [Getting Started with Amazon ES Domains](es-gsg.md)
 
 **Learn the Basics**
-
 + [Regions and Endpoints for Amazon ES](#endpoints)
-
 + [Amazon Resource Names and AWS Namespaces](http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
-
-+ [Scaling in Amazon ES](#concepts-scaling)
-
 + [Choosing an Elasticsearch Version](#aes-choosing-version)
 
 **Choose Instance Types and Storage**
-
 + [Choosing an Instance Type](#aes-choosing-instance-type)
-
++ [Scaling in Amazon ES](#concepts-scaling)
 + [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)
 
 **Stay Secure**
-
-+ [Signing Service Requests](#signing-requests)
-
-+ [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)
++ [Amazon Elasticsearch Service Access Control](es-ac.md)\.
++ [Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)
 
 ## Signing Up for AWS<a name="aws-sign-up"></a>
 
@@ -169,11 +125,8 @@ You must enter payment information before you can begin using Amazon ES\. Note y
 ## Accessing Amazon Elasticsearch Service<a name="accessing-amazon-elasticsearch"></a>
 
 You can access Amazon ES through the Amazon ES console, the AWS SDKs, or the AWS CLI\. 
-
 + The [Amazon ES console](https://console.aws.amazon.com/es/) lets you create, configure, and monitor your domains\. Using the console is the easiest way to get started with Amazon ES\. 
-
 + The [AWS SDKs](http://aws.amazon.com/code) support all the Amazon ES configuration API operations, making it easy to manage your domains using your preferred technology\. The SDKs automatically sign requests as needed using your AWS credentials\.
-
 + The [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/) wraps all the Amazon ES configuration API operations, providing a simple way to create and configure domains\. The AWS CLI automatically signs requests as needed using your AWS credentials\.
 
 ## Regions and Endpoints for Amazon Elasticsearch Service<a name="endpoints"></a>
@@ -207,33 +160,11 @@ When you create a domain, you choose an initial number of Elasticsearch instance
 ## Using Amazon EBS Volumes for Storage<a name="ebs-volumes-storage"></a>
 
 You have the option of configuring your Amazon ES domain to use an Amazon EBS volume for storing indices rather than the default storage provided by the instance\. An Amazon EBS volume is a durable, block\-level storage device that you can attach to a single instance\. Amazon ES supports the following EBS volume types:
-
 + Magnetic
-
 + General Purpose \(SSD\)
-
 + Provisioned IOPS \(SSD\)
 
-For an overview, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\. For procedures that show you how to use Amazon EBS volumes for your Amazon ES domain, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. For information about the minimum and maximum size of supported EBS volumes in an Amazon ES domain, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\. 
-
-## Signing Service Requests<a name="signing-requests"></a>
-
-If you use a programming language that AWS provides an SDK for, we recommend that you use the SDK to submit HTTP requests to AWS\. The AWS SDKs greatly simplify the process of signing requests, and save you a significant amount of time compared to natively accessing the Elasticsearch APIs\. The SDKs integrate easily with your development environment and provide easy access to related commands\. You also can use the Amazon ES console and AWS CLI to submit signed requests with no additional effort\.
-
-If you choose to call the Elasticsearch APIs directly, you must sign your own requests\. Configuration service requests must always be signed\. All requests must be signed unless you configure anonymous access for those services\. Use the following procedure to sign a request:
-
-1. Calculate a digital signature using a cryptographic hash function\. The input must include the text of your request and your secret access key\.
-
-   The function returns a hash value based on your input\.
-
-1. Include the digital signature in the `Authorization` header of your request\.
-
-   The service recalculates the signature using the same hash function and input that you used\. If the resulting signature matches the signature in the request, the service processes the request\. Otherwise, the service rejects the request\.
-
-Amazon ES supports authentication using AWS Signature Version 4\. For more information, see [Signature Version 4 Signing Process](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)\. For some examples of signed requests to the Elasticsearch APIs, see [Programmatic Indexing](es-indexing.md#es-indexing-programmatic)\.
-
-**Note**  
-The service ignores parameters passed in URLs for HTTP POST requests that are signed with Signature Version 4\.
+For an overview, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\. For procedures that show you how to use Amazon EBS volumes for your Amazon ES domain, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. For information about the minimum and maximum size of supported EBS volumes in an Amazon ES domain, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
 
 ## Related Services<a name="aes-related-services"></a>
 

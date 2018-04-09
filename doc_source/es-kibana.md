@@ -2,7 +2,7 @@
 
 This chapter describes some considerations for using Kibana and Logstash with Amazon ES\.
 
-
+**Topics**
 + [Kibana](#es-managedomains-kibana)
 + [Loading Bulk Data with the Logstash Plugin](#es-managedomains-logstash)
 
@@ -16,11 +16,8 @@ For information about using Kibana to visualize your data, see the [Kibana User 
 To prevent public access to Kibana, you must configure an IP\-based access policy\. The default installation of Kibana does not support IAM user authentication at this time\. To learn more about IP\-based access policies, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
 
 The following sections address some common Kibana use cases:
-
 + [Using a Proxy to Access Amazon ES from Kibana](#es-kibana-proxy)
-
 + [Configuring Kibana to Use a WMS Map Server](#es-kibana-map-server)
-
 + [Connecting a Local Kibana Server to Amazon ES](#es-kibana-local)
 
 ### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
@@ -106,7 +103,6 @@ Map services often have licensing fees or restrictions\. You are responsible for
 If you have invested significant time into configuring your own Kibana instance, you can use it instead of \(or in addition to\) the default Kibana instance that Amazon ES provides\.
 
 **To connect a local Kibana server to Amazon ES:**
-
 + Make the following changes to `config/kibana.yml`:
 
   ```
@@ -125,20 +121,16 @@ You must install your own local instance of Logstash and make the following chan
 
 ****  
 
-| Configuration Field | Input | Output Plugin | Description | 
+| Configuration Field | Input \| Output Plugin | Description | 
 | --- | --- | --- | 
 | bucket | Input | Specifies the Amazon S3 bucket containing the data that you want to load into an Amazon ES domain\. You can find this service endpoint in the Amazon Elasticsearch Service console dashboard\. | 
 | region | Input | Specifies the AWS Region where the Amazon S3 bucket resides\. | 
 | hosts | Output | Specifies the service endpoint for the target Amazon ES domain\. | 
 | ssl | Output | Specifies whether to use SSL to connect to Amazon ES\.  | 
-| flush\_size | Output |  By default, Logstash fills a buffer with 5,000 events before sending the entire batch onward\. However, if your documents are large, approaching 100 MB in size, we recommend configuring `flush_size` option to a larger value to prevent the buffer from filling too quickly\.  If you increase `flush_size`, we recommend also setting the Logstash `LS_HEAP_SIZE` environment variable to 2048 MB to prevent running out of memory\. For more information, see [https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-flush_size](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-flush_size) in the Elasticsearch documentation\.  | 
 
 This example configures Logstash to do the following:
-
 + Point the output plugin to an Amazon ES endpoint
-
 + Point to the input plugin to the `wikipedia-stats-log` bucket in S3
-
 + Use SSL to connect to Amazon ES 
 
 ```
@@ -154,30 +146,9 @@ output{
     elasticsearch {
         hosts => "search-logs-demo0-cpxczkdpi4bkb4c44g3csyln5a.us-east-1.es.example.com"
         ssl => true
-        flush_size => 250000
-    }
-}
-```
-
-The following example demonstrates the same configuration, but connects to Amazon ES without SSL:
-
-```
-input{
-    s3 {
-        bucket => "wikipedia-stats-log"
-        access_key_id => "lizards"
-        secret_access_key => "lollipops"
-        region => "us-east-1"
-    }
-}
-output{
-    elasticsearch {
-        hosts => "search-logs-demo0-cpxczkdpi4bkb4c44g3csyln5a.us-east-1.es.example.com"
-        ssl => false
-        flush_size => 250000
     }
 }
 ```
 
 **Note**  
-The service request in the preceding example must be signed\. For more information about signing requests, see [Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.
+The service request in the preceding example must be signed\. For more information about signing requests, see [Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see the [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.

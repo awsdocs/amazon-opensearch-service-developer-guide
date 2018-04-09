@@ -39,6 +39,8 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
 1. For simplicity in this tutorial, we'll use an IP\-based access policy\. On the **Set up access** page, in the **Network configuration** section, choose **Public access**\.
 
+1. For now, you can ignore **Kibana authentication**\. For more information about the feature, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
+
 1. For **Set the domain access policy to**, choose **Allow access to the domain from specific IP\(s\)** and enter your public IP address, which you can find by searching for "What is my IP?" on [Google](https://www.google.com)\. Then choose **OK**\.
 
    To learn more about public access, VPC access, and access policies in general, see [Amazon Elasticsearch Service Access Control](es-ac.md) and [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
@@ -50,7 +52,6 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 New domains take up to ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
 
 **To create an Amazon ES domain \(AWS CLI\)**
-
 + Run the following command to create an Amazon ES domain\.
 
   The command creates a domain named *movies* with Elasticsearch version 6\.0\. It specifies one instance of the `t2.small.elasticsearch` instance type\. The instance type requires EBS storage, so it specifies a 10 GB volume\. Finally, the command applies an IP\-based access policy that restricts access to the domain to a single IP address\.

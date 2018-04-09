@@ -25,7 +25,6 @@ The most common causes of a red cluster status are [failed cluster nodes](#aes-h
 If your Amazon ES domain enters a red cluster status, AWS Support might contact you to ask whether you want to address the problem yourself or you want the support team to restore the latest automatic snapshot of the domain\. If you don't respond or resolve the issue within seven days, AWS Support restores the latest automatic snapshot\. You can [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when a red cluster status occurs\.
 
 Ultimately, red shards cause red clusters, and red indices cause red shards\. To identity the indices causing the red cluster status, Elasticsearch has some helpful APIs\.
-
 + `GET /_cluster/allocation/explain` chooses the first unassigned shard that it finds and explains why it cannot be allocated to a node:
 
   ```
@@ -38,7 +37,6 @@ Ultimately, red shards cause red clusters, and red indices cause red shards\. To
       "allocate_explanation": "cannot allocate because allocation is not permitted to any of the nodes"
   }
   ```
-
 + `GET /_cat/indices?v` shows the health status, number of documents, and disk usage for each index:
 
   ```

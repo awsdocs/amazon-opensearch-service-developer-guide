@@ -15,9 +15,7 @@ The following illustration shows the VPC architecture if zone awareness is enabl
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/VPCZoneAwareness.png)
 
 Amazon ES also places an *elastic network interface* \(ENI\) in the VPC for each of your data nodes\. Amazon ES assigns each ENI a private IP address from the IPv4 address range of your subnet\. The service also assigns a public DNS hostname \(which is the domain endpoint\) for the IP addresses\. You must use a public DNS service to resolve the endpoint \(which is a DNS hostname\) to the appropriate IP addresses for the data nodes:
-
 + If your VPC uses the Amazon\-provided DNS server by setting the `enableDnsSupport` option to `true` \(the default value\), resolution for the Amazon ES endpoint will succeed\.
-
 + If your VPC uses a private DNS server and the server can reach the public authoritative DNS servers to resolve DNS hostnames, resolution for the Amazon ES endpoint will also succeed\.
 
 Because the IP addresses might change, you should resolve the domain endpoint periodically so that you can always access the correct data nodes\. We recommend that you set the DNS resolution interval to one minute\. If you’re using a client, you should also ensure that the DNS cache in the client is cleared\.
@@ -25,7 +23,7 @@ Because the IP addresses might change, you should resolve the domain endpoint pe
 **Note**  
 Amazon ES doesn't support IPv6 addresses with a VPC\. You can use a VPC that has IPv6 enabled, but the domain will use IPv4 addresses\.
 
-
+**Topics**
 + [Limitations](#es-vpc-limitations)
 + [About Access Policies on VPC Domains](#es-vpc-security)
 + [Before You Begin: Prerequisites for VPC Access](#es-prerequisites-vpc-endpoints)
@@ -38,19 +36,12 @@ Amazon ES doesn't support IPv6 addresses with a VPC\. You can use a VPC that has
 ## Limitations<a name="es-vpc-limitations"></a>
 
 Currently, operating an Amazon ES domain within a VPC has the following limitations:
-
 + You can either launch your domain within a VPC or use a public endpoint, but you can't do both\. You must choose one or the other when you create your domain\.
-
 + If you launch a new domain within a VPC, you can't later switch it to use a public endpoint\. The reverse is also true: If you create a domain with a public endpoint, you can't later place it within a VPC\. Instead, you must create a new domain and migrate your data\.
-
 + You can't launch your domain within a VPC that uses dedicated tenancy\. You must use a VPC with tenancy set to **Default**\.
-
 + After you place a domain within a VPC, you can't move it to a different VPC\. However, you can change the subnets and security group settings\.
-
 + Compared to public domains, VPC domains display less information in the Amazon ES console\. Specifically, the **Cluster health** tab does not include shard information, and the **Indices** tab is not present at all\.
-
 + Currently, Amazon ES does not support integration with Amazon Kinesis Data Firehose for domains that reside within a VPC\. To use this service with Amazon ES, you must use a domain with public access\.
-
 + To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/), and [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
 
 ## About Access Policies on VPC Domains<a name="es-vpc-security"></a>
@@ -83,11 +74,9 @@ Because security groups already enforce IP\-based access policies, you can't app
 ## Before You Begin: Prerequisites for VPC Access<a name="es-prerequisites-vpc-endpoints"></a>
 
 Before you can enable a connection between a VPC and your new Amazon ES domain, you must do the following:
-
 + **Create a VPC**
 
   To create your VPC, you can use the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. You must create a subnet in the VPC, or two subnets if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. For more information, see [Creating A VPC](#es-creating-vpc)\. If you already have a VPC, you can skip this step\.
-
 + **Reserve IP addresses **
 
   Amazon ES enables the connection of a VPC to a domain by placing network interfaces in a subnet of the VPC\. Each network interface is associated with an IP address\. You must reserve a sufficient number of IP addresses in the subnet for the network interfaces\. For more information, see [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)\. 
@@ -163,17 +152,13 @@ Now you are ready to [launch an Amazon ES domain](es-createupdatedomains.md#es-c
 Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or two subnets of the VPC if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
 
 The number of IP addresses that Amazon ES requires depends on the following:
-
 + Number of data nodes in your domain\. \(Master nodes are not included in the number\.\) 
-
 + Whether you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. If you enable zone awareness, you need only half the number of IP addresses per subnet that you need if you don't enable zone awareness\.
 
 Here is the basic formula: The number of IP addresses reserved in each subnet is three times the number of nodes, divided by two if zone awareness is enabled\.
 
 **Examples**
-
 + If a domain has 10 data nodes and zone awareness is enabled, the IP count is 10 / 2 \* 3 = 15\.
-
 + If a domain has 10 data nodes and zone awareness is disabled, the IP count is 10 \* 3 = 30\.
 
 When you create the domain, Amazon ES reserves the IP addresses\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console at [https://console\.aws\.amazon\.com/ec2/](https://console.aws.amazon.com/ec2/)\. The **Description** column shows which Amazon ES domain the network interface is associated with\.

@@ -8,11 +8,8 @@ VPC support introduces some additional considerations to Amazon ES access contro
 ## Types of Policies<a name="es-ac-types"></a>
 
 Amazon ES supports three types of access policies:
-
 + [Resource\-based Policies](#es-ac-types-resource)
-
 + [Identity\-based policies](#es-ac-types-identity)
-
 + [IP\-based Policies](#es-ac-types-ip)
 
 ### Resource\-based Policies<a name="es-ac-types-resource"></a>
@@ -42,9 +39,7 @@ The [http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements
 ```
 
 Two important considerations apply to this policy:
-
 + These privileges apply only to this domain\. Unless you create additional policies, `test-user` can't access other domains or even view a list of them in the Amazon ES dashboard\.
-
 + The trailing `/*` in the `Resource` element is significant\. Despite having full access, `test-user` can perform these actions only on the domain's subresources, not on the domain's configuration\.
 
   For example, `test-user` can make requests against an index \(`GET https://search-test-domain.us-west-1.es.amazonaws.com/test-index`\), but can't update the domain's configuration \(`POST https://es.us-west-1.amazonaws.com/2015-01-01/es/domain/test-domain/config`\)\. Note the difference between the two endpoints\. Accessing the [configuration API](es-configuration-api.md) requires an [identity\-based policy](#es-ac-types-identity)\.
@@ -199,9 +194,7 @@ The following IP\-based access policy grants all requests that originate from `1
 ## Signing Amazon ES Requests<a name="es-managedomains-signing-service-requests"></a>
 
 Even if you configure a completely open resource\-based access policy, *all* requests to the Amazon ES configuration API must be signed\. If your policies specify IAM users or roles, requests to the Elasticsearch APIs also must be signed\. The signing method differs by API:
-
 + To make calls to the Amazon ES configuration API, we recommend that you use one of the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\. The SDKs greatly simplify the process and can save you a significant amount of time compared to creating and signing your own requests\.
-
 + To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Programmatic Indexing](es-indexing.md#es-indexing-programmatic)\.
 
 To sign a request, you calculate a digital signature using a cryptographic hash function, which returns a hash value based on the input\. The input includes the text of your request and your secret access key\. The hash function returns a hash value that you include in the request as your signature\. The signature is part of the `Authorization` header of your request\.
@@ -216,11 +209,8 @@ The service ignores parameters passed in URLs for HTTP POST requests that are si
 ## When Policies Collide<a name="es-ac-conflict"></a>
 
 Complexities arise when policies disagree or make no explicit mention of a user\. [Understanding How IAM Works](http://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html#intro-structure-authorization) in the *IAM User Guide* provides a concise summary of policy evaluation logic:
-
 + By default, all requests are denied\.
-
 + An explicit allow overrides this default\.
-
 + An explicit deny overrides any allows\.
 
 For example, if a resource\-based policy grants you access to a domain, but an identify\-based policy denies you access, you are denied access\. If an identity\-based policy grants access and a resource\-based policy does not specify whether or not you should have access, you are allowed access\. See the following table of intersecting policies for a full summary of outcomes\.
@@ -343,17 +333,13 @@ Similarly, the following resource\-based policy contains two subtle issues:
   ]
 }
 ```
-
 + Despite the explicit deny, `test-user` can still make calls such as `GET https://search-test-domain.us-west-1.es.amazonaws.com/_all/_search` and `GET https://search-test-domain.us-west-1.es.amazonaws.com/*/_search` to access the documents in `restricted-index`\.
-
 + Because the `Resource` element references `restricted-index/*`, `test-user` doesn't have permissions to directly access the index's documents\. The user does, however, have permissions to *delete the entire index*\. To prevent access and deletion, the policy instead must specify `restricted-index*`\.
 
 Rather than mixing broad allows and focused denies, the safest approach is to follow the principle of [least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) and grant only the permissions that are required to perform a task\.
 
 ## Configuring Access Policies<a name="es-ac-creating"></a>
-
-+ For instructions on creating or modifying resource\- and IP\-based policies in Amazon ES, see [Configuring Access Policies ](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
-
++ For instructions on creating or modifying resource\- and IP\-based policies in Amazon ES, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
 + For instructions on creating or modifying identity\-based policies in IAM, see [Creating IAM Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html) in the *IAM User Guide*\.
 
 ## Additional Sample Policies<a name="es-ac-samples"></a>

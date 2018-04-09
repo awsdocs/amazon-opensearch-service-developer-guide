@@ -6,14 +6,13 @@ To search documents in an Amazon ES domain, use the Elasticsearch [search](https
 Requests using curl are unauthenticated and rely on an IP\-based access policy\.
 
 **To search documents from the command line**
-
 + Run the following command to search the *movies* domain for the word *mars*:
 
   ```
   curl -XGET 'elasticsearch_domain_endpoint/movies/_search?q=mars'
   ```
 
-**To search documents from an Amazon ES domain by using Kibana \(console\)**
+**To search documents from an Amazon ES domain by using Kibana**
 
 1. Point your browser to the Kibana plugin for your Amazon ES domain\. You can find the Kibana endpoint on your domain dashboard on the Amazon ES console\. The URL follows the format of:
 

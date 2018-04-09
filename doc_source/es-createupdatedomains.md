@@ -4,11 +4,12 @@ This chapter describes how to create and configure Amazon Elasticsearch Service 
 
 Unlike the brief instructions in the [Getting Started](es-gsg.md) tutorial, this chapter describes all options and provides relevant reference information\. You can complete each procedure by using instructions for the Amazon ES console, the AWS Command Line Interface \(AWS CLI\), or the AWS SDKs\.
 
-
+**Topics**
 + [Creating Amazon ES Domains](#es-createdomains)
 + [Configuring Amazon ES Domains](#es-createdomains-configure-cluster)
 + [Configuring EBS\-based Storage](#es-createdomain-configure-ebs)
 + [Modifying VPC Access Configuration](#es-createdomain-configure-vpc-endpoints)
++ [Configuring Amazon Cognito Authentication for Kibana](#es-createdomain-configure-cognito-auth)
 + [Configuring Access Policies](#es-createdomain-configure-access-policies)
 + [Configuring Automatic Snapshots](#es-createdomain-configure-snapshots)
 + [Configuring Advanced Options](#es-createdomain-configure-advanced-options)
@@ -33,13 +34,9 @@ Use the following procedure to create an Amazon ES domain by using the console\.
    Alternatively, choose **Get Started** if this is the first Amazon ES domain that you will create for your AWS account\.
 
 1. On the **Define domain** page, for **Domain name**, type a name for your domain\. The domain name must meet the following criteria:
-
    + Uniquely identifies a domain
-
    + Starts with a lowercase letter
-
    + Contains between 3 and 28 characters
-
    + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
 
 1. For **Version**, choose an Elasticsearch version for your domain\. We recommend that you choose the latest version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
@@ -110,7 +107,11 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
    1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-Linked Role for VPC Access](es-vpc.md#es-enabling-slr)\.
 
-1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md), [Configuring Access Policies ](#es-createdomain-configure-access-policies), and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+1. \(Optional\) If you want to protect Kibana with a login page, choose **Enable Amazon Cognito for authentication**\.
+
+   1. Choose the Amazon Cognito user pool and identity pool that you want to use for Kibana authentication\. For guidance on creating these resources, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
+
+1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md), [Configuring Access Policies](#es-createdomain-configure-access-policies), and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 **Note**  
 If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
@@ -141,6 +142,7 @@ aws es create-elasticsearch-domain --domain-name <value>
   [--cli-input-json <value>]
   [--generate-cli-skeleton <value>]
   [--encryption-at-rest-options <value>]
+  [--cognito-options <value>]
 ```
 
 The following table provides more information about each of the optional parameters\.
@@ -161,17 +163,14 @@ The following table provides more information about each of the optional paramet
 | \-\-log\-publishing\-options | Specifies whether Amazon ES should publish Elasticsearch slow logs to CloudWatch\. For more information, see [Configuring Slow Logs](#es-createdomain-configure-slow-logs)\. | 
 | \-\-vpc\-options | Specifies whether to launch the Amazon ES domain within an Amazon VPC \(VPC\)\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
 | \-\-encryption\-at\-rest\-options | Specifies whether to enable [encryption of data at rest](encryption-at-rest.md)\. | 
+| \-\-cognito\-options | Specifies whether to use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. | 
 
 **Examples**
 
 The first example demonstrates the following Amazon ES domain configuration:
-
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
-
 + Populates the domain with two instances of the m4\.large\.elasticsearch instance type
-
 + Uses a 100 GB Magnetic disk EBS volume for storage for each data node
-
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
 ```
@@ -179,15 +178,10 @@ aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
-
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
-
 + Populates the domain with six instances of the m4\.large\.elasticsearch instance type
-
 + Uses a 100 GB General Purpose \(SSD\) EBS volume for storage for each data node
-
 + Restricts access to the service to a single user, identified by the user's AWS account ID: 555555555555 
-
 + Enables zone awareness
 
 ```
@@ -195,17 +189,11 @@ aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
-
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
-
 + Populates the domain with ten instances of the m4\.xlarge\.elasticsearch instance type
-
 + Populates the domain with three instances of the m4\.large\.elasticsearch instance type to serve as dedicated master nodes
-
 + Uses a 100 GB Provisioned IOPS EBS volume for storage, configured with a baseline performance of 1000 IOPS for each data node
-
 + Restricts access to a single user and to a single subresource, the `_search` API
-
 + Configures automated daily snapshots of the indices for 03:00 UTC 
 
 ```
@@ -222,21 +210,13 @@ The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined
 ## Configuring Amazon ES Domains<a name="es-createdomains-configure-cluster"></a>
 
 To meet the demands of increased traffic and data, you can update your Amazon ES domain configuration with any of the following changes:
-
 + Change the instance count
-
 + Change the instance type
-
 + Enable or disable dedicated master nodes
-
 + Enable or disable Zone Awareness
-
 + Configure storage configuration
-
 + Change the start time for automated snapshots of domain indices
-
 + Change the VPC subnets and security groups
-
 + Configure advanced options
 
 **Note**  
@@ -278,7 +258,7 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
       1. For **Dedicated master instance count**, choose the number of instances for the dedicated master node\.
 
-         We recommend choosing an odd number of instances to avoid potential Amazon ES issues, such as the [split brain](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/modules-node.html#split-brain) issue\. The default and recommended number is three\.
+         We recommend choosing an odd number of instances to avoid potential Amazon ES issues, such as the [split brain](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain) issue\. The default and recommended number is three\.
 
    1. If you want to enable zone awareness, select the **Enable zone awareness** check box\. If you enable zone awareness, you must have an even number of instances in your instance count\. This allows for the even distribution of shards across two Availability Zones in the same region\.
 
@@ -342,11 +322,8 @@ The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined
 ## Configuring EBS\-based Storage<a name="es-createdomain-configure-ebs"></a>
 
 An Amazon EBS volume is a block\-level storage device that you can attach to a single instance\. EBS volumes enable you to independently scale the storage resources of your Amazon ES domain from its compute resources\. EBS volumes are most useful for domains with large datasets, but without the need for large compute resources\. EBS volumes are much larger than the default storage provided by the instance\. Amazon Elasticsearch Service supports the following EBS volume types:
-
 + General Purpose \(SSD\)
-
 + Provisioned IOPS \(SSD\)
-
 + Magnetic
 
 **Note**  
@@ -452,6 +429,10 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 1. For **Security groups**, add the security groups that need access to the domain\. 
 
 1. Choose **Submit**\.
+
+## Configuring Amazon Cognito Authentication for Kibana<a name="es-createdomain-configure-cognito-auth"></a>
+
+See [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
 
 ## Configuring Access Policies<a name="es-createdomain-configure-access-policies"></a>
 
@@ -725,11 +706,8 @@ After you enable log publishing, see [Setting Elasticsearch Logging Thresholds](
 ### Enabling Slow Logs Publishing \(AWS SDKs\)<a name="es-createdomain-configure-slow-logs-sdk"></a>
 
 Before you can enable slow logs publishing, you must first create a CloudWatch log group, get its ARN, and give Amazon ES permissions to write to it\. The relevant operations are documented in the [Amazon CloudWatch Logs API Reference](http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/):
-
 + `CreateLogGroup`
-
 + `DescribeLogGroup`
-
 + `PutResourcePolicy`
 
 You can access these operations using the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\.
@@ -751,13 +729,9 @@ curl -XPUT elasticsearch_domain_endpoint/index/_settings --data '{"index.search.
 To test that slow logs are publishing successfully, consider starting with very low values to verify that logs appear in CloudWatch, and then increase the thresholds to more useful levels\.
 
 If the logs don't appear, check the following:
-
 + Does the CloudWatch log group exist? Check the CloudWatch console\.
-
 + Does Amazon ES have permissions to write to the log group? Check the Amazon ES console\.
-
 + Is the Amazon ES domain configured to publish to the log group? Check the Amazon ES console, use the AWS CLI `describe-elasticsearch-domain-config` option, or call `DescribeElasticsearchDomainConfig` using one of the SDKs\.
-
 + Are the Elasticsearch logging thresholds low enough that your requests are exceeding them? To review your thresholds for an index, use the following command:
 
   ```
@@ -773,7 +747,5 @@ Disabling publishing to CloudWatch using the Amazon ES console or AWS CLI does *
 Viewing the slow logs in CloudWatch is just like viewing any other CloudWatch log\. For more information, see [View Log Data](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/ViewingLogData.html) in the *Amazon CloudWatch Logs User Guide*\.
 
 Here are some considerations for viewing the logs:
-
 + Amazon ES publishes only the first 255,000 characters of each line of the slow logs to CloudWatch\. Any remaining content is truncated\.
-
 + In CloudWatch, the log stream names have suffixes of `-index-slow-logs` or `-search-slow-logs` to help identify their contents\.

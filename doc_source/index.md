@@ -28,6 +28,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)
 + [Migrating to a Different Elasticsearch Version](es-version-migration.md)
 + [Kibana and Logstash](es-kibana.md)
++ [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)
 + [Amazon Elasticsearch Service Best Practices](aes-bp.md)
    + [Sizing Amazon ES Domains](sizing-domains.md)
    + [Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)

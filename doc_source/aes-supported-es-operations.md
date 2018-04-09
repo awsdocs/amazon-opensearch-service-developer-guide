@@ -2,7 +2,7 @@
 
 Amazon ES supports many versions of Elasticsearch\. The following topics show the operations that Amazon ES supports for each version\.
 
-
+**Topics**
 + [Notable API Differences](#es_version_api_notes)
 + [Version 6\.2](#es_version_6_2)
 + [Version 6\.0](#es_version_6_0)
@@ -51,11 +51,8 @@ A sample return follows:
   }
 }
 ```
-
 + `cluster_concurrent_rebalance` specifies the number of shards that can be relocated to new nodes at any given time\. For more information, see [Shard Rebalancing Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/shards-allocation.html#_shard_rebalancing_settings) in the Elasticsearch documentation\.
-
 + `max_bytes_per_sec` is the maximum data transfer speed that Elasticsearch uses during a [recovery event](https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-recovery.html)\.
-
 + `di_number` is an internal Amazon ES value that is used to copy shards to new *domain instances* after configuration changes\.
 
 ## Version 6\.2<a name="es_version_6_2"></a>

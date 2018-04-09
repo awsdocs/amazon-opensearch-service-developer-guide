@@ -7,11 +7,8 @@ To learn more, see [Sizing Amazon ES Domains](sizing-domains.md), [Cluster and I
 Amazon ES supports the following instance types\.
 
 **T2 Instance Types**
-
 + `t2.micro.elasticsearch`
-
 + `t2.small.elasticsearch`
-
 + `t2.medium.elasticsearch`
 
 **Note**  
@@ -20,13 +17,9 @@ The `t2.micro.elasticsearch` instance type supports only Elasticsearch 2\.3 and 
 The `t2` instance types do not support encryption of data at rest\.
 
 **M3 Instance Types**
-
 + `m3.medium.elasticsearch`
-
 + `m3.large.elasticsearch`
-
 + `m3.xlarge.elasticsearch`
-
 + `m3.2xlarge.elasticsearch`
 
 **Note**  
@@ -34,45 +27,30 @@ The `m3` instance types are not available in the us\-east\-2, ca\-central\-1, eu
 The `m3` instance types do not support encryption of data at rest\.
 
 **M4 Instance Types**
-
 + `m4.large.elasticsearch`
-
 + `m4.xlarge.elasticsearch`
-
 + `m4.2xlarge.elasticsearch`
-
 + `m4.4xlarge.elasticsearch`
-
 + `m4.10xlarge.elasticsearch`
 
 **Note**  
 The `m4` instance types are not available in the eu\-west\-3 region\.
 
 **C4 Instance Types**
-
 + `c4.large.elasticsearch`
-
 + `c4.xlarge.elasticsearch`
-
 + `c4.2xlarge.elasticsearch`
-
 + `c4.4xlarge.elasticsearch`
-
 + `c4.8xlarge.elasticsearch`
 
 **Note**  
 The `c4` instance types are not available in the eu\-west\-3 region\.
 
 **R3 Instance Types**
-
 + `r3.large.elasticsearch`
-
 + `r3.xlarge.elasticsearch`
-
 + `r3.2xlarge.elasticsearch`
-
 + `r3.4xlarge.elasticsearch`
-
 + `r3.8xlarge.elasticsearch`
 
 **Note**  
@@ -80,40 +58,26 @@ The `r3` instance types are not available in the ca\-central\-1, eu\-west\-2, eu
 The `r3` instance types do not support encryption of data at rest\.
 
 **R4 Instance Types**
-
 + `r4.large.elasticsearch`
-
 + `r4.xlarge.elasticsearch`
-
 + `r4.2xlarge.elasticsearch`
-
 + `r4.4xlarge.elasticsearch`
-
 + `r4.8xlarge.elasticsearch`
-
 + `r4.16xlarge.elasticsearch`
 
 **I2 Instance Types**
-
 + `i2.xlarge.elasticsearch`
-
 + `i2.2xlarge.elasticsearch`
 
 **Note**  
 The `i2` instance types are not available in the sa\-east\-1, ca\-central\-1, eu\-west\-2, eu\-west\-3, us\-east\-2, and cn\-northwest\-1 regions\.
 
 **I3 Instance Types**
-
 + `i3.large.elasticsearch`
-
 + `i3.xlarge.elasticsearch`
-
 + `i3.2xlarge.elasticsearch`
-
 + `i3.4xlarge.elasticsearch`
-
 + `i3.8xlarge.elasticsearch`
-
 + `i3.16xlarge.elasticsearch`
 
 **Note**  
