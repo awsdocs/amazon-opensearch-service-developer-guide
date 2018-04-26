@@ -12,25 +12,37 @@ This chapter describes some considerations for using Kibana and Logstash with Am
 
 For information about using Kibana to visualize your data, see the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/index.html)\.
 
-**Note**  
-To prevent public access to Kibana, you must configure an IP\-based access policy\. The default installation of Kibana does not support IAM user authentication at this time\. To learn more about IP\-based access policies, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
-
 The following sections address some common Kibana use cases:
-+ [Using a Proxy to Access Amazon ES from Kibana](#es-kibana-proxy)
++ [Controlling Access to Kibana](#es-kibana-access)
 + [Configuring Kibana to Use a WMS Map Server](#es-kibana-map-server)
 + [Connecting a Local Kibana Server to Amazon ES](#es-kibana-local)
 
-### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
+### Controlling Access to Kibana<a name="es-kibana-access"></a>
 
-Because Kibana is a JavaScript application, requests originate from the user's IP address\. Unauthenticated, IP\-based access control might be impractical due to the sheer number of IP addresses you would need to whitelist in order for each user to have access to Kibana\. One workaround is to place a proxy server between Kibana and Amazon ES\. Then you can add an IP\-based access policy that allows requests from only one IP address, the proxy's\. The following diagram shows this configuration\.
+Kibana does not natively support IAM users and roles, but Amazon ES offers several solutions for controlling access to Kibana:
+
+
+****  
+
+| Domain Configuration | Access Control Options | 
+| --- | --- | 
+| Public access |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html)  | 
+| VPC access |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html)  | 
+
+#### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
+
+**Note**  
+This process is only applicable if your domain uses public access and you don't want to use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. See [Controlling Access to Kibana](#es-kibana-access)\.
+
+Because Kibana is a JavaScript application, requests originate from the user's IP address\. IP\-based access control might be impractical due to the sheer number of IP addresses you would need to whitelist in order for each user to have access to Kibana\. One workaround is to place a proxy server between Kibana and Amazon ES\. Then you can add an IP\-based access policy that allows requests from only one IP address, the proxy's\. The following diagram shows this configuration\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/KibanaProxy.png)
 
 1. This is your Amazon ES domain\. IAM provides authorized access to this domain\. An additional, IP\-based access policy provides access to the proxy server\.
 
-1. This is the proxy server, residing in a VPC subnet and running on an Amazon EC2 instance\.
+1. This is the proxy server, running on an Amazon EC2 instance\.
 
-1. Other applications running on EC2 instances can use the Signature Version 4 signing process to send authenticated requests to Amazon ES\. For sample code that makes signed requests to Amazon ES, see [Programmatic Indexing](es-indexing.md#es-indexing-programmatic)\.
+1. Other applications can use the Signature Version 4 signing process to send authenticated requests to Amazon ES\.
 
 1. Kibana clients connect to your Amazon ES domain through the proxy\.
 
@@ -38,34 +50,34 @@ To enable this sort of configuration, you need a resource\-based policy that spe
 
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Resource": "arn:aws:es:us-west-2:111111111111:domain/recipes1/analytics",
-            "Principal": {
-                "AWS": "arn:aws:iam::111111111111:role/allowedrole1"
-            },
-            "Action": [
-                "es:ESHttpGet"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "*"
-            },
-            "Action": "es:*",
-            "Condition": {
-                "IpAddress": {
-                    "aws:SourceIp": [
-                        "123.456.789.123"
-                    ]
-                }
-            },
-            "Resource": "arn:aws:es:us-west-2:111111111111:domain/recipes1/analytics"
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Resource": "arn:aws:es:us-west-2:111111111111:domain/recipes1/analytics",
+      "Principal": {
+        "AWS": "arn:aws:iam::111111111111:role/allowedrole1"
+      },
+      "Action": [
+        "es:ESHttpGet"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "es:*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": [
+            "123.456.789.123"
+          ]
         }
-    ]
+      },
+      "Resource": "arn:aws:es:us-west-2:111111111111:domain/recipes1/analytics"
+    }
+  ]
 }
 ```
 

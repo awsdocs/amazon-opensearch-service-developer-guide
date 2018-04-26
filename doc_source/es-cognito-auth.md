@@ -18,6 +18,7 @@ The first time that you configure a domain to use Amazon Cognito authentication 
 + [Limits](#es-cognito-auth-limits)
 + [Common Configuration Issues](#es-cognito-auth-troubleshooting)
 + [Disabling Amazon Cognito Authentication for Kibana](#es-cognito-auth-disable)
++ [Deleting Domains that Use Amazon Cognito Authentication for Kibana](#es-cognito-auth-delete)
 
 ## Prerequisites<a name="es-cognito-auth-prereq"></a>
 
@@ -188,6 +189,9 @@ When you configure a domain to use Amazon Cognito authentication for Kibana, Ama
 
 ![\[Amazon Cognito console showing app client settings\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/cognito-app-client.png)
 
+**Warning**  
+Don't rename or delete the app client\.
+
 Depending on how you configured your user pool, you might need to create user accounts manually, or users might be able to create their own\. If these settings are acceptable, you don't need to take further action\. Many people, however, prefer to use external identity providers\.
 
 To enable a SAML 2\.0 identity provider, you must provide a SAML metadata document\. To enable social identity providers like Login with Amazon, Facebook, and Google, you must have an app ID and app secret from those providers\. You can enable any combination of identity providers\. The login page adds options as you add providers, as shown in the following screenshot\.
@@ -296,3 +300,7 @@ Use the following procedure to disable Amazon Cognito authentication for Kibana\
 
 **Important**  
 If you no longer need the Amazon Cognito user pool and identity pool, delete them\. Otherwise, you can continue to incur charges\.
+
+## Deleting Domains that Use Amazon Cognito Authentication for Kibana<a name="es-cognito-auth-delete"></a>
+
+To prevent domains that use Amazon Cognito authentication for Kibana from becoming stuck in a configuration state of **Processing**, delete Amazon ES domains *before* deleting their associated Amazon Cognito user pools and identity pools\.
