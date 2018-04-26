@@ -246,7 +246,14 @@ For more information about the options available to you when taking a snapshot, 
 
 ## Restoring Snapshots<a name="es-managedomains-snapshot-restore"></a>
 
-To restore a snapshot, perform the following procedure:
+**Warning**  
+If you use [index aliases](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html), cease write requests to an alias \(or switch the alias to another index\) prior to deleting its index\. Halting write requests helps avoid the following scenario:  
+You delete an index, which also deletes its alias\.
+An errant write request to the now\-deleted alias creates a new index with the same name as the alias\.
+You can no longer use the alias due to a naming conflict with the new index\.
+If you switched the alias to another index, specify `"include_aliases": false` when you restore from a snapshot\.
+
+**To restore a snapshot**
 
 1. Identify the snapshot that you want to restore\. To see all snapshot repositories, run the following command:
 
