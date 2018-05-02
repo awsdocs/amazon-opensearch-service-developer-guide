@@ -42,7 +42,7 @@ Currently, operating an Amazon ES domain within a VPC has the following limitati
 + After you place a domain within a VPC, you can't move it to a different VPC\. However, you can change the subnets and security group settings\.
 + Compared to public domains, VPC domains display less information in the Amazon ES console\. Specifically, the **Cluster health** tab does not include shard information, and the **Indices** tab is not present at all\.
 + Currently, Amazon ES does not support integration with Amazon Kinesis Data Firehose for domains that reside within a VPC\. To use this service with Amazon ES, you must use a domain with public access\.
-+ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/), and [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
++ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/), and [Controlling Access to Kibana](es-kibana.md#es-kibana-access)\.
 
 ## About Access Policies on VPC Domains<a name="es-vpc-security"></a>
 

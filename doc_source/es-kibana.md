@@ -83,6 +83,33 @@ To enable this sort of configuration, you need a resource\-based policy that spe
 
 We recommend that you configure the EC2 instance running the proxy server with an Elastic IP address\. This way, you can replace the instance when necessary and still attach the same public IP address to it\. To learn more, see [Elastic IP Addresses](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) in the *Amazon EC2 User Guide for Linux Instances*\.
 
+If you use a proxy server *and* [Amazon Cognito Authentication for Kibana](es-cognito-auth.md), you might need to add settings for Kibana and Amazon Cognito to avoid `redirect_mismatch` errors\. See the following `nginx.conf` example:
+
+```
+server {
+  listen 443;
+ 
+  location /login {
+    proxy_pass           https://$cognito_host/login;
+    proxy_cookie_domain  $cognito_host                 $proxy_host;
+    proxy_redirect       https://$kibana_host          https://$proxy_host;
+  }
+ 
+  location / {
+    proxy_pass               https://$kibana_host;
+    proxy_redirect           https://$cognito_host  https://proxy_host;
+    proxy_cookie_domain      $kibana_host           $proxy_host;
+    proxy_buffer_size        128k;
+    proxy_buffers            4                      256k;
+    proxy_busy_buffers_size  256k;
+  }
+}
+
+$cognito_host=your-cognito-domain-name.auth.us-west-2.amazoncognito.com
+$kibana_host=search-your-es-domain.us-west-2.es.amazonaws.com
+$proxy_host=your-proxy-server.us-west-2.compute.amazonaws.com
+```
+
 ### Configuring Kibana to Use a WMS Map Server<a name="es-kibana-map-server"></a>
 
 Due to licensing restrictions, the default installation of Kibana on Amazon ES domains that use Elasticsearch 5\.*x* or greater does *not* include a map server for tile map visualizations\. Use the following procedure to configure Kibana to use a Web Map Service \(WMS\) map server\.

@@ -6,7 +6,6 @@ The following sections offer solutions to common problems that you might encount
 + [Kibana: I Can't Sign AWS Service Requests to the Kibana Service Endpoint](#aes-troubleshooting-kibana-configure-anonymous-access)
 + [Kibana: I Don't See the Indices for My Elasticsearch Domain in Kibana 4](#aes-troubleshooting-kibana-find-indices)
 + [Kibana: I Get a Browser Error When I Use Kibana to View My Data](#aes-troubleshooting-kibana-debug-browser-errors)
-+ [Integrations: I Don't See a Service Role for Amazon ES in the IAM Console](#aes-troubleshooting-integrations)
 + [Domain Creation: Unauthorized Operation When Selecting VPC Access](#es-vpc-permissions)
 + [Domain Creation: Stuck at Loading After Choosing VPC Access](#es-vpc-sts)
 + [SDKs: I Get Certificate Errors When I Try to Use an SDK](#aes-troubleshooting-certificates)
@@ -112,27 +111,6 @@ Your browser wraps service error messages in HTTP response objects when you use 
 1. Choose any HTTP session with a status of 500\.
 
 1. Choose the **Response** tab to view the service response\.
-
-## Integrations: I Don't See a Service Role for Amazon ES in the IAM Console<a name="aes-troubleshooting-integrations"></a>
-
-You can integrate Amazon ES with other services, such as Amazon S3 and Kinesis, as described in [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es) and [Loading Streaming Data into Amazon ES from Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis-lambda-es) in this guide\. Both of these integrations use AWS Lambda as an event handler in the cloud\. When you create a Lambda function using the AWS Lambda console, the console automatically opens the IAM console to help you create the required execution role\. You don't need to open the IAM console yourself and select a service role\. However, you must open the IAM console after AWS Lambda helps you to create the new role and attach the following IAM policy to it:
-
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "es:*"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:es:us-west-2:123456789012:domain/<my_domain_name>/*"
-        }
-    ]
-}
-```
-
-For step\-by\-step procedures, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es) and [Loading Streaming Data into Amazon ES from Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis-lambda-es) in this guide\. 
 
 ## Domain Creation: Unauthorized Operation When Selecting VPC Access<a name="es-vpc-permissions"></a>
 

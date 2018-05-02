@@ -46,7 +46,7 @@ If your minimum storage requirement exceeds 1 PB, see [Petabyte Scale for Amazon
 
 ## Choosing the Number of Shards<a name="aes-bp-sharding"></a>
 
-After you understand your storage requirements, you can investigate your indexing strategy\. Each Elasticsearch index is split into some number of shards\. Because you can't change the number of primary shards for an existing index, you should decide about shard count *before* indexing your first document\.
+After you understand your storage requirements, you can investigate your indexing strategy\. Each Elasticsearch index is split into some number of shards\. Because you can't easily change the number of primary shards for an existing index, you should decide about shard count *before* indexing your first document\.
 
 The overarching goal of choosing a number of shards is to distribute an index evenly across all data nodes in the cluster\. However, these shards shouldn't be too large or too numerous\. A good rule of thumb is to try to keep shard size between 10–50 GB\. Large shards can make it difficult for Elasticsearch to recover from failure, but because each shard uses some amount of CPU and memory, having too many small shards can cause performance issues and out of memory errors\. In other words, shards should be small enough that the underlying Amazon ES instance can handle them, but not so small that they place needless strain on the hardware\.
 

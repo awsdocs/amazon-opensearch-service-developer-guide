@@ -174,24 +174,25 @@ Amazon ES commonly is used with the following services:
 Use AWS CloudTrail to get a history of the Amazon ES API calls and related events for your account\. CloudTrail is a web service that records API calls from your accounts and delivers the resulting log files to your Amazon S3 bucket\. You also can use CloudTrail to track changes that were made to your AWS resources\. For more information, see [Auditing Amazon Elasticsearch Service Domains with AWS CloudTrail](es-managedomains.md#es-managedomains-cloudtrailauditing)\.
 
 [Amazon CloudWatch](http://aws.amazon.com/documentation/cloudwatch/)  
-An Amazon ES domain automatically sends metrics to Amazon CloudWatch so that you can gather and analyze performance statistics\. You can monitor these metrics by using the AWS CLI or the AWS SDKs\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.
+An Amazon ES domain automatically sends metrics to Amazon CloudWatch so that you can gather and analyze performance statistics\. You can monitor these metrics by using the AWS CLI or the AWS SDKs\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.  
+CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
 
 [Kinesis](http://aws.amazon.com/documentation/kinesis/)  
-Kinesis is a managed service that scales elastically for real\-time processing of streaming data at a massive scale\. Amazon ES provides Lambda sample code for integration with Kinesis\. For more information, see [Loading Streaming Data into Amazon ES From Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis-lambda-es)\.
+Kinesis is a managed service that scales elastically for real\-time processing of streaming data at a massive scale\. For more information, see [Loading Streaming Data into Amazon ES from Amazon Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis)\.
 
 [Amazon S3](http://aws.amazon.com/documentation/s3/)  
 Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. You can use Amazon S3 to store and retrieve any amount of data at any time, from anywhere on the web\. Amazon ES provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.
 
 [AWS IAM](http://aws.amazon.com/iam/)  
-AWS Identity and Access Management \(IAM\) is a web service that you can use to manage users and user permissions in AWS\. You can use IAM to create user\-based access policies for your Amazon ES domains\. For more information, see the [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) documentation\.
+AWS Identity and Access Management \(IAM\) is a web service that you can use to manage users and user permissions in AWS\. You can use IAM to create user\-based access policies for your Amazon ES domains\. For more information, see the [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) documentation and [Amazon Elasticsearch Service Access Control](es-ac.md)\.
 
 Amazon ES integrates with the following services to provide data ingestion:
 
 [AWS Lambda](http://aws.amazon.com/documentation/lambda/)  
-AWS Lambda is a zero\-administration compute platform for backend web developers that runs your code in the AWS Cloud\. Amazon ES provides sample code to run on Lambda that integrates with Kinesis and Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES](es-aws-integrations.md)\.
+AWS Lambda is a compute service that lets you run code without provisioning or managing servers\. Amazon ES provides Lambda sample code to stream data from DynamoDB, Amazon S3, and Kinesis\. For more information, see [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
 
 [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
-Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. Amazon ES provides a Logstash plugin to support DynamoDB Streams and to sign AWS service requests\. 
+Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon DynamoDB](es-aws-integrations.md#es-aws-integrations-dynamodb-es)\.
 
 ## Pricing for Amazon Elasticsearch Service<a name="aes-pricing"></a>
 
