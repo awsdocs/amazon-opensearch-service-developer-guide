@@ -45,6 +45,7 @@ Amazon's trademarks and trade dress may not be used in
    + [Other Supported Resources](aes-supported-resources.md)
 + [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)
 + [Amazon Elasticsearch Service Limits](aes-limits.md)
++ [Amazon Elasticsearch Service Reserved Instances](aes-ri.md)
 + [Using Service-Linked Roles for Amazon ES](slr-es.md)
 + [Document History for Amazon Elasticsearch Service](document-history.md)
 + [AWS Glossary](glossary.md)

@@ -160,7 +160,7 @@ After you create the function, you can test it by uploading a file to the Amazon
 
 Upload the file to the `logs` folder of your S3 bucket\. For instructions, see [Add an Object to a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\.
 
-Then use the Amazon ES console or Kibana to verify that the `lambda-index` index contains two documents\. You can also make a standard search request:
+Then use the Amazon ES console or Kibana to verify that the `lambda-s3-index` index contains two documents\. You can also make a standard search request:
 
 ```
 GET https://es-domain/lambda-index/_search?pretty
@@ -181,7 +181,7 @@ GET https://es-domain/lambda-index/_search?pretty
         }
       },
       {
-        "_index" : "lambda-index",
+        "_index" : "lambda-s3-index",
         "_type" : "lambda-type",
         "_id" : "vjYmaWIBJWV_TTkEuCAB",
         "_score" : 1.0,

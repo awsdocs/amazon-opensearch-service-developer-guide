@@ -56,7 +56,7 @@ You must have a role that specifies Amazon Elasticsearch Service, `es.amazonaws.
 }
 ```
 
-If you create this role using the IAM console, Amazon ES is not included in the **Select role type** list\. However, you can still create the role by choosing **Amazon EC2**, following the steps to create the role, and then editing the role's trust relationships to `es.amazonaws.com` instead of `ec2.amazonaws.com`\. For instructions and additional information, see [Creating a Role for an AWS Service](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html#roles-creatingrole-service-console) and [Modifying a Role](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_manage_modify.html#roles-managingrole-editing-console) in the *IAM User Guide*\.
+If you create this role using the IAM console, Amazon ES is not included in the **Choose the service that will use this role** list\. However, you can still create the role by choosing **Amazon EC2**, following the steps to create the role, and then editing the role's trust relationships to `es.amazonaws.com` instead of `ec2.amazonaws.com`\. For instructions and additional information, see [Creating a Role for an AWS Service](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html#roles-creatingrole-service-console) and [Modifying a Role](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_manage_modify.html#roles-managingrole-editing-console) in the *IAM User Guide*\.
 
 **Note**  
 Only IAM users or roles with access to this service role may [register snapshot repositories](#es-managedomains-snapshot-registerdirectory)\. A common way to provide access is to attach the following policy to a different user or role:  
