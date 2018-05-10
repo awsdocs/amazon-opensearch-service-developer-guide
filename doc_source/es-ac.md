@@ -195,7 +195,7 @@ The following IP\-based access policy grants all requests that originate from `1
 
 Even if you configure a completely open resource\-based access policy, *all* requests to the Amazon ES configuration API must be signed\. If your policies specify IAM users or roles, requests to the Elasticsearch APIs also must be signed\. The signing method differs by API:
 + To make calls to the Amazon ES configuration API, we recommend that you use one of the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\. The SDKs greatly simplify the process and can save you a significant amount of time compared to creating and signing your own requests\.
-+ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Programmatic Indexing](es-indexing.md#es-indexing-programmatic)\.
++ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Programmatic Indexing](es-indexing-programmatic.md)\.
 
 To sign a request, you calculate a digital signature using a cryptographic hash function, which returns a hash value based on the input\. The input includes the text of your request and your secret access key\. The hash function returns a hash value that you include in the request as your signature\. The signature is part of the `Authorization` header of your request\.
 
@@ -304,7 +304,7 @@ POST https://search-test-domain.us-west-1.es.amazonaws.com/_bulk
 
 In this situation, the access policy fails to fulfill its intent\. To prevent users from bypassing these kinds of restrictions, you can change `rest.action.multi.allow_explicit_index` to false\. If this value is false, all calls to the bulk, [mget](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html), and [msearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html) APIs that specify index names in the request body stop working\. In other words, calls to `_bulk` no longer work, but calls to `test-index/_bulk` do\. This second endpoint contains an index name, so you don't need to specify one in the request body\.
 
-[Kibana](es-kibana.md#es-managedomains-kibana) relies heavily on mget and msearch, so it is unlikely to work properly after this change\. For partial remediation, you can leave `rest.action.multi.allow_explicit` as true and deny certain users access to one or more of these APIs\.
+[Kibana](es-kibana.md#es-managedomains-kibana) relies heavily on mget and msearch, so it is unlikely to work properly after this change\. For partial remediation, you can leave `rest.action.multi.allow_explicit_index` as true and deny certain users access to one or more of these APIs\.
 
 For information about changing this setting, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\.
 

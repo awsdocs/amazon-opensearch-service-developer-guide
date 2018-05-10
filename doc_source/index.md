@@ -24,6 +24,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Amazon Elasticsearch Service Access Control](es-ac.md)
 + [Managing Amazon Elasticsearch Service Domains](es-managedomains.md)
 + [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)
+   + [Programmatic Indexing](es-indexing-programmatic.md)
 + [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)
 + [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)
 + [Migrating to a Different Elasticsearch Version](es-version-migration.md)

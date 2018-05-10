@@ -119,7 +119,7 @@ If your domain resides within a VPC, your computer must be connected to the VPC 
 Save the following sample Python code as a Python file, such as `register-repo.py`\. The client requires the [requests](http://docs.python-requests.org/) and [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) packages\.
 
 **Tip**  
-A Java\-based code sample is available in [Indexing Data](es-indexing.md#es-indexing-programmatic-java)\.
+A Java\-based code sample is available in [Indexing Data](es-indexing-programmatic.md#es-indexing-programmatic-java)\.
 
 Registering a snapshot directory is a one\-time operation, but to migrate from one domain to another, you must register the same snapshot repository on the old domain and the new domain\. The client also contains commented\-out examples for other snapshot operations\.
 

@@ -554,7 +554,7 @@ The AWS SDKs \(except the Android and iOS SDKs\) support all the actions that ar
 
 Use advanced options to configure the following:
 
-**rest\.action\.multi\.allow\_explicit**  
+**rest\.action\.multi\.allow\_explicit\_index**  
 Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to false prevents users from bypassing access control for subresources\. By default, the value is true\. For more information, see [URL\-based access control](https://www.elastic.co/guide/en/elasticsearch/reference/current/url-access-control.html) and [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
 
 **indices\.fielddata\.cache\.size**  
@@ -587,7 +587,7 @@ Use the following syntax for the `--advanced-options` option\. The syntax for th
 **Syntax**
 
 ```
---advanced-options rest.action.multi.allow_explicit=<true|false>, indices.fielddata.cache.size=<percentage_heap>, indices.query.bool.max_clause_count=<int>
+--advanced-options rest.action.multi.allow_explicit_index=<true|false>, indices.fielddata.cache.size=<percentage_heap>, indices.query.bool.max_clause_count=<int>
 ```
 
 
