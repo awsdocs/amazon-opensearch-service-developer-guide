@@ -501,7 +501,7 @@ Amazon Elasticsearch Service provides automatic daily snapshots of a domain's pr
 For information on working with these snapshots, see [Restoring Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
 
 **Warning**  
-The service stops taking snapshots of Amazon ES indices while the health of a cluster is red\. Any documents that you add to a red cluster, even to indices with a health status of green, can be lost in the event of a cluster failure due to this lack of backups\. To prevent loss of data, return the health of your cluster to green before uploading additional data to any index in the cluster\.
+The service stops taking snapshots of Amazon ES indices while the health of a cluster is red\. Any documents that you add to a red cluster, even to indices with a health status of green, can be lost in the event of a cluster failure due to this lack of backups\. To prevent loss of data, return the health of your cluster to green before uploading additional data to any index in the cluster\. To learn more, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
 
 ### Configuring Snapshots \(Console\)<a name="es-createdomain-configure-snapshots-console"></a>
 

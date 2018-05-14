@@ -1,10 +1,9 @@
 # Troubleshooting<a name="aes-troubleshooting"></a>
 
-The following sections offer solutions to common problems that you might encounter when you use services \(such as Amazon S3, Kinesis, and IAM\) and products \(such as Kibana\) that integrate with Amazon Elasticsearch Service \(Amazon ES\):
+The following sections offer solutions to common problems that you might encounter when you use services and products that integrate with Amazon Elasticsearch Service \(Amazon ES\):
 
 **Topics**
-+ [Kibana: I Can't Sign AWS Service Requests to the Kibana Service Endpoint](#aes-troubleshooting-kibana-configure-anonymous-access)
-+ [Kibana: I Don't See the Indices for My Elasticsearch Domain in Kibana 4](#aes-troubleshooting-kibana-find-indices)
++ [Kibana: I Can't Access Kibana](#aes-troubleshooting-kibana-configure-anonymous-access)
 + [Kibana: I Get a Browser Error When I Use Kibana to View My Data](#aes-troubleshooting-kibana-debug-browser-errors)
 + [Domain Creation: Unauthorized Operation When Selecting VPC Access](#es-vpc-permissions)
 + [Domain Creation: Stuck at Loading After Choosing VPC Access](#es-vpc-sts)
@@ -12,79 +11,15 @@ The following sections offer solutions to common problems that you might encount
 
 For information about service\-specific errors, see [Handling AWS Service Errors](aes-handling-errors.md) in this guide\.
 
-## Kibana: I Can't Sign AWS Service Requests to the Kibana Service Endpoint<a name="aes-troubleshooting-kibana-configure-anonymous-access"></a>
+## Kibana: I Can't Access Kibana<a name="aes-troubleshooting-kibana-configure-anonymous-access"></a>
 
-The Kibana endpoint doesn't support signed AWS service requests\. We recommend that you access Kibana with one of the configuration options described in the following table\.
-
-
-****  
-
-| Kibana Configuration | Description | 
-| --- | --- | 
-| Anonymous, IP\-based Access | If the Kibana host is behind a firewall, configure the Kibana endpoint to accept anonymous requests from the IP address of the firewall\. Use CIDR notation if you need to specify a range of IP addresses\. | 
-| NAT Gateway with Amazon VPC | Amazon VPC supports NAT gateways\. When you create a NAT gateway, you must specify an Elastic IP address to associate with the gateway\. The NAT gateway sends traffic to the public Internet gateway using the Elastic IP address as the source IP address\. Specify this Elastic IP address in the access policy for Kibana to allow all requests from the gateway\. For more information, see [NAT Gateway Basics](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html#nat-gateway-basics) and [Creating a NAT Gateway](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html#nat-gateway-creating) in the Amazon Virtual Private Cloud User Guide\. | 
-
-**Examples**
-
-The following example is an anonymous, IP\-based access policy that specifies a range of IP addresses and an 18\-bit routing prefix:
+The Kibana endpoint doesn't support signed requests\. If the access control policy for your domain only grants access to certain IAM users or roles, you might receive the following error when you attempt to access Kibana:
 
 ```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "*"
-      },
-      "Action": "es:*",
-      "Resource": "arn:aws:es:us-west-2:123456789012:domain/mydomain/_plugin/kibana",
-      "Condition": {
-        "IpAddress": {
-          "aws:SourceIp": "192.240.192.0/18"
-        }
-      }
-    }
-  ]
-}
+"User: anonymous is not authorized to perform: es:ESHttpGet"
 ```
 
-The following example specifies anonymous access from the Elastic IP address associated with a NAT gateway:
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "*"
-      },
-      "Action": "es:*",
-      "Resource": "arn:aws:es:us-west-2:123456789012:domain/mydomain/_plugin/kibana",
-      "Condition": {
-        "IpAddress": {
-          "aws:SourceIp": "198.51.100.4"
-        }
-      }
-    }
-  ]
-}
-```
-
-## Kibana: I Don't See the Indices for My Elasticsearch Domain in Kibana 4<a name="aes-troubleshooting-kibana-find-indices"></a>
-
-Users familiar with Kibana 3 but new to Kibana 4 sometimes have difficulty finding their indices in the interface\. Unlike Kibana 3, which provides default dashboards to view your data, Kibana 4 requires you to first specify an index name or pattern that matches the name of an index in your Amazon ES domain\. For example, if your Amazon ES domain contains an index named `movies-2013`, any of the following patterns would match this index:
-+ movies\-2013
-+ movies\-\*
-+ mov\*
-
-You can configure visualizations for the data in your Amazon ES domain index after you specify the index name or pattern\. You can find the names of your domain indices on the **Indices** tab in the Amazon ES console\. For more information about using Kibana 4, see the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/4.0/index.html)\. 
-
-**Note**  
-Amazon ES also supports Kibana 3, so you can configure access to that version of the tool if you prefer to use it\. Specify `/_plugin/kibana3` as the resource in your access policy rather than `/_plugin/kibana`\. After the service finishes processing the configuration change, you can access Kibana 3 by manually editing the Kibana service endpoint provided in the Amazon ES console\. For example, if the console indicates that your Kibana endpoint is `mydomain-6w5y8xjt5ydwsrubmdk4m5kcpa.us-west-2.es.amazonaws.com/_plugin/kibana/`, point your browser to `mydomain-6w5y8xjt5ydwsrubmdk4m5kcpa.us-west-2.es.amazonaws.com/_plugin/kibana3/` instead\.
+If your Amazon ES domain uses VPC access, you might not receive that error\. Instead, the request might time out\. To learn more about correcting this issue and the various configuration options available to you, see [Controlling Access to Kibana](es-kibana.md#es-kibana-access), [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security), and [Amazon Elasticsearch Service Access Control](es-ac.md)\.
 
 ## Kibana: I Get a Browser Error When I Use Kibana to View My Data<a name="aes-troubleshooting-kibana-debug-browser-errors"></a>
 

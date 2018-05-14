@@ -1,6 +1,6 @@
 # Kibana and Logstash<a name="es-kibana"></a>
 
-This chapter describes some considerations for using Kibana and Logstash with Amazon ES\.
+This chapter describes some considerations for using Kibana and Logstash with Amazon Elasticsearch Service\.
 
 **Topics**
 + [Kibana](#es-managedomains-kibana)
@@ -8,7 +8,7 @@ This chapter describes some considerations for using Kibana and Logstash with Am
 
 ## Kibana<a name="es-managedomains-kibana"></a>
 
-[Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html) is a popular open source visualization tool designed to work with Elasticsearch\. Amazon Elasticsearch Service \(Amazon ES\) provides a default installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `https://domain.region.es.amazonaws.com/_plugin/kibana/`\. Queries on this default Kibana installation have a 60\-second timeout\.
+[Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html) is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `https://domain.region.es.amazonaws.com/_plugin/kibana/`\. Queries using this default Kibana installation have a 60\-second timeout\.
 
 For information about using Kibana to visualize your data, see the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/index.html)\.
 
@@ -51,9 +51,8 @@ To enable this sort of configuration, you need a resource\-based policy that spe
 ```
 {
   "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Resource": "arn:aws:es:us-west-2:111111111111:domain/recipes1/analytics",
+  "Statement": [{
+      "Resource": "arn:aws:es:us-west-2:111111111111:domain/my-domain/*",
       "Principal": {
         "AWS": "arn:aws:iam::111111111111:role/allowedrole1"
       },
@@ -75,7 +74,7 @@ To enable this sort of configuration, you need a resource\-based policy that spe
           ]
         }
       },
-      "Resource": "arn:aws:es:us-west-2:111111111111:domain/recipes1/analytics"
+      "Resource": "arn:aws:es:us-west-2:111111111111:domain/my-domain/*"
     }
   ]
 }
@@ -190,4 +189,4 @@ output{
 ```
 
 **Note**  
-The service request in the preceding example must be signed\. For more information about signing requests, see [Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see the [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.
+The service request in the preceding example must be signed\. For more information about signing requests, see [Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see the plugin [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.
