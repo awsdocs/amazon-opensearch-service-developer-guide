@@ -39,7 +39,7 @@ The following example is an anonymous, IP\-based access policy that specifies a 
         "AWS": "*"
       },
       "Action": "es:*",
-      "Resource": "arn:aws:es:us-west-2:123456789012:domain/mydomain/_plugin/kibana",
+      "Resource": "arn:aws:es:us-west-2:123456789012:domain/mydomain/_plugin/kibana*",
       "Condition": {
         "IpAddress": {
           "aws:SourceIp": "192.240.192.0/18"
@@ -84,7 +84,7 @@ Users familiar with Kibana 3 but new to Kibana 4 sometimes have difficulty findi
 You can configure visualizations for the data in your Amazon ES domain index after you specify the index name or pattern\. You can find the names of your domain indices on the **Indices** tab in the Amazon ES console\. For more information about using Kibana 4, see the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/4.0/index.html)\. 
 
 **Note**  
-Amazon ES also supports Kibana 3, so you can configure access to that version of the tool if you prefer to use it\. Specify `/_plugin/kibana3` as the resource in your access policy rather than `/_plugin/kibana`\. After the service finishes processing the configuration change, you can access Kibana 3 by manually editing the Kibana service endpoint provided in the Amazon ES console\. For example, if the console indicates that your Kibana endpoint is `mydomain-6w5y8xjt5ydwsrubmdk4m5kcpa.us-west-2.es.amazonaws.com/_plugin/kibana/`, point your browser to `mydomain-6w5y8xjt5ydwsrubmdk4m5kcpa.us-west-2.es.amazonaws.com/_plugin/kibana3/` instead\.
+Amazon ES also supports Kibana 3, so you can configure access to that version of the tool if you prefer to use it\. Specify `/_plugin/kibana3*` as the resource in your access policy rather than `/_plugin/kibana*`\. After the service finishes processing the configuration change, you can access Kibana 3 by manually editing the Kibana service endpoint provided in the Amazon ES console\. For example, if the console indicates that your Kibana endpoint is `mydomain-6w5y8xjt5ydwsrubmdk4m5kcpa.us-west-2.es.amazonaws.com/_plugin/kibana/`, point your browser to `mydomain-6w5y8xjt5ydwsrubmdk4m5kcpa.us-west-2.es.amazonaws.com/_plugin/kibana3/` instead\.
 
 ## Kibana: I Get a Browser Error When I Use Kibana to View My Data<a name="aes-troubleshooting-kibana-debug-browser-errors"></a>
 
