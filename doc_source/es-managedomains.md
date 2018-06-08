@@ -5,7 +5,7 @@ As the size and number of documents in your Amazon Elasticsearch Service \(Amazo
 **Topics**
 + [About Configuration Changes](#es-managedomains-configuration-changes)
 + [Charges for Configuration Changes](#es-managedomains-config-charges)
-+ [Enabling Zone Awareness \(Console\)](#es-managedomains-zoneawareness)
++ [Enabling Zone Awareness](#es-managedomains-zoneawareness)
 + [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](#es-managedomains-cloudwatchmetrics)
 + [Auditing Amazon Elasticsearch Service Domains with AWS CloudTrail](#es-managedomains-cloudtrailauditing)
 + [Tagging Amazon Elasticsearch Service Domains](#es-managedomains-awsresourcetagging)
@@ -35,18 +35,24 @@ If you change the configuration for a domain, Amazon ES creates a new cluster as
 
   **Example:** You change the configuration from six `m3.xlarge` instances to three `m3.xlarge` instances\. For the first hour, you are charged for the largest cluster \(6 \* `m3.xlarge`\)\. After the first hour, you are charged only for the new cluster \(3 \* `m3.xlarge`\)\.
 
-## Enabling Zone Awareness \(Console\)<a name="es-managedomains-zoneawareness"></a>
+## Enabling Zone Awareness<a name="es-managedomains-zoneawareness"></a>
 
-Each AWS Region is a separate geographic area with multiple, isolated locations known as *Availability Zones*\. To prevent data loss and minimize downtime in the event of node and data center failure, you can use the Amazon ES console to allocate nodes and replica index shards that belong to an Elasticsearch cluster across two Availability Zones in the same region\. This allocation is known as *zone awareness*\. If you enable zone awareness, you also must use the native Elasticsearch API to create replica shards for your cluster\. Amazon ES distributes the replicas across the nodes in the Availability Zones, which increases the availability of your cluster\. Enabling zone awareness for a cluster slightly increases network latencies\.
+Each AWS Region is a separate geographic area with multiple, isolated locations known as *Availability Zones*\. To prevent data loss and minimize downtime in the event of node and data center failure, you can use the Amazon ES console to allocate an Elasticsearch cluster's nodes and shards across two Availability Zones in the same region\. This allocation is known as *zone awareness*\. Zone awareness requires an even number of instances and slightly increases network latencies\.
+
+If you enable zone awareness, you must have at least one replica for each index in your cluster\. Fortunately, the default configuration for any index is a replica count of 1\. Amazon ES distributes primary and replica shards across nodes in different Availability Zones, which increases the availability of your cluster\.
 
 **Important**  
- Zone awareness requires an even number of instances in the instance count\. The default configuration for any index is a replica count of 1\. If you specify a replica count of 0 for an index, zone awareness doesn't replicate the shards to the second Availability Zone\. Without replica shards, there are no replicas to distribute to a second Availability Zone, and enabling the feature doesn't provide protection from data loss\. 
+ If you specify a replica count of 0 for an index, enabling zone awareness doesn't provide any additional data durability or availability\. Without replicas, Amazon ES can't distribute copies of your data to other Availability Zones\.
 
-If you enable [zone awareness](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-zoneawareness) and you use a VPC endpoint to connect to your domain, you must specify Availability Zones for the domain\. Some instance types might not be available in some Availability Zones\. For more information about using VPC endpoints, see [VPCs and VPC Endpoints for Amazon ES Domains](es-vpc.md)\.
+If you enable zone awareness and use VPC access domains, you must specify Availability Zones for the VPC subnets\. For more information about VPCs, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
-The following illustration shows a four\-node cluster with zone awareness enabled\. The service places all the primary index shards in one Availability Zone and all the replica shards in the second Availability Zone\.
+The following illustration shows a four\-node cluster with zone awareness enabled\. The service distributes the shards so that no replica shard is in the same Availability Zone as its corresponding primary shard\.
 
-![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/zoneawareness.png)
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/zone-awareness.png)
+
+If one Availability Zone \(AZ\) experiences a service interruption, you have a 50/50 chance of cluster downtime due to how [master node](es-managedomains-dedicatedmasternodes.md) election works\. For example, if you use the recommended three dedicated master nodes, Amazon ES distributes two dedicated master nodes into one AZ and one dedicated master node into the other\. If the AZ with two dedicated master nodes experiences an interruption, your cluster is unavailable until the remaining AZ can automatically replace the now\-missing dedicated master nodes, achieve a quorum, and elect a new master\.
+
+Further, if one AZ experiences an interruption, the cluster's data nodes might experience a period of extreme load while Amazon ES automatically configures new nodes to replace the now\-missing ones\. Suddenly, half as many nodes have to process just as many requests to the cluster\. As they process these requests, the remaining nodes are also struggling to replicate data onto new nodes as they come online\. A cluster with extra resources can alleviate this concern\.
 
 **To enable zone awareness \(console\)**
 
@@ -105,11 +111,11 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 | Metric | Description | 
 | --- | --- | 
 | ClusterStatus\.green | Indicates that all index shards are allocated to nodes in the cluster\. Relevant statistics: Minimum, Maximum | 
-| ClusterStatus\.yellow | Indicates that the primary shards for all indices are allocated to nodes in a cluster, but the replica shards for at least one index are not\. Single node clusters always initialize with this cluster status because there is no second node to which a replica can be assigned\. You can either increase your node count to obtain a green cluster status, or you can use the Elasticsearch API to set the number\_of\_replicas setting for your index to 0\. For more information, see [Configuring Amazon Elasticsearch Service Domains](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains-configure-cluster) and [Update Indices Settings](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/indices-update-settings.html) in the Elasticsearch documentation\.Relevant statistics: Minimum, Maximum | 
+| ClusterStatus\.yellow | Indicates that the primary shards for all indices are allocated to nodes in a cluster, but the replica shards for at least one index are not\. Single node clusters always initialize with this cluster status because there is no second node to which a replica can be assigned\. You can either increase your node count to obtain a green cluster status, or you can use the Elasticsearch API to set the number\_of\_replicas setting for your index to 0\. To learn more, see [Configuring Amazon Elasticsearch Service Domains](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains-configure-cluster)\.Relevant statistics: Minimum, Maximum | 
 | ClusterStatus\.red | Indicates that the primary and replica shards of at least one index are not allocated to nodes in a cluster\. To recover, you must delete the indices or restore a snapsnot and then add EBS\-based storage, use larger instance types, or add instances\. For more information, see [Red Cluster Status](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-red-cluster-status)\. Relevant statistics: Minimum, Maximum | 
 | Nodes | The number of nodes in the Amazon ES cluster\. Relevant Statistics: Minimum, Maximum, Average | 
 | SearchableDocuments | The total number of searchable documents across all indices in the cluster\. Relevant statistics: Minimum, Maximum, Average | 
-| DeletedDocuments | The total number of deleted documents across all indices in the cluster\. Relevant statistics: Minimum, Maximum, Average | 
+| DeletedDocuments | The total number of documents marked for deletion across all indices in the cluster\. These documents no longer appear in search results, but Elasticsearch only removes deleted documents from disk during segment merges\. This metric increases after delete requests and decreases after segment merges\. Relevant statistics: Minimum, Maximum, Average | 
 | CPUUtilization | The maximum percentage of CPU resources used for data nodes in the cluster\. Relevant statistics: Maximum, Average | 
 | FreeStorageSpace | The free space, in megabytes, for nodes in the cluster\. `Sum` shows total free space for the cluster\. `Minimum`, `Maximum`, and `Average` show free space for individual nodes\. Amazon ES throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Recovering from a Lack of Free Storage Space](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-watermark) `FreeStorageSpace` will always be lower than the value that the Elasticsearch `_cluster/stats` API provides\. Amazon ES reserves a percentage of the storage space on each instance for internal operations\. Relevant statistics: Minimum, Maximum, Average, Sum | 
 | ClusterUsedSpace | The total used space, in megabytes, for a cluster\. You can view this metric in the Amazon CloudWatch console, but not in the Amazon ES console\. Relevant statistics: Minimum, Maximum | 

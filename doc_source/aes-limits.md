@@ -114,4 +114,4 @@ The following table shows the maximum size of HTTP request payloads\.
 
 ## Java Process Limit<a name="aes-java-process-limit"></a>
 
-Amazon ES limits Java processes to a heap size of 32 GB\. Advanced users can specify the percentage of the heap used for [field data](https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html)\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
+Amazon ES limits Java processes to a heap size of 32 GB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.

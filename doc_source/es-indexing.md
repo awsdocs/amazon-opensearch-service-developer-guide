@@ -1,6 +1,6 @@
 # Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
 
-Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has [clients for many programming languages](https://www.elastic.co/guide/en/elasticsearch/client/index.html)\. Advanced users can skip directly to [Programmatic Indexing](es-indexing-programmatic.md)\.
+Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has clients for many programming languages\. Advanced users can skip directly to [Programmatic Indexing](es-indexing-programmatic.md)\.
 
 For situations in which new data arrives incrementally \(for example, customer orders from a small business\), you might use the `_index` API to index documents as they arrive\. For situations in which the flow of data is less frequent \(for example, weekly updates to a marketing website\), you might prefer to generate a file and send it to the `_bulk` API\. For large numbers of documents, lumping requests together and using the `_bulk` API offers superior performance\. If your documents are enormous, however, you might need to index them individually using the `_index` API\.
 
@@ -39,7 +39,7 @@ optional_document\n
 
 For a short sample file, see [Step 2: Upload Data to an Amazon ES Domain for Indexing](es-gsg-upload-data.md)\.
 
-Elasticsearch features [automatic index creation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#index-creation) when you add a document to an index that doesn't already exist\. It also features [automatic ID generation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#_automatic_id_generation) if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, establishes the document type of `movie`, indexes the document, and assigns it a unique ID:
+Elasticsearch features automatic index creation when you add a document to an index that doesn't already exist\. It also features automatic ID generation if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, establishes the document type of `movie`, indexes the document, and assigns it a unique ID:
 
 ```
 curl -XPOST elasticsearch_domain/movies/movie -d '{"title": "Spirited Away"}' -H 'Content-Type: application/json'

@@ -3,7 +3,7 @@
 **Important**  
 This process is a concise tutorial for configuring a *test domain*\. It should not be used to create production domains\. For a comprehensive version of the same process, see [Creating and Configuring Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\.
 
-An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsearch engine instances that process HTTP requests to AWS, the indexed data that you want to search, snapshots of the domain, access policies, and metadata\. You can create an Amazon ES domain by using the Amazon ES console, the AWS CLI, or the AWS SDK\. If you don't already have an account, see [Signing Up for AWS](what-is-amazon-elasticsearch-service.md#aws-sign-up)\.
+An Amazon Elasticsearch Service domain encapsulates Elasticsearch itself, your indexed data, snapshots of the domain, access policies, and metadata\. You can create an Amazon ES domain by using the console, the AWS CLI, or the AWS SDKs\. If you don't already have an account, see [Signing Up for AWS](what-is-amazon-elasticsearch-service.md#aws-sign-up)\.
 
 **To create an Amazon ES domain \(console\)**
 
@@ -25,8 +25,6 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
 1. For **Storage type**, choose **EBS**\.
 
-   The **EBS volume type** and **EBS volume size** boxes appear\.
-
    1. For **EBS volume type**, choose General Purpose \(SSD\)\. For more information, see [Amazon EBS Volume Types\.](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
 
    1. For **EBS volume size**, type the size in GB of the external storage for *each* data node\. For this tutorial, you can use the default value of 10\.
@@ -37,11 +35,11 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
 1. Choose **Next**\.
 
-1. For simplicity in this tutorial, we'll use an IP\-based access policy\. On the **Set up access** page, in the **Network configuration** section, choose **Public access**\.
+1. For simplicity in this tutorial, we recommend an IP\-based access policy\. On the **Set up access** page, in the **Network configuration** section, choose **Public access**\.
 
 1. For now, you can ignore **Kibana authentication**\. For more information about the feature, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
 
-1. For **Set the domain access policy to**, choose **Allow access to the domain from specific IP\(s\)** and enter your public IP address, which you can find by searching for "What is my IP?" on [Google](https://www.google.com)\. Then choose **OK**\.
+1. For **Set the domain access policy to**, choose **Allow access to the domain from specific IP\(s\)** and enter your public IP address, which you can find by searching for "What is my IP?" on most search engines\. Then choose **OK**\.
 
    To learn more about public access, VPC access, and access policies in general, see [Amazon Elasticsearch Service Access Control](es-ac.md) and [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
@@ -49,7 +47,7 @@ An Amazon Elasticsearch Service \(Amazon ES\) domain encapsulates the Elasticsea
 
 1. On the **Review** page, review your domain configuration, and then choose **Confirm**\.
 **Note**  
-New domains take up to ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
+New domains take roughly ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
 
 **To create an Amazon ES domain \(AWS CLI\)**
 + Run the following command to create an Amazon ES domain\.
@@ -63,7 +61,7 @@ New domains take up to ten minutes to initialize\. After your domain is initiali
   ```
 
 **Note**  
-Initializing a domain and its resources takes approximately ten minutes\. When initialization is complete, the endpoint of the domain is available for index and Amazon ES requests\.
+New domains take roughly ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
 
 Use the following command to query the status of the new domain:
 

@@ -12,7 +12,7 @@ Supported scripting options include the following:
 + Painless
 + Lucene Expressions
 + Mustache
-For Elasticsearch 5\.5 and newer domains, Amazon ES supports stored scripts using the `_scripts` endpoint\. Elasticsearch 5\.3 and 5\.1 domains only support inline scripts\. To learn more, see [How to use scripts](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting-using.html#modules-scripting-stored-scripts) in the Elasticsearch documentation\.
+For Elasticsearch 5\.5 and newer domains, Amazon ES supports stored scripts using the `_scripts` endpoint\. Elasticsearch 5\.3 and 5\.1 domains only support inline scripts\.
 
 **TCP transport**  
 The service supports HTTP on port 80, but does not support TCP transport\.

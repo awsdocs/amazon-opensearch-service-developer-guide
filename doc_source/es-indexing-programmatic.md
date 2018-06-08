@@ -1,10 +1,10 @@
 # Programmatic Indexing<a name="es-indexing-programmatic"></a>
 
-This section includes examples of how to use popular [Elasticsearch clients](https://www.elastic.co/guide/en/elasticsearch/client/index.html) and standard HTTP requests to index documents\.
+This section includes examples of how to use popular Elasticsearch clients and standard HTTP requests to index documents\.
 
 ## Python<a name="es-indexing-programmatic-python"></a>
 
-You can install [elasticsearch\-py](https://www.elastic.co/guide/en/elasticsearch/client/python-api/current/index.html), the official Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) package simplifies the authentication process, but is not strictly required\. From the terminal, run the following commands:
+You can install elasticsearch\-py, the official Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) package simplifies the authentication process, but is not strictly required\. From the terminal, run the following commands:
 
 ```
 pip install elasticsearch
@@ -139,7 +139,7 @@ print(es.search(q='some test query'))
 
 ## Java<a name="es-indexing-programmatic-java"></a>
 
-This first example uses the [Elasticsearch low\-level Java REST Client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html), which you must [configure as a dependency](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/_maven_repository.html)\. The request is unauthenticated and relies on an IP\-based access policy\. You must provide a value for `host`:
+This first example uses the Elasticsearch low\-level Java REST Client, which you must configure as a dependency\. The request is unauthenticated and relies on an IP\-based access policy\. You must provide a value for `host`:
 
 ```
 import java.io.IOException;
@@ -176,7 +176,7 @@ public class JavaRestClientExample {
 }
 ```
 
-The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started\. The following example uses the [Elasticsearch low\-level Java REST client](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html) to perform two unrelated actions: registering a snapshot repository and indexing a document\.
+The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started\. The following example uses the Elasticsearch low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\.
 
 ```
 import org.apache.http.HttpEntity;
@@ -198,16 +198,16 @@ public class AmazonElasticsearchServiceSample {
 
     private static String serviceName = "es";
     private static String region = "us-west-1";
-    private static String aesEndpoint = "https://domain.us-west-1.es.amazonaws.com"; 
+    private static String aesEndpoint = "https://domain.us-west-1.es.amazonaws.com";
 
     private static String payload = "{ \"type\": \"s3\", \"settings\": { \"bucket\": \"your-bucket\", \"region\": \"us-west-1\", \"role_arn\": \"arn:aws:iam::123456789012:role/TheServiceRole\" } }";
     private static String snapshotPath = "/_snapshot/my-snapshot-repo";
 
     private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
     private static String indexingPath = "/my-index/my-type";
-    
+
     static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
-    
+
     public static void main(String[] args) throws IOException {
         RestClient esClient = esClient(serviceName, region);
 
@@ -223,7 +223,7 @@ public class AmazonElasticsearchServiceSample {
         response = esClient.performRequest("PUT", indexingPath + "/" + id, params, entity);
         System.out.println(response.toString());
     }
-    
+
     // Adds the interceptor to the ES REST client
     public static RestClient esClient(String serviceName, String region) {
         AWS4Signer signer = new AWS4Signer();
@@ -237,7 +237,7 @@ public class AmazonElasticsearchServiceSample {
 
 ## Ruby<a name="es-indexing-programmatic-ruby"></a>
 
-This first example uses the [Elasticsearch Ruby client](https://www.elastic.co/guide/en/elasticsearch/client/ruby-api/current/index.html) and [Faraday middleware](https://github.com/winebarrel/faraday_middleware-aws-sigv4) to perform the request signing\. From the terminal, run the following commands:
+This first example uses the Elasticsearch Ruby client and [Faraday middleware](https://github.com/winebarrel/faraday_middleware-aws-sigv4) to perform the request signing\. From the terminal, run the following commands:
 
 ```
 gem install elasticsearch

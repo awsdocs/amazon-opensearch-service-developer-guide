@@ -22,7 +22,7 @@ Because the *movies* domain from this tutorial is for test purposes, you should 
   ```
 
 **Note**  
-Deleting a domain deletes all billable Amazon ES resources\. However, any manual snapshots of the domain that you created using the native Elasticsearch API are not deleted\. Consider saving a snapshot if you might need to recreate the Amazon ES domain in the future\. If you don't plan to recreate the domain, you can safely delete any snapshots that you created manually\.
+Deleting a domain deletes all billable Amazon ES resources\. However, any manual snapshots of the domain that you created are not deleted\. Consider saving a snapshot if you might need to recreate the Amazon ES domain in the future\. If you don't plan to recreate the domain, you can safely delete any snapshots that you created manually\.
 
 **To delete an Amazon ES domain \(AWS SDKs\)**
 

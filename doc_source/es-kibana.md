@@ -8,9 +8,7 @@ This chapter describes some considerations for using Kibana and Logstash with Am
 
 ## Kibana<a name="es-managedomains-kibana"></a>
 
-[Kibana](https://www.elastic.co/guide/en/kibana/current/introduction.html) is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `https://domain.region.es.amazonaws.com/_plugin/kibana/`\. Queries using this default Kibana installation have a 60\-second timeout\.
-
-For information about using Kibana to visualize your data, see the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/index.html)\.
+Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `https://domain.region.es.amazonaws.com/_plugin/kibana/`\. Queries using this default Kibana installation have a 60\-second timeout\.
 
 The following sections address some common Kibana use cases:
 + [Controlling Access to Kibana](#es-kibana-access)
@@ -87,13 +85,13 @@ If you use a proxy server *and* [Amazon Cognito Authentication for Kibana](es-co
 ```
 server {
   listen 443;
- 
+
   location /login {
     proxy_pass           https://$cognito_host/login;
     proxy_cookie_domain  $cognito_host                 $proxy_host;
     proxy_redirect       https://$kibana_host          https://$proxy_host;
   }
- 
+
   location / {
     proxy_pass               https://$kibana_host;
     proxy_redirect           https://$cognito_host  https://proxy_host;
@@ -152,7 +150,7 @@ You must use the `http` prefix and explicitly specify port 80\.
 
 ## Loading Bulk Data with the Logstash Plugin<a name="es-managedomains-logstash"></a>
 
-Logstash provides a convenient way to use the [bulk API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html) to upload data into your Amazon ES domain with the [S3](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-s3.html) plugin\. The service also supports all other standard Logstash input plugins that are provided by Elasticsearch\. Amazon ES also supports two Logstash output plugins: the standard [Elasticsearch](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html) plugin and the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin, which signs and exports Logstash events to Amazon ES\.
+Logstash provides a convenient way to use the bulk API to upload data into your Amazon ES domain with the S3 plugin\. The service also supports all other standard Logstash input plugins that are provided by Elasticsearch\. Amazon ES also supports two Logstash output plugins: the standard Elasticsearch plugin and the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin, which signs and exports Logstash events to Amazon ES\.
 
 You must install your own local instance of Logstash and make the following changes in the Logstash configuration file to enable interaction with Amazon ES\.
 
@@ -161,7 +159,7 @@ You must install your own local instance of Logstash and make the following chan
 
 | Configuration Field | Input \| Output Plugin | Description | 
 | --- | --- | --- | 
-| bucket | Input | Specifies the Amazon S3 bucket containing the data that you want to load into an Amazon ES domain\. You can find this service endpoint in the Amazon Elasticsearch Service console dashboard\. | 
+| bucket | Input | Specifies the Amazon S3 bucket containing the data that you want to load into an Amazon ES domain\. | 
 | region | Input | Specifies the AWS Region where the Amazon S3 bucket resides\. | 
 | hosts | Output | Specifies the service endpoint for the target Amazon ES domain\. | 
 | ssl | Output | Specifies whether to use SSL to connect to Amazon ES\.  | 

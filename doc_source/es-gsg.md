@@ -13,6 +13,3 @@ You can complete the following steps by using the Amazon ES console, the AWS CLI
 1. [Delete an Amazon ES domain](es-gsg-deleting.md)
 
  For information about installing and setting up the AWS CLI, see the [AWS Command Line Interface User Guide](http://docs.aws.amazon.com/cli/latest/userguide/)\. 
-
-**Note**  
-If you want to use the AWS CLI to complete the tutorial, you must use version 1\.8\.9 or later\. To see which version of the AWS CLI that you have installed, run the `aws --version`\.

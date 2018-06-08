@@ -13,7 +13,7 @@ You can also [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when t
 **Note**  
 The **Nodes** metric is not accurate during changes to your cluster configuration and during routine maintenance for the service\. This behavior is expected\. The metric will report the correct number of cluster nodes soon\. To learn more, see [About Configuration Changes](es-managedomains.md#es-managedomains-configuration-changes)\.
 
-To protect your clusters from unexpected node terminations and restarts, create at least one replica for each index in your Amazon ES domain\. To learn more, see [Shards and Replicas](https://www.elastic.co/guide/en/elasticsearch/reference/current/_basic_concepts.html#getting-started-shards-and-replicas) in the Elasticsearch documentation\.
+To protect your clusters from unexpected node terminations and restarts, create at least one replica for each index in your Amazon ES domain\.
 
 ## Red Cluster Status<a name="aes-handling-errors-red-cluster-status"></a>
 
@@ -44,7 +44,7 @@ Ultimately, red shards cause red clusters, and red indices cause red shards\. To
   green  open   test1            30h1EiMvS5uAFr2t5CEVoQ   5   0        820            0       14mb           14mb
   green  open   test2            sdIxs_WDT56afFGu5KPbFQ   1   0          0            0       233b           233b
   green  open   test3            GGRZp_TBRZuSaZpAGk2pmw   1   1          2            0     14.7kb          7.3kb
-  red    open   test4            BJxfAErbTtu5HBjIXJV_7A   1   0                                                  
+  red    open   test4            BJxfAErbTtu5HBjIXJV_7A   1   0
   green  open   test5            _8C6MIXOSxCqVYicH3jsEA   1   0          7            0     24.3kb         24.3kb
   ```
 
@@ -75,7 +75,7 @@ You might receive a `ClusterBlockException` error for the following reasons\.
 
 ### Lack of Available Storage Space<a name="aes-handling-errors-watermark"></a>
 
-If no nodes have enough storage space to accommodate shard relocation, basic write operations like adding documents and creating indices can begin to fail\. To learn more, see [Disk\-based Shard Allocation](https://www.elastic.co/guide/en/elasticsearch/reference/current/disk-allocator.html) in the Elasticsearch documentation\. [Calculating Storage Requirements](sizing-domains.md#aes-bp-storage) provides a summary of how Amazon ES uses disk space\.
+If no nodes have enough storage space to accommodate shard relocation, basic write operations like adding documents and creating indices can begin to fail\. [Calculating Storage Requirements](sizing-domains.md#aes-bp-storage) provides a summary of how Amazon ES uses disk space\.
 
 To avoid issues, monitor the `FreeStorageSpace` metric in the Amazon ES console and [create CloudWatch alarms](cloudwatch-alarms.md) to trigger when `FreeStorageSpace` drops below a certain threshold\. `GET /_cat/allocation?v` also provides a useful summary of shard allocation and disk usage\. To resolve issues associated with a lack of storage space, scale your Amazon ES domain to use larger instance types, more instances, or more EBS\-based storage\. For instructions, see [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\.
 
@@ -94,6 +94,6 @@ A JVM `OutOfMemoryError` typically means that one of the following JVM circuit b
 
 | Circuit Breaker | Description | Cluster Setting Property | 
 | --- | --- | --- | 
-| Parent Breaker | Total percentage of JVM heap memory allowed for all circuit breakers\. The default value is 70%\. | indices\.breaker\.total\.limitFor more information, see [Cluster Update Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-update-settings.html) in the Elasticsearch documentation\. | 
-| Field Data Breaker | Percentage of JVM heap memory allowed to load a single data field into memory\. The default value is 60%\. If you upload data with large fields, we recommend raising this limit\. | indices\.breaker\.fielddata\.limitFor more information, see [Field data](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-fielddata.html) in the Elasticsearch documentation\. | 
-| Request Breaker | Percentage of JVM heap memory allowed for data structures used to respond to a service request\. The default value is 40%\. If your service requests involve calculating aggregations, we recommend raising this limit\. | indices\.breaker\.request\.limitFor more information, see [Field data](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-fielddata.html) in the Elasticsearch documentation\. | 
+| Parent Breaker | Total percentage of JVM heap memory allowed for all circuit breakers\. The default value is 70%\. | indices\.breaker\.total\.limit | 
+| Field Data Breaker | Percentage of JVM heap memory allowed to load a single data field into memory\. The default value is 60%\. If you upload data with large fields, we recommend raising this limit\. | indices\.breaker\.fielddata\.limit | 
+| Request Breaker | Percentage of JVM heap memory allowed for data structures used to respond to a service request\. The default value is 40%\. If your service requests involve calculating aggregations, we recommend raising this limit\. | indices\.breaker\.request\.limit | 

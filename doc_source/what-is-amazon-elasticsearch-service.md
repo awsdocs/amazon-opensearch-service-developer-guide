@@ -1,6 +1,6 @@
 # What Is Amazon Elasticsearch Service?<a name="what-is-amazon-elasticsearch-service"></a>
 
-Amazon Elasticsearch Service \(Amazon ES\) is a managed service that makes it easy to create a domain and deploy, operate, and scale Elasticsearch clusters in the AWS Cloud\. Elasticsearch is a popular open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analytics\. With Amazon ES, you get direct access to the Elasticsearch APIs so that existing code and applications work seamlessly with the service\.
+Amazon Elasticsearch Service \(Amazon ES\) is a managed service that makes it easy to deploy, operate, and scale Elasticsearch clusters in the AWS Cloud\. Elasticsearch is a popular open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analytics\. With Amazon ES, you get direct access to the Elasticsearch APIs so that existing code and applications work seamlessly with the service\.
 
 Amazon ES provisions all the resources for your Elasticsearch cluster and launches the cluster\. It also automatically detects and replaces failed Elasticsearch nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
 
@@ -9,8 +9,7 @@ To get started using the service, you create an Amazon ES domain\. An Amazon ES 
 Additionally, Amazon ES offers the following benefits of a managed service:
 + Cluster scaling options
 + Self\-healing clusters
-+ Replication for high availability
-+ Data durability
++ Replication for data durability
 + Enhanced security
 + Node monitoring
 
@@ -49,7 +48,7 @@ Amazon ES includes the following features:
 **Stability**
 + Multiple geographical locations for your resources, known as *regions* and *Availability Zones*
 + Dedicated master nodes to offload cluster management tasks
-+ Automated snapshots to back up and restore Amazon ES domains and replicate domains across Availability Zones
++ Automated snapshots to back up and restore Amazon ES domains
 + Cluster node allocation across two Availability Zones in the same region, known as *zone awareness*
 
 **Integration with Popular Services**
@@ -61,13 +60,13 @@ Amazon ES includes the following features:
 ## Supported Elasticsearch Versions<a name="aes-choosing-version"></a>
 
 Amazon ES currently supports the following Elasticsearch versions:
-+ [6\.2](https://www.elastic.co/guide/en/elasticsearch/reference/6.2/index.html)
-+ [6\.0](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/index.html)
-+ [5\.5](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/index.html)
-+ [5\.3](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/index.html)
-+ [5\.1](https://www.elastic.co/guide/en/elasticsearch/reference/5.1/index.html)
-+ [2\.3](https://www.elastic.co/guide/en/elasticsearch/reference/2.3/index.html)
-+ [1\.5](https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index.html)
++ 6\.2
++ 6\.0
++ 5\.5
++ 5\.3
++ 5\.1
++ 2\.3
++ 1\.5
 
 Compared to earlier versions of Elasticsearch, the 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are some highlights:
 + **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
@@ -87,7 +86,7 @@ To get started, sign up for an AWS account if you don't already have one\. For m
 
 After you are set up with an account, complete the [Getting Started](es-gsg.md) tutorial for Amazon Elasticsearch Service\. Consult the following introductory topics if you need more information while learning about the service\.
 
-**Get Up and Running**
+**Get up and Running**
 + [Signing Up for AWS](#aws-sign-up)
 + [Accessing Amazon ES](#accessing-amazon-elasticsearch)
 + [Getting Started with Amazon ES Domains](es-gsg.md)

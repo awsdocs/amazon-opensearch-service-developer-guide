@@ -45,7 +45,7 @@ Use the following procedure to create an Amazon ES domain by using the console\.
 
 1. For **Instance count**, choose the number of instances that you want\.
 
-   The default is one\. For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. We recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the [split brain](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain) issue\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for [replication](https://www.elastic.co/guide/en/elasticsearch/reference/current/_basic_concepts.html#getting-started-shards-and-replicas)\. Single node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md)\.
+   The default is one\. For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. We recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the split brain issue\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for replication\. Single node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md)\.
 
 1. For **Instance type**, choose an instance type for the data nodes\.
 
@@ -63,9 +63,9 @@ You can choose an instance type for the dedicated master node that differs from 
 
    1. For **Dedicated master instance count**, choose the number of instances for the dedicated master node\.
 
-      We recommend choosing an odd number of instances to avoid potential Elasticsearch issues, such as the [split brain](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain) issue\. The default and recommended number is three\.
+      We recommend choosing an odd number of instances to avoid potential Elasticsearch issues, such as the split brain issue\. The default and recommended number is three\.
 
-1. \(Optional\) To provide high availability for data nodes, select the **Enable zone awareness** check box\.
+1. \(Optional\) For enhanced data durability, select the **Enable zone awareness** check box\.
 
    Zone awareness distributes Amazon ES data nodes across two Availability Zones in the same region\. If you enable zone awareness, you must have an even number of instances in the instance count, and you must use the native Elasticsearch API to create replica shards for your cluster\. This process allows for the even distribution of shards across two Availability Zones\. For more information, see [Enabling Zone Awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
 
@@ -258,7 +258,7 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
       1. For **Dedicated master instance count**, choose the number of instances for the dedicated master node\.
 
-         We recommend choosing an odd number of instances to avoid potential Amazon ES issues, such as the [split brain](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain) issue\. The default and recommended number is three\.
+         We recommend choosing an odd number of instances to avoid potential Amazon ES issues, such as the split brain issue\. The default and recommended number is three\.
 
    1. If you want to enable zone awareness, select the **Enable zone awareness** check box\. If you enable zone awareness, you must have an even number of instances in your instance count\. This allows for the even distribution of shards across two Availability Zones in the same region\.
 
@@ -555,7 +555,7 @@ The AWS SDKs \(except the Android and iOS SDKs\) support all the actions that ar
 Use advanced options to configure the following:
 
 **rest\.action\.multi\.allow\_explicit\_index**  
-Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to false prevents users from bypassing access control for subresources\. By default, the value is true\. For more information, see [URL\-based access control](https://www.elastic.co/guide/en/elasticsearch/reference/current/url-access-control.html) and [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
+Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to false prevents users from bypassing access control for subresources\. By default, the value is true\. For more information, see [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
 
 **indices\.fielddata\.cache\.size**  
 Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is unbounded\.   
@@ -610,7 +610,7 @@ The AWS SDKs \(except the Android and iOS SDKs\) support all of the actions defi
 
 Slow logs are an Elasticsearch feature that Amazon ES exposes through Amazon CloudWatch Logs\. These logs are useful for troubleshooting performance issues, but are *disabled* by default\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
 
-Amazon ES exposes two slow logs: search and index\. To learn more about these logs, see [Slow Log](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html) in the Elasticsearch documentation\.
+Amazon ES exposes two slow logs: search and index\.
 
 ### Enabling Slow Logs Publishing \(Console\)<a name="es-createdomain-configure-slow-logs-console"></a>
 
@@ -718,7 +718,7 @@ After you enable log publishing, see [Setting Elasticsearch Logging Thresholds](
 
 ### Setting Elasticsearch Logging Thresholds<a name="es-createdomain-configure-slow-logs-indices"></a>
 
-Elasticsearch disables slow logs by default\. After you enable the *publishing* of slow logs to CloudWatch, you still must specify logging thresholds for each Elasticsearch index\. These thresholds define precisely what should be logged and at which log level\. Settings vary slightly by Elasticsearch version\. For summaries of each version, see [Slow Log](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-slowlog.html) in the Elasticsearch documentation\.
+Elasticsearch disables slow logs by default\. After you enable the *publishing* of slow logs to CloudWatch, you still must specify logging thresholds for each Elasticsearch index\. These thresholds define precisely what should be logged and at which log level\. Settings vary slightly by Elasticsearch version\.
 
 You specify these settings through the Elasticsearch REST API\. An example follows:
 

@@ -281,7 +281,7 @@ For example, consider the following resource\-based policy:
 }
 ```
 
-This policy grants `test-user` full access to `test-index` and the Elasticsearch [bulk](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html) API\. It also allows `GET` requests to `restricted-index`\.
+This policy grants `test-user` full access to `test-index` and the Elasticsearch bulk API\. It also allows `GET` requests to `restricted-index`\.
 
 The following indexing request, as you might expect, fails due to a permissions error:
 
@@ -294,7 +294,7 @@ PUT https://search-test-domain.us-west-1.es.amazonaws.com/restricted-index/movie
 }
 ```
 
-Unlike the [index](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html) API, the bulk API lets you create, update, and delete many documents in a single call\. You often specify these operations in the request body, however, rather than in the request URL\. Because Amazon ES uses URLs to control access to domain subresources, `test-user` can, in fact, use the bulk API to make changes to `restricted-index`\. Even though the user lacks `POST` permissions on the index, the following request **succeeds**:
+Unlike the index API, the bulk API lets you create, update, and delete many documents in a single call\. You often specify these operations in the request body, however, rather than in the request URL\. Because Amazon ES uses URLs to control access to domain subresources, `test-user` can, in fact, use the bulk API to make changes to `restricted-index`\. Even though the user lacks `POST` permissions on the index, the following request **succeeds**:
 
 ```
 POST https://search-test-domain.us-west-1.es.amazonaws.com/_bulk
@@ -302,7 +302,7 @@ POST https://search-test-domain.us-west-1.es.amazonaws.com/_bulk
 { "title": "Your Name", "director": "Makoto Shinkai", "year": "2016" }
 ```
 
-In this situation, the access policy fails to fulfill its intent\. To prevent users from bypassing these kinds of restrictions, you can change `rest.action.multi.allow_explicit_index` to false\. If this value is false, all calls to the bulk, [mget](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html), and [msearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html) APIs that specify index names in the request body stop working\. In other words, calls to `_bulk` no longer work, but calls to `test-index/_bulk` do\. This second endpoint contains an index name, so you don't need to specify one in the request body\.
+In this situation, the access policy fails to fulfill its intent\. To prevent users from bypassing these kinds of restrictions, you can change `rest.action.multi.allow_explicit_index` to false\. If this value is false, all calls to the bulk, mget, and msearch APIs that specify index names in the request body stop working\. In other words, calls to `_bulk` no longer work, but calls to `test-index/_bulk` do\. This second endpoint contains an index name, so you don't need to specify one in the request body\.
 
 [Kibana](es-kibana.md#es-managedomains-kibana) relies heavily on mget and msearch, so it is unlikely to work properly after this change\. For partial remediation, you can leave `rest.action.multi.allow_explicit_index` as true and deny certain users access to one or more of these APIs\.
 

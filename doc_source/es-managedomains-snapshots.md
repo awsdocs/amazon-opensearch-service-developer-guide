@@ -9,7 +9,7 @@ If the cluster enters red status and you don't correct the problem, you start to
 You cannot use automated snapshots to migrate to new domains\. Automated snapshots are read\-only from within a given domain\. For migrations, you must use manual snapshots stored in your own repository \(an S3 bucket\)\. Standard S3 charges apply to manual snapshots\.
 
 **Tip**  
-Some users find tools like the [Curator](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/index.html) CLI convenient for index and snapshot management\. The Curator CLI offers advanced filtering functionality that can help simplify tasks on complex clusters\.
+Some users find tools like Curator convenient for index and snapshot management\. Curator offers advanced filtering functionality that can help simplify tasks on complex clusters\.
 
 **Topics**
 + [Manual Snapshot Prerequisites](#es-managedomains-snapshot-prerequisites)
@@ -28,7 +28,7 @@ To create index snapshots manually, you must work with IAM and Amazon S3\. Verif
 | --- | --- | 
 | S3 bucket | Stores manual snapshots for your Amazon ES domain\. Make a note of the bucket's Amazon Resource Name \(ARN\), which takes the form of `arn:aws:s3:::s3-bucket-name`\. You need it in two places:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html)For more information, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\. | 
 | IAM role | Delegates permissions to Amazon Elasticsearch Service\. The rest of this document refers to this role as `TheServiceRole`\. The trust relationship for the role must specify Amazon Elasticsearch Service in the `Principal` statement, as shown in the following example:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "es.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />}</pre>The role must have the following policy attached to it: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For more information, see [Creating Customer Managed Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_using-managed.html#create-managed-policy-console) and [Attaching Managed Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_using-managed.html#attach-managed-policy-console) in the *IAM User Guide*\. | 
-| Permissions |  You must be able to assume the IAM role in order to register the snapshot repository\. You also need access to the `es:ESHttpPut` action\. A common way to provide access is to attach the following policy to your account: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheServiceRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/my-domain/*"<br />    }<br />  ]<br />}</pre> If your account does not have `iam:PassRole` permissions to assume `TheServiceRole`, you might encounter encounter the following common error: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount <br />is not authorized to perform: iam:PassRole on resource: <br />arn:aws:iam::123456789012:role/TheServiceRole"}</pre>  | 
+| Permissions |  You must be able to assume the IAM role in order to register the snapshot repository\. You also need access to the `es:ESHttpPut` action\. A common way to provide access is to attach the following policy to your account: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheServiceRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/my-domain/*"<br />    }<br />  ]<br />}</pre> If your account does not have `iam:PassRole` permissions to assume `TheServiceRole`, you might encounter encounter the following common error: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheServiceRole"}</pre>  | 
 
 ## Registering a Manual Snapshot Repository<a name="es-managedomains-snapshot-registerdirectory"></a>
 
@@ -73,6 +73,9 @@ Endpoint for your Amazon ES domain
 `path`  
 Name of the snapshot repository
 
+`payload`  
+Must include the name of the S3 bucket, region, and the ARN for the IAM role that you created in [Manual Snapshot Prerequisites](#es-managedomains-snapshot-prerequisites)\.
+
 ```
 import boto3
 import requests
@@ -84,7 +87,7 @@ service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-# REGISTER REPOSITORY
+# Register repository
 
 path = '_snapshot/my-snapshot-repo' # the Elasticsearch API endpoint
 url = host + path
@@ -93,7 +96,7 @@ payload = {
   "type": "s3",
   "settings": {
     "bucket": "s3-bucket-name",
-    "region": "",
+    "region": "us-west-1",
     "role_arn": "arn:aws:iam::123456789012:role/TheServiceRole"
   }
 }
@@ -105,44 +108,44 @@ r = requests.put(url, auth=awsauth, json=payload, headers=headers)
 print(r.status_code)
 print(r.text)
 
-# # TAKE SNAPSHOT
-# 
+# # Take snapshot
+#
 # path = '_snapshot/my-snapshot-repo/my-snapshot'
 # url = host + path
-# 
+#
 # r = requests.put(url, auth=awsauth)
-# 
+#
 # print(r.text)
-# 
-# # DELETE INDEX
-# 
+#
+# # Delete index
+#
 # path = 'my-index'
 # url = host + path
-# 
+#
 # r = requests.delete(url, auth=awsauth)
-# 
+#
 # print(r.text)
-# 
-# # RESTORE SNAPSHOT (ALL INDICES)
-# 
+#
+# # Restore snapshots (all indices)
+#
 # path = '_snapshot/my-snapshot-repo/my-snapshot/_restore'
 # url = host + path
-# 
+#
 # r = requests.post(url, auth=awsauth)
-# 
+#
 # print(r.text)
-# 
-# # RESTORE SNAPSHOT (ONE INDEX)
-# 
+#
+# # Restore snapshot (one index)
+#
 # path = '_snapshot/my-snapshot-repo/my-snapshot/_restore'
 # url = host + path
-# 
+#
 # payload = {"indices": "my-index"}
-# 
+#
 # headers = {"Content-Type": "application/json"}
-# 
+#
 # r = requests.post(url, auth=awsauth, json=payload, headers=headers)
-# 
+#
 # print(r.text)
 ```
 
@@ -168,12 +171,10 @@ The time required to take a snapshot increases with the size of the Amazon ES do
 curl -XGET 'elasticsearch-domain-endpoint/_snapshot/repository/_all?pretty'
 ```
 
-For more information about the options available to you when taking a snapshot, see [Snapshot and Restore](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html#_snapshot) in the Elasticsearch documentation\.
-
 ## Restoring Snapshots<a name="es-managedomains-snapshot-restore"></a>
 
 **Warning**  
-If you use [index aliases](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-aliases.html), cease write requests to an alias \(or switch the alias to another index\) prior to deleting its index\. Halting write requests helps avoid the following scenario:  
+If you use index aliases, cease write requests to an alias \(or switch the alias to another index\) prior to deleting its index\. Halting write requests helps avoid the following scenario:  
 You delete an index, which also deletes its alias\.
 An errant write request to the now\-deleted alias creates a new index with the same name as the alias\.
 You can no longer use the alias due to a naming conflict with the new index\.
@@ -224,8 +225,6 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
    ```
    curl -XPOST 'elasticsearch-domain-endpoint/_snapshot/cs-automated/2017-snapshot/_restore' -d '{"indices": "my-index"}' -H 'Content-Type: application/json'
    ```
-
-For more information about restoring only certain indices from a snapshot, see [Snapshot and Restore](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html#_restore) in the Elasticsearch documentation\.
 
 **Note**  
 If not all primary shards were available for the indices involved, a snapshot might have a `state` of `PARTIAL`\. This value indicates that data from at least one shard was not stored successfully\. You can still restore from a partial snapshot, but you might need to use older snapshots to restore any missing indices\.

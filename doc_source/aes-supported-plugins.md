@@ -20,6 +20,6 @@ Kibana is a plugin in older versions of Amazon ES and a Node\.js application in 
 
 ## Output Plugins<a name="outputplugins"></a>
 
-Amazon ES supports two Logstash output plugins to stream data into Amazon ES: the standard [Elasticsearch output plugin](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html) and the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin, which signs and exports Logstash events to Amazon ES\. 
+Amazon ES supports two Logstash output plugins to stream data into Amazon ES: the standard Elasticsearch output plugin and the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin, which signs and exports Logstash events to Amazon ES\. 
 
 For more information about Logstash, see [Loading Bulk Data with the Logstash Plugin](es-kibana.md#es-managedomains-logstash)\.

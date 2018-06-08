@@ -51,8 +51,8 @@ A sample return follows:
   }
 }
 ```
-+ `cluster_concurrent_rebalance` specifies the number of shards that can be relocated to new nodes at any given time\. For more information, see [Shard Rebalancing Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/shards-allocation.html#_shard_rebalancing_settings) in the Elasticsearch documentation\.
-+ `max_bytes_per_sec` is the maximum data transfer speed that Elasticsearch uses during a [recovery event](https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-recovery.html)\.
++ `cluster_concurrent_rebalance` specifies the number of shards that can be relocated to new nodes at any given time\.
++ `max_bytes_per_sec` is the maximum data transfer speed that Elasticsearch uses during a recovery event\.
 + `di_number` is an internal Amazon ES value that is used to copy shards to new *domain instances* after configuration changes\.
 
 ## Version 6\.2<a name="es_version_6_2"></a>
@@ -72,8 +72,6 @@ For Elasticsearch 6\.2, Amazon ES supports the following operations\.
 
 1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API Differences](#es_version_api_notes)\.
 
-For more information about Elasticsearch 6\.2 operations, see the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/6.2/index.html)\.
-
 ## Version 6\.0<a name="es_version_6_0"></a>
 
 For Elasticsearch 6\.0, Amazon ES supports the following operations\.
@@ -90,8 +88,6 @@ For Elasticsearch 6\.0, Amazon ES supports the following operations\.
 1. For considerations about using scripts, see [Other Supported Resources](aes-supported-resources.md)\.
 
 1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API Differences](#es_version_api_notes)\.
-
-For more information about Elasticsearch 6\.0 operations, see the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/6.0/index.html)\.
 
 ## Version 5\.5<a name="es_version_5_5"></a>
 
@@ -110,8 +106,6 @@ For Elasticsearch 5\.5, Amazon ES supports the following operations\.
 
 1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API Differences](#es_version_api_notes)\.
 
-For more information about Elasticsearch 5\.5 operations, see the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/index.html)\.
-
 ## Version 5\.3<a name="es_version_5_3"></a>
 
 For Elasticsearch 5\.3, Amazon ES supports the following operations\.
@@ -129,8 +123,6 @@ For Elasticsearch 5\.3, Amazon ES supports the following operations\.
 
 1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API Differences](#es_version_api_notes)\.
 
-For more information about Elasticsearch 5\.3 operations, see the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/5.3/index.html)\.
-
 ## Version 5\.1<a name="es_version_5_1"></a>
 
 For Elasticsearch 5\.1, Amazon ES supports the following operations\.
@@ -146,8 +138,6 @@ For Elasticsearch 5\.1, Amazon ES supports the following operations\.
 
 1. For considerations about using scripts, see [Other Supported Resources](aes-supported-resources.md)\.
 
-For more information about Elasticsearch 5\.1 operations, see the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/5.1/index.html)\.
-
 ## Version 2\.3<a name="es_version_2_3"></a>
 
 For Elasticsearch 2\.3, Amazon ES supports the following operations\.
@@ -157,8 +147,6 @@ For Elasticsearch 2\.3, Amazon ES supports the following operations\.
 | --- |--- |--- |
 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  | 
 
-For more information about Elasticsearch 2\.3 operations, see the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/2.3/index.html)\.
-
 ## Version 1\.5<a name="es_version_1_5"></a>
 
 For Elasticsearch 1\.5, Amazon ES supports the following operations\.
@@ -167,5 +155,3 @@ For Elasticsearch 1\.5, Amazon ES supports the following operations\.
 |  |  |  | 
 | --- |--- |--- |
 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  | 
-
-For more information about Elasticsearch 1\.5 operations, see the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/1.5/index.html)\.
