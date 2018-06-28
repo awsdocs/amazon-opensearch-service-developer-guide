@@ -1,31 +1,31 @@
 # Programmatic Indexing<a name="es-indexing-programmatic"></a>
 
-This section includes examples of how to use popular Elasticsearch clients and standard HTTP requests to index documents\.
+This section includes examples of how to use Elasticsearch clients and standard HTTP requests to index documents\.
 
 ## Python<a name="es-indexing-programmatic-python"></a>
 
-You can install elasticsearch\-py, the official Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) package simplifies the authentication process, but is not strictly required\. From the terminal, run the following commands:
+You can install elasticsearch\-py, the Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but is not strictly required\. From the terminal, run the following commands:
 
 ```
+pip install boto3
 pip install elasticsearch
 pip install requests
 pip install requests-aws4auth
 ```
 
-The following sample code establishes a secure connection to the specified Amazon ES domain and indexes a single document using the `_index` API\. You must provide values for `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`, `region`, and `host`:
+The following sample code establishes a secure connection to the specified Amazon ES domain and indexes a single document using the `_index` API\. You must provide values for `region` and `host`:
 
 ```
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
-
-AWS_ACCESS_KEY = ''
-AWS_SECRET_KEY = ''
-region = '' # For example, us-east-1
-service = 'es'
-
-awsauth = AWS4Auth(AWS_ACCESS_KEY, AWS_SECRET_KEY, region, service)
+import boto3
 
 host = '' # For example, my-test-domain.us-east-1.es.amazonaws.com
+region = '' # e.g. us-west-1
+
+service = 'es'
+credentials = boto3.Session().get_credentials()
+awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service)
 
 es = Elasticsearch(
     hosts = [{'host': host, 'port': 443}],
@@ -46,24 +46,20 @@ es.index(index="movies", doc_type="movie", id="5", body=document)
 print(es.get(index="movies", doc_type="movie", id="5"))
 ```
 
-**Important**  
-These samples are for testing purposes\. We do not recommend storing your AWS access key and AWS secret key directly in code\.
-
 If you don't want to use the `elasticsearch.py` client, you can just make standard HTTP requests\. This sample creates a new index with seven shards and two replicas:
 
 ```
-import requests
 from requests_aws4auth import AWS4Auth
-
-AWS_ACCESS_KEY = ''
-AWS_SECRET_KEY = ''
-region = '' # For example, us-east-1
-service = 'es'
-
-awsauth = AWS4Auth(AWS_ACCESS_KEY, AWS_SECRET_KEY, region, service)
+import boto3
+import requests
 
 host = '' # The domain with https:// and trailing slash. For example, https://my-test-domain.us-east-1.es.amazonaws.com/
 path = 'my-index' # the Elasticsearch API endpoint
+region = '' # For example, us-west-1
+
+service = 'es'
+credentials = boto3.Session().get_credentials()
+awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service)
 
 url = host + path
 
@@ -86,6 +82,7 @@ This next example uses the [Beautiful Soup](https://www.crummy.com/software/Beau
 from bs4 import BeautifulSoup
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
+import boto3
 import glob
 import json
 
@@ -115,14 +112,12 @@ for html_file in glob.glob('*.htm'):
 
     id += 1
 
-AWS_ACCESS_KEY = ''
-AWS_SECRET_KEY = ''
-region = '' # For example, us-east-1
-service = 'es'
-
-awsauth = AWS4Auth(AWS_ACCESS_KEY, AWS_SECRET_KEY, region, service)
-
 host = '' # For example, my-test-domain.us-east-1.es.amazonaws.com
+region = '' # e.g. us-west-1
+
+service = 'es'
+credentials = boto3.Session().get_credentials()
+awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service)
 
 es = Elasticsearch(
     hosts = [{'host': host, 'port': 443}],

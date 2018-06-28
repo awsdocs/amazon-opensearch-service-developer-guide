@@ -132,8 +132,8 @@ def lambda_handler(event, context):
 
     # Split into two try blocks. We still want to try and take a snapshot if deletion failed.
     try:
-        # Get the list of indexes.
-        # You can filter this list if you didn't want to snapshot all indexes.
+        # Get the list of indices.
+        # You can filter this list if you didn't want to snapshot all indices.
         index_list = curator.IndexList(es)
 
         # Take a new snapshot. This operation can take a while, so we don't want to wait for it to complete.

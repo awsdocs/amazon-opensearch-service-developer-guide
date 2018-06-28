@@ -3,15 +3,16 @@
 The following sections offer solutions to common problems that you might encounter when you use services and products that integrate with Amazon Elasticsearch Service \(Amazon ES\):
 
 **Topics**
-+ [Kibana: I Can't Access Kibana](#aes-troubleshooting-kibana-configure-anonymous-access)
-+ [Kibana: I Get a Browser Error When I Use Kibana to View My Data](#aes-troubleshooting-kibana-debug-browser-errors)
++ [Kibana: Can't Access Kibana](#aes-troubleshooting-kibana-configure-anonymous-access)
++ [Snapshots: "Not Valid for the Object's Storage Class" Error](#aes-troubleshooting-glacier-snapshots)
++ [Kibana: Browser Error When Viewing Data](#aes-troubleshooting-kibana-debug-browser-errors)
 + [Domain Creation: Unauthorized Operation When Selecting VPC Access](#es-vpc-permissions)
 + [Domain Creation: Stuck at Loading After Choosing VPC Access](#es-vpc-sts)
-+ [SDKs: I Get Certificate Errors When I Try to Use an SDK](#aes-troubleshooting-certificates)
++ [SDKs: Certificate Errors](#aes-troubleshooting-certificates)
 
 For information about service\-specific errors, see [Handling AWS Service Errors](aes-handling-errors.md) in this guide\.
 
-## Kibana: I Can't Access Kibana<a name="aes-troubleshooting-kibana-configure-anonymous-access"></a>
+## Kibana: Can't Access Kibana<a name="aes-troubleshooting-kibana-configure-anonymous-access"></a>
 
 The Kibana endpoint doesn't support signed requests\. If the access control policy for your domain only grants access to certain IAM users or roles, you might receive the following error when you attempt to access Kibana:
 
@@ -21,7 +22,13 @@ The Kibana endpoint doesn't support signed requests\. If the access control poli
 
 If your Amazon ES domain uses VPC access, you might not receive that error\. Instead, the request might time out\. To learn more about correcting this issue and the various configuration options available to you, see [Controlling Access to Kibana](es-kibana.md#es-kibana-access), [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security), and [Amazon Elasticsearch Service Access Control](es-ac.md)\.
 
-## Kibana: I Get a Browser Error When I Use Kibana to View My Data<a name="aes-troubleshooting-kibana-debug-browser-errors"></a>
+## Snapshots: "Not Valid for the Object's Storage Class" Error<a name="aes-troubleshooting-glacier-snapshots"></a>
+
+Amazon ES snapshots do not support the Amazon Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the Amazon Glacier storage class\.
+
+If you need to restore a snapshot from the bucket, restore the objects from Amazon Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot respository\.
+
+## Kibana: Browser Error When Viewing Data<a name="aes-troubleshooting-kibana-debug-browser-errors"></a>
 
 Your browser wraps service error messages in HTTP response objects when you use Kibana to view data in your Amazon ES domain\. You can use developer tools commonly available in web browsers, such as Developer Mode in Chrome, to view the underlying service errors and assist your debugging efforts\.
 
@@ -63,7 +70,7 @@ After creating a new domain that uses VPC access, the domain's **Configuration s
 
 To add VPC endpoints to your VPC, Amazon ES needs to assume the `AWSServiceRoleForAmazonElasticsearchService` role\. Thus, AWS STS must be enabled to create new domains that use VPC access in a given region\. To learn more about enabling and disabling AWS STS, see the [IAM User Guide](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html)\.
 
-## SDKs: I Get Certificate Errors When I Try to Use an SDK<a name="aes-troubleshooting-certificates"></a>
+## SDKs: Certificate Errors<a name="aes-troubleshooting-certificates"></a>
 
 Because AWS SDKs use the CA certificates from your computer, changes to the certificates on the AWS servers can cause connection failures when you attempt to use an SDK\. Error messages vary, but typically contain the following text:
 

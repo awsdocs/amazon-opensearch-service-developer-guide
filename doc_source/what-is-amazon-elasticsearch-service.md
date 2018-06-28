@@ -202,3 +202,6 @@ However, a notable data transfer exception exists\. If you use [zone awareness](
 For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
 
 If you qualify for the AWS Free Tier, you receive up to 750 hours per month of use with the `t2.micro.elasticsearch` or `t2.small.elasticsearch` instance types\. You also receive up to 10 GB of Amazon EBS storage \(Magnetic or General Purpose\)\. For more information, see [AWS Free Tier](http://aws.amazon.com/free/)\.
+
+**Note**  
+Throughout this guide, 1 MB refers to 10242 or 1,048,576 bytes\. Likewise, 1 GB refers to 10243 or 1,073,741,824 bytes\.

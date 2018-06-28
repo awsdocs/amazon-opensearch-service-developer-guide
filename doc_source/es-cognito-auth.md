@@ -14,6 +14,7 @@ The first time that you configure a domain to use Amazon Cognito authentication 
 + [Configuring Identity Providers](#es-cognito-auth-identity-providers)
 + [\(Optional\) Configuring Granular Access](#es-cognito-auth-granular)
 + [\(Optional\) Customizing the Login Page](#es-cognito-auth-customize)
++ [\(Optional\) Configuring Advanced Security](#es-cognito-auth-advanced)
 + [Testing](#es-cognito-auth-testing)
 + [Limits](#es-cognito-auth-limits)
 + [Common Configuration Issues](#es-cognito-auth-troubleshooting)
@@ -227,6 +228,10 @@ To learn more, see [Using Rule\-Based Mapping to Assign Roles to Users](http://d
 ## \(Optional\) Customizing the Login Page<a name="es-cognito-auth-customize"></a>
 
 The **UI customization** page of the Amazon Cognito console lets you upload a custom logo and make CSS changes to the login page\. For instructions and a full list of CSS properties, see [Specifying App UI Customization Settings for Your User Pool](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-ui-customization.html) in the *Amazon Cognito Developer Guide*\.
+
+## \(Optional\) Configuring Advanced Security<a name="es-cognito-auth-advanced"></a>
+
+Amazon Cognito user pools support advanced security features like multi\-factor authentication, compromised credential checking, and adaptive authentication\. To learn more, see [Managing Security](http://docs.aws.amazon.com/cognito/latest/developerguide/managing-security.html) in the *Amazon Cognito Developer Guide*\.
 
 ## Testing<a name="es-cognito-auth-testing"></a>
 

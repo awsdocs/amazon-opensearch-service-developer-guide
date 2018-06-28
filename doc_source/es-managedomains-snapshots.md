@@ -9,7 +9,22 @@ If the cluster enters red status and you don't correct the problem, you start to
 You cannot use automated snapshots to migrate to new domains\. Automated snapshots are read\-only from within a given domain\. For migrations, you must use manual snapshots stored in your own repository \(an S3 bucket\)\. Standard S3 charges apply to manual snapshots\.
 
 **Tip**  
-Some users find tools like Curator convenient for index and snapshot management\. Curator offers advanced filtering functionality that can help simplify tasks on complex clusters\.
+Some users find tools like Curator convenient for index and snapshot management\. Curator offers advanced filtering functionality that can help simplify tasks on complex clusters\. Amazon ES supports Curator on domains running Elasticsearch version 5\.3 and above\. You can use Curator as a command line interface \(CLI\) or Python API\. If you use the CLI, export your credentials at the command line and configure curator\.yml as follows:  
+
+```
+client:
+  hosts: search-my-domain.us-west-1.es.amazonaws.com
+  port: 443
+  use_ssl: True
+  aws_region: us-west-1
+  aws_sign_request: True
+  ssl_no_validate: False
+  timeout: 60
+ 
+logging:
+  loglevel: INFO
+```
+For a sample Lambda function that uses the Python API, see [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)\.
 
 **Topics**
 + [Manual Snapshot Prerequisites](#es-managedomains-snapshot-prerequisites)
@@ -26,7 +41,7 @@ To create index snapshots manually, you must work with IAM and Amazon S3\. Verif
 
 | Prerequisite  | Description | 
 | --- | --- | 
-| S3 bucket | Stores manual snapshots for your Amazon ES domain\. Make a note of the bucket's Amazon Resource Name \(ARN\), which takes the form of `arn:aws:s3:::s3-bucket-name`\. You need it in two places:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html)For more information, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\. | 
+| S3 bucket | Stores manual snapshots for your Amazon ES domain\. Make a note of the bucket's Amazon Resource Name \(ARN\), which takes the form of `arn:aws:s3:::s3-bucket-name`\. You need it in two places:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html)For more information, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\. Do **not** apply an Amazon Glacier lifecycle rule to this bucket\. Manual snapshots do not support the Amazon Glacier storage class\. | 
 | IAM role | Delegates permissions to Amazon Elasticsearch Service\. The rest of this document refers to this role as `TheServiceRole`\. The trust relationship for the role must specify Amazon Elasticsearch Service in the `Principal` statement, as shown in the following example:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "es.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />}</pre>The role must have the following policy attached to it: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For more information, see [Creating Customer Managed Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_using-managed.html#create-managed-policy-console) and [Attaching Managed Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_using-managed.html#attach-managed-policy-console) in the *IAM User Guide*\. | 
 | Permissions |  You must be able to assume the IAM role in order to register the snapshot repository\. You also need access to the `es:ESHttpPut` action\. A common way to provide access is to attach the following policy to your account: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheServiceRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/my-domain/*"<br />    }<br />  ]<br />}</pre> If your account does not have `iam:PassRole` permissions to assume `TheServiceRole`, you might encounter encounter the following common error: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheServiceRole"}</pre>  | 
 

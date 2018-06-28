@@ -42,7 +42,8 @@ For a short sample file, see [Step 2: Upload Data to an Amazon ES Domain for Ind
 Elasticsearch features automatic index creation when you add a document to an index that doesn't already exist\. It also features automatic ID generation if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, establishes the document type of `movie`, indexes the document, and assigns it a unique ID:
 
 ```
-curl -XPOST elasticsearch_domain/movies/movie -d '{"title": "Spirited Away"}' -H 'Content-Type: application/json'
+POST elasticsearch_domain/movies/movie
+{"title": "Spirited Away"}
 ```
 
 **Important**  
@@ -51,7 +52,7 @@ To use automatic ID generation, you must use the `POST` method instead of `PUT`\
 To verify that the document exists, you can perform the following search:
 
 ```
-curl -XGET elasticsearch_domain/movies/_search?pretty
+GET elasticsearch_domain/movies/_search?pretty
 ```
 
 The response should contain the following:
@@ -77,17 +78,19 @@ The response should contain the following:
 Automatic ID generation has a clear downside: because the indexing code didn't specify a document ID, you can't easily update the document at a later time\. To specify an ID of `7`, use the following request:
 
 ```
-curl -XPUT elasticsearch_domain/movies/movie/7 -d '{"title": "Spirited Away"}' -H 'Content-Type: application/json'
+PUT elasticsearch_domain/movies/movie/7
+{"title": "Spirited Away"}
 ```
 
 Indices default to five primary shards and one replica\. If you want to specify non\-default settings, create the index before adding documents:
 
 ```
-curl -XPUT elasticsearch_domain/movies -d '{"settings": {"number_of_shards": 6, "number_of_replicas": 2}}' -H 'Content-Type: application/json'
+PUT elasticsearch_domain/movies
+{"settings": {"number_of_shards": 6, "number_of_replicas": 2}}
 ```
 
 **Note**  
-Requests using curl are unauthenticated and rely on an IP\-based access policy\. For examples of signed requests, see [Programmatic Indexing](es-indexing-programmatic.md)\.
+For sample code, see [Programmatic Indexing](es-indexing-programmatic.md)\.
 
 Elasticsearch indices have the following naming restrictions:
 + All letters must be lowercase\.

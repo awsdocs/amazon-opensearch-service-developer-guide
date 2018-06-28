@@ -1,11 +1,11 @@
-# Document History for Amazon Elasticsearch Service<a name="document-history"></a>
+# Release Notes for Amazon Elasticsearch Service<a name="release-notes"></a>
 
-This topic describes important changes to the documentation for Amazon Elasticsearch Service \(Amazon ES\)\.
+This topic describes important changes to Amazon Elasticsearch Service \(Amazon ES\)\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
 + **Latest product release—**29 May 2018
-+ **Latest documentation update—**29 May 2018
++ **Latest documentation update—**28 June 2018
 
 
 | Change | Description | Release Date | 

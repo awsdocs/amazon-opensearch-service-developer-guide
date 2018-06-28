@@ -19,7 +19,7 @@ For rolling indices, you can multiply the amount of data generated during a repr
 
 The size of your source data, however, is just one aspect of your storage requirements\. You also have to consider the following:
 
-1. Number of replicas: Each replica is a full copy of an index and needs the same amount of disk space\. By default, each Elasticsearch index has one replica\. We recommend at least one to prevent against data loss\. Replicas also improve search performance, so you might want more if you have a read\-heavy workload\.
+1. Number of replicas: Each replica is a full copy of an index and needs the same amount of disk space\. By default, each Elasticsearch index has one replica\. We recommend at least one to prevent data loss\. Replicas also improve search performance, so you might want more if you have a read\-heavy workload\.
 
 1. Elasticsearch indexing overhead: The on\-disk size of an index varies, but is often 10% larger than the source data\. After indexing your data, you can use the `_cat/indices` API and `pri.store.size` value to calculate the exact overhead\. The `_cat/allocation` API also provides a useful summary\.
 
@@ -72,9 +72,11 @@ Still, even those resources might be insufficient\. Some Elasticsearch users rep
 
 1. To start, we recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the split brain issue\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for replication\.
 
-1. If you have a 184 GB storage requirement and the recommended minimum number of three instances, you use the equation 184 / 3 = 61 GB to find the amount of storage that each instance needs\. In this example, you might select three `m3.medium.elasticsearch` instances for your cluster, each using a 90 GB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 3 vCPU cores and 12 GB of memory, so it's suited to lighter workloads\.
+1. If you have a 184 GB storage requirement and the recommended minimum number of three instances, you use the equation 184 / 3 = 61 GB to find the amount of storage that each instance needs\. In this example, you might select three `m4.large.elasticsearch` instances for your cluster, each using a 90 GB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GB of memory, so it's suited to lighter workloads\.
 
-   For a more substantial example, consider a 14 TB storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 140 = 280 vCPU cores and 8 \* 140 = 1120 GB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage or extra RAM, you could also test 18 `m4.4xlarge.elasticsearch` instances, each using a 900 GB EBS storage volume\.
+   For a more substantial example, consider a 14 TB storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 140 = 280 vCPU cores and 8 \* 140 = 1120 GB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r4.4xlarge.elasticsearch` instances, each using a 900 GB EBS storage volume\.
+
+   If your cluster includes hundreds of terabytes of data, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
 
 1. After configuring the cluster, you can [add your index](es-indexing.md), perform some representative client testing using a realistic dataset, and [monitor CloudWatch metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics) to see how the cluster handles the workload\.
 
