@@ -21,7 +21,7 @@ We recommend that you allocate **three** dedicated master nodes for each product
 1. Having five dedicated master nodes works as well as three and allows you to lose two nodes while maintaining a quorum, but because only one dedicated master node is active at any given time, this configuration means paying for four idle nodes\. Many customers find this level of failover protection excessive\.
 
 **Note**  
-If your cluster does not have does not have the necessary quorum to elect a new master node, write *and* read requests to the cluster both fail\. This behavior differs from the Elasticsearch default\.
+If your cluster does not have the necessary quorum to elect a new master node, write *and* read requests to the cluster both fail\. This behavior differs from the Elasticsearch default\.
 
 Dedicated master nodes perform the following cluster management tasks:
 + Track all nodes in the cluster
