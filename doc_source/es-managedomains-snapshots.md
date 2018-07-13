@@ -1,6 +1,8 @@
 # Working with Amazon Elasticsearch Service Index Snapshots<a name="es-managedomains-snapshots"></a>
 
-Snapshots are backups of a cluster's data and state\. They provide a convenient way to migrate data across Amazon Elasticsearch Service domains and recover from failure\. The service supports restoring from snapshots taken on both Amazon ES domains and self\-managed Elasticsearch clusters\.
+Snapshots are backups of a cluster's data and state\. State includes cluster settings, node information, index settings, and shard allocation\.
+
+Snapshots provide a convenient way to migrate data across Amazon Elasticsearch Service domains and recover from failure\. The service supports restoring from snapshots taken on both Amazon ES domains and self\-managed Elasticsearch clusters\.
 
 Amazon ES takes daily automated snapshots of the primary index shards in a domain, as described in [Configuring Automatic Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. The service stores up to 14 of these snapshots for no more than 30 days in a preconfigured Amazon S3 bucket at no additional charge to you\. You can use these snapshots to restore the domain\.
 
@@ -165,6 +167,10 @@ print(r.text)
 ```
 
 ## Taking Manual Snapshots<a name="es-managedomains-snapshot-create"></a>
+
+Snapshots are not instantaneous; they take some time to complete\. While a snapshot is in\-progress, you can still index documents and make other requests to the cluster, but new documents \(and updates to existing documents\) aren't included in the snapshot\. The snapshot includes indices as they existed at the moment you initiated the snapshot\.
+
+Elasticsearch snapshots are incremental, meaning that they only store data that has changed since the last successful snapshot\. This incremental nature means that the difference in disk usage between frequent and infreqent snapshots is often minimal\. In other words, taking hourly snapshots for a week \(for a total of 168 snapshots\) might not use much more disk space than taking a single snapshot at the end of the week\. Also, the more frequently you take snapshots, the less time they take to complete\. Some Elasticsearch users take snapshots as often as every half hour\.
 
 You specify two pieces of information when you create a snapshot:
 + Name of your snapshot repository
