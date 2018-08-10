@@ -1,6 +1,8 @@
 # Getting Started with Amazon Elasticsearch Service<a name="es-gsg"></a>
 
-This tutorial shows you how to use Amazon Elasticsearch Service \(Amazon ES\) to create and configure a test domain\. It walks you through the basic steps to get a domain up and running quickly\. For a detailed walkthrough, see [Creating and Configuring Amazon Elasticsearch Service Domains](es-createupdatedomains.md) and the other topics within this guide\.
+This tutorial shows you how to use Amazon Elasticsearch Service \(Amazon ES\) to create and configure a test domain\. An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\.
+
+The tutorial walks you through the basic steps to get a domain up and running quickly\. For more detailed information, see [Creating and Configuring Amazon Elasticsearch Service Domains](es-createupdatedomains.md) and the other topics within this guide\.
 
 You can complete the following steps by using the Amazon ES console, the AWS CLI, or the AWS SDK:
 

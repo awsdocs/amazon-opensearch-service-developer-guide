@@ -1,15 +1,15 @@
 # Loading Streaming Data into Amazon Elasticsearch Service<a name="es-aws-integrations"></a>
 
-You can load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon Elasticsearch Service domain from many different sources\. Some sources, like Amazon Kinesis Firehose and Amazon CloudWatch Logs, have built\-in support for Amazon ES\. Others, like Amazon S3, Amazon Kinesis, and Amazon DynamoDB, use AWS Lambda functions as event handlers\. The Lambda functions respond to new data by processing it and streaming it to your domain\.
+You can load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon Elasticsearch Service domain from many different sources\. Some sources, like Amazon Kinesis Data Firehose and Amazon CloudWatch Logs, have built\-in support for Amazon ES\. Others, like Amazon S3, Amazon Kinesis Data Streams, and Amazon DynamoDB, use AWS Lambda functions as event handlers\. The Lambda functions respond to new data by processing it and streaming it to your domain\.
 
 **Note**  
 Lambda supports several popular programming languages and is available in most AWS Regions\. For more information, see [Building Lambda Functions](http://docs.aws.amazon.com/lambda/latest/dg/lambda-app.html) in the *AWS Lambda Developer Guide* and [AWS Lambda Regions](http://docs.aws.amazon.com/general/latest/gr/rande.html#lambda_region) in the *AWS General Reference*\.
 
 **Topics**
 + [Loading Streaming Data into Amazon ES from Amazon S3](#es-aws-integrations-s3-lambda-es)
-+ [Loading Streaming Data into Amazon ES from Amazon Kinesis](#es-aws-integrations-kinesis)
++ [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams](#es-aws-integrations-kinesis)
 + [Loading Streaming Data into Amazon ES from Amazon DynamoDB](#es-aws-integrations-dynamodb-es)
-+ [Loading Streaming Data into Amazon ES from Amazon Kinesis Firehose](#es-aws-integrations-fh)
++ [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose](#es-aws-integrations-fh)
 + [Loading Streaming Data into Amazon ES from Amazon CloudWatch](#es-aws-integrations-cloudwatch-es)
 + [Loading Data into Amazon ES from AWS IoT](#es-aws-integrations-cloudwatch-iot)
 
@@ -196,9 +196,9 @@ GET https://es-domain/lambda-index/_search?pretty
 }
 ```
 
-## Loading Streaming Data into Amazon ES from Amazon Kinesis<a name="es-aws-integrations-kinesis"></a>
+## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams<a name="es-aws-integrations-kinesis"></a>
 
-You can load streaming data from Amazon Kinesis to Amazon ES\. New data that arrives in the Amazon Kinesis data stream triggers an event notification to Lambda, which then runs your custom code to perform the indexing\. This section includes some unsophisticated Python sample code\. For more robust code in Node\.js, see [amazon\-elasticsearch\-lambda\-samples](https://github.com/aws-samples/amazon-elasticsearch-lambda-samples) on GitHub\.
+You can load streaming data from Kinesis Data Streams to Amazon ES\. New data that arrives in the data stream triggers an event notification to Lambda, which then runs your custom code to perform the indexing\. This section includes some unsophisticated Python sample code\. For more robust code in Node\.js, see [amazon\-elasticsearch\-lambda\-samples](https://github.com/aws-samples/amazon-elasticsearch-lambda-samples) on GitHub\.
 
 ### Prerequisites<a name="es-aws-integrations-kinesis-lambda-prereq"></a>
 
@@ -209,7 +209,7 @@ Before proceeding, you must have the following resources\.
 
 | Prerequisite | Description | 
 | --- | --- | 
-| Amazon Kinesis Data Stream | The event source for your Lambda function\. For instructions about creating Amazon Kinesis data streams, see [Kinesis Data Streams](https://docs.aws.amazon.com/kinesis/latest/dev/amazon-kinesis-streams.html)\. | 
+| Amazon Kinesis Data Stream | The event source for your Lambda function\. To learn more, see [Kinesis Data Streams](https://docs.aws.amazon.com/kinesis/latest/dev/amazon-kinesis-streams.html)\. | 
 | Amazon ES Domain | The destination for data after your Lambda function processes it\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
 | IAM Role |  This role must have basic Amazon ES, Kinesis, and Lambda permissions, such as the following: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents",<br />        "kinesis:GetShardIterator",<br />        "kinesis:GetRecords",<br />        "kinesis:DescribeStream",<br />        "kinesis:ListStreams"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre> The role must have the following trust relationship: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre> To learn more, see [Creating IAM Roles](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\.  | 
 
@@ -405,13 +405,13 @@ GET https://es-domain/lambda-index/lambda-type/00001
 }
 ```
 
-## Loading Streaming Data into Amazon ES from Amazon Kinesis Firehose<a name="es-aws-integrations-fh"></a>
+## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose<a name="es-aws-integrations-fh"></a>
 
-Amazon Kinesis supports Amazon ES as a delivery destination\. For instructions about how to load streaming data into Amazon ES, see [Creating an Amazon Kinesis Firehose Delivery Stream](http://docs.aws.amazon.com/firehose/latest/dev/basic-create.html) and [Choose Amazon ES for your destination](http://docs.aws.amazon.com/firehose/latest/dev/create-destination.html#create-destination-elasticsearch) in the *Amazon Kinesis Firehose Developer Guide*\.
+Kinesis Data Firehose supports Amazon ES as a delivery destination\. For instructions about how to load streaming data into Amazon ES, see [Creating a Kinesis Data Firehose Delivery Stream](http://docs.aws.amazon.com/firehose/latest/dev/basic-create.html) and [Choose Amazon ES for Your Destination](http://docs.aws.amazon.com/firehose/latest/dev/create-destination.html#create-destination-elasticsearch) in the *Amazon Kinesis Data Firehose Developer Guide*\.
 
-Before you load data into Amazon ES, you might need to perform transforms on the data\. To learn more about using Lambda functions to perform this task, see [Data Transformation](http://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html) in the *Amazon Kinesis Firehose Developer Guide*\.
+Before you load data into Amazon ES, you might need to perform transforms on the data\. To learn more about using Lambda functions to perform this task, see [Data Transformation](http://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html) in the same guide\.
 
-As you configure a delivery stream, Kinesis Firehose features a "one\-click" IAM role that gives it the resource access it needs to send data to Amazon ES, back up data on Amazon S3, and transform data using Lambda\. Because of the complexity involved in creating such a role manually, we recommend using the provided role\.
+As you configure a delivery stream, Kinesis Data Firehose features a "one\-click" IAM role that gives it the resource access it needs to send data to Amazon ES, back up data on Amazon S3, and transform data using Lambda\. Because of the complexity involved in creating such a role manually, we recommend using the provided role\.
 
 ## Loading Streaming Data into Amazon ES from Amazon CloudWatch<a name="es-aws-integrations-cloudwatch-es"></a>
 

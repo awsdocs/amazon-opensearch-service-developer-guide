@@ -26,6 +26,7 @@ Amazon ES doesn't support IPv6 addresses with a VPC\. You can use a VPC that has
 **Topics**
 + [Limitations](#es-vpc-limitations)
 + [About Access Policies on VPC Domains](#es-vpc-security)
++ [Testing VPC Domains](#kibana-test)
 + [Before You Begin: Prerequisites for VPC Access](#es-prerequisites-vpc-endpoints)
 + [Creating a VPC](#es-creating-vpc)
 + [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)
@@ -60,7 +61,7 @@ When you create a domain with VPC access, the endpoint *looks* similar to a publ
 https://vpc-domain-name-identifier.region.es.amazonaws.com
 ```
 
-If you try to access the endpoint in a web browser, however, you might find that the request times out\. To perform even basic `GET` requests, your computer must be able to connect to the VPC\. This connection often takes the form of an internet gateway, VPN server, or proxy server\. For details on the various forms it can take, see [Scenarios and Examples](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\.
+If you try to access the endpoint in a web browser, however, you might find that the request times out\. To perform even basic `GET` requests, your computer must be able to connect to the VPC\. This connection often takes the form of a VPN, managed network, or proxy server\. For details on the various forms it can take, see [Scenarios and Examples](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\. For a development\-focused example, see [Testing VPC Domains](#kibana-test)\.
 
 In addition to this connectivity requirement, VPCs let you manage access to the domain through [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html)\. For many use cases, this combination of security features is sufficient, and you might feel comfortable applying an open access policy to the domain\.
 
@@ -70,6 +71,43 @@ For an additional layer of security, we recommend using access policies that spe
 
 **Note**  
 Because security groups already enforce IP\-based access policies, you can't apply IP\-based access policies to Amazon ES domains that reside within a VPC\. If you use public access, IP\-based policies are still available\.
+
+## Testing VPC Domains<a name="kibana-test"></a>
+
+The enhanced security of a VPC can make connecting to your domain and running basic tests a real challenge\. If you already have an Amazon ES VPC domain and would rather not create a VPN server, try the following process:
+
+1. For your domain's access policy, choose **Do not require signing request with IAM credential**\. You can always update this setting after you finish testing\.
+
+1. Create an Amazon Linux Amazon EC2 instance in the same VPC, subnet, and security group as your Amazon ES domain\.
+
+   Because this instance is for testing purposes and needs to do very little work, choose an inexpensive instance type like `t2.micro`\. Assign the instance a public IP address and either create a new key pair or choose an existing one\. If you create a new key, download it to your `~/.ssh` directory\.
+
+   To learn more about creating instances, see [Getting Started with Amazon EC2 Linux Instances](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance)\.
+
+1. Add an [internet gateway](https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Internet_Gateway.html) to your VPC\.
+
+1. In the [route table](https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html) for your VPC, add a new route\. For **Destination**, specify a [CIDR block](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#IPv4_CIDR_blocks) that contains your computer's public IP address\. For **Target**, specify the internet gateway you just created\.
+
+   For example, you might specify `123.123.123.123/32` for just your computer or `123.123.123.0/24` for a range of computers\.
+
+1. For the security group, specify two inbound rules:    
+[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html)
+
+   The first rule lets you SSH into your EC2 instance\. The second allows the EC2 instance to communicate with the Amazon ES domain over HTTPS\.
+
+1. From the terminal, run the following command:
+
+   ```
+   ssh -i ~/.ssh/your-key.pem ec2-user@your-ec2-instance-public-ip -N -L 9200:vpc-your-amazon-es-domain.region.es.amazonaws.com:443
+   ```
+
+   This command creates an SSH tunnel that forwards requests to [https://localhost:9200](https://localhost:9200) to your Amazon ES domain through the EC2 instance\. By default, Elasticsearch listens for traffic on port 9200\. Specifying this port simulates a local Elasticsearch install, but use whichever port you'd like\.
+
+   The command provides no feedback and runs indefinitely\. To stop it, press `Ctrl + C`\.
+
+1. Navigate to [https://localhost:9200/\_plugin/kibana/](https://localhost:9200/_plugin/kibana/) in your web browser\. You might need to acknowledge a security exception\.
+
+   Alternately, you can send requests to [https://localhost:9200](https://localhost:9200) using [curl](https://curl.haxx.se/), [Postman](https://www.getpostman.com/), or your favorite programming language\.
 
 ## Before You Begin: Prerequisites for VPC Access<a name="es-prerequisites-vpc-endpoints"></a>
 

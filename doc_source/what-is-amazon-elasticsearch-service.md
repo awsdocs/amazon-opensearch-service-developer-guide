@@ -1,21 +1,14 @@
 # What Is Amazon Elasticsearch Service?<a name="what-is-amazon-elasticsearch-service"></a>
 
-Amazon Elasticsearch Service \(Amazon ES\) is a managed service that makes it easy to deploy, operate, and scale Elasticsearch clusters in the AWS Cloud\. Elasticsearch is a popular open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analytics\. With Amazon ES, you get direct access to the Elasticsearch APIs so that existing code and applications work seamlessly with the service\.
+Amazon Elasticsearch Service \(Amazon ES\) is a managed service that makes it easy to deploy, operate, and scale Elasticsearch clusters in the AWS Cloud\. Elasticsearch is a popular open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. With Amazon ES, you get direct access to the Elasticsearch APIs; existing code and applications work seamlessly with the service\.
 
-Amazon ES provisions all the resources for your Elasticsearch cluster and launches the cluster\. It also automatically detects and replaces failed Elasticsearch nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
+Amazon ES provisions all the resources for your Elasticsearch cluster and launches it\. It also automatically detects and replaces failed Elasticsearch nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
 
-To get started using the service, you create an Amazon ES domain\. An Amazon ES domain is an Elasticsearch cluster in the AWS Cloud that has the compute and storage resources that you specify\. For example, you can specify the number of instances, instance types, and storage options\.
+To get started using Amazon ES, you create a *domain*\. An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\.
 
-Additionally, Amazon ES offers the following benefits of a managed service:
-+ Cluster scaling options
-+ Self\-healing clusters
-+ Replication for data durability
-+ Enhanced security
-+ Node monitoring
+You can use the Amazon ES console to set up and configure a domain in minutes\. If you prefer programmatic access, you can use the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/) or the [AWS SDKs](http://aws.amazon.com/code)\.
 
-You can use the Amazon ES console to set up and configure your domain in minutes\. If you prefer programmatic access, you can use the [AWS SDKs](http://aws.amazon.com/code) or the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/)\. 
-
-There are no upfront costs to set up clusters, and you pay only for the service resources that you use\.
+There are no upfront costs to set up domains, and you pay only for the resources that you use\.
 
 **Topics**
 + [Features of Amazon Elasticsearch Service](#what-is-aes-features)
@@ -176,8 +169,8 @@ Use AWS CloudTrail to get a history of the Amazon ES API calls and related event
 An Amazon ES domain automatically sends metrics to Amazon CloudWatch so that you can gather and analyze performance statistics\. You can monitor these metrics by using the AWS CLI or the AWS SDKs\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.  
 CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
 
-[Kinesis](http://aws.amazon.com/documentation/kinesis/)  
-Kinesis is a managed service that scales elastically for real\-time processing of streaming data at a massive scale\. For more information, see [Loading Streaming Data into Amazon ES from Amazon Kinesis](es-aws-integrations.md#es-aws-integrations-kinesis)\.
+[Amazon Kinesis](http://aws.amazon.com/documentation/kinesis/)  
+Kinesis is a managed service that scales elastically for real\-time processing of streaming data at a massive scale\. For more information, see [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams](es-aws-integrations.md#es-aws-integrations-kinesis) and [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose](es-aws-integrations.md#es-aws-integrations-fh)\.
 
 [Amazon S3](http://aws.amazon.com/documentation/s3/)  
 Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. You can use Amazon S3 to store and retrieve any amount of data at any time, from anywhere on the web\. Amazon ES provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.

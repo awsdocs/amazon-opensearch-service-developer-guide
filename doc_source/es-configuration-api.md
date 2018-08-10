@@ -223,7 +223,7 @@ This operation does not use HTTP request parameters\.
 #### Example<a name="w3ab1c43b7c11c17"></a>
 
 This example demonstrates the following:
-+ Creates an Amazon ES domain named `streaming-logs`
++ Creates an Amazon ES domain that is named `streaming-logs`
 + Configures a cluster with six instances of the m3\.medium\.elasticsearch instance type and three dedicated master nodes of the same type
 + Enables zone awareness
 + Configures VPC endpoints for the domain
@@ -1096,7 +1096,7 @@ HTTP/1.1 200 OK
 
 ### DescribeReservedElasticsearchInstanceOfferings<a name="es-configuration-api-actions-describereservedelasticsearchinstanceofferings"></a>
 
-Describes the available reserved instance offerings for a given region\.
+Describes the available Reserved Instance offerings for a given region\.
 
 #### Syntax<a name="w3ab1c43b7c27b5"></a>
 
@@ -1126,7 +1126,7 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| ReservedElasticsearchInstanceOfferings | ReservedElasticsearchInstanceOfferings | Container for all information on a reserved instance offering\. To learn more, see [Purchasing Reserved Instances \(AWS CLI\)](aes-ri.md#aes-ri-cli)\. | 
+| ReservedElasticsearchInstanceOfferings | ReservedElasticsearchInstanceOfferings | Container for all information on a Reserved Instance offering\. To learn more, see [Purchasing Reserved Instances \(AWS CLI\)](aes-ri.md#aes-ri-cli)\. | 
 
 #### Errors<a name="w3ab1c43b7c27c13"></a>
 
@@ -1608,7 +1608,7 @@ HTTP/1.1 200 OK
 
 ### PurchaseReservedElasticsearchInstance<a name="es-configuration-api-actions-purchasereservedelasticsearchinstance"></a>
 
-Purchase a reserved instance\.
+Purchases a Reserved Instance\.
 
 #### Syntax<a name="w3ab1c43b7c41b5"></a>
 
@@ -1798,7 +1798,7 @@ This operation does not use HTTP request parameters\.
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain for which you want to update the configuration\. | 
-| ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | No | Desired changes to the cluster configuration, such as the instance type and number of EC2 instances\. | 
+| ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | No | Changes that you want to make to the cluster configuration, such as the instance type and number of EC2 instances\. | 
 | EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | No | Type and size of EBS volumes attached to data nodes\.  | 
 | VPCOptions | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | No | Container for the values required to configure Amazon ES to work with a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
 | SnapshotOptions | [`SnapshotOptions`](#es-configuration-api-datatypes-snapshotoptions) | No | Hour during which the service takes an automated daily snapshot of the indices in the Amazon ES domain\. | 
@@ -1988,7 +1988,7 @@ Key\-value string pairs to specify advanced Elasticsearch configuration options\
 | --- | --- | --- | 
 | rest\.action\.multi\.allow\_explicit\_index | Key\-value pair:`rest.action.multi.allow_explicit_index=<true\|false>` | Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. If you want to configure access policies for domain sub\-resources, such as specific indices and domain APIs, you must disable this property\. For more information, see URL\-based Access Control\. For more information about access policies for sub\-resources, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\. | 
 | indices\.fielddata\.cache\.size | Key\-value pair:`indices.fielddata.cache.size=<percentage_of_heap>` | Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is unbounded\. | 
-| indices\.query\.bool\.max\_clause\_count | Key\-value pair:`indices.query.bool.max_clause_count=<int>` | Specifies the maximum number of clauses allowed in a Lucene boolean query\. 1024 is the default\. Queries with more than the permitted number of clauses result in a TooManyClauses error\. To learn more, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\. | 
+| indices\.query\.bool\.max\_clause\_count | Key\-value pair:`indices.query.bool.max_clause_count=<int>` | Specifies the maximum number of clauses allowed in a Lucene Boolean query\. 1024 is the default\. Queries with more than the permitted number of clauses result in a TooManyClauses error\. To learn more, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\. | 
 
 ### AdvancedOptionsStatus<a name="es-configuration-api-datatypes-advancedoptionsstatus"></a>
 
@@ -2031,7 +2031,7 @@ Status of an update to advanced configuration options for an Amazon ES domain\.
 | Field | Data Type | Description | 
 | --- | --- | --- | 
 | Options | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
-| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to the Cognito configuration options for an Amazon ES domain\. | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to the Amazon Cognito configuration options for an Amazon ES domain\. | 
 
 ### CreateElasticsearchDomainRequest<a name="es-configuration-api-datatypes-createesdomainrequest"></a>
 
@@ -2209,15 +2209,16 @@ The key\-value pair that contains the VPC endpoint\. Only exists if the Amazon E
 
 ### LogPublishingOptions<a name="es-configuration-api-datatypes-logpublishingoptions"></a>
 
-Specifies whether the Amazon ES domain publishes the Elasticsearch slow logs to Amazon CloudWatch\. You still have to enable the *collection* of slow logs using the Elasticsearch REST API\. To learn more, see [Setting Elasticsearch Logging Thresholds](es-createupdatedomains.md#es-createdomain-configure-slow-logs-indices)\.
+Specifies whether the Amazon ES domain publishes the Elasticsearch application and slow logs to Amazon CloudWatch\. You still have to enable the *collection* of slow logs using the Elasticsearch REST API\. To learn more, see [Setting Elasticsearch Logging Thresholds for Slow Logs](es-createupdatedomains.md#es-createdomain-configure-slow-logs-indices)\.
 
 
 ****  
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| INDEX\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether or not the Elasticsearch index slow log should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
-| SEARCH\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether or not the Elasticsearch search slow log should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
+| INDEX\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether the Elasticsearch index slow log should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
+| SEARCH\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether the Elasticsearch search slow log should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
+| ES\_APPLICATION\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether the Elasticsearch error logs should be published there:<pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
 
 ### LogPublishingOptionsStatus<a name="es-configuration-api-datatypes-logpublishingoptions-status"></a>
 
@@ -2228,7 +2229,7 @@ Status of an update to the configuration of the slow log publishing options for 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| Options | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Slow log publishing options for the domain | 
+| Options | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Log publishing options for the domain | 
 | Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to snapshot options for an Amazon ES domain | 
 
 ### OptionState<a name="es-configuration-api-datatypes-optionsstate"></a>
@@ -2251,8 +2252,8 @@ Status of an update to configuration options for an Amazon ES domain\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| CreationDate | Timestamp | Date and time when the Amazon ES domain was created | 
-| UpdateDate | Timestamp | Date and time when the Amazon ES domain was updated | 
+| CreationDate | Time stamp | Date and time when the Amazon ES domain was created | 
+| UpdateDate | Time stamp | Date and time when the Amazon ES domain was updated | 
 | UpdateVersion | Integer | Whole number that specifies the latest version for the entity | 
 | State | [`OptionState`](#es-configuration-api-datatypes-optionsstate) | State of an update to configuration options for an Amazon ES domain | 
 | PendingDeletion | Boolean | Indicates whether the service is processing a request to permanently delete the Amazon ES domain and all of its resources | 
@@ -2337,7 +2338,7 @@ Status of an update to the configuration of the daily automated snapshot for an 
 | --- | --- | --- | 
 | VPCId | String | The ID for your VPC\. Amazon VPC generates this value when you create a VPC\. | 
 | SubnetIds | StringList | A list of subnet IDs associated with the VPC endpoints for the domain\. To learn more, see [VPCs and Subnets](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html) in the Amazon VPC User Guide\. | 
-| AvailabilityZones | StringList | The list of availability zones associated with the VPC subnets\. To learn more, see [VPC and Subnet Basics](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#vpc-subnet-basics) in the Amazon VPC User Guide\. | 
+| AvailabilityZones | StringList | The list of Availability Zones associated with the VPC subnets\. To learn more, see [VPC and Subnet Basics](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#vpc-subnet-basics) in the Amazon VPC User Guide\. | 
 | SecurityGroupIds | StringList | The list of security group IDs associated with the VPC endpoints for the domain\. To learn more, see [Security Groups for your VPC](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) in the Amazon VPC User Guide\. | 
 
 ### VPCDerivedInfoStatus<a name="es-configuration-api-datatypes-vpcderivedinfostatus"></a>

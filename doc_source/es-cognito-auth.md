@@ -83,7 +83,7 @@ Amazon Cognito is not available in all AWS Regions\. For a list of supported reg
 
 ### Configuring Amazon Cognito Authentication \(Console\)<a name="es-cognito-auth-config-console"></a>
 
-Because it creates [the IAM role](#es-cognito-auth-role) for you, the console offers the simplest configuration experience\. In addition to the standard Amazon ES permissions, you need the following minimal set of permissions to use the console to create a domain that uses Amazon Cognito authentication for Kibana:
+Because it creates [the IAM role](#es-cognito-auth-role) for you, the console offers the simplest configuration experience\. In addition to the standard Amazon ES permissions, you need the following set of permissions to use the console to create a domain that uses Amazon Cognito authentication for Kibana:
 
 ```
 {
@@ -101,6 +101,32 @@ Because it creates [the IAM role](#es-cognito-auth-role) for you, the console of
         "cognito-idp:ListUserPools"
       ],
       "Resource": "*"
+    }
+  ]
+}
+```
+
+If [the IAM role](#es-cognito-auth-role) already exists, you need fewer permissions:
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeVpcs",
+        "cognito-identity:ListIdentityPools",
+        "cognito-idp:ListUserPools"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:PassRole"
+      ],
+      "Resource": "arn:aws:iam::123456789012:role/CognitoAccessForAmazonES"
     }
   ]
 }

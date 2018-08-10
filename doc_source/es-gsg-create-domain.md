@@ -3,7 +3,7 @@
 **Important**  
 This process is a concise tutorial for configuring a *test domain*\. It should not be used to create production domains\. For a comprehensive version of the same process, see [Creating and Configuring Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\.
 
-An Amazon Elasticsearch Service domain encapsulates Elasticsearch itself, your indexed data, snapshots of the domain, access policies, and metadata\. You can create an Amazon ES domain by using the console, the AWS CLI, or the AWS SDKs\. If you don't already have an account, see [Signing Up for AWS](what-is-amazon-elasticsearch-service.md#aws-sign-up)\.
+An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\. You can create an Amazon ES domain by using the console, the AWS CLI, or the AWS SDKs\. If you don't already have an account, see [Signing Up for AWS](what-is-amazon-elasticsearch-service.md#aws-sign-up)\.
 
 **To create an Amazon ES domain \(console\)**
 

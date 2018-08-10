@@ -11,7 +11,7 @@ If the cluster enters red status and you don't correct the problem, you start to
 You cannot use automated snapshots to migrate to new domains\. Automated snapshots are read\-only from within a given domain\. For migrations, you must use manual snapshots stored in your own repository \(an S3 bucket\)\. Standard S3 charges apply to manual snapshots\.
 
 **Tip**  
-Some users find tools like Curator convenient for index and snapshot management\. Curator offers advanced filtering functionality that can help simplify tasks on complex clusters\. Amazon ES supports Curator on domains running Elasticsearch version 5\.3 and above\. You can use Curator as a command line interface \(CLI\) or Python API\. If you use the CLI, export your credentials at the command line and configure curator\.yml as follows:  
+Some users find tools like Curator convenient for index and snapshot management\. Curator offers advanced filtering functionality that can help simplify tasks on complex clusters\. Amazon ES supports Curator on domains running Elasticsearch version 5\.3 and above\. You can use Curator as a command line interface \(CLI\) or Python API\. If you use the CLI, export your credentials at the command line and configure `curator.yml` as follows:  
 
 ```
 client:
