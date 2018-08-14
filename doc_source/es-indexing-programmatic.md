@@ -4,7 +4,7 @@ This section includes examples of how to use Elasticsearch clients and standard 
 
 ## Python<a name="es-indexing-programmatic-python"></a>
 
-You can install elasticsearch\-py, the Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but is not strictly required\. From the terminal, run the following commands:
+You can install elasticsearch\-py, the Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
 
 ```
 pip install boto3

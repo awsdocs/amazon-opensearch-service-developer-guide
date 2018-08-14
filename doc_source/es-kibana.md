@@ -187,4 +187,4 @@ output{
 ```
 
 **Note**  
-The service request in the preceding example must be signed\. For more information about signing requests, see [Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see the plugin [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.
+The service request in the preceding example must be signed\. For more information about signing requests, see [Making and Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see the plugin [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.

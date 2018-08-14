@@ -191,15 +191,50 @@ The following IP\-based access policy grants all requests that originate from `1
 }
 ```
 
-## Signing Amazon ES Requests<a name="es-managedomains-signing-service-requests"></a>
+## Making and Signing Amazon ES Requests<a name="es-managedomains-signing-service-requests"></a>
 
 Even if you configure a completely open resource\-based access policy, *all* requests to the Amazon ES configuration API must be signed\. If your policies specify IAM users or roles, requests to the Elasticsearch APIs also must be signed\. The signing method differs by API:
-+ To make calls to the Amazon ES configuration API, we recommend that you use one of the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\. The SDKs greatly simplify the process and can save you a significant amount of time compared to creating and signing your own requests\.
-+ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Programmatic Indexing](es-indexing-programmatic.md)\.
++ To make calls to the Amazon ES configuration API, we recommend that you use one of the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\. The SDKs greatly simplify the process and can save you a significant amount of time compared to creating and signing your own requests\. The configuration API endpoints use the following format:
 
-To sign a request, you calculate a digital signature using a cryptographic hash function, which returns a hash value based on the input\. The input includes the text of your request and your secret access key\. The hash function returns a hash value that you include in the request as your signature\. The signature is part of the `Authorization` header of your request\.
+  ```
+  es.region.amazonaws.com/2015-01-01/
+  ```
 
-After receiving your request, Amazon ES recalculates the signature using the same hash function and input that you used to sign the request\. If the resulting signature matches the signature in the request, Amazon ES processes the request\. Otherwise, Amazon ES rejects the request\.
+  For example, the following request makes a minor configuration change to the `movies` domain, but you have to sign it yourself \(not recommended\):
+
+  ```
+  POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/movies/config
+  {
+    "SnapshotOptions": {
+      "AutomatedSnapshotStartHour": 3
+    }
+  }
+  ```
+
+  If you use one of the SDKs, such as [Boto 3](https://boto3.readthedocs.io/en/latest/reference/services/es.html#ElasticsearchService.Client.update_elasticsearch_domain_config), the SDK automatically handles the request signing:
+
+  ```
+  import boto3
+  
+  client = boto3.client('es')
+  response = client.update_elasticsearch_domain_config(
+    DomainName='movies',
+    SnapshotOptions={
+      'AutomatedSnapshotStartHour': 3
+    }
+  )
+  ```
++ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Programmatic Indexing](es-indexing-programmatic.md)\. The Elasticsearch APIs use the following format:
+
+  ```
+  domain.region.es.amazonaws.com
+  ```
+
+  For example, the following request searches the `movies` index for *thor*:
+
+  ```
+  GET https://search-my-domain.us-east-1.es.amazonaws.com/movies/_search?q=thor
+  ```
 
 Amazon ES supports authentication using AWS Signature Version 4\. For more information, see [Signature Version 4 Signing Process](http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)\.
 
