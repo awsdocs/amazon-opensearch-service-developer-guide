@@ -95,7 +95,7 @@ To get started, [sign up for an AWS account](https://aws.amazon.com/) if you don
 Amazon ES commonly is used with the following services:
 
 [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/)  
-Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Auditing Amazon Elasticsearch Service Domains with AWS CloudTrail](es-managedomains.md#es-managedomains-cloudtrailauditing)\.
+Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail](es-managedomains.md#es-managedomains-cloudtrailauditing)\.
 
 [Amazon CloudWatch](http://aws.amazon.com/documentation/cloudwatch/)  
 An Amazon ES domain automatically sends metrics to Amazon CloudWatch so that you can gather and analyze performance statistics\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.  

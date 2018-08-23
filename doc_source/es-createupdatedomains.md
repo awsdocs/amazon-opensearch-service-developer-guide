@@ -754,7 +754,7 @@ Disabling publishing to CloudWatch using the Amazon ES console or AWS CLI does *
 
 ### Viewing Logs<a name="es-createdomain-configure-slow-logs-viewing"></a>
 
-Viewing the application and slow logs in CloudWatch is just like viewing any other CloudWatch log\. For more information, see [View Log Data](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/ViewingLogData.html) in the *Amazon CloudWatch Logs User Guide*\.
+Viewing the application and slow logs in CloudWatch is just like viewing any other CloudWatch log\. For more information, see [View Log Data](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#ViewingLogData) in the *Amazon CloudWatch Logs User Guide*\.
 
 Here are some considerations for viewing the logs:
 + Amazon ES publishes only the first 255,000 characters of each line to CloudWatch\. Any remaining content is truncated\.

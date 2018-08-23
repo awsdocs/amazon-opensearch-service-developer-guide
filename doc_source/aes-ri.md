@@ -28,6 +28,8 @@ The console lets you view your existing Reserved Instances and purchase new ones
 1. Choose **Reserved Instances**\.
 
    On this page, you can view your existing reservations\. If you have many reservations, you can filter them to more easily identify and view a particular reservation\.
+**Tip**  
+If you don't see the **Reserved Instances** link, [create a domain](es-createupdatedomains.md) in the region\.
 
 1. Choose **Purchase Reserved Instance**\.
 

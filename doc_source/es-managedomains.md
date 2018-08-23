@@ -7,7 +7,7 @@ As the size and number of documents in your Amazon Elasticsearch Service \(Amazo
 + [Charges for Configuration Changes](#es-managedomains-config-charges)
 + [Enabling Zone Awareness](#es-managedomains-zoneawareness)
 + [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](#es-managedomains-cloudwatchmetrics)
-+ [Auditing Amazon Elasticsearch Service Domains with AWS CloudTrail](#es-managedomains-cloudtrailauditing)
++ [Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail](#es-managedomains-cloudtrailauditing)
 + [Tagging Amazon Elasticsearch Service Domains](#es-managedomains-awsresourcetagging)
 
 ## About Configuration Changes<a name="es-managedomains-configuration-changes"></a>
@@ -169,92 +169,129 @@ The following screenshot shows the EBS volume metrics that are described in the 
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/MonitoringTabEBSMetrics2.png)
 
-## Auditing Amazon Elasticsearch Service Domains with AWS CloudTrail<a name="es-managedomains-cloudtrailauditing"></a>
+## Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail<a name="es-managedomains-cloudtrailauditing"></a>
 
-Amazon Elasticsearch Service \(Amazon ES\) is integrated with AWS CloudTrail, a service that logs all AWS API calls made by, or on behalf of, your AWS account\. The log files are delivered to an Amazon S3 bucket that you create and configure with a bucket policy that grants CloudTrail permissions to write log files to the bucket\. CloudTrail captures all Amazon ES configuration service API calls, including those submitted by the Amazon Elasticsearch Service console\. 
-
-You can use the information collected by CloudTrail to monitor activity for your search domains\. You can determine the request that was made to Amazon ES, the source IP address from which the request was made, who made the request, and when it was made\. To learn more about CloudTrail, including how to configure and enable it, see the [AWS CloudTrail User Guide](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/)\. To learn more about how to create and configure an S3 bucket for CloudTrail, see [Amazon S3 Bucket Policy for CloudTrail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html)\.
+Amazon Elasticsearch Service integrates with AWS CloudTrail, a service that provides a record of actions taken by a user, role, or an AWS service in Amazon ES\. CloudTrail captures all configuration API calls for Amazon ES as events\.
 
 **Note**  
-CloudTrail logs events only for configuration\-related API calls to Amazon Elasticsearch Service\. Data\-related APIs are not logged\.
+CloudTrail only captures calls to the [configuration API](es-configuration-api.md), such as `CreateElasticsearchDomain` and `GetUpgradeStatus`, not the [Elasticsearch APIs](aes-supported-es-operations.md), such as `_search` and `_bulk`\.
 
-The following example shows a sample CloudTrail log for Amazon ES:
+The calls captured include calls from the Amazon ES console, CLI, or SDKs\. If you create a trail, you can enable continuous delivery of CloudTrail events to an Amazon S3 bucket, including events for Amazon ES\. If you don't configure a trail, you can still view the most recent events in the CloudTrail console in **Event history**\. Using the information collected by CloudTrail, you can determine the request that was made to Amazon ES, the IP address from which the request was made, who made the request, when it was made, and additional details\.
+
+To learn more about CloudTrail, see the [AWS CloudTrail User Guide](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/)\.
+
+### Amazon Elasticsearch Service Information in CloudTrail<a name="service-name-info-in-cloudtrail"></a>
+
+CloudTrail is enabled on your AWS account when you create the account\. When activity occurs in Amazon ES, that activity is recorded in a CloudTrail event along with other AWS service events in **Event history**\. You can view, search, and download recent events in your AWS account\. For more information, see [Viewing Events with CloudTrail Event History](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html)\.
+
+For an ongoing record of events in your AWS account, including events for Amazon ES, create a trail\. A *trail* enables CloudTrail to deliver log files to an Amazon S3 bucket\. By default, when you create a trail in the console, the trail applies to all AWS Regions\. The trail logs events from all Regions in the AWS partition and delivers the log files to the Amazon S3 bucket that you specify\. Additionally, you can configure other AWS services to further analyze and act upon the event data collected in CloudTrail logs\. For more information, see the following:
++ [Overview for Creating a Trail](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html)
++ [CloudTrail Supported Services and Integrations](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html#cloudtrail-aws-service-specific-topics-integrations)
++ [Configuring Amazon SNS Notifications for CloudTrail](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/getting_notifications_top_level.html)
++ [Receiving CloudTrail Log Files from Multiple Regions](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/receive-cloudtrail-log-files-from-multiple-regions.html) and [Receiving CloudTrail Log Files from Multiple Accounts](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-receive-logs-from-multiple-accounts.html)
+
+All Amazon ES configuration API actions are logged by CloudTrail and are documented in the [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\. 
+
+Every event or log entry contains information about who generated the request\. The identity information helps you determine the following: 
++ Whether the request was made with root or AWS Identity and Access Management \(IAM\) user credentials\.
++ Whether the request was made with temporary security credentials for a role or federated user\.
++ Whether the request was made by another AWS service\.
+
+For more information, see the [CloudTrail userIdentity Element](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html)\.
+
+### Understanding Amazon Elasticsearch Service Log File Entries<a name="understanding-service-name-entries"></a>
+
+A trail is a configuration that enables delivery of events as log files to an Amazon S3 bucket that you specify\. CloudTrail log files contain one or more log entries\. An event represents a single request from any source and includes information about the requested action, the date and time of the action, request parameters, and so on\. CloudTrail log files aren't an ordered stack trace of the public API calls, so they don't appear in any specific order\.
+
+The following example shows a CloudTrail log entry that demonstrates the `CreateElasticsearchDomain` action\.
 
 ```
 {
-    "Records": [
-        {
-            "eventVersion": "1.03",
-            "userIdentity": {
-                "type": "Root",
-                "principalId": "000000000000",
-                "arn": "arn:aws:iam::000000000000:root",
-                "accountId": "000000000000",
-                "accessKeyId": "A*****************A"
-            },
-            "eventTime": "2015-07-31T21:28:06Z",
-            "eventSource": "es.amazonaws.com",
-            "eventName": "CreateElasticsearchDomain",
-            "awsRegion": "us-east-1",
-            "sourceIPAddress": "Your IP",
-            "userAgent": "es/test",
-            "requestParameters": {
-                "elasticsearchClusterConfig": {},
-                "snapshotOptions": {
-                    "automatedSnapshotStartHour": "0"
-                },
-                "domainName": "your-domain-name",
-                "eBSOptions": {
-                    "eBSEnabled": false
-                }
-            },
-            "responseElements": {
-                "domainStatus": {
-                    "created": true,
-                    "processing": true,
-                    "aRN": "arn:aws:es:us-east-1:000000000000:domain/your-domain-name",
-                    "domainId": "000000000000/your-domain-name",
-                    "elasticsearchClusterConfig": {
-                        "zoneAwarenessEnabled": false,
-                        "instanceType": "m3.medium.elasticsearch",
-                        "dedicatedMasterEnabled": false,
-                        "instanceCount": 1
-                    },
-                    "deleted": false,
-                    "domainName": "your-domain-name",
-                    "domainVersion": "1.5", 
-                    "accessPolicies": "",
-                    "advancedOptions": {
-                        "rest.action.multi.allow_explicit_index": "true"
-                    },
-                    "snapshotOptions": {
-                        "automatedSnapshotStartHour": "0"
-                    },
-                    "eBSOptions": {
-                        "eBSEnabled": false
-                    }
-                }
-            },
-            "requestID": "05dbfc84-37cb-11e5-a2cd-fbc77a4aae72",
-            "eventID": "c21da94e-f5ed-41a4-8703-9a5f49e2ec85",
-            "eventType": "AwsApiCall",
-            "recipientAccountId": "000000000000"
-        }
-    ]
+  "eventVersion": "1.05",
+  "userIdentity": {
+    "type": "IAMUser",
+    "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+    "arn": "arn:aws:iam::123456789012:user/test-user",
+    "accountId": "123456789012",
+    "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+    "userName": "test-user",
+    "sessionContext": {
+      "attributes": {
+        "mfaAuthenticated": "false",
+        "creationDate": "2018-08-21T21:59:11Z"
+      }
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2018-08-21T22:00:05Z",
+  "eventSource": "es.amazonaws.com",
+  "eventName": "CreateElasticsearchDomain",
+  "awsRegion": "us-west-1",
+  "sourceIPAddress": "123.123.123.123",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters": {
+    "elasticsearchVersion": "6.3",
+    "elasticsearchClusterConfig": {
+      "instanceType": "m4.large.elasticsearch",
+      "instanceCount": 1
+    },
+    "snapshotOptions": {
+      "automatedSnapshotStartHour": 0
+    },
+    "domainName": "test-domain",
+    "encryptionAtRestOptions": {},
+    "eBSOptions": {
+      "eBSEnabled": true,
+      "volumeSize": 10,
+      "volumeType": "gp2"
+    },
+    "accessPolicies": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"123456789012\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:us-west-1:123456789012:domain/test-domain/*\"}]}",
+    "advancedOptions": {
+      "rest.action.multi.allow_explicit_index": "true"
+    }
+  },
+  "responseElements": {
+    "domainStatus": {
+      "created": true,
+      "elasticsearchClusterConfig": {
+        "zoneAwarenessEnabled": false,
+        "instanceType": "m4.large.elasticsearch",
+        "dedicatedMasterEnabled": false,
+        "instanceCount": 1
+      },
+      "cognitoOptions": {
+        "enabled": false
+      },
+      "encryptionAtRestOptions": {
+        "enabled": false
+      },
+      "advancedOptions": {
+        "rest.action.multi.allow_explicit_index": "true"
+      },
+      "upgradeProcessing": false,
+      "snapshotOptions": {
+        "automatedSnapshotStartHour": 0
+      },
+      "eBSOptions": {
+        "eBSEnabled": true,
+        "volumeSize": 10,
+        "volumeType": "gp2"
+      },
+      "elasticsearchVersion": "6.3",
+      "processing": true,
+      "aRN": "arn:aws:es:us-west-1:123456789012:domain/test-domain",
+      "domainId": "123456789012/test-domain",
+      "deleted": false,
+      "domainName": "test-domain",
+      "accessPolicies": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::123456789012:root\"},\"Action\":\"es:*\",\"Resource\":\"arn:aws:es:us-west-1:123456789012:domain/test-domain/*\"}]}"
+    }
+  },
+  "requestID": "12345678-1234-1234-1234-987654321098",
+  "eventID": "87654321-4321-4321-4321-987654321098",
+  "eventType": "AwsApiCall",
+  "recipientAccountId": "123456789012"
 }
 ```
-
-### Amazon Elasticsearch Service Information in CloudTrail<a name="cloudsearch-info-in-cloudtrail"></a>
-
-When CloudTrail logging is enabled in your AWS account, API calls made to Amazon Elasticsearch Service \(Amazon ES\) operations are tracked in log files\. Amazon ES records are written together with other AWS service records in a log file\. CloudTrail determines when to create and write to a new file based on a time period and file size\. 
-
-All Amazon ES configuration service operations are logged\. For example, calls to `CreateElasticsearchDomain`, `DescribeElasticsearchDomain`, and `UpdateElasticsearchDomainConfig` generate entries in the CloudTrail log files\. Every log entry contains information about who generated the request\. The user identity information in the log helps you determine whether the request was made with root or IAM user credentials, with temporary security credentials for a role or federated user, or by another AWS service\. For more information, see the `userIdentity` field in the [CloudTrail Event Reference](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/event_reference_top_level.html)\.
-
-You can store your log files in your bucket indefinitely, or you can define Amazon S3 lifecycle rules to archive or delete log files automatically\. By default, your log files are encrypted using Amazon S3 server\-side encryption \(SSE\)\. You can choose to have CloudTrail publish Amazon SNS notifications when new log files are delivered if you want to take quick action upon log file delivery\. For more information, see [Configuring Amazon SNS Notifications for CloudTrail](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/getting_notifications_top_level.html)\. You also can aggregate Amazon ES log files from multiple AWS Regions and multiple AWS accounts into a single Amazon S3 bucket\. For more information, see [Receiving CloudTrail Log Files from Multiple Regions](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/aggregating_logs_top_level.html)\.
-
-### Understanding Amazon Elasticsearch Service Log File Entries<a name="understanding-cloudsearch-event-entries"></a>
-
-CloudTrail log files contain one or more log entries where each entry is made up of multiple JSON\-formatted events\. A log entry represents a single request from any source and includes information about the requested action, any parameters, the date and time of the action, and so on\. The log entries are not guaranteed to be in any particular order—they are not an ordered stack trace of the public API calls\. CloudTrail log files include events for all AWS API calls for your AWS account, not just calls to the Amazon ES configuration service API\. However, you can read the log files and scan for `eventSource` `es.amazonaws.com`\. The `eventName` element contains the name of the configuration service action that was called\.
 
 ## Tagging Amazon Elasticsearch Service Domains<a name="es-managedomains-awsresourcetagging"></a>
 

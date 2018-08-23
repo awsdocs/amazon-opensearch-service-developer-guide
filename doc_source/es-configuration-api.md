@@ -196,7 +196,7 @@ This operation does not use HTTP request parameters\.
 | ElasticsearchVersion | String | No | Version of Elasticsearch\. If not specified, 1\.5 is used as the default\. For the full list of supported versions, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. | 
 | ElasticsearchClusterConfig | [`ElasticsearchClusterConfig`](#es-configuration-api-datatypes-elasticsearchclusterconfig) | No | Container for the cluster configuration of an Amazon ES domain\. | 
 | EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | No | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. | 
-| VPCOptions | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | No | Container for the values required to configure Amazon ES to work with a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
+| VPCOptions | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | No | Container for the values required to configure VPC access domains\. If you don't specify these values, Amazon ES creates the domain with a public endpoint\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
 | CognitoOptions | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | No | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
 | AccessPolicies | String | No | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md)\. | 
 | SnapshotOptions | [`SnapshotOptions`](#es-configuration-api-datatypes-snapshotoptions) | No | Container for parameters required to configure automated snapshots of domain indices\. For more information, see [Configuring Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. | 
@@ -2715,7 +2715,7 @@ Status of an update to the configuration of the daily automated snapshot for an 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| SubnetIds | StringList | A list of subnet IDs associated with the VPC endpoints for the domain\. If your domain has zone awareness enabled, you need to provide two subnet IDs, one per zone\. Otherwise, you only need to provide one\. To learn more, see [VPCs and Subnets](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html) in the Amazon VPC User Guide\. | 
+| SubnetIds | StringList | A list of subnet IDs associated with the VPC endpoints for the domain\. If your domain has zone awareness enabled, you need to provide two subnet IDs, one per zone\. Otherwise, provide only one\. To learn more, see [VPCs and Subnets](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html) in the Amazon VPC User Guide\. | 
 | SecurityGroupIds | StringList | The list of security group IDs associated with the VPC endpoints for the domain\. If you do not provide a security group ID, Amazon ES uses the default security group for the VPC\. To learn more, see [Security Groups for your VPC](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) in the Amazon VPC User Guide\. | 
 
 ### VPCOptionsStatus<a name="es-configuration-api-datatypes-vpcoptionsstatus"></a>

@@ -1,12 +1,14 @@
 # Upgrading Elasticsearch<a name="es-version-migration"></a>
 
-Amazon ES offers in\-place Elasticsearch upgrades for domains that run versions 5\.1 and later\. Currently, Amazon ES supports the following upgrade paths\.
+Amazon ES offers in\-place Elasticsearch upgrades for domains that run versions 5\.1 and later\. If you use services like Amazon Kinesis Data Firehose or Amazon CloudWatch Logs to stream data to Amazon ES, check that these services support the newer version of Elasticsearch before migrating\.
+
+Currently, Amazon ES supports the following upgrade paths\.
 
 
 | From Version | To Version | 
 | --- | --- | 
 | 6\.x | 6\.3 | 
-| 5\.6 |  6\.3  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. If you use AWS Lambda, check that your code creates only a single mapping type per index\. If you use services like Amazon Kinesis Data Firehose or Amazon CloudWatch Logs to stream data to Amazon ES, check that these services support Elasticsearch 6\.*x* before migrating\. To avoid downtime during the upgrade from Elasticsearch 5\.6 to 6\.3, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
+| 5\.6 |  6\.3  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. If you use AWS Lambda, check that your code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
 | 5\.x | 5\.6 | 
 
 In essence, you can move to the latest release within the same major version \(for example, 5\.3 to 5\.6\) or from the latest release in a major version to the latest release in the *next* major version \(for example, 5\.6 to 6\.3\)\. As new Elasticsearch versions become available on Amazon ES, these upgrade paths change\.
@@ -34,7 +36,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 | Too many pending tasks | The master node is under heavy load and has many pending tasks\. Consider reducing traffic to the cluster or scaling your domain\. | 
 | Impaired storage volume | The disk volume of one or more nodes isn't functioning properly\. This issue often occurs alongside other issues, like a high error rate or too many pending tasks\. If it occurs in isolation and doesn't self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | KMS key issue | The KMS key that is used to encrypt the domain is either inaccessible or missing\. For more information, see [Monitoring Domains That Encrypt Data at Rest](encryption-at-rest.md#monitoring-ear)\. | 
-| Snapshot in progress | The domain is currently taking a snapshot\. Check upgrade eligibility after the snapshot finishes\. | 
+| Snapshot in progress | The domain is currently taking a snapshot\. Check upgrade eligibility after the snapshot finishes\. Also check that you can list manual snapshot repositories, list snapshots within those repositories, and take manual snapshots\. If Amazon ES is unable to check whether a snapshot is in progress, upgrades can fail\. | 
 | Snapshot timeout or failure | The pre\-upgrade snapshot took too long to complete or failed\. Check cluster health, and try again\. If the problem persists, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | Incompatible indices | One or more indices is incompatible with the target Elasticsearch version\. This problem can occur if you migrated the indices from an older version of Elasticsearch, like 2\.3\. Reindex the indices, and try again\. | 
 | High disk usage | Disk usage for the cluster is above 90%\. Delete data or scale the domain, and try again\. | 

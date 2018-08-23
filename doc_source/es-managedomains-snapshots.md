@@ -11,7 +11,12 @@ If the cluster enters red status and you don't correct the problem, you start to
 You cannot use automated snapshots to migrate to new domains\. Automated snapshots are read\-only from within a given domain\. For migrations, you must use manual snapshots stored in your own repository \(an S3 bucket\)\. Standard S3 charges apply to manual snapshots\.
 
 **Tip**  
-Some users find tools like Curator convenient for index and snapshot management\. Curator offers advanced filtering functionality that can help simplify tasks on complex clusters\. Amazon ES supports Curator on domains running Elasticsearch version 5\.3 and above\. You can use Curator as a command line interface \(CLI\) or Python API\. If you use the CLI, export your credentials at the command line and configure `curator.yml` as follows:  
+Many users find tools like Curator convenient for index and snapshot management\. Use [pip](https://pip.pypa.io/en/stable/installing/) to install Curator:  
+
+```
+pip install elasticsearch-curator
+```
+Curator offers advanced filtering functionality that can help simplify management tasks on complex clusters\. Amazon ES supports Curator on domains running Elasticsearch version 5\.1 and above\. You can use Curator as a command line interface \(CLI\) or Python API\. If you use the CLI, export your credentials at the command line and configure `curator.yml` as follows:  
 
 ```
 client:
@@ -221,6 +226,7 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
 
    You can't restore a snapshot of your indices to an Elasticsearch cluster that already contains indices with the same names\. Currently, Amazon ES does not support the Elasticsearch `_close` API, so you must use one of the following alternatives:
    + Delete the indices on the same Amazon ES domain, and then restore the snapshot\.
+   + [Rename the indices as you restore them from the snapshot](aes-handling-errors.md#aes-troubleshooting-close-api), and later, reindex them\.
    + Restore the snapshot to a different Amazon ES domain \(only possible with manual snapshots\)\.
 
    The following example shows how to delete *all* existing indices for a domain:

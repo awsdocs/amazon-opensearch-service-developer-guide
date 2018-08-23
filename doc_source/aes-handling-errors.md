@@ -112,6 +112,22 @@ The **Nodes** metric is not accurate during changes to your cluster configuratio
 
 To protect your clusters from unexpected node terminations and restarts, create at least one replica for each index in your Amazon ES domain\.
 
+## Can't Close Index<a name="aes-troubleshooting-close-api"></a>
+
+Amazon ES doesn't support the `_close` API\. If you are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\. The other option is to use the `rename_pattern` and `rename_replacement` fields to rename the index as you restore it:
+
+```
+POST /_snapshot/my-repository/my-snapshot/_restore
+{
+  "indices": "my-index-1,myindex-2",
+  "include_global_state": true,
+  "rename_pattern": "my-index-(\\d)",
+  "rename_replacement": "restored-my-index-$1"
+}
+```
+
+If you plan to reindex, shrink, or split an index, you likely want to stop writing to it before performing the operation\.
+
 ## "Not Valid for the Object's Storage Class" Snapshot Error<a name="aes-troubleshooting-glacier-snapshots"></a>
 
 Amazon ES snapshots do not support the Amazon Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the Amazon Glacier storage class\.

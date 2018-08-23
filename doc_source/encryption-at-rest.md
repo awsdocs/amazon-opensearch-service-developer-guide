@@ -35,7 +35,22 @@ In order to use the Amazon ES console to create a domain that encrypts data at r
 }
 ```
 
-If you want to use a key other than **\(Default\) aws/es**, you must also have permissions to create [grants](http://docs.aws.amazon.com/kms/latest/developerguide/grants.html) for the key\. These permissions typically take the form of a resource\-based policy that you specify when you create the key\. To learn more, see [Using Key Policies in AWS KMS](http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) in the *AWS Key Management Service Developer Guide*\.
+If you want to use a key other than **\(Default\) aws/es**, you must also have permissions to create [grants](http://docs.aws.amazon.com/kms/latest/developerguide/grants.html) for the key\. These permissions typically take the form of a resource\-based policy that you specify when you create the key\.
+
+If you want to keep your key exclusive to Amazon ES, you can add the [http://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-via-service](http://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-via-service) condition to the key policy:
+
+```
+"Condition": {
+  "StringEquals": {
+    "kms:ViaService": "es.us-west-1.amazonaws.com"
+  },
+  "Bool": {
+    "kms:GrantIsForAWSResource": "true"
+  }
+}
+```
+
+To learn more, see [Using Key Policies in AWS KMS](http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) in the *AWS Key Management Service Developer Guide*\.
 
 ## Disabling Encryption of Data at Rest<a name="disabling-ear"></a>
 
