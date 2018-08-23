@@ -52,6 +52,28 @@ If you want to keep your key exclusive to Amazon ES, you can add the [http://doc
 
 To learn more, see [Using Key Policies in AWS KMS](http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) in the *AWS Key Management Service Developer Guide*\.
 
+
+## IAM Policy to Create KMS Grants<a name="disabling-ear"></a>
+
+If you want to restrict the user to create KMS grants only for ElasticSearch service, you can restrict it by using an IAM policy like that:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "kms:CreateGrant",
+      "Resource": "arn:aws:kms:[region]:[accountid]:key/[key_id]",
+      "Condition": {
+        "StringEquals": {
+          "kms:GranteePrincipal": "arn:aws:iam::[elasticsearch_controlplane_account]:user/super"
+        }
+      }
+    }
+  ]
+}
+```
+
 ## Disabling Encryption of Data at Rest<a name="disabling-ear"></a>
 
 After you configure a domain to encrypt data at rest, you can't disable the setting\. Instead, you can take a [manual snapshot](es-managedomains-snapshots.md) of the existing domain, [create another domain](es-createupdatedomains.md#es-createdomains), migrate your data, and delete the old domain\.
