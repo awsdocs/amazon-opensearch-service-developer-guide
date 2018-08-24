@@ -5,7 +5,7 @@ This topic describes important changes to Amazon Elasticsearch Service \(Amazon 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
 + **Latest product release—**14 August 2018
-+ **Latest documentation update—**14 August 2018
++ **Latest documentation update—**24 August 2018
 
 
 | Change | Description | Release Date | 

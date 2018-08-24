@@ -47,6 +47,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)
 + [Amazon Elasticsearch Service Limits](aes-limits.md)
 + [Amazon Elasticsearch Service Reserved Instances](aes-ri.md)
++ [Tutorial: Creating a Search Application with Amazon Elasticsearch Service](search-example.md)
 + [Tutorial: Visualizing Customer Support Calls with Amazon Elasticsearch Service and Kibana](es-walkthrough.md)
 + [Release Notes for Amazon Elasticsearch Service](release-notes.md)
 + [Using Service-Linked Roles for Amazon ES](slr-es.md)
