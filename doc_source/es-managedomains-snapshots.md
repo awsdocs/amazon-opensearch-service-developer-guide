@@ -31,7 +31,7 @@ client:
 logging:
   loglevel: INFO
 ```
-For a sample Lambda function that uses the Python API, see [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)\.
+For sample Lambda functions that use the Python API, see [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)\.
 
 **Topics**
 + [Manual Snapshot Prerequisites](#es-managedomains-snapshot-prerequisites)

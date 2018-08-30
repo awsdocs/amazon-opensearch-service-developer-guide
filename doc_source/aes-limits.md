@@ -4,13 +4,13 @@ The following tables show limits for Amazon ES resources, including the number o
 
 ## Cluster and Instance Limits<a name="clusterresource"></a>
 
-The following table shows Amazon ES limits for clusters and instances\. 
+The following table shows Amazon ES limits for clusters and instances\.
 
 
 | Clusters and Instances | Limit | 
 | --- | --- | 
-| Maximum Number of Instances \(Instance Count\) per Cluster | 20 \(except for T2 instance types, which have a maximum of 10\) The default limit is 20 instances per domain\. To request an increase up to 100 instances per domain \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.   For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.   | 
-| Maximum Number of Dedicated Master Nodes | 5  You can use a T2 instance type as a dedicated master node only if the instance count is 10 or fewer\.  | 
+| Maximum Number of Instances \(Instance Count\) per Cluster | 20 \(except for the T2 instance types, which have a maximum of 10\)  The default limit is 20 instances per domain\. To request an increase up to 100 instances per domain \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.   For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.   | 
+| Maximum Number of Dedicated Master Nodes | 5  You can use the T2 instance types as dedicated master nodes only if the instance count is 10 or fewer\.  | 
 | Smallest Instance Type Supported by Elasticsearch Version | t2\.micro\.elasticsearch \(versions 1\.5 and 2\.3\) and t2\.small\.elasticsearch \(version 5\.x and 6\.x\)\. | 
 
 For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
@@ -20,7 +20,7 @@ For a list of the instance types that Amazon ES supports, see [Supported Instanc
 The following table shows the minimum and maximum sizes for EBS volumes for each instance type that Amazon ES supports\. See [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) for information on which instance types offer instance storage\.
 
 **Note**  
-If you select magnetic storage under **EBS volume type** when creating your domain, maximum volume size is 100 GB for all instance types except t2\.micro, t2\.small, and t2\.medium\. For the maximum sizes listed in the following table, select one of the SSD options\.
+If you select magnetic storage under **EBS volume type** when creating your domain, maximum volume size is 100 GB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, select one of the SSD options\.
 
 
 ****  
@@ -57,7 +57,7 @@ If you select magnetic storage under **EBS volume type** when creating your doma
 | r4\.16xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
 | i2\.xlarge\.elasticsearch | 10 GB | 512 GB | 
 | i2\.2xlarge\.elasticsearch | 10 GB | 512 GB | 
-|  `i3.large.elasticsearch`  | N/A | N/A | 
+| i3\.large\.elasticsearch  | N/A | N/A | 
 | i3\.xlarge\.elasticsearch | N/A | N/A | 
 | i3\.2xlarge\.elasticsearch | N/A | N/A | 
 | i3\.4xlarge\.elasticsearch | N/A | N/A | 
@@ -105,7 +105,7 @@ The following table shows the maximum size of HTTP request payloads\.
 | r4\.16xlarge\.elasticsearch | 100 MB | 
 | i2\.xlarge\.elasticsearch | 100 MB | 
 | i2\.2xlarge\.elasticsearch | 100 MB | 
-|  `i3.large.elasticsearch`  | 100 MB | 
+| i3\.large\.elasticsearch | 100 MB | 
 | i3\.xlarge\.elasticsearch | 100 MB | 
 | i3\.2xlarge\.elasticsearch | 100 MB | 
 | i3\.4xlarge\.elasticsearch | 100 MB | 

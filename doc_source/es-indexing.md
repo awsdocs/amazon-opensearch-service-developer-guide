@@ -95,4 +95,4 @@ For sample code, see [Programmatic Indexing](es-indexing-programmatic.md)\.
 Elasticsearch indices have the following naming restrictions:
 + All letters must be lowercase\.
 + Index names cannot begin with `_` or `-`\.
-+ Index names cannot contain spaces, commas, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `>`, or `<`\.
++ Index names cannot contain spaces, commas, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`\.

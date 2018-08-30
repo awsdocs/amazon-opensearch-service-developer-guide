@@ -113,7 +113,7 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
 1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md), [Configuring Access Policies](#es-createdomain-configure-access-policies), and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 **Note**  
-If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 1. Choose **Next**\.
 

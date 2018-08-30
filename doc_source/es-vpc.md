@@ -43,7 +43,7 @@ Currently, operating an Amazon ES domain within a VPC has the following limitati
 + After you place a domain within a VPC, you can't move it to a different VPC\. However, you can change the subnets and security group settings\.
 + Compared to public domains, VPC domains display less information in the Amazon ES console\. Specifically, the **Cluster health** tab does not include shard information, and the **Indices** tab is not present at all\.
 + Currently, Amazon ES does not support integration with Amazon Kinesis Data Firehose for domains that reside within a VPC\. To use this service with Amazon ES, you must use a domain with public access\.
-+ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/), and [Controlling Access to Kibana](es-kibana.md#es-kibana-access)\.
++ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](http://docs.aws.amazon.com/vpc/latest/userguide/), and [Controlling Access to Kibana](es-kibana.md#es-kibana-access)\.
 
 ## About Access Policies on VPC Domains<a name="es-vpc-security"></a>
 
@@ -61,9 +61,9 @@ When you create a domain with VPC access, the endpoint *looks* similar to a publ
 https://vpc-domain-name-identifier.region.es.amazonaws.com
 ```
 
-If you try to access the endpoint in a web browser, however, you might find that the request times out\. To perform even basic `GET` requests, your computer must be able to connect to the VPC\. This connection often takes the form of a VPN, managed network, or proxy server\. For details on the various forms it can take, see [Scenarios and Examples](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\. For a development\-focused example, see [Testing VPC Domains](#kibana-test)\.
+If you try to access the endpoint in a web browser, however, you might find that the request times out\. To perform even basic `GET` requests, your computer must be able to connect to the VPC\. This connection often takes the form of a VPN, managed network, or proxy server\. For details on the various forms it can take, see [Scenarios and Examples](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\. For a development\-focused example, see [Testing VPC Domains](#kibana-test)\.
 
-In addition to this connectivity requirement, VPCs let you manage access to the domain through [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html)\. For many use cases, this combination of security features is sufficient, and you might feel comfortable applying an open access policy to the domain\.
+In addition to this connectivity requirement, VPCs let you manage access to the domain through [security groups](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)\. For many use cases, this combination of security features is sufficient, and you might feel comfortable applying an open access policy to the domain\.
 
 Operating with an open access policy does *not* mean that anyone on the internet can access the Amazon ES domain\. Rather, it means that if a request reaches the Amazon ES domain and the associated security groups permit it, the domain accepts the request without further security checks\.
 
@@ -123,7 +123,7 @@ Before you can enable a connection between a VPC and your new Amazon ES domain, 
 
 To create your VPC, you can use one of the following: the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. The VPC must have a subnet, or two subnets if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. The two subnets must be in different Availability Zones in the same region\.
 
-The following procedure shows how to use the Amazon VPC console to create a VPC with a public subnet, reserve IP addresses for the subnet, and create a security group to control access to your Amazon ES domain\. For other VPC configurations, see [Scenarios and Examples](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\.
+The following procedure shows how to use the Amazon VPC console to create a VPC with a public subnet, reserve IP addresses for the subnet, and create a security group to control access to your Amazon ES domain\. For other VPC configurations, see [Scenarios and Examples](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\.
 
 **To create a VPC \(console\)**
 
@@ -202,7 +202,7 @@ Here is the basic formula: The number of IP addresses reserved in each subnet is
 When you create the domain, Amazon ES reserves the IP addresses\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console at [https://console\.aws\.amazon\.com/ec2/](https://console.aws.amazon.com/ec2/)\. The **Description** column shows which Amazon ES domain the network interface is associated with\.
 
 **Tip**  
-We recommend that you create dedicated subnets for the Amazon ES reserved IP addresses\. By using dedicated subnets, you avoid overlap with other applications and services and ensure that you can reserve additional IP addresses if you need to scale your cluster in the future\. To learn more, see [Creating a Subnet in Your VPC](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/working-with-vpcs.html#AddaSubnet)\.
+We recommend that you create dedicated subnets for the Amazon ES reserved IP addresses\. By using dedicated subnets, you avoid overlap with other applications and services and ensure that you can reserve additional IP addresses if you need to scale your cluster in the future\. To learn more, see [Creating a Subnet in Your VPC](http://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet)\.
 
 ## Service\-Linked Role for VPC Access<a name="es-enabling-slr"></a>
 
@@ -229,9 +229,9 @@ Amazon VPC has its own set of documentation to describe how to create and use yo
 | Description | Documentation | 
 | --- | --- | 
 | How to get started using Amazon VPC | [Amazon VPC Getting Started Guide](http://docs.aws.amazon.com/AmazonVPC/latest/GettingStartedGuide/) | 
-| How to use Amazon VPC through the AWS Management Console | [Amazon VPC User Guide](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/) | 
+| How to use Amazon VPC through the AWS Management Console | [Amazon VPC User Guide](http://docs.aws.amazon.com/vpc/latest/userguide/) | 
 | Complete descriptions of all the Amazon VPC commands | [Amazon EC2 Command Line Reference](http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/) \(The Amazon VPC commands are part of the Amazon EC2 reference\.\) | 
 | Complete descriptions of the Amazon VPC API actions, data types, and errors | [Amazon EC2 API Reference](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/) \(The Amazon VPC API actions are part of the Amazon EC2 reference\.\) | 
-| Information for the network administrator who configures the gateway at your end of an optional IPsec VPN connection | [Amazon VPC Network Administrator Guide](http://docs.aws.amazon.com/AmazonVPC/latest/NetworkAdminGuide/) | 
+| Information for the network administrator who configures the gateway at your end of an optional IPsec VPN connection | [Amazon VPC Network Administrator Guide](http://docs.aws.amazon.com/vpc/latest/adminguide/) | 
 
 For more detailed information about Amazon Virtual Private Cloud, see [Amazon Virtual Private Cloud](https://aws.amazon.com/vpc/)\.

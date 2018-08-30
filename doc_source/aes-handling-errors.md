@@ -128,6 +128,12 @@ POST /_snapshot/my-repository/my-snapshot/_restore
 
 If you plan to reindex, shrink, or split an index, you likely want to stop writing to it before performing the operation\.
 
+## Can't SSH into Node<a name="aes-troubleshooting-ssh"></a>
+
+You can't use SSH to access any of the nodes in your Elasticsearch cluster, and you can't directly modify `elasticsearch.yml`\. Instead, use the console, AWS CLI, or SDKs to configure your domain\. You can specify a few cluster\-level settings using the Elasticsearch REST APIs, as well\. To learn more, see [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md) and [Supported Elasticsearch Operations](aes-supported-es-operations.md)\.
+
+If you need more insight into the performance of the cluster, you can [publish error logs and slow logs to CloudWatch](es-createupdatedomains.md#es-createdomain-configure-slow-logs)\.
+
 ## "Not Valid for the Object's Storage Class" Snapshot Error<a name="aes-troubleshooting-glacier-snapshots"></a>
 
 Amazon ES snapshots do not support the Amazon Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the Amazon Glacier storage class\.

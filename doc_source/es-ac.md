@@ -162,7 +162,7 @@ IP\-based policies restrict access to a domain to one or more IP addresses or CI
 The primary appeal of IP\-based policies is that they allow unsigned requests to an Amazon ES domain, which lets you use clients like [curl](https://curl.haxx.se/) and [Kibana](es-kibana.md#es-managedomains-kibana) or access the domain through a proxy server\. To learn more, see [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
 
 **Note**  
-If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 The following IP\-based access policy grants all requests that originate from `12.345.678.901` access to `test-domain`:
 
