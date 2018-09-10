@@ -38,7 +38,7 @@ All configuration service requests must be signed\. For more information, see [S
 | [`PurchaseReservedElasticsearchInstance`](#es-configuration-api-actions-purchasereservedelasticsearchinstance) | POST | 
 | [`RemoveTags`](#es-configuration-api-actions-removetags) | POST | 
 | [`UpdateElasticsearchDomainConfig`](#es-configuration-api-actions-updateelasticsearchdomainconfig) | POST | 
-| UpgradeElasticsearchDomain | POST | 
+| [`UpgradeElasticsearchDomain`](#es-configuration-api-actions-upgrade-domain) | POST | 
 
 ### AddTags<a name="es-configuration-api-actions-addtags"></a>
 
