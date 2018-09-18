@@ -1,17 +1,18 @@
-# Release Notes for Amazon Elasticsearch Service<a name="release-notes"></a>
+# Document History for Amazon Elasticsearch Service<a name="release-notes"></a>
 
 This topic describes important changes to Amazon Elasticsearch Service \(Amazon ES\)\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**14 August 2018
-+ **Latest documentation update—**24 August 2018
++ **Latest product release—**18 September 2018
++ **Latest documentation update—**18 September 2018
 
 
 | Change | Description | Release Date | 
 | --- | --- | --- | 
+| Node\-to\-node Encryption | Amazon Elasticsearch Service now supports node\-to\-node encryption, which keeps your data encrypted as Elasticsearch distributes it throughout your cluster\. To learn more, see [Node\-to\-node Encryption for Amazon Elasticsearch Service](ntn.md)\. |  18 September 2018 | 
 | Elasticsearch 6\.3 and 5\.6 Support | Amazon Elasticsearch Service now supports Elasticsearch version 6\.3 and 5\.6\. To learn more, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. |  14 August 2018 | 
-| In\-place version upgrades | Amazon Elasticsearch Service now supports in\-place version upgrades for Elasticsearch\. To learn more, see [Upgrading Elasticsearch](es-version-migration.md)\. | 14 August 2018 | 
+| In\-place Version Upgrades | Amazon Elasticsearch Service now supports in\-place version upgrades for Elasticsearch\. To learn more, see [Upgrading Elasticsearch](es-version-migration.md)\. | 14 August 2018 | 
 | Error Logs |  Amazon ES now supports the publishing of Elasticsearch error logs to CloudWatch Logs\. To learn more, see [Configuring Logs](es-createupdatedomains.md#es-createdomain-configure-slow-logs)\.  | 31 July 2018 | 
 | China \(Ningxia\) Reserved Instances | Amazon ES now offers Reserved Instances in the China \(Ningxia\) region\. | 29 May 2018 | 
 | Reserved Instances | Amazon ES now offers Reserved Instances\. To learn more, see [Amazon Elasticsearch Service Reserved Instances](aes-ri.md)\. | 7 May 2018 | 
@@ -31,10 +32,10 @@ This topic describes important changes to Amazon Elasticsearch Service \(Amazon 
 | More Instances and Larger EBS Volumes | Amazon ES added support for more instances and larger EBS volumes\. | 21 February 2017 | 
 | Elasticsearch 5\.1 Support | Amazon ES added support for Elasticsearch version 5\.1\. | 30 January 2017 | 
 | Support for the Phonetic Analysis Plugin | Amazon ES now provides built\-in integration with the Phonetic Analysis plugin, which allows you to run “sounds\-like” queries on your data\.  | 22 December 2016 | 
-| US East \(Ohio\) Support | Amazon ES added support for the following region: US East \(Ohio\), us\-east\-2\. For a list of regions supported by Amazon ES, see [AWS Regions and Endpoints](http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the AWS General Reference\. | 17 October 2016 | 
+| US East \(Ohio\) Support | Amazon ES added support for the following region: US East \(Ohio\), us\-east\-2\. For a list of regions supported by Amazon ES, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the AWS General Reference\. | 17 October 2016 | 
 | New Performance Metric | Amazon ES added a performance metric, ClusterUsedSpace\. | 29 July 2016 | 
 | Elasticsearch 2\.3 Support | Amazon ES added support for Elasticsearch version 2\.3\. | 27 July 2016 | 
-| Asia Pacific \(Mumbai\) Support | Amazon ES added support for the following region: Asia Pacific \(Mumbai\), ap\-south\-1\. For a list of regions supported by Amazon ES, see [AWS Regions and Endpoints](http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the AWS General Reference\. | 27 June 2016 | 
+| Asia Pacific \(Mumbai\) Support | Amazon ES added support for the following region: Asia Pacific \(Mumbai\), ap\-south\-1\. For a list of regions supported by Amazon ES, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the AWS General Reference\. | 27 June 2016 | 
 | More Instances per Cluster | Amazon ES increased the maximum number of instances \(instance count\) per cluster from 10 to 20\.  | 18 May 2016 | 
-| Asia Pacific \(Seoul\) Support | Amazon ES added support for the following region: Asia Pacific \(Seoul\), ap\-northeast\-2\. For a list of regions supported by Amazon ES, see [AWS Regions and Endpoints](http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the AWS General Reference\. | 28 January 2016 | 
+| Asia Pacific \(Seoul\) Support | Amazon ES added support for the following region: Asia Pacific \(Seoul\), ap\-northeast\-2\. For a list of regions supported by Amazon ES, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions) in the AWS General Reference\. | 28 January 2016 | 
 | Amazon ES | Initial release\. | 1 October 2015 | 

@@ -107,13 +107,15 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
    1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-Linked Role for VPC Access](es-vpc.md#es-enabling-slr)\.
 
+1. \(Optional\) If you want to enable [node\-to\-node encryption](ntn.md), choose **Node\-to\-node encryption**\.
+
 1. \(Optional\) If you want to protect Kibana with a login page, choose **Enable Amazon Cognito for authentication**\.
 
    1. Choose the Amazon Cognito user pool and identity pool that you want to use for Kibana authentication\. For guidance on creating these resources, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
 
 1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md), [Configuring Access Policies](#es-createdomain-configure-access-policies), and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 **Note**  
-If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 1. Choose **Next**\.
 
@@ -143,6 +145,7 @@ aws es create-elasticsearch-domain --domain-name <value>
   [--generate-cli-skeleton <value>]
   [--encryption-at-rest-options <value>]
   [--cognito-options <value>]
+  [--node-to-node-encryption-options <value>]
 ```
 
 The following table provides more information about each of the optional parameters\.
@@ -164,6 +167,7 @@ The following table provides more information about each of the optional paramet
 | \-\-vpc\-options | Specifies whether to launch the Amazon ES domain within an Amazon VPC \(VPC\)\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
 | \-\-encryption\-at\-rest\-options | Specifies whether to enable [encryption of data at rest](encryption-at-rest.md)\. | 
 | \-\-cognito\-options | Specifies whether to use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. | 
+| \-\-node\-to\-node\-encryption\-options | Specify true to enable [node\-to\-node encryption](ntn.md)\. | 
 
 **Examples**
 
@@ -657,7 +661,7 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
    }
    ```
 **Important**  
-CloudWatch Logs supports [10 resource policies per region](http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
+CloudWatch Logs supports [10 resource policies per region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
 
 1. Choose **Enable**\.
 
@@ -686,7 +690,7 @@ aws logs put-resource-policy --policy-name my-policy --policy-document '{ "Versi
 ```
 
 **Important**  
-CloudWatch Logs supports [10 resource policies per region](http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable slow logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
+CloudWatch Logs supports [10 resource policies per region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable slow logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
 
 Finally, you can use the `--log-publishing-options` option to enable publishing\. The syntax for the option is the same for both the `create-elasticsearch-domain` and `update-elasticsearch-domain-config` commands\.
 
@@ -711,7 +715,7 @@ If you enabled one of the slow logs, see [Setting Elasticsearch Logging Threshol
 
 ### Enabling Log Publishing \(AWS SDKs\)<a name="es-createdomain-configure-slow-logs-sdk"></a>
 
-Before you can enable log publishing, you must first create a CloudWatch log group, get its ARN, and give Amazon ES permissions to write to it\. The relevant operations are documented in the [Amazon CloudWatch Logs API Reference](http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/):
+Before you can enable log publishing, you must first create a CloudWatch log group, get its ARN, and give Amazon ES permissions to write to it\. The relevant operations are documented in the [Amazon CloudWatch Logs API Reference](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/):
 + `CreateLogGroup`
 + `DescribeLogGroup`
 + `PutResourcePolicy`
@@ -754,7 +758,7 @@ Disabling publishing to CloudWatch using the Amazon ES console or AWS CLI does *
 
 ### Viewing Logs<a name="es-createdomain-configure-slow-logs-viewing"></a>
 
-Viewing the application and slow logs in CloudWatch is just like viewing any other CloudWatch log\. For more information, see [View Log Data](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#ViewingLogData) in the *Amazon CloudWatch Logs User Guide*\.
+Viewing the application and slow logs in CloudWatch is just like viewing any other CloudWatch log\. For more information, see [View Log Data](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#ViewingLogData) in the *Amazon CloudWatch Logs User Guide*\.
 
 Here are some considerations for viewing the logs:
 + Amazon ES publishes only the first 255,000 characters of each line to CloudWatch\. Any remaining content is truncated\.

@@ -16,7 +16,7 @@ Amazon ES supports three types of access policies:
 
 You attach resource\-based policies to domains\. These policies specify which actions a principal can perform on the domain's *subresources*\. Subresources include Elasticsearch indices and APIs\.
 
-The [http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) element specifies the accounts, users, or roles that are allowed access\. The [http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html) element specifies which subresources these principals can access\. The following resource\-based policy grants `test-user` full access \(`es:*`\) to `test-domain`:
+The [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) element specifies the accounts, users, or roles that are allowed access\. The [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html) element specifies which subresources these principals can access\. The following resource\-based policy grants `test-user` full access \(`es:*`\) to `test-domain`:
 
 ```
 {
@@ -150,19 +150,19 @@ An administrator might have full access to Amazon ES:
 }
 ```
 
-For more information about the differences between resource\-based and identity\-based policies, see [IAM Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) in the *IAM User Guide*\.
+For more information about the differences between resource\-based and identity\-based policies, see [IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) in the *IAM User Guide*\.
 
 **Note**  
 Users with the AWS managed `AmazonESReadOnlyAccess` policy can't see cluster health status in the console\. To allow them to see cluster health status, add the `"es:ESHttpGet"` action to an access policy and attach it to their accounts or roles\.
 
 ### IP\-based Policies<a name="es-ac-types-ip"></a>
 
-IP\-based policies restrict access to a domain to one or more IP addresses or CIDR blocks\. Technically, IP\-based policies are not a distinct type of policy\. Instead, they are just resource\-based policies that specify an anonymous principal and include a special [http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) element\.
+IP\-based policies restrict access to a domain to one or more IP addresses or CIDR blocks\. Technically, IP\-based policies are not a distinct type of policy\. Instead, they are just resource\-based policies that specify an anonymous principal and include a special [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) element\.
 
 The primary appeal of IP\-based policies is that they allow unsigned requests to an Amazon ES domain, which lets you use clients like [curl](https://curl.haxx.se/) and [Kibana](es-kibana.md#es-managedomains-kibana) or access the domain through a proxy server\. To learn more, see [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
 
 **Note**  
-If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 The following IP\-based access policy grants all requests that originate from `12.345.678.901` access to `test-domain`:
 
@@ -243,7 +243,7 @@ The service ignores parameters passed in URLs for HTTP POST requests that are si
 
 ## When Policies Collide<a name="es-ac-conflict"></a>
 
-Complexities arise when policies disagree or make no explicit mention of a user\. [Understanding How IAM Works](http://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html#intro-structure-authorization) in the *IAM User Guide* provides a concise summary of policy evaluation logic:
+Complexities arise when policies disagree or make no explicit mention of a user\. [Understanding How IAM Works](https://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html#intro-structure-authorization) in the *IAM User Guide* provides a concise summary of policy evaluation logic:
 + By default, all requests are denied\.
 + An explicit allow overrides this default\.
 + An explicit deny overrides any allows\.
@@ -375,8 +375,8 @@ Rather than mixing broad allows and focused denies, the safest approach is to fo
 
 ## Configuring Access Policies<a name="es-ac-creating"></a>
 + For instructions on creating or modifying resource\- and IP\-based policies in Amazon ES, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
-+ For instructions on creating or modifying identity\-based policies in IAM, see [Creating IAM Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html) in the *IAM User Guide*\.
++ For instructions on creating or modifying identity\-based policies in IAM, see [Creating IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html) in the *IAM User Guide*\.
 
 ## Additional Sample Policies<a name="es-ac-samples"></a>
 
-Although this chapter includes many sample policies, AWS access control is a complex subject that is best understood through examples\. For more, see [Example Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_examples.html) in the *IAM User Guide*\.
+Although this chapter includes many sample policies, AWS access control is a complex subject that is best understood through examples\. For more, see [Example Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_examples.html) in the *IAM User Guide*\.

@@ -1,6 +1,6 @@
 # Amazon Cognito Authentication for Kibana<a name="es-cognito-auth"></a>
 
-Amazon Elasticsearch Service uses [Amazon Cognito](http://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) to offer user name and password protection for [Kibana](es-kibana.md#es-managedomains-kibana)\. This authentication feature is optional and available only for domains using Elasticsearch 5\.1 or later\. If you don't configure Amazon Cognito authentication, you can still protect Kibana using an [IP\-based access policy](es-ac.md#es-ac-types-ip) and a [proxy server](es-kibana.md#es-kibana-proxy)\.
+Amazon Elasticsearch Service uses [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) to offer user name and password protection for [Kibana](es-kibana.md#es-managedomains-kibana)\. This authentication feature is optional and available only for domains using Elasticsearch 5\.1 or later\. If you don't configure Amazon Cognito authentication, you can still protect Kibana using an [IP\-based access policy](es-ac.md#es-ac-types-ip) and a [proxy server](es-kibana.md#es-kibana-proxy)\.
 
 Much of the authentication process occurs in Amazon Cognito, but this chapter offers guidelines and requirements for configuring Amazon Cognito resources to work with Amazon ES domains\. [Standard pricing](https://aws.amazon.com/cognito/pricing/) applies to all Amazon Cognito resources\.
 
@@ -24,8 +24,8 @@ The first time that you configure a domain to use Amazon Cognito authentication 
 ## Prerequisites<a name="es-cognito-auth-prereq"></a>
 
 Before you can configure Amazon Cognito authentication for Kibana, you must fulfill several prerequisites\. The Amazon ES console helps streamline the creation of these resources, but understanding the purpose of each resource helps with configuration and troubleshooting\. Amazon Cognito authentication for Kibana requires the following resources:
-+ Amazon Cognito [user pool](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html)
-+ Amazon Cognito [identity pool](http://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html)
++ Amazon Cognito [user pool](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html)
++ Amazon Cognito [identity pool](https://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html)
 + IAM role that has the `AmazonESCognitoAccess` policy attached
 
 **Note**  
@@ -33,20 +33,20 @@ The user pool and identity pool must be in the same AWS Region\. You can use the
 
 ### About the User Pool<a name="es-cognito-auth-prereq-up"></a>
 
-User pools have two main features: create and manage a directory of users, and let users sign up and log in\. For instructions about creating a user pool, see [Create a User Pool](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-as-user-directory.html) in the *Amazon Cognito Developer Guide*\.
+User pools have two main features: create and manage a directory of users, and let users sign up and log in\. For instructions about creating a user pool, see [Create a User Pool](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-as-user-directory.html) in the *Amazon Cognito Developer Guide*\.
 
 When you create a user pool to use with Amazon ES, consider the following:
-+ Your Amazon Cognito user pool must have a [domain name](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-domain.html)\. Amazon ES uses this domain name to redirect users to a login page for accessing Kibana\. Other than a domain name, the user pool doesn't require any non\-default configuration\.
-+ You must specify the pool's required [standard attributes](http://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-attributes.html#cognito-user-pools-standard-attributes)—attributes like name, birth date, email address, and phone number\. You can't change these attributes after you create the user pool, so choose the ones that matter to you at this time\.
-+ While creating your user pool, choose whether users can create their own accounts, the minimum password strength for accounts, and whether to enable multi\-factor authentication\. If you plan to use an [external identity provider](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-identity-federation.html), these settings are inconsequential\. Technically, you can enable the user pool as an identity provider *and* enable an external identity provider, but most people prefer one or the other\.
++ Your Amazon Cognito user pool must have a [domain name](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-domain.html)\. Amazon ES uses this domain name to redirect users to a login page for accessing Kibana\. Other than a domain name, the user pool doesn't require any non\-default configuration\.
++ You must specify the pool's required [standard attributes](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-attributes.html#cognito-user-pools-standard-attributes)—attributes like name, birth date, email address, and phone number\. You can't change these attributes after you create the user pool, so choose the ones that matter to you at this time\.
++ While creating your user pool, choose whether users can create their own accounts, the minimum password strength for accounts, and whether to enable multi\-factor authentication\. If you plan to use an [external identity provider](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-identity-federation.html), these settings are inconsequential\. Technically, you can enable the user pool as an identity provider *and* enable an external identity provider, but most people prefer one or the other\.
 
 User pool IDs take the form of `region_ID`\. If you plan to use the AWS CLI or an AWS SDK to configure Amazon ES, make note of the ID\.
 
 ### About the Identity Pool<a name="es-cognito-auth-prereq-ip"></a>
 
-Identity pools let you assign temporary, limited\-privilege roles to users after they log in\. For instructions about creating an identity pool, see [Identity Pools](http://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html) in the *Amazon Cognito Developer Guide*\. When you create an identity pool to use with Amazon ES, consider the following: 
+Identity pools let you assign temporary, limited\-privilege roles to users after they log in\. For instructions about creating an identity pool, see [Identity Pools](https://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html) in the *Amazon Cognito Developer Guide*\. When you create an identity pool to use with Amazon ES, consider the following: 
 + If you use the Amazon Cognito console, you must select the **Enable access to unauthenticated identities** check box to create the identity pool\. After you create the identity pool and [configure the Amazon ES domain](#es-cognito-auth-config), Amazon Cognito disables this setting\.
-+ You don't need to add [external identity providers](http://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html) to the identity pool\. When you configure Amazon ES to use Amazon Cognito authentication, it configures the identity pool to use the user pool that you just created\.
++ You don't need to add [external identity providers](https://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html) to the identity pool\. When you configure Amazon ES to use Amazon Cognito authentication, it configures the identity pool to use the user pool that you just created\.
 + After you create the identity pool, you must choose unauthenticated and authenticated IAM roles\. These roles specify the access policies that users have before and after they log in\. If you use the Amazon Cognito console, it can create these roles for you\. After you create the authenticated role, make note of the ARN, which takes the form of `arn:aws:iam::123456789012:role/Cognito_identitypoolAuth_Role`\.
 
 Identity pool IDs take the form of `region:ID-ID-ID-ID-ID`\. If you plan to use the AWS CLI or an AWS SDK to configure Amazon ES, make note of the ID\.
@@ -72,14 +72,14 @@ If you use the AWS CLI or one of the AWS SDKs, you must create your own role, at
 }
 ```
 
-For instructions, see [Creating a Role to Delegate Permissions to an AWS Service](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html) and [Attaching and Detaching IAM Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) in the *IAM User Guide*\.
+For instructions, see [Creating a Role to Delegate Permissions to an AWS Service](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html) and [Attaching and Detaching IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) in the *IAM User Guide*\.
 
 ## Configuring an Amazon ES Domain<a name="es-cognito-auth-config"></a>
 
 After you complete the prerequisites, you can configure an Amazon ES domain to use Amazon Cognito for Kibana\.
 
 **Note**  
-Amazon Cognito is not available in all AWS Regions\. For a list of supported regions, see [AWS Regions and Endpoints](http://docs.aws.amazon.com/general/latest/gr/rande.html#cognito_identity_region)\. You don't need to use the same region for Amazon Cognito that you use for Amazon ES\.
+Amazon Cognito is not available in all AWS Regions\. For a list of supported regions, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#cognito_identity_region)\. You don't need to use the same region for Amazon Cognito that you use for Amazon ES\.
 
 ### Configuring Amazon Cognito Authentication \(Console\)<a name="es-cognito-auth-config-console"></a>
 
@@ -227,7 +227,7 @@ To enable a SAML 2\.0 identity provider, you must provide a SAML metadata docume
 
 The easiest way to configure your user pool is to use the Amazon Cognito console\. Use the **Identity Providers** page to add external identity providers and the **App client settings** page to enable and disable identity providers for the Amazon ES domain's app client\. For example, you might want to enable your own SAML identity provider and disable **Cognito User Pool** as an identity provider\.
 
-For instructions, see [Using Federation from a User Pool](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-identity-federation.html) and [Specifying Identity Provider Settings for Your User Pool App](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-idp-settings.html) in the *Amazon Cognito Developer Guide*\.
+For instructions, see [Using Federation from a User Pool](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-identity-federation.html) and [Specifying Identity Provider Settings for Your User Pool App](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-idp-settings.html) in the *Amazon Cognito Developer Guide*\.
 
 ## \(Optional\) Configuring Granular Access<a name="es-cognito-auth-granular"></a>
 
@@ -241,7 +241,7 @@ You configure these options using the **Edit identity pool** page of the Amazon 
 
 ### User Groups and Tokens<a name="es-cognito-auth-granular-tokens"></a>
 
-When you create a user group, you choose an IAM role for members of the group\. For information about creating groups, see [User Groups](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html) in the *Amazon Cognito Developer Guide*\.
+When you create a user group, you choose an IAM role for members of the group\. For information about creating groups, see [User Groups](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html) in the *Amazon Cognito Developer Guide*\.
 
 After you create one or more user groups, you can configure your authentication provider to assign users their groups' roles rather than the identity pool's default role\. Choose the **Choose role from token** option\. Then choose either **Use default Authenticated role** or **DENY** to specify how the identity pool should handle users who are not part of a group\.
 
@@ -249,15 +249,15 @@ After you create one or more user groups, you can configure your authentication 
 
 Rules are essentially a series of `if` statements that Amazon Cognito evaluates sequentially\. For example, if a user's email address contains `@corporate`, Amazon Cognito assigns that user `Role_A`\. If a user's email address contains `@subsidiary`, it assigns that user `Role_B`\. Otherwise, it assigns the user the default authenticated role\.
 
-To learn more, see [Using Rule\-Based Mapping to Assign Roles to Users](http://docs.aws.amazon.com/cognito/latest/developerguide/role-based-access-control.html#using-rules-to-assign-roles-to-users) in the *Amazon Cognito Developer Guide*\.
+To learn more, see [Using Rule\-Based Mapping to Assign Roles to Users](https://docs.aws.amazon.com/cognito/latest/developerguide/role-based-access-control.html#using-rules-to-assign-roles-to-users) in the *Amazon Cognito Developer Guide*\.
 
 ## \(Optional\) Customizing the Login Page<a name="es-cognito-auth-customize"></a>
 
-The **UI customization** page of the Amazon Cognito console lets you upload a custom logo and make CSS changes to the login page\. For instructions and a full list of CSS properties, see [Specifying App UI Customization Settings for Your User Pool](http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-ui-customization.html) in the *Amazon Cognito Developer Guide*\.
+The **UI customization** page of the Amazon Cognito console lets you upload a custom logo and make CSS changes to the login page\. For instructions and a full list of CSS properties, see [Specifying App UI Customization Settings for Your User Pool](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-ui-customization.html) in the *Amazon Cognito Developer Guide*\.
 
 ## \(Optional\) Configuring Advanced Security<a name="es-cognito-auth-advanced"></a>
 
-Amazon Cognito user pools support advanced security features like multi\-factor authentication, compromised credential checking, and adaptive authentication\. To learn more, see [Managing Security](http://docs.aws.amazon.com/cognito/latest/developerguide/managing-security.html) in the *Amazon Cognito Developer Guide*\.
+Amazon Cognito user pools support advanced security features like multi\-factor authentication, compromised credential checking, and adaptive authentication\. To learn more, see [Managing Security](https://docs.aws.amazon.com/cognito/latest/developerguide/managing-security.html) in the *Amazon Cognito Developer Guide*\.
 
 ## Testing<a name="es-cognito-auth-testing"></a>
 
@@ -279,7 +279,7 @@ If any step of this process fails, see [Common Configuration Issues](#es-cognito
 
 Amazon Cognito has soft limits on many of its resources\. If you want to enable Kibana authentication for a large number of Amazon ES domains, review [Limits in Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html) and [request limit increases](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) as necessary\.
 
-Each Amazon ES domain adds an [app client](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-client-apps.html) to the user pool, which adds an [authentication provider](http://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html) to the identity pool\. If you enable Kibana authentication for more than 10 domains, you might encounter the "maximum Amazon Cognito user pool providers per identity pool" limit\. If you exceed a limit, any Amazon ES domains that you try to configure to use Amazon Cognito authentication for Kibana can get stuck in a configuration state of **Processing**\.
+Each Amazon ES domain adds an [app client](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-client-apps.html) to the user pool, which adds an [authentication provider](https://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html) to the identity pool\. If you enable Kibana authentication for more than 10 domains, you might encounter the "maximum Amazon Cognito user pool providers per identity pool" limit\. If you exceed a limit, any Amazon ES domains that you try to configure to use Amazon Cognito authentication for Kibana can get stuck in a configuration state of **Processing**\.
 
 ## Common Configuration Issues<a name="es-cognito-auth-troubleshooting"></a>
 

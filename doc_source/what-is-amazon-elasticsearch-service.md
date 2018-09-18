@@ -6,7 +6,7 @@ Amazon ES provisions all the resources for your Elasticsearch cluster and launch
 
 To get started using Amazon ES, you create a *domain*\. An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\.
 
-You can use the Amazon ES console to set up and configure a domain in minutes\. If you prefer programmatic access, you can use the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/) or the [AWS SDKs](http://aws.amazon.com/code)\.
+You can use the Amazon ES console to set up and configure a domain in minutes\. If you prefer programmatic access, you can use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/) or the [AWS SDKs](http://aws.amazon.com/code)\.
 
 **Topics**
 + [Features of Amazon Elasticsearch Service](#what-is-aes-features)

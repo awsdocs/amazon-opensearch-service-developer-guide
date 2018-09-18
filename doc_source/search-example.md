@@ -40,7 +40,7 @@ Using API Gateway to create a more limited API simplifies the process of interac
 | Integration Request |  Integration type: Lambda function Use Lambda proxy integration: Yes Lambda Region: *us\-west\-1* Lambda function: search\-es\-lambda Invoke with caller credentials: No Credentials cache: Do not add caller credentials to cache key Use default timeout: Yes  | 
 | Stage |  Name: search\-es\-api\-test **Default Method Throttling** Enable throttling: Yes Rate: 1000 Burst: 500  | 
 
-These settings configure an API that has only one method: a `GET` request to the endpoint root \(`https://some-id.execute-api.us-west-1.amazonaws.com/search-es-api-test`\)\. The request requires a single parameter \(`q`\), the query string to search for\. When called, the method passes the request to Lambda, which executes the `search-es-lambda` function\. For more information, see [Creating an API in Amazon API Gateway](http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html) and [Deploying an API in Amazon API Gateway](http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html)\.
+These settings configure an API that has only one method: a `GET` request to the endpoint root \(`https://some-id.execute-api.us-west-1.amazonaws.com/search-es-api-test`\)\. The request requires a single parameter \(`q`\), the query string to search for\. When called, the method passes the request to Lambda, which executes the `search-es-lambda` function\. For more information, see [Creating an API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html) and [Deploying an API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html)\.
 
 ## Step 3: Create the Lambda Function<a name="search-example-lambda"></a>
 
@@ -105,7 +105,7 @@ The function must have the following trigger\.
 | --- | --- | --- | --- | 
 | API Gateway | search\-es\-api | search\-es\-api\-test | Open | 
 
-For more information about creating Lambda functions and deployment packages, see [Creating a Deployment Package \(Python\)](http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Creating the Lambda Deployment Package](es-aws-integrations.md#es-aws-integrations-s3-lambda-es-deployment-package) in this guide\.
+For more information about creating Lambda functions and deployment packages, see [Creating a Deployment Package \(Python\)](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Creating the Lambda Deployment Package](es-aws-integrations.md#es-aws-integrations-s3-lambda-es-deployment-package) in this guide\.
 
 ## Step 4: Modify the Domain Access Policy<a name="search-example-perms"></a>
 

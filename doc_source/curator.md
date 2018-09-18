@@ -4,7 +4,7 @@ This chapter has sample code for using AWS Lambda and [Curator](http://curator.r
 
 Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\.
 
-For information about configuring Lambda functions and creating deployment packages, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\. For even more information, see the [AWS Lambda Developer Guide](http://docs.aws.amazon.com/lambda/latest/dg/)\. This chapter contains only sample code, basic settings, triggers, and permissions\.
+For information about configuring Lambda functions and creating deployment packages, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\. For even more information, see the [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/)\. This chapter contains only sample code, basic settings, triggers, and permissions\.
 
 **Topics**
 + [Sample Code](#curator-sample)

@@ -42,7 +42,7 @@ Before proceeding, you must have the following resources\.
 
 | Prerequisite | Description | 
 | --- | --- | 
-| Amazon S3 Bucket | For more information, see [Creating a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. | 
+| Amazon S3 Bucket | For more information, see [Creating a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. | 
 | Amazon ES Domain | The destination for data\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
 
 If you don't already have these resources, you can create them using the following AWS CLI commands:
@@ -346,7 +346,7 @@ Now that you have some data in Amazon ES, you can visualize it using Kibana\.
 
 ## Step 5: Clean Up Resources and Next Steps<a name="es-walkthrough-next-steps"></a>
 
-To avoid unnecessary charges, delete the S3 bucket and Amazon ES domain\. To learn more, see [Delete a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html#delete-bucket) in the *Amazon Simple Storage Service Developer Guide* and [Delete an Amazon ES Domain](es-gsg-deleting.md) in this guide\.
+To avoid unnecessary charges, delete the S3 bucket and Amazon ES domain\. To learn more, see [Delete a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html#delete-bucket) in the *Amazon Simple Storage Service Developer Guide* and [Delete an Amazon ES Domain](es-gsg-deleting.md) in this guide\.
 
 Transcripts require much less disk space than MP3 files\. You might be able to shorten your MP3 retention window—for example, from three months of call recordings to one month—retain years of transcripts, and still save on storage costs\.
 

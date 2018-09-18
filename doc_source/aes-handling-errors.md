@@ -140,6 +140,16 @@ Amazon ES snapshots do not support the Amazon Glacier storage class\. You might 
 
 If you need to restore a snapshot from the bucket, restore the objects from Amazon Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot respository\.
 
+## Invalid Host Header<a name="aes-troubleshooting-host-header"></a>
+
+Amazon ES requires that clients specify `Host` in the request headers:
+
+```
+Host: search-my-domain.us-west-1.es.amazonaws.com
+```
+
+If you receive an `Invalid Host Header` error, check that your client includes the Amazon ES domain endpoint \(and not, for example, its IP address\) in the `Host` header\.
+
 ## Browser Error When Using Kibana<a name="aes-troubleshooting-kibana-debug-browser-errors"></a>
 
 Your browser wraps service error messages in HTTP response objects when you use Kibana to view data in your Amazon ES domain\. You can use developer tools commonly available in web browsers, such as Developer Mode in Chrome, to view the underlying service errors and assist your debugging efforts\.
@@ -174,7 +184,7 @@ To enable this query, you must have access to the `ec2:DescribeVpcs`, `ec2:Descr
 
 After creating a new domain that uses VPC access, the domain's **Configuration state** might never progress beyond **Loading**\. If this issue occurs, you likely have AWS Security Token Service \(AWS STS\) *disabled* for your region\.
 
-To add VPC endpoints to your VPC, Amazon ES needs to assume the `AWSServiceRoleForAmazonElasticsearchService` role\. Thus, AWS STS must be enabled to create new domains that use VPC access in a given region\. To learn more about enabling and disabling AWS STS, see the [IAM User Guide](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html)\.
+To add VPC endpoints to your VPC, Amazon ES needs to assume the `AWSServiceRoleForAmazonElasticsearchService` role\. Thus, AWS STS must be enabled to create new domains that use VPC access in a given region\. To learn more about enabling and disabling AWS STS, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html)\.
 
 ## Certificate Error When Using SDK<a name="aes-troubleshooting-certificates"></a>
 

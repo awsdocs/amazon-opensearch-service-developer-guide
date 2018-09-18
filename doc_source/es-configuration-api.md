@@ -203,6 +203,7 @@ This operation does not use HTTP request parameters\.
 | AdvancedOptions | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\. | 
 | LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | No | Key\-value pairs to configure slow log publishing\. | 
 | EncryptionAtRestOptions | [`EncryptionAtRestOptions`](#es-configuration-api-datatypes-encryptionatrest) | No | Key\-value pairs to enable encryption at rest\. | 
+| NodeToNodeEncryptionOptions | [`NodeToNodeEncryptionOptions`](#es-configuration-api-datatypes-node-to-node) | No | Enables node\-to\-node encryption\. | 
 
 #### Response Elements<a name="w3aac44b7c11c13"></a>
 
@@ -2281,7 +2282,7 @@ This operation does not use HTTP request parameters\.
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | String | Yes | Name of the Amazon ES domain that you want to upgade\. | 
+| DomainName | String | Yes | Name of the Amazon ES domain that you want to upgrade\. | 
 | TargetVersion | String | Yes | Elasticsearch version to which you want to upgrade\. See [GetCompatibleElasticsearchVersions](#es-configuration-api-actions-get-compat-vers)\. | 
 | PerformCheckOnly | Boolean | No | Defaults to false\. If true, Amazon ES checks the eligibility of the domain, but does not perform the upgrade\. | 
 
@@ -2409,6 +2410,7 @@ Container for the parameters required by the `CreateElasticsearchDomain` service
 | SnapshotOptions | [`SnapshotOptionsStatus`](#es-configuration-api-datatypes-snapshotoptionsstatus) | Container for parameters required to configure automated snapshots of domain indices\. For more information, see [Configuring Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. | 
 | AdvancedOptions | [`AdvancedOptionsStatus`](#es-configuration-api-datatypes-advancedoptionsstatus) | Key\-value pairs to specify advanced configuration options\. | 
 | CognitoOptions | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
+| NodeToNodeEncryptionOptions | [`NodeToNodeEncryptionOptions`](#es-configuration-api-datatypes-node-to-node) | Specify true to enable node\-to\-node encryption\. | 
 
 ### DomainID<a name="es-configuration-api-datatypes-domainid"></a>
 
@@ -2517,6 +2519,7 @@ Container for the contents of a `DomainStatus` data structure\.
 | AdvancedOptions | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | Key\-value pairs to specify advanced configuration options\. | 
 | EncryptionAtRestOptions | [`EncryptionAtRestOptions`](#es-configuration-api-datatypes-encryptionatrest) | Key\-value pairs to enable encryption at rest\. | 
 | CognitoOptions | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
+| NodeToNodeEncryptionOptionsStatus | [NodeToNodeEncryptionOptionsStatus](#es-configuration-api-datatypes-node-to-node-status) | Whether node\-to\-node encryption is enabled or disabled\. | 
 
 ### ElasticsearchDomainStatusList<a name="es-configuration-api-datatypes-esdomainstatuslist"></a>
 
@@ -2588,6 +2591,29 @@ Status of an update to the configuration of the slow log publishing options for 
 | --- | --- | --- | 
 | Options | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Log publishing options for the domain | 
 | Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of an update to snapshot options for an Amazon ES domain | 
+
+### NodeToNodeEncryptionOptions<a name="es-configuration-api-datatypes-node-to-node"></a>
+
+Enables or disables node\-to\-node encryption\.
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| Enabled | Boolean | Enable with true\. | 
+
+### NodeToNodeEncryptionOptionsStatus<a name="es-configuration-api-datatypes-node-to-node-status"></a>
+
+State of a domain's node\-to\-node encryption options\.
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| Options | [`NodeToNodeEncryptionOptions`](#es-configuration-api-datatypes-node-to-node) | Whether node\-to\-node encryption is enabled or disabled\. | 
+| Status | [`OptionStatus`](#es-configuration-api-datatypes-optionstatus) | Status of the setting\. | 
 
 ### OptionState<a name="es-configuration-api-datatypes-optionsstate"></a>
 
@@ -2694,9 +2720,9 @@ Status of an update to the configuration of the daily automated snapshot for an 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
 | VPCId | String | The ID for your VPC\. Amazon VPC generates this value when you create a VPC\. | 
-| SubnetIds | StringList | A list of subnet IDs associated with the VPC endpoints for the domain\. To learn more, see [VPCs and Subnets](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) in the Amazon VPC User Guide\. | 
-| AvailabilityZones | StringList | The list of Availability Zones associated with the VPC subnets\. To learn more, see [VPC and Subnet Basics](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#vpc-subnet-basics) in the Amazon VPC User Guide\. | 
-| SecurityGroupIds | StringList | The list of security group IDs associated with the VPC endpoints for the domain\. To learn more, see [Security Groups for your VPC](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) in the Amazon VPC User Guide\. | 
+| SubnetIds | StringList | A list of subnet IDs associated with the VPC endpoints for the domain\. To learn more, see [VPCs and Subnets](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) in the Amazon VPC User Guide\. | 
+| AvailabilityZones | StringList | The list of Availability Zones associated with the VPC subnets\. To learn more, see [VPC and Subnet Basics](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html#vpc-subnet-basics) in the Amazon VPC User Guide\. | 
+| SecurityGroupIds | StringList | The list of security group IDs associated with the VPC endpoints for the domain\. To learn more, see [Security Groups for your VPC](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) in the Amazon VPC User Guide\. | 
 
 ### VPCDerivedInfoStatus<a name="es-configuration-api-datatypes-vpcderivedinfostatus"></a>
 
@@ -2715,8 +2741,8 @@ Status of an update to the configuration of the daily automated snapshot for an 
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| SubnetIds | StringList | A list of subnet IDs associated with the VPC endpoints for the domain\. If your domain has zone awareness enabled, you need to provide two subnet IDs, one per zone\. Otherwise, provide only one\. To learn more, see [VPCs and Subnets](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) in the Amazon VPC User Guide\. | 
-| SecurityGroupIds | StringList | The list of security group IDs associated with the VPC endpoints for the domain\. If you do not provide a security group ID, Amazon ES uses the default security group for the VPC\. To learn more, see [Security Groups for your VPC](http://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) in the Amazon VPC User Guide\. | 
+| SubnetIds | StringList | A list of subnet IDs associated with the VPC endpoints for the domain\. If your domain has zone awareness enabled, you need to provide two subnet IDs, one per zone\. Otherwise, provide only one\. To learn more, see [VPCs and Subnets](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) in the Amazon VPC User Guide\. | 
+| SecurityGroupIds | StringList | The list of security group IDs associated with the VPC endpoints for the domain\. If you do not provide a security group ID, Amazon ES uses the default security group for the VPC\. To learn more, see [Security Groups for your VPC](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) in the Amazon VPC User Guide\. | 
 
 ### VPCOptionsStatus<a name="es-configuration-api-datatypes-vpcoptionsstatus"></a>
 

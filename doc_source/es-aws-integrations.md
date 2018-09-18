@@ -3,7 +3,7 @@
 You can load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon Elasticsearch Service domain from many different sources\. Some sources, like Amazon Kinesis Data Firehose and Amazon CloudWatch Logs, have built\-in support for Amazon ES\. Others, like Amazon S3, Amazon Kinesis Data Streams, and Amazon DynamoDB, use AWS Lambda functions as event handlers\. The Lambda functions respond to new data by processing it and streaming it to your domain\.
 
 **Note**  
-Lambda supports several popular programming languages and is available in most AWS Regions\. For more information, see [Building Lambda Functions](http://docs.aws.amazon.com/lambda/latest/dg/lambda-app.html) in the *AWS Lambda Developer Guide* and [AWS Lambda Regions](http://docs.aws.amazon.com/general/latest/gr/rande.html#lambda_region) in the *AWS General Reference*\.
+Lambda supports several popular programming languages and is available in most AWS Regions\. For more information, see [Building Lambda Functions](https://docs.aws.amazon.com/lambda/latest/dg/lambda-app.html) in the *AWS Lambda Developer Guide* and [AWS Lambda Regions](https://docs.aws.amazon.com/general/latest/gr/rande.html#lambda_region) in the *AWS General Reference*\.
 
 **Topics**
 + [Loading Streaming Data into Amazon ES from Amazon S3](#es-aws-integrations-s3-lambda-es)
@@ -31,7 +31,7 @@ Before proceeding, you must have the following resources\.
 
 | Prerequisite | Description | 
 | --- | --- | 
-| Amazon S3 Bucket | For more information, see [Creating a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. The bucket must reside in the same region as your Amazon ES domain\. | 
+| Amazon S3 Bucket | For more information, see [Creating a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. The bucket must reside in the same region as your Amazon ES domain\. | 
 | Amazon ES Domain | The destination for data after your Lambda function processes it\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
 
 ### Creating the Lambda Deployment Package<a name="es-aws-integrations-s3-lambda-es-deployment-package"></a>
@@ -117,7 +117,7 @@ If you use macOS, these commands might not work properly\. As a workaround, add 
 
 ### Creating the Lambda Function<a name="es-aws-integrations-s3-lambda-es-create"></a>
 
-After you create the deployment package, you can create the Lambda function\. When you create a function, choose a name, runtime \(for example, Python 2\.7\), and IAM role\. The IAM role defines the permissions for your function\. For detailed instructions, see [Create a Simple Lambda Function](http://docs.aws.amazon.com/lambda/latest/dg/get-started-create-function.html) in the *AWS Lambda Developer Guide*\.
+After you create the deployment package, you can create the Lambda function\. When you create a function, choose a name, runtime \(for example, Python 2\.7\), and IAM role\. The IAM role defines the permissions for your function\. For detailed instructions, see [Create a Simple Lambda Function](https://docs.aws.amazon.com/lambda/latest/dg/get-started-create-function.html) in the *AWS Lambda Developer Guide*\.
 
 This example assumes that you are using the console\. Choose Python 2\.7 and a role that has S3 read permissions and Amazon ES write permissions, as shown in the following screenshot\.
 
@@ -158,7 +158,7 @@ After you create the function, you can test it by uploading a file to the Amazon
 12.345.678.91 - [10/Oct/2000:14:56:14 -0700] "GET /some-file.jpg"
 ```
 
-Upload the file to the `logs` folder of your S3 bucket\. For instructions, see [Add an Object to a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\.
+Upload the file to the `logs` folder of your S3 bucket\. For instructions, see [Add an Object to a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\.
 
 Then use the Amazon ES console or Kibana to verify that the `lambda-s3-index` index contains two documents\. You can also make a standard search request:
 
@@ -211,7 +211,7 @@ Before proceeding, you must have the following resources\.
 | --- | --- | 
 | Amazon Kinesis Data Stream | The event source for your Lambda function\. To learn more, see [Kinesis Data Streams](https://docs.aws.amazon.com/kinesis/latest/dev/amazon-kinesis-streams.html)\. | 
 | Amazon ES Domain | The destination for data after your Lambda function processes it\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
-| IAM Role |  This role must have basic Amazon ES, Kinesis, and Lambda permissions, such as the following: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents",<br />        "kinesis:GetShardIterator",<br />        "kinesis:GetRecords",<br />        "kinesis:DescribeStream",<br />        "kinesis:ListStreams"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre> The role must have the following trust relationship: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre> To learn more, see [Creating IAM Roles](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\.  | 
+| IAM Role |  This role must have basic Amazon ES, Kinesis, and Lambda permissions, such as the following: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents",<br />        "kinesis:GetShardIterator",<br />        "kinesis:GetRecords",<br />        "kinesis:DescribeStream",<br />        "kinesis:ListStreams"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre> The role must have the following trust relationship: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre> To learn more, see [Creating IAM Roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\.  | 
 
 ### Creating the Lambda Function<a name="es-aws-integrations-kinesis-lambda"></a>
 
@@ -268,7 +268,7 @@ Then follow the instructions in [Creating the Lambda Function](#es-aws-integrati
 + **Batch size**: 100
 + **Starting position**: Trim horizon
 
-To learn more, see [Working with Amazon Kinesis Data Streams](http://docs.aws.amazon.com/streams/latest/dev/working-with-kinesis.html) in the *Amazon Kinesis Data Streams Developer Guide*\.
+To learn more, see [Working with Amazon Kinesis Data Streams](https://docs.aws.amazon.com/streams/latest/dev/working-with-kinesis.html) in the *Amazon Kinesis Data Streams Developer Guide*\.
 
 At this point, you have a complete set of resources: a Kinesis data stream, a function that executes after the stream receives new data and indexes that data, and an Amazon ES domain for searching and visualization\.
 
@@ -314,9 +314,9 @@ Before proceeding, you must have the following resources\.
 
 | Prerequisite | Description | 
 | --- | --- | 
-| DynamoDB Table | The table contains your source data\. For more information, see [Basic Operations for Tables](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html) in the *Amazon DynamoDB Developer Guide*\.The table must reside in the same region as your Amazon ES domain and have a stream set to **New image**\. To learn more, see [Enabling a Stream](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html#Streams.Enabling)\. | 
+| DynamoDB Table | The table contains your source data\. For more information, see [Basic Operations for Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html) in the *Amazon DynamoDB Developer Guide*\.The table must reside in the same region as your Amazon ES domain and have a stream set to **New image**\. To learn more, see [Enabling a Stream](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html#Streams.Enabling)\. | 
 | Amazon ES Domain | The destination for data after your Lambda function processes it\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
-| IAM Role | This role must have basic Amazon ES, DynamoDB, and Lambda execution permissions, such as the following:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "dynamodb:DescribeStream",<br />        "dynamodb:GetRecords",<br />        "dynamodb:GetShardIterator",<br />        "dynamodb:ListStreams",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre>The role must have the following trust relationship:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre>To learn more, see [Creating IAM Roles](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\. | 
+| IAM Role | This role must have basic Amazon ES, DynamoDB, and Lambda execution permissions, such as the following:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "dynamodb:DescribeStream",<br />        "dynamodb:GetRecords",<br />        "dynamodb:GetShardIterator",<br />        "dynamodb:ListStreams",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre>The role must have the following trust relationship:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre>To learn more, see [Creating IAM Roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\. | 
 
 ### Creating the Lambda Function<a name="es-aws-integrations-dynamodb-es-lambda"></a>
 
@@ -407,9 +407,9 @@ GET https://es-domain/lambda-index/lambda-type/00001
 
 ## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose<a name="es-aws-integrations-fh"></a>
 
-Kinesis Data Firehose supports Amazon ES as a delivery destination\. For instructions about how to load streaming data into Amazon ES, see [Creating a Kinesis Data Firehose Delivery Stream](http://docs.aws.amazon.com/firehose/latest/dev/basic-create.html) and [Choose Amazon ES for Your Destination](http://docs.aws.amazon.com/firehose/latest/dev/create-destination.html#create-destination-elasticsearch) in the *Amazon Kinesis Data Firehose Developer Guide*\.
+Kinesis Data Firehose supports Amazon ES as a delivery destination\. For instructions about how to load streaming data into Amazon ES, see [Creating a Kinesis Data Firehose Delivery Stream](https://docs.aws.amazon.com/firehose/latest/dev/basic-create.html) and [Choose Amazon ES for Your Destination](https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html#create-destination-elasticsearch) in the *Amazon Kinesis Data Firehose Developer Guide*\.
 
-Before you load data into Amazon ES, you might need to perform transforms on the data\. To learn more about using Lambda functions to perform this task, see [Data Transformation](http://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html) in the same guide\.
+Before you load data into Amazon ES, you might need to perform transforms on the data\. To learn more about using Lambda functions to perform this task, see [Data Transformation](https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html) in the same guide\.
 
 As you configure a delivery stream, Kinesis Data Firehose features a "one\-click" IAM role that gives it the resource access it needs to send data to Amazon ES, back up data on Amazon S3, and transform data using Lambda\. Because of the complexity involved in creating such a role manually, we recommend using the provided role\.
 
@@ -419,4 +419,4 @@ You can load streaming data from CloudWatch Logs to your Amazon ES domain by usi
 
 ## Loading Data into Amazon ES from AWS IoT<a name="es-aws-integrations-cloudwatch-iot"></a>
 
-You can send data from AWS IoT using [rules](http://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html)\. To learn more, see [Amazon ES Action](http://docs.aws.amazon.com/iot/latest/developerguide/elasticsearch-rule.html) in the *AWS IoT Developer Guide*\.
+You can send data from AWS IoT using [rules](https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html)\. To learn more, see [Amazon ES Action](https://docs.aws.amazon.com/iot/latest/developerguide/elasticsearch-rule.html) in the *AWS IoT Developer Guide*\.

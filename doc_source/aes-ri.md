@@ -133,7 +133,7 @@ aws es describe-reserved-elasticsearch-instances --region us-east-1
 **Note**  
 `StartTime` is Unix epoch time, which is the number of seconds that have passed since midnight UTC of 1 January 1970\. For example, 1522872571 epoch time is 20:09:31 UTC of 4 April 2018\. You can use online converters\.
 
-To learn more about the commands used in the preceding examples, see the [AWS CLI Command Reference](http://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
+To learn more about the commands used in the preceding examples, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
 
 ## Purchasing Reserved Instances \(AWS SDKs\)<a name="aes-ri-sdk"></a>
 
@@ -146,4 +146,4 @@ For more information about installing and using the AWS SDKs, see [AWS Software 
 
 ## Examining Costs<a name="aes-ri-ce"></a>
 
-Cost Explorer is a free tool that you can use to view your spending data for the past 13 months\. Analyzing this data helps you identify trends and understand if RIs fit your use case\. If you already have RIs, you can [group by](http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/groupdata.html) **Purchase Option** and [show amortized costs](http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/advanced.html) to compare that spending to your spending for On\-Demand Instances\. For more information, see [Analyzing Your Costs with Cost Explorer](http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-explorer-what-is.html) in the *AWS Billing and Cost Management User Guide*\.
+Cost Explorer is a free tool that you can use to view your spending data for the past 13 months\. Analyzing this data helps you identify trends and understand if RIs fit your use case\. If you already have RIs, you can [group by](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/groupdata.html) **Purchase Option** and [show amortized costs](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/advanced.html) to compare that spending to your spending for On\-Demand Instances\. For more information, see [Analyzing Your Costs with Cost Explorer](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-explorer-what-is.html) in the *AWS Billing and Cost Management User Guide*\.

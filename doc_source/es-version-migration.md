@@ -71,7 +71,7 @@ You can use the following operations to identify the right Elasticsearch version
 + `get-upgrade-status` \(`GetUpgradeStatus`\)
 + `get-upgrade-history` \(`GetUpgradeHistory`\)
 
-For more information, see the [AWS CLI Command Reference](http://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
 
 ## Using a Snapshot to Migrate Data<a name="snapshot-based-migration"></a>
 

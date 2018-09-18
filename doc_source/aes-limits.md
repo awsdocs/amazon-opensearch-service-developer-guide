@@ -9,9 +9,10 @@ The following table shows Amazon ES limits for clusters and instances\.
 
 | Clusters and Instances | Limit | 
 | --- | --- | 
-| Maximum Number of Instances \(Instance Count\) per Cluster | 20 \(except for the T2 instance types, which have a maximum of 10\)  The default limit is 20 instances per domain\. To request an increase up to 100 instances per domain \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.   For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.   | 
-| Maximum Number of Dedicated Master Nodes | 5  You can use the T2 instance types as dedicated master nodes only if the instance count is 10 or fewer\.  | 
-| Smallest Instance Type Supported by Elasticsearch Version | t2\.micro\.elasticsearch \(versions 1\.5 and 2\.3\) and t2\.small\.elasticsearch \(version 5\.x and 6\.x\)\. | 
+| Maximum number of instances \(instance count\) per cluster | 20 \(except for the T2 instance types, which have a maximum of 10\)  The default limit is 20 instances per domain\. To request an increase up to 100 instances per domain \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.   For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.   | 
+| Maximum number of dedicated master nodes | 5  You can use the T2 instance types as dedicated master nodes only if the instance count is 10 or fewer\.  | 
+| Smallest supported instance type | `t2.micro.elasticsearch` \(versions 1\.5 and 2\.3\) and `t2.small.elasticsearch` \(version 5\.*x* and 6\.*x*\)\. | 
+| Maximum number of domains per account \(per region\) | 100 | 
 
 For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
