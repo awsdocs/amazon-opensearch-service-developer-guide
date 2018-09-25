@@ -68,9 +68,12 @@ def lambda_handler(event, context):
 
     # Filters by age, anything created more than one month ago.
     # index_list.filter_by_age(source='creation_date', direction='older', unit='months', unit_count=1)
+    
+    print("Found %s indexes to delete" % len(index_list.indices))
 
-    # Delete all indices in the filtered list.
-    curator.DeleteIndices(index_list).do_action()
+    # If our filtered list has any indices, delete them.
+    if index_list.indices:
+        curator.DeleteIndices(index_list).do_action()
 ```
 
 You must update the values for `host` and `region`\.
