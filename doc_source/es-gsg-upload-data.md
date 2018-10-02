@@ -15,7 +15,7 @@ You can install curl on Windows and use it from the command prompt, but Windows 
 + Run the following command to add a single document to the *movies* domain:
 
   ```
-  curl -XPUT elasticsearch_domain_endpoint/movies/movie/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
+  curl --insecure -XPUT elasticsearch_domain_endpoint/movies/movie/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
   ```
 
 For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
