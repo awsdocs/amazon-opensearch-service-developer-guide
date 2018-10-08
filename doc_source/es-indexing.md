@@ -82,10 +82,17 @@ PUT elasticsearch_domain/movies/movie/7
 {"title": "Spirited Away"}
 ```
 
+Indices that you create in Elasticsearch versions 6\.0 and later can only contain one document type\. For best compatibility with future versions of Elasticsearch, use a single type, `_doc`, for all indices:
+
+```
+PUT elasticsearch_domain/more-movies/_doc/1
+{"title": "Back to the Future"}
+```
+
 Indices default to five primary shards and one replica\. If you want to specify non\-default settings, create the index before adding documents:
 
 ```
-PUT elasticsearch_domain/movies
+PUT elasticsearch_domain/more-movies
 {"settings": {"number_of_shards": 6, "number_of_replicas": 2}}
 ```
 
@@ -96,3 +103,11 @@ Elasticsearch indices have the following naming restrictions:
 + All letters must be lowercase\.
 + Index names cannot begin with `_` or `-`\.
 + Index names cannot contain spaces, commas, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`\.
+
+Don't include sensitive information in index, type, or document ID names\. Elasticsearch uses these names in its Uniform Resource Identifiers \(URIs\)\. Servers and applications often log HTTP requests, which can lead to unnecessary data exposure if URIs contain sensitive information:
+
+```
+2018-10-03T23:39:43 198.51.100.14 200 "GET https://elasticsearch_domain/dr-jane-doe/flu-patients-2018/202-555-0100/ HTTP/1.1"
+```
+
+Even if you don't have [permissions](es-ac.md) to view the associated JSON document, you could infer from this fake log line that one of Dr\. Doe's patients with a phone number of 202\-555\-0100 had the flu in 2018\.

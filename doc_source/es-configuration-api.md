@@ -175,8 +175,11 @@ POST /2015-01-01/es/domain
         "KmsKeyId": "<KEY_ID>"
     },
     "AdvancedOptions": {
-            "rest.action.multi.allow_explicit_index": "<TRUE|FALSE>",
-            "indices.fielddata.cache.size": "<PERCENTAGE_OF_HEAP>"
+        "rest.action.multi.allow_explicit_index": "<TRUE|FALSE>",
+        "indices.fielddata.cache.size": "<PERCENTAGE_OF_HEAP>"
+    },
+    "NodeToNodeEncryptionOptions": {
+        "Enabled": true|false
     }
 }
 ```
@@ -229,98 +232,116 @@ This operation does not use HTTP request parameters\.
 
 This example demonstrates the following:
 + Creates an Amazon ES domain that is named `streaming-logs`
-+ Configures a cluster with six instances of the m3\.medium\.elasticsearch instance type and three dedicated master nodes of the same type
++ Configures a cluster with six data nodes \(`i3.large`\) and three dedicated master nodes \(`c4.large`\)
 + Enables zone awareness
-+ Configures VPC endpoints for the domain
++ Configures VPC access for the domain
++ Enables encryption at rest and node\-to\-node encryption
 
 Request
 
 ```
-POST es.<AWS_REGION>.amazonaws.com/2015-01-01/es/domain
+POST https://es.us-west-1.amazonaws.com/2015-01-01/es/domain
 {
-    "DomainName": "streaming-logs",
-    "ElasticsearchVersion": "5.5",
-    "ElasticsearchClusterConfig": {
-        "InstanceType": "m3.medium.elasticsearch",
-        "InstanceCount": 6,
-        "DedicatedMasterEnabled": "true",
-        "DedicatedMasterCount": 3,
-        "DedicatedMasterType": "m3.medium.elasticsearch",
-        "ZoneAwarenessEnabled": "true"
-    },
-    "VPCOptions": {
-        "SubnetIds": [
-            "subnet-87654321",
-            "subnet-12345678"
-        ]
-    },
-    "EncryptionAtRestOptions": {
-        "Enabled": true,
-        "KmsKeyId": "1a2a3a4-1a2a-3a4a-5a6a-1a2a3a4a5a6a"
-    }
+  "DomainName": "streaming-logs",
+  "ElasticsearchVersion": "6.3",
+  "ElasticsearchClusterConfig": {
+    "InstanceType": "i3.large.elasticsearch",
+    "InstanceCount": 6,
+    "DedicatedMasterEnabled": "true",
+    "DedicatedMasterCount": 3,
+    "DedicatedMasterType": "c4.large.elasticsearch",
+    "ZoneAwarenessEnabled": "true"
+  },
+  "EncryptionAtRestOptions": {
+    "Enabled": true,
+    "KmsKeyId": "1a2a3a4-1a2a-3a4a-5a6a-1a2a3a4a5a6a"
+  },
+  "NodeToNodeEncryptionOptions": {
+    "Enabled": true
+  },
+  "VPCOptions": {
+    "SubnetIds": [
+      "subnet-87654321",
+      "subnet-12345678"
+    ]
+  }
 }
 ```
 
 Response
 
 ```
-HTTP/1.1 200 OK
-x-amzn-RequestId: 30b03e92-536f-11e5-9cd2-b36dbf43d89e
-Content-Type: application/json
-Content-Length: 645
-Date: Sat, 05 Sep 2015 01:41:15 GMT
 {
-    "DomainStatus": {
-        "ARN": "arn:aws:es:us-west-1:123456789012:domain/streaming-logs",
-        "AccessPolicies": "",
-        "AdvancedOptions": {
-            "rest.action.multi.allow_explicit_index": "true"
-        },
-        "Created": true,
-        "Deleted": false,
-        "DomainId": "123456789012/streaming-logs",
-        "DomainName": "streaming-logs",
-        "EBSOptions": {
-            "EBSEnabled": false,
-            "EncryptionEnabled": null,
-            "Iops": null,
-            "VolumeSize": null,
-            "VolumeType": null
-        },
-        "ElasticsearchClusterConfig": {
-            "DedicatedMasterCount": 3,
-            "DedicatedMasterEnabled": true,
-            "DedicatedMasterType": "m3.medium.elasticsearch",
-            "InstanceCount": 6,
-            "InstanceType": "m3.medium.elasticsearch",
-            "ZoneAwarenessEnabled": true
-        },
-        "ElasticsearchVersion": "5.5",
-        "EncryptionAtRestOptions": {
-            "Enabled": true,
-            "KmsKeyId": "arn:aws:kms:us-west-1:123456789012:key/1a2a3a4-1a2a-3a4a-5a6a-1a2a3a4a5a6a"
-        },
-        "Endpoint": null,
-        "Endpoints": null,
-        "Processing": true,
-        "SnapshotOptions": {
-            "AutomatedSnapshotStartHour": 0
-        },
-        "VPCOptions": {
-            "AvailabilityZones": [
-                "us-west-1b",
-                "us-west-1c"
-            ],
-            "SecurityGroupIds": [
-                "sg-12345678"
-            ],
-            "SubnetIds": [
-                "subnet-87654321",
-                "subnet-12345678"
-            ],
-            "VPCId": "vpc-12345678"
-        }
+  "DomainStatus": {
+    "ARN": "arn:aws:es:us-west-1:123456789012:domain/streaming-logs",
+    "AccessPolicies": "",
+    "AdvancedOptions": {
+      "rest.action.multi.allow_explicit_index": "true"
+    },
+    "CognitoOptions": {
+      "Enabled": false,
+      "IdentityPoolId": null,
+      "RoleArn": null,
+      "UserPoolId": null
+    },
+    "Created": true,
+    "Deleted": false,
+    "DomainId": "123456789012/streaming-logs",
+    "DomainName": "streaming-logs",
+    "EBSOptions": {
+      "EBSEnabled": false,
+      "Iops": null,
+      "VolumeSize": null,
+      "VolumeType": null
+    },
+    "ElasticsearchClusterConfig": {
+      "DedicatedMasterCount": 3,
+      "DedicatedMasterEnabled": true,
+      "DedicatedMasterType": "c4.large.elasticsearch",
+      "InstanceCount": 6,
+      "InstanceType": "i3.large.elasticsearch",
+      "ZoneAwarenessEnabled": true
+    },
+    "ElasticsearchVersion": "6.3",
+    "EncryptionAtRestOptions": {
+      "Enabled": true,
+      "KmsKeyId": "arn:aws:kms:us-west-1:123456789012:key/1a2a3a4-1a2a-3a4a-5a6a-1a2a3a4a5a6a"
+    },
+    "Endpoint": null,
+    "Endpoints": null,
+    "LogPublishingOptions": null,
+    "NodeToNodeEncryptionOptions": {
+      "Enabled": true
+    },
+    "Processing": true,
+    "ServiceSoftwareOptions": {
+      "AutomatedUpdateDate": 0,
+      "Cancellable": false,
+      "CurrentVersion": "LEGACY",
+      "Description": "There is no software update available for this domain.",
+      "NewVersion": "",
+      "UpdateAvailable": false,
+      "UpdateStatus": "COMPLETED"
+    },
+    "SnapshotOptions": {
+      "AutomatedSnapshotStartHour": 0
+    },
+    "UpgradeProcessing": false,
+    "VPCOptions": {
+      "AvailabilityZones": [
+        "us-west-1b",
+        "us-west-1c"
+      ],
+      "SecurityGroupIds": [
+        "sg-12345678"
+      ],
+      "SubnetIds": [
+        "subnet-12345678",
+        "subnet-87654321"
+      ],
+      "VPCId": "vpc-12345678"
     }
+  }
 }
 ```
 
@@ -2491,6 +2512,7 @@ Container for the configuration of an Amazon ES domain\.
 | LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | Key\-value pairs to configure slow log publishing\. | 
 | AdvancedOptions | [`AdvancedOptionsStatus`](#es-configuration-api-datatypes-advancedoptions) | Key\-value pairs to specify advanced configuration options\. | 
 | EncryptionAtRestOptions | [`EncryptionAtRestOptionsStatus`](#es-configuration-api-datatypes-encryptionatreststatus) | Key\-value pairs to enable encryption at rest\. | 
+| NodeToNodeEncryptionOptions | [`NodeToNodeEncryptionOptionsStatus`](#es-configuration-api-datatypes-node-to-node-status) | Whether node\-to\-node encryption is enabled or disabled\. | 
 
 ### ElasticsearchDomainStatus<a name="es-configuration-api-datatypes-elasticsearchdomainstatus"></a>
 
@@ -2519,7 +2541,7 @@ Container for the contents of a `DomainStatus` data structure\.
 | AdvancedOptions | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | Key\-value pairs to specify advanced configuration options\. | 
 | EncryptionAtRestOptions | [`EncryptionAtRestOptions`](#es-configuration-api-datatypes-encryptionatrest) | Key\-value pairs to enable encryption at rest\. | 
 | CognitoOptions | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
-| NodeToNodeEncryptionOptionsStatus | [NodeToNodeEncryptionOptionsStatus](#es-configuration-api-datatypes-node-to-node-status) | Whether node\-to\-node encryption is enabled or disabled\. | 
+| NodeToNodeEncryptionOptions | [`NodeToNodeEncryptionOptions`](#es-configuration-api-datatypes-node-to-node) | Whether node\-to\-node encryption is enabled or disabled\. | 
 
 ### ElasticsearchDomainStatusList<a name="es-configuration-api-datatypes-esdomainstatuslist"></a>
 

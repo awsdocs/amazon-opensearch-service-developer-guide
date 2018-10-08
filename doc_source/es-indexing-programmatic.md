@@ -41,9 +41,9 @@ document = {
     "year": "2011"
 }
 
-es.index(index="movies", doc_type="movie", id="5", body=document)
+es.index(index="movies", doc_type="_doc", id="5", body=document)
 
-print(es.get(index="movies", doc_type="movie", id="5"))
+print(es.get(index="movies", doc_type="_doc", id="5"))
 ```
 
 If you don't want to use the `elasticsearch.py` client, you can just make standard HTTP requests\. This sample creates a new index with seven shards and two replicas:
@@ -105,7 +105,7 @@ for html_file in glob.glob('*.htm'):
     # If running this script on a website, you probably need to prepend the URL and path to html_file.
 
     # The action_and_metadata portion of the bulk file
-    bulk_file += '{ "index" : { "_index" : "site", "_type" : "page", "_id" : "' + str(id) + '" } }\n'
+    bulk_file += '{ "index" : { "_index" : "site", "_type" : "_doc", "_id" : "' + str(id) + '" } }\n'
 
     # The optional_document portion of the bulk file
     bulk_file += json.dumps(index) + '\n'
@@ -153,7 +153,7 @@ public class JavaRestClientExample {
 
         String host = ""; // For example, my-test-domain.us-east-1.es.amazonaws.com
         String index = "movies";
-        String type = "movie";
+        String type = "_doc";
         String id = "6";
 
         String json = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\""
@@ -199,7 +199,7 @@ public class AmazonElasticsearchServiceSample {
     private static String snapshotPath = "/_snapshot/my-snapshot-repo";
 
     private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
-    private static String indexingPath = "/my-index/my-type";
+    private static String indexingPath = "/my-index/_doc";
 
     static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
 
@@ -253,7 +253,7 @@ public class AmazonElasticsearchServiceSample {
     private static String region = "us-west-1";
     private static String aesEndpoint = ""; // e.g. https://search-mydomain.us-west-1.es.amazonaws.com
     private static String index = "my-index";
-    private static String type = "my-type";
+    private static String type = "_doc";
     private static String id = "1";
     
     static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
@@ -301,7 +301,7 @@ require 'faraday_middleware/aws_sigv4'
 
 host = '' # e.g. https://my-domain.region.es.com
 index = 'ruby-index'
-type = 'ruby-type'
+type = '_doc'
 id = '1'
 document = {
   year: 2007,
@@ -342,7 +342,7 @@ require 'aws-sdk-elasticsearchservice'
 
 host = '' # e.g. https://my-domain.region.es.com
 index = 'ruby-index'
-type = 'ruby-type'
+type = '_doc'
 id = '2'
 document = {
   year: 2007,
@@ -402,7 +402,7 @@ var AWS = require('aws-sdk');
 var region = ''; // e.g. us-west-1
 var domain = ''; // e.g. search-domain.region.es.amazonaws.com
 var index = 'node-test';
-var type = 'node-type';
+var type = '_doc';
 var id = '1';
 var json = {
   "title": "Moneyball",

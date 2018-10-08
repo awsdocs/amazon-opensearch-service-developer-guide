@@ -108,6 +108,8 @@ The enhanced security of a VPC can make connecting to your domain and running ba
 1. Navigate to [https://localhost:9200/\_plugin/kibana/](https://localhost:9200/_plugin/kibana/) in your web browser\. You might need to acknowledge a security exception\.
 
    Alternately, you can send requests to [https://localhost:9200](https://localhost:9200) using [curl](https://curl.haxx.se/), [Postman](https://www.getpostman.com/), or your favorite programming language\.
+**Tip**  
+If you encounter curl errors due to a certificate mismatch, try the `--insecure` flag\.
 
 ## Before You Begin: Prerequisites for VPC Access<a name="es-prerequisites-vpc-endpoints"></a>
 

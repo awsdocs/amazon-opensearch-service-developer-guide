@@ -69,9 +69,9 @@ def lambda_handler(event, context):
     # Filters by age, anything created more than one month ago.
     # index_list.filter_by_age(source='creation_date', direction='older', unit='months', unit_count=1)
     
-    print("Found %s indexes to delete" % len(index_list.indices))
+    print("Found %s indices to delete" % len(index_list.indices))
 
-    # If our filtered list has any indices, delete them.
+    # If our filtered list contains any indices, delete them.
     if index_list.indices:
         curator.DeleteIndices(index_list).do_action()
 ```

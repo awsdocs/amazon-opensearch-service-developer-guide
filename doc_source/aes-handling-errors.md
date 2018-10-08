@@ -142,10 +142,10 @@ If you need to restore a snapshot from the bucket, restore the objects from Amaz
 
 ## Invalid Host Header<a name="aes-troubleshooting-host-header"></a>
 
-Amazon ES requires that clients specify `Host` in the request headers:
+Amazon ES requires that clients specify `Host` in the request headers\. A valid `Host` value is the domain endpoint without `https://`, such as:
 
 ```
-Host: search-my-domain.us-west-1.es.amazonaws.com
+Host: search-my-sample-domain-ih2lhn2ew2scurji.us-west-2.es.amazonaws.com
 ```
 
 If you receive an `Invalid Host Header` error, check that your client includes the Amazon ES domain endpoint \(and not, for example, its IP address\) in the `Host` header\.
