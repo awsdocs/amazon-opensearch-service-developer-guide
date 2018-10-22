@@ -1,8 +1,135 @@
-# Programmatic Indexing<a name="es-indexing-programmatic"></a>
+# Signing HTTP Requests to Amazon Elasticsearch Service<a name="es-request-signing"></a>
 
-This section includes examples of how to use Elasticsearch clients and standard HTTP requests to index documents\.
+This chapter includes examples of how to send signed HTTP requests to Amazon Elasticsearch Service using Elasticsearch clients and other common libraries\. These code samples are for interacting with the Elasticsearch APIs, such as `_index`, `_bulk`, and `_snapshot`\.
 
-## Python<a name="es-indexing-programmatic-python"></a>
+**Important**  
+For examples of how to interact with the Configuration API, including operations like creating, updating, and deleting Amazon ES domains, see [Using the AWS SDKs with Amazon Elasticsearch Service](es-configuration-samples.md)\.
+
+**Topics**
++ [Java](#es-request-signing-java)
++ [Python](#es-request-signing-python)
++ [Ruby](#es-request-signing-ruby)
++ [Node](#es-request-signing-node)
+
+## Java<a name="es-request-signing-java"></a>
+
+The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started\. The following example uses the Elasticsearch low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
+
+```
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
+import org.elasticsearch.client.Response;
+import org.elasticsearch.client.RestClient;
+import com.amazonaws.auth.AWS4Signer;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+
+public class AmazonElasticsearchServiceSample {
+
+    private static String serviceName = "es";
+    private static String region = "us-west-1";
+    private static String aesEndpoint = "https://domain.us-west-1.es.amazonaws.com";
+
+    private static String payload = "{ \"type\": \"s3\", \"settings\": { \"bucket\": \"your-bucket\", \"region\": \"us-west-1\", \"role_arn\": \"arn:aws:iam::123456789012:role/TheServiceRole\" } }";
+    private static String snapshotPath = "/_snapshot/my-snapshot-repo";
+
+    private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
+    private static String indexingPath = "/my-index/_doc";
+
+    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
+
+    public static void main(String[] args) throws IOException {
+        RestClient esClient = esClient(serviceName, region);
+
+        // Register a snapshot repository
+        HttpEntity entity = new NStringEntity(payload, ContentType.APPLICATION_JSON);
+        Map<String, String> params = Collections.emptyMap();
+        Response response = esClient.performRequest("PUT", snapshotPath, params, entity);
+        System.out.println(response.toString());
+
+        // Index a document
+        entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
+        String id = "1";
+        response = esClient.performRequest("PUT", indexingPath + "/" + id, params, entity);
+        System.out.println(response.toString());
+    }
+
+    // Adds the interceptor to the ES REST client
+    public static RestClient esClient(String serviceName, String region) {
+        AWS4Signer signer = new AWS4Signer();
+        signer.setServiceName(serviceName);
+        signer.setRegionName(region);
+        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
+        return RestClient.builder(HttpHost.create(aesEndpoint)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)).build();
+    }
+}
+```
+
+If you prefer the high\-level REST client, which offers most of the same features and simpler code, try the following sample, which also uses the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor):
+
+```
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequestInterceptor;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import com.amazonaws.auth.AWS4Signer;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class AmazonElasticsearchServiceSample {
+
+    private static String serviceName = "es";
+    private static String region = "us-west-1";
+    private static String aesEndpoint = ""; // e.g. https://search-mydomain.us-west-1.es.amazonaws.com
+    private static String index = "my-index";
+    private static String type = "_doc";
+    private static String id = "1";
+    
+    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
+    
+    public static void main(String[] args) throws IOException {
+        RestHighLevelClient esClient = esClient(serviceName, region);
+
+        // Create the document as a hash map
+        Map<String, Object> document = new HashMap<>();
+        document.put("title", "Walk the Line");
+        document.put("director", "James Mangold");
+        document.put("year", "2005");
+
+        // Form the indexing request, send it, and print the response
+        IndexRequest request = new IndexRequest(index, type, id).source(document);
+        IndexResponse response = esClient.index(request);
+        System.out.println(response.toString());
+    }
+    
+    // Adds the interceptor to the ES REST client
+    public static RestHighLevelClient esClient(String serviceName, String region) {
+        AWS4Signer signer = new AWS4Signer();
+        signer.setServiceName(serviceName);
+        signer.setRegionName(region);
+        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
+        return new RestHighLevelClient(RestClient.builder(HttpHost.create(aesEndpoint)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)));
+    }
+}
+```
+
+**Tip**  
+Both signed samples use the default credential chain\. Run `aws configure` using the AWS CLI to set your credentials\.
+
+## Python<a name="es-request-signing-python"></a>
 
 You can install elasticsearch\-py, the Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
 
@@ -13,7 +140,7 @@ pip install requests
 pip install requests-aws4auth
 ```
 
-The following sample code establishes a secure connection to the specified Amazon ES domain and indexes a single document using the `_index` API\. You must provide values for `region` and `host`:
+The following sample code establishes a secure connection to the specified Amazon ES domain and indexes a single document using the `_index` API\. You must provide values for `region` and `host`\.
 
 ```
 from elasticsearch import Elasticsearch, RequestsHttpConnection
@@ -46,7 +173,7 @@ es.index(index="movies", doc_type="_doc", id="5", body=document)
 print(es.get(index="movies", doc_type="_doc", id="5"))
 ```
 
-If you don't want to use the `elasticsearch.py` client, you can just make standard HTTP requests\. This sample creates a new index with seven shards and two replicas:
+If you don't want to use elasticsearch\-py, you can just make standard HTTP requests\. This sample creates a new index with seven shards and two replicas:
 
 ```
 from requests_aws4auth import AWS4Auth
@@ -132,159 +259,7 @@ es.bulk(bulk_file)
 print(es.search(q='some test query'))
 ```
 
-## Java<a name="es-indexing-programmatic-java"></a>
-
-This first example uses the Elasticsearch low\-level Java REST Client, which you must configure as a dependency\. The request is unauthenticated and relies on an IP\-based access policy\. You must provide a value for `host`:
-
-```
-import java.io.IOException;
-import java.util.Collections;
-
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.http.entity.ContentType;
-import org.elasticsearch.client.http.HttpEntity;
-import org.elasticsearch.client.http.HttpHost;
-import org.elasticsearch.client.http.nio.entity.NStringEntity;
-
-public class JavaRestClientExample {
-
-    public static void main(String[] args) throws IOException {
-
-        String host = ""; // For example, my-test-domain.us-east-1.es.amazonaws.com
-        String index = "movies";
-        String type = "_doc";
-        String id = "6";
-
-        String json = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\""
-            + "}";
-
-        RestClient client = RestClient.builder(new HttpHost(host, 443, "https")).build();
-
-        HttpEntity entity = new NStringEntity(json, ContentType.APPLICATION_JSON);
-
-        Response response = client.performRequest("PUT", "/" + index + "/" + type + "/" + id,
-            Collections.<String, String>emptyMap(), entity);
-
-        System.out.println(response.toString());
-    }
-}
-```
-
-The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started\. The following example uses the Elasticsearch low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\.
-
-```
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.entity.ContentType;
-import org.apache.http.nio.entity.NStringEntity;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.RestClient;
-import com.amazonaws.auth.AWS4Signer;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-
-public class AmazonElasticsearchServiceSample {
-
-    private static String serviceName = "es";
-    private static String region = "us-west-1";
-    private static String aesEndpoint = "https://domain.us-west-1.es.amazonaws.com";
-
-    private static String payload = "{ \"type\": \"s3\", \"settings\": { \"bucket\": \"your-bucket\", \"region\": \"us-west-1\", \"role_arn\": \"arn:aws:iam::123456789012:role/TheServiceRole\" } }";
-    private static String snapshotPath = "/_snapshot/my-snapshot-repo";
-
-    private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
-    private static String indexingPath = "/my-index/_doc";
-
-    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
-
-    public static void main(String[] args) throws IOException {
-        RestClient esClient = esClient(serviceName, region);
-
-        // Register a snapshot repository
-        HttpEntity entity = new NStringEntity(payload, ContentType.APPLICATION_JSON);
-        Map<String, String> params = Collections.emptyMap();
-        Response response = esClient.performRequest("PUT", snapshotPath, params, entity);
-        System.out.println(response.toString());
-
-        // Index a document
-        entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
-        String id = "1";
-        response = esClient.performRequest("PUT", indexingPath + "/" + id, params, entity);
-        System.out.println(response.toString());
-    }
-
-    // Adds the interceptor to the ES REST client
-    public static RestClient esClient(String serviceName, String region) {
-        AWS4Signer signer = new AWS4Signer();
-        signer.setServiceName(serviceName);
-        signer.setRegionName(region);
-        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
-        return RestClient.builder(HttpHost.create(aesEndpoint)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)).build();
-    }
-}
-```
-
-If you prefer the high\-level REST client, try the following code, which also uses the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor):
-
-```
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequestInterceptor;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import com.amazonaws.auth.AWS4Signer;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-public class AmazonElasticsearchServiceSample {
-
-    private static String serviceName = "es";
-    private static String region = "us-west-1";
-    private static String aesEndpoint = ""; // e.g. https://search-mydomain.us-west-1.es.amazonaws.com
-    private static String index = "my-index";
-    private static String type = "_doc";
-    private static String id = "1";
-    
-    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
-    
-    public static void main(String[] args) throws IOException {
-        RestHighLevelClient esClient = esClient(serviceName, region);
-
-        // Create the document as a hash map
-        Map<String, Object> document = new HashMap<>();
-        document.put("title", "Walk the Line");
-        document.put("director", "James Mangold");
-        document.put("year", "2005");
-
-        // Form the indexing request, send it, and print the response
-        IndexRequest request = new IndexRequest(index, type, id).source(document);
-        IndexResponse response = esClient.index(request);
-        System.out.println(response.toString());
-    }
-    
-    // Adds the interceptor to the ES REST client
-    public static RestHighLevelClient esClient(String serviceName, String region) {
-        AWS4Signer signer = new AWS4Signer();
-        signer.setServiceName(serviceName);
-        signer.setRegionName(region);
-        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
-        return new RestHighLevelClient(RestClient.builder(HttpHost.create(aesEndpoint)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)));
-    }
-}
-```
-
-## Ruby<a name="es-indexing-programmatic-ruby"></a>
+## Ruby<a name="es-request-signing-ruby"></a>
 
 This first example uses the Elasticsearch Ruby client and [Faraday middleware](https://github.com/winebarrel/faraday_middleware-aws-sigv4) to perform the request signing\. From the terminal, run the following commands:
 
@@ -386,7 +361,7 @@ Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
 end
 ```
 
-## Node<a name="es-indexing-programmatic-node"></a>
+## Node<a name="es-request-signing-node"></a>
 
 This example uses the [SDK for JavaScript in Node\.js](https://aws.amazon.com/sdk-for-node-js/)\. From the terminal, run the following commands:
 

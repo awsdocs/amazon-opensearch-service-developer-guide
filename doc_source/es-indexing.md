@@ -1,6 +1,6 @@
-# Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
+# Introduction to Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
 
-Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has clients for many programming languages\. Advanced users can skip directly to [Programmatic Indexing](es-indexing-programmatic.md)\.
+Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has clients for many programming languages\. Advanced users can skip directly to [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
 
 For situations in which new data arrives incrementally \(for example, customer orders from a small business\), you might use the `_index` API to index documents as they arrive\. For situations in which the flow of data is less frequent \(for example, weekly updates to a marketing website\), you might prefer to generate a file and send it to the `_bulk` API\. For large numbers of documents, lumping requests together and using the `_bulk` API offers superior performance\. If your documents are enormous, however, you might need to index them individually using the `_index` API\.
 
@@ -97,7 +97,7 @@ PUT elasticsearch_domain/more-movies
 ```
 
 **Note**  
-For sample code, see [Programmatic Indexing](es-indexing-programmatic.md)\.
+For sample code, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
 
 Elasticsearch indices have the following naming restrictions:
 + All letters must be lowercase\.

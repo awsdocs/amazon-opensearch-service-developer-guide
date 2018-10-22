@@ -22,7 +22,7 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/_bulk
 ...
 ```
 
-To learn more, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+To learn more, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 ## Step 2: Create the API<a name="search-example-api"></a>
 

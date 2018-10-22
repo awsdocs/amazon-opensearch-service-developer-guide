@@ -83,7 +83,7 @@ If your domain resides within a VPC, your computer must be connected to the VPC 
 Save the following sample Python code as a Python file, such as `register-repo.py`\. The client requires the [AWS SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/), [requests](http://docs.python-requests.org/) and [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) packages\. The client contains commented\-out examples for other snapshot operations\.
 
 **Tip**  
-A Java\-based code sample is available in [Programmatic Indexing](es-indexing-programmatic.md#es-indexing-programmatic-java)\.
+A Java\-based code sample is available in [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
 
 You must update the following variables in your code: `host`, `region`, `path`, and `payload`\.
 

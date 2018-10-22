@@ -224,7 +224,7 @@ Even if you configure a completely open resource\-based access policy, *all* req
     }
   )
   ```
-+ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Programmatic Indexing](es-indexing-programmatic.md)\. The Elasticsearch APIs use the following format:
++ To make calls to the Elasticsearch APIs, you must sign your own requests\. For sample code, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\. The Elasticsearch APIs use the following format:
 
   ```
   domain.region.es.amazonaws.com

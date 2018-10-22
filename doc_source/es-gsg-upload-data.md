@@ -1,7 +1,7 @@
 # Step 2: Upload Data to an Amazon ES Domain for Indexing<a name="es-gsg-upload-data"></a>
 
 **Important**  
-This process is a concise tutorial for uploading a small amount of test data\. For more information, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+This process is a concise tutorial for uploading a small amount of test data\. For more information, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 You can upload data to an Amazon Elasticsearch Service domain for indexing using the Elasticsearch index and bulk APIs from the command line\.
 + Use the index API to add or update a single Elasticsearch document\.
@@ -18,7 +18,7 @@ You can install curl on Windows and use it from the command prompt, but Windows 
   curl -XPUT elasticsearch_domain_endpoint/movies/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
   ```
 
-For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 **To upload a JSON file that contains multiple documents to an Amazon ES domain**
 
@@ -39,7 +39,7 @@ For a detailed explanation of this command and how to make signed requests to Am
    curl -XPOST elasticsearch_domain_endpoint/_bulk --data-binary @bulk_movies.json -H 'Content-Type: application/json'
    ```
 
-For more information about the bulk file format, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+For more information about the bulk file format, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 **Note**  
 Amazon ES supports migrating data from manual snapshots taken on both Amazon ES and self\-managed Elasticsearch clusters\. Restoring a snapshot from a self\-managed Elasticsearch cluster is a common way to migrate data to Amazon ES\. For more information, see [Restoring Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
