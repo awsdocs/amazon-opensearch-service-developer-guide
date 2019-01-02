@@ -65,7 +65,7 @@ You can choose an instance type for the dedicated master node that differs from 
 
       We recommend choosing an odd number of instances to avoid potential Elasticsearch issues, such as the split brain issue\. The default and recommended number is three\.
 
-1. \(Optional\) For enhanced data durability, select the **Enable zone awareness** check box\.
+1. \(Optional\) Select the **Enable zone awareness** check box\.
 
    Zone awareness distributes Amazon ES data nodes across two Availability Zones in the same region\. If you enable zone awareness, you must have an even number of instances in the instance count, and you must use the native Elasticsearch API to create replica shards for your cluster\. This process allows for the even distribution of shards across two Availability Zones\. For more information, see [Enabling Zone Awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
 
@@ -174,7 +174,7 @@ The following table provides more information about each of the optional paramet
 The first example demonstrates the following Amazon ES domain configuration:
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
 + Populates the domain with two instances of the m4\.large\.elasticsearch instance type
-+ Uses a 100 GB Magnetic disk EBS volume for storage for each data node
++ Uses a 100 GiB Magnetic disk EBS volume for storage for each data node
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
 ```
@@ -184,7 +184,7 @@ aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version
 The next example demonstrates the following Amazon ES domain configuration:
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
 + Populates the domain with six instances of the m4\.large\.elasticsearch instance type
-+ Uses a 100 GB General Purpose \(SSD\) EBS volume for storage for each data node
++ Uses a 100 GiB General Purpose \(SSD\) EBS volume for storage for each data node
 + Restricts access to the service to a single user, identified by the user's AWS account ID: 555555555555 
 + Enables zone awareness
 
@@ -196,7 +196,7 @@ The next example demonstrates the following Amazon ES domain configuration:
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
 + Populates the domain with ten instances of the m4\.xlarge\.elasticsearch instance type
 + Populates the domain with three instances of the m4\.large\.elasticsearch instance type to serve as dedicated master nodes
-+ Uses a 100 GB Provisioned IOPS EBS volume for storage, configured with a baseline performance of 1000 IOPS for each data node
++ Uses a 100 GiB Provisioned IOPS EBS volume for storage, configured with a baseline performance of 1000 IOPS for each data node
 + Restricts access to a single user and to a single subresource, the `_search` API
 + Configures automated daily snapshots of the indices for 03:00 UTC 
 
@@ -363,7 +363,7 @@ Use the following procedure to enable EBS\-based storage by using the console\.
 1. Choose **Submit**\. 
 
 **Note**  
-Set the IOPS value for a Provisioned IOPS EBS volume to no more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GB, you can't assign an IOPS value for it that is greater than 3000\.
+Set the IOPS value for a Provisioned IOPS EBS volume to no more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you can't assign an IOPS value for it that is greater than 3000\.
 
 For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
 
@@ -384,21 +384,21 @@ Use the `--ebs-options` option to configure EBS\-based storage by using the AWS 
 | --- | --- | --- | 
 | EBSEnabled | true or false | Specifies whether to use an EBS volume for storage rather than the storage provided by the instance\. The default value is false\. | 
 | VolumeType | Any of the following:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html) | The EBS volume type to use with the Amazon ES domain\. | 
-| VolumeSize | Integer | Specifies the size of the EBS volume for each data node in GB\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type to which it is attached\. To see a table that shows the minimum and maximum EBS size for each instance type, see [Service Limits](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-limits.html)\.  | 
+| VolumeSize | Integer | Specifies the size of the EBS volume for each data node in GiB\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type to which it is attached\. To see a table that shows the minimum and maximum EBS size for each instance type, see [Service Limits](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-limits.html)\.  | 
 | IOPS | Integer | Specifies the baseline I/O performance for the EBS volume\. This parameter is used only by Provisioned IOPS \(SSD\) volumes\. The minimum value is 1000\. The maximum value is 16000\. | 
 
 **Note**  
-We recommend that you do not set the IOPS value for a Provisioned IOPS EBS volume to more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GB, you should not assign an IOPS value for it that is greater than 3000\. For more information, including use cases for each volume type, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the Amazon EC2 documentation\.
+We recommend that you do not set the IOPS value for a Provisioned IOPS EBS volume to more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you should not assign an IOPS value for it that is greater than 3000\. For more information, including use cases for each volume type, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the Amazon EC2 documentation\.
 
 **Examples**
 
-The following example creates a domain named `mylogs` with Elasticsearch version 5\.5 with a 10 GB General Purpose EBS volume:
+The following example creates a domain named `mylogs` with Elasticsearch version 5\.5 with a 10 GiB General Purpose EBS volume:
 
 ```
 aws es create-elasticsearch-domain --domain-name=mylogs --elasticsearch-version 5.5 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=10
 ```
 
-However, you might need a larger EBS volume as the size of your search indices increases\. For example, you might opt for a 100 GB Provisioned IOPS volume with a baseline I/O performance of 3000 IOPS\. The following example updates the domain configuration with those changes:
+However, you might need a larger EBS volume as the size of your search indices increases\. For example, you might opt for a 100 GiB Provisioned IOPS volume with a baseline I/O performance of 3000 IOPS\. The following example updates the domain configuration with those changes:
 
 ```
 aws es update-elasticsearch-domain-config --domain-name=mylogs --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,IOPS=3000
@@ -617,9 +617,19 @@ Amazon ES exposes three Elasticsearch logs through Amazon CloudWatch Logs: error
 **Note**  
 Error logs are available only for Elasticsearch versions 5\.1 and greater\. Slow logs are available for all Elasticsearch versions\.
 
-For its logs, Elasticsearch uses [Apache Log4j 2](https://logging.apache.org/log4j/2.x/) and its built\-in log levels \(from least to most severe\) of `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, and `FATAL`\. If you enable error logs, Amazon ES publishes log lines of `WARN`, `ERROR`, and `FATAL` to CloudWatch\. Less severe levels are not available at this time\. Error logs can help with troubleshooting in many situations, including:
+For its logs, Elasticsearch uses [Apache Log4j 2](https://logging.apache.org/log4j/2.x/) and its built\-in log levels \(from least to most severe\) of `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, and `FATAL`\.
+
+If you enable error logs, Amazon ES publishes log lines of `WARN`, `ERROR`, and `FATAL` to CloudWatch\. Amazon ES also publishes several exceptions from the `DEBUG` level, including:
++ `org.elasticsearch.index.mapper.MapperParsingException`
++ `org.elasticsearch.index.query.QueryShardException`
++ `org.elasticsearch.action.search.SearchPhaseExecutionException`
++ `org.elasticsearch.common.util.concurrent.EsRejectedExecutionException`
++ `java.lang.IllegalArgumentException`
+
+Error logs can help with troubleshooting in many situations, including:
 + Painless script compilation issues
 + Invalid queries
++ Indexing issues
 + Snapshot failures
 
 ### Enabling Log Publishing \(Console\)<a name="es-createdomain-configure-slow-logs-console"></a>

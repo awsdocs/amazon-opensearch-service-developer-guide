@@ -16,7 +16,7 @@ In general, performing the steps in this walkthrough should cost less than $2\. 
 + S3 bucket with less than 100 MB transferred and stored
 
   To learn more, see [Amazon S3 Pricing](https://aws.amazon.com/s3/pricing/)\.
-+ Amazon ES domain with one `t2.medium` instance and 10 GB of EBS storage for several hours
++ Amazon ES domain with one `t2.medium` instance and 10 GiB of EBS storage for several hours
 
   To learn more, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
 + Several calls to Amazon Transcribe
@@ -279,29 +279,29 @@ If you don't have a bunch of call recordings handy—and who does?—you can [in
 1. Place `sample-calls.bulk` in the same directory as `bulk-helper.py` and run the helper\. A sample output follows:
 
    ```
-   $ python bulk-helper.py 
+   $ python bulk-helper.py
    {
-     "errors": false, 
+     "errors": false,
      "items": [
        {
          "index": {
-           "_id": "1", 
-           "_index": "test-data", 
-           "_primary_term": 1, 
-           "_seq_no": 42, 
+           "_id": "1",
+           "_index": "test-data",
+           "_primary_term": 1,
+           "_seq_no": 42,
            "_shards": {
-             "failed": 0, 
-             "successful": 1, 
+             "failed": 0,
+             "successful": 1,
              "total": 2
-           }, 
-           "_type": "call", 
-           "_version": 9, 
-           "result": "updated", 
+           },
+           "_type": "call",
+           "_version": 9,
+           "result": "updated",
            "status": 200
          }
        },
        ...
-     ], 
+     ],
      "took": 27
    }
    ```

@@ -140,7 +140,7 @@ For more information, see [Configuring Access Policies](es-createupdatedomains.m
 1. Open `index.html` and try running searches for *thor*, *house*, and a few other terms\.  
 ![\[A sample search for thor.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/search-ui.png)
 
-## Next Steps<a name="search-example-webpage"></a>
+## Next Steps<a name="search-example-next"></a>
 
 This chapter is just a starting point to demonstrate a concept\. You might consider the following modifications:
 + Add your own data to the Amazon ES domain\.

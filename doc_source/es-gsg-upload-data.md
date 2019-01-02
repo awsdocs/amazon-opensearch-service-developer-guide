@@ -9,7 +9,7 @@ You can upload data to an Amazon Elasticsearch Service domain for indexing using
 
 The following example requests use [curl](https://curl.haxx.se/), a common HTTP client, for brevity and convenience\. Clients like curl can't perform the request signing that is required if your access policies specify IAM users or roles\. To successfully perform the instructions in this step, you must use an IP address\-based access policy that allows unauthenticated access, like you configured in [step 1](es-gsg-create-domain.md)\.
 
-You can install curl on Windows and use it from the command prompt, but Windows users might find it more convenient to use a tool like [Cygwin](https://www.cygwin.com/) or [the Windows Subsystem for Linux](https://msdn.microsoft.com/en-us/commandline/wsl/about)\. macOS and most Linux distributions come with curl pre\-installed\.
+You can install curl on Windows and use it from the command prompt, but Windows users might find it more convenient to use a tool like [Cygwin](https://www.cygwin.com/) or [the Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)\. macOS and most Linux distributions come with curl pre\-installed\.
 
 **To upload a single document to an Amazon ES domain**
 + Run the following command to add a single document to the *movies* domain:

@@ -9,7 +9,7 @@ Amazon ES domains offer encryption of data at rest, a security feature that help
 
 The following are *not* encrypted when you enable encryption of data at rest, but you can take additional steps to protect them:
 + Manual snapshots: Currently, you can't use KMS master keys to encrypt manual snapshots\. You can, however, use [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) to encrypt the bucket that you use as a snapshot repository\. For instructions, see [Registering a Manual Snapshot Repository](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory)\.
-+ Slow logs: If you [publish slow logs](es-createupdatedomains.md#es-createdomain-configure-slow-logs) and want to encrypt them, you can encrypt their CloudWatch Logs log group using the same AWS KMS master key as the Amazon ES domain\. For more information, see [Encrypt Log Data in CloudWatch Logs Using AWS KMS](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html) in the Amazon CloudWatch Logs User Guide\.
++ Slow logs and error logs: If you [publish logs](es-createupdatedomains.md#es-createdomain-configure-slow-logs) and want to encrypt them, you can encrypt their CloudWatch Logs log group using the same AWS KMS master key as the Amazon ES domain\. For more information, see [Encrypt Log Data in CloudWatch Logs Using AWS KMS](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html) in the *Amazon CloudWatch Logs User Guide*\.
 
 To learn how to create AWS KMS master keys, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\.
 

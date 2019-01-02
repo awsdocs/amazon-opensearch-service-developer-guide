@@ -27,7 +27,7 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
    1. For **EBS volume type**, choose General Purpose \(SSD\)\. For more information, see [Amazon EBS Volume Types\.](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
 
-   1. For **EBS volume size**, type the size in GB of the external storage for *each* data node\. For this tutorial, you can use the default value of 10\.
+   1. For **EBS volume size**, type the size in GiB of the external storage for *each* data node\. For this tutorial, you can use the default value of 10\.
 
 1. For now, you can ignore **Enable encryption at rest**\. For more information about the feature, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
@@ -52,7 +52,7 @@ New domains take roughly ten minutes to initialize\. After your domain is initia
 **To create an Amazon ES domain \(AWS CLI\)**
 + Run the following command to create an Amazon ES domain\.
 
-  The command creates a domain named *movies* with Elasticsearch version 6\.0\. It specifies one instance of the `t2.small.elasticsearch` instance type\. The instance type requires EBS storage, so it specifies a 10 GB volume\. Finally, the command applies an IP\-based access policy that restricts access to the domain to a single IP address\.
+  The command creates a domain named *movies* with Elasticsearch version 6\.0\. It specifies one instance of the `t2.small.elasticsearch` instance type\. The instance type requires EBS storage, so it specifies a 10 GiB volume\. Finally, the command applies an IP\-based access policy that restricts access to the domain to a single IP address\.
 
   You need to replace `your_ip_address` in the command with your public IP address, which you can find by searching for "What is my IP?" on [Google](https://www.google.com)\.
 

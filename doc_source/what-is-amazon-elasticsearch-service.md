@@ -27,7 +27,7 @@ Amazon ES includes the following features:
 **Security**
 + AWS Identity and Access Management \(IAM\) access control
 + Easy integration with Amazon VPC and VPC security groups
-+ Encryption of data at rest
++ Encryption of data at rest and node\-to\-node encryption
 + Amazon Cognito authentication for Kibana
 
 **Stability**
@@ -45,13 +45,8 @@ Amazon ES includes the following features:
 ## Supported Elasticsearch Versions<a name="aes-choosing-version"></a>
 
 Amazon ES currently supports the following Elasticsearch versions:
-+ 6\.3
-+ 6\.2
-+ 6\.0
-+ 5\.6
-+ 5\.5
-+ 5\.3
-+ 5\.1
++ 6\.3, 6\.2, 6\.0
++ 5\.6, 5\.5, 5\.3, 5\.1
 + 2\.3
 + 1\.5
 
@@ -74,12 +69,7 @@ With AWS, you pay only for what you use\. For Amazon ES, you pay for each hour o
 
 However, a notable data transfer exception exists\. If you use [zone awareness](es-managedomains.md#es-managedomains-zoneawareness), Amazon ES does not bill for traffic between the two Availability Zones in which the domain resides\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\.
 
-For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
-
-If you qualify for the AWS Free Tier, you receive up to 750 hours per month of use with the `t2.micro.elasticsearch` or `t2.small.elasticsearch` instance types\. You also receive up to 10 GB of Amazon EBS storage \(Magnetic or General Purpose\)\. For more information, see [AWS Free Tier](http://aws.amazon.com/free/)\.
-
-**Note**  
-Throughout this guide, 1 MB refers to 10242 or 1,048,576 bytes\. Likewise, 1 GB refers to 10243 or 1,073,741,824 bytes\.
+For full pricing details, including details on the AWS Free Tier, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
 
 ## Getting Started with Amazon Elasticsearch Service<a name="aes-get-started"></a>
 
@@ -94,24 +84,24 @@ To get started, [sign up for an AWS account](https://aws.amazon.com/) if you don
 
 Amazon ES commonly is used with the following services:
 
+[Amazon CloudWatch](http://aws.amazon.com/documentation/cloudwatch/)  
+Amazon ES domains automatically send metrics to CloudWatch so that you can monitor domain health and performance\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.  
+CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
+
 [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/)  
 Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail](es-managedomains.md#es-managedomains-cloudtrailauditing)\.
 
-[Amazon CloudWatch](http://aws.amazon.com/documentation/cloudwatch/)  
-An Amazon ES domain automatically sends metrics to Amazon CloudWatch so that you can gather and analyze performance statistics\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.  
-CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
-
 [Amazon Kinesis](http://aws.amazon.com/documentation/kinesis/)  
-Kinesis is a managed service that scales elastically for real\-time processing of streaming data at a massive scale\. For more information, see [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams](es-aws-integrations.md#es-aws-integrations-kinesis) and [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose](es-aws-integrations.md#es-aws-integrations-fh)\.
+Kinesis is a managed service for real\-time processing of streaming data at a massive scale\. For more information, see [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams](es-aws-integrations.md#es-aws-integrations-kinesis) and [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose](es-aws-integrations.md#es-aws-integrations-fh)\.
 
 [Amazon S3](http://aws.amazon.com/documentation/s3/)  
-Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. Amazon ES provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.
+Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. This guide provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.
 
 [AWS IAM](http://aws.amazon.com/iam/)  
-AWS Identity and Access Management \(IAM\) is a web service that you can use to manage for your Amazon ES domains\. For more information, see the [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) documentation and [Amazon Elasticsearch Service Access Control](es-ac.md)\.
+AWS Identity and Access Management \(IAM\) is a web service that you can use to manage access to your Amazon ES domains\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md)\.
 
 [AWS Lambda](http://aws.amazon.com/documentation/lambda/)  
-AWS Lambda is a compute service that lets you run code without provisioning or managing servers\. Amazon ES provides Lambda sample code to stream data from DynamoDB, Amazon S3, and Kinesis\. For more information, see [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
+AWS Lambda is a compute service that lets you run code without provisioning or managing servers\. This guide provides Lambda sample code to stream data from DynamoDB, Amazon S3, and Kinesis\. For more information, see [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
 
 [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
-Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon DynamoDB](es-aws-integrations.md#es-aws-integrations-dynamodb-es)\.
+Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more about streaming data to Amazon ES, see [Loading Streaming Data into Amazon ES from Amazon DynamoDB](es-aws-integrations.md#es-aws-integrations-dynamodb-es)\.

@@ -102,7 +102,7 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
 
    All Lambda execution environments have [Boto3](https://aws.amazon.com/sdk-for-python/) installed, so you don't need to include it in your deployment package\.
 **Tip**  
-If you use macOS, these commands might not work properly\. As a workaround, add a file named `setup.cfg` to the `eslambda` directory:  
+If you use macOS, these commands might not work properly\. As a workaround, add a file named `setup.cfg` to the `s3-to-es` directory:  
 
    ```
    [install]

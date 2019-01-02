@@ -1,5 +1,8 @@
 # Upgrading Elasticsearch<a name="es-version-migration"></a>
 
+**Note**  
+Elasticsearch version upgrades differ from service software updates\. For information on updating the service software for your Amazon ES domain, see [Managing Amazon Elasticsearch Service Domains](es-managedomains.md)\.
+
 Amazon ES offers in\-place Elasticsearch upgrades for domains that run versions 5\.1 and later\. If you use services like Amazon Kinesis Data Firehose or Amazon CloudWatch Logs to stream data to Amazon ES, check that these services support the newer version of Elasticsearch before migrating\.
 
 Currently, Amazon ES supports the following upgrade paths\.

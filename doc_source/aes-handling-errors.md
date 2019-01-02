@@ -70,7 +70,7 @@ To determine if a red cluster status is due to a continuous heavy processing loa
 
 A yellow cluster status means that the primary shards for all indices are allocated to nodes in a cluster, but the replica shards for at least one index are not\. Single\-node clusters always initialize with a yellow cluster status because there is no other node to which Amazon ES can assign a replica\. To achieve green cluster status, increase your node count\. For more information, see [Sizing Amazon ES Domains](sizing-domains.md) and [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\.
 
-## ClusterBlockException<a name="aes-handling-errors-yellow-index-error"></a>
+## ClusterBlockException<a name="troubleshooting-cluster-block"></a>
 
 You might receive a `ClusterBlockException` error for the following reasons\.
 
@@ -103,7 +103,7 @@ A JVM `OutOfMemoryError` typically means that one of the following JVM circuit b
 
 Amazon EC2 instances might experience unexpected terminations and restarts\. Typically, Amazon ES restarts the nodes for you\. However, it's possible for one or more nodes in an Elasticsearch cluster to remain in a failed condition\.
 
-To check for this condition, open your domain dashboard on the Amazon ES console\. Choose the **Monitoring** tab, and then choose the **Nodes** metric\. See if the reported number of nodes is fewer than the number that you configured for your cluster\. If the metric shows that one or more nodes is down for more than one day, contact [AWS Support](https://aws.amazon.com/premiumsupport/)\.
+To check for this condition, open your domain dashboard on the Amazon ES console\. Choose the **Cluster health** tab, and then choose the **Nodes** metric\. See if the reported number of nodes is fewer than the number that you configured for your cluster\. If the metric shows that one or more nodes is down for more than one day, contact [AWS Support](https://aws.amazon.com/premiumsupport/)\.
 
 You can also [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when this issue occurs\.
 
@@ -136,9 +136,9 @@ If you need more insight into the performance of the cluster, you can [publish e
 
 ## "Not Valid for the Object's Storage Class" Snapshot Error<a name="aes-troubleshooting-glacier-snapshots"></a>
 
-Amazon ES snapshots do not support the Amazon Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the Amazon Glacier storage class\.
+Amazon ES snapshots do not support the Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the Glacier storage class\.
 
-If you need to restore a snapshot from the bucket, restore the objects from Amazon Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot respository\.
+If you need to restore a snapshot from the bucket, restore the objects from Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot respository\.
 
 ## Invalid Host Header<a name="aes-troubleshooting-host-header"></a>
 

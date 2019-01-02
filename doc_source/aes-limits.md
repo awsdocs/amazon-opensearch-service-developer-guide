@@ -21,43 +21,43 @@ For a list of the instance types that Amazon ES supports, see [Supported Instanc
 The following table shows the minimum and maximum sizes for EBS volumes for each instance type that Amazon ES supports\. See [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) for information on which instance types offer instance storage\.
 
 **Note**  
-If you select magnetic storage under **EBS volume type** when creating your domain, maximum volume size is 100 GB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, select one of the SSD options\.
+If you select magnetic storage under **EBS volume type** when creating your domain, maximum volume size is 100 GiB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, select one of the SSD options\.
 
 
 ****  
 
 | Instance Type | Minimum EBS Size | Maximum EBS Size | 
 | --- | --- | --- | 
-| t2\.micro\.elasticsearch | 10 GB | 35 GB | 
-| t2\.small\.elasticsearch | 10 GB | 35 GB | 
-| t2\.medium\.elasticsearch | 10 GB | 35 GB | 
-| m3\.medium\.elasticsearch | 10 GB | 100 GB | 
-| m3\.large\.elasticsearch | 10 GB | 512 GB | 
-| m3\.xlarge\.elasticsearch | 10 GB | 512 GB | 
-| m3\.2xlarge\.elasticsearch | 10 GB | 512 GB | 
-| m4\.large\.elasticsearch | 10 GB | 512 GB | 
-| m4\.xlarge\.elasticsearch | 10 GB | 1 TB\* | 
-| m4\.2xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| m4\.4xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| m4\.10xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| c4\.large\.elasticsearch | 10 GB | 100 GB | 
-| c4\.xlarge\.elasticsearch | 10 GB | 512 GB | 
-| c4\.2xlarge\.elasticsearch | 10 GB | 1 TB\* | 
-| c4\.4xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| c4\.8xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| r3\.large\.elasticsearch | 10 GB | 512 GB | 
-| r3\.xlarge\.elasticsearch | 10 GB | 512 GB | 
-| r3\.2xlarge\.elasticsearch | 10 GB | 512 GB | 
-| r3\.4xlarge\.elasticsearch | 10 GB | 512 GB | 
-| r3\.8xlarge\.elasticsearch | 10 GB | 512 GB | 
-| r4\.large\.elasticsearch | 10 GB | 1 TB\* | 
-| r4\.xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| r4\.2xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| r4\.4xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| r4\.8xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| r4\.16xlarge\.elasticsearch | 10 GB | 1\.5 TB\* | 
-| i2\.xlarge\.elasticsearch | 10 GB | 512 GB | 
-| i2\.2xlarge\.elasticsearch | 10 GB | 512 GB | 
+| t2\.micro\.elasticsearch | 10 GiB | 35 GiB | 
+| t2\.small\.elasticsearch | 10 GiB | 35 GiB | 
+| t2\.medium\.elasticsearch | 10 GiB | 35 GiB | 
+| m3\.medium\.elasticsearch | 10 GiB | 100 GiB | 
+| m3\.large\.elasticsearch | 10 GiB | 512 GiB | 
+| m3\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| m3\.2xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| m4\.large\.elasticsearch | 10 GiB | 512 GiB | 
+| m4\.xlarge\.elasticsearch | 10 GiB | 1 TiB\* | 
+| m4\.2xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| m4\.4xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| m4\.10xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| c4\.large\.elasticsearch | 10 GiB | 100 GiB | 
+| c4\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| c4\.2xlarge\.elasticsearch | 10 GiB | 1 TiB\* | 
+| c4\.4xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| c4\.8xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| r3\.large\.elasticsearch | 10 GiB | 512 GiB | 
+| r3\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| r3\.2xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| r3\.4xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| r3\.8xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| r4\.large\.elasticsearch | 10 GiB | 1 TiB\* | 
+| r4\.xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| r4\.2xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| r4\.4xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| r4\.8xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| r4\.16xlarge\.elasticsearch | 10 GiB | 1\.5 TiB\* | 
+| i2\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| i2\.2xlarge\.elasticsearch | 10 GiB | 512 GiB | 
 | i3\.large\.elasticsearch  | N/A | N/A | 
 | i3\.xlarge\.elasticsearch | N/A | N/A | 
 | i3\.2xlarge\.elasticsearch | N/A | N/A | 
@@ -65,7 +65,7 @@ If you select magnetic storage under **EBS volume type** when creating your doma
 | i3\.8xlarge\.elasticsearch | N/A | N/A | 
 | i3\.16xlarge\.elasticsearch | N/A | N/A | 
 
-\* 512 GB is the maximum volume size that is supported with Elasticsearch version 1\.5\.
+\* 512 GiB is the maximum volume size that is supported with Elasticsearch version 1\.5\.
 
 ## Network Limits<a name="network-limits"></a>
 
@@ -115,4 +115,4 @@ The following table shows the maximum size of HTTP request payloads\.
 
 ## Java Process Limit<a name="aes-java-process-limit"></a>
 
-Amazon ES limits Java processes to a heap size of 32 GB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
+Amazon ES limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
