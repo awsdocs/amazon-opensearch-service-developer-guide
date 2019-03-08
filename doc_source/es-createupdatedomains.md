@@ -31,61 +31,58 @@ Use the following procedure to create an Amazon ES domain by using the console\.
 
 1. Choose **Create a new domain**\.
 
-   Alternatively, choose **Get Started** if this is the first Amazon ES domain that you will create for your AWS account\.
+   Alternatively, choose **Get Started** if this is your first Amazon ES domain in the AWS Region\.
 
-1. On the **Define domain** page, for **Domain name**, type a name for your domain\. The domain name must meet the following criteria:
-   + Uniquely identifies a domain
+1. For **Choose deployment type**, select the option that best\-matches the purpose of your domain\.
+   + **Production** domains use Multi\-AZ and dedicated master nodes and for higher availability\.
+   + **Development and testing** domains use a single Availability Zone\.
+   + **Custom** domains let you choose from all configuration options\.
+**Important**  
+Different deployment types present different options on subsequent screens\. For comprehensiveness, these steps include all options \(the **Custom** deployment type\)\.
+
+1. For **Elasticsearch version**, we recommend that you choose the latest version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
+
+1. Choose **Next**\.
+
+1. For **Elasticsearch domain name**, type a domain name\. The name must meet the following criteria:
+   + Unique to your account and Region
    + Starts with a lowercase letter
    + Contains between 3 and 28 characters
    + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
 
-1. For **Version**, choose an Elasticsearch version for your domain\. We recommend that you choose the latest version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
+1. For **Availability Zones**, choose 1\-AZ, 2\-AZ, or 3\-AZ\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
 
-1. Choose **Next**\.
-
-1. For **Instance count**, choose the number of instances that you want\.
-
-   The default is one\. For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. We recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the split brain issue\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for replication\. Single node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md)\.
-
-1. For **Instance type**, choose an instance type for the data nodes\.
-
-   To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
-
-1. \(Optional\) If you must ensure cluster stability or if you have a domain that has more than 10 instances, enable a dedicated master node\. Dedicated master nodes increase cluster stability and are required for a domain that has an instance count greater than 10\. For more information, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
-
-   1. Select the **Enable dedicated master** check box\.
-
-   1. For **Dedicated master instance type**, choose an instance type for the dedicated master node\. 
-
-      For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
+1. For **Instance type**, choose an instance type for the data nodes\. For more information, see [Supported Instance Types](aes-supported-instance-types.md)\.
 **Note**  
-You can choose an instance type for the dedicated master node that differs from the instance type that you choose for the data nodes\. For example, you might select general purpose or storage\-optimized instances for your data nodes, but compute\-optimized instances for your dedicated master nodes\.
+Not all Availability Zones support all instance types\. If you choose **3\-AZ**, we recommend choosing current\-generation instance types such as R4 or I3\.
 
-   1. For **Dedicated master instance count**, choose the number of instances for the dedicated master node\.
+1. For **Number of instances**, choose the number of data nodes\.
 
-      We recommend choosing an odd number of instances to avoid potential Elasticsearch issues, such as the split brain issue\. The default and recommended number is three\.
+   For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. Single node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md) and [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
 
-1. \(Optional\) Select the **Enable zone awareness** check box\.
+1. \(Optional\) Enable or disable [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. Dedicated master nodes increase cluster stability and are required for domains that have instance counts greater than 10\. We recommend three dedicated master nodes for production domains\.
+**Note**  
+You can choose different instance types for your dedicated master nodes and data nodes\. For example, you might select general purpose or storage\-optimized instances for your data nodes, but compute\-optimized instances for your dedicated master nodes\.
 
-   Zone awareness distributes Amazon ES data nodes across two Availability Zones in the same region\. If you enable zone awareness, you must have an even number of instances in the instance count, and you must use the native Elasticsearch API to create replica shards for your cluster\. This process allows for the even distribution of shards across two Availability Zones\. For more information, see [Enabling Zone Awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
+1. For **Storage type**, choose either **Instance** \(default\) or **EBS**\.
 
-1. For **Storage type**, choose either **Instance** \(the default\) or **EBS**\. 
-
-   If your Amazon ES domain requires more storage, use an EBS volume for storage rather than the storage that is attached to the selected instance type\. Domains with large indices or large numbers of indices often benefit from the increased storage capacity of EBS volumes\. For guidance on creating especially large domains, see [Petabyte Scale](petabyte-scale.md)\. If you choose **EBS**, the following boxes appear:
+   Domains with large indices or large numbers of indices often benefit from the increased storage capacity of EBS volumes\. For guidance on creating especially large domains, see [Petabyte Scale](petabyte-scale.md)\. If you choose **EBS**, the following options appear:
 
    1. For **EBS volume type**, choose an EBS volume type\.
 
-      If you choose Provisioned IOPS \(SSD\) for the EBS volume type, for **Provisioned IOPS**, type the baseline IOPS performance that you want\. For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
+      If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, type the baseline IOPS performance that you want\. For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
 
    1.  For **EBS volume size**, type the size of the EBS volume that you want to attach to each data node\.
 
-      **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain using the following formula: \(number of data nodes\) \* \(EBS volume size\)\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type that it's attached to\. To learn more, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
+      **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain by multiplying the number of data nodes by the EBS volume size\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type that it's attached to\. To learn more, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
 
-1. \(Optional\) To enable encryption of data at rest, select the **Enable encryption at rest** check box\.
+1. \(Optional\) To enable node\-to\-node encryption, select the **Node\-to\-node encryption** check box\. For more information, see [Node\-to\-node Encryption for Amazon Elasticsearch Service](ntn.md)\.
+
+1. \(Optional\) To enable encryption of data at rest, select the **Enable encryption of data at rest** check box\.
 
    Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
-1. For **Automated snapshot start hour**, choose the hour for automated daily snapshots of domain indices\.
+1. For **Automated snapshot start hour**, choose a low traffic time for Amazon ES to take automated snapshots\.
 
    For more information and recommendations, see [Configuring Automatic Snapshots](#es-createdomain-configure-snapshots)\.
 
@@ -93,21 +90,19 @@ You can choose an instance type for the dedicated master node that differs from 
 
 1. Choose **Next**\.
 
-1. On the **Set up access** page, in the **Network configuration** section, choose either **Public Access** or **VPC access**\. If you choose **Public access**, skip to step 17\. If you choose **VPC access**, ensure that you have met the [prerequisites](es-vpc.md#es-prerequisites-vpc-endpoints), and then do the following:
+1. On the **Set up access** page, in the **Network configuration** section, choose either **VPC access** or **Public access**\. If you choose **Public access**, skip to the next step\. If you choose **VPC access**, ensure that you have met the [prerequisites](es-vpc.md#es-prerequisites-vpc-endpoints), and then do the following:
 
    1. For **VPC**, choose the ID of the VPC that you want to use\.
 **Note**  
 The VPC and domain must be in the same AWS Region, and you must select a VPC with tenancy set to **Default**\. Amazon ES does not yet support VPCs that use dedicated tenancy\.
 
-   1. For **Subnet**, choose a subnet\. If you enabled zone awareness in step 10, you must choose two subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces* \(ENIs\) in the subnet or subnets\.
+   1. For **Subnet**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces* \(ENIs\) in the subnets\.
 **Note**  
 You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
    1. For **Security groups**, choose the VPC security groups that need access to the Amazon ES domain\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
    1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-Linked Role for VPC Access](es-vpc.md#es-enabling-slr)\.
-
-1. \(Optional\) If you want to enable [node\-to\-node encryption](ntn.md), choose **Node\-to\-node encryption**\.
 
 1. \(Optional\) If you want to protect Kibana with a login page, choose **Enable Amazon Cognito for authentication**\.
 
@@ -119,61 +114,17 @@ If you chose **VPC access** in step 16, the IP\-based policy template is not ava
 
 1. Choose **Next**\.
 
-1. On the **Review** page, review your domain configuration, and then choose **Confirm and create**\.
-
-1. Choose **OK**\.
-
-**Note**  
-New domains take up to ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
+1. On the **Review** page, review your domain configuration, and then choose **Confirm**\.
 
 ### Creating Amazon ES Domains \(AWS CLI\)<a name="es-createdomains-cli"></a>
 
-Instead of creating an Amazon ES domain by using the console, you can create a domain by using the AWS CLI\. Use the following syntax to create an Amazon ES domain\.
+Instead of creating an Amazon ES domain by using the console, you can use the AWS CLI\. Use the following syntax to create an Amazon ES domain\. For syntax, see Amazon Elasticsearch Service in the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
 
-```
-aws es create-elasticsearch-domain --domain-name <value>
+#### Example Commands<a name="es-createdomains-cli-examples"></a>
 
-  [--elasticsearch-version <value>]
-  [--elasticsearch-cluster-config <value>]
-  [--ebs-options <value>]
-  [--access-policies <value>]
-  [--snapshot-options <value>]
-  [--vpc-options <value>]
-  [--advanced-options <value>]
-  [--log-publishing-options <value>]
-  [--cli-input-json <value>]
-  [--generate-cli-skeleton <value>]
-  [--encryption-at-rest-options <value>]
-  [--cognito-options <value>]
-  [--node-to-node-encryption-options <value>]
-```
-
-The following table provides more information about each of the optional parameters\.
-
-
-****  
-
-| Optional Parameter | Description | 
-| --- | --- | 
-| \-\-elasticsearch\-version | Specifies the Elasticsearch version of the domain\. If not specified, the default value is 1\.5\. For more information, see [Choosing an Elasticsearch Version](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\. | 
-| \-\-elasticsearch\-cluster\-config | Specifies the instance type and count of the domain, whether zone awareness is enabled, and whether the domain uses a dedicated master node\. Dedicated master nodes increase cluster stability and are required for a domain that has an instance count greater than 10\. For more information, see [Configuring Amazon ES Domains](#es-createdomains-configure-cluster-cli)\. | 
-| \-\-ebs\-options | Specifies whether the domain uses an EBS volume for storage\. If true, this parameter must also specify the EBS volume type, size, and, if applicable, IOPS value\. For more information, see [Configuring EBS\-based Storage](#es-createdomain-configure-ebs-cli)\. | 
-| \-\-access\-policies | Specifies the access policy for the domain\. For more information, see [Configuring Access Policies](#es-createdomain-configure-access-policies-cli)\. | 
-| \-\-snapshot\-options | Specifies the hour in UTC during which the service performs a daily automated snapshot of the indices in the domain\. The default value is 0, or midnight, which means that the snapshot is taken anytime between midnight and 1:00 AM\. For more information, see [Configuring Snapshots](#es-createdomain-configure-snapshots-cli)\. | 
-| \-\-advanced\-options | Specifies whether to allow references to indices in the bodies of HTTP request objects\. For more information, see [ Configuring Advanced Options](#es-createdomain-configure-advanced-options-cli)\.  | 
-| \-\-generate\-cli\-skeleton | Displays JSON for all specified parameters\. Save the output to a file so that you can later read the file with the \-\-cli\-input\-json parameter rather than typing the parameters at the command line\. For more information, see [Generate CLI Skeleton and CLI Input JSON Parameters](http://docs.aws.amazon.com/cli/latest/userguide/generate-cli-skeleton.html) in the AWS Command Line Interface User Guide\. | 
-| \-\-cli\-input\-json | Specifies the name of a JSON file that contains a set of CLI parameters\. For more information, see [Generate CLI Skeleton and CLI Input JSON Parameters](http://docs.aws.amazon.com/cli/latest/userguide/generate-cli-skeleton.html) in the AWS Command Line Interface User Guide\. | 
-| \-\-log\-publishing\-options | Specifies whether Amazon ES should publish Elasticsearch logs to CloudWatch\. For more information, see [Configuring Logs](#es-createdomain-configure-slow-logs)\. | 
-| \-\-vpc\-options | Specifies whether to launch the Amazon ES domain within an Amazon VPC \(VPC\)\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
-| \-\-encryption\-at\-rest\-options | Specifies whether to enable [encryption of data at rest](encryption-at-rest.md)\. | 
-| \-\-cognito\-options | Specifies whether to use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. | 
-| \-\-node\-to\-node\-encryption\-options | Specify true to enable [node\-to\-node encryption](ntn.md)\. | 
-
-**Examples**
-
-The first example demonstrates the following Amazon ES domain configuration:
+This first example demonstrates the following Amazon ES domain configuration:
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
-+ Populates the domain with two instances of the m4\.large\.elasticsearch instance type
++ Populates the domain with two instances of the `m4.large.elasticsearch` instance type
 + Uses a 100 GiB Magnetic disk EBS volume for storage for each data node
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
@@ -183,19 +134,19 @@ aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version
 
 The next example demonstrates the following Amazon ES domain configuration:
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
-+ Populates the domain with six instances of the m4\.large\.elasticsearch instance type
++ Populates the domain with six instances of the `m4.large.elasticsearch` instance type
 + Uses a 100 GiB General Purpose \(SSD\) EBS volume for storage for each data node
 + Restricts access to the service to a single user, identified by the user's AWS account ID: 555555555555 
-+ Enables zone awareness
++ Distributes instances across three Availability Zones
 
 ```
-aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=6,ZoneAwarenessEnabled=true --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/logs/*" } ] }'
+aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=6,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3} --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/logs/*" } ] }'
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
 + Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
-+ Populates the domain with ten instances of the m4\.xlarge\.elasticsearch instance type
-+ Populates the domain with three instances of the m4\.large\.elasticsearch instance type to serve as dedicated master nodes
++ Populates the domain with ten instances of the `m4.xlarge.elasticsearch` instance type
++ Populates the domain with three instances of the `m4.large.elasticsearch` instance type to serve as dedicated master nodes
 + Uses a 100 GiB Provisioned IOPS EBS volume for storage, configured with a baseline performance of 1000 IOPS for each data node
 + Restricts access to a single user and to a single subresource, the `_search` API
 + Configures automated daily snapshots of the indices for 03:00 UTC 
@@ -217,7 +168,7 @@ To meet the demands of increased traffic and data, you can update your Amazon ES
 + Change the instance count
 + Change the instance type
 + Enable or disable dedicated master nodes
-+ Enable or disable zone awareness
++ Enable or disable Multi\-AZ
 + Configure storage configuration
 + Change the start time for automated snapshots of domain indices
 + Change the VPC subnets and security groups
@@ -242,35 +193,27 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
 1. On the **Configure cluster** page, update the configuration of the domain\.
 
-   The cluster is a collection of one or more data nodes, optional dedicated master nodes, and storage required to run Amazon ES and operate your domain\.
-
    1. If you want to change the instance type for data nodes, for **Instance type**, choose a new instance type\. 
 
       To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
-   1. If you want to change the instance count, for **Instance count**, choose an integer from one to twenty\. To request an increase up to 100 instances per domain, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. 
+   1. If you want to change the instance count, for **Instance count**, choose an integer from 1–20\. To request an increase up to 200 instances per domain, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. 
 
-   1. If you want to improve cluster stability or if your domain has an instance count greater than 10, enable a dedicated master node for your cluster\. For more information, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
+   1. If you want to improve cluster stability or if your domain has an instance count greater than 10, enable dedicated master nodes for your cluster\. For more information, see [Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
 
-      1. Select the **Enable dedicated master** check box\.
+      1. Select the **Dedicated master instances** check box\.
 
-      1. For **Dedicated master instance type**, choose an instance type for the dedicated master node\.
+      1. For **Dedicated master instance type**, choose an instance type for the dedicated master nodes\.
 
-         You can choose an instance type for the dedicated master node that differs from the instance type that you choose for the data nodes\.
+      1. For **Dedicated master instance count**, choose the number of instances\.
 
-         To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\. 
+   1. If you want to enable or disable Multi\-AZ, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
 
-      1. For **Dedicated master instance count**, choose the number of instances for the dedicated master node\.
-
-         We recommend choosing an odd number of instances to avoid potential Amazon ES issues, such as the split brain issue\. The default and recommended number is three\.
-
-   1. If you want to enable zone awareness, select the **Enable zone awareness** check box\. If you enable zone awareness, you must have an even number of instances in your instance count\. This allows for the even distribution of shards across two Availability Zones in the same region\.
-
-   1. If you want to change the hour during which the service takes automated daily snapshots of the primary index shards of your Amazon ES domain, for **Automated snapshot start hour**, choose an integer\.
+   1. If you want to change the hour during which the service takes automated daily snapshots of the primary index shards of your Amazon ES domain, for **Automated snapshot start hour**, choose a new time\.
 
    1. If you didn't enable VPC access when you created the domain, skip to step 7\. If you enabled VPC access, you can change the subnet that the VPC endpoint is placed in, and you can change the security groups:
 
-      1. For **Subnets**, choose a subnet\. The subnet must have a sufficient number of IP addresses reserved for the network interfaces\. If you enabled zone awareness, you must choose two subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+      1. For **Subnets**, choose a subnet\. The subnet must have a sufficient number of IP addresses reserved for the network interfaces\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
       1. For **Security groups**, add the security groups that need access to the domain\.
 
@@ -280,37 +223,14 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
 ### Configuring Amazon ES Domains \(AWS CLI\)<a name="es-createdomains-configure-cluster-cli"></a>
 
-Use the `elasticsearch-cluster-config` option to configure your Amazon ES cluster by using the AWS CLI\. The following syntax is used by both the `create-elasticsearch-domain` and `update-elasticsearch-domain-config` commands\.
+Use the `elasticsearch-cluster-config` option to configure your Amazon ES cluster by using the AWS CLI\. For syntax, see Amazon Elasticsearch Service in the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
 
-**Syntax**
+#### Example Commands<a name="es-createdomains-configure-cluster-cli-examples"></a>
 
-```
---elasticsearch-cluster-config InstanceType=<value>,InstanceCount=<value>,DedicatedMasterEnabled=<value>,DedicatedMasterType=<value>,DedicatedMasterCount=<value>,ZoneAwarenessEnabled=<value>
-```
-
-**Note**  
- Do not include spaces between parameters for the same option\.
-
-The following table describes the parameters in more detail\.
-
-
-****  
-
-| Parameter | Valid Values | Description | 
-| --- | --- | --- | 
-| InstanceType | Any supported instance type\. See [Supported Instance Types](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html)\. | The hardware configuration of the computer that hosts the instance\. The default is m4\.large\.elasticsearch\. | 
-| InstanceCount | Integer | The number of instances in the Amazon ES domain\. The default is one, and the maximum default limit is twenty\. To request an increase up to 100 instances per domain, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.  | 
-| DedicatedMasterEnabled | true or false | Specifies whether to use a dedicated master node for the Amazon ES domain\. The default value is false\. | 
-| DedicatedMasterType | Any supported instance type | The hardware configuration of the computer that hosts the master node\. The default is m4\.large\.elasticsearch\. | 
-| DedicatedMasterCount | Integer | The number of instances used for the dedicated master node\. The default is three\. | 
-| ZoneAwarenessEnabled | true or false | Specifies whether to enable zone awareness for the Amazon ES domain\. The default value is false\. | 
-
-**Examples**
-
-The following example creates an Amazon ES domain named `mylogs` with Elasticsearch version 5\.5 with two instances of the m4\.large\.elasticsearch instance type and zone awareness enabled:
+The following example creates an Amazon ES domain named `mylogs` with Elasticsearch version 5\.5 with two instances of the `m4.large.elasticsearch` instance type distributed across three Availability Zones:
 
 ```
-aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config InstanceType=m4.large.elasticsearch,InstanceCount=2,DedicatedMasterEnabled=false,ZoneAwarenessEnabled=true
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config InstanceType=m4.large.elasticsearch,InstanceCount=2,DedicatedMasterEnabled=false,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3}
 ```
 
 However, you likely will want to reconfigure your new Amazon ES domain as network traffic grows and as the quantity and size of documents increase\. For example, you might decide to use a larger instance type, use more instances, and enable a dedicated master node\. The following example updates the domain configuration with these changes:
@@ -426,7 +346,7 @@ Use the following procedure to configure VPC access by using the console\.
 
 1. Choose **Configure cluster**\.
 
-1. In the **Network configuration** section, for **Subnets**, choose a subnet\. If you enabled zone awareness, you must choose two subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+1. In the **Network configuration** section, for **Subnets**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 **Note**  
 You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 

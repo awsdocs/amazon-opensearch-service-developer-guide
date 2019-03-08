@@ -62,7 +62,7 @@ To determine if a red cluster status is due to a continuous heavy processing loa
 
 | Relevant Metric | Description | Recovery | 
 | --- | --- | --- | 
-| JVMMemoryPressure |  Specifies the percentage of the Java heap used for all data nodes in a cluster\. View the **Maximum** statistic for this metric, and look for smaller and smaller drops in memory pressure as the Java garbage collector fails to reclaim sufficient memory\. This pattern likely is due to complex queries or large data fields\. At 75% memory usage, Elasticsearch triggers the Concurrent Mark Sweep \(CMS\) garbage collector, which runs alongside other processes to keep pauses and disruptions to a minimum\. If CMS fails to reclaim enough memory and usage remains above 75%, Elasticsearch triggers a different garbage collection algorithm that halts or slows other processes in order to free up sufficient memory to prevent an out of memory error\. At 95% memory usage, Elasticsearch kills processes that attempt to allocate memory\. It might kill a critical process and bring down one or more nodes in the cluster\. The `_nodes/stats/jvm` API offers a useful summary of JVM statistics, memory pool usage, and garbage collection information: <pre>GET elasticsearch_domain/_nodes/stats/jvm?pretty</pre>  |  Set memory circuit breakers for the JVM\. For more information, see [JVM OutOfMemoryError](#aes-handling-errors-jvm_out_of_memory_error)\. If the problem persists, delete unnecessary indices, reduce the number or complexity of requests to the domain, add instances, or use larger instance types\.  | 
+| JVMMemoryPressure |  Specifies the percentage of the Java heap used for all data nodes in a cluster\. View the **Maximum** statistic for this metric, and look for smaller and smaller drops in memory pressure as the Java garbage collector fails to reclaim sufficient memory\. This pattern likely is due to complex queries or large data fields\. The Concurrent Mark Sweep \(CMS\) garbage collector triggers when 75% of the “old generation” object space is full\. This collector runs alongside other threads to keep pauses to a minimum\. If CMS is unable to reclaim enough memory during these normal collections, Elasticsearch triggers a different garbage collection algorithm that halts all threads\. Nodes are unresponsive during these stop\-the\-world collections, which can affect cluster stability\. If memory usage continues to grow, Elasticsearch eventually crashes due to an out of memory error\. A good rule of thumb is to keep usage below 80%\. The `_nodes/stats/jvm` API offers a useful summary of JVM statistics, memory pool usage, and garbage collection information: <pre>GET elasticsearch_domain/_nodes/stats/jvm?pretty</pre>  |  Set memory circuit breakers for the JVM\. For more information, see [JVM OutOfMemoryError](#aes-handling-errors-jvm_out_of_memory_error)\. If the problem persists, delete unnecessary indices, reduce the number or complexity of requests to the domain, add instances, or use larger instance types\.  | 
 | CPUUtilization | Specifies the percentage of CPU resources used for data nodes in a cluster\. View the Maximum statistic for this metric, and look for a continuous pattern of high usage\. | Add data nodes or increase the size of the instance types of existing data nodes\. For more information, see [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\. | 
 | Nodes | Specifies the number of nodes in a cluster\. View the Minimum statistic for this metric\. This value fluctuates when the service deploys a new fleet of instances for a cluster\. | Add data nodes\. For more information, see [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\. | 
 
@@ -149,6 +149,35 @@ Host: search-my-sample-domain-ih2lhn2ew2scurji.us-west-2.es.amazonaws.com
 ```
 
 If you receive an `Invalid Host Header` error, check that your client includes the Amazon ES domain endpoint \(and not, for example, its IP address\) in the `Host` header\.
+
+## Can't Downgrade After Upgrade<a name="aes-troubleshooting-upgrade-snapshot"></a>
+
+[In\-place upgrades](es-version-migration.md) are irreversible, but if you contact [AWS Support](https://aws.amazon.com/premiumsupport/), they can help you restore the automatic, pre\-upgrade snapshot on a new domain\. For example, if you upgrade a domain from Elasticsearch 5\.6 to 6\.4, AWS Support can help you restore the pre\-upgrade snapshot on a new Elasticsearch 5\.6 domain\. If you took a manual snapshot of the original domain, you can [perform that step yourself](es-managedomains-snapshots.md)\.
+
+## Need Summary of Domains for All Regions<a name="aes-troubleshooting-domain-summary"></a>
+
+The following script uses the Amazon EC2 [describe\-regions](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-regions.html) AWS CLI command to create a list of all regions in which Amazon ES could be available\. Then it calls [list\-domain\-names](https://docs.aws.amazon.com/cli/latest/reference/es/list-domain-names.html) for each region:
+
+```
+for region in `aws ec2 describe-regions --output text | cut -f3`
+do
+    echo "\nListing domains in region '$region':"
+    aws es list-domain-names --region $region --query 'DomainNames'
+done
+```
+
+You recieve the following output for each region:
+
+```
+Listing domains in region:'us-west-2'...
+[
+  {
+    "DomainName": "sample-domain"
+  }
+]
+```
+
+Regions in which Amazon ES is not available return "Could not connect to the endpoint URL\."
 
 ## Browser Error When Using Kibana<a name="aes-troubleshooting-kibana-debug-browser-errors"></a>
 

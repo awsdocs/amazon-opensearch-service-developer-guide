@@ -8,7 +8,7 @@ This chapter describes some considerations for using Kibana and Logstash with Am
 
 ## Kibana<a name="es-managedomains-kibana"></a>
 
-Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `elasticsearch-domain-endpoint/_plugin/kibana/`\. Queries using this default Kibana installation have a 60\-second timeout\.
+Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `elasticsearch-domain-endpoint/_plugin/kibana/`\. Queries using this default Kibana installation have a 300\-second timeout\.
 
 The following sections address some common Kibana use cases:
 + [Controlling Access to Kibana](#es-kibana-access)
@@ -83,28 +83,49 @@ We recommend that you configure the EC2 instance running the proxy server with a
 If you use a proxy server *and* [Amazon Cognito Authentication for Kibana](es-cognito-auth.md), you might need to add settings for Kibana and Amazon Cognito to avoid `redirect_mismatch` errors\. See the following `nginx.conf` example:
 
 ```
+{
 server {
-  listen 443;
+    listen 443;
+    server_name $host;
+    rewrite ^/$ https://$host/_plugin/kibana redirect;
 
-  location /login {
-    proxy_pass           https://$cognito_host/login;
-    proxy_cookie_domain  $cognito_host                 $proxy_host;
-    proxy_redirect       https://$kibana_host          https://$proxy_host;
-  }
+    ssl_certificate           /etc/nginx/cert.crt;
+    ssl_certificate_key       /etc/nginx/cert.key;
 
-  location / {
-    proxy_pass               https://$kibana_host;
-    proxy_redirect           https://$cognito_host  https://$proxy_host;
-    proxy_cookie_domain      $kibana_host           $proxy_host;
-    proxy_buffer_size        128k;
-    proxy_buffers            4                      256k;
-    proxy_busy_buffers_size  256k;
-  }
+    ssl on;
+    ssl_session_cache  builtin:1000  shared:SSL:10m;
+    ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
+    ssl_prefer_server_ciphers on;
+
+    location /_plugin/kibana {
+        # Forward requests to Kibana
+        proxy_pass https://$kibana_host/_plugin/kibana;
+
+        # Handle redirects to Cognito
+        proxy_redirect https://$cognito_host https://$host;
+
+        # Update cookie domain and path
+        proxy_cookie_domain $kibana_host $host;
+        proxy_cookie_path / /_plugin/kibana/;
+
+        # Response buffer settings
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+    }
+
+    location ~ \/(log|sign|fav|forgot|change|saml|oauth2) {
+        # Forward requests to Cognito
+        proxy_pass https://$cognito_host;
+
+        # Handle redirects to Kibana
+        proxy_redirect https://$kibana_host https://$host;
+
+        # Update cookie domain
+        proxy_cookie_domain $cognito_host $host;
+    }
 }
-
-$cognito_host=your-cognito-domain-name.auth.us-west-2.amazoncognito.com
-$kibana_host=your-es-domain.us-west-2.es.amazonaws.com
-$proxy_host=your-proxy-server.us-west-2.compute.amazonaws.com
 ```
 
 ### Configuring Kibana to Use a WMS Map Server<a name="es-kibana-map-server"></a>

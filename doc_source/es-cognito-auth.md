@@ -5,7 +5,7 @@ Amazon Elasticsearch Service uses [Amazon Cognito](https://docs.aws.amazon.com/c
 Much of the authentication process occurs in Amazon Cognito, but this chapter offers guidelines and requirements for configuring Amazon Cognito resources to work with Amazon ES domains\. [Standard pricing](https://aws.amazon.com/cognito/pricing/) applies to all Amazon Cognito resources\.
 
 **Tip**  
-The first time that you configure a domain to use Amazon Cognito authentication for Kibana, we recommend using the console\. Amazon Cognito resources are extremely customizable, and the console can help you identity and understand the features that matter to you\.
+The first time that you configure a domain to use Amazon Cognito authentication for Kibana, we recommend using the console\. Amazon Cognito resources are extremely customizable, and the console can help you identify and understand the features that matter to you\.
 
 **Topics**
 + [Prerequisites](#es-cognito-auth-prereq)

@@ -21,6 +21,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
+import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 import com.amazonaws.auth.AWS4Signer;
@@ -28,8 +29,6 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
 
 public class AmazonElasticsearchServiceSample {
 
@@ -50,14 +49,22 @@ public class AmazonElasticsearchServiceSample {
 
         // Register a snapshot repository
         HttpEntity entity = new NStringEntity(payload, ContentType.APPLICATION_JSON);
-        Map<String, String> params = Collections.emptyMap();
-        Response response = esClient.performRequest("PUT", snapshotPath, params, entity);
+        Request request = new Request("PUT", snapshotPath);
+        request.setEntity(entity);
+        // request.addParameter(name, value); // optional parameters
+        Response response = esClient.performRequest(request);
         System.out.println(response.toString());
-
+        
         // Index a document
         entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
         String id = "1";
-        response = esClient.performRequest("PUT", indexingPath + "/" + id, params, entity);
+        request = new Request("PUT", indexingPath + "/" + id);
+        request.setEntity(entity);
+        
+        // Using a String instead of an HttpEntity sets Content-Type to application/json automatically.
+        // request.setJsonEntity(sampleDocument);
+        
+        response = esClient.performRequest(request);
         System.out.println(response.toString());
     }
 
@@ -79,6 +86,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpRequestInterceptor;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import com.amazonaws.auth.AWS4Signer;
@@ -111,7 +119,7 @@ public class AmazonElasticsearchServiceSample {
 
         // Form the indexing request, send it, and print the response
         IndexRequest request = new IndexRequest(index, type, id).source(document);
-        IndexResponse response = esClient.index(request);
+        IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
         System.out.println(response.toString());
     }
     

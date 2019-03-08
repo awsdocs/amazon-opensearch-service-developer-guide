@@ -10,17 +10,15 @@ Currently, Amazon ES supports the following upgrade paths\.
 
 | From Version | To Version | 
 | --- | --- | 
-| 6\.x | 6\.3 | 
-| 5\.6 |  6\.3  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. If you use AWS Lambda, check that your code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
+| 6\.x | 6\.3 or 6\.4 | 
+| 5\.6 |  6\.3 or 6\.4  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. If you use AWS Lambda, check that your code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
 | 5\.x | 5\.6 | 
-
-In essence, you can move to the latest release within the same major version \(for example, 5\.3 to 5\.6\) or from the latest release in a major version to the latest release in the *next* major version \(for example, 5\.6 to 6\.3\)\. As new Elasticsearch versions become available on Amazon ES, these upgrade paths change\.
 
 The upgrade process consists of three steps:
 
 1. **Pre\-upgrade checks** – Amazon ES performs a series of checks for issues that can block an upgrade and doesn't proceed to the next step unless these checks succeed\.
 
-1. **Snapshot** – Amazon ES takes a snapshot of the Elasticsearch cluster and doesn't proceed to the next step unless the snapshot succeeds\. If the upgrade fails, Amazon ES uses this snapshot to restore the cluster to its original state\.
+1. **Snapshot** – Amazon ES takes a snapshot of the Elasticsearch cluster and doesn't proceed to the next step unless the snapshot succeeds\. If the upgrade fails, Amazon ES uses this snapshot to restore the cluster to its original state\. For more information about this snapshot, see [Can't Downgrade After Upgrade](aes-handling-errors.md#aes-troubleshooting-upgrade-snapshot)\.
 
 1. **Upgrade** – Amazon ES starts the upgrade, which can take from 15 minutes to several hours to complete\. Kibana might be unavailable during some or all of the upgrade\.
 
@@ -35,7 +33,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 | Red cluster status | One or more indices in the cluster is red\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. | 
 | High error rate | The Elasticsearch cluster is returning a large number of 5xx errors when attempting to process requests\. This problem is usually the result of too many simultaneous read or write requests\. Consider reducing traffic to the cluster or scaling your domain\. | 
 | Split brain | Split brain means that your Elasticsearch cluster has more than one master node and has split into two clusters that never will rejoin on their own\. You can avoid split brain by using the recommended number of [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. For help recovering from split brain, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
-| Master node not found | Amazon ES can't find the cluster's master node\. If your domain uses zone awareness, an Availability Zone failure might have caused the cluster to lose quorum and be unable to elect a new [master node](es-managedomains-dedicatedmasternodes.md)\. If the issue does not self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
+| Master node not found | Amazon ES can't find the cluster's master node\. If your domain uses [multi\-AZ](es-managedomains.md#es-managedomains-multiaz), an Availability Zone failure might have caused the cluster to lose quorum and be unable to elect a new [master node](es-managedomains-dedicatedmasternodes.md)\. If the issue does not self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | Too many pending tasks | The master node is under heavy load and has many pending tasks\. Consider reducing traffic to the cluster or scaling your domain\. | 
 | Impaired storage volume | The disk volume of one or more nodes isn't functioning properly\. This issue often occurs alongside other issues, like a high error rate or too many pending tasks\. If it occurs in isolation and doesn't self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | KMS key issue | The KMS key that is used to encrypt the domain is either inaccessible or missing\. For more information, see [Monitoring Domains That Encrypt Data at Rest](encryption-at-rest.md#monitoring-ear)\. | 
@@ -87,7 +85,7 @@ The following table shows how to use snapshots to migrate data to a domain that 
 
 | From Version | To Version | Migration Process | 
 | --- | --- | --- | 
-| 6\.x | 6\.3 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
+| 6\.x | 6\.4 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 6\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 5\.6 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 2\.3 | 6\.x |  Elasticsearch 2\.3 snapshots are not compatible with 6\.*x*\. To migrate your data directly from 2\.3 to 6\.*x*, you must manually recreate your indices in the new domain\. Alternately, you can follow the 2\.3 to 5\.*x* steps in this table, perform `_reindex` operations in the new 5\.*x* domain to convert your 2\.3 indices to 5\.*x* indices, and then follow the 5\.*x* to 6\.*x* steps\.  | 

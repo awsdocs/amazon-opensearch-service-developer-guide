@@ -250,7 +250,7 @@ Complexities arise when policies disagree or make no explicit mention of a user\
 + An explicit allow overrides this default\.
 + An explicit deny overrides any allows\.
 
-For example, if a resource\-based policy grants you access to a domain, but an identify\-based policy denies you access, you are denied access\. If an identity\-based policy grants access and a resource\-based policy does not specify whether or not you should have access, you are allowed access\. See the following table of intersecting policies for a full summary of outcomes\.
+For example, if a resource\-based policy grants you access to a domain, but an identity\-based policy denies you access, you are denied access\. If an identity\-based policy grants access and a resource\-based policy does not specify whether or not you should have access, you are allowed access\. See the following table of intersecting policies for a full summary of outcomes\.
 
 
 ****  

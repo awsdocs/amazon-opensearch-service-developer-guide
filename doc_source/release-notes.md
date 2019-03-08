@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**November 20, 2018
-+ **Latest documentation update—**November 20, 2018
++ **Latest product release—**February 7, 2019
++ **Latest documentation update—**February 7, 2019
 
 ## Release Notes<a name="release-table"></a>
 
@@ -13,6 +13,10 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Three Availability Zone Support](#release-notes) | Amazon Elasticsearch Service now supports three Availability Zones in many regions\. This release also includes a streamlined console experience\. To learn more, see [Configuring a Multi\-AZ Domain](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-multiaz)\. This feature requires service software R20181023 or later\. | February 7, 2019 | 
+| [R20181023 \(Service Software\)](#release-notes) | Improvements to snapshots and support for new features\. | February 7, 2019 | 
+| [Elasticsearch 6\.4 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.4\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | January 23, 2019 | 
+| [200\-Node Clusters](#release-notes) | Amazon ES now lets you create clusters with up to 200 data nodes for a total of 3 PB of storage\. To learn more, see [Petabyte Scale](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/petabyte-scale.html)\. | January 22, 2019 | 
 | [Service Software Updates](#release-notes) | Amazon ES now lets you manually update the service software for your domain in order to benefit from new features more quickly or update at a low traffic time\. To learn more, see [Service Software Updates](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-service-software)\. | November 20, 2018 | 
 | [New CloudWatch Metrics](#release-notes) | Amazon ES now offers node\-level metrics and new **Cluster health** and **Instance health** tabs in the Amazon ES console\. To learn more, see [Monitoring Cluster Metrics](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-cloudwatchmetrics)\. | November 20, 2018 | 
 | [R20180914 \(Service Software\)](#release-notes) | Adds detailed cluster health monitoring, additional patches, and service enhancements\. | November 19, 2018 | 

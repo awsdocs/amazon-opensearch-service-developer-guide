@@ -21,7 +21,7 @@ Amazon ES includes the following features:
 
 **Scale**
 + Numerous configurations of CPU, memory, and storage capacity, known as *instance types*
-+ Up to 1\.5 PB of instance storage
++ Up to 3 PB of instance storage
 + Amazon EBS storage volumes
 
 **Security**
@@ -32,9 +32,9 @@ Amazon ES includes the following features:
 
 **Stability**
 + Multiple geographical locations for your resources, known as *regions* and *Availability Zones*
++ Node allocation across two or three Availability Zones in the same region, known as *Multi\-AZ*
 + Dedicated master nodes to offload cluster management tasks
 + Automated snapshots to back up and restore Amazon ES domains
-+ Cluster node allocation across two Availability Zones in the same region, known as *zone awareness*
 
 **Integration with Popular Services**
 + Data visualization using Kibana
@@ -45,7 +45,7 @@ Amazon ES includes the following features:
 ## Supported Elasticsearch Versions<a name="aes-choosing-version"></a>
 
 Amazon ES currently supports the following Elasticsearch versions:
-+ 6\.3, 6\.2, 6\.0
++ 6\.4, 6\.3, 6\.2, 6\.0
 + 5\.6, 5\.5, 5\.3, 5\.1
 + 2\.3
 + 1\.5
@@ -53,7 +53,8 @@ Amazon ES currently supports the following Elasticsearch versions:
 Compared to earlier versions of Elasticsearch, the 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are some highlights:
 + **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
 + **Vega visualizations** – Kibana 6\.2 and newer support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
-+ **Ranking evaluation** – The `_rank_eval` API lets you measure and track how ranked search results perform against a set of queries to ensure that your searches perform as expected\.
++ **Java high\-level REST client** – Compared to the low\-level client, this client offers a simplified development experience and supports many Elasticsearch APIs\. For a code sample, see [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
++ **Weighted averages** – This aggregration lets you assign weights to documents and factor those weights into the average of a given value\.
 + **Composite aggregations** – These aggregations build composite buckets from one or more fields and sort them in "natural order" \(alphabetically for terms, numerically or by date for histograms\)\.
 + **Higher indexing performance** – Newer versions of Elasticsearch provide superior indexing capabilities that significantly increase the throughput of data updates\.
 + **Better safeguards** – The 6\.*x* versions of Elasticsearch offer many safeguards that are designed to prevent overly broad or complex queries from negatively affecting the performance and stability of the cluster\.
@@ -67,9 +68,9 @@ If you start a new Elasticsearch project, we strongly recommend that you choose 
 
 With AWS, you pay only for what you use\. For Amazon ES, you pay for each hour of use of an EC2 instance and for the cumulative size of any EBS storage volumes attached to your instances\. [Standard AWS data transfer charges](https://aws.amazon.com/ec2/pricing/) also apply\.
 
-However, a notable data transfer exception exists\. If you use [zone awareness](es-managedomains.md#es-managedomains-zoneawareness), Amazon ES does not bill for traffic between the two Availability Zones in which the domain resides\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\.
+However, a notable data transfer exception exists\. If a domain uses [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\.
 
-For full pricing details, including details on the AWS Free Tier, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
+For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
 
 ## Getting Started with Amazon Elasticsearch Service<a name="aes-get-started"></a>
 

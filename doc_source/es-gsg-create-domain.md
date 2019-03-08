@@ -21,7 +21,7 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. For **Instance type**, choose an instance type for the Amazon ES domain\. For this tutoral, we recommend `t2.small.elasticsearch`, a small and inexpensive instance type suitable for testing purposes\.
 
-1. For now, you can ignore the **Enable dedicated master** and **Enable zone awareness** check boxes\. For more information about both, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md) and [Enabling Zone Awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
+1. For now, you can ignore the **Enable dedicated master** and **Enable zone awareness** check boxes\. For more information about both, see [About Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md) and [Enabling Zone Awareness](es-managedomains.md#es-managedomains-multiaz)\.
 
 1. For **Storage type**, choose **EBS**\.
 

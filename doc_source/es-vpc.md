@@ -4,13 +4,13 @@ A *virtual private cloud* \(VPC\) is a virtual network that is dedicated to your
 
 Placing an Amazon ES domain within a VPC enables secure communication between Amazon ES and other services within the VPC without the need for an internet gateway, NAT device, or VPN connection\. All traffic remains securely within the AWS Cloud\. Because of their logical isolation, domains that reside within a VPC have an extra layer of security when compared to domains that use public endpoints\.
 
-To support VPCs, Amazon ES places an endpoint into either one or two subnets of your VPC\. A *subnet* is a range of IP addresses in your VPC\. If you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness) for your domain, Amazon ES places an endpoint into two subnets\. The subnets must be in different Availability Zones in the same region\. If you don't enable zone awareness, Amazon ES places an endpoint into only one subnet\.
+To support VPCs, Amazon ES places an endpoint into either one or two subnets of your VPC\. A *subnet* is a range of IP addresses in your VPC\. If you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) for your domain, Amazon ES places an endpoint into two subnets\. The subnets must be in different Availability Zones in the same region\. If you only use one Availability Zone, Amazon ES places an endpoint into only one subnet\.
 
-The following illustration shows the VPC architecture if zone awareness is not enabled\.
+The following illustration shows the VPC architecture for one Availability Zone\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/VPCNoZoneAwareness.png)
 
-The following illustration shows the VPC architecture if zone awareness is enabled\.
+The following illustration shows the VPC architecture for two Availability Zones\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/VPCZoneAwareness.png)
 
@@ -116,14 +116,14 @@ If you encounter curl errors due to a certificate mismatch, try the `--insecure`
 Before you can enable a connection between a VPC and your new Amazon ES domain, you must do the following:
 + **Create a VPC**
 
-  To create your VPC, you can use the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. You must create a subnet in the VPC, or two subnets if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. For more information, see [Creating A VPC](#es-creating-vpc)\. If you already have a VPC, you can skip this step\.
+  To create your VPC, you can use the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. For more information, see [Creating A VPC](#es-creating-vpc)\. If you already have a VPC, you can skip this step\.
 + **Reserve IP addresses **
 
   Amazon ES enables the connection of a VPC to a domain by placing network interfaces in a subnet of the VPC\. Each network interface is associated with an IP address\. You must reserve a sufficient number of IP addresses in the subnet for the network interfaces\. For more information, see [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)\. 
 
 ## Creating a VPC<a name="es-creating-vpc"></a>
 
-To create your VPC, you can use one of the following: the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. The VPC must have a subnet, or two subnets if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. The two subnets must be in different Availability Zones in the same region\.
+To create your VPC, you can use one of the following: the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. The VPC must have a subnet, or two subnets if you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz)\. The two subnets must be in different Availability Zones in the same region\.
 
 The following procedure shows how to use the Amazon VPC console to create a VPC with a public subnet, reserve IP addresses for the subnet, and create a security group to control access to your Amazon ES domain\. For other VPC configurations, see [Scenarios and Examples](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\.
 
@@ -141,7 +141,7 @@ The following procedure shows how to use the Amazon VPC console to create a VPC 
 
 1. In the confirmation message that appears, choose **Close**\.
 
-1. If you intend to enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness) for your Amazon ES domain, you must create a second subnet in a different Availability Zone in the same region\. If you don't intend to enable zone awareness, skip to step 8\. 
+1. If you intend to enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) for your Amazon ES domain, you must create a second subnet in a different Availability Zone in the same region\. Otherwise, skip to step 8\. 
 
    1. In the navigation pane, choose **Subnets\.**
 
@@ -189,17 +189,17 @@ Now you are ready to [launch an Amazon ES domain](es-createupdatedomains.md#es-c
 
 ## Reserving IP Addresses in a VPC Subnet<a name="es-reserving-ip-vpc-endpoints"></a>
 
-Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or two subnets of the VPC if you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
+Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or two subnets of the VPC if you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
 
 The number of IP addresses that Amazon ES requires depends on the following:
 + Number of data nodes in your domain\. \(Master nodes are not included in the number\.\) 
-+ Whether you enable [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\. If you enable zone awareness, you need only half the number of IP addresses per subnet that you need if you don't enable zone awareness\.
++ Number of Availability Zones\. If you enable two or three Availability Zones, you need only half or one\-third the number of IP addresses per subnet that you need for one Availability Zone\.
 
-Here is the basic formula: The number of IP addresses reserved in each subnet is three times the number of nodes, divided by two if zone awareness is enabled\.
+Here is the basic formula: The number of IP addresses reserved in each subnet is three times the number of nodes, divided by the number of Availability Zones\.
 
 **Examples**
-+ If a domain has 10 data nodes and zone awareness is enabled, the IP count is 10 / 2 \* 3 = 15\.
-+ If a domain has 10 data nodes and zone awareness is disabled, the IP count is 10 \* 3 = 30\.
++ If a domain has 10 data nodes and two Availability Zones, the IP count is 10 / 2 \* 3 = 15\.
++ If a domain has 10 data nodes and one Availability Zone, the IP count is 10 \* 3 = 30\.
 
 When you create the domain, Amazon ES reserves the IP addresses\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console at [https://console\.aws\.amazon\.com/ec2/](https://console.aws.amazon.com/ec2/)\. The **Description** column shows which Amazon ES domain the network interface is associated with\.
 

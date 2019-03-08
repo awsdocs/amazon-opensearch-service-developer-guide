@@ -6,7 +6,7 @@ As the size and number of documents in your Amazon Elasticsearch Service \(Amazo
 + [About Configuration Changes](#es-managedomains-configuration-changes)
 + [Charges for Configuration Changes](#es-managedomains-config-charges)
 + [Service Software Updates](#es-service-software)
-+ [Enabling Zone Awareness](#es-managedomains-zoneawareness)
++ [Configuring a Multi\-AZ Domain](#es-managedomains-multiaz)
 + [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](#es-managedomains-cloudwatchmetrics)
 + [Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail](#es-managedomains-cloudtrailauditing)
 + [Tagging Amazon Elasticsearch Service Domains](#es-managedomains-awsresourcetagging)
@@ -19,7 +19,7 @@ The following operations cause blue/green deployments:
 + Changing instance count or type
 + Enabling or disabling dedicated master nodes
 + Changing dedicated master node count
-+ Enabling or disabling zone awareness
++ Enabling or disabling Multi\-AZ
 + Changing storage type, volume type, or volume size
 + Choosing different VPC subnets
 + Adding or removing VPC security groups
@@ -31,7 +31,7 @@ The following operations cause blue/green deployments:
 
 The following operations do **not** cause blue/green deployments:
 + Changing access policy
-+ Changing automated snapshot hour
++ Changing the automated snapshot hour
 
 If you initiate a configuration change, the domain state changes to **Processing**\. During certain [service software updates](#es-service-software), the state remains **Active**\. In both cases, you can review the cluster health and Amazon CloudWatch metrics and see that the number of nodes in the cluster temporarily increases—often doubling—while the domain update occurs\. In the following illustration, you can see the number of nodes doubling from 11 to 22 during a configuration change and returning to 11 when the update is complete\.
 
@@ -61,9 +61,7 @@ Service software updates differ from Elasticsearch version upgrades\. For inform
 
 Amazon ES regularly releases system software updates that add features or otherwise improve your domains\. The console is the easiest way to see if an update is available\. For a history of service software updates, see [Release Notes](release-notes.md#release-table)\.
 
-Previously, we deployed these updates on an automatic, rolling schedule\. This schedule meant that a feature update you were looking forward to might arrive on your domain later than you hoped—or at an inconvenient time\.
-
-Now when new service software becomes available, you can request an update to your domain and benefit from new features more quickly\. You might also want to start the update at a low traffic time\.
+When new service software becomes available, you can request an update to your domain and benefit from new features immediately\. You might also want to start the update at a low traffic time\.
 
 Some updates are required, and others are optional\. If you take no action on required updates, we still update the service software automatically after a certain timeframe \(typically two weeks\)\. Your domain might be ineligible for a service software update if it is in any of the states that are shown in the following table\.
 
@@ -87,7 +85,7 @@ Some updates are required, and others are optional\. If you take no action on re
 
 1. For **Service software release**, use the documentation link to compare your current version to the latest version\. Then choose **Update**\.
 
-**To schedule a service software update \(CLI and SDK\)**
+**To schedule a service software update \(AWS CLI and AWS SDKs\)**
 
 You can use the following commands to see if an update is available, check upgrade eligibility, and schedule an update:
 + `describe-elasticsearch-domain` \(`DescribeElasticsearchDomain`\)
@@ -98,48 +96,78 @@ For more information, see the [AWS CLI Command Reference](https://docs.aws.amazo
 **Tip**  
 After scheduling an update, you might have a narrow window of time in which you can cancel it\. Use the console or `stop-elasticsearch-service-software-update` \(`StopElasticsearchServiceSoftwareUpdate`\) command\.
 
-## Enabling Zone Awareness<a name="es-managedomains-zoneawareness"></a>
+## Configuring a Multi\-AZ Domain<a name="es-managedomains-multiaz"></a>
 
-Each AWS Region is a separate geographic area with multiple, isolated locations known as *Availability Zones*\. To prevent data loss and minimize downtime in the event of node and data center failure, you can use the Amazon ES console to allocate an Elasticsearch cluster's nodes and shards across two Availability Zones in the same Region\. This allocation is known as *zone awareness*\. Zone awareness requires an even number of instances and slightly increases network latencies\.
+Each AWS Region is a separate geographic area with multiple, isolated locations known as *Availability Zones*\. To prevent data loss and minimize cluster downtime in the event of a service disruption, you can distribute nodes across two or three Availability Zones in the same Region, a configuration known as *Multi\-AZ*\.
 
-If you enable zone awareness, you must have at least one replica for each index in your cluster\. Fortunately, the default configuration for any index is a replica count of 1\. Amazon ES distributes primary and replica shards across nodes in different Availability Zones, which increases the availability of your cluster\.
+For domains that run production workloads, we recommend the following configuration:
++ Choose a Region that supports three Availability Zones with Amazon ES:
+  + US East \(N\. Virginia, Ohio\)
+  + US West \(Oregon\)
+  + EU \(Frankfurt, Ireland, London, Paris\)
+  + Asia Pacific \(Singapore, Sydney, Tokyo\)
+  + China \(Ningxia\)
++ Deploy the domain across three zones\.
++ Choose current\-generation instance types for dedicated master nodes and data nodes\.
++ Use three dedicated master nodes and at least three data nodes\.
++ Create at least one replica for each index in your cluster\.
 
-**Important**  
- If you specify a replica count of 0 for an index, enabling zone awareness doesn't provide any additional availability; without replicas, Amazon ES can't distribute copies of your data to other Availability Zones\.
+The rest of this section provides explanations for and context around these recommendations\.
 
-If you enable zone awareness and use VPC access domains, you must specify Availability Zones for the VPC subnets\. For more information about VPCs, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+### Shard Distribution<a name="es-managedomains-za-shards"></a>
 
-The following illustration shows a four\-node cluster with zone awareness enabled\. The service distributes the shards so that no replica shard is in the same Availability Zone as its corresponding primary shard\.
+If you enable Multi\-AZ, you should create at least one replica for each index in your cluster\. Without replicas, Amazon ES can't distribute copies of your data to other Availability Zones, which largely defeats the purpose of Multi\-AZ\. Fortunately, the default configuration for any index is a replica count of 1\. As the following diagram shows, Amazon ES distributes primary and replica shards so that no replica shard is in the same zone as its corresponding primary shard\.
 
-![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/zone-awareness.png)
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/za-3-az.png)
 
-If one Availability Zone experiences a service interruption, you have a 50/50 chance of cluster downtime due to how [master node](es-managedomains-dedicatedmasternodes.md) election works\. For example, if you use the recommended three dedicated master nodes, Amazon ES distributes two dedicated master nodes into one Availability Zone and one dedicated master node into the other\. If the Availability Zone with two dedicated master nodes experiences an interruption, your cluster is unavailable until the remaining Availability Zone can automatically replace the now\-missing dedicated master nodes, form a quorum, and elect a new master node\.
+In addition to distributing shards by Availability Zone, Amazon ES distributes them by node\. Still, certain domain configurations can result in imbalanced shard counts\. Consider the following domain:
++ 5 data nodes
++ 5 primary shards
++ 2 replicas
++ 3 Availability Zones
 
-Further, if one Availability Zone experiences an interruption, the cluster's data nodes might experience a period of extreme load while Amazon ES automatically configures new nodes to replace the now\-missing ones\. Suddenly, half as many nodes have to process just as many requests to the cluster\. As they process these requests, the remaining nodes are also struggling to replicate data onto new nodes as they come online\. A cluster with extra resources can alleviate this concern\.
+In this situation, Amazon ES has to overload one node in order to distribute the primary and replica shards across the zones, as shown in the following diagram\.
 
-**To enable zone awareness \(console\)**
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/za-3-az-imbal.png)
 
-1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
+To avoid these kinds of situations, which can strain individual nodes and hurt performance, we recommend that you choose an instance count that is a multiple of three if you plan to have two or more replicas per index\.
 
-1. Under **Analytics**, choose **Elasticsearch Service**\.
+### Dedicated Master Node Distribution<a name="es-managedomains-za-dm"></a>
 
-1. In the navigation pane, under **My domains**, choose your Amazon ES domain\.
+Even if you select two Availability Zones when configuring your domain, Amazon ES automatically distributes [dedicated master nodes](es-managedomains-dedicatedmasternodes.md) across three Availability Zones\. This distribution helps prevent cluster downtime if a zone experiences a service disruption\. If you use the recommended three dedicated master nodes and one Availability Zone goes down, your cluster still has a quorum \(2\) of dedicated master nodes and can elect a new master\. The following diagram demonstrates this configuration\.
 
-1. Choose **Configure cluster**\.
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/za-2-az.png)
 
-1. In the **Node configuration** pane, choose **Enable zone awareness**\.
+This automatic distribution has some notable exceptions:
++ If you choose an older\-generation instance type that is not available in three Availability Zones, the following scenarios apply:
+  + If you chose three Availability Zones for the domain, Amazon ES throws an error\. Choose a different instance type, and try again\.
+  + If you chose two Availability Zones for the domain, Amazon ES distributes the dedicated master nodes across two zones\.
++ Not all AWS Regions have three Availability Zones\. In these Regions, you can only configure a domain to use two zones \(and Amazon ES can only distribute dedicated master nodes across two zones\)\. For the list of Regions that support three Availability Zones, see [Configuring a Multi\-AZ Domain](#es-managedomains-multiaz)\.
 
-1. Choose **Submit**\.
+### Availability Zone Disruptions<a name="es-managedomains-za-summary"></a>
 
-For more information, see [Regions and Availability Zones](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) in the EC2 documentation\.
+Availability Zone disruptions are rare, but do occur\. The following table lists different Multi\-AZ configurations and behaviors during a disruption\.
+
+
+| Number of Availability Zones in a Region | Number of Availability Zones That You Chose | Number of Dedicated Master Nodes | Behavior if One Availability Zone Experiences a Disruption | 
+| --- | --- | --- | --- | 
+| 2 or more | 2 | 0 |  Downtime\. Your cluster loses half of its data nodes and must replace at least one in the remaining Availability Zone before it can elect a master\.  | 
+| 2 | 2 | 3 |  50/50 chance of downtime\. Amazon ES distributes two dedicated master nodes into one Availability Zone and one into the other: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html)  | 
+| 3 or more | 2 | 3 |  No downtime\. Amazon ES automatically distributes the dedicated master nodes across three Availability Zones, so the remaining two dedicated master nodes can elect a master\.  | 
+| 3 or more | 3 | 0 |  No downtime\. Roughly two\-thirds of your data nodes are still available to elect a master\.  | 
+| 3 or more | 3 | 3 |  No downtime\. The remaining two dedicated master nodes can elect a master\.  | 
+
+In *all* configurations, regardless of the cause, node failures can cause the cluster's remaining data nodes to experience a period of increased load while Amazon ES automatically configures new nodes to replace the now\-missing ones\.
+
+For example, in the event of an Availability Zone disruption in a three\-zone configuration, two\-thirds as many data nodes have to process just as many requests to the cluster\. As they process these requests, the remaining nodes are also replicating shards onto new nodes as they come online, which can further impact performance\. If availability is critical to your workload, consider adding resources to your cluster to alleviate this concern\.
 
 ## Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)<a name="es-managedomains-cloudwatchmetrics"></a>
 
 Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. If you use General Purpose or Magnetic EBS volumes, the EBS volume metrics update only every five minutes\. To view these metrics, use the **Cluster health** and **Instance health** tabs in the Amazon Elasticsearch Service console\. The metrics are provided at no extra charge\.
 
-If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs will often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [About Configuration Changes](#es-managedomains-configuration-changes)\.
+If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [About Configuration Changes](#es-managedomains-configuration-changes)\.
 
-Amazon ES metrics fall into categories:
+Amazon ES metrics fall into these categories:
 + [Cluster Metrics](#es-managedomains-cloudwatchmetrics-cluster-metrics)
 + [Dedicated Master Node Metrics](#es-managedomains-cloudwatchmetrics-master-node-metrics)
 + [EBS Volume Metrics](#es-managedomains-cloudwatchmetrics-master-ebs-metrics)
@@ -214,7 +242,7 @@ Different versions of Elasticsearch use different thread pools to process calls 
 | Metric | Description | 
 | --- | --- | 
 | IndexingLatency | The average time, in milliseconds, that it takes a shard to complete an indexing operation\. Relevant statistics: Average | 
-| IndexingRate | The number of indexing operations per minute\. A single call to the `_bulk` API that adds two documents and updates two counts as four operations, which might be spread across one or more modes\. If that index has one or more replicas, other nodes in the cluster also record a total of four indexing operations\. Document deletions do not count towards this metric\. Relevant statistics: Average | 
+| IndexingRate | The number of indexing operations per minute\. A single call to the `_bulk` API that adds two documents and updates two counts as four operations, which might be spread across one or more nodes\. If that index has one or more replicas, other nodes in the cluster also record a total of four indexing operations\. Document deletions do not count towards this metric\. Relevant statistics: Average | 
 | SearchLatency | The average time, in milliseconds, that it takes a shard to complete a search operation\. Relevant statistics: Average | 
 | SearchRate | The total number of search requests per minute for all shards on a node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant statistics: Average | 
 | SysMemoryUtilization | The percentage of the instance's memory that is in use\. Relevant statistics: Minimum, Maximum, Average | 
@@ -242,7 +270,7 @@ Amazon Elasticsearch Service integrates with AWS CloudTrail, a service that prov
 **Note**  
 CloudTrail only captures calls to the [configuration API](es-configuration-api.md), such as `CreateElasticsearchDomain` and `GetUpgradeStatus`, not the [Elasticsearch APIs](aes-supported-es-operations.md), such as `_search` and `_bulk`\.
 
-The captured calls include calls from the Amazon ES console, CLI, or SDKs\. If you create a trail, you can enable continuous delivery of CloudTrail events to an Amazon S3 bucket, including events for Amazon ES\. If you don't configure a trail, you can still view the most recent events in the CloudTrail console in **Event history**\. Using the information collected by CloudTrail, you can determine the request that was made to Amazon ES, the IP address from which the request was made, who made the request, when it was made, and additional details\.
+The captured calls include calls from the Amazon ES console, AWS CLI, or an AWS SDK\. If you create a trail, you can enable continuous delivery of CloudTrail events to an Amazon S3 bucket, including events for Amazon ES\. If you don't configure a trail, you can still view the most recent events in the CloudTrail console in **Event history**\. Using the information collected by CloudTrail, you can determine the request that was made to Amazon ES, the IP address from which the request was made, who made the request, when it was made, and additional details\.
 
 To learn more about CloudTrail, see the [AWS CloudTrail User Guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/)\.
 
@@ -259,9 +287,9 @@ For an ongoing record of events in your AWS account, including events for Amazon
 All Amazon ES configuration API actions are logged by CloudTrail and are documented in the [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\. 
 
 Every event or log entry contains information about who generated the request\. The identity information helps you determine the following: 
-+ Whether the request was made with root or AWS Identity and Access Management \(IAM\) user credentials\.
-+ Whether the request was made with temporary security credentials for a role or federated user\.
-+ Whether the request was made by another AWS service\.
++ Whether the request was made with root or AWS Identity and Access Management \(IAM\) user credentials
++ Whether the request was made with temporary security credentials for a role or federated user
++ Whether the request was made by another AWS service
 
 For more information, see the [CloudTrail userIdentity Element](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html)\.
 
@@ -373,7 +401,7 @@ You can use Amazon ES tags to add metadata to your Amazon ES domains\. AWS does 
 
 Each Amazon ES domain has a tag set, which contains all the tags that are assigned to that Amazon ES domain\. AWS does not automatically set any tags on Amazon ES domains\. A tag set can contain up to 50 tags, or it can be empty\. If you add a tag to an Amazon ES domain that has the same key as an existing tag for a resource, the new value overwrites the old value\. 
 
-You can use these tags to track costs by grouping expenses for similarly tagged resources\. An Amazon ES domain tag is a name\-value pair that you define and associate with an Amazon ES domain\. The name is referred to as the *key*\. You can use tags to assign arbitrary information to an Amazon ES domain\. A tag key could be used, for example, to define a category, and the tag value could be an item in that category\. For example, you could define a tag key of “project” and a tag value of “Salix,” indicating that the Amazon ES domain is assigned to the Salix project\. You could also use tags to designate Amazon ES domains as being used for test or production by using a key such as environment=test or environment=production\. We recommend that you use a consistent set of tag keys to make it easier to track metadata that is associated with Amazon ES domains\. 
+You can use these tags to track costs by grouping expenses for similarly tagged resources\. An Amazon ES domain tag is a name\-value pair that you define and associate with an Amazon ES domain\. The name is referred to as the *key*\. You can use tags to assign arbitrary information to an Amazon ES domain\. A tag key could be used, for example, to define a category, and the tag value could be an item in that category\. For example, you could define a tag key of “project” and a tag value of “Salix,” indicating that the Amazon ES domain is assigned to the Salix project\. You could also use tags to designate Amazon ES domains as being used for test or production by using a key such as `environment=test` or `environment=production`\. We recommend that you use a consistent set of tag keys to make it easier to track metadata that is associated with Amazon ES domains\. 
 
 You also can use tags to organize your AWS bill to reflect your own cost structure\. To do this, sign up to get your AWS account bill with tag key values included\. Then, organize your billing information according to resources with the same tag key values to see the cost of combined resources\. For example, you can tag several Amazon ES domains with key\-value pairs, and then organize your billing information to see the total cost for each domain across several services\. For more information, see [Using Cost Allocation Tags](http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html) in the *AWS Billing and Cost Management* documentation\.
 

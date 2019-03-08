@@ -14,9 +14,9 @@ We recommend that you allocate **three** dedicated master nodes for each product
 
 1. Three dedicated master nodes, the recommended number, provides two backup nodes in the event of a master node failure and the necessary quorum \(2\) to elect a new master\.
 
-1. Four dedicated master nodes is no better than three and can cause issues if you use [zone awareness](es-managedomains.md#es-managedomains-zoneawareness)\.
+1. Four dedicated master nodes is no better than three and can cause issues if you use [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) \(AZs\) in a region that has only two AZs\.
    + If one master node fails, you have the quorum \(3\) to elect a new master\. If two nodes fail, you lose that quorum, just as you do with three dedicated master nodes\.
-   + If each Availability Zone has two dedicated master nodes and the zones are unable to communicate with each other, neither zone has the quorum to elect a new master\.
+   + If each AZ has two dedicated master nodes and the zones are unable to communicate with each other, neither zone has the quorum to elect a new master\.
 
 1. Having five dedicated master nodes works as well as three and allows you to lose two nodes while maintaining a quorum, but because only one dedicated master node is active at any given time, this configuration means paying for four idle nodes\. Many customers find this level of failover protection excessive\.
 
@@ -36,18 +36,17 @@ The following illustration shows an Amazon ES domain with ten instances\. Seven 
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/DedicatedMasterNodes_no-caption.png)
 
-Although dedicated master nodes do not process search and query requests, their size is highly correlated with the number of instances, indices, and shards that they can manage\. For production clusters, we recommend the following instance types for dedicated master nodes\. These recommendations are based on typical workloads and can vary based on your needs\.
+Although dedicated master nodes do not process search and query requests, their size is highly correlated with the number of instances, indices, and shards that they can manage\. For production clusters, we recommend the following instance types for dedicated master nodes\. These recommendations are based on typical workloads and can vary based on your needs\. Clusters with many shards or field mappings can benefit from larger instance types\. Monitor the [dedicated master node metrics](cloudwatch-alarms.md) to see if you need to use a larger instance type\.
 
 
 ****  
 
 |  **Instance Count**  |  **Recommended Minimum Dedicated Master Instance Type**  | 
 | --- | --- | 
-|  5–10  |  `m3.medium.elasticsearch`  | 
-|  10–20  |  `m4.large.elasticsearch`  | 
-| 20–50 |  `c4.xlarge.elasticsearch`  | 
-|  50–100  |  `c4.2xlarge.elasticsearch`  | 
-+ For recommendations on dedicated master nodes for large clusters, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
+|  1–10  |  `c4.large.elasticsearch`  | 
+|  10–30  |  `c4.xlarge.elasticsearch`  | 
+| 30–75 |  `c4.2xlarge.elasticsearch`  | 
+|  75–200  |  `r4.4xlarge.elasticsearch`  | 
 + For information about how certain configuration changes can affect dedicated master nodes, see [About Configuration Changes](es-managedomains.md#es-managedomains-configuration-changes)\.
 + For clarification on instance count limits, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\.
 + For more information about specific instance types, including vCPU, memory, and pricing, see [Amazon Elasticsearch Instance Prices](https://aws.amazon.com/elasticsearch-service/pricing/)\.
