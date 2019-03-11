@@ -1,6 +1,6 @@
 # Signing HTTP Requests to Amazon Elasticsearch Service<a name="es-request-signing"></a>
 
-This chapter includes examples of how to send signed HTTP requests to Amazon Elasticsearch Service using Elasticsearch clients and other common libraries\. These code samples are for interacting with the Elasticsearch APIs, such as `_index`, `_bulk`, and `_snapshot`\.
+This chapter includes examples of how to send signed HTTP requests to Amazon Elasticsearch Service using Elasticsearch clients and other common libraries\. These code samples are for interacting with the Elasticsearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles, you must sign requests to the Elasticsearch APIs\.
 
 **Important**  
 For examples of how to interact with the Configuration API, including operations like creating, updating, and deleting Amazon ES domains, see [Using the AWS SDKs with Amazon Elasticsearch Service](es-configuration-samples.md)\.

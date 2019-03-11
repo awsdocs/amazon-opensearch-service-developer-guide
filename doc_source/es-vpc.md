@@ -111,6 +111,8 @@ The enhanced security of a VPC can make connecting to your domain and running ba
 **Tip**  
 If you encounter curl errors due to a certificate mismatch, try the `--insecure` flag\.
 
+As an alternative to this approach, if your domain is in a region that AWS Cloud9 supports, you can [create an EC2 environment](https://docs.aws.amazon.com/cloud9/latest/user-guide/create-environment.html#create-environment-main) in the same VPC as your domain, add the environment's security group to your Amazon ES domain configuration, add the HTTPS rule from step 5 to your security group, and use the web\-based Bash in AWS Cloud9 to issue curl commands\.
+
 ## Before You Begin: Prerequisites for VPC Access<a name="es-prerequisites-vpc-endpoints"></a>
 
 Before you can enable a connection between a VPC and your new Amazon ES domain, you must do the following:

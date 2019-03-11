@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**February 7, 2019
-+ **Latest documentation update—**February 7, 2019
++ **Latest product release—**March 11, 2019
++ **Latest documentation update—**March 11, 2019
 
 ## Release Notes<a name="release-table"></a>
 
@@ -13,6 +13,7 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [R20190113 \(Service Software\)](#release-notes) | Bug fixes for snapshots and multi\-AZ domain upgrades and support for upcoming features\. | March 6, 2019 | 
 | [Three Availability Zone Support](#release-notes) | Amazon Elasticsearch Service now supports three Availability Zones in many regions\. This release also includes a streamlined console experience\. To learn more, see [Configuring a Multi\-AZ Domain](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-multiaz)\. This feature requires service software R20181023 or later\. | February 7, 2019 | 
 | [R20181023 \(Service Software\)](#release-notes) | Improvements to snapshots and support for new features\. | February 7, 2019 | 
 | [Elasticsearch 6\.4 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.4\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | January 23, 2019 | 
