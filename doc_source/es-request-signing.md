@@ -13,7 +13,9 @@ For examples of how to interact with the Configuration API, including operations
 
 ## Java<a name="es-request-signing-java"></a>
 
-The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started\. The following example uses the Elasticsearch low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
+The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started, or you can [download a sample project for Amazon ES on GitHub](https://github.com/awsdocs/amazon-elasticsearch-service-developer-guide/blob/master/sample_code/java/amazon-es-docs-sample-client.zip)\.
+
+The following example uses the Elasticsearch low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
 
 ```
 import org.apache.http.HttpEntity;

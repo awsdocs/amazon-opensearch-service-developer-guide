@@ -265,6 +265,8 @@ If you don't have a bunch of call recordings handy—and who does?—you can [in
    response = es.bulk(bulk_file)
    print(json.dumps(response, indent=2, sort_keys=True))
    ```
+**Note**  
+This code sample uses Python 2 and might require modifications for Python 3\.
 
 1. Update the initial two variables for `host` and `region`\.
 
