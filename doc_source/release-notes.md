@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**March 11, 2019
-+ **Latest documentation update—**March 11, 2019
++ **Latest product release—**March 25, 2019
++ **Latest documentation update—**March 25, 2019
 
 ## Release Notes<a name="release-table"></a>
 
@@ -13,6 +13,8 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [R20190221 \(Service Software\)](#release-notes) | Includes the alerting feature, bug fixes, and support for upcoming features\. | March 25, 2019 | 
+| [Alerting](#release-notes) | The alerting feature notifies you when data from one or more Elasticsearch indices meets certain conditions\. To learn more, see [Alerting](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html)\. | March 25, 2019 | 
 | [R20190113 \(Service Software\)](#release-notes) | Bug fixes for snapshots and multi\-AZ domain upgrades and support for upcoming features\. | March 6, 2019 | 
 | [Three Availability Zone Support](#release-notes) | Amazon Elasticsearch Service now supports three Availability Zones in many regions\. This release also includes a streamlined console experience\. To learn more, see [Configuring a Multi\-AZ Domain](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-multiaz)\. This feature requires service software R20181023 or later\. | February 7, 2019 | 
 | [R20181023 \(Service Software\)](#release-notes) | Improvements to snapshots and support for new features\. | February 7, 2019 | 
