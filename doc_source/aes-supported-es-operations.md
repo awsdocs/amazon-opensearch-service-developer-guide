@@ -4,6 +4,7 @@ Amazon ES supports many versions of Elasticsearch\. The following topics show th
 
 **Topics**
 + [Notable API Differences](#es_version_api_notes)
++ [Version 6\.5](#es_version_6_5)
 + [Version 6\.4](#es_version_6_4)
 + [Version 6\.3](#es_version_6_3)
 + [Version 6\.2](#es_version_6_2)
@@ -87,6 +88,25 @@ PUT https://domain.region.es.amazonaws.com/source-index/_settings
   }
 }
 ```
+
+## Version 6\.5<a name="es_version_6_5"></a>
+
+For Elasticsearch 6\.5, Amazon ES supports the following operations\.
+
+
+|  |  |  | 
+| --- |--- |--- |
+|  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-es-operations.html)  | 
+
+1. Cluster configuration changes might interrupt these operations before completion\. We recommend that you use the `/_tasks` operation along with these operations to verify that the requests completed successfully\.
+
+1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\. To avoid a problem with `=` characters in `scroll_id` values, use the request body, not the query string, to pass `scroll_id` values to Amazon ES\.
+
+1. For considerations about using scripts, see [Other Supported Resources](aes-supported-resources.md)\.
+
+1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API Differences](#es_version_api_notes)\.
+
+1. See [Shrink](#es_version_api_notes-shrink)\.
 
 ## Version 6\.4<a name="es_version_6_4"></a>
 

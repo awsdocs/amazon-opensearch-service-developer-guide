@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**March 25, 2019
-+ **Latest documentation update—**March 25, 2019
++ **Latest product release—**April 8, 2019
++ **Latest documentation update—**April 8, 2019
 
 ## Release Notes<a name="release-table"></a>
 
@@ -13,6 +13,8 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Elasticsearch 6\.5 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.5\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | April 8, 2019 | 
+| [R20190221\-P1 \(Service Software\)](#release-notes) | Bug fixes\. | April 5, 2019 | 
 | [R20190221 \(Service Software\)](#release-notes) | Includes the alerting feature, bug fixes, and support for upcoming features\. | March 25, 2019 | 
 | [Alerting](#release-notes) | The alerting feature notifies you when data from one or more Elasticsearch indices meets certain conditions\. To learn more, see [Alerting](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html)\. | March 25, 2019 | 
 | [R20190113 \(Service Software\)](#release-notes) | Bug fixes for snapshots and multi\-AZ domain upgrades and support for upcoming features\. | March 6, 2019 | 

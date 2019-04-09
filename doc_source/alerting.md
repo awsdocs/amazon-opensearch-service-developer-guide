@@ -2,7 +2,7 @@
 
 The alerting feature notifies you when data from one or more Elasticsearch indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the past 20 minutes\. To get started, open Kibana and choose **Alerting**\.
 
-Full documentation for the alerting feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/)\.
+Alerting requires Elasticsearch 6\.2 or higher\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/)\.
 
 ## Differences<a name="alerting-diff"></a>
 
@@ -24,7 +24,33 @@ Amazon ES supports [Amazon SNS](https://aws.amazon.com/sns/) for notifications\.
 
 1. For **Type**, choose **Amazon SNS**\.
 
-1. Provide the SNS topic ARN and the ARN for an IAM role within your account that has `es.amazonaws.com` in its trust relationship and permissions to publish to the topic \(`sns:Publish` for the topic ARN\)\.
+1. Provide the SNS topic ARN\.
+
+1. Provide the ARN for an IAM role within your account that has the following trust relationship and permissions \(at minimum\):
+
+   ```
+   {
+     "Version": "2012-10-17",
+     "Statement": [{
+       "Effect": "Allow",
+       "Principal": {
+         "Service": "es.amazonaws.com"
+       },
+       "Action": "sts:AssumeRole"
+     }]
+   }
+   ```
+
+   ```
+   {
+     "Version": "2012-10-17",
+     "Statement": [{
+       "Effect": "Allow",
+       "Action": "sns:Publish",
+       "Resource": "sns-topic-arn"
+     }]
+   }
+   ```
 
 1. Choose **Create**\.
 
