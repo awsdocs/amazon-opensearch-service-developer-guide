@@ -2,6 +2,8 @@
 
 Amazon Elasticsearch Service offers domain storage of up to 3 PB\. You can configure a domain with 200 `i3.16xlarge.elasticsearch` instance types, each with 15 TB of storage\. Because of the sheer difference in scale, recommendations for domains of this size differ from [our general recommendations](aes-bp.md)\. This section discusses considerations for creating domains, costs, storage, and shard size\.
 
+While this section frequently references the `i3.16xlarge.elasticsearch` instance types, you can use several other instance types to reach 1 PB of total domain storage\.
+
 **Tip**  
 The AWS Database Blog has [an excellent post](https://aws.amazon.com/blogs/database/run-a-petabyte-scale-cluster-in-amazon-elasticsearch-service) on creating and operating petabyte\-scale domains\.
 
@@ -12,7 +14,7 @@ Domains of this size exceed the default limit of 20 instances per domain\. To re
 Before creating a domain of this size, check the [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) page to ensure that the associated costs match your expectations\.
 
 **Storage**  
-The `i3` instance types are specifically designed to provide fast, local non\-volatile memory express \(NVMe\) storage\. Because this local storage tends to offer considerable performance benefits when compared to Amazon Elastic Block Store, EBS volumes are not an option when you select these instance types in Amazon ES\.
+The `i3` instance types are specifically designed to provide fast, local non\-volatile memory express \(NVMe\) storage\. Because this local storage tends to offer considerable performance benefits when compared to Amazon Elastic Block Store, EBS volumes are not an option when you select these instance types in Amazon ES\. If you prefer EBS storage, use another instance type, such as `r5.12xlarge.elasticsearch`\.
 
 **Shard size and count**  
 A common Elasticsearch guideline is not to exceed 50 GB per shard\. Given the number of shards necessary to accommodate large domains and the resources available to `i3.16xlarge.elasticsearch` instances, we recommend a shard size of 100 GB\.  

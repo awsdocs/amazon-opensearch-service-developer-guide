@@ -61,7 +61,7 @@ After you configure a domain to encrypt data at rest, you can't disable the sett
 
 ## Monitoring Domains That Encrypt Data at Rest<a name="monitoring-ear"></a>
 
-Domains that encrypt data at rest have two additional metrics: `KMSKeyError` and `KMSKeyInaccessible`\. For full descriptions of these metrics, see [Cluster Metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics-cluster-metrics)\. You can view them using either the Amazon ES console or the Amazon CloudWatch console\.
+Domains that encrypt data at rest have two additional metrics: `KMSKeyError` and `KMSKeyInaccessible`\. These metrics only appear if the domain encounters a problem with your encryption key\. For full descriptions of these metrics, see [Cluster Metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics-cluster-metrics)\. You can view them using either the Amazon ES console or the Amazon CloudWatch console\.
 
 **Tip**  
 Each metric represents a significant problem for a domain, so we recommend that you create CloudWatch alarms for both\. For more information, see [Recommended CloudWatch Alarms](cloudwatch-alarms.md)\.

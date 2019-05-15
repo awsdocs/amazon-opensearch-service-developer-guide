@@ -74,7 +74,7 @@ Still, even those resources might be insufficient\. Some Elasticsearch users rep
 
 1. If you have a 184 GiB storage requirement and the recommended minimum number of three instances, use the equation 184 / 3 = 61 GiB to find the amount of storage that each instance needs\. In this example, you might select three `m4.large.elasticsearch` instances for your cluster, each using a 90 GiB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GiB of memory, so it's suited to lighter workloads\.
 
-   For a more substantial example, consider a 14 TiB storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r4.4xlarge.elasticsearch` instances, each using a 1 TiB EBS storage volume\.
+   For a more substantial example, consider a 14 TiB storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r5.4xlarge.elasticsearch` instances, each using a 1 TiB EBS storage volume\.
 
    If your cluster includes hundreds of terabytes of data, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
 

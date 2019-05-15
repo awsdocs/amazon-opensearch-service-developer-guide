@@ -10,12 +10,15 @@ For information about which instance type is appropriate for your use case, see 
 | Instance Type | Restrictions | 
 | --- | --- | 
 |  C4  |   | 
+|  C5  |  | 
 |  I2  |   | 
 |  I3  | The I3 instance types require Elasticsearch version 5\.1 or newer and do not support EBS storage volumes\. | 
 |  M3  |  The M3 instance types do not support encryption of data at rest\.  | 
 |  M4  |   | 
+| M5 |  | 
 |  R3  |  The R3 instance types do not support encryption of data at rest\.  | 
 |  R4  |   | 
+|  R5  |  | 
 |  T2  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html)  | 
 
 **Tip**  

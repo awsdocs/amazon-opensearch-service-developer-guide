@@ -32,6 +32,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Kibana and Logstash](es-kibana.md)
 + [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)
 + [Alerting](alerting.md)
++ [SQL Support for Amazon Elasticsearch Service](sql-support.md)
 + [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)
 + [Amazon Elasticsearch Service Best Practices](aes-bp.md)
    + [Sizing Amazon ES Domains](sizing-domains.md)

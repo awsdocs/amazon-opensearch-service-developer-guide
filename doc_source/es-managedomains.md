@@ -233,7 +233,7 @@ The `AWS/ES` namespace includes the following metrics for EBS volumes\.
 
 ### Instance Metrics<a name="es-managedomains-cloudwatchmetrics-instance-metrics"></a>
 
-The `AWS/ES` namespace includes the following metrics for each instance in a domain\.
+The `AWS/ES` namespace includes the following metrics for each instance in a domain\. Amazon ES also aggregates these instance metrics to provide insight into overall cluster health\. You can verify this behavior using the **Data samples** statistic in the console\. Note that each metric in the following table has relevant statistics for the node *and* the cluster\.
 
 **Important**  
 Different versions of Elasticsearch use different thread pools to process calls to the `_index` API\. Elasticsearch 1\.5 and 2\.3 use the index thread pool\. Elasticsearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. 6\.3 and newer use the write thread pool\. Currently, Amazon ES doesn't provide metrics for the bulk and write thread pools\.
@@ -241,27 +241,27 @@ Different versions of Elasticsearch use different thread pools to process calls 
 
 | Metric | Description | 
 | --- | --- | 
-| IndexingLatency | The average time, in milliseconds, that it takes a shard to complete an indexing operation\. Relevant statistics: Average | 
-| IndexingRate | The number of indexing operations per minute\. A single call to the `_bulk` API that adds two documents and updates two counts as four operations, which might be spread across one or more nodes\. If that index has one or more replicas, other nodes in the cluster also record a total of four indexing operations\. Document deletions do not count towards this metric\. Relevant statistics: Average | 
-| SearchLatency | The average time, in milliseconds, that it takes a shard to complete a search operation\. Relevant statistics: Average | 
-| SearchRate | The total number of search requests per minute for all shards on a node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant statistics: Average | 
-| SysMemoryUtilization | The percentage of the instance's memory that is in use\. Relevant statistics: Minimum, Maximum, Average | 
-| JVMGCYoungCollectionCount | The number of times that "young generation" garbage collection has run\. A large, ever\-growing number of runs is a normal part of cluster operations\. Relevant statistics: Maximum | 
-| JVMGCYoungCollectionTime | The amount of time, in milliseconds, that the cluster has spent performing "young generation" garbage collection\. Relevant statistics: Maximum | 
-| JVMGCOldCollectionCount | The number of times that "old generation" garbage collection has run\. In a cluster with sufficient resources, this number should remain small and grow infrequently\. Relevant statistics: Maximum | 
-| JVMGCOldCollectionTime | The amount of time, in milliseconds, that the cluster has spent performing "old generation" garbage collection\. Relevant statistics: Maximum | 
-| ThreadpoolForce\_mergeQueue | The number of queued tasks in the force merge thread pool\. If the queue size is consistently high, consider scaling your cluster\. Relevant statistics: Maximum | 
-| ThreadpoolForce\_mergeRejected | The number of rejected tasks in the force merge thread pool\. If this number continually grows, consider scaling your cluster\. Relevant statistics: Maximum | 
-| ThreadpoolForce\_mergeThreads | The size of the force merge thread pool\. Relevant statistics: Maximum | 
-| ThreadpoolIndexQueue | The number of queued tasks in the index thread pool\. If the queue size is consistently high, consider scaling your cluster\. The maximum index queue size is 200\. Relevant statistics: Maximum | 
-| ThreadpoolIndexRejected | The number of rejected tasks in the index thread pool\. If this number continually grows, consider scaling your cluster\. Relevant statistics: Maximum | 
-| ThreadpoolIndexThreads | The size of the index thread pool\. Relevant statistics: Maximum | 
-| ThreadpoolSearchQueue | The number of queued tasks in the search thread pool\. If the queue size is consistently high, consider scaling your cluster\. The maximum search queue size is 1,000\. Relevant statistics: Maximum | 
-| ThreadpoolSearchRejected | The number of rejected tasks in the search thread pool\. If this number continually grows, consider scaling your cluster\. Relevant statistics: Maximum | 
-| ThreadpoolSearchThreads | The size of the search thread pool\. Relevant statistics: Maximum | 
-| ThreadpoolBulkQueue | The number of queued tasks in the bulk thread pool\. If the queue size is consistently high, consider scaling your cluster\. Relevant statistics: Maximum | 
-| ThreadpoolBulkRejected | The number of rejected tasks in the bulk thread pool\. If this number continually grows, consider scaling your cluster\. Relevant statistics: Maximum | 
-| ThreadpoolBulkThreads | The size of the bulk thread pool\. Relevant statistics: Maximum | 
+| IndexingLatency | The average time, in milliseconds, that it takes a shard to complete an indexing operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum | 
+| IndexingRate | The number of indexing operations per minute\. A single call to the `_bulk` API that adds two documents and updates two counts as four operations, which might be spread across one or more nodes\. If that index has one or more replicas, other nodes in the cluster also record a total of four indexing operations\. Document deletions do not count towards this metric\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum | 
+| SearchLatency | The average time, in milliseconds, that it takes a shard to complete a search operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum | 
+| SearchRate | The total number of search requests per minute for all shards on a node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum | 
+| SysMemoryUtilization | The percentage of the instance's memory that is in use\. Relevant node statistics: Minimum, Maximum, Average Relevant cluster statistics: Minimum, Maximum, Average | 
+| JVMGCYoungCollectionCount | The number of times that "young generation" garbage collection has run\. A large, ever\-growing number of runs is a normal part of cluster operations\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| JVMGCYoungCollectionTime | The amount of time, in milliseconds, that the cluster has spent performing "young generation" garbage collection\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| JVMGCOldCollectionCount | The number of times that "old generation" garbage collection has run\. In a cluster with sufficient resources, this number should remain small and grow infrequently\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| JVMGCOldCollectionTime | The amount of time, in milliseconds, that the cluster has spent performing "old generation" garbage collection\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| ThreadpoolForce\_mergeQueue | The number of queued tasks in the force merge thread pool\. If the queue size is consistently high, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| ThreadpoolForce\_mergeRejected | The number of rejected tasks in the force merge thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum | 
+| ThreadpoolForce\_mergeThreads | The size of the force merge thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| ThreadpoolIndexQueue | The number of queued tasks in the index thread pool\. If the queue size is consistently high, consider scaling your cluster\. The maximum index queue size is 200\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| ThreadpoolIndexRejected | The number of rejected tasks in the index thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum | 
+| ThreadpoolIndexThreads | The size of the index thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| ThreadpoolSearchQueue | The number of queued tasks in the search thread pool\. If the queue size is consistently high, consider scaling your cluster\. The maximum search queue size is 1,000\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| ThreadpoolSearchRejected | The number of rejected tasks in the search thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum | 
+| ThreadpoolSearchThreads | The size of the search thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| ThreadpoolBulkQueue | The number of queued tasks in the bulk thread pool\. If the queue size is consistently high, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
+| ThreadpoolBulkRejected | The number of rejected tasks in the bulk thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum | 
+| ThreadpoolBulkThreads | The size of the bulk thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
 
 ## Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail<a name="es-managedomains-cloudtrailauditing"></a>
 
