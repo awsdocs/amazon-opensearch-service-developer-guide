@@ -307,7 +307,7 @@ The following example shows a CloudTrail log entry that demonstrates the `Create
     "principalId": "AIDACKCEVSQ6C2EXAMPLE",
     "arn": "arn:aws:iam::123456789012:user/test-user",
     "accountId": "123456789012",
-    "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+    "accessKeyId": "access-key",
     "userName": "test-user",
     "sessionContext": {
       "attributes": {

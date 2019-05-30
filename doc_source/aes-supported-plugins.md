@@ -10,6 +10,7 @@ Kibana is a plugin in older versions of Amazon ES and a Node\.js application in 
 
 | Elasticsearch Version | Plugins | 
 | --- | --- | 
+| 6\.7 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-plugins.html)  | 
 | 6\.5 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-plugins.html)  | 
 | 6\.4 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-plugins.html)  | 
 | 6\.3 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-plugins.html)  | 

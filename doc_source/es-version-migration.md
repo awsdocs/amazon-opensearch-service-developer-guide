@@ -10,8 +10,8 @@ Currently, Amazon ES supports the following upgrade paths\.
 
 | From Version | To Version | 
 | --- | --- | 
-| 6\.x | 6\.3, 6\.4, or 6\.5 | 
-| 5\.6 |  6\.3, 6\.4, or 6\.5  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. If you use AWS Lambda, check that your code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
+| 6\.x | 6\.x | 
+| 5\.6 |  6\.*x*  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. Check that your client code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
 | 5\.x | 5\.6 | 
 
 The upgrade process consists of three steps:
@@ -85,7 +85,7 @@ The following table shows how to use snapshots to migrate data to a domain that 
 
 | From Version | To Version | Migration Process | 
 | --- | --- | --- | 
-| 6\.x | 6\.5 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
+| 6\.x | 6\.7 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 6\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 5\.6 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 2\.3 | 6\.x |  Elasticsearch 2\.3 snapshots are not compatible with 6\.*x*\. To migrate your data directly from 2\.3 to 6\.*x*, you must manually recreate your indices in the new domain\. Alternately, you can follow the 2\.3 to 5\.*x* steps in this table, perform `_reindex` operations in the new 5\.*x* domain to convert your 2\.3 indices to 5\.*x* indices, and then follow the 5\.*x* to 6\.*x* steps\.  | 

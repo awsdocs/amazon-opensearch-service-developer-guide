@@ -197,7 +197,7 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
       To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
-   1. If you want to change the instance count, for **Instance count**, choose an integer from 1–20\. To request an increase up to 200 instances per domain, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. 
+   1. If you want to change the instance count, for **Instance count**, choose an integer from 1–40\. To request an increase up to 200 instances per domain, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. 
 
    1. If you want to improve cluster stability or if your domain has an instance count greater than 10, enable dedicated master nodes for your cluster\. For more information, see [Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
 
@@ -658,7 +658,7 @@ If you enabled one of the slow logs, see [Setting Elasticsearch Logging Threshol
 
 ### Setting Elasticsearch Logging Thresholds for Slow Logs<a name="es-createdomain-configure-slow-logs-indices"></a>
 
-Elasticsearch disables slow logs by default\. After you enable the *publishing* of slow logs to CloudWatch, you still must specify logging thresholds for each Elasticsearch index\. These thresholds define precisely what should be logged and at which log level\. Settings vary slightly by Elasticsearch version\.
+Elasticsearch disables slow logs by default\. After you enable the *publishing* of slow logs to CloudWatch, you still must specify logging thresholds for each Elasticsearch index\. These thresholds define precisely what should be logged and at which log level\.
 
 You specify these settings through the Elasticsearch REST API:
 
