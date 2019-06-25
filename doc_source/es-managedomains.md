@@ -8,7 +8,6 @@ As the size and number of documents in your Amazon Elasticsearch Service \(Amazo
 + [Service Software Updates](#es-service-software)
 + [Configuring a Multi\-AZ Domain](#es-managedomains-multiaz)
 + [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](#es-managedomains-cloudwatchmetrics)
-+ [Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail](#es-managedomains-cloudtrailauditing)
 + [Tagging Amazon Elasticsearch Service Domains](#es-managedomains-awsresourcetagging)
 
 ## About Configuration Changes<a name="es-managedomains-configuration-changes"></a>
@@ -16,7 +15,8 @@ As the size and number of documents in your Amazon Elasticsearch Service \(Amazo
 Amazon ES uses a *blue/green* deployment process when updating domains\. Blue/green typically refers to the practice of running two production environments, one live and one idle, and switching the two as you make software changes\. In the case of Amazon ES, it refers to the practice of creating a new environment for domain updates and routing users to the new environment after those updates are complete\. The practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
 
 The following operations cause blue/green deployments:
-+ Changing instance count or type
++ Changing instance type
++ If your domain *doesn't* have dedicated master nodes, changing data instance count
 + Enabling or disabling dedicated master nodes
 + Changing dedicated master node count
 + Enabling or disabling Multi\-AZ
@@ -29,9 +29,12 @@ The following operations cause blue/green deployments:
 + Enabling or disabling the publication of error logs or slow logs to CloudWatch
 + Upgrading to a new Elasticsearch version
 
-The following operations do **not** cause blue/green deployments:
+In *most* cases, the following operations do not cause blue/green deployments:
 + Changing access policy
 + Changing the automated snapshot hour
++ If your domain has dedicated master nodes, changing data instance count
+
+Exceptions exist\. For example, if you have not reconfigured your domain since the launch of three Availability Zone support, Amazon ES might perform a one\-time blue/green deployment to redistribute your dedicated master nodes across Availability Zones\.
 
 If you initiate a configuration change, the domain state changes to **Processing**\. During certain [service software updates](#es-service-software), the state remains **Active**\. In both cases, you can review the cluster health and Amazon CloudWatch metrics and see that the number of nodes in the cluster temporarily increases—often doubling—while the domain update occurs\. In the following illustration, you can see the number of nodes doubling from 11 to 22 during a configuration change and returning to 11 when the update is complete\.
 
@@ -75,7 +78,7 @@ Some updates are required, and others are optional\. If you take no action on re
 | Amazon Cognito integration issue | Your domain uses [authentication for Kibana](es-cognito-auth.md), and Amazon ES can't find one or more Amazon Cognito resources\. This problem usually occurs if the Amazon Cognito user pool is missing\. To correct the issue, recreate the missing resource and configure the Amazon ES domain to use it\. | 
 | Other Amazon ES service issue | Issues with Amazon ES itself might cause your domain to display as ineligible for an update\. If none of the previous conditions apply to your domain and the problem persists for more than a day, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 
-**To schedule a service software update \(console\)**
+**To request a service software update \(console\)**
 
 1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
 
@@ -85,16 +88,16 @@ Some updates are required, and others are optional\. If you take no action on re
 
 1. For **Service software release**, use the documentation link to compare your current version to the latest version\. Then choose **Update**\.
 
-**To schedule a service software update \(AWS CLI and AWS SDKs\)**
+**To request a service software update \(AWS CLI and AWS SDKs\)**
 
-You can use the following commands to see if an update is available, check upgrade eligibility, and schedule an update:
+You can use the following commands to see if an update is available, check upgrade eligibility, and request an update:
 + `describe-elasticsearch-domain` \(`DescribeElasticsearchDomain`\)
 + `start-elasticsearch-service-software-update` \(`StartElasticsearchServiceSoftwareUpdate`\)
 
 For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
 
 **Tip**  
-After scheduling an update, you might have a narrow window of time in which you can cancel it\. Use the console or `stop-elasticsearch-service-software-update` \(`StopElasticsearchServiceSoftwareUpdate`\) command\.
+After requesting an update, you might have a narrow window of time in which you can cancel it\. Use the console or `stop-elasticsearch-service-software-update` \(`StopElasticsearchServiceSoftwareUpdate`\) command\.
 
 ## Configuring a Multi\-AZ Domain<a name="es-managedomains-multiaz"></a>
 
@@ -262,130 +265,6 @@ Different versions of Elasticsearch use different thread pools to process calls 
 | ThreadpoolBulkQueue | The number of queued tasks in the bulk thread pool\. If the queue size is consistently high, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
 | ThreadpoolBulkRejected | The number of rejected tasks in the bulk thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum | 
 | ThreadpoolBulkThreads | The size of the bulk thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
-
-## Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail<a name="es-managedomains-cloudtrailauditing"></a>
-
-Amazon Elasticsearch Service integrates with AWS CloudTrail, a service that provides a record of actions taken by a user, role, or an AWS service in Amazon ES\. CloudTrail captures all configuration API calls for Amazon ES as events\.
-
-**Note**  
-CloudTrail only captures calls to the [configuration API](es-configuration-api.md), such as `CreateElasticsearchDomain` and `GetUpgradeStatus`, not the [Elasticsearch APIs](aes-supported-es-operations.md), such as `_search` and `_bulk`\.
-
-The captured calls include calls from the Amazon ES console, AWS CLI, or an AWS SDK\. If you create a trail, you can enable continuous delivery of CloudTrail events to an Amazon S3 bucket, including events for Amazon ES\. If you don't configure a trail, you can still view the most recent events in the CloudTrail console in **Event history**\. Using the information collected by CloudTrail, you can determine the request that was made to Amazon ES, the IP address from which the request was made, who made the request, when it was made, and additional details\.
-
-To learn more about CloudTrail, see the [AWS CloudTrail User Guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/)\.
-
-### Amazon Elasticsearch Service Information in CloudTrail<a name="service-name-info-in-cloudtrail"></a>
-
-CloudTrail is enabled on your AWS account when you create the account\. When activity occurs in Amazon ES, that activity is recorded in a CloudTrail event along with other AWS service events in **Event history**\. You can view, search, and download recent events in your AWS account\. For more information, see [Viewing Events with CloudTrail Event History](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html)\.
-
-For an ongoing record of events in your AWS account, including events for Amazon ES, create a trail\. A *trail* enables CloudTrail to deliver log files to an Amazon S3 bucket\. By default, when you create a trail in the console, the trail applies to all AWS Regions\. The trail logs events from all Regions in the AWS partition and delivers the log files to the Amazon S3 bucket that you specify\. Additionally, you can configure other AWS services to further analyze and act upon the event data collected in CloudTrail logs\. For more information, see the following:
-+ [Overview for Creating a Trail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html)
-+ [CloudTrail Supported Services and Integrations](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html#cloudtrail-aws-service-specific-topics-integrations)
-+ [Configuring Amazon SNS Notifications for CloudTrail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/getting_notifications_top_level.html)
-+ [Receiving CloudTrail Log Files from Multiple Regions](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/receive-cloudtrail-log-files-from-multiple-regions.html) and [Receiving CloudTrail Log Files from Multiple Accounts](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-receive-logs-from-multiple-accounts.html)
-
-All Amazon ES configuration API actions are logged by CloudTrail and are documented in the [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\. 
-
-Every event or log entry contains information about who generated the request\. The identity information helps you determine the following: 
-+ Whether the request was made with root or AWS Identity and Access Management \(IAM\) user credentials
-+ Whether the request was made with temporary security credentials for a role or federated user
-+ Whether the request was made by another AWS service
-
-For more information, see the [CloudTrail userIdentity Element](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html)\.
-
-### Understanding Amazon Elasticsearch Service Log File Entries<a name="understanding-service-name-entries"></a>
-
-A trail is a configuration that enables delivery of events as log files to an Amazon S3 bucket that you specify\. CloudTrail log files contain one or more log entries\. An event represents a single request from any source and includes information about the requested action, the date and time of the action, request parameters, and so on\. CloudTrail log files aren't an ordered stack trace of the public API calls, so they don't appear in any specific order\.
-
-The following example shows a CloudTrail log entry that demonstrates the `CreateElasticsearchDomain` action:
-
-```
-{
-  "eventVersion": "1.05",
-  "userIdentity": {
-    "type": "IAMUser",
-    "principalId": "AIDACKCEVSQ6C2EXAMPLE",
-    "arn": "arn:aws:iam::123456789012:user/test-user",
-    "accountId": "123456789012",
-    "accessKeyId": "access-key",
-    "userName": "test-user",
-    "sessionContext": {
-      "attributes": {
-        "mfaAuthenticated": "false",
-        "creationDate": "2018-08-21T21:59:11Z"
-      }
-    },
-    "invokedBy": "signin.amazonaws.com"
-  },
-  "eventTime": "2018-08-21T22:00:05Z",
-  "eventSource": "es.amazonaws.com",
-  "eventName": "CreateElasticsearchDomain",
-  "awsRegion": "us-west-1",
-  "sourceIPAddress": "123.123.123.123",
-  "userAgent": "signin.amazonaws.com",
-  "requestParameters": {
-    "elasticsearchVersion": "6.3",
-    "elasticsearchClusterConfig": {
-      "instanceType": "m4.large.elasticsearch",
-      "instanceCount": 1
-    },
-    "snapshotOptions": {
-      "automatedSnapshotStartHour": 0
-    },
-    "domainName": "test-domain",
-    "encryptionAtRestOptions": {},
-    "eBSOptions": {
-      "eBSEnabled": true,
-      "volumeSize": 10,
-      "volumeType": "gp2"
-    },
-    "accessPolicies": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"123456789012\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:us-west-1:123456789012:domain/test-domain/*\"}]}",
-    "advancedOptions": {
-      "rest.action.multi.allow_explicit_index": "true"
-    }
-  },
-  "responseElements": {
-    "domainStatus": {
-      "created": true,
-      "elasticsearchClusterConfig": {
-        "zoneAwarenessEnabled": false,
-        "instanceType": "m4.large.elasticsearch",
-        "dedicatedMasterEnabled": false,
-        "instanceCount": 1
-      },
-      "cognitoOptions": {
-        "enabled": false
-      },
-      "encryptionAtRestOptions": {
-        "enabled": false
-      },
-      "advancedOptions": {
-        "rest.action.multi.allow_explicit_index": "true"
-      },
-      "upgradeProcessing": false,
-      "snapshotOptions": {
-        "automatedSnapshotStartHour": 0
-      },
-      "eBSOptions": {
-        "eBSEnabled": true,
-        "volumeSize": 10,
-        "volumeType": "gp2"
-      },
-      "elasticsearchVersion": "6.3",
-      "processing": true,
-      "aRN": "arn:aws:es:us-west-1:123456789012:domain/test-domain",
-      "domainId": "123456789012/test-domain",
-      "deleted": false,
-      "domainName": "test-domain",
-      "accessPolicies": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::123456789012:root\"},\"Action\":\"es:*\",\"Resource\":\"arn:aws:es:us-west-1:123456789012:domain/test-domain/*\"}]}"
-    }
-  },
-  "requestID": "12345678-1234-1234-1234-987654321098",
-  "eventID": "87654321-4321-4321-4321-987654321098",
-  "eventType": "AwsApiCall",
-  "recipientAccountId": "123456789012"
-}
-```
 
 ## Tagging Amazon Elasticsearch Service Domains<a name="es-managedomains-awsresourcetagging"></a>
 

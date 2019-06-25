@@ -46,7 +46,7 @@ All configuration service requests must be signed\. For more information, see [S
 
 Attaches resource tags to an Amazon ES domain\. For more information, see [Tagging Amazon ES Domains](es-managedomains.md#es-managedomains-awsresourcetagging)\.
 
-#### Syntax<a name="w4aac52b7b9b5"></a>
+#### Syntax<a name="w30aac55b7b9b5"></a>
 
 ```
 POST /2015-01-01/tags
@@ -61,11 +61,11 @@ POST /2015-01-01/tags
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7b9b7"></a>
+#### Request Parameters<a name="w30aac55b7b9b7"></a>
 
 This operation does not use request parameters\.
 
-#### Request Body<a name="w4aac52b7b9b9"></a>
+#### Request Body<a name="w30aac55b7b9b9"></a>
 
 
 ****  
@@ -75,11 +75,11 @@ This operation does not use request parameters\.
 | TagList | [`TagList`](#es-configuration-api-datatypes-taglist) | Yes | List of resource tags | 
 | ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain to which you want to attach resource tags\. | 
 
-#### Response Elements<a name="w4aac52b7b9c11"></a>
+#### Response Elements<a name="w30aac55b7b9c11"></a>
 
 Not applicable\. The `AddTags` operation does not return a data structure\.
 
-#### Errors<a name="w4aac52b7b9c13"></a>
+#### Errors<a name="w30aac55b7b9c13"></a>
 
 The `AddTags` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -87,7 +87,7 @@ The `AddTags` operation can return any of the following errors:
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 + [`InternalException`](#es-configuration-api-errors-internal)
 
-#### Example<a name="w4aac52b7b9c15"></a>
+#### Example<a name="w30aac55b7b9c15"></a>
 
 The following example attaches a single resource tag with a tag key of `project` to the `logs` Amazon ES domain:
 
@@ -123,7 +123,7 @@ Creates a new Amazon ES domain\. For more information, see [ Creating Amazon ES 
 **Note**  
 If you attempt to create an Amazon ES domain and a domain with the same name already exists, the API does not report an error\. Instead, it returns details for the existing domain\.
 
-#### Syntax<a name="w4aac52b7c11b7"></a>
+#### Syntax<a name="w30aac55b7c11b7"></a>
 
 ```
 POST /2015-01-01/es/domain
@@ -189,11 +189,11 @@ POST /2015-01-01/es/domain
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7c11b9"></a>
+#### Request Parameters<a name="w30aac55b7c11b9"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c11c11"></a>
+#### Request Body<a name="w30aac55b7c11c11"></a>
 
 
 ****  
@@ -206,14 +206,14 @@ This operation does not use HTTP request parameters\.
 | EBSOptions | [`EBSOptions`](#es-configuration-api-datatypes-ebsoptions) | No | Container for the parameters required to enable EBS\-based storage for an Amazon ES domain\. For more information, see [Configuring EBS\-based Storage](es-createupdatedomains.md#es-createdomain-configure-ebs)\. | 
 | VPCOptions | [`VPCOptions`](#es-configuration-api-datatypes-vpcoptions) | No | Container for the values required to configure VPC access domains\. If you don't specify these values, Amazon ES creates the domain with a public endpoint\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | 
 | CognitoOptions | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | No | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
-| AccessPolicies | String | No | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md)\. | 
+| AccessPolicies | String | No | IAM policy document specifying the access policies for the new Amazon ES domain\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)\. | 
 | SnapshotOptions | [`SnapshotOptions`](#es-configuration-api-datatypes-snapshotoptions) | No | Container for parameters required to configure automated snapshots of domain indices\. For more information, see [Configuring Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. | 
 | AdvancedOptions | [`AdvancedOptions`](#es-configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\. | 
 | LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | No | Key\-value pairs to configure slow log publishing\. | 
 | EncryptionAtRestOptions | [`EncryptionAtRestOptions`](#es-configuration-api-datatypes-encryptionatrest) | No | Key\-value pairs to enable encryption at rest\. | 
 | NodeToNodeEncryptionOptions | [`NodeToNodeEncryptionOptions`](#es-configuration-api-datatypes-node-to-node) | No | Enables node\-to\-node encryption\. | 
 
-#### Response Elements<a name="w4aac52b7c11c13"></a>
+#### Response Elements<a name="w30aac55b7c11c13"></a>
 
 
 ****  
@@ -222,7 +222,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | 
 | DomainStatus | [ElasticsearchDomainStatus](#es-configuration-api-datatypes-elasticsearchdomainstatus) | Specifies the status and configuration of a new Amazon ES domain\. | 
 
-#### Errors<a name="w4aac52b7c11c15"></a>
+#### Errors<a name="w30aac55b7c11c15"></a>
 
 `CreateElasticsearchDomain` can return any of the following errors:
 + [ `BaseException`](#es-configuration-api-errors-baseexception)
@@ -233,7 +233,7 @@ This operation does not use HTTP request parameters\.
 + [`ResourceAlreadyExistsException`](#es-configuration-api-errors-resourcealreadyexists)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c11c17"></a>
+#### Example<a name="w30aac55b7c11c17"></a>
 
 This example demonstrates the following:
 + Creates an Amazon ES domain that is named `streaming-logs`
@@ -360,13 +360,13 @@ Response
 
 Deletes an Amazon ES domain and all of its data\. A domain cannot be recovered after it is deleted\.
 
-#### Syntax<a name="w4aac52b7c15b5"></a>
+#### Syntax<a name="w30aac55b7c15b5"></a>
 
 ```
 DELETE /2015-01-01/es/domain/<DOMAIN_NAME>
 ```
 
-#### Request Parameters<a name="w4aac52b7c15b7"></a>
+#### Request Parameters<a name="w30aac55b7c15b7"></a>
 
 
 ****  
@@ -375,11 +375,11 @@ DELETE /2015-01-01/es/domain/<DOMAIN_NAME>
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to delete\. | 
 
-#### Request Body<a name="w4aac52b7c15b9"></a>
+#### Request Body<a name="w30aac55b7c15b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c15c11"></a>
+#### Response Elements<a name="w30aac55b7c15c11"></a>
 
 
 ****  
@@ -388,7 +388,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | DomainStatus | [ElasticsearchDomainStatus](#es-configuration-api-datatypes-elasticsearchdomainstatus) | Specifies the configuration of the specified Amazon ES domain\. | 
 
-#### Errors<a name="w4aac52b7c15c13"></a>
+#### Errors<a name="w30aac55b7c15c13"></a>
 
 The `DeleteElasticsearchDomain` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -396,7 +396,7 @@ The `DeleteElasticsearchDomain` operation can return any of the following errors
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c15c15"></a>
+#### Example<a name="w30aac55b7c15c15"></a>
 
 The following example deletes the `weblogs` domain:
 
@@ -472,32 +472,32 @@ Deletes the service\-linked role between Amazon ES and Amazon EC2\. This role gi
 **Note**  
 This action only succeeds if no domains are using the service\-linked role\.
 
-#### Syntax<a name="w4aac52b7c17b7"></a>
+#### Syntax<a name="w30aac55b7c17b7"></a>
 
 ```
 DELETE /2015-01-01/es/role
 ```
 
-#### Request Parameters<a name="w4aac52b7c17b9"></a>
+#### Request Parameters<a name="w30aac55b7c17b9"></a>
 
 This operation does not use request parameters\.
 
-#### Request Body<a name="w4aac52b7c17c11"></a>
+#### Request Body<a name="w30aac55b7c17c11"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c17c13"></a>
+#### Response Elements<a name="w30aac55b7c17c13"></a>
 
 Not applicable\. The `DeleteElasticsearchServiceRole` operation does not return a data structure\.
 
-#### Errors<a name="w4aac52b7c17c15"></a>
+#### Errors<a name="w30aac55b7c17c15"></a>
 
 `DeleteElasticsearchServiceRole` can return any of the following errors:
 + [ `BaseException`](#es-configuration-api-errors-baseexception)
 + [`InternalException`](#es-configuration-api-errors-internal)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c17c17"></a>
+#### Example<a name="w30aac55b7c17c17"></a>
 
 The following example demonstrates deletion of the service\-linked role:
 
@@ -515,13 +515,13 @@ If successful, this action provides no response\.
 
 Describes the domain configuration for the specified Amazon ES domain, including the domain ID, domain service endpoint, and domain ARN\.
 
-#### Syntax<a name="w4aac52b7c19b5"></a>
+#### Syntax<a name="w30aac55b7c19b5"></a>
 
 ```
 GET /2015-01-01/es/domain/<DOMAIN_NAME>
 ```
 
-#### Request Parameters<a name="w4aac52b7c19b7"></a>
+#### Request Parameters<a name="w30aac55b7c19b7"></a>
 
 
 ****  
@@ -530,11 +530,11 @@ GET /2015-01-01/es/domain/<DOMAIN_NAME>
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to describe\. | 
 
-#### Request Body<a name="w4aac52b7c19b9"></a>
+#### Request Body<a name="w30aac55b7c19b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c19c11"></a>
+#### Response Elements<a name="w30aac55b7c19c11"></a>
 
 
 ****  
@@ -543,7 +543,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | DomainStatus | [ElasticsearchDomainStatus](#es-configuration-api-datatypes-elasticsearchdomainstatus) | Configuration of the specified Amazon ES domain\. | 
 
-#### Errors<a name="w4aac52b7c19c13"></a>
+#### Errors<a name="w30aac55b7c19c13"></a>
 
 `DescribeElasticsearchDomain` can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -551,7 +551,7 @@ This operation does not use the HTTP request body\.
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c19c15"></a>
+#### Example<a name="w30aac55b7c19c15"></a>
 
 The following example returns a description of the `streaming-logs` domain:
 
@@ -625,13 +625,13 @@ Response
 
 Displays the configuration of an Amazon ES domain\.
 
-#### Syntax<a name="w4aac52b7c21b5"></a>
+#### Syntax<a name="w30aac55b7c21b5"></a>
 
 ```
 GET /2015-01-01/es/domain/<DOMAIN_NAME>/config
 ```
 
-#### Request Parameters<a name="w4aac52b7c21b7"></a>
+#### Request Parameters<a name="w30aac55b7c21b7"></a>
 
 
 ****  
@@ -640,11 +640,11 @@ GET /2015-01-01/es/domain/<DOMAIN_NAME>/config
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain\. | 
 
-#### Request Body<a name="w4aac52b7c21b9"></a>
+#### Request Body<a name="w30aac55b7c21b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c21c11"></a>
+#### Response Elements<a name="w30aac55b7c21c11"></a>
 
 
 ****  
@@ -653,14 +653,14 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | DomainConfig | [`ElasticsearchDomainConfig`](#es-configuration-api-datatypes-esdomainconfig) | Configuration of the Amazon ES domain\. | 
 
-#### Errors<a name="w4aac52b7c21c13"></a>
+#### Errors<a name="w30aac55b7c21c13"></a>
 
 The `DescribeElasticsearchDomainConfig` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
 + [`InternalException`](#es-configuration-api-errors-internal)
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-#### Example<a name="w4aac52b7c21c15"></a>
+#### Example<a name="w30aac55b7c21c15"></a>
 
 The following example returns a description of the configuration of the `logs` domain:
 
@@ -816,7 +816,7 @@ HTTP/1.1 200 OK
 
 Describes the domain configuration for up to five specified Amazon ES domains\. Information includes the domain ID, domain service endpoint, and domain ARN\.
 
-#### Syntax<a name="w4aac52b7c23b5"></a>
+#### Syntax<a name="w30aac55b7c23b5"></a>
 
 ```
 POST /2015-01-01/es/domain-info
@@ -828,11 +828,11 @@ POST /2015-01-01/es/domain-info
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7c23b7"></a>
+#### Request Parameters<a name="w30aac55b7c23b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c23b9"></a>
+#### Request Body<a name="w30aac55b7c23b9"></a>
 
 
 ****  
@@ -841,7 +841,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | --- | 
 | DomainNames | [DomainNameList](#es-configuration-api-datatypes-domainnamelist) | Yes | Array of Amazon ES domains in the following format:`{"DomainNames":["<Domain_Name>","<Domain_Name>"...]` | 
 
-#### Response Elements<a name="w4aac52b7c23c11"></a>
+#### Response Elements<a name="w30aac55b7c23c11"></a>
 
 
 ****  
@@ -850,14 +850,14 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | 
 | DomainStatusList | [`ElasticsearchDomainStatusList`](#es-configuration-api-datatypes-esdomainstatuslist) | List that contains the status of each requested Amazon ES domain\. | 
 
-#### Errors<a name="w4aac52b7c23c13"></a>
+#### Errors<a name="w30aac55b7c23c13"></a>
 
 The `DescribeElasticsearchDomains` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
 + [`InternalException`](#es-configuration-api-errors-internal)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c23c15"></a>
+#### Example<a name="w30aac55b7c23c15"></a>
 
 The following example returns a description of the `logs` and `streaming-logs` domains:
 
@@ -979,13 +979,13 @@ HTTP/1.1 200 OK
 
 Describes the instance count, storage, and master node limits for a given Elasticsearch version and instance type\.
 
-#### Syntax<a name="w4aac52b7c25b5"></a>
+#### Syntax<a name="w30aac55b7c25b5"></a>
 
 ```
 GET 2015-01-01/es/instanceTypeLimits/{ElasticsearchVersion}/{InstanceType}?domainName={DomainName}
 ```
 
-#### Request Parameters<a name="w4aac52b7c25b7"></a>
+#### Request Parameters<a name="w30aac55b7c25b7"></a>
 
 
 ****  
@@ -996,11 +996,11 @@ GET 2015-01-01/es/instanceTypeLimits/{ElasticsearchVersion}/{InstanceType}?domai
 | InstanceType | String | Yes | Instance type\. To view instance types by region, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | No | The name of an existing domain\. Only specify if you need the limits for an existing domain\. | 
 
-#### Request Body<a name="w4aac52b7c25b9"></a>
+#### Request Body<a name="w30aac55b7c25b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c25c11"></a>
+#### Response Elements<a name="w30aac55b7c25c11"></a>
 
 
 ****  
@@ -1009,7 +1009,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | LimitsByRole | Map | Map containing all applicable instance type limits\. "data" refers to data nodes\. "master" refers to dedicated master nodes\. | 
 
-#### Errors<a name="w4aac52b7c25c13"></a>
+#### Errors<a name="w30aac55b7c25c13"></a>
 
 The `DescribeElasticsearchInstanceTypeLimits` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -1019,7 +1019,7 @@ The `DescribeElasticsearchInstanceTypeLimits` operation can return any of the fo
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c25c15"></a>
+#### Example<a name="w30aac55b7c25c15"></a>
 
 The following example returns a description of the `logs` and `streaming-logs` domains:
 
@@ -1144,13 +1144,13 @@ HTTP/1.1 200 OK
 
 Describes the available Reserved Instance offerings for a given region\.
 
-#### Syntax<a name="w4aac52b7c27b5"></a>
+#### Syntax<a name="w30aac55b7c27b5"></a>
 
 ```
 GET /2015-01-01/es/reservedInstanceOfferings?offeringId={OfferingId}&maxResults={MaxResults}&nextToken={NextToken}
 ```
 
-#### Request Parameters<a name="w4aac52b7c27b7"></a>
+#### Request Parameters<a name="w30aac55b7c27b7"></a>
 
 
 ****  
@@ -1161,11 +1161,11 @@ GET /2015-01-01/es/reservedInstanceOfferings?offeringId={OfferingId}&maxResults=
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w4aac52b7c27b9"></a>
+#### Request Body<a name="w30aac55b7c27b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c27c11"></a>
+#### Response Elements<a name="w30aac55b7c27c11"></a>
 
 
 ****  
@@ -1174,7 +1174,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | ReservedElasticsearchInstanceOfferings | ReservedElasticsearchInstanceOfferings | Container for all information on a Reserved Instance offering\. To learn more, see [Purchasing Reserved Instances \(AWS CLI\)](aes-ri.md#aes-ri-cli)\. | 
 
-#### Errors<a name="w4aac52b7c27c13"></a>
+#### Errors<a name="w30aac55b7c27c13"></a>
 
 The `DescribeReservedElasticsearchInstanceOfferings` operation can return any of the following errors:
 + [`DisabledOperationException`](#es-configuration-api-errors-disabledoperation)
@@ -1182,7 +1182,7 @@ The `DescribeReservedElasticsearchInstanceOfferings` operation can return any of
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c27c15"></a>
+#### Example<a name="w30aac55b7c27c15"></a>
 
 Request
 
@@ -1218,13 +1218,13 @@ Response
 
 Describes the instances you have reserved in a given region\.
 
-#### Syntax<a name="w4aac52b7c29b5"></a>
+#### Syntax<a name="w30aac55b7c29b5"></a>
 
 ```
 GET 2015-01-01/es/reservedInstances?reservationId={ReservationId}&maxResults={PageSize}&nextToken={NextToken}
 ```
 
-#### Request Parameters<a name="w4aac52b7c29b7"></a>
+#### Request Parameters<a name="w30aac55b7c29b7"></a>
 
 
 ****  
@@ -1235,11 +1235,11 @@ GET 2015-01-01/es/reservedInstances?reservationId={ReservationId}&maxResults={Pa
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w4aac52b7c29b9"></a>
+#### Request Body<a name="w30aac55b7c29b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c29c11"></a>
+#### Response Elements<a name="w30aac55b7c29c11"></a>
 
 
 ****  
@@ -1248,7 +1248,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | ReservedElasticsearchInstances |  `ReservedElasticsearchInstances`  | Container for all information on the instance you have reserved\. To learn more, see [Purchasing Reserved Instances \(AWS CLI\)](aes-ri.md#aes-ri-cli)\. | 
 
-#### Errors<a name="w4aac52b7c29c13"></a>
+#### Errors<a name="w30aac55b7c29c13"></a>
 
 The `DescribeReservedElasticsearchInstances` operation can return any of the following errors:
 + [`DisabledOperationException`](#es-configuration-api-errors-disabledoperation)
@@ -1256,7 +1256,7 @@ The `DescribeReservedElasticsearchInstances` operation can return any of the fol
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c29c15"></a>
+#### Example<a name="w30aac55b7c29c15"></a>
 
 Request
 
@@ -1297,13 +1297,13 @@ Response
 
 Returns a map of Elasticsearch versions and the versions you can upgrade them to\.
 
-#### Syntax<a name="w4aac52b7c31b5"></a>
+#### Syntax<a name="w30aac55b7c31b5"></a>
 
 ```
 GET /2015-01-01/es/compatibleVersions?domainName={DomainName}
 ```
 
-#### Request Parameters<a name="w4aac52b7c31b7"></a>
+#### Request Parameters<a name="w30aac55b7c31b7"></a>
 
 
 ****  
@@ -1312,11 +1312,11 @@ GET /2015-01-01/es/compatibleVersions?domainName={DomainName}
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | No | The name of an existing domain\. | 
 
-#### Request Body<a name="w4aac52b7c31b9"></a>
+#### Request Body<a name="w30aac55b7c31b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c31c11"></a>
+#### Response Elements<a name="w30aac55b7c31c11"></a>
 
 
 ****  
@@ -1325,7 +1325,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | ElasticsearchVersions | Map | A map of Elasticsearch versions and the versions you can upgrade them to\. | 
 
-#### Errors<a name="w4aac52b7c31c13"></a>
+#### Errors<a name="w30aac55b7c31c13"></a>
 
 The `GetCompatibleElasticsearchVersions` operation can return any of the following errors:
 + [BaseException](#es-configuration-api-errors-baseexception)
@@ -1334,7 +1334,7 @@ The `GetCompatibleElasticsearchVersions` operation can return any of the followi
 + [ValidationException](#es-configuration-api-errors-validationexception)
 + [InternalException](#es-configuration-api-errors-internal)
 
-#### Example<a name="w4aac52b7c31c15"></a>
+#### Example<a name="w30aac55b7c31c15"></a>
 
 The following example lists all three domains owned by the current user:
 
@@ -1393,13 +1393,13 @@ Response
 
 Returns a list of the domain's 10 most\-recent upgrade operations\.
 
-#### Syntax<a name="w4aac52b7c33b5"></a>
+#### Syntax<a name="w30aac55b7c33b5"></a>
 
 ```
 GET /2015-01-01/es/upgradeDomain/{DomainName}/history?maxResults={MaxResults}&amp;nextToken={NextToken}
 ```
 
-#### Request Parameters<a name="w4aac52b7c33b7"></a>
+#### Request Parameters<a name="w30aac55b7c33b7"></a>
 
 
 ****  
@@ -1409,11 +1409,11 @@ GET /2015-01-01/es/upgradeDomain/{DomainName}/history?maxResults={MaxResults}&am
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w4aac52b7c33b9"></a>
+#### Request Body<a name="w30aac55b7c33b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c33c11"></a>
+#### Response Elements<a name="w30aac55b7c33c11"></a>
 
 
 ****  
@@ -1422,7 +1422,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | UpgradeHistoryList | UpgradeHistoryList | Container for result logs of the past ten upgrade operations\. | 
 
-#### Errors<a name="w4aac52b7c33c13"></a>
+#### Errors<a name="w30aac55b7c33c13"></a>
 
 The `GetCompatibleElasticsearchVersions` operation can return any of the following errors:
 + [BaseException](#es-configuration-api-errors-baseexception)
@@ -1431,7 +1431,7 @@ The `GetCompatibleElasticsearchVersions` operation can return any of the followi
 + [ValidationException](#es-configuration-api-errors-validationexception)
 + [InternalException](#es-configuration-api-errors-internal)
 
-#### Example<a name="w4aac52b7c33c15"></a>
+#### Example<a name="w30aac55b7c33c15"></a>
 
 The following example lists the upgrade history for the given domain:
 
@@ -1514,13 +1514,13 @@ Response
 
 Returns the most\-recent status of a domain's Elasticsearch version upgrade\.
 
-#### Syntax<a name="w4aac52b7c35b5"></a>
+#### Syntax<a name="w30aac55b7c35b5"></a>
 
 ```
 GET /2015-01-01/es/upgradeDomain/{DomainName}/status
 ```
 
-#### Request Parameters<a name="w4aac52b7c35b7"></a>
+#### Request Parameters<a name="w30aac55b7c35b7"></a>
 
 
 ****  
@@ -1529,11 +1529,11 @@ GET /2015-01-01/es/upgradeDomain/{DomainName}/status
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
 
-#### Request Body<a name="w4aac52b7c35b9"></a>
+#### Request Body<a name="w30aac55b7c35b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c35c11"></a>
+#### Response Elements<a name="w30aac55b7c35c11"></a>
 
 
 ****  
@@ -1542,7 +1542,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | UpgradeStepItem | UpgradeStepItem | Container for the most\-recent status of a domain's version upgrade\. | 
 
-#### Errors<a name="w4aac52b7c35c13"></a>
+#### Errors<a name="w30aac55b7c35c13"></a>
 
 The `GetCompatibleElasticsearchVersions` operation can return any of the following errors:
 + [BaseException](#es-configuration-api-errors-baseexception)
@@ -1551,7 +1551,7 @@ The `GetCompatibleElasticsearchVersions` operation can return any of the followi
 + [ValidationException](#es-configuration-api-errors-validationexception)
 + [InternalException](#es-configuration-api-errors-internal)
 
-#### Example<a name="w4aac52b7c35c15"></a>
+#### Example<a name="w30aac55b7c35c15"></a>
 
 The following example lists the upgrade status for the given domain:
 
@@ -1575,21 +1575,21 @@ Response
 
 Displays the names of all Amazon ES domains owned by the current user *in the active region*\.
 
-#### Syntax<a name="w4aac52b7c37b5"></a>
+#### Syntax<a name="w30aac55b7c37b5"></a>
 
 ```
 GET /2015-01-01/domain
 ```
 
-#### Request Parameters<a name="w4aac52b7c37b7"></a>
+#### Request Parameters<a name="w30aac55b7c37b7"></a>
 
 This operation does not use request parameters\.
 
-#### Request Body<a name="w4aac52b7c37b9"></a>
+#### Request Body<a name="w30aac55b7c37b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c37c11"></a>
+#### Response Elements<a name="w30aac55b7c37c11"></a>
 
 
 ****  
@@ -1598,13 +1598,13 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | DomainNameList | [`DomainNameList`](#es-configuration-api-datatypes-domainnamelist) | The names of all Amazon ES domains owned by the current user\. | 
 
-#### Errors<a name="w4aac52b7c37c13"></a>
+#### Errors<a name="w30aac55b7c37c13"></a>
 
 The `ListDomainNames` operation can return any of the following errors:
 + [BaseException](#es-configuration-api-errors-baseexception)
 + [ValidationException](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c37c15"></a>
+#### Example<a name="w30aac55b7c37c15"></a>
 
 The following example lists all three domains owned by the current user:
 
@@ -1633,13 +1633,13 @@ Response
 
 Lists all Elasticsearch instance types that are supported for a given Elasticsearch version and the features that these instance types support\.
 
-#### Syntax<a name="w4aac52b7c39b5"></a>
+#### Syntax<a name="w30aac55b7c39b5"></a>
 
 ```
 GET 2015-01-01/es/instanceTypeDetails/{ElasticsearchVersion}?domainName={DomainName}&maxResults={MaxResults}&nextToken={NextToken}
 ```
 
-#### Request Parameters<a name="w4aac52b7c39b7"></a>
+#### Request Parameters<a name="w30aac55b7c39b7"></a>
 
 
 ****  
@@ -1651,11 +1651,11 @@ GET 2015-01-01/es/instanceTypeDetails/{ElasticsearchVersion}?domainName={DomainN
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w4aac52b7c39b9"></a>
+#### Request Body<a name="w30aac55b7c39b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c39c11"></a>
+#### Response Elements<a name="w30aac55b7c39c11"></a>
 
 
 ****  
@@ -1665,7 +1665,7 @@ This operation does not use the HTTP request body\.
 | ElasticsearchInstanceTypes | List | List of supported instance types for the given Elasticsearch version and the features that these instance types support\. | 
 | NextToken | String |  Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
 
-#### Errors<a name="w4aac52b7c39c13"></a>
+#### Errors<a name="w30aac55b7c39c13"></a>
 
 `ListElasticsearchInstanceTypeDetails` can return any of the following errors:
 + [ `BaseException`](#es-configuration-api-errors-baseexception)
@@ -1673,7 +1673,7 @@ This operation does not use the HTTP request body\.
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c39c15"></a>
+#### Example<a name="w30aac55b7c39c15"></a>
 
 Request
 
@@ -1720,13 +1720,13 @@ Response
 
 Lists all Elasticsearch instance types that are supported for a given Elasticsearch version\. This action is deprecated\. Use [ListElasticsearchInstanceTypeDetails](#es-configuration-api-actions-listelasticsearchinstancetypedetails) instead\.
 
-#### Syntax<a name="w4aac52b7c41b5"></a>
+#### Syntax<a name="w30aac55b7c41b5"></a>
 
 ```
 GET 2015-01-01/es/instanceTypes/{ElasticsearchVersion}?domainName={DomainName}&maxResults={MaxResults}&nextToken={NextToken}
 ```
 
-#### Request Parameters<a name="w4aac52b7c41b7"></a>
+#### Request Parameters<a name="w30aac55b7c41b7"></a>
 
 
 ****  
@@ -1738,11 +1738,11 @@ GET 2015-01-01/es/instanceTypes/{ElasticsearchVersion}?domainName={DomainName}&m
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w4aac52b7c41b9"></a>
+#### Request Body<a name="w30aac55b7c41b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c41c11"></a>
+#### Response Elements<a name="w30aac55b7c41c11"></a>
 
 
 ****  
@@ -1752,7 +1752,7 @@ This operation does not use the HTTP request body\.
 | ElasticsearchInstanceTypes | List | List of supported instance types for the given Elasticsearch version\. | 
 | NextToken | String |  Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
 
-#### Errors<a name="w4aac52b7c41c13"></a>
+#### Errors<a name="w30aac55b7c41c13"></a>
 
 `ListElasticsearchInstanceTypes` can return any of the following errors:
 + [ `BaseException`](#es-configuration-api-errors-baseexception)
@@ -1760,7 +1760,7 @@ This operation does not use the HTTP request body\.
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c41c15"></a>
+#### Example<a name="w30aac55b7c41c15"></a>
 
 Request
 
@@ -1800,13 +1800,13 @@ Response
 
 Lists all supported Elasticsearch versions on Amazon ES\.
 
-#### Syntax<a name="w4aac52b7c43b5"></a>
+#### Syntax<a name="w30aac55b7c43b5"></a>
 
 ```
 GET 2015-01-01/es/versions?maxResults={MaxResults}&nextToken={NextToken}
 ```
 
-#### Request Parameters<a name="w4aac52b7c43b7"></a>
+#### Request Parameters<a name="w30aac55b7c43b7"></a>
 
 
 ****  
@@ -1816,11 +1816,11 @@ GET 2015-01-01/es/versions?maxResults={MaxResults}&nextToken={NextToken}
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w4aac52b7c43b9"></a>
+#### Request Body<a name="w30aac55b7c43b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c43c11"></a>
+#### Response Elements<a name="w30aac55b7c43c11"></a>
 
 
 ****  
@@ -1830,7 +1830,7 @@ This operation does not use the HTTP request body\.
 | ElasticsearchVersions | List | Lists all supported Elasticsearch versions\. | 
 | NextToken | String |  Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
 
-#### Errors<a name="w4aac52b7c43c13"></a>
+#### Errors<a name="w30aac55b7c43c13"></a>
 
 `ListElasticsearchVersions` can return any of the following errors:
 + [ `BaseException`](#es-configuration-api-errors-baseexception)
@@ -1838,7 +1838,7 @@ This operation does not use the HTTP request body\.
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c43c15"></a>
+#### Example<a name="w30aac55b7c43c15"></a>
 
 Request
 
@@ -1866,13 +1866,13 @@ Response
 
 Displays all resource tags for an Amazon ES domain\.
 
-#### Syntax<a name="w4aac52b7c45b5"></a>
+#### Syntax<a name="w30aac55b7c45b5"></a>
 
 ```
 GET /2015-01-01/tags?arn=<DOMAIN_ARN>
 ```
 
-#### Request Parameters<a name="w4aac52b7c45b7"></a>
+#### Request Parameters<a name="w30aac55b7c45b7"></a>
 
 
 ****  
@@ -1881,11 +1881,11 @@ GET /2015-01-01/tags?arn=<DOMAIN_ARN>
 | --- | --- | --- | --- | 
 | ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain\. | 
 
-#### Request Body<a name="w4aac52b7c45b9"></a>
+#### Request Body<a name="w30aac55b7c45b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w4aac52b7c45c11"></a>
+#### Response Elements<a name="w30aac55b7c45c11"></a>
 
 
 ****  
@@ -1894,7 +1894,7 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | TagList | [`TagList`](#es-configuration-api-datatypes-taglist) | List of resource tags\. For more information, see [Tagging Amazon Elasticsearch Service Domains](es-managedomains.md#es-managedomains-awsresourcetagging)\. | 
 
-#### Errors<a name="w4aac52b7c45c13"></a>
+#### Errors<a name="w30aac55b7c45c13"></a>
 
 The `ListTags` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -1902,7 +1902,7 @@ The `ListTags` operation can return any of the following errors:
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 + [`InternalException`](#es-configuration-api-errors-internal)
 
-#### Example<a name="w4aac52b7c45c15"></a>
+#### Example<a name="w30aac55b7c45c15"></a>
 
 The following example lists the tags attached to the `logs` domain:
 
@@ -1934,17 +1934,17 @@ HTTP/1.1 200 OK
 
 Purchases a Reserved Instance\.
 
-#### Syntax<a name="w4aac52b7c47b5"></a>
+#### Syntax<a name="w30aac55b7c47b5"></a>
 
 ```
 POST /2015-01-01/es/purchaseReservedInstanceOffering
 ```
 
-#### Request Parameters<a name="w4aac52b7c47b7"></a>
+#### Request Parameters<a name="w30aac55b7c47b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c47b9"></a>
+#### Request Body<a name="w30aac55b7c47b9"></a>
 
 
 ****  
@@ -1955,7 +1955,7 @@ This operation does not use HTTP request parameters\.
 |  ReservedElasticsearchInstanceOfferingId  | String | Yes | The offering ID\. | 
 | InstanceCount | Integer | Yes | The number of instances you want to reserve\. | 
 
-#### Response Elements<a name="w4aac52b7c47c11"></a>
+#### Response Elements<a name="w30aac55b7c47c11"></a>
 
 
 ****  
@@ -1965,7 +1965,7 @@ This operation does not use HTTP request parameters\.
 | ReservationName | String | The name of your reservation\. | 
 |  ReservedElasticsearchInstanceId | String | The reservation ID\. | 
 
-#### Errors<a name="w4aac52b7c47c13"></a>
+#### Errors<a name="w30aac55b7c47c13"></a>
 
 The `PurchaseReservedElasticsearchInstance` operation can return any of the following errors:
 + [`DisabledOperationException`](#es-configuration-api-errors-disabledoperation)
@@ -1975,7 +1975,7 @@ The `PurchaseReservedElasticsearchInstance` operation can return any of the foll
 + [`LimitExceededException`](#es-configuration-api-errors-limitexceeded)
 + [`ResourceAlreadyExistsException`](#es-configuration-api-errors-resourcealreadyexists)
 
-#### Example<a name="w4aac52b7c47c15"></a>
+#### Example<a name="w30aac55b7c47c15"></a>
 
 Request
 
@@ -2001,7 +2001,7 @@ Response
 
 Removes the specified resource tags from an Amazon ES domain\.
 
-#### Syntax<a name="w4aac52b7c49b5"></a>
+#### Syntax<a name="w30aac55b7c49b5"></a>
 
 ```
 POST es.<AWS_REGION>.amazonaws.com/2015-01-01/tags-removal
@@ -2015,11 +2015,11 @@ POST es.<AWS_REGION>.amazonaws.com/2015-01-01/tags-removal
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7c49b7"></a>
+#### Request Parameters<a name="w30aac55b7c49b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c49b9"></a>
+#### Request Body<a name="w30aac55b7c49b9"></a>
 
 
 ****  
@@ -2029,18 +2029,18 @@ This operation does not use HTTP request parameters\.
 | ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
 | TagKeys | [`TagKey`](#es-configuration-api-datatypes-tagkey) | Yes | List of tag keys for resource tags that you want to remove from an Amazon ES domain\. | 
 
-#### Response Elements<a name="w4aac52b7c49c11"></a>
+#### Response Elements<a name="w30aac55b7c49c11"></a>
 
 Not applicable\. The `RemoveTags` operation does not return a response element\.
 
-#### Errors<a name="w4aac52b7c49c13"></a>
+#### Errors<a name="w30aac55b7c49c13"></a>
 
 The `RemoveTags` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 + [`InternalException`](#es-configuration-api-errors-internal)
 
-#### Example<a name="w4aac52b7c49c15"></a>
+#### Example<a name="w30aac55b7c49c15"></a>
 
 The following example deletes a resource tag with a tag key of `project` from the Amazon ES domain:
 
@@ -2062,7 +2062,7 @@ This operation does not return a response element\.
 
 Schedules a service software update for an Amazon ES domain\.
 
-#### Syntax<a name="w4aac52b7c51b5"></a>
+#### Syntax<a name="w30aac55b7c51b5"></a>
 
 ```
 POST es.<AWS_REGION>.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/start
@@ -2071,11 +2071,11 @@ POST es.<AWS_REGION>.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/start
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7c51b7"></a>
+#### Request Parameters<a name="w30aac55b7c51b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c51b9"></a>
+#### Request Body<a name="w30aac55b7c51b9"></a>
 
 
 ****  
@@ -2084,7 +2084,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to update to the latest service software\. | 
 
-#### Response Elements<a name="w4aac52b7c51c11"></a>
+#### Response Elements<a name="w30aac55b7c51c11"></a>
 
 
 ****  
@@ -2093,7 +2093,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | 
 | ServiceSoftwareOptions | ServiceSoftwareOptions | Container for the state of your domain relative to the latest service software\. | 
 
-#### Errors<a name="w4aac52b7c51c13"></a>
+#### Errors<a name="w30aac55b7c51c13"></a>
 
 The `RemoveTags` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -2101,7 +2101,7 @@ The `RemoveTags` operation can return any of the following errors:
 + [`InternalException`](#es-configuration-api-errors-internal)
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-#### Example<a name="w4aac52b7c51c15"></a>
+#### Example<a name="w30aac55b7c51c15"></a>
 
 The following example schedules a service software update for `my-domain`:
 
@@ -2134,7 +2134,7 @@ Response
 
 Stops a scheduled service software update for an Amazon ES domain\. Only works if the domain's `UpdateStatus` is `PENDING_UPDATE`\.
 
-#### Syntax<a name="w4aac52b7c53b5"></a>
+#### Syntax<a name="w30aac55b7c53b5"></a>
 
 ```
 POST es.<AWS_REGION>.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/stop
@@ -2143,11 +2143,11 @@ POST es.<AWS_REGION>.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/stop
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7c53b7"></a>
+#### Request Parameters<a name="w30aac55b7c53b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c53b9"></a>
+#### Request Body<a name="w30aac55b7c53b9"></a>
 
 
 ****  
@@ -2156,7 +2156,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to update to the latest service software\. | 
 
-#### Response Elements<a name="w4aac52b7c53c11"></a>
+#### Response Elements<a name="w30aac55b7c53c11"></a>
 
 
 ****  
@@ -2165,7 +2165,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | 
 | ServiceSoftwareOptions | [`ServiceSoftwareOptions`](#es-configuration-api-datatypes-servicesoftware) | Container for the state of your domain relative to the latest service software\. | 
 
-#### Errors<a name="w4aac52b7c53c13"></a>
+#### Errors<a name="w30aac55b7c53c13"></a>
 
 The `RemoveTags` operation can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -2173,7 +2173,7 @@ The `RemoveTags` operation can return any of the following errors:
 + [`InternalException`](#es-configuration-api-errors-internal)
 + [`ResourceNotFoundException`](#es-configuration-api-errors-resourcenotfound)
 
-#### Example<a name="w4aac52b7c53c15"></a>
+#### Example<a name="w30aac55b7c53c15"></a>
 
 The following example stops a scheduled service software update for `my-domain`:
 
@@ -2206,7 +2206,7 @@ Response
 
 Modifies the configuration of an Amazon ES domain, such as the instance type and the number of instances\. You only need to specify the values that you want to update\.
 
-#### Syntax<a name="w4aac52b7c55b5"></a>
+#### Syntax<a name="w30aac55b7c55b5"></a>
 
 ```
 POST /2015-01-01/es/domain/<DOMAIN_NAME>/config
@@ -2254,11 +2254,11 @@ POST /2015-01-01/es/domain/<DOMAIN_NAME>/config
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7c55b7"></a>
+#### Request Parameters<a name="w30aac55b7c55b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c55b9"></a>
+#### Request Body<a name="w30aac55b7c55b9"></a>
 
 
 ****  
@@ -2275,7 +2275,7 @@ This operation does not use HTTP request parameters\.
 | LogPublishingOptions | [`LogPublishingOptions`](#es-configuration-api-datatypes-logpublishingoptions) | No | Key\-value string pairs to configure slow log publishing\. | 
 | CognitoOptions | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | No | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
 
-#### Response Elements<a name="w4aac52b7c55c11"></a>
+#### Response Elements<a name="w30aac55b7c55c11"></a>
 
 
 ****  
@@ -2284,7 +2284,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | 
 | DomainConfig | String | Status of the Amazon ES domain after updating its configuration\. | 
 
-#### Errors<a name="w4aac52b7c55c13"></a>
+#### Errors<a name="w30aac55b7c55c13"></a>
 
 `UpdateElasticsearchDomainConfig` can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -2293,7 +2293,7 @@ This operation does not use HTTP request parameters\.
 + [`LimitExceededException`](#es-configuration-api-errors-limitexceeded)
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 
-#### Example<a name="w4aac52b7c55c15"></a>
+#### Example<a name="w30aac55b7c55c15"></a>
 
 The following example configures the daily automatic snapshot for the `streaming-logs` domain to occur during the hour starting at 3:00 AM GMT:
 
@@ -2445,7 +2445,7 @@ Response
 
 Upgrades an Amazon ES domain to a new version of Elasticsearch\. Alternately, checks upgrade eligibility\.
 
-#### Syntax<a name="w4aac52b7c57b5"></a>
+#### Syntax<a name="w30aac55b7c57b5"></a>
 
 ```
 POST /2015-01-01/es/upgradeDomain
@@ -2456,11 +2456,11 @@ POST /2015-01-01/es/upgradeDomain
 }
 ```
 
-#### Request Parameters<a name="w4aac52b7c57b7"></a>
+#### Request Parameters<a name="w30aac55b7c57b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w4aac52b7c57b9"></a>
+#### Request Body<a name="w30aac55b7c57b9"></a>
 
 
 ****  
@@ -2471,7 +2471,7 @@ This operation does not use HTTP request parameters\.
 | TargetVersion | String | Yes | Elasticsearch version to which you want to upgrade\. See [GetCompatibleElasticsearchVersions](#es-configuration-api-actions-get-compat-vers)\. | 
 | PerformCheckOnly | Boolean | No | Defaults to false\. If true, Amazon ES checks the eligibility of the domain, but does not perform the upgrade\. | 
 
-#### Response Elements<a name="w4aac52b7c57c11"></a>
+#### Response Elements<a name="w30aac55b7c57c11"></a>
 
 
 ****  
@@ -2480,7 +2480,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | 
 | UpgradeElasticsearchDomainResponse | Map | Basic response confirming operation details\. | 
 
-#### Errors<a name="w4aac52b7c57c13"></a>
+#### Errors<a name="w30aac55b7c57c13"></a>
 
 `UpdateElasticsearchDomainConfig` can return any of the following errors:
 + [`BaseException`](#es-configuration-api-errors-baseexception)
@@ -2490,7 +2490,7 @@ This operation does not use HTTP request parameters\.
 + [`ValidationException`](#es-configuration-api-errors-validationexception)
 + `[Internal](#es-configuration-api-errors-internal)`
 
-#### Example<a name="w4aac52b7c57c15"></a>
+#### Example<a name="w30aac55b7c57c15"></a>
 
 The following example upgrades an Amazon ES 5\.*x* domain to Elasticsearch 5\.6:
 

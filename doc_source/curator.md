@@ -1,6 +1,6 @@
 # Using Curator to Rotate Data in Amazon Elasticsearch Service<a name="curator"></a>
 
-This chapter has sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots\. Curator offers numerous filters to help you identity indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\.
+This chapter has sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\.
 
 Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\.
 

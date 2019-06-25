@@ -90,7 +90,7 @@ Amazon ES domains automatically send metrics to CloudWatch so that you can monit
 CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
 
 [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/)  
-Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Logging Amazon Elasticsearch Service Configuration API Calls with AWS CloudTrail](es-managedomains.md#es-managedomains-cloudtrailauditing)\.
+Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Logging and Monitoring in Amazon Elasticsearch Service](es-managedomains-cloudtrailauditing.md)\.
 
 [Amazon Kinesis](http://aws.amazon.com/documentation/kinesis/)  
 Kinesis is a managed service for real\-time processing of streaming data at a massive scale\. For more information, see [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams](es-aws-integrations.md#es-aws-integrations-kinesis) and [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose](es-aws-integrations.md#es-aws-integrations-fh)\.
@@ -99,7 +99,7 @@ Kinesis is a managed service for real\-time processing of streaming data at a ma
 Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. This guide provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.
 
 [AWS IAM](http://aws.amazon.com/iam/)  
-AWS Identity and Access Management \(IAM\) is a web service that you can use to manage access to your Amazon ES domains\. For more information, see [Amazon Elasticsearch Service Access Control](es-ac.md)\.
+AWS Identity and Access Management \(IAM\) is a web service that you can use to manage access to your Amazon ES domains\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)\.
 
 [AWS Lambda](http://aws.amazon.com/documentation/lambda/)  
 AWS Lambda is a compute service that lets you run code without provisioning or managing servers\. This guide provides Lambda sample code to stream data from DynamoDB, Amazon S3, and Kinesis\. For more information, see [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.

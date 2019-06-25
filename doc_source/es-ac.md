@@ -1,4 +1,4 @@
-# Amazon Elasticsearch Service Access Control<a name="es-ac"></a>
+# Identity and Access Management in Amazon Elasticsearch Service<a name="es-ac"></a>
 
 Amazon Elasticsearch Service offers several ways of controlling access to your domains\. This section covers the various policy types, how they interact with each other, and how to create your own, custom policies\.
 
@@ -9,14 +9,14 @@ VPC support introduces some additional considerations to Amazon ES access contro
 
 Amazon ES supports three types of access policies:
 + [Resource\-based Policies](#es-ac-types-resource)
-+ [Identity\-based policies](#es-ac-types-identity)
++ [Identity\-based Policies](#es-ac-types-identity)
 + [IP\-based Policies](#es-ac-types-ip)
 
 ### Resource\-based Policies<a name="es-ac-types-resource"></a>
 
 You attach resource\-based policies to domains\. These policies specify which actions a principal can perform on the domain's *subresources*\. Subresources include Elasticsearch indices and APIs\.
 
-The [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) element specifies the accounts, users, or roles that are allowed access\. The [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html) element specifies which subresources these principals can access\. The following resource\-based policy grants `test-user` full access \(`es:*`\) to `test-domain`:
+The [Principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) element specifies the accounts, users, or roles that are allowed access\. The [Resource](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html) element specifies which subresources these principals can access\. The following resource\-based policy grants `test-user` full access \(`es:*`\) to `test-domain`:
 
 ```
 {
@@ -108,7 +108,7 @@ Next, you might decide to configure a role for power users\. This policy allows 
 
 For information about all available actions, see [Policy Element Reference](#es-ac-reference)\.
 
-### Identity\-based policies<a name="es-ac-types-identity"></a>
+### Identity\-based Policies<a name="es-ac-types-identity"></a>
 
 Unlike resource\-based policies, which you attach to domains in Amazon ES, you attach identity\-based policies to users or roles using the AWS Identity and Access Management \(IAM\) service\. Just like [resource\-based policies](#es-ac-types-resource), identity\-based policies specify who can access a service, which actions they can perform, and if applicable, the resources on which they can perform those actions\.
 
@@ -153,11 +153,11 @@ An administrator might have full access to Amazon ES:
 For more information about the differences between resource\-based and identity\-based policies, see [IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) in the *IAM User Guide*\.
 
 **Note**  
-Users with the AWS managed `AmazonESReadOnlyAccess` policy can't see cluster health status in the console\. To allow them to see cluster health status, add the `"es:ESHttpGet"` action to an access policy and attach it to their accounts or roles\.
+Users with the AWS managed `AmazonESReadOnlyAccess` policy can't see cluster health status on the console\. To allow them to see cluster health status, add the `"es:ESHttpGet"` action to an access policy and attach it to their accounts or roles\.
 
 ### IP\-based Policies<a name="es-ac-types-ip"></a>
 
-IP\-based policies restrict access to a domain to one or more IP addresses or CIDR blocks\. Technically, IP\-based policies are not a distinct type of policy\. Instead, they are just resource\-based policies that specify an anonymous principal and include a special [https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) element\.
+IP\-based policies restrict access to a domain to one or more IP addresses or CIDR blocks\. Technically, IP\-based policies are not a distinct type of policy\. Instead, they are just resource\-based policies that specify an anonymous principal and include a special [Condition](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) element\.
 
 The primary appeal of IP\-based policies is that they allow unsigned requests to an Amazon ES domain, which lets you use clients like [curl](https://curl.haxx.se/) and [Kibana](es-kibana.md#es-managedomains-kibana) or access the domain through a proxy server\. To learn more, see [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
 

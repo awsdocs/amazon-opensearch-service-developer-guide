@@ -26,4 +26,5 @@ The Java Database Connectivity \(JDBC\) driver lets you integrate Amazon ES doma
 
 | Elasticsearch Version | JDBC Driver Version | 
 | --- | --- | 
+| 6\.7 | [0\.9\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-0.9.0.0.jar) | 
 | 6\.5 | [0\.9\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-0.9.0.0.jar) | 

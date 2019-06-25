@@ -10,7 +10,7 @@ The Kibana endpoint doesn't support signed requests\. If the access control poli
 "User: anonymous is not authorized to perform: es:ESHttpGet"
 ```
 
-If your Amazon ES domain uses VPC access, you might not receive this error\. Instead, the request might time out\. To learn more about correcting this issue and the various configuration options available to you, see [Controlling Access to Kibana](es-kibana.md#es-kibana-access), [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security), and [Amazon Elasticsearch Service Access Control](es-ac.md)\.
+If your Amazon ES domain uses VPC access, you might not receive this error\. Instead, the request might time out\. To learn more about correcting this issue and the various configuration options available to you, see [Controlling Access to Kibana](es-kibana.md#es-kibana-access), [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security), and [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)\.
 
 ## Can't Access VPC Domain<a name="aes-troubleshooting-vpc-domain"></a>
 

@@ -41,7 +41,7 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. For **Set the domain access policy to**, choose **Allow access to the domain from specific IP\(s\)** and enter your public IP address, which you can find by searching for "What is my IP?" on most search engines\. Then choose **OK**\.
 
-   To learn more about public access, VPC access, and access policies in general, see [Amazon Elasticsearch Service Access Control](es-ac.md) and [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+   To learn more about public access, VPC access, and access policies in general, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md) and [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
 1. Choose **Next**\.
 

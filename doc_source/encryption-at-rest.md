@@ -37,7 +37,7 @@ To use the Amazon ES console to create a domain that encrypts data at rest, you 
 
 If you want to use a key other than **\(Default\) aws/es**, you must also have permissions to create [grants](https://docs.aws.amazon.com/kms/latest/developerguide/grants.html) for the key\. These permissions typically take the form of a resource\-based policy that you specify when you create the key\.
 
-If you want to keep your key exclusive to Amazon ES, you can add the [https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-via-service](https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-via-service) condition to the key policy:
+If you want to keep your key exclusive to Amazon ES, you can add the [kms:ViaService](https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-via-service) condition to the key policy:
 
 ```
 "Condition": {
@@ -61,17 +61,17 @@ After you configure a domain to encrypt data at rest, you can't disable the sett
 
 ## Monitoring Domains That Encrypt Data at Rest<a name="monitoring-ear"></a>
 
-Domains that encrypt data at rest have two additional metrics: `KMSKeyError` and `KMSKeyInaccessible`\. These metrics only appear if the domain encounters a problem with your encryption key\. For full descriptions of these metrics, see [Cluster Metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics-cluster-metrics)\. You can view them using either the Amazon ES console or the Amazon CloudWatch console\.
+Domains that encrypt data at rest have two additional metrics: `KMSKeyError` and `KMSKeyInaccessible`\. These metrics appear only if the domain encounters a problem with your encryption key\. For full descriptions of these metrics, see [Cluster Metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics-cluster-metrics)\. You can view them using either the Amazon ES console or the Amazon CloudWatch console\.
 
 **Tip**  
 Each metric represents a significant problem for a domain, so we recommend that you create CloudWatch alarms for both\. For more information, see [Recommended CloudWatch Alarms](cloudwatch-alarms.md)\.
 
 ## Other Considerations<a name="ear-considerations"></a>
-+ Automatic key rotation preserves the properties of your AWS KMS master keys, so the rotation has no effect on your ability to access your Elasticsearch data\. Encrypted Amazon ES domains do not support manual key rotation, which involves creating a new master key and updating any references to the old key\. To learn more, see [Rotating Customer Master Keys](https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html) in the *AWS Key Management Service Developer Guide*\.
-+ Certain instance types do not support encryption of data at rest\. For details, see [Supported Instance Types](aes-supported-instance-types.md)\.
-+ Encryption of data at rest is not available in the cn\-north\-1 \(Beijing\) and cn\-northwest\-1 \(Ningxia\) Region\.
++ Automatic key rotation preserves the properties of your AWS KMS master keys, so the rotation has no effect on your ability to access your Elasticsearch data\. Encrypted Amazon ES domains don't support manual key rotation, which involves creating a new master key and updating any references to the old key\. To learn more, see [Rotating Customer Master Keys](https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html) in the *AWS Key Management Service Developer Guide*\.
++ Certain instance types don't support encryption of data at rest\. For details, see [Supported Instance Types](aes-supported-instance-types.md)\.
++ Encryption of data at rest is not available in the `cn-north-1` \(Beijing\) and `cn-northwest-1` \(Ningxia\) Regions\.
 + Kibana still works on domains that encrypt data at rest\.
 + Domains that encrypt data at rest use a different repository name for their automated snapshots\. For more information, see [Restoring Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
-+ Encrypting an Amazon ES domain requires two [grants](https://docs.aws.amazon.com/kms/latest/developerguide/grants.html), and each encryption key has a [limit](https://docs.aws.amazon.com/kms/latest/developerguide/limits.html#grants-per-principal-per-key) of 500 grants per principal\. This limit means that the maximum number of Amazon ES domains that you can encrypt using a single key is 250\. Currently, Amazon ES supports a maximum of 100 domains per account \(per region\), so this grant limit is of no consequence\. If the domain limit per account increases, however, the grant limit might become relevant\.
++ Encrypting an Amazon ES domain requires two [grants](https://docs.aws.amazon.com/kms/latest/developerguide/grants.html), and each encryption key has a [limit](https://docs.aws.amazon.com/kms/latest/developerguide/limits.html#grants-per-principal-per-key) of 500 grants per principal\. This limit means that the maximum number of Amazon ES domains that you can encrypt using a single key is 250\. Currently, Amazon ES supports a maximum of 100 domains per account \(per Region\), so this grant limit is of no consequence\. If the domain limit per account increases, however, the grant limit might become relevant\.
 
   If you need to encrypt more than 250 domains at that time, you can create additional keys\. Keys are regional, not global, so if you operate in more than one AWS Region, you already need multiple keys\.
