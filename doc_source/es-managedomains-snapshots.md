@@ -1,14 +1,16 @@
 # Working with Amazon Elasticsearch Service Index Snapshots<a name="es-managedomains-snapshots"></a>
 
-Snapshots are backups of a cluster's data and state\. State includes cluster settings, node information, index settings, and shard allocation\.
+Snapshots are backups of a cluster's indices and state\. State includes cluster settings, node information, index settings, and shard allocation\.
 
-Snapshots provide a convenient way to migrate data across Amazon Elasticsearch Service domains and recover from failure\. The service supports restoring from snapshots taken on both Amazon ES domains and self\-managed Elasticsearch clusters\.
+Snapshots provide a convenient way to migrate data between Amazon Elasticsearch Service domains and recover from failure\. The service supports restoring from snapshots taken on both Amazon ES domains and self\-managed Elasticsearch clusters\.
++ For domains running Elasticsearch 5\.3 and later, Amazon ES takes hourly automated snapshots and retains up to 336 of them for 14 days\.
++ For domains running Elasticsearch 5\.1 and earlier, Amazon ES takes daily automated snapshots \(during the hour you specify\) and retains up to 14 of them for 30 days\.
 
-Amazon ES takes daily automated snapshots of the primary index shards in a domain, as described in [Configuring Automatic Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\. The service stores up to 14 of these snapshots for no more than 30 days in a preconfigured Amazon S3 bucket at no additional charge to you\. You can use these snapshots to restore the domain\.
+In both cases, the service stores the snapshots in a preconfigured Amazon S3 bucket at no additional charge\. You can use these automated snapshots to restore domains\.
 
-If the cluster enters red status and you don't correct the problem, you start to lose automated snapshots after 16 days\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
+If the cluster enters red status and you don't correct the problem within two weeks, you can permanently lose your cluster's data\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
 
-You cannot use automated snapshots to migrate to new domains\. Automated snapshots are read\-only from within a given domain\. For migrations, you must use manual snapshots stored in your own repository \(an S3 bucket\)\. Standard S3 charges apply to manual snapshots\.
+You can't use automated snapshots to migrate to new domains\. Automated snapshots are read\-only from within a given domain\. For migrations, you must use manual snapshots stored in your own repository \(an S3 bucket\)\. Standard S3 charges apply to manual snapshots\.
 
 **Tip**  
 Many users find tools like Curator convenient for index and snapshot management\. Use [pip](https://pip.pypa.io/en/stable/installing/) to install Curator:  

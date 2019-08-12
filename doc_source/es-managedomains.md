@@ -7,6 +7,7 @@ As the size and number of documents in your Amazon Elasticsearch Service \(Amazo
 + [Charges for Configuration Changes](#es-managedomains-config-charges)
 + [Service Software Updates](#es-service-software)
 + [Configuring a Multi\-AZ Domain](#es-managedomains-multiaz)
++ [Interpreting Health Dashboards](#es-managedomains-cloudwatchmetrics-box-charts)
 + [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](#es-managedomains-cloudwatchmetrics)
 + [Tagging Amazon Elasticsearch Service Domains](#es-managedomains-awsresourcetagging)
 
@@ -164,6 +165,16 @@ In *all* configurations, regardless of the cause, node failures can cause the cl
 
 For example, in the event of an Availability Zone disruption in a three\-zone configuration, two\-thirds as many data nodes have to process just as many requests to the cluster\. As they process these requests, the remaining nodes are also replicating shards onto new nodes as they come online, which can further impact performance\. If availability is critical to your workload, consider adding resources to your cluster to alleviate this concern\.
 
+## Interpreting Health Dashboards<a name="es-managedomains-cloudwatchmetrics-box-charts"></a>
+
+The **Instance health** tab in the Amazon ES console uses box charts to provide at\-a\-glance visibility into the health of each Elasticsearch node\.
+
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/box-charts.png)
++ Each colored box shows the range of values for the node over the specified time period\.
++ Blue boxes represent values that are consistent with other nodes\. Red boxes represent outliers\.
++ The white line within each box shows the node's current value\.
++ The “whiskers” on either side of each box show the minimum and maximum values for all nodes over the time period\.
+
 ## Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)<a name="es-managedomains-cloudwatchmetrics"></a>
 
 Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. If you use General Purpose or Magnetic EBS volumes, the EBS volume metrics update only every five minutes\. To view these metrics, use the **Cluster health** and **Instance health** tabs in the Amazon Elasticsearch Service console\. The metrics are provided at no extra charge\.
@@ -202,7 +213,7 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 | KibanaHealthyNodes | A health check for Kibana\. A value of 1 indicates normal behavior\. A value of 0 indicates that Kibana is inaccessible\. In most cases, the health of Kibana mirrors the health of the cluster\. Relevant statistics: Minimum You can view this metric on the Amazon CloudWatch console, but not the Amazon ES console\. | 
 | KMSKeyError | A value of 1 indicates that the KMS customer master key used to encrypt data at rest has been disabled\. To restore the domain to normal operations, re\-enable the key\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum | 
 | KMSKeyInaccessible | A value of 1 indicates that the KMS customer master key used to encrypt data at rest has been deleted or revoked its grants to Amazon ES\. You can't recover domains that are in this state\. If you have a manual snapshot, though, you can use it to migrate the domain's data to a new domain\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum | 
-| InvalidHostHeaderRequests | The number of HTTP requests made to the Elasticsearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain endpoint as the host header value\. If you see large values for this metric, check that your Elasticsearch clients include the proper host header value in their requests\. Otherwise, Amazon ES might reject the requests\. You can also update the domain’s access policy to require signed requests\. Relevant statistics: Sum | 
+| InvalidHostHeaderRequests | The number of HTTP requests made to the Elasticsearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. Amazon ES rejects invaild requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\.If you see large values for this metric, confirm that your Elasticsearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum | 
 | ElasticsearchRequests | The number of requests made to the Elasticsearch cluster\. Relevant statistics: Sum | 
 | RequestCount | The number of requests to a domain and the HTTP response code \(2xx, 3xx, 4xx, 5xx\) for each request\. Relevant statistics: Sum | 
 

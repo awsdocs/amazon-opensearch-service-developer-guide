@@ -121,14 +121,11 @@ public class AESSample {
      */
     private static void updateDomain(final AWSElasticsearch client, final String domainName) {
         try {
-            // Updates the domain to take automated snapshots at noon and use three data
-            // instances instead of five.
+            // Updates the domain to use three data instances instead of five.
             // You can uncomment the Cognito lines and fill in the strings to enable Cognito
             // authentication for Kibana.
             final UpdateElasticsearchDomainConfigRequest updateRequest = new UpdateElasticsearchDomainConfigRequest()
                     .withDomainName(domainName)
-                    .withSnapshotOptions(new SnapshotOptions()
-                            .withAutomatedSnapshotStartHour(12))
                     // .withCognitoOptions(new CognitoOptions()
                             // .withEnabled(true)
                             // .withUserPoolId("user-pool-id")

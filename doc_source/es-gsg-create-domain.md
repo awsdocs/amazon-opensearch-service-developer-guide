@@ -31,8 +31,6 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. For now, you can ignore **Enable encryption at rest**\. For more information about the feature, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
-1. For **Automated snapshot start hour**, use the default value\. For more information, see [Configuring Automatic Snapshots](es-createupdatedomains.md#es-createdomain-configure-snapshots)\.
-
 1. Choose **Next**\.
 
 1. For simplicity in this tutorial, we recommend an IP\-based access policy\. On the **Set up access** page, in the **Network configuration** section, choose **Public access**\.

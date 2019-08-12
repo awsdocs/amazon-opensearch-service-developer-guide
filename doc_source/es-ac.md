@@ -68,7 +68,7 @@ To further restrict `test-user`, you can apply the following policy:
 
 Now `test-user` can perform only one operation: searches against `test-index`\. All other indices within the domain are inaccessible, and without permissions to use the `es:ESHttpPut` or `es:ESHttpPost` actions, `test-user` can't add or modify documents\.
 
-Next, you might decide to configure a role for power users\. This policy allows `power-user-role` access to all HTTP methods, except for the ability to delete a critical index and its documents:
+Next, you might decide to configure a role for power users\. This policy gives `power-user-role` access to the HTTP GET and PUT methods for all URIs in the index:
 
 ```
 {
@@ -82,25 +82,10 @@ Next, you might decide to configure a role for power users\. This policy allows 
         ]
       },
       "Action": [
-        "es:ESHttpDelete",
         "es:ESHttpGet",
-        "es:ESHttpHead",
-        "es:ESHttpPost",
         "es:ESHttpPut"
       ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/*"
-    },
-    {
-      "Effect": "Deny",
-      "Principal": {
-        "AWS": [
-          "arn:aws:iam::123456789012:role/power-user-role"
-        ]
-      },
-      "Action": [
-        "es:ESHttpDelete"
-      ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/critical-index*"
+      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/test-index/*"
     }
   ]
 }
@@ -114,7 +99,7 @@ Unlike resource\-based policies, which you attach to domains in Amazon ES, you a
 
 While they certainly don't have to be, identity\-based policies tend to be more generic\. They often govern only the configuration API actions a user can perform\. After you have these policies in place, you can use resource\-based policies in Amazon ES to offer users access to Elasticsearch indices and APIs\.
 
-Because identity\-based policies attach to users or roles \(principals\), the JSON doesn't specify a principal\. The following policy grants access to actions that begin with `Describe` and `List` and allows `GET` requests against all domains\. This combination of actions provides read\-only access:
+Because identity\-based policies attach to users or roles \(principals\), the JSON doesn't specify a principal\. The following policy grants access to actions that begin with `Describe` and `List`\. This combination of actions provides read\-only access to domain configurations, but not to the data stored in the domain itself:
 
 ```
 {
@@ -123,8 +108,7 @@ Because identity\-based policies attach to users or roles \(principals\), the JS
     {
       "Action": [
         "es:Describe*",
-        "es:List*",
-        "es:ESHttpGet"
+        "es:List*"
       ],
       "Effect": "Allow",
       "Resource": "*"
@@ -133,7 +117,7 @@ Because identity\-based policies attach to users or roles \(principals\), the JS
 }
 ```
 
-An administrator might have full access to Amazon ES:
+An administrator might have full access to Amazon ES and all data stored on all domains:
 
 ```
 {
@@ -200,13 +184,13 @@ Even if you configure a completely open resource\-based access policy, *all* req
   es.region.amazonaws.com/2015-01-01/
   ```
 
-  For example, the following request makes a minor configuration change to the `movies` domain, but you have to sign it yourself \(not recommended\):
+  For example, the following request makes a configuration change to the `movies` domain, but you have to sign it yourself \(not recommended\):
 
   ```
   POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/movies/config
   {
-    "SnapshotOptions": {
-      "AutomatedSnapshotStartHour": 3
+    "ElasticsearchClusterConfig": {
+      "InstanceType": "c5.xlarge.elasticsearch"
     }
   }
   ```
@@ -219,8 +203,8 @@ Even if you configure a completely open resource\-based access policy, *all* req
   client = boto3.client('es')
   response = client.update_elasticsearch_domain_config(
     DomainName='movies',
-    SnapshotOptions={
-      'AutomatedSnapshotStartHour': 3
+    ElasticsearchClusterConfig={
+      'InstanceType': 'c5.xlarge.elasticsearch'
     }
   )
   ```

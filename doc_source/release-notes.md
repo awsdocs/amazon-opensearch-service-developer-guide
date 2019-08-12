@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**May 29, 2019
-+ **Latest documentation update—**May 29, 2019
++ **Latest product release—**July 8, 2019
++ **Latest documentation update—**July 8, 2019
 
 ## Release Notes<a name="release-table"></a>
 
@@ -13,6 +13,8 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [R20190724\-P1 \(Service Software\)](#release-notes) | Support for upcoming features\. | August 1, 2019 | 
+| [Hourly Snapshots](#release-notes) | Rather than daily snapshots, Amazon Elasticsearch Service now takes hourly snapshots of domains running Elasticsearch 5\.3 and later so that you have more frequent backups from which to restore your data\. To learn more, see [Working with Amazon Elasticsearch Service Index Snapshots](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html)\. | July 8, 2019 | 
 | [Elasticsearch 6\.7 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.7\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | May 29, 2019 | 
 | [R20190418 \(Service Software\)](#release-notes) | Adds SQL support, bug fixes, and support for upcoming features\. | May 15, 2019 | 
 | [5\-series Instance Types](#release-notes) | Amazon Elasticsearch Service now supports M5, C5, and R5 instance types\. Compared to previous\-generation instance types, these new types offer better performance at lower prices\. For more information, see [Supported Instance Types](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html) and [Limits](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-limits.html)\. | April 24, 2019 | 

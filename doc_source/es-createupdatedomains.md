@@ -11,7 +11,6 @@ Unlike the brief instructions in the [Getting Started](es-gsg.md) tutorial, this
 + [Modifying VPC Access Configuration](#es-createdomain-configure-vpc-endpoints)
 + [Configuring Amazon Cognito Authentication for Kibana](#es-createdomain-configure-cognito-auth)
 + [Configuring Access Policies](#es-createdomain-configure-access-policies)
-+ [Configuring Automatic Snapshots](#es-createdomain-configure-snapshots)
 + [Configuring Advanced Options](#es-createdomain-configure-advanced-options)
 + [Configuring Logs](#es-createdomain-configure-slow-logs)
 
@@ -82,9 +81,7 @@ You can choose different instance types for your dedicated master nodes and data
 
    Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
-1. For **Automated snapshot start hour**, choose a low traffic time for Amazon ES to take automated snapshots\.
-
-   For more information and recommendations, see [Configuring Automatic Snapshots](#es-createdomain-configure-snapshots)\.
+1. \(Optional\) For domains running Elasticsearch 5\.3 and later, **Automated snapshot start hour** has no effect\. For more information about automated snapshots, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
 
 1. \(Optional\) Choose **Advanced options**\. For a summary of options, see [Configuring Advanced Options](#es-createdomain-configure-advanced-options)\.
 
@@ -123,36 +120,35 @@ Instead of creating an Amazon ES domain by using the console, you can use the AW
 #### Example Commands<a name="es-createdomains-cli-examples"></a>
 
 This first example demonstrates the following Amazon ES domain configuration:
-+ Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
++ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 5\.5
 + Populates the domain with two instances of the `m4.large.elasticsearch` instance type
 + Uses a 100 GiB Magnetic disk EBS volume for storage for each data node
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
 ```
-aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=standard,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --melasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=standard,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
-+ Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
++ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 5\.5
 + Populates the domain with six instances of the `m4.large.elasticsearch` instance type
 + Uses a 100 GiB General Purpose \(SSD\) EBS volume for storage for each data node
 + Restricts access to the service to a single user, identified by the user's AWS account ID: 555555555555 
 + Distributes instances across three Availability Zones
 
 ```
-aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=6,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3} --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/logs/*" } ] }'
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=6,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3} --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/*" } ] }'
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
-+ Creates an Amazon ES domain named *weblogs* with Elasticsearch version 5\.5
++ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 5\.5
 + Populates the domain with ten instances of the `m4.xlarge.elasticsearch` instance type
 + Populates the domain with three instances of the `m4.large.elasticsearch` instance type to serve as dedicated master nodes
 + Uses a 100 GiB Provisioned IOPS EBS volume for storage, configured with a baseline performance of 1000 IOPS for each data node
 + Restricts access to a single user and to a single subresource, the `_search` API
-+ Configures automated daily snapshots of the indices for 03:00 UTC 
 
 ```
-aws es create-elasticsearch-domain --domain-name weblogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.xlarge.elasticsearch,InstanceCount=10,DedicatedMasterEnabled=true,DedicatedMasterType=m4.large.elasticsearch,DedicatedMasterCount=3 --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,Iops=1000 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::555555555555:root" }, "Action": "es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/_search" } ] }' --snapshot-options AutomatedSnapshotStartHour=3
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.xlarge.elasticsearch,InstanceCount=10,DedicatedMasterEnabled=true,DedicatedMasterType=m4.large.elasticsearch,DedicatedMasterCount=3 --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,Iops=1000 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::555555555555:root" }, "Action": "es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/_search" } ] }'
 ```
 
 **Note**  
@@ -170,7 +166,6 @@ To meet the demands of increased traffic and data, you can update your Amazon ES
 + Enable or disable dedicated master nodes
 + Enable or disable Multi\-AZ
 + Configure storage configuration
-+ Change the start time for automated snapshots of domain indices
 + Change the VPC subnets and security groups
 + Configure advanced options
 
@@ -208,8 +203,6 @@ Use the following procedure to update your Amazon ES configuration by using the 
       1. For **Dedicated master instance count**, choose the number of instances\.
 
    1. If you want to enable or disable Multi\-AZ, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
-
-   1. If you want to change the hour during which the service takes automated daily snapshots of the primary index shards of your Amazon ES domain, for **Automated snapshot start hour**, choose a new time\.
 
    1. If you didn't enable VPC access when you created the domain, skip to step 7\. If you enabled VPC access, you can change the subnet that the VPC endpoint is placed in, and you can change the security groups:
 
@@ -417,62 +410,6 @@ If you configure access policies using the AWS CLI, you can use one of many onli
 ### Configuring Access Policies \(AWS SDKs\)<a name="es-createdomain-configure-access-policies-sdk"></a>
 
 The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--access-policies` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
-
-## Configuring Automatic Snapshots<a name="es-createdomain-configure-snapshots"></a>
-
-Amazon Elasticsearch Service provides automatic daily snapshots of a domain's primary index shards and the number of replica shards\. By default, the service takes automatic snapshots at midnight, but you should choose a time when the service is under minimal load\.
-
-For information on working with these snapshots, see [Restoring Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
-
-**Warning**  
-The service stops taking snapshots of Amazon ES indices while the health of a cluster is red\. Any documents that you add to a red cluster, even to indices with a health status of green, can be lost in the event of a cluster failure due to this lack of backups\. To prevent loss of data, return the health of your cluster to green before uploading additional data to any index in the cluster\. To learn more, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
-
-### Configuring Snapshots \(Console\)<a name="es-createdomain-configure-snapshots-console"></a>
-
- Use the following procedure to configure daily automatic index snapshots by using the console\.
-
-**To configure automatic snapshots \(console\)**
-
-1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
-
-1. Under **Analytics**, choose **Elasticsearch Service**\.
-
-1. In the navigation pane, under **My domains**, choose the domain that you want to update\.
-
-1. Choose **Configure cluster**\.
-
-1. For **Automated snapshot start hour**, choose the new hour for the service to take automated snapshots\.
-
-1. Choose **Submit**\.
-
-### Configuring Snapshots \(AWS CLI\)<a name="es-createdomain-configure-snapshots-cli"></a>
-
-Use the following syntax for the `--snapshot-options` option\. The syntax for the option is the same for both the `create-elasticsearch-domain` and `update-elasticsearch-domain-config` commands\.
-
-**Syntax**
-
-```
---snapshot-options AutomatedSnapshotStartHour=<value>
-```
-
-
-****  
-
-| Parameter | Valid Values | Description | 
-| --- | --- | --- | 
-| AutomatedSnapshotStartHour | Integer between 0 and 23 | Specifies the hour in UTC during which the service performs a daily automated snapshot of the indices in the new domain\. The default value is 0, or midnight, which means that the snapshot is taken anytime between midnight and 1:00 AM\. | 
-
-**Example**
-
-The following example configures automatic snapshots at 01:00 UTC:
-
-```
-aws es update-elasticsearch-domain-config --domain-name mylogs --region us-east-2 --snapshot-options AutomatedSnapshotStartHour=1
-```
-
-### Configuring Snapshots \(AWS SDKs\)<a name="es-createdomain-configure-snapshots-sdk"></a>
-
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions that are defined in the [Amazon ES Configuration API Reference](es-configuration-api.md)\. This includes the `--snapshots-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
 
 ## Configuring Advanced Options<a name="es-createdomain-configure-advanced-options"></a>
 

@@ -8,7 +8,7 @@ While this section frequently references the `i3.16xlarge.elasticsearch` instanc
 The AWS Database Blog has [an excellent post](https://aws.amazon.com/blogs/database/run-a-petabyte-scale-cluster-in-amazon-elasticsearch-service) on creating and operating petabyte\-scale domains\.
 
 **Creating domains**  
-Domains of this size exceed the default limit of 20 instances per domain\. To request a service limit increase of up to 200 instances per domain, open a case at the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.
+Domains of this size exceed the default limit of 40 instances per domain\. To request a service limit increase of up to 200 instances per domain, open a case at the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.
 
 **Pricing**  
 Before creating a domain of this size, check the [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) page to ensure that the associated costs match your expectations\.
