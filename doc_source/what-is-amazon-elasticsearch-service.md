@@ -45,20 +45,22 @@ Amazon ES includes the following features:
 ## Supported Elasticsearch Versions<a name="aes-choosing-version"></a>
 
 Amazon ES currently supports the following Elasticsearch versions:
-+ 6\.7, 6\.5, 6\.4, 6\.3, 6\.2, 6\.0
++ 7\.1
++ 6\.8, 6\.7, 6\.5, 6\.4, 6\.3, 6\.2, 6\.0
 + 5\.6, 5\.5, 5\.3, 5\.1
 + 2\.3
 + 1\.5
 
-Compared to earlier versions of Elasticsearch, the 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are some highlights:
+**Note**  
+Amazon Kinesis Data Firehose currently doesn't support Amazon ES 7\.*x* domains\.
+
+Compared to earlier versions of Elasticsearch, the 7\.*x* and 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are a few highlights:
 + **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
 + **Vega visualizations** – Kibana 6\.2 and newer support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
 + **Java high\-level REST client** – Compared to the low\-level client, this client offers a simplified development experience and supports many Elasticsearch APIs\. For a code sample, see [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
 + **Weighted averages** – This aggregration lets you assign weights to documents and factor those weights into the average of a given value\.
-+ **Composite aggregations** – These aggregations build composite buckets from one or more fields and sort them in "natural order" \(alphabetically for terms, numerically or by date for histograms\)\.
 + **Higher indexing performance** – Newer versions of Elasticsearch provide superior indexing capabilities that significantly increase the throughput of data updates\.
-+ **Better safeguards** – The 6\.*x* versions of Elasticsearch offer many safeguards that are designed to prevent overly broad or complex queries from negatively affecting the performance and stability of the cluster\.
-+ **Kibana autocomplete** – Kibana 6\.3 and newer support autocomplete for queries, which greatly improves the day\-to\-day user experience\.
++ **Better safeguards** – Newer versions of Elasticsearch offer improved cluster coordination and many safeguards that help prevent overly broad or complex queries from negatively affecting performing and stability\.
 
 For more information about the differences between Elasticsearch versions and the APIs that Amazon ES supports, see [Supported Elasticsearch Operations](aes-supported-es-operations.md)\.
 

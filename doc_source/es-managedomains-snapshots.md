@@ -1,16 +1,16 @@
 # Working with Amazon Elasticsearch Service Index Snapshots<a name="es-managedomains-snapshots"></a>
 
-Snapshots are backups of a cluster's indices and state\. State includes cluster settings, node information, index settings, and shard allocation\.
+Snapshots are backups of a cluster's indices and *state*\. State includes cluster settings, node information, index settings, and shard allocation\.
 
-Snapshots provide a convenient way to migrate data between Amazon Elasticsearch Service domains and recover from failure\. The service supports restoring from snapshots taken on both Amazon ES domains and self\-managed Elasticsearch clusters\.
+On Amazon Elasticsearch Service, snapshots come in two forms: automated and manual\.
++ Automated snapshots are *only* for cluster recovery\. You can use them to [restore your domain](#es-managedomains-snapshot-restore) in the event of [red cluster status](aes-handling-errors.md#aes-handling-errors-red-cluster-status) or other data loss\. Amazon ES stores automated snapshots in a preconfigured Amazon S3 bucket at no additional charge\.
++ Manual snapshots are for cluster recovery *or* moving data from one cluster to another\. As the name suggests, you have to initiate manual snapshots\. These snapshots are stored in your own Amazon S3 bucket, and standard S3 charges apply\. If you have a snapshot from a self\-managed Elasticsearch cluster, you can even use that snapshot to migrate to an Amazon ES domain\.
+
+All Amazon ES domains take automated snapshots, but frequency differs:
 + For domains running Elasticsearch 5\.3 and later, Amazon ES takes hourly automated snapshots and retains up to 336 of them for 14 days\.
 + For domains running Elasticsearch 5\.1 and earlier, Amazon ES takes daily automated snapshots \(during the hour you specify\) and retains up to 14 of them for 30 days\.
 
-In both cases, the service stores the snapshots in a preconfigured Amazon S3 bucket at no additional charge\. You can use these automated snapshots to restore domains\.
-
-If the cluster enters red status and you don't correct the problem within two weeks, you can permanently lose your cluster's data\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
-
-You can't use automated snapshots to migrate to new domains\. Automated snapshots are read\-only from within a given domain\. For migrations, you must use manual snapshots stored in your own repository \(an S3 bucket\)\. Standard S3 charges apply to manual snapshots\.
+If your cluster enters red status, Amazon ES stops taking automated snapshots\. If you don't correct the problem within two weeks, you can permanently lose your cluster's data\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
 
 **Tip**  
 Many users find tools like Curator convenient for index and snapshot management\. Use [pip](https://pip.pypa.io/en/stable/installing/) to install Curator:  
@@ -175,11 +175,18 @@ You specify two pieces of information when you create a snapshot:
 The examples in this chapter use [curl](https://curl.haxx.se/), a common HTTP client, for convenience and brevity\. If your access policies specify IAM users or roles, however, you must sign your snapshot requests\. You can use the commented\-out examples in the [sample Python client](#es-managedomains-snapshot-client-python) to make signed HTTP requests to the same endpoints that the curl commands use\.
 
 **To manually take a snapshot**
-+ Run the following command to manually take a snapshot:
 
-  ```
-  curl -XPUT 'elasticsearch-domain-endpoint/_snapshot/repository/snapshot-name'
-  ```
+1. You can't take a snapshot if one is currently in progress\. To check, run the following command:
+
+   ```
+   curl -XGET 'elasticsearch-domain-endpoint/_snapshot/_status'
+   ```
+
+1. Run the following command to manually take a snapshot:
+
+   ```
+   curl -XPUT 'elasticsearch-domain-endpoint/_snapshot/repository/snapshot-name'
+   ```
 
 **Note**  
 The time required to take a snapshot increases with the size of the Amazon ES domain\. Long\-running snapshot operations sometimes encounter the following error: `504 GATEWAY_TIMEOUT`\. Typically, you can ignore these errors and wait for the operation to complete successfully\. Use the following command to verify the state of all snapshots of your domain:  

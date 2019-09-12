@@ -146,3 +146,7 @@ The following table shows the maximum size of HTTP request payloads\.
 ## Java Process Limit<a name="aes-java-process-limit"></a>
 
 Amazon ES limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
+
+## Domain Policy Limit<a name="aes-domain-policy-limit"></a>
+
+Amazon ES limits [access policies on domains](es-ac.md#es-ac-types-resource) to 102400 bytes\.

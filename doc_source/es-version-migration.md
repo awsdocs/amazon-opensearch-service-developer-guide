@@ -10,7 +10,8 @@ Currently, Amazon ES supports the following upgrade paths\.
 
 | From Version | To Version | 
 | --- | --- | 
-| 6\.x | 6\.x | 
+| 6\.8 | 7\.1 Elasticsearch 7\.*x* includes numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](es-managedomains-snapshots.md) of the 6\.8 domain, restoring it on a test 7\.1 domain, and using that test domain to identify potential upgrade issues\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\. Amazon Kinesis Data Firehose currently doesn't support Amazon ES 7\.*x* domains\.  | 
+| 6\.*x* | 6\.*x* | 
 | 5\.6 |  6\.*x*  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. Check that your client code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
 | 5\.x | 5\.6 | 
 
@@ -29,6 +30,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 
 | Issue | Description | 
 | --- | --- | 
+| Too many shards per node | The 7\.x versions of Elasticsearch have a default setting of no more than 1,000 shards per node\. If a node in your current cluster exceeds this setting, Amazon ES doesn't allow you to upgrade\. If you encounter this error, you have several options:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html) | 
 | Domain in processing | The domain is in the middle of a configuration change\. Check upgrade eligibility after the operation completes\. | 
 | Red cluster status | One or more indices in the cluster is red\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. | 
 | High error rate | The Elasticsearch cluster is returning a large number of 5xx errors when attempting to process requests\. This problem is usually the result of too many simultaneous read or write requests\. Consider reducing traffic to the cluster or scaling your domain\. | 
@@ -51,6 +53,8 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 The upgrade process is irreversible and can't be paused nor canceled\. During an upgrade, you can't make configuration changes to the domain\. Before starting an upgrade, double\-check that you want to proceed\. You can use these same steps to perform the pre\-upgrade check without actually starting an upgrade\.
 
 **To upgrade a domain to a later version of Elasticsearch \(console\)**
+
+1. [Take a manual snapshot](es-managedomains-snapshots.md) of your domain\. This snapshot serves as a backup that you can [restore on a new domain](es-managedomains-snapshots.md#es-managedomains-snapshot-restore) if you want to return to using the prior Elasticsearch version\.
 
 1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
 
@@ -78,14 +82,15 @@ For more information, see the [AWS CLI Command Reference](https://docs.aws.amazo
 
 In\-place upgrades are the easier, faster, and more reliable way to upgrade a domain to a later Elasticsearch version\. Snapshots are a good option if you need to migrate from a pre\-5\.1 version of Elasticsearch or want to migrate to an entirely new cluster\.
 
-The following table shows how to use snapshots to migrate data to a domain that uses a different Elasticsearch version\. Most of the steps require you to create and restore manual index snapshots\. For more information about this process, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
+The following table shows how to use snapshots to migrate data to a domain that uses a different Elasticsearch version\. For more information about taking and restoring snapshots, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
 
 
 ****  
 
 | From Version | To Version | Migration Process | 
 | --- | --- | --- | 
-| 6\.x | 6\.7 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
+| 6\.x | 7\.1 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
+| 6\.x | 6\.8 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 6\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 5\.6 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 2\.3 | 6\.x |  Elasticsearch 2\.3 snapshots are not compatible with 6\.*x*\. To migrate your data directly from 2\.3 to 6\.*x*, you must manually recreate your indices in the new domain\. Alternately, you can follow the 2\.3 to 5\.*x* steps in this table, perform `_reindex` operations in the new 5\.*x* domain to convert your 2\.3 indices to 5\.*x* indices, and then follow the 5\.*x* to 6\.*x* steps\.  | 

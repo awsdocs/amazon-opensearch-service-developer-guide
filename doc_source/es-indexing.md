@@ -10,20 +10,20 @@ For information about integrating data from other AWS services, see [Loading Str
 
 Before you can search data, you must *index* it\. Indexing is the method by which search engines organize data for fast retrieval\. The resulting structure is called, fittingly, an index\.
 
-In Elasticsearch, the basic unit of data is a JSON *document*\. Within an index, Elasticsearch organizes documents into *types* \(arbitrary data categories that you define\) and identifies them using a unique *ID*\.
+In Elasticsearch, the basic unit of data is a JSON *document*\. Within an index, Elasticsearch identifies each document using a unique *ID*\.
 
 A request to the `_index` API looks like the following:
 
 ```
-PUT elasticsearch_domain/index/type/id
+PUT elasticsearch_domain/index/_doc/id
 { "A JSON": "document" }
 ```
 
-A request to the `_bulk` API looks a little different, because you specify the index, type, and ID in the bulk data:
+A request to the `_bulk` API looks a little different, because you specify the index and ID in the bulk data:
 
 ```
 POST elasticsearch_domain/_bulk
-{ "index": { "_index" : "index", "_type" : "type", "_id" : "id" } }
+{ "index": { "_index" : "index", "_id" : "id" } }
 { "A JSON": "document" }
 ```
 
@@ -39,15 +39,15 @@ optional_document\n
 
 For a short sample file, see [Step 2: Upload Data to an Amazon ES Domain for Indexing](es-gsg-upload-data.md)\.
 
-Elasticsearch features automatic index creation when you add a document to an index that doesn't already exist\. It also features automatic ID generation if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, establishes the document type of `movie`, indexes the document, and assigns it a unique ID:
+Elasticsearch features automatic index creation when you add a document to an index that doesn't already exist\. It also features automatic ID generation if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, indexes the document, and assigns it a unique ID:
 
 ```
-POST elasticsearch_domain/movies/movie
+POST elasticsearch_domain/movies/_doc
 {"title": "Spirited Away"}
 ```
 
 **Important**  
-To use automatic ID generation, you must use the `POST` method instead of `PUT`\.
+For automatic ID generation, use the `POST` method instead of `PUT`\.
 
 To verify that the document exists, you can perform the following search:
 
@@ -64,7 +64,7 @@ The response should contain the following:
   "hits" : [
     {
       "_index" : "movies",
-      "_type" : "movie",
+      "_type" : "_doc",
       "_id" : "AV4WaTnYxBoJaZkSFeX9",
       "_score" : 1.0,
       "_source" : {
@@ -78,18 +78,13 @@ The response should contain the following:
 Automatic ID generation has a clear downside: because the indexing code didn't specify a document ID, you can't easily update the document at a later time\. To specify an ID of `7`, use the following request:
 
 ```
-PUT elasticsearch_domain/movies/movie/7
+PUT elasticsearch_domain/movies/_doc/7
 {"title": "Spirited Away"}
 ```
 
-Indices that you create in Elasticsearch versions 6\.0 and later can only contain one document type\. For best compatibility with future versions of Elasticsearch, use a single type, `_doc`, for all indices:
+Rather than requiring `_doc,` older versions of Elasticsearch support arbitrary names for document types\. Some older versions also support more than one document type per index\. No matter which version of Elasticsearch you choose, we recommend using a single type, `_doc`, for all indices\.
 
-```
-PUT elasticsearch_domain/more-movies/_doc/1
-{"title": "Back to the Future"}
-```
-
-Indices default to five primary shards and one replica\. If you want to specify non\-default settings, create the index before adding documents:
+For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\. If you want to specify non\-default settings for shards and replicas, create the index before adding documents:
 
 ```
 PUT elasticsearch_domain/more-movies
@@ -104,7 +99,7 @@ For sample code, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-
 Elasticsearch indices have the following naming restrictions:
 + All letters must be lowercase\.
 + Index names cannot begin with `_` or `-`\.
-+ Index names cannot contain spaces, commas, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`\.
++ Index names cannot contain spaces, commas, `:`, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`\.
 
 Don't include sensitive information in index, type, or document ID names\. Elasticsearch uses these names in its Uniform Resource Identifiers \(URIs\)\. Servers and applications often log HTTP requests, which can lead to unnecessary data exposure if URIs contain sensitive information:
 
@@ -166,9 +161,9 @@ Instead of including fields, you can exclude fields with a `-` prefix\. `filter_
 
 ```
 POST elasticsearch_domain/_bulk?filter_path=-took,-items.index._*
-{ "index": { "_index": "more-movies", "_type": "_doc", "_id": "1" } }
+{ "index": { "_index": "more-movies", "_id": "1" } }
 {"title": "Back to the Future"}
-{ "index": { "_index": "more-movies", "_type": "_doc", "_id": "2" } }
+{ "index": { "_index": "more-movies", "_id": "2" } }
 {"title": "Spirited Away"}
 ```
 

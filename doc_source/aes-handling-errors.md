@@ -1,6 +1,6 @@
 # Amazon Elasticsearch Service Troubleshooting<a name="aes-handling-errors"></a>
 
-This section describes how to identity and solve common Amazon Elasticsearch Service issues\. Consult the information in this section before contacting [AWS Support](https://aws.amazon.com/premiumsupport/)\.
+This section describes how to identify and solve common Amazon Elasticsearch Service issues\. Consult the information in this section before contacting [AWS Support](https://aws.amazon.com/premiumsupport/)\.
 
 ## Can't Access Kibana<a name="aes-troubleshooting-kibana-configure-anonymous-access"></a>
 
@@ -15,6 +15,43 @@ If your Amazon ES domain uses VPC access, you might not receive this error\. Ins
 ## Can't Access VPC Domain<a name="aes-troubleshooting-vpc-domain"></a>
 
 See [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security) and [Testing VPC Domains](es-vpc.md#kibana-test)\.
+
+## Cluster in Read\-Only State<a name="aes-troubleshooting-7x"></a>
+
+Compared to earlier versions, Elasticsearch 7\.*x* uses a different system for cluster coordination\. In this new system, when the cluster loses quorum, the cluster is unavailable until you take action\. Loss of quorum can take two forms:
++ If your cluster uses dedicated master nodes, quorum loss occurs when half or more are unavailable\.
++ If your cluster does not use dedicated master nodes, quorum loss occurs when half or more of your data nodes are unavailable\.
+
+If quorum loss occurs and your cluster has more than one node, Amazon ES restores quorum and places the cluster into a read\-only state\. You have two options:
++ Remove the read\-only state and use the cluster as\-is\.
++ [Restore the cluster or individual indices from a snapshot](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.
+
+If you prefer to use the cluster as\-is, verify that cluster health is green using the following request:
+
+```
+GET _cat/health?v
+```
+
+If cluster health is red, we recommend restoring the cluster from a snapshot\. You can also see [Red Cluster Status](#aes-handling-errors-red-cluster-status) for troubleshooting steps\. If cluster health is green, check that all expected indices are present using the following request:
+
+```
+GET _cat/indices?v
+```
+
+Then run some searches to verify that the expected data is present\. If it is, you can remove the read\-only state using the following request:
+
+```
+PUT _cluster/settings
+{
+  "persistent": {
+    "cluster.blocks.read_only": false
+  }
+}
+```
+
+If quorum loss occurs and your cluster has only one node, Amazon ES replaces the node and does *not* place the cluster into a read\-only state\. Otherwise, your options are the same: use the cluster as\-is or restore from a snapshot\.
+
+In both situations, Amazon ES sends two events to your [Personal Health Dashboard](https://phd.aws.amazon.com/phd/home#/)\. The first informs you of the loss of quorum\. The second occurs after Amazon ES successfully restores quorum\. For more information about using the Personal Health Dashboard, see the [AWS Health User Guide](https://docs.aws.amazon.com/health/latest/ug/)\.
 
 ## Red Cluster Status<a name="aes-handling-errors-red-cluster-status"></a>
 
@@ -138,7 +175,7 @@ If you need more insight into the performance of the cluster, you can [publish e
 
 Amazon ES snapshots do not support the Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the Glacier storage class\.
 
-If you need to restore a snapshot from the bucket, restore the objects from Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot respository\.
+If you need to restore a snapshot from the bucket, restore the objects from Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot repository\.
 
 ## Invalid Host Header<a name="aes-troubleshooting-host-header"></a>
 
@@ -159,14 +196,14 @@ If you receive an `Invalid Host Header` error when making a request, check that 
 The following script uses the Amazon EC2 [describe\-regions](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-regions.html) AWS CLI command to create a list of all regions in which Amazon ES could be available\. Then it calls [list\-domain\-names](https://docs.aws.amazon.com/cli/latest/reference/es/list-domain-names.html) for each region:
 
 ```
-for region in `aws ec2 describe-regions --output text | cut -f3`
+for region in `aws ec2 describe-regions --output text | cut -f4`
 do
     echo "\nListing domains in region '$region':"
     aws es list-domain-names --region $region --query 'DomainNames'
 done
 ```
 
-You recieve the following output for each region:
+You receive the following output for each region:
 
 ```
 Listing domains in region:'us-west-2'...

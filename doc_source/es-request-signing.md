@@ -10,6 +10,7 @@ For examples of how to interact with the Configuration API, including operations
 + [Python](#es-request-signing-python)
 + [Ruby](#es-request-signing-ruby)
 + [Node](#es-request-signing-node)
++ [Go](#es-request-signing-go)
 
 ## Java<a name="es-request-signing-java"></a>
 
@@ -284,7 +285,7 @@ This sample code creates a new Elasticsearch client, configures Faraday middlewa
 require 'elasticsearch'
 require 'faraday_middleware/aws_sigv4'
 
-host = '' # e.g. https://my-domain.region.es.com
+host = '' # e.g. https://my-domain.region.es.amazonaws.com
 index = 'ruby-index'
 type = '_doc'
 id = '1'
@@ -325,7 +326,7 @@ This next example uses the [AWS SDK for Ruby](https://aws.amazon.com/sdk-for-rub
 ```
 require 'aws-sdk-elasticsearchservice'
 
-host = '' # e.g. https://my-domain.region.es.com
+host = '' # e.g. https://my-domain.region.es.amazonaws.com
 index = 'ruby-index'
 type = '_doc'
 id = '2'
@@ -427,6 +428,70 @@ function indexDocument(document) {
   }, function(error) {
     console.log('Error: ' + error);
   });
+}
+```
+
+If your credentials don't work, export them at the terminal using the following commands:
+
+```
+export AWS_ACCESS_KEY_ID="your-access-key"
+export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_SESSION_TOKEN=""your-session-token"
+```
+
+## Go<a name="es-request-signing-go"></a>
+
+This example uses the [AWS SDK for Go](https://aws.amazon.com/sdk-for-go/) and indexes a single document\. You must provide values for `domain` and `region`\.
+
+```
+package main
+
+import (
+  "fmt"
+  "net/http"
+  "strings"
+  "time"
+  "github.com/aws/aws-sdk-go/aws/credentials"
+  "github.com/aws/aws-sdk-go/aws/signer/v4"
+)
+
+func main() {
+
+  // Basic information for the Amazon Elasticsearch Service domain
+  domain := "" // e.g. https://my-domain.region.es.amazonaws.com
+  index := "my-index"
+  id := "1"
+  endpoint := domain + "/" + index + "/" + "_doc" + "/" + id
+  region := "" // e.g. us-east-1
+  service := "es"
+
+  // Sample JSON document to be included as the request body
+  json := `{ "title": "Thor: Ragnarok", "director": "Taika Waititi", "year": "2017" }`
+  body := strings.NewReader(json)
+
+  // Get credentials from environment variables and create the AWS Signature Version 4 signer
+  credentials := credentials.NewEnvCredentials()
+  signer := v4.NewSigner(credentials)
+
+  // An HTTP client for sending the request
+  client := &http.Client{}
+
+  // Form the HTTP request
+  req, err := http.NewRequest(http.MethodPut, endpoint, body)
+  if err != nil {
+    fmt.Print(err)
+  }
+
+  // You can probably infer Content-Type programmatically, but here, we just say that it's JSON
+  req.Header.Add("Content-Type", "application/json")
+
+  // Sign the request, send it, and print the response
+  signer.Sign(req, body, service, region, time.Now())
+  resp, err := client.Do(req)
+  if err != nil {
+    fmt.Print(err)
+  }
+  fmt.Print(resp.Status + "\n")
 }
 ```
 

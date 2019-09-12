@@ -105,7 +105,7 @@ The function must have the following trigger\.
 | --- | --- | --- | --- | 
 | API Gateway | search\-es\-api | search\-es\-api\-test | Open | 
 
-For more information about creating Lambda functions and deployment packages, see [Creating a Deployment Package \(Python\)](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Creating the Lambda Deployment Package](es-aws-integrations.md#es-aws-integrations-s3-lambda-es-deployment-package) in this guide\.
+Because this sample function uses external libraries, you must create a deployment package and upload it to Lambda for the code to work\. For more information about creating Lambda functions and deployment packages, see [Creating a Deployment Package \(Python\)](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Creating the Lambda Deployment Package](es-aws-integrations.md#es-aws-integrations-s3-lambda-es-deployment-package) in this guide\.
 
 ## Step 4: Modify the Domain Access Policy<a name="search-example-perms"></a>
 

@@ -56,9 +56,6 @@ For example, suppose you have 66 GiB of data\. You don't expect that number to i
 
 This equation helps compensate for growth over time\. If you expect those same 67 GiB of data to quadruple over the next year, the approximate number of shards is \(66 \+ 198\) \* 1\.1 / 30 = 10\. Remember, though, you don't have those extra 198 GiB of data *yet*\. Check to make sure this preparation for the future doesn't create unnecessarily tiny shards that consume huge amounts of CPU and memory in the present\. In this case, 66 \* 1\.1 / 10 shards = 7\.26 GiB per shard, which will consume extra resources and is below the recommended size range\. You might consider the more middle\-of\-the\-road approach of six shards, which leaves you with 12 GiB shards today and 48 GiB shards in the future\. Then again, you might prefer to start with three shards and reindex your data when the shards exceed 50 GiB\.
 
-**Note**  
-By default, Elasticsearch indices are split into five primary shards\. You can specify different settings when you [create an index](es-indexing.md#es-indexing-intro)\.
-
 ## Choosing Instance Types and Testing<a name="aes-bp-instances"></a>
 
 After you calculate your storage requirements and choose the number of shards that you need, you can start to make hardware decisions\. Hardware requirements vary dramatically by workload, but we can still offer some basic recommendations\.

@@ -229,6 +229,7 @@ The `AWS/ES` namespace includes the following metrics for dedicated master nodes
 | MasterJVMMemoryPressure | The maximum percentage of the Java heap used for all dedicated master nodes in the cluster\. We recommend moving to a larger instance type when this metric reaches 85 percent\. Relevant statistics: Maximum | 
 | MasterCPUCreditBalance | The remaining CPU credits available for dedicated master nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU Credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html#t2-instances-cpu-credits) in the *Amazon EC2 User Guide for Linux Instances*\. This metric is available only for the t2\.micro\.elasticsearch, t2\.small\.elasticsearch, and t2\.medium\.elasticsearch instance types\. Relevant statistics: Minimum | 
 | MasterReachableFromNode | A health check for `MasterNotDiscovered` exceptions\. A value of 1 indicates normal behavior\. A value of 0 indicates that `/_cluster/health/` is failing\. Failures mean that the master node stopped or is not reachable\. They are usually the result of a network connectivity issue or AWS dependency problem\. Relevant statistics: Minimum You can view this metric on the Amazon CloudWatch console, but not the Amazon ES console\. | 
+| MasterSysMemoryUtilization | The percentage of the master node's memory that is in use\. Relevant statistics: Maximum | 
 
 ### EBS Volume Metrics<a name="es-managedomains-cloudwatchmetrics-master-ebs-metrics"></a>
 
@@ -276,6 +277,9 @@ Different versions of Elasticsearch use different thread pools to process calls 
 | ThreadpoolBulkQueue | The number of queued tasks in the bulk thread pool\. If the queue size is consistently high, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average | 
 | ThreadpoolBulkRejected | The number of rejected tasks in the bulk thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum | 
 | ThreadpoolBulkThreads | The size of the bulk thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| ThreadpoolWriteThreads | The size of the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| ThreadpoolWriteRejected | The number of rejected tasks in the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| ThreadpoolWriteQueue | The number of queued tasks in the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
 
 ## Tagging Amazon Elasticsearch Service Domains<a name="es-managedomains-awsresourcetagging"></a>
 

@@ -163,7 +163,7 @@ If you have invested significant time into configuring your own Kibana instance,
 + Make the following changes to `config/kibana.yml`:
 
   ```
-  kibana_index: ".kibana-5"
+  kibana_index: ".kibana"
   elasticsearch_url: "http://elasticsearch_domain:80"
   ```
 

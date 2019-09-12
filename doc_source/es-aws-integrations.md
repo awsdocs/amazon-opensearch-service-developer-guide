@@ -409,7 +409,8 @@ GET https://es-domain/lambda-index/lambda-type/00001
 
 Kinesis Data Firehose supports Amazon ES as a delivery destination\. For instructions about how to load streaming data into Amazon ES, see [Creating a Kinesis Data Firehose Delivery Stream](https://docs.aws.amazon.com/firehose/latest/dev/basic-create.html) and [Choose Amazon ES for Your Destination](https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html#create-destination-elasticsearch) in the *Amazon Kinesis Data Firehose Developer Guide*\.
 
-Kinesis Data Firehose does not support loading data into Amazon ES domains inside a VPC.
+**Note**  
+Amazon Kinesis Data Firehose currently doesn't support VPC domains or Amazon ES 7\.*x* domains\.
 
 Before you load data into Amazon ES, you might need to perform transforms on the data\. To learn more about using Lambda functions to perform this task, see [Data Transformation](https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html) in the same guide\.
 
