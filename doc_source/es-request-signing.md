@@ -197,7 +197,7 @@ region = '' # For example, us-west-1
 
 service = 'es'
 credentials = boto3.Session().get_credentials()
-awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service)
+awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
 url = host + path
 
@@ -409,7 +409,7 @@ function indexDocument(document) {
   request.headers['Content-Type'] = 'application/json';
   // Content-Length is only needed for DELETE requests that include a request
   // body, but including it for all requests doesn't seem to hurt anything.
-  request.headers["Content-Length"] = request.body.length;
+  request.headers['Content-Length'] = Buffer.byteLength(request.body);
 
   var credentials = new AWS.EnvironmentCredentials('AWS');
   var signer = new AWS.Signers.V4(request, 'es');

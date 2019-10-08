@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**August 13, 2019
-+ **Latest documentation update—**August 13, 2019
++ **Latest product release—**October 3, 2019
++ **Latest documentation update—**October 3, 2019
 
 ## Release Notes<a name="release-table"></a>
 
@@ -13,6 +13,8 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Require HTTPS](#release-notes) | You can now require that all traffic to your Amazon ES domains arrive over HTTPS\. When configuring your domain, check the **Require HTTPS** box\. | October 3, 2019 | 
+| [R20190808 \(Service Software\)](#release-notes) | Bug fixes\. | September 12, 2019 | 
 | [Elasticsearch 7\.1 and 6\.8 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.1 and 6\.8\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | August 13, 2019 | 
 | [R20190724\-P1 \(Service Software\)](#release-notes) | Adds support for new Elasticsearch versions\. | August 1, 2019 | 
 | [Hourly Snapshots](#release-notes) | Rather than daily snapshots, Amazon Elasticsearch Service now takes hourly snapshots of domains running Elasticsearch 5\.3 and later so that you have more frequent backups from which to restore your data\. To learn more, see [Working with Amazon Elasticsearch Service Index Snapshots](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html)\. | July 8, 2019 | 

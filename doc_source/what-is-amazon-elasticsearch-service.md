@@ -58,7 +58,7 @@ Compared to earlier versions of Elasticsearch, the 7\.*x* and 6\.*x* versions of
 + **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
 + **Vega visualizations** – Kibana 6\.2 and newer support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
 + **Java high\-level REST client** – Compared to the low\-level client, this client offers a simplified development experience and supports many Elasticsearch APIs\. For a code sample, see [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
-+ **Weighted averages** – This aggregration lets you assign weights to documents and factor those weights into the average of a given value\.
++ **Weighted averages** – This aggregation lets you assign weights to documents and factor those weights into the average of a given value\.
 + **Higher indexing performance** – Newer versions of Elasticsearch provide superior indexing capabilities that significantly increase the throughput of data updates\.
 + **Better safeguards** – Newer versions of Elasticsearch offer improved cluster coordination and many safeguards that help prevent overly broad or complex queries from negatively affecting performing and stability\.
 

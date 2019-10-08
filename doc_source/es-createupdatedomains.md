@@ -2,7 +2,7 @@
 
 This chapter describes how to create and configure Amazon Elasticsearch Service \(Amazon ES\) domains\. An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\.
 
-Unlike the brief instructions in the [Getting Started](es-gsg.md) tutorial, this chapter describes all options and provides relevant reference information\. You can complete each procedure by using instructions for the Amazon ES console, the AWS Command Line Interface \(AWS CLI\), or AWS SDKs\.
+Unlike the brief instructions in the [Getting Started](es-gsg.md) tutorial, this chapter describes all options and provides relevant reference information\. You can complete each procedure by using instructions for the Amazon ES console, the AWS Command Line Interface \(AWS CLI\), or the AWS SDKs\.
 
 **Topics**
 + [Creating Amazon ES Domains](#es-createdomains)
@@ -32,24 +32,24 @@ Use the following procedure to create an Amazon ES domain by using the console\.
 
    Alternatively, choose **Get Started** if this is your first Amazon ES domain in the AWS Region\.
 
-1. For **Choose deployment type**, select the option that best\-matches the purpose of your domain\.
-   + **Production** domains use Multi\-AZ and dedicated master nodes and for higher availability\.
+1. For **Choose deployment type**, select the option that best matches the purpose of your domain:
+   + **Production** domains use Multi\-AZ and dedicated master nodes for higher availability\.
    + **Development and testing** domains use a single Availability Zone\.
    + **Custom** domains let you choose from all configuration options\.
 **Important**  
-Different deployment types present different options on subsequent screens\. For comprehensiveness, these steps include all options \(the **Custom** deployment type\)\.
+Different deployment types present different options on subsequent pages\. For comprehensiveness, these steps include all options \(the **Custom** deployment type\)\.
 
 1. For **Elasticsearch version**, we recommend that you choose the latest version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
 
 1. Choose **Next**\.
 
-1. For **Elasticsearch domain name**, type a domain name\. The name must meet the following criteria:
+1. For **Elasticsearch domain name**, enter a domain name\. The name must meet the following criteria:
    + Unique to your account and Region
    + Starts with a lowercase letter
    + Contains between 3 and 28 characters
    + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
 
-1. For **Availability Zones**, choose 1\-AZ, 2\-AZ, or 3\-AZ\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
+1. For **Availability Zones**, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
 
 1. For **Instance type**, choose an instance type for the data nodes\. For more information, see [Supported Instance Types](aes-supported-instance-types.md)\.
 **Note**  
@@ -57,7 +57,7 @@ Not all Availability Zones support all instance types\. If you choose **3\-AZ**,
 
 1. For **Number of instances**, choose the number of data nodes\.
 
-   For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. Single node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md) and [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
+   For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md) and [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
 
 1. \(Optional\) Enable or disable [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. Dedicated master nodes increase cluster stability and are required for domains that have instance counts greater than 10\. We recommend three dedicated master nodes for production domains\.
 **Note**  
@@ -69,11 +69,13 @@ You can choose different instance types for your dedicated master nodes and data
 
    1. For **EBS volume type**, choose an EBS volume type\.
 
-      If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, type the baseline IOPS performance that you want\. For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
+      If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, enter the baseline IOPS performance that you want\. For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
 
-   1.  For **EBS volume size**, type the size of the EBS volume that you want to attach to each data node\.
+   1.  For **EBS volume size**, enter the size of the EBS volume that you want to attach to each data node\.
 
       **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain by multiplying the number of data nodes by the EBS volume size\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type that it's attached to\. To learn more, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
+
+1. \(Optional\) To require that all requests to the domain arrive over HTTPS, select the **Require HTTPS for all traffic to the domain** check box\.
 
 1. \(Optional\) To enable node\-to\-node encryption, select the **Node\-to\-node encryption** check box\. For more information, see [Node\-to\-node Encryption for Amazon Elasticsearch Service](ntn.md)\.
 
@@ -93,7 +95,7 @@ You can choose different instance types for your dedicated master nodes and data
 **Note**  
 The VPC and domain must be in the same AWS Region, and you must select a VPC with tenancy set to **Default**\. Amazon ES does not yet support VPCs that use dedicated tenancy\.
 
-   1. For **Subnet**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces* \(ENIs\) in the subnets\.
+   1. For **Subnet**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces*in the subnets\.
 **Note**  
 You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
@@ -107,7 +109,7 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
 1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md), [Configuring Access Policies](#es-createdomain-configure-access-policies), and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 **Note**  
-If you chose **VPC access** in step 16, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you chose **VPC access** in step 19, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 1. Choose **Next**\.
 
@@ -115,7 +117,7 @@ If you chose **VPC access** in step 16, the IP\-based policy template is not ava
 
 ### Creating Amazon ES Domains \(AWS CLI\)<a name="es-createdomains-cli"></a>
 
-Instead of creating an Amazon ES domain by using the console, you can use the AWS CLI\. Use the following syntax to create an Amazon ES domain\. For syntax, see Amazon Elasticsearch Service in the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
+Instead of creating an Amazon ES domain by using the console, you can use the AWS CLI\. For syntax, see Amazon Elasticsearch Service in the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
 
 #### Example Commands<a name="es-createdomains-cli-examples"></a>
 
@@ -204,9 +206,9 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
    1. If you want to enable or disable Multi\-AZ, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
 
-   1. If you didn't enable VPC access when you created the domain, skip to step 7\. If you enabled VPC access, you can change the subnet that the VPC endpoint is placed in, and you can change the security groups:
+   1. If you enabled VPC access, you can change the subnet that the VPC endpoint is placed in, and you can change the security groups:
 
-      1. For **Subnets**, choose a subnet\. The subnet must have a sufficient number of IP addresses reserved for the network interfaces\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+      1. For **Subnets**, choose a subnet\. The subnet must have a sufficient number of IP addresses reserved for the network interfaces\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same Region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 
       1. For **Security groups**, add the security groups that need access to the domain\.
 
@@ -267,9 +269,9 @@ Use the following procedure to enable EBS\-based storage by using the console\.
 
 1. For **EBS volume type**, choose an EBS volume type\.
 
-   If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, type the baseline IOPS performance that you want\.
+   If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, enter the baseline IOPS performance that you want\.
 
-1. For **EBS volume size**, type the size that you want for the EBS volume\.
+1. For **EBS volume size**, enter the size that you want for the EBS volume\.
 
    **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain using the following formula: \(number of data nodes\) \* \(EBS volume size\)\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type to which it is attached\. To learn more, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
 
@@ -301,7 +303,7 @@ Use the `--ebs-options` option to configure EBS\-based storage by using the AWS 
 | IOPS | Integer | Specifies the baseline I/O performance for the EBS volume\. This parameter is used only by Provisioned IOPS \(SSD\) volumes\. The minimum value is 1000\. The maximum value is 16000\. | 
 
 **Note**  
-We recommend that you do not set the IOPS value for a Provisioned IOPS EBS volume to more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you should not assign an IOPS value for it that is greater than 3000\. For more information, including use cases for each volume type, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the Amazon EC2 documentation\.
+We recommend that you don't set the IOPS value for a Provisioned IOPS EBS volume to more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you shouldn't assign an IOPS value for it that is greater than 3000\. For more information, including use cases for each volume type, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the Amazon EC2 documentation\.
 
 **Examples**
 
@@ -339,7 +341,7 @@ Use the following procedure to configure VPC access by using the console\.
 
 1. Choose **Configure cluster**\.
 
-1. In the **Network configuration** section, for **Subnets**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+1. In the **Network configuration** section, for **Subnets**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same Region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 **Note**  
 You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
@@ -349,13 +351,13 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
 ## Configuring Amazon Cognito Authentication for Kibana<a name="es-createdomain-configure-cognito-auth"></a>
 
-See [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
+After creating a domain, you can enable or disable Amazon Cognito authentication for Kibana\. You can also change the user pool and identity pool\. For more information, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
 
 ## Configuring Access Policies<a name="es-createdomain-configure-access-policies"></a>
 
 Amazon Elasticsearch Service offers several ways to configure access to your Amazon ES domains\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)\.
 
-The console provides preconfigured access policies that you can customize for the specific needs of your domain\. You also can import access policies from other Amazon ES domains\. For information on how these access policies interact with VPC access, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+The console provides preconfigured access policies that you can customize for the specific needs of your domain\. You also can import access policies from other Amazon ES domains\. For information about how these access policies interact with VPC access, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 ### Configuring Access Policies \(Console\)<a name="es-createdomain-configure-access-policies-console"></a>
 
@@ -416,14 +418,14 @@ The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined
 Use advanced options to configure the following:
 
 **rest\.action\.multi\.allow\_explicit\_index**  
-Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to false prevents users from bypassing access control for subresources\. By default, the value is true\. For more information, see [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
+Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to `false` prevents users from bypassing access control for subresources\. By default, the value is `true`\. For more information, see [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
 
 **indices\.fielddata\.cache\.size**  
 Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is unbounded\.   
 Many customers query rotating daily indices\. We recommend that you begin benchmark testing with `indices.fielddata.cache.size` configured to 40% of the JVM heap for most such use cases\. However, if you have very large indices you might need a large field data cache\.
 
 **indices\.query\.bool\.max\_clause\_count**  
-Specifies the maximum number of clauses allowed in a Lucene Boolean query\. 1024 is the default\. Queries with more than the permitted number of clauses result in a `TooManyClauses` error\. For more information, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\.
+Specifies the maximum number of clauses allowed in a Lucene Boolean query\. The default is 1024\. Queries with more than the permitted number of clauses result in a `TooManyClauses` error\. For more information, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\.
 
 ### Configuring Advanced Options \(Console\)<a name="es-createdomain-configure-advanced-options-console"></a>
 
@@ -439,7 +441,7 @@ Specifies the maximum number of clauses allowed in a Lucene Boolean query\. 1024
 
 1. Choose **Advanced options**\.
 
-1.  Specify the options that you want and choose **Submit**\.
+1.  Specify the options that you want, and then choose **Submit**\.
 
 ### Configuring Advanced Options \(AWS CLI\)<a name="es-createdomain-configure-advanced-options-cli"></a>
 
@@ -465,7 +467,7 @@ aws es update-elasticsearch-domain-config --domain-name mylogs --region us-east-
 
 ### Configuring Advanced Options \(AWS SDKs\)<a name="es-createdomain-configure-advanced-options-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all of the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--advanced-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--advanced-options` parameter for `UpdateElasticsearchDomainConfig`\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
 ## Configuring Logs<a name="es-createdomain-configure-slow-logs"></a>
 
@@ -476,14 +478,14 @@ Error logs are available only for Elasticsearch versions 5\.1 and greater\. Slow
 
 For its logs, Elasticsearch uses [Apache Log4j 2](https://logging.apache.org/log4j/2.x/) and its built\-in log levels \(from least to most severe\) of `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, and `FATAL`\.
 
-If you enable error logs, Amazon ES publishes log lines of `WARN`, `ERROR`, and `FATAL` to CloudWatch\. Amazon ES also publishes several exceptions from the `DEBUG` level, including:
+If you enable error logs, Amazon ES publishes log lines of `WARN`, `ERROR`, and `FATAL` to CloudWatch\. Amazon ES also publishes several exceptions from the `DEBUG` level, including the following:
 + `org.elasticsearch.index.mapper.MapperParsingException`
 + `org.elasticsearch.index.query.QueryShardException`
 + `org.elasticsearch.action.search.SearchPhaseExecutionException`
 + `org.elasticsearch.common.util.concurrent.EsRejectedExecutionException`
 + `java.lang.IllegalArgumentException`
 
-Error logs can help with troubleshooting in many situations, including:
+Error logs can help with troubleshooting in many situations, including the following:
 + Painless script compilation issues
 + Invalid queries
 + Indexing issues
@@ -528,7 +530,7 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
    }
    ```
 **Important**  
-CloudWatch Logs supports [10 resource policies per region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
+CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
 
 1. Choose **Enable**\.
 
@@ -544,7 +546,7 @@ Before you can enable log publishing, you need a CloudWatch log group\. If you d
 aws logs create-log-group --log-group-name my-log-group
 ```
 
-Type the next command to find the log group's ARN, and then *make a note of it*:
+Enter the next command to find the log group's ARN, and then *make a note of it*:
 
 ```
 aws logs describe-log-groups --log-group-name my-log-group
@@ -557,7 +559,7 @@ aws logs put-resource-policy --policy-name my-policy --policy-document '{ "Versi
 ```
 
 **Important**  
-CloudWatch Logs supports [10 resource policies per region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable slow logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
+CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable slow logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
 
 Finally, you can use the `--log-publishing-options` option to enable publishing\. The syntax for the option is the same for both the `create-elasticsearch-domain` and `update-elasticsearch-domain-config` commands\.
 

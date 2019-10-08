@@ -29,6 +29,7 @@ The following operations cause blue/green deployments:
 + Modifying advanced settings
 + Enabling or disabling the publication of error logs or slow logs to CloudWatch
 + Upgrading to a new Elasticsearch version
++ Enabling or disabling **Require HTTPS**
 
 In *most* cases, the following operations do not cause blue/green deployments:
 + Changing access policy
@@ -188,7 +189,7 @@ Amazon ES metrics fall into these categories:
 + [Instance Metrics](#es-managedomains-cloudwatchmetrics-instance-metrics)
 
 **Note**  
-The service archives the metrics for two weeks before discarding them\.
+The service archives metrics for two weeks before discarding them\.
 
 ### Cluster Metrics<a name="es-managedomains-cloudwatchmetrics-cluster-metrics"></a>
 
@@ -203,9 +204,9 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 | Nodes | The number of nodes in the Amazon ES cluster, including dedicated master nodes\. Relevant statistics: Minimum, Maximum, Average | 
 | SearchableDocuments | The total number of searchable documents across all indices in the cluster\. Relevant statistics: Minimum, Maximum, Average | 
 | DeletedDocuments | The total number of documents marked for deletion across all indices in the cluster\. These documents no longer appear in search results, but Elasticsearch only removes deleted documents from disk during segment merges\. This metric increases after delete requests and decreases after segment merges\. Relevant statistics: Minimum, Maximum, Average | 
-| CPUUtilization | The maximum percentage of CPU resources used for data nodes in the cluster\. Relevant statistics: Maximum, Average | 
-| FreeStorageSpace | The free space, in GiB, for nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum`, `Maximum`, and `Average` show free space for individual nodes\. Amazon ES throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Recovering from a Lack of Free Storage Space](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-watermark) `FreeStorageSpace` will always be lower than the value that the Elasticsearch `_cluster/stats` API provides\. Amazon ES reserves a percentage of the storage space on each instance for internal operations\. Relevant statistics: Minimum, Maximum, Average, Sum | 
-| ClusterUsedSpace | The total used space, in GiB, for the cluster\. You can view this metric in the Amazon CloudWatch console, but not in the Amazon ES console\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Minimum, Maximum | 
+| CPUUtilization | The maximum percentage of CPU resources used for data nodes in the cluster\. This metric is also available for individual nodes\. Relevant statistics: Maximum, Average | 
+| FreeStorageSpace | The free space for nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum`, `Maximum`, and `Average` show free space for individual nodes\. This metric is also available for individual nodes\. Amazon ES throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Recovering from a Lack of Free Storage Space](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-handling-errors.html#aes-handling-errors-watermark)\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. `FreeStorageSpace` will always be lower than the value that the Elasticsearch `_cluster/stats` API provides\. Amazon ES reserves a percentage of the storage space on each instance for internal operations\. Relevant statistics: Minimum, Maximum, Average, Sum | 
+| ClusterUsedSpace | The total used space for the cluster\. You must leave the period at one minute to get an accurate value\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. Relevant statistics: Minimum, Maximum | 
 | ClusterIndexWritesBlocked | Indicates whether your cluster is accepting or blocking incoming write requests\. A value of 0 means that the cluster is accepting requests\. A value of 1 means that it is blocking requests\. Many factors can cause a cluster to begin blocking requests\. Some common factors include the following: `FreeStorageSpace` is too low, `JVMMemoryPressure` is too high, or `CPUUtilization` is too high\. To alleviate this issue, consider adding more disk space or scaling your cluster\. Relevant statistics: Maximum You can view this metric in the Amazon CloudWatch console, but not the Amazon ES console\. | 
 | JVMMemoryPressure | The maximum percentage of the Java heap used for all data nodes in the cluster\. Relevant statistics: Maximum | 
 | AutomatedSnapshotFailure | The number of failed automated snapshots for the cluster\. A value of `1` indicates that no automated snapshot was taken for the domain in the previous 36 hours\. Relevant statistics: Minimum, Maximum | 
@@ -215,7 +216,7 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 | KMSKeyInaccessible | A value of 1 indicates that the KMS customer master key used to encrypt data at rest has been deleted or revoked its grants to Amazon ES\. You can't recover domains that are in this state\. If you have a manual snapshot, though, you can use it to migrate the domain's data to a new domain\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum | 
 | InvalidHostHeaderRequests | The number of HTTP requests made to the Elasticsearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. Amazon ES rejects invaild requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\.If you see large values for this metric, confirm that your Elasticsearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum | 
 | ElasticsearchRequests | The number of requests made to the Elasticsearch cluster\. Relevant statistics: Sum | 
-| RequestCount | The number of requests to a domain and the HTTP response code \(2xx, 3xx, 4xx, 5xx\) for each request\. Relevant statistics: Sum | 
+| 2xx, 3xx, 4xx, 5xx | The number of requests to the domain that resulted in the given HTTP response code \(2xx, 3xx, 4xx, 5xx\)\. Relevant statistics: Sum | 
 
 ### Dedicated Master Node Metrics<a name="es-managedomains-cloudwatchmetrics-master-node-metrics"></a>
 
