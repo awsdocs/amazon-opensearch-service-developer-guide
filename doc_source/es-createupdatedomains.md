@@ -128,7 +128,7 @@ This first example demonstrates the following Amazon ES domain configuration:
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
 ```
-aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --melasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=standard,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=standard,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
@@ -219,20 +219,6 @@ Use the following procedure to update your Amazon ES configuration by using the 
 ### Configuring Amazon ES Domains \(AWS CLI\)<a name="es-createdomains-configure-cluster-cli"></a>
 
 Use the `elasticsearch-cluster-config` option to configure your Amazon ES cluster by using the AWS CLI\. For syntax, see Amazon Elasticsearch Service in the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
-
-#### Example Commands<a name="es-createdomains-configure-cluster-cli-examples"></a>
-
-The following example creates an Amazon ES domain named `mylogs` with Elasticsearch version 5\.5 with two instances of the `m4.large.elasticsearch` instance type distributed across three Availability Zones:
-
-```
-aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config InstanceType=m4.large.elasticsearch,InstanceCount=2,DedicatedMasterEnabled=false,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3}
-```
-
-However, you likely will want to reconfigure your new Amazon ES domain as network traffic grows and as the quantity and size of documents increase\. For example, you might decide to use a larger instance type, use more instances, and enable a dedicated master node\. The following example updates the domain configuration with these changes:
-
-```
-aws es update-elasticsearch-domain-config --domain-name mylogs --elasticsearch-cluster-config InstanceType=m4.xlarge.elasticsearch,InstanceCount=3,DedicatedMasterEnabled=true,DedicatedMasterType=m4.large.elasticsearch,DedicatedMasterCount=3
-```
 
 ### Configuring Amazon ES Domains \(AWS SDKs\)<a name="es-createdomains-configure-cluster-sdk"></a>
 

@@ -51,9 +51,6 @@ Amazon ES currently supports the following Elasticsearch versions:
 + 2\.3
 + 1\.5
 
-**Note**  
-Amazon Kinesis Data Firehose currently doesn't support Amazon ES 7\.*x* domains\.
-
 Compared to earlier versions of Elasticsearch, the 7\.*x* and 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are a few highlights:
 + **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
 + **Vega visualizations** – Kibana 6\.2 and newer support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.

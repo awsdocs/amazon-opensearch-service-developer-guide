@@ -139,7 +139,7 @@ To learn more about the commands used in the preceding examples, see the [AWS CL
 
 The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the following:
 + `DescribeReservedElasticsearchInstanceOfferings`
-+ `PurchaseReservedElasticsearchInstance`
++ `PurchaseReservedElasticsearchInstanceOffering`
 + `DescribeReservedElasticsearchInstances`
 
 For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.

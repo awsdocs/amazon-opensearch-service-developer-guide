@@ -5,44 +5,36 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
 + **Latest product release—**October 3, 2019
-+ **Latest documentation update—**October 3, 2019
++ **Latest documentation update—**November 6, 2019
 
 ## Release Notes<a name="release-table"></a>
 
 The following table describes important changes to Amazon ES\. For notifications about updates, you can subscribe to the RSS feed\.
 
+**Important**  
+ Service software updates add support for new features, security patches, bug fixes, and other improvements\. To use new features, you might need to update the service software on your domain\. For more information, see [Service Software Updates](es-managedomains.md#es-service-software)\.
+
 | Change | Description | Date | 
 | --- |--- |--- |
-| [Require HTTPS](#release-notes) | You can now require that all traffic to your Amazon ES domains arrive over HTTPS\. When configuring your domain, check the **Require HTTPS** box\. | October 3, 2019 | 
-| [R20190808 \(Service Software\)](#release-notes) | Bug fixes\. | September 12, 2019 | 
+| [Require HTTPS](#release-notes) | You can now require that all traffic to your Amazon ES domains arrive over HTTPS\. When configuring your domain, check the **Require HTTPS** box\. This feature requires service software R20190808 or later\. | October 3, 2019 | 
 | [Elasticsearch 7\.1 and 6\.8 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.1 and 6\.8\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | August 13, 2019 | 
-| [R20190724\-P1 \(Service Software\)](#release-notes) | Adds support for new Elasticsearch versions\. | August 1, 2019 | 
 | [Hourly Snapshots](#release-notes) | Rather than daily snapshots, Amazon Elasticsearch Service now takes hourly snapshots of domains running Elasticsearch 5\.3 and later so that you have more frequent backups from which to restore your data\. To learn more, see [Working with Amazon Elasticsearch Service Index Snapshots](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html)\. | July 8, 2019 | 
 | [Elasticsearch 6\.7 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.7\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | May 29, 2019 | 
-| [R20190418 \(Service Software\)](#release-notes) | Adds SQL support, bug fixes, and support for upcoming features\. | May 15, 2019 | 
+| [SQL Support](#release-notes) | Amazon Elasticsearch Service now lets you query your data using SQL\. For more information, see [SQL Support](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/sql-support.html)\. This feature requires service software R20190418 or later\. | May 15, 2019 | 
 | [5\-series Instance Types](#release-notes) | Amazon Elasticsearch Service now supports M5, C5, and R5 instance types\. Compared to previous\-generation instance types, these new types offer better performance at lower prices\. For more information, see [Supported Instance Types](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html) and [Limits](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-limits.html)\. | April 24, 2019 | 
 | [Elasticsearch 6\.5 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.5\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | April 8, 2019 | 
-| [R20190221\-P1 \(Service Software\)](#release-notes) | Bug fixes\. | April 5, 2019 | 
-| [R20190221 \(Service Software\)](#release-notes) | Includes the alerting feature, bug fixes, and support for upcoming features\. | March 25, 2019 | 
-| [Alerting](#release-notes) | The alerting feature notifies you when data from one or more Elasticsearch indices meets certain conditions\. To learn more, see [Alerting](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html)\. | March 25, 2019 | 
-| [R20190113 \(Service Software\)](#release-notes) | Bug fixes for snapshots and multi\-AZ domain upgrades and support for upcoming features\. | March 6, 2019 | 
+| [Alerting](#release-notes) | The alerting feature notifies you when data from one or more Elasticsearch indices meets certain conditions\. To learn more, see [Alerting](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/alerting.html)\. This feature requires service software R20190221 or later\. | March 25, 2019 | 
 | [Three Availability Zone Support](#release-notes) | Amazon Elasticsearch Service now supports three Availability Zones in many regions\. This release also includes a streamlined console experience\. To learn more, see [Configuring a Multi\-AZ Domain](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-multiaz)\. This feature requires service software R20181023 or later\. | February 7, 2019 | 
-| [R20181023 \(Service Software\)](#release-notes) | Improvements to snapshots and support for new features\. | February 7, 2019 | 
 | [Elasticsearch 6\.4 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.4\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | January 23, 2019 | 
 | [200\-Node Clusters](#release-notes) | Amazon ES now lets you create clusters with up to 200 data nodes for a total of 3 PB of storage\. To learn more, see [Petabyte Scale](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/petabyte-scale.html)\. | January 22, 2019 | 
 | [Service Software Updates](#release-notes) | Amazon ES now lets you manually update the service software for your domain in order to benefit from new features more quickly or update at a low traffic time\. To learn more, see [Service Software Updates](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-service-software)\. | November 20, 2018 | 
 | [New CloudWatch Metrics](#release-notes) | Amazon ES now offers node\-level metrics and new **Cluster health** and **Instance health** tabs in the Amazon ES console\. To learn more, see [Monitoring Cluster Metrics](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-cloudwatchmetrics)\. | November 20, 2018 | 
-| [R20180914 \(Service Software\)](#release-notes) | Adds detailed cluster health monitoring, additional patches, and service enhancements\. | November 19, 2018 | 
 | [China \(Beijing\) Support](#release-notes) | Amazon Elasticsearch Service is now available in the cn\-north\-1 region, where it supports the M4, C4, and R4 instance types\. | October 17, 2018 | 
 | [Node\-to\-node Encryption](#release-notes) | Amazon Elasticsearch Service now supports node\-to\-node encryption, which keeps your data encrypted as Elasticsearch distributes it throughout your cluster\. To learn more, see [Node\-to\-node Encryption](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ntn.html)\. | September 18, 2018 | 
-| [R20180817 \(Service Software\)](#release-notes) | Support for node\-to\-node encryption and new CloudWatch metrics\. | August 17, 2018 | 
 | [In\-place version upgrades](#release-notes) | Amazon Elasticsearch Service now supports in\-place version upgrades for Elasticsearch\. To learn more, see [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | August 14, 2018 | 
 | [Elasticsearch 6\.3 and 5\.6 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 6\.3 and 5\.6\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version)\. | August 14, 2018 | 
 | [Error Logs](#release-notes) | Amazon ES now lets you publish Elasticsearch error logs to Amazon CloudWatch\. To learn more, see [Configuring Logs](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-slow-logs)\. | July 31, 2018 | 
-| [R20180719 \(Service Software\)](#release-notes) | Support for new Elasticsearch versions and bug fixes\. | July 19, 2018 | 
-| [R20180621 \(Service Software\)](#release-notes) | Improvements to automated snapshots\. | June 21, 2018 | 
 | [China \(Ningxia\) Reserved Instances](#release-notes) | Amazon ES now offers Reserved Instances in the China \(Ningxia\) region\. | May 29, 2018 | 
-| [R20180522 \(Service Software\)](#release-notes) | Security fixes\. | May 22, 2018 | 
 | [Reserved Instances](#release-notes) | Amazon ES now offers Reserved Instances\. To learn more, see [Amazon ES Reserved Instances](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-ri.html)\. | May 7, 2018 | 
 
 ## Earlier Updates<a name="earlier-updates"></a>

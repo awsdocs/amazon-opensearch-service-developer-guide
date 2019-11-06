@@ -10,7 +10,7 @@ Currently, Amazon ES supports the following upgrade paths\.
 
 | From Version | To Version | 
 | --- | --- | 
-| 6\.8 | 7\.1 Elasticsearch 7\.*x* includes numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](es-managedomains-snapshots.md) of the 6\.8 domain, restoring it on a test 7\.1 domain, and using that test domain to identify potential upgrade issues\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\. Amazon Kinesis Data Firehose currently doesn't support Amazon ES 7\.*x* domains\.  | 
+| 6\.8 | 7\.1 Elasticsearch 7\.*x* includes numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](es-managedomains-snapshots.md) of the 6\.8 domain, restoring it on a test 7\.1 domain, and using that test domain to identify potential upgrade issues\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\.  | 
 | 6\.*x* | 6\.*x* | 
 | 5\.6 |  6\.*x*  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. Check that your client code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
 | 5\.x | 5\.6 | 
@@ -51,6 +51,8 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 ## Starting an Upgrade<a name="starting-upgrades"></a>
 
 The upgrade process is irreversible and can't be paused nor canceled\. During an upgrade, you can't make configuration changes to the domain\. Before starting an upgrade, double\-check that you want to proceed\. You can use these same steps to perform the pre\-upgrade check without actually starting an upgrade\.
+
+If the cluster has dedicated master nodes, upgrades complete without downtime\. Otherwise, the cluster might be unresponsive for several seconds post\-upgrade while it elects a master node\.
 
 **To upgrade a domain to a later version of Elasticsearch \(console\)**
 

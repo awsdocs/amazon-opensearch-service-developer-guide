@@ -52,8 +52,27 @@ Amazon ES supports [Amazon SNS](https://aws.amazon.com/sns/) for notifications\.
    }
    ```
 
+   For more information, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\.
+
 1. Choose **Create**\.
 
 ### Alerting Settings<a name="alerting-diff-settings"></a>
 
 Open Distro for Elasticsearch lets you modify certain alerting settings using the `_cluster/settings` API \(for example, `opendistro.alerting.monitor.max_monitors`\)\. On Amazon ES, you can't change these settings\.
+
+You can, however, disable the alerting feature\. Send the following request:
+
+```
+PUT _cluster/settings
+{
+  "persistent" : {
+    "opendistro.scheduled_jobs.enabled" : false
+  }
+}
+```
+
+If you previously created monitors and want to stop the creation of daily alerting indices, delete all alert history indices:
+
+```
+DELETE .opendistro-alerting-alert-history-*
+```

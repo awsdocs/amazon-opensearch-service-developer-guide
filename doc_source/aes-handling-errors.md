@@ -252,6 +252,10 @@ After creating a new domain that uses VPC access, the domain's **Configuration s
 
 To add VPC endpoints to your VPC, Amazon ES needs to assume the `AWSServiceRoleForAmazonElasticsearchService` role\. Thus, AWS STS must be enabled to create new domains that use VPC access in a given region\. To learn more about enabling and disabling AWS STS, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html)\.
 
+## Can't Connect from Alpine Linux<a name="aes-troubleshooting-alpine"></a>
+
+Alpine Linux limits DNS response size to 512 bytes\. If you try to connect to your Amazon ES domain from Alpine Linux, DNS resolution can fail if the domain is in a VPC and has more than 20 nodes\. If your domain is in a VPC, we recommend using other Linux distributions, such as Debian, Ubuntu, CentOS, Red Hat Enterprise Linux, or Amazon Linux 2, to connect to it\.
+
 ## Certificate Error When Using SDK<a name="aes-troubleshooting-certificates"></a>
 
 Because AWS SDKs use the CA certificates from your computer, changes to the certificates on the AWS servers can cause connection failures when you attempt to use an SDK\. Error messages vary, but typically contain the following text:

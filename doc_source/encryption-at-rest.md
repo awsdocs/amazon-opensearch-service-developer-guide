@@ -1,11 +1,11 @@
 # Encryption of Data at Rest for Amazon Elasticsearch Service<a name="encryption-at-rest"></a>
 
-Amazon ES domains offer encryption of data at rest, a security feature that helps prevent unauthorized access to your data\. The feature uses AWS Key Management Service \(AWS KMS\) to store and manage your encryption keys\. If enabled, it encrypts the following aspects of a domain:
+Amazon ES domains offer encryption of data at rest, a security feature that helps prevent unauthorized access to your data\. The feature uses AWS Key Management Service \(AWS KMS\) to store and manage your encryption keys and the Advanced Encryption Standard algorithm with 256\-bit keys \(AES\-256\) to perform the encryption\. If enabled, the feature encrypts the following aspects of a domain:
 + Indices
-+ Automated snapshots
 + Elasticsearch logs
 + Swap files
 + All other data in the application directory
++ Automated snapshots
 
 The following are *not* encrypted when you enable encryption of data at rest, but you can take additional steps to protect them:
 + Manual snapshots: Currently, you can't use KMS master keys to encrypt manual snapshots\. You can, however, use [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) to encrypt the bucket that you use as a snapshot repository\. For instructions, see [Registering a Manual Snapshot Repository](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory)\.
