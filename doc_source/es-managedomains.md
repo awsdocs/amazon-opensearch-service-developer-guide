@@ -36,13 +36,13 @@ In *most* cases, the following operations do not cause blue/green deployments:
 + Changing the automated snapshot hour
 + If your domain has dedicated master nodes, changing data instance count
 
-Exceptions exist\. For example, if you have not reconfigured your domain since the launch of three Availability Zone support, Amazon ES might perform a one\-time blue/green deployment to redistribute your dedicated master nodes across Availability Zones\.
+There are some exceptions\. For example, if you haven't reconfigured your domain since the launch of three Availability Zone support, Amazon ES might perform a one\-time blue/green deployment to redistribute your dedicated master nodes across Availability Zones\.
 
 If you initiate a configuration change, the domain state changes to **Processing**\. During certain [service software updates](#es-service-software), the state remains **Active**\. In both cases, you can review the cluster health and Amazon CloudWatch metrics and see that the number of nodes in the cluster temporarily increases—often doubling—while the domain update occurs\. In the following illustration, you can see the number of nodes doubling from 11 to 22 during a configuration change and returning to 11 when the update is complete\.
 
 ![\[Number of nodes doubling from 11 to 22 during a domain configuration change.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/NodesDoubled.png)
 
-This temporary increase can strain the cluster's [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), which suddenly have many more nodes to manage\. It is important to maintain sufficient capacity on dedicated master nodes to handle the overhead that is associated with these blue/green deployments\.
+This temporary increase can strain the cluster's [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), which suddenly might have many more nodes to manage\. It's important to maintain sufficient capacity on dedicated master nodes to handle the overhead that is associated with these blue/green deployments\.
 
 **Important**  
 You do *not* incur any additional charges during configuration changes and service maintenance\. You are billed only for the number of nodes that you request for your cluster\. For specifics, see [Charges for Configuration Changes](#es-managedomains-config-charges)\.
@@ -210,11 +210,11 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 | ClusterIndexWritesBlocked | Indicates whether your cluster is accepting or blocking incoming write requests\. A value of 0 means that the cluster is accepting requests\. A value of 1 means that it is blocking requests\. Many factors can cause a cluster to begin blocking requests\. Some common factors include the following: `FreeStorageSpace` is too low, `JVMMemoryPressure` is too high, or `CPUUtilization` is too high\. To alleviate this issue, consider adding more disk space or scaling your cluster\. Relevant statistics: Maximum You can view this metric in the Amazon CloudWatch console, but not the Amazon ES console\. | 
 | JVMMemoryPressure | The maximum percentage of the Java heap used for all data nodes in the cluster\. Relevant statistics: Maximum | 
 | AutomatedSnapshotFailure | The number of failed automated snapshots for the cluster\. A value of `1` indicates that no automated snapshot was taken for the domain in the previous 36 hours\. Relevant statistics: Minimum, Maximum | 
-| CPUCreditBalance | The remaining CPU credits available for data nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU Credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html#t2-instances-cpu-credits) in the *Amazon EC2 Developer Guide*\. This metric is available only for the t2\.micro\.elasticsearch, t2\.small\.elasticsearch, and t2\.medium\.elasticsearch instance types\. Relevant statistics: Minimum | 
+| CPUCreditBalance | The remaining CPU credits available for data nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU Credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html#t2-instances-cpu-credits) in the *Amazon EC2 Developer Guide*\. This metric is available only for the `t2.micro.elasticsearch`, `t2.small.elasticsearch`, and `t2.medium.elasticsearch` instance types\. Relevant statistics: Minimum | 
 | KibanaHealthyNodes | A health check for Kibana\. A value of 1 indicates normal behavior\. A value of 0 indicates that Kibana is inaccessible\. In most cases, the health of Kibana mirrors the health of the cluster\. Relevant statistics: Minimum You can view this metric on the Amazon CloudWatch console, but not the Amazon ES console\. | 
 | KMSKeyError | A value of 1 indicates that the KMS customer master key used to encrypt data at rest has been disabled\. To restore the domain to normal operations, re\-enable the key\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum | 
 | KMSKeyInaccessible | A value of 1 indicates that the KMS customer master key used to encrypt data at rest has been deleted or revoked its grants to Amazon ES\. You can't recover domains that are in this state\. If you have a manual snapshot, though, you can use it to migrate the domain's data to a new domain\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum | 
-| InvalidHostHeaderRequests | The number of HTTP requests made to the Elasticsearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. Amazon ES rejects invaild requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\.If you see large values for this metric, confirm that your Elasticsearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum | 
+| InvalidHostHeaderRequests | The number of HTTP requests made to the Elasticsearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. Amazon ES rejects invalid requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\.If you see large values for this metric, confirm that your Elasticsearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum | 
 | ElasticsearchRequests | The number of requests made to the Elasticsearch cluster\. Relevant statistics: Sum | 
 | 2xx, 3xx, 4xx, 5xx | The number of requests to the domain that resulted in the given HTTP response code \(2xx, 3xx, 4xx, 5xx\)\. Relevant statistics: Sum | 
 
@@ -228,7 +228,7 @@ The `AWS/ES` namespace includes the following metrics for dedicated master nodes
 | MasterCPUUtilization | The maximum percentage of CPU resources used by the dedicated master nodes\. We recommend increasing the size of the instance type when this metric reaches 60 percent\. Relevant statistics: Average | 
 | MasterFreeStorageSpace | This metric is not relevant and can be ignored\. The service does not use master nodes as data nodes\. | 
 | MasterJVMMemoryPressure | The maximum percentage of the Java heap used for all dedicated master nodes in the cluster\. We recommend moving to a larger instance type when this metric reaches 85 percent\. Relevant statistics: Maximum | 
-| MasterCPUCreditBalance | The remaining CPU credits available for dedicated master nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU Credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html#t2-instances-cpu-credits) in the *Amazon EC2 User Guide for Linux Instances*\. This metric is available only for the t2\.micro\.elasticsearch, t2\.small\.elasticsearch, and t2\.medium\.elasticsearch instance types\. Relevant statistics: Minimum | 
+| MasterCPUCreditBalance | The remaining CPU credits available for dedicated master nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU Credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html#t2-instances-cpu-credits) in the *Amazon EC2 User Guide for Linux Instances*\. This metric is available only for the `t2.micro.elasticsearch`, `t2.small.elasticsearch`, and `t2.medium.elasticsearch` instance types\. Relevant statistics: Minimum | 
 | MasterReachableFromNode | A health check for `MasterNotDiscovered` exceptions\. A value of 1 indicates normal behavior\. A value of 0 indicates that `/_cluster/health/` is failing\. Failures mean that the master node stopped or is not reachable\. They are usually the result of a network connectivity issue or AWS dependency problem\. Relevant statistics: Minimum You can view this metric on the Amazon CloudWatch console, but not the Amazon ES console\. | 
 | MasterSysMemoryUtilization | The percentage of the master node's memory that is in use\. Relevant statistics: Maximum | 
 
@@ -252,7 +252,7 @@ The `AWS/ES` namespace includes the following metrics for EBS volumes\.
 The `AWS/ES` namespace includes the following metrics for each instance in a domain\. Amazon ES also aggregates these instance metrics to provide insight into overall cluster health\. You can verify this behavior using the **Data samples** statistic in the console\. Note that each metric in the following table has relevant statistics for the node *and* the cluster\.
 
 **Important**  
-Different versions of Elasticsearch use different thread pools to process calls to the `_index` API\. Elasticsearch 1\.5 and 2\.3 use the index thread pool\. Elasticsearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. 6\.3 and newer use the write thread pool\. Currently, Amazon ES doesn't provide metrics for the bulk and write thread pools\.
+Different versions of Elasticsearch use different thread pools to process calls to the `_index` API\. Elasticsearch 1\.5 and 2\.3 use the index thread pool\. Elasticsearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. 6\.3 and later use the write thread pool\. Currently, Amazon ES doesn't provide metrics for the bulk and write thread pools\.
 
 
 | Metric | Description | 
@@ -281,6 +281,18 @@ Different versions of Elasticsearch use different thread pools to process calls 
 | ThreadpoolWriteThreads | The size of the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
 | ThreadpoolWriteRejected | The number of rejected tasks in the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
 | ThreadpoolWriteQueue | The number of queued tasks in the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+
+### UltraWarm Metrics<a name="es-managedomains-cloudwatchmetrics-uw"></a>
+
+The `AWS/ES` namespace includes the following metrics for UltraWarm nodes\.
+
+
+| Metric | Description | 
+| --- | --- | 
+| WarmCPUUtilization | The maximum percentage of CPU usage by the UltraWarm nodes\. Relevant statistics: Maximum | 
+| WarmJVMMemoryPressure | The maximum percentage of the Java heap used for the UltraWarm nodes\. Relevant statistics: Maximum | 
+| WarmStorageSpaceUtilization | The total amount of warm storage space that the cluster is using\. Relevant statistics: Sum | 
+| WarmSysMemoryUtilization | The percentage of the warm node's memory that is in use\. Relevant statistics: Maximum | 
 
 ## Tagging Amazon Elasticsearch Service Domains<a name="es-managedomains-awsresourcetagging"></a>
 

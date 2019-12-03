@@ -21,8 +21,8 @@ Amazon ES includes the following features:
 
 **Scale**
 + Numerous configurations of CPU, memory, and storage capacity, known as *instance types*
-+ Up to 3 PB of instance storage
-+ Amazon EBS storage volumes
++ Up to 3 PB of attached storage
++ Cost\-effective [UltraWarm](ultrawarm.md) storage for read\-only data
 
 **Security**
 + AWS Identity and Access Management \(IAM\) access control
@@ -31,8 +31,8 @@ Amazon ES includes the following features:
 + Amazon Cognito authentication for Kibana
 
 **Stability**
-+ Multiple geographical locations for your resources, known as *regions* and *Availability Zones*
-+ Node allocation across two or three Availability Zones in the same region, known as *Multi\-AZ*
++ Numerous geographical locations for your resources, known as *Regions* and *Availability Zones*
++ Node allocation across two or three Availability Zones in the same AWS Region, known as *Multi\-AZ*
 + Dedicated master nodes to offload cluster management tasks
 + Automated snapshots to back up and restore Amazon ES domains
 
@@ -52,14 +52,12 @@ Amazon ES currently supports the following Elasticsearch versions:
 + 1\.5
 
 Compared to earlier versions of Elasticsearch, the 7\.*x* and 6\.*x* versions offer powerful features that make them faster, more secure, and easier to use\. Here are a few highlights:
-+ **Index splitting** – If an index outgrows its original number of shards, the `_split` API offers a convenient way to split each primary shard into two or more shards in a new index\.
-+ **Vega visualizations** – Kibana 6\.2 and newer support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
-+ **Java high\-level REST client** – Compared to the low\-level client, this client offers a simplified development experience and supports many Elasticsearch APIs\. For a code sample, see [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
-+ **Weighted averages** – This aggregation lets you assign weights to documents and factor those weights into the average of a given value\.
 + **Higher indexing performance** – Newer versions of Elasticsearch provide superior indexing capabilities that significantly increase the throughput of data updates\.
-+ **Better safeguards** – Newer versions of Elasticsearch offer improved cluster coordination and many safeguards that help prevent overly broad or complex queries from negatively affecting performing and stability\.
++ **Better safeguards** – Newer versions of Elasticsearch help prevent overly broad or complex queries from negatively affecting the performance and stability of the cluster\.
++ **Vega visualizations** – Kibana 6\.2 and later versions support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
++ **Java high\-level REST client** – Compared to the low\-level client, this client offers a simplified development experience and supports most Elasticsearch APIs\. For a code example, see [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
 
-For more information about the differences between Elasticsearch versions and the APIs that Amazon ES supports, see [Supported Elasticsearch Operations](aes-supported-es-operations.md)\.
+For more information, see [Supported Elasticsearch Operations](aes-supported-es-operations.md) and [Features by Elasticsearch Version](aes-features-by-version.md)\.
 
 If you start a new Elasticsearch project, we strongly recommend that you choose the latest supported Elasticsearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see [Upgrading Elasticsearch](es-version-migration.md)\.
 

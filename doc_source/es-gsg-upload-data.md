@@ -3,7 +3,7 @@
 **Important**  
 This process is a concise tutorial for uploading a small amount of test data\. For more information, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
-You can upload data to an Amazon Elasticsearch Service domain for indexing using the Elasticsearch index and bulk APIs from the command line\.
+You can upload data to an Amazon Elasticsearch Service domain for indexing using the Elasticsearch index and bulk APIs from the command line:
 + Use the index API to add or update a single Elasticsearch document\.
 + Use the bulk API to add or update multiple Elasticsearch documents that are described in the same JSON file\.
 

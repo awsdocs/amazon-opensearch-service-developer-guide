@@ -1,6 +1,6 @@
 # Amazon Elasticsearch Service Limits<a name="aes-limits"></a>
 
-The following tables show limits for Amazon ES resources, including the number of instances per cluster, the minimum and maximum sizes for EBS volumes, and network limits\.
+The following tables show limits for Amazon ES resources, including the number of nodes per cluster, the minimum and maximum sizes for EBS volumes, and network limits\.
 
 ## Cluster and Instance Limits<a name="clusterresource"></a>
 
@@ -9,17 +9,30 @@ The following table shows Amazon ES limits for clusters and instances\.
 
 | Clusters and Instances | Limit | 
 | --- | --- | 
-| Maximum number of data instances \(instance count\) per cluster | 40 \(except for the T2 instance types, which have a maximum of 10\)  The default limit is 40 data instances per domain\. To request an increase up to 200 per domain \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.  For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
-| Maximum number of dedicated master nodes | 5  You can use the T2 instance types as dedicated master nodes only if the instance count is 10 or fewer\.  | 
+| Maximum number of data nodes \(including warm nodes\) per cluster | 40 \(except for the T2 instance types, which have a maximum of 10\)  The default limit is 40 data nodes per cluster\. To request an increase up to 200 \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.  For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
+| Maximum number of warm nodes per cluster | 45 | 
+| Maximum number of dedicated master nodes | 5  You can use the T2 instance types for dedicated master nodes \(not recommended for production domains\) only if the number of data nodes is 10 or fewer\.  | 
 | Smallest supported instance type | `t2.micro.elasticsearch` \(versions 1\.5 and 2\.3\) and `t2.small.elasticsearch` \(version 5\.*x* and 6\.*x*\)\. | 
-| Maximum number of domains per account \(per region\) | 100 | 
+| Maximum number of domains per account \(per Region\) | 100 | 
 
 For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
+## UltraWarm Storage Limits<a name="limits-ultrawarm"></a>
+
+The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm Storage for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
+
+
+****  
+
+| Instance Type | Maximum Storage | 
+| --- | --- | 
+| ultrawarm1\.medium\.elasticsearch | 1\.5 TiB | 
+| ultrawarm1\.large\.elasticsearch | 20 TiB | 
+
 ## EBS Volume Size Limits<a name="ebsresource"></a>
 
-The following table shows the minimum and maximum sizes for EBS volumes for each instance type that Amazon ES supports\. See [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) for information on which instance types include instance storage and additional hardware details\.
-+ If you select magnetic storage under **EBS volume type** when creating your domain, maximum volume size is 100 GiB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, select one of the SSD options\.
+The following table shows the minimum and maximum sizes for EBS volumes for each instance type that Amazon ES supports\. For information about which instance types include instance storage and additional hardware details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
++ If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, choose one of the SSD options\.
 + 512 GiB is the maximum volume size that is supported with Elasticsearch version 1\.5\.
 + Some older\-generation instance types include instance storage, but also support EBS storage\. If you choose EBS storage for one of these instance types, the storage volumes are *not* additive\. You can use either an EBS volume or the instance storage, not both\.
 
@@ -149,4 +162,4 @@ Amazon ES limits Java processes to a heap size of 32 GiB\. Advanced users can sp
 
 ## Domain Policy Limit<a name="aes-domain-policy-limit"></a>
 
-Amazon ES limits [access policies on domains](es-ac.md#es-ac-types-resource) to 102400 bytes\.
+Amazon ES limits [access policies on domains](es-ac.md#es-ac-types-resource) to 100 KiB\.

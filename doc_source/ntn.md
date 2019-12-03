@@ -15,5 +15,4 @@ By default, domains do not use node\-to\-node encryption, and you can't configur
 After you configure a domain to use node\-to\-node encryption, you can't disable the setting\. Instead, you can take a [manual snapshot](es-managedomains-snapshots.md) of the encrypted domain, [create another domain](es-createupdatedomains.md#es-createdomains), migrate your data, and delete the old domain\.
 
 ## Other Considerations<a name="ntn-considerations"></a>
-+ Node\-to\-node encryption is not available in the `cn-north-1` \(Beijing\) and `cn-northwest-1` \(Ningxia\) Regions\.
 + Kibana still works on domains that use node\-to\-node encryption\.

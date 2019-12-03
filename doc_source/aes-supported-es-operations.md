@@ -23,46 +23,41 @@ Amazon ES supports many versions of Elasticsearch\. The following topics show th
 
 ### Cluster Settings<a name="es_version_api_notes-cs"></a>
 
-Prior to Elasticsearch 5\.3, the `_cluster/settings` API on Amazon ES domains supported only the HTTP `PUT` method, not the `GET` method\. Newer versions support the `GET` method, as shown in the following example:
+Prior to Elasticsearch 5\.3, the `_cluster/settings` API on Amazon ES domains supported only the HTTP `PUT` method, not the `GET` method\. Later versions support the `GET` method, as shown in the following example:
 
 ```
 GET https://domain.region.es.amazonaws.com/_cluster/settings?pretty
 ```
 
-A sample return follows:
+Here is a return example:
 
 ```
 {
-  "persistent" : {
-    "cluster" : {
-      "routing" : {
-        "allocation" : {
-          "cluster_concurrent_rebalance" : "2"
+  "persistent": {
+    "cluster": {
+      "routing": {
+        "allocation": {
+          "cluster_concurrent_rebalance": "2",
+          "node_concurrent_recoveries": "2",
+          "disk": {
+            "watermark": {
+              "low": "1.35gb",
+              "flood_stage": "0.45gb",
+              "high": "0.9gb"
+            }
+          },
+          "node_initial_primaries_recoveries": "4"
         }
       }
     },
-    "indices" : {
-      "recovery" : {
-        "max_bytes_per_sec" : "20mb"
-      }
-    }
-  },
-  "transient" : {
-    "cluster" : {
-      "routing" : {
-        "allocation" : {
-          "exclude" : {
-            "di_number" : "2"
-          }
-        }
+    "indices": {
+      "recovery": {
+        "max_bytes_per_sec": "40mb"
       }
     }
   }
 }
 ```
-+ `cluster_concurrent_rebalance` specifies the number of shards that can be relocated to new nodes at any given time\.
-+ `max_bytes_per_sec` is the maximum data transfer speed that Elasticsearch uses during a recovery event\.
-+ `di_number` is an internal Amazon ES value that is used to copy shards to new *domain instances* after configuration changes\.
 
 ### Shrink<a name="es_version_api_notes-shrink"></a>
 

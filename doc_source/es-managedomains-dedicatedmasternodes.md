@@ -8,20 +8,20 @@ We recommend that you allocate **three** dedicated master nodes for each product
 
 1. Two dedicated master nodes means that your cluster does not have the necessary quorum of nodes to elect a new master node in the event of a failure\.
 
-   A quorum is Number of Dedicated Master Nodes / 2 \+ 1 \(rounded down to the nearest whole number\), which Amazon ES sets to `discovery.zen.minimum_master_nodes` when you create your domain\.
+   A quorum is the number of dedicated master nodes / 2 \+ 1 \(rounded down to the nearest whole number\), which Amazon ES sets to `discovery.zen.minimum_master_nodes` when you create your domain\.
 
-   In this case, 2 / 2 \+ 1 = 2\. Because one dedicated master node has failed and only one backup exists, the cluster does not have a quorum and cannot elect a new master\.
+   In this case, 2 / 2 \+ 1 = 2\. Because one dedicated master node has failed and only one backup exists, the cluster doesn't have a quorum and can't elect a new master\.
 
 1. Three dedicated master nodes, the recommended number, provides two backup nodes in the event of a master node failure and the necessary quorum \(2\) to elect a new master\.
 
-1. Four dedicated master nodes is no better than three and can cause issues if you use [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) \(AZs\) in a region that has only two AZs\.
+1. Four dedicated master nodes are no better than three and can cause issues if you use [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) in a Region that has only two zones\.
    + If one master node fails, you have the quorum \(3\) to elect a new master\. If two nodes fail, you lose that quorum, just as you do with three dedicated master nodes\.
-   + If each AZ has two dedicated master nodes and the zones are unable to communicate with each other, neither zone has the quorum to elect a new master\.
+   + If each Availability Zone has two dedicated master nodes and the zones are unable to communicate with each other, neither zone has the quorum to elect a new master\.
 
-1. Having five dedicated master nodes works as well as three and allows you to lose two nodes while maintaining a quorum, but because only one dedicated master node is active at any given time, this configuration means paying for four idle nodes\. Many customers find this level of failover protection excessive\.
+1. Having five dedicated master nodes works as well as three and allows you to lose two nodes while maintaining a quorum\. But because only one dedicated master node is active at any given time, this configuration means paying for four idle nodes\. Many users find this level of failover protection excessive\.
 
 **Note**  
-If your cluster does not have the necessary quorum to elect a new master node, write *and* read requests to the cluster both fail\. This behavior differs from the Elasticsearch default\.
+If your cluster doesn't have the necessary quorum to elect a new master node, write *and* read requests to the cluster both fail\. This behavior differs from the Elasticsearch default\.
 
 Dedicated master nodes perform the following cluster management tasks:
 + Track all nodes in the cluster
@@ -36,7 +36,7 @@ The following illustration shows an Amazon ES domain with ten instances\. Seven 
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/DedicatedMasterNodes_no-caption.png)
 
-Although dedicated master nodes do not process search and query requests, their size is highly correlated with the number of instances, indices, and shards that they can manage\. For production clusters, we recommend the following instance types for dedicated master nodes\. These recommendations are based on typical workloads and can vary based on your needs\. Clusters with many shards or field mappings can benefit from larger instance types\. Monitor the [dedicated master node metrics](cloudwatch-alarms.md) to see if you need to use a larger instance type\.
+Although dedicated master nodes don't process search and query requests, their size is highly correlated with the number of instances, indices, and shards that they can manage\. For production clusters, we recommend the following instance types for dedicated master nodes\. These recommendations are based on typical workloads and can vary based on your needs\. Clusters with many shards or field mappings can benefit from larger instance types\. Monitor the [dedicated master node metrics](cloudwatch-alarms.md) to see if you need to use a larger instance type\.
 
 
 ****  

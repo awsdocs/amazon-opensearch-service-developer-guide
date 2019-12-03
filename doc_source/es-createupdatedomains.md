@@ -16,7 +16,7 @@ Unlike the brief instructions in the [Getting Started](es-gsg.md) tutorial, this
 
 ## Creating Amazon ES Domains<a name="es-createdomains"></a>
 
-This section describes how to create Amazon ES domains by using the Amazon ES console or by using the AWS CLI with the `create-elasticsearch-domain` command\. The procedures for the AWS CLI include syntax and examples\.
+This section describes how to create Amazon ES domains by using the Amazon ES console or by using the AWS CLI with the `create-elasticsearch-domain` command\.
 
 ### Creating Amazon ES Domains \(Console\)<a name="es-createdomains-console"></a>
 
@@ -30,14 +30,13 @@ Use the following procedure to create an Amazon ES domain by using the console\.
 
 1. Choose **Create a new domain**\.
 
-   Alternatively, choose **Get Started** if this is your first Amazon ES domain in the AWS Region\.
-
-1. For **Choose deployment type**, select the option that best matches the purpose of your domain:
+1. For **Choose deployment type**, choose the option that best matches the purpose of your domain:
    + **Production** domains use Multi\-AZ and dedicated master nodes for higher availability\.
    + **Development and testing** domains use a single Availability Zone\.
    + **Custom** domains let you choose from all configuration options\.
+   + **UltraWarm Preview** domains let you enable [UltraWarm Storage for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
 **Important**  
-Different deployment types present different options on subsequent pages\. For comprehensiveness, these steps include all options \(the **Custom** deployment type\)\.
+Different deployment types present different options on subsequent pages\. These steps include all options \(the **Custom** deployment type\)\.
 
 1. For **Elasticsearch version**, we recommend that you choose the latest version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
 
@@ -53,49 +52,43 @@ Different deployment types present different options on subsequent pages\. For c
 
 1. For **Instance type**, choose an instance type for the data nodes\. For more information, see [Supported Instance Types](aes-supported-instance-types.md)\.
 **Note**  
-Not all Availability Zones support all instance types\. If you choose **3\-AZ**, we recommend choosing current\-generation instance types such as R4 or I3\.
+Not all Availability Zones support all instance types\. If you choose **3\-AZ**, we recommend choosing current\-generation instance types such as R5 or I3\.
 
-1. For **Number of instances**, choose the number of data nodes\.
+1. For **Number of nodes**, choose the number of data nodes\.
 
    For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md) and [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
 
-1. \(Optional\) Enable or disable [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. Dedicated master nodes increase cluster stability and are required for domains that have instance counts greater than 10\. We recommend three dedicated master nodes for production domains\.
-**Note**  
-You can choose different instance types for your dedicated master nodes and data nodes\. For example, you might select general purpose or storage\-optimized instances for your data nodes, but compute\-optimized instances for your dedicated master nodes\.
+1. For **Data nodes storage type**, choose either **Instance** \(default\) or **EBS**\.
 
-1. For **Storage type**, choose either **Instance** \(default\) or **EBS**\.
-
-   Domains with large indices or large numbers of indices often benefit from the increased storage capacity of EBS volumes\. For guidance on creating especially large domains, see [Petabyte Scale](petabyte-scale.md)\. If you choose **EBS**, the following options appear:
+   For guidance on creating especially large domains, see [Petabyte Scale](petabyte-scale.md)\. If you choose **EBS**, the following options appear:
 
    1. For **EBS volume type**, choose an EBS volume type\.
 
       If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, enter the baseline IOPS performance that you want\. For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
 
-   1.  For **EBS volume size**, enter the size of the EBS volume that you want to attach to each data node\.
+   1.  For **EBS storage size per node**, enter the size of the EBS volume that you want to attach to each data node\.
 
       **EBS volume size** is per node\. You can calculate the total cluster size for the Amazon ES domain by multiplying the number of data nodes by the EBS volume size\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type that it's attached to\. To learn more, see [EBS Volume Size Limits](aes-limits.md#ebsresource)\.
 
-1. \(Optional\) To require that all requests to the domain arrive over HTTPS, select the **Require HTTPS for all traffic to the domain** check box\.
+1. \(Optional\) Enable or disable [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. Dedicated master nodes increase cluster stability and are required for domains that have instance counts greater than 10\. We recommend three dedicated master nodes for production domains\.
+**Note**  
+You can choose different instance types for your dedicated master nodes and data nodes\. For example, you might select general purpose or storage\-optimized instances for your data nodes, but compute\-optimized instances for your dedicated master nodes\.
 
-1. \(Optional\) To enable node\-to\-node encryption, select the **Node\-to\-node encryption** check box\. For more information, see [Node\-to\-node Encryption for Amazon Elasticsearch Service](ntn.md)\.
-
-1. \(Optional\) To enable encryption of data at rest, select the **Enable encryption of data at rest** check box\.
-
-   Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
+1. \(Optional\) To preview [UltraWarm storage](ultrawarm.md), choose **Enable UltraWarm data nodes**\. Each instance type has a [maximum amount of storage](aes-limits.md#limits-ultrawarm) that it can address\. Multiply that amount by the number of warm data nodes for the total addressable warm storage\.
 
 1. \(Optional\) For domains running Elasticsearch 5\.3 and later, **Automated snapshot start hour** has no effect\. For more information about automated snapshots, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
 
-1. \(Optional\) Choose **Advanced options**\. For a summary of options, see [Configuring Advanced Options](#es-createdomain-configure-advanced-options)\.
+1. \(Optional\) Choose **Optional Elasticsearch cluster settings**\. For a summary of these options, see [Configuring Advanced Options](#es-createdomain-configure-advanced-options)\.
 
 1. Choose **Next**\.
 
-1. On the **Set up access** page, in the **Network configuration** section, choose either **VPC access** or **Public access**\. If you choose **Public access**, skip to the next step\. If you choose **VPC access**, ensure that you have met the [prerequisites](es-vpc.md#es-prerequisites-vpc-endpoints), and then do the following:
+1. In the **Network configuration** section, choose either **VPC access** or **Public access**\. If you choose **Public access**, skip to the next step\. If you choose **VPC access**, ensure that you have met the [prerequisites](es-vpc.md#es-prerequisites-vpc-endpoints), and then do the following:
 
    1. For **VPC**, choose the ID of the VPC that you want to use\.
 **Note**  
 The VPC and domain must be in the same AWS Region, and you must select a VPC with tenancy set to **Default**\. Amazon ES does not yet support VPCs that use dedicated tenancy\.
 
-   1. For **Subnet**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces*in the subnets\.
+   1. For **Subnet**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces* in the subnets\.
 **Note**  
 You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
@@ -107,9 +100,17 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
    1. Choose the Amazon Cognito user pool and identity pool that you want to use for Kibana authentication\. For guidance on creating these resources, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
 
-1. For **Set the domain access policy to**, choose a preconfigured policy from the **Select a template** dropdown list and edit it to meet the needs of your domain\. Alternatively, you can add one or more Identity and Access Management \(IAM\) policy statements in the **Add or edit the access policy** box\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md), [Configuring Access Policies](#es-createdomain-configure-access-policies), and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+1. For **Domain access policy**, add the ARNs or IP addresses that you want or choose a preconfigured policy from the dropdown list\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md) and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 **Note**  
-If you chose **VPC access** in step 19, the IP\-based policy template is not available in the dropdown list, and you can't configure an IP\-based policy manually\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you chose **VPC access** in step 17, IP\-based policies are prohibited\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+
+1. \(Optional\) To require that all requests to the domain arrive over HTTPS, select the **Require HTTPS for all traffic to the domain** check box\.
+
+1. \(Optional\) To enable node\-to\-node encryption, select the **Node\-to\-node encryption** check box\. For more information, see [Node\-to\-node Encryption for Amazon Elasticsearch Service](ntn.md)\.
+
+1. \(Optional\) To enable encryption of data at rest, select the **Enable encryption of data at rest** check box\.
+
+   Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. For more information, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
 1. Choose **Next**\.
 
@@ -171,9 +172,6 @@ To meet the demands of increased traffic and data, you can update your Amazon ES
 + Change the VPC subnets and security groups
 + Configure advanced options
 
-**Note**  
-For information about configuring a domain to use an EBS volume for storage, see [Configuring EBS\-based Storage](#es-createdomain-configure-ebs)\. 
-
 ### Configuring Amazon ES Domains \(Console\)<a name="es-createdomains-configure-cluster-console"></a>
 
 Use the following procedure to update your Amazon ES configuration by using the console\.
@@ -186,35 +184,9 @@ Use the following procedure to update your Amazon ES configuration by using the 
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to update\.
 
-1. Choose **Configure cluster**\.
+1. Choose **Edit domain**\.
 
-1. On the **Configure cluster** page, update the configuration of the domain\.
-
-   1. If you want to change the instance type for data nodes, for **Instance type**, choose a new instance type\. 
-
-      To see a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
-
-   1. If you want to change the instance count, for **Instance count**, choose an integer from 1–40\. To request an increase up to 200 instances per domain, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. 
-
-   1. If you want to improve cluster stability or if your domain has an instance count greater than 10, enable dedicated master nodes for your cluster\. For more information, see [Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
-
-      1. Select the **Dedicated master instances** check box\.
-
-      1. For **Dedicated master instance type**, choose an instance type for the dedicated master nodes\.
-
-      1. For **Dedicated master instance count**, choose the number of instances\.
-
-   1. If you want to enable or disable Multi\-AZ, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.
-
-   1. If you enabled VPC access, you can change the subnet that the VPC endpoint is placed in, and you can change the security groups:
-
-      1. For **Subnets**, choose a subnet\. The subnet must have a sufficient number of IP addresses reserved for the network interfaces\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same Region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
-
-      1. For **Security groups**, add the security groups that need access to the domain\.
-
-   1. \(Optional\) Choose **Advanced options**\. For a summary of options, see [Configuring Advanced Options](#es-createdomain-configure-advanced-options)
-
-   1. Choose **Submit**\.
+1. On the **Edit domain** page, update the configuration of the domain, and then choose **Submit**\.
 
 ### Configuring Amazon ES Domains \(AWS CLI\)<a name="es-createdomains-configure-cluster-cli"></a>
 
@@ -226,7 +198,7 @@ The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined
 
 ## Configuring EBS\-based Storage<a name="es-createdomain-configure-ebs"></a>
 
-An Amazon EBS volume is a block\-level storage device that you can attach to a single instance\. EBS volumes enable you to independently scale the storage resources of your Amazon ES domain from its compute resources\. EBS volumes are most useful for domains with large datasets, but without the need for large compute resources\. EBS volumes are much larger than the default storage provided by the instance\. Amazon Elasticsearch Service supports the following EBS volume types:
+An Amazon EBS volume is a block\-level storage device that you can attach to a single instance\. Amazon Elasticsearch Service supports the following EBS volume types:
 + General Purpose \(SSD\)
 + Provisioned IOPS \(SSD\)
 + Magnetic
@@ -249,7 +221,7 @@ Use the following procedure to enable EBS\-based storage by using the console\.
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to configure\.
 
-1. Choose **Configure cluster**\.
+1. Choose **Edit domain**\.
 
 1. For **Storage type**, choose **EBS**\.
 
@@ -264,7 +236,7 @@ Use the following procedure to enable EBS\-based storage by using the console\.
 1. Choose **Submit**\. 
 
 **Note**  
-Set the IOPS value for a Provisioned IOPS EBS volume to no more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you can't assign an IOPS value for it that is greater than 3000\.
+Set the IOPS value for a Provisioned IOPS EBS volume to no more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you can't assign an IOPS value for it that is greater than 3,000\.
 
 For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
 
@@ -286,10 +258,10 @@ Use the `--ebs-options` option to configure EBS\-based storage by using the AWS 
 | EBSEnabled | true or false | Specifies whether to use an EBS volume for storage rather than the storage provided by the instance\. The default value is false\. | 
 | VolumeType | Any of the following:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html) | The EBS volume type to use with the Amazon ES domain\. | 
 | VolumeSize | Integer | Specifies the size of the EBS volume for each data node in GiB\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type to which it is attached\. To see a table that shows the minimum and maximum EBS size for each instance type, see [Service Limits](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-limits.html)\.  | 
-| IOPS | Integer | Specifies the baseline I/O performance for the EBS volume\. This parameter is used only by Provisioned IOPS \(SSD\) volumes\. The minimum value is 1000\. The maximum value is 16000\. | 
+| IOPS | Integer | Specifies the baseline I/O performance for the EBS volume\. This parameter is used only by Provisioned IOPS \(SSD\) volumes\. The minimum value is 1,000\. The maximum value is 16,000\. | 
 
 **Note**  
-We recommend that you don't set the IOPS value for a Provisioned IOPS EBS volume to more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you shouldn't assign an IOPS value for it that is greater than 3000\. For more information, including use cases for each volume type, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the Amazon EC2 documentation\.
+We recommend that you don't set the IOPS value for a Provisioned IOPS EBS volume to more than 30 times the maximum storage of the volume\. For example, if your volume has a maximum size of 100 GiB, you shouldn't assign an IOPS value for it that is greater than 3,000\. For more information, including use cases for each volume type, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html) in the Amazon EC2 documentation\.
 
 **Examples**
 
@@ -299,7 +271,7 @@ The following example creates a domain named `mylogs` with Elasticsearch version
 aws es create-elasticsearch-domain --domain-name=mylogs --elasticsearch-version 5.5 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=10
 ```
 
-However, you might need a larger EBS volume as the size of your search indices increases\. For example, you might opt for a 100 GiB Provisioned IOPS volume with a baseline I/O performance of 3000 IOPS\. The following example updates the domain configuration with those changes:
+However, you might need a larger EBS volume as the size of your search indices increases\. For example, you might opt for a 100 GiB Provisioned IOPS volume with a baseline I/O performance of 3,000 IOPS\. The following example updates the domain configuration with those changes:
 
 ```
 aws es update-elasticsearch-domain-config --domain-name=mylogs --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,IOPS=3000
@@ -325,7 +297,7 @@ Use the following procedure to configure VPC access by using the console\.
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to configure\.
 
-1. Choose **Configure cluster**\.
+1. Choose **Edit domain**\.
 
 1. In the **Network configuration** section, for **Subnets**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. The subnets must be in different Availability Zones in the same Region\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
 **Note**  
@@ -411,7 +383,7 @@ Specifies the percentage of Java heap space that is allocated to field data\. By
 Many customers query rotating daily indices\. We recommend that you begin benchmark testing with `indices.fielddata.cache.size` configured to 40% of the JVM heap for most such use cases\. However, if you have very large indices you might need a large field data cache\.
 
 **indices\.query\.bool\.max\_clause\_count**  
-Specifies the maximum number of clauses allowed in a Lucene Boolean query\. The default is 1024\. Queries with more than the permitted number of clauses result in a `TooManyClauses` error\. For more information, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\.
+Specifies the maximum number of clauses allowed in a Lucene Boolean query\. The default is 1,024\. Queries with more than the permitted number of clauses result in a `TooManyClauses` error\. For more information, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\.
 
 ### Configuring Advanced Options \(Console\)<a name="es-createdomain-configure-advanced-options-console"></a>
 
@@ -423,7 +395,7 @@ Specifies the maximum number of clauses allowed in a Lucene Boolean query\. The 
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to update\.
 
-1. Choose **Configure cluster**\.
+1. Choose **Edit domain**\.
 
 1. Choose **Advanced options**\.
 
