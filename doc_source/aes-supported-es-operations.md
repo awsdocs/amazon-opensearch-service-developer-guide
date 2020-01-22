@@ -75,10 +75,18 @@ PUT https://domain.region.es.amazonaws.com/source-index/_settings
 }
 ```
 
-Then make the following request after completing the shrink operation:
+Then make the following requests after completing the shrink operation:
 
 ```
 PUT https://domain.region.es.amazonaws.com/source-index/_settings
+{
+  "settings": {
+    "index.routing.allocation.require._name": null,
+    "index.blocks.read_only": false
+  }
+}
+
+PUT https://domain.region.es.amazonaws.com/shrunken-index/_settings
 {
   "settings": {
     "index.routing.allocation.require._name": null,

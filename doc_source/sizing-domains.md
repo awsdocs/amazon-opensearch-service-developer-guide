@@ -43,7 +43,7 @@ Insufficient storage space is one of the most common causes of cluster instabili
 
 Other storage considerations exist:
 + If your minimum storage requirement exceeds 1 PB, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
-+ If you have rolling indices and want to use a hot\-warm architecture, see [UltraWarm Storage for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
++ If you have rolling indices and want to use a hot\-warm architecture, see [UltraWarm for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
 
 ## Choosing the Number of Shards<a name="aes-bp-sharding"></a>
 

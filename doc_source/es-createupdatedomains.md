@@ -34,7 +34,7 @@ Use the following procedure to create an Amazon ES domain by using the console\.
    + **Production** domains use Multi\-AZ and dedicated master nodes for higher availability\.
    + **Development and testing** domains use a single Availability Zone\.
    + **Custom** domains let you choose from all configuration options\.
-   + **UltraWarm Preview** domains let you enable [UltraWarm Storage for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
+   + **UltraWarm Preview** domains let you enable [UltraWarm for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
 **Important**  
 Different deployment types present different options on subsequent pages\. These steps include all options \(the **Custom** deployment type\)\.
 

@@ -8,7 +8,7 @@ This chapter describes some considerations for using Kibana and Logstash with Am
 
 ## Kibana<a name="es-managedomains-kibana"></a>
 
-Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `elasticsearch-domain-endpoint/_plugin/kibana/`\. Queries using this default Kibana installation have a 300\-second timeout\.
+Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `domain-endpoint/_plugin/kibana/`\. Queries using this default Kibana installation have a 300\-second timeout\.
 
 The following sections address some common Kibana use cases:
 + [Controlling Access to Kibana](#es-kibana-access)
@@ -163,11 +163,14 @@ If you have invested significant time into configuring your own Kibana instance,
 + Make the following changes to `config/kibana.yml`:
 
   ```
-  kibana_index: ".kibana"
-  elasticsearch_url: "http://elasticsearch_domain:80"
+  kibana.index: ".kibana_1"
+  # Use elasticsearch.url for versions older than 6.6
+  # elasticsearch.url: "https://domain-endpoint:443"
+  # Use elasticsearch.hosts for versions 6.6 and later
+  elasticsearch.hosts: "https://domain-endpoint:443"
   ```
 
-You must use the `http` prefix and explicitly specify port 80\.
+Older versions of Elasticsearch might only work over HTTP\. In all cases, add the `http` or `https` prefix\. For older versions, you must explicitly specify port 80 or 443\. For newer versions, you can omit the port\.
 
 ## Loading Bulk Data with the Logstash Plugin<a name="es-managedomains-logstash"></a>
 

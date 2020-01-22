@@ -1,21 +1,21 @@
-# UltraWarm Storage for Amazon Elasticsearch Service \(Preview\)<a name="ultrawarm"></a>
+# UltraWarm for Amazon Elasticsearch Service \(Preview\)<a name="ultrawarm"></a>
 
-UltraWarm storage provides a cost\-effective way to store large amounts of read\-only data on Amazon Elasticsearch Service\. Standard data nodes use "hot" storage, which takes the form of instance stores or Amazon EBS volumes attached to each node\. Hot storage provides the fastest possible performance for indexing and searching new data\.
+UltraWarm provides a cost\-effective way to store large amounts of read\-only data on Amazon Elasticsearch Service\. Standard data nodes use "hot" storage, which takes the form of instance stores or Amazon EBS volumes attached to each node\. Hot storage provides the fastest possible performance for indexing and searching new data\.
 
-Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated caching solution to improve performance\. For indices that you are not actively writing to and query less frequently, UltraWarm storage offers significantly lower costs per GiB\. In Elasticsearch, these warm indices behave just like any other index\. You can query them using the same APIs or use them to create dashboards in Kibana\.
+Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated caching solution to improve performance\. For indices that you are not actively writing to and query less frequently, UltraWarm offers significantly lower costs per GiB\. In Elasticsearch, these warm indices behave just like any other index\. You can query them using the same APIs or use them to create dashboards in Kibana\.
 
 **Topics**
 + [Public Preview Limitations](#ultrawarm-pp)
 + [Calculating UltraWarm Storage Requirements](#ultrawarm-calc)
 + [UltraWarm Pricing](#ultrawarm-pricing)
-+ [Creating Domains with UltraWarm Storage](#ultrawarm-new-domain)
++ [Creating Domains with UltraWarm](#ultrawarm-new-domain)
 + [Migrating Indices to UltraWarm Storage](#ultrawarm-migrating)
 + [Listing Hot and Warm Indices](#ultrawarm-es-api)
 + [Restoring Warm Indices from Snapshots](#ultrawarm-snapshot)
 
 ## Public Preview Limitations<a name="ultrawarm-pp"></a>
 
-For the public preview, UltraWarm storage has several important limitations:
+For the public preview, UltraWarm has several important limitations:
 + We don't yet recommend using warm storage for critical workloads\. Preview features are for testing and evaluation\.
 + You can't add warm storage to existing domains, only new ones\. After creating a domain with warm storage, you *can* increase or decrease the number of warm nodes, but you can't disable warm storage entirely\.
 + UltraWarm is available only in the `us-east-1` \(N\. Virginia\), `us-east-2` \(Ohio\), and `us-west-2` \(Oregon\) Regions\.
@@ -28,10 +28,10 @@ For the public preview, UltraWarm storage has several important limitations:
 
 As covered in [Calculating Storage Requirements](sizing-domains.md#aes-bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and Amazon ES reserved space\. For example, a 10 GiB primary shard with one replica shard requires roughly 26 GiB of hot storage\.
 
-Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 10 GiB shard requires 10 GiB of warm storage\. If you provision an `ultrawarm1.large.elasticsearch` instance, you can use all 20 TiB of its maximum storage for primary shards\.
+Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 10 GiB shard requires 10 GiB of warm storage\. If you provision an `ultrawarm1.large.elasticsearch` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm Storage Limits](aes-limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
 
 **Tip**  
-With UltraWarm storage, we still recommend a maximum shard size of 50 GiB\.
+With UltraWarm, we still recommend a maximum shard size of 50 GiB\.
 
 ## UltraWarm Pricing<a name="ultrawarm-pricing"></a>
 
@@ -39,14 +39,14 @@ With hot storage, you pay for what you provision\. Some instances require an att
 
 With UltraWarm storage, you pay for what you use\. An `ultrawarm1.large.elasticsearch` instance can address up to 20 TiB of storage on S3, but if you store only 1 TiB of data, you're only billed for 1 TiB of data\. Like all other node types, you also pay an hourly rate for each UltraWarm node\. For more information, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
 
-## Creating Domains with UltraWarm Storage<a name="ultrawarm-new-domain"></a>
+## Creating Domains with UltraWarm<a name="ultrawarm-new-domain"></a>
 
-The console is the simplest way to create a domain that uses warm storage\. While creating the domain, choose **Preview**, enable **UltraWarm Storage**, and choose the number of warm nodes that you want\. For more information, see [Creating Amazon ES Domains \(Console\)](es-createupdatedomains.md#es-createdomains-console)\.
+The console is the simplest way to create a domain that uses warm storage\. While creating the domain, choose **UltraWarm Preview**, enable **UltraWarm**, and choose the number of warm nodes that you want\. For more information, see [Creating Amazon ES Domains \(Console\)](es-createupdatedomains.md#es-createdomains-console)\.
 
 You can also use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](es-configuration-api.md), specifically the `WarmEnabled`, `WarmCount`, and `WarmType` options in `ElasticsearchClusterConfig`\.
 
 **Note**  
-Each UltraWarm instance type has a maximum amount of storage that it can address, and domains support a maximum number of warm nodes\. For details, see [Amazon Elasticsearch Service Limits](aes-limits.md)\.
+Domains support a maximum number of warm nodes\. For details, see [Amazon Elasticsearch Service Limits](aes-limits.md)\.
 
 ### Sample CLI Command<a name="ultrawarm-sample-cli"></a>
 
@@ -175,9 +175,6 @@ GET my-index/_settings
         },
         "provided_name": "my-index",
         "creation_date": "1572886951679",
-        "store": {
-          "type": "snapshot"
-        },
         "unassigned": {
           "node_left": {
             "delayed_timeout": "5m"
@@ -209,7 +206,6 @@ GET my-index/_settings
 } disables
 ```
 + `blocks.ultrawarm_allow_delete` specifies whether to block most `_settings` updates to the index \(`true`\) or allow them \(`false`\)\.
-+ `store.type` is the underlying way that Amazon ES stores the warm index on S3\. This value is always `snapshot`\.
 + `number_of_replicas`, in this case, is the number of passive replicas, which don't consume disk space\.
 + `routing.allocation.require.box_type` specifies that the index should use warm nodes rather than standard data nodes\.
 + `routing.search_preference` instructs Amazon ES to query primary shards first and only use the passive replicas if the query fails\. This setting reduces disk usage\.
@@ -233,7 +229,7 @@ Indices in warm storage are read\-only unless you [restore them to hot storage](
 
 ## Listing Hot and Warm Indices<a name="ultrawarm-es-api"></a>
 
-UltraWarm storage adds two additional options, similar to `_all`, to help manage hot and warm indices\. For a list of all warm or hot indices, make the following requests:
+UltraWarm adds two additional options, similar to `_all`, to help manage hot and warm indices\. For a list of all warm or hot indices, make the following requests:
 
 ```
 GET _warm
@@ -249,7 +245,7 @@ _cluster/state/_all/_hot
 
 ## Restoring Warm Indices from Snapshots<a name="ultrawarm-snapshot"></a>
 
-In addition to the standard repository for automated snapshots, UltraWarm storage adds a second repository, `cs-ultrawarm`\. Snapshots in `cs-ultrawarm` have the same 14\-day retention period as other automated snapshots\. For more information, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
+In addition to the standard repository for automated snapshots, UltraWarm adds a second repository, `cs-ultrawarm`\. Snapshots in `cs-ultrawarm` have the same 14\-day retention period as other automated snapshots\. For more information, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
 
 **To restore a warm index back to hot storage**
 

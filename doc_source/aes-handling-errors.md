@@ -173,9 +173,9 @@ If you need more insight into the performance of the cluster, you can [publish e
 
 ## "Not Valid for the Object's Storage Class" Snapshot Error<a name="aes-troubleshooting-glacier-snapshots"></a>
 
-Amazon ES snapshots do not support the Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the Glacier storage class\.
+Amazon ES snapshots do not support the S3 Glacier storage class\. You might encounter this error when you attempt to list snapshots if your S3 bucket includes a lifecycle rule that transitions objects to the S3 Glacier storage class\.
 
-If you need to restore a snapshot from the bucket, restore the objects from Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot repository\.
+If you need to restore a snapshot from the bucket, restore the objects from S3 Glacier, copy the objects to a new bucket, and [register the new bucket](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory) as a snapshot repository\.
 
 ## Invalid Host Header<a name="aes-troubleshooting-host-header"></a>
 

@@ -1,7 +1,7 @@
 # Amazon Elasticsearch Service Developer Guide
 
 -----
-*****Copyright &copy; 2019 Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
+*****Copyright &copy; 2020 Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
 
 -----
 Amazon's trademarks and trade dress may not be used in 
@@ -46,7 +46,7 @@ Amazon's trademarks and trade dress may not be used in
    + [Sizing Amazon ES Domains](sizing-domains.md)
    + [Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)
    + [Recommended CloudWatch Alarms](cloudwatch-alarms.md)
-+ [UltraWarm Storage for Amazon Elasticsearch Service (Preview)](ultrawarm.md)
++ [UltraWarm for Amazon Elasticsearch Service (Preview)](ultrawarm.md)
 + [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)
 + [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)
 + [Amazon Elasticsearch Service Troubleshooting](aes-handling-errors.md)

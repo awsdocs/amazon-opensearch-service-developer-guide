@@ -19,7 +19,7 @@ For a list of the instance types that Amazon ES supports, see [Supported Instanc
 
 ## UltraWarm Storage Limits<a name="limits-ultrawarm"></a>
 
-The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm Storage for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
+The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
 
 
 ****  

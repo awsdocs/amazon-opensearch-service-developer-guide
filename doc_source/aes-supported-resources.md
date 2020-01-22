@@ -15,4 +15,4 @@ Supported scripting options include the following:
 For Elasticsearch 5\.5 and later domains, Amazon ES supports stored scripts using the `_scripts` endpoint\. Elasticsearch 5\.3 and 5\.1 domains support inline scripts only\.
 
 **TCP transport**  
-The service supports HTTP on port 80, but does not support TCP transport\.
+The service supports HTTP on port 80 and HTTPS over port 443, but does not support TCP transport\.
