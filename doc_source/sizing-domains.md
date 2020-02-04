@@ -70,13 +70,13 @@ Still, even those resources might be insufficient\. Some Elasticsearch users rep
 
 1. To start, we recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the split brain issue\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for replication\.
 
-1. If you have a 184 GiB storage requirement and the recommended minimum number of three instances, use the equation 184 / 3 = 61 GiB to find the amount of storage that each instance needs\. In this example, you might select three `m4.large.elasticsearch` instances for your cluster, each using a 90 GiB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GiB of memory, so it's suited to lighter workloads\.
+1. If you have a 184 GiB storage requirement and the recommended minimum number of three instances, use the equation 184 / 3 = 61 GiB to find the amount of storage that each instance needs\. In this example, you might select three `m5.large.elasticsearch` instances for your cluster, each using a 90 GiB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GiB of memory, so it's suited to lighter workloads\.
 
-   For a more substantial example, consider a 14 TiB storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r5.4xlarge.elasticsearch` instances, each using a 1 TiB EBS storage volume\.
+   For a more substantial example, consider a 14 TiB \(14,336 GiB\) storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r5.4xlarge.elasticsearch` instances, each using a 1 TiB EBS storage volume\.
 
    If your cluster includes hundreds of terabytes of data, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
 
-1. After configuring the cluster, you can [add your index](es-indexing.md), perform some representative client testing using a realistic dataset, and [monitor CloudWatch metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics) to see how the cluster handles the workload\.
+1. After configuring the cluster, you can [add your indices](es-indexing.md) using the number of shards you calculated earlier, perform some representative client testing using a realistic dataset, and [monitor CloudWatch metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics) to see how the cluster handles the workload\.
 
 1. If performance satisfies your needs, tests succeed, and CloudWatch metrics are normal, the cluster is ready to use\. Remember to [set CloudWatch alarms](cloudwatch-alarms.md) to detect unhealthy resource usage\.
 

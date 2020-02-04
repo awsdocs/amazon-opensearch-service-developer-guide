@@ -20,6 +20,8 @@ We recommend that you allocate **three** dedicated master nodes for each product
 
 1. Having five dedicated master nodes works as well as three and allows you to lose two nodes while maintaining a quorum\. But because only one dedicated master node is active at any given time, this configuration means paying for four idle nodes\. Many users find this level of failover protection excessive\.
 
+If a cluster has an even number of master\-eligible nodes, Elasticsearch versions 7\.*x* and later ignore one node so that the voting configuration is always an odd number\. In this case, four dedicated master nodes are essentially equivalent to three \(and two to one\)\.
+
 **Note**  
 If your cluster doesn't have the necessary quorum to elect a new master node, write *and* read requests to the cluster both fail\. This behavior differs from the Elasticsearch default\.
 

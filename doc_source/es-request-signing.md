@@ -318,7 +318,7 @@ If your credentials don't work, export them at the terminal using the following 
 ```
 export AWS_ACCESS_KEY_ID="your-access-key"
 export AWS_SECRET_ACCESS_KEY="your-secret-key"
-export AWS_SESSION_TOKEN=""your-session-token"
+export AWS_SESSION_TOKEN="your-session-token"
 ```
 
 This next example uses the [AWS SDK for Ruby](https://aws.amazon.com/sdk-for-ruby/) and standard Ruby libraries to send a signed HTTP request\. Like the first example, it indexes a single document\. You must provide values for host and region\.
@@ -436,7 +436,7 @@ If your credentials don't work, export them at the terminal using the following 
 ```
 export AWS_ACCESS_KEY_ID="your-access-key"
 export AWS_SECRET_ACCESS_KEY="your-secret-key"
-export AWS_SESSION_TOKEN=""your-session-token"
+export AWS_SESSION_TOKEN="your-session-token"
 ```
 
 ## Go<a name="es-request-signing-go"></a>
@@ -500,5 +500,5 @@ If your credentials don't work, export them at the terminal using the following 
 ```
 export AWS_ACCESS_KEY_ID="your-access-key"
 export AWS_SECRET_ACCESS_KEY="your-secret-key"
-export AWS_SESSION_TOKEN=""your-session-token"
+export AWS_SESSION_TOKEN="your-session-token"
 ```

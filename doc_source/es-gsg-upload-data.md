@@ -26,7 +26,7 @@ For a detailed explanation of this command and how to make signed requests to Am
 
    ```
    { "index" : { "_index": "movies", "_type" : "_doc", "_id" : "2" } }
-   {"director": "Frankenheimer, John", "genre": ["Drama", "Mystery", "Thriller"], "year": 1962, "actor": ["Lansbury, Angela", "Sinatra, Frank", "Leigh, Janet", "Harvey, Laurence", "Silva, Henry", "Frees, Paul", "Gregory, James", "Bissell, Whit", "McGiver, John", "Parrish, Leslie", "Edwards, James", "Flowers, Bess", "Dhiegh, Khigh", "Payne, Julie", "Kleeb, Helen", "Gray, Joe", "Nalder, Reggie", "Stevens, Bert", "Masters, Michael", "Lowell, Tom"], "title": "The Manchurian Candidate"}
+   {"director": "Frankenheimer, John", "genre": ["Drama", "Mystery", "Thriller", "Crime"], "year": 1962, "actor": ["Lansbury, Angela", "Sinatra, Frank", "Leigh, Janet", "Harvey, Laurence", "Silva, Henry", "Frees, Paul", "Gregory, James", "Bissell, Whit", "McGiver, John", "Parrish, Leslie", "Edwards, James", "Flowers, Bess", "Dhiegh, Khigh", "Payne, Julie", "Kleeb, Helen", "Gray, Joe", "Nalder, Reggie", "Stevens, Bert", "Masters, Michael", "Lowell, Tom"], "title": "The Manchurian Candidate"}
    { "index" : { "_index": "movies", "_type" : "_doc", "_id" : "3" } }
    {"director": "Baird, Stuart", "genre": ["Action", "Crime", "Thriller"], "year": 1998, "actor": ["Downey Jr., Robert", "Jones, Tommy Lee", "Snipes, Wesley", "Pantoliano, Joe", "Jacob, Ir\u00e8ne", "Nelligan, Kate", "Roebuck, Daniel", "Malahide, Patrick", "Richardson, LaTanya", "Wood, Tom", "Kosik, Thomas", "Stellate, Nick", "Minkoff, Robert", "Brown, Spitfire", "Foster, Reese", "Spielbauer, Bruce", "Mukherji, Kevin", "Cray, Ed", "Fordham, David", "Jett, Charlie"], "title": "U.S. Marshals"}
    { "index" : { "_index": "movies", "_type" : "_doc", "_id" : "4" } }
@@ -40,6 +40,3 @@ For a detailed explanation of this command and how to make signed requests to Am
    ```
 
 For more information about the bulk file format, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
-
-**Note**  
-Amazon ES supports migrating data from manual snapshots taken on both Amazon ES and self\-managed Elasticsearch clusters\. Restoring a snapshot from a self\-managed Elasticsearch cluster is a common way to migrate data to Amazon ES\. For more information, see [Restoring Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-restore)\.

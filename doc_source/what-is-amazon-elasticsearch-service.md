@@ -65,7 +65,7 @@ If you start a new Elasticsearch project, we strongly recommend that you choose 
 
 With AWS, you pay only for what you use\. For Amazon ES, you pay for each hour of use of an EC2 instance and for the cumulative size of any EBS storage volumes attached to your instances\. [Standard AWS data transfer charges](https://aws.amazon.com/ec2/pricing/) also apply\.
 
-However, a notable data transfer exception exists\. If a domain uses [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\.
+However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\. Similarly, Amazon ES does not bill for data transfer between [UltraWarm](ultrawarm.md) nodes and Amazon S3\.
 
 For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
 

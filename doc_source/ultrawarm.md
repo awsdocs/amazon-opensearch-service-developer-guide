@@ -37,7 +37,7 @@ With UltraWarm, we still recommend a maximum shard size of 50 GiB\.
 
 With hot storage, you pay for what you provision\. Some instances require an attached Amazon EBS volume, while others include an instance store\. Whether that storage is empty or full, you pay the same price\.
 
-With UltraWarm storage, you pay for what you use\. An `ultrawarm1.large.elasticsearch` instance can address up to 20 TiB of storage on S3, but if you store only 1 TiB of data, you're only billed for 1 TiB of data\. Like all other node types, you also pay an hourly rate for each UltraWarm node\. For more information, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
+With UltraWarm storage, you pay for what you use\. An `ultrawarm1.large.elasticsearch` instance can address up to 20 TiB of storage on S3, but if you store only 1 TiB of data, you're only billed for 1 TiB of data\. Like all other node types, you also pay an hourly rate for each UltraWarm node\. For more information, see [Pricing for Amazon Elasticsearch Service](what-is-amazon-elasticsearch-service.md#aes-pricing)\.
 
 ## Creating Domains with UltraWarm<a name="ultrawarm-new-domain"></a>
 

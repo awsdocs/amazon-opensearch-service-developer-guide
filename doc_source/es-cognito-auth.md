@@ -140,9 +140,9 @@ If [the IAM role](#es-cognito-auth-role) already exists, you need fewer permissi
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to configure\.
 
-1. Choose **Configure cluster**\.
+1. Choose **Edit domain**\.
 
-1. For **Kibana authentication**, choose **Enable Amazon Cognito for authentication**\.
+1. For **Amazon Cognito authentication**, choose **Enable Amazon Cognito authentication**\.
 
 1. For **Region**, select the region that contains your Amazon Cognito user pool and identity pool\.
 
@@ -323,9 +323,9 @@ Use the following procedure to disable Amazon Cognito authentication for Kibana\
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to configure\.
 
-1. Choose **Configure cluster**\.
+1. Choose **Edit domain**\.
 
-1. For **Kibana authentication**, clear the **Enable Amazon Cognito for authentication** check box\.
+1. For **Amazon Cognito authentication**, clear the **Enable Amazon Cognito authentication** check box\.
 
 1. Choose **Submit**\.
 
