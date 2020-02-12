@@ -80,6 +80,8 @@ To enable [server\-side encryption with S3\-managed keys](https://docs.aws.amazo
 
 If your domain resides within a VPC, your computer must be connected to the VPC in order for the request to successfully register the snapshot repository\. Accessing a VPC varies by network configuration, but likely involves connecting to a VPN or corporate network\. To check that you can reach the Amazon ES domain, navigate to `https://your-vpc-domain.region.es.amazonaws.com` in a web browser and verify that you receive the default JSON response\.
 
+If you use fine\-grained access control, see [Manual Snapshots](fgac.md#fgac-snapshots) for an additional step\.
+
 ### Sample Python Client<a name="es-managedomains-snapshot-client-python"></a>
 
 Save the following sample Python code as a Python file, such as `register-repo.py`\. The client requires the [AWS SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/), [requests](http://docs.python-requests.org/) and [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) packages\. The client contains commented\-out examples for other snapshot operations\.

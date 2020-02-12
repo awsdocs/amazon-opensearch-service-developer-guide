@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**October 3, 2019
-+ **Latest documentation update—**November 6, 2019
++ **Latest product release—**February 11, 2020
++ **Latest documentation update—**February 11, 2020
 
 ## Release Notes<a name="release-table"></a>
 
@@ -16,6 +16,7 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Fine\-Grained Access Control](#release-notes) | Amazon Elasticsearch Service now supports [fine\-grained access control](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/fgac.html), which offers security at the index, document, and field level, Kibana multi\-tenancy, and optional HTTP basic authentication for your cluster\. | February 11, 2020 | 
 | [UltraWarm Storage \(Preview\)](#release-notes) | Amazon Elasticsearch Service adds UltraWarm, a new warm storage tier that uses Amazon S3 and a sophisticated caching solution to improve performance\. For indices that you are not actively writing to and query less frequently, UltraWarm storage offers significantly lower costs per GiB\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)\. | December 3, 2019 | 
 | [Encryption Features for China Regions](#release-notes) | Encryption of data at rest and node\-to\-node encryption are now available in the `cn-north-1` \(Beijing\) and `cn-northwest-1` \(Ningxia\) Regions\. | November 20, 2019 | 
 | [Require HTTPS](#release-notes) | You can now require that all traffic to your Amazon ES domains arrive over HTTPS\. When configuring your domain, check the **Require HTTPS** box\. This feature requires service software R20190808 or later\. | October 3, 2019 | 

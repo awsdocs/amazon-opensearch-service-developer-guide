@@ -13,7 +13,7 @@ The first time that you configure a domain to use Amazon Cognito authentication 
 + [Allowing the Authenticated Role](#es-cognito-auth-config-ac)
 + [Configuring Identity Providers](#es-cognito-auth-identity-providers)
 + [\(Optional\) Configuring Granular Access](#es-cognito-auth-granular)
-+ [\(Optional\) Customizing the Login Page](#es-cognito-auth-customize)
++ [\(Optional\) Customizing the Sign\-in Page](#es-cognito-auth-customize)
 + [\(Optional\) Configuring Advanced Security](#es-cognito-auth-advanced)
 + [Testing](#es-cognito-auth-testing)
 + [Limits](#es-cognito-auth-limits)
@@ -26,7 +26,7 @@ The first time that you configure a domain to use Amazon Cognito authentication 
 Before you can configure Amazon Cognito authentication for Kibana, you must fulfill several prerequisites\. The Amazon ES console helps streamline the creation of these resources, but understanding the purpose of each resource helps with configuration and troubleshooting\. Amazon Cognito authentication for Kibana requires the following resources:
 + Amazon Cognito [user pool](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html)
 + Amazon Cognito [identity pool](https://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html)
-+ IAM role that has the `AmazonESCognitoAccess` policy attached
++ IAM role that has the `AmazonESCognitoAccess` policy attached \(`CognitoAccessForAmazonES`\)
 
 **Note**  
 The user pool and identity pool must be in the same AWS Region\. You can use the same user pool, identity pool, and IAM role to add Amazon Cognito authentication for Kibana to multiple Amazon ES domains\. To learn more, see [Limits](#es-cognito-auth-limits)\.
@@ -51,9 +51,9 @@ Identity pools let you assign temporary, limited\-privilege roles to users after
 
 Identity pool IDs take the form of `region:ID-ID-ID-ID-ID`\. If you plan to use the AWS CLI or an AWS SDK to configure Amazon ES, make note of the ID\.
 
-### About the IAM Role<a name="es-cognito-auth-role"></a>
+### About the CognitoAccessForAmazonES Role<a name="es-cognito-auth-role"></a>
 
-Amazon ES needs permissions to configure the Amazon Cognito user and identity pools and use them for authentication\. You can use `AmazonESCognitoAccess`, which is an AWS managed policy, for this purpose\. If you use the console to create or configure your Amazon ES domain, it creates an IAM role for you and attaches this policy to the role\.
+Amazon ES needs permissions to configure the Amazon Cognito user and identity pools and use them for authentication\. You can use `AmazonESCognitoAccess`, which is an AWS managed policy, for this purpose\. If you use the console to create or configure your Amazon ES domain, it creates an IAM role for you and attaches this policy to the role\. The default name for this role is `CognitoAccessForAmazonES`\.
 
 If you use the AWS CLI or one of the AWS SDKs, you must create your own role, attach the policy, and specify the ARN for this role when you configure your Amazon ES domain\. The role must have the following trust relationship:
 
@@ -79,11 +79,11 @@ For instructions, see [Creating a Role to Delegate Permissions to an AWS Service
 After you complete the prerequisites, you can configure an Amazon ES domain to use Amazon Cognito for Kibana\.
 
 **Note**  
-Amazon Cognito is not available in all AWS Regions\. For a list of supported regions, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#cognito_identity_region)\. You don't need to use the same region for Amazon Cognito that you use for Amazon ES\.
+Amazon Cognito is not available in all AWS Regions\. For a list of supported regions, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#cognito_identity_region)\. You don't need to use the same Region for Amazon Cognito that you use for Amazon ES\.
 
 ### Configuring Amazon Cognito Authentication \(Console\)<a name="es-cognito-auth-config-console"></a>
 
-Because it creates [the IAM role](#es-cognito-auth-role) for you, the console offers the simplest configuration experience\. In addition to the standard Amazon ES permissions, you need the following set of permissions to use the console to create a domain that uses Amazon Cognito authentication for Kibana:
+Because it creates the [CognitoAccessForAmazonES](#es-cognito-auth-role) role for you, the console offers the simplest configuration experience\. In addition to the standard Amazon ES permissions, you need the following set of permissions to use the console to create a domain that uses Amazon Cognito authentication for Kibana:
 
 ```
 {
@@ -106,7 +106,7 @@ Because it creates [the IAM role](#es-cognito-auth-role) for you, the console of
 }
 ```
 
-If [the IAM role](#es-cognito-auth-role) already exists, you need fewer permissions:
+If [CognitoAccessForAmazonES](#es-cognito-auth-role) already exists, you need fewer permissions:
 
 ```
 {
@@ -144,7 +144,7 @@ If [the IAM role](#es-cognito-auth-role) already exists, you need fewer permissi
 
 1. For **Amazon Cognito authentication**, choose **Enable Amazon Cognito authentication**\.
 
-1. For **Region**, select the region that contains your Amazon Cognito user pool and identity pool\.
+1. For **Region**, select the Region that contains your Amazon Cognito user pool and identity pool\.
 
 1. For **Cognito User Pool**, select a user pool or create one\. For guidance, see [About the User Pool](#es-cognito-auth-prereq-up)\.
 
@@ -152,7 +152,7 @@ If [the IAM role](#es-cognito-auth-role) already exists, you need fewer permissi
 **Note**  
 The **Create new user pool** and **Create new identity pool** links direct you to the Amazon Cognito console and require you to create these resources manually\. The process is not automatic\. To learn more, see [Prerequisites](#es-cognito-auth-prereq)\.
 
-1. For **IAM Role**, use the default value \(recommended\) or type a new name\. To learn more about the purpose of this role, see [About the IAM Role](#es-cognito-auth-role)\.
+1. For **IAM Role**, use the default value of `CognitoAccessForAmazonES` \(recommended\) or enter a new name\. To learn more about the purpose of this role, see [About the CognitoAccessForAmazonES Role](#es-cognito-auth-role)\.
 
 1. Choose **Submit**\.
 
@@ -186,7 +186,10 @@ After your domain finishes processing, see [Allowing the Authenticated Role](#es
 
 By default, the authenticated IAM role that you configured by following the guidelines in [About the Identity Pool](#es-cognito-auth-prereq-ip) does not have the necessary privileges to access Kibana\. You must provide the role with additional permissions\.
 
-You can include these permissions in an [identity\-based](es-ac.md#es-ac-types-identity) policy, but unless you want authenticated users to have access to all Amazon ES domains, a [resource\-based](es-ac.md#es-ac-types-resource) policy attached to a single domain is the more common approach:
+**Important**  
+If you configured [fine\-grained access control](fgac.md) and use an "open" or IP\-based access policy, you can skip this step\.
+
+You can include these permissions in an [identity\-based](es-ac.md#es-ac-types-identity) policy, but unless you want authenticated users to have access to all Amazon ES domains, a [resource\-based](es-ac.md#es-ac-types-resource) policy attached to a single domain is the better approach:
 
 ```
 {
@@ -221,9 +224,9 @@ Don't rename or delete the app client\.
 
 Depending on how you configured your user pool, you might need to create user accounts manually, or users might be able to create their own\. If these settings are acceptable, you don't need to take further action\. Many people, however, prefer to use external identity providers\.
 
-To enable a SAML 2\.0 identity provider, you must provide a SAML metadata document\. To enable social identity providers like Login with Amazon, Facebook, and Google, you must have an app ID and app secret from those providers\. You can enable any combination of identity providers\. The login page adds options as you add providers, as shown in the following screenshot\.
+To enable a SAML 2\.0 identity provider, you must provide a SAML metadata document\. To enable social identity providers like Login with Amazon, Facebook, and Google, you must have an app ID and app secret from those providers\. You can enable any combination of identity providers\. The sign\-in page adds options as you add providers, as shown in the following screenshot\.
 
-![\[Login page with several options\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/auth-providers.png)
+![\[Sign-in page with several options\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/auth-providers.png)
 
 The easiest way to configure your user pool is to use the Amazon Cognito console\. Use the **Identity Providers** page to add external identity providers and the **App client settings** page to enable and disable identity providers for the Amazon ES domain's app client\. For example, you might want to enable your own SAML identity provider and disable **Cognito User Pool** as an identity provider\.
 
@@ -231,13 +234,16 @@ For instructions, see [Using Federation from a User Pool](https://docs.aws.amazo
 
 ## \(Optional\) Configuring Granular Access<a name="es-cognito-auth-granular"></a>
 
-You might have noticed that the default identity pool settings assign every user who logs in the same IAM role \(`Cognito_identitypoolAuth_Role`\), which means that every user can access the same AWS resources\. If you want more granular access control—for example, if you want your organization's analysts to have access to all eight of your Amazon ES domains, but everyone else to have access to only five of them—you have two options:
-+ Create user groups and configure your identity provider to choose the IAM role based on the user's authentication token\.
+You might have noticed that the default identity pool settings assign every user who logs in the same IAM role \(`Cognito_identitypoolAuth_Role`\), which means that every user can access the same AWS resources\. If you want to use [fine\-grained access control](fgac.md) with Amazon Cognito—for example, if you want your organization's analysts to have read\-only access to several indices, but developers to have write access to all indices—you have two options:
++ Create user groups and configure your identity provider to choose the IAM role based on the user's authentication token \(recommended\)\.
 + Configure your identity provider to choose the IAM role based on one or more rules\.
 
-You configure these options using the **Edit identity pool** page of the Amazon Cognito console, as shown in the following screenshot\.
+You configure these options using the **Edit identity pool** page of the Amazon Cognito console, as shown in the following screenshot\. For a walkthrough that includes fine\-grained access control, see [Tutorial: IAM Master User and Amazon Cognito](fgac.md#fgac-walkthrough-iam)\.
 
 ![\[Role options for an authentication provider\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/cognito-roles.png)
+
+**Important**  
+Just like the default role, Amazon Cognito must be part of each additional role's trust relationship\. For details, see [Creating Roles for Role Mapping](https://docs.aws.amazon.com/cognito/latest/developerguide/role-based-access-control.html#creating-roles-for-role-mapping) in the *Amazon Cognito Developer Guide*\.
 
 ### User Groups and Tokens<a name="es-cognito-auth-granular-tokens"></a>
 
@@ -251,9 +257,9 @@ Rules are essentially a series of `if` statements that Amazon Cognito evaluates 
 
 To learn more, see [Using Rule\-Based Mapping to Assign Roles to Users](https://docs.aws.amazon.com/cognito/latest/developerguide/role-based-access-control.html#using-rules-to-assign-roles-to-users) in the *Amazon Cognito Developer Guide*\.
 
-## \(Optional\) Customizing the Login Page<a name="es-cognito-auth-customize"></a>
+## \(Optional\) Customizing the Sign\-in Page<a name="es-cognito-auth-customize"></a>
 
-The **UI customization** page of the Amazon Cognito console lets you upload a custom logo and make CSS changes to the login page\. For instructions and a full list of CSS properties, see [Specifying App UI Customization Settings for Your User Pool](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-ui-customization.html) in the *Amazon Cognito Developer Guide*\.
+The **UI customization** page of the Amazon Cognito console lets you upload a custom logo and make CSS changes to the sign\-in page\. For instructions and a full list of CSS properties, see [Specifying App UI Customization Settings for Your User Pool](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-ui-customization.html) in the *Amazon Cognito Developer Guide*\.
 
 ## \(Optional\) Configuring Advanced Security<a name="es-cognito-auth-advanced"></a>
 
@@ -267,7 +273,7 @@ After you are satisfied with your configuration, verify that the user experience
 
 1. Navigate to `https://elasticsearch-domain/_plugin/kibana/` in a web browser\.
 
-1. Log in using your preferred credentials\.
+1. Sign in using your preferred credentials\.
 
 1. After Kibana loads, configure at least one index pattern\. Kibana uses these patterns to identity which indices that you want to analyze\. Enter `*`, choose **Next step**, and then choose **Create index pattern**\.
 
@@ -291,9 +297,9 @@ The following tables list common configuration issues and solutions\.
 | Issue | Solution | 
 | --- | --- | 
 |  `Amazon ES can't create the role` \(console\)  | You don't have the correct IAM permissions\. Add the permissions specified in [Configuring Amazon Cognito Authentication \(Console\)](#es-cognito-auth-config-console)\. | 
-|  `User is not authorized to perform: iam:PassRole on resource CognitoAccessForAmazonES` \(console\)  | You don't have iam:PassRole permissions for the [IAM role](#es-cognito-auth-role)\. Attach the following policy to your account:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "iam:PassRole"<br />      ],<br />      "Resource": "arn:aws:iam::123456789012:role/service-role/CognitoAccessForAmazonES"<br />    }<br />  ]<br />}</pre>Alternately, you can attach the `IAMFullAccess` policy\. | 
+|  `User is not authorized to perform: iam:PassRole on resource CognitoAccessForAmazonES` \(console\)  | You don't have iam:PassRole permissions for the [CognitoAccessForAmazonES](#es-cognito-auth-role) role\. Attach the following policy to your account:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "iam:PassRole"<br />      ],<br />      "Resource": "arn:aws:iam::123456789012:role/service-role/CognitoAccessForAmazonES"<br />    }<br />  ]<br />}</pre>Alternately, you can attach the `IAMFullAccess` policy\. | 
 |  `User is not authorized to perform: cognito-identity:ListIdentityPools on resource`  |  You don't have read permissions for Amazon Cognito\. Attach the `AmazonCognitoReadOnly` policy to your account\.  | 
-|  `An error occurred (ValidationException) when calling the CreateElasticsearchDomain operation: Amazon Elasticsearch must be allowed to use the passed role`  |  Amazon ES isn't specified in the trust relationship of the IAM role\. Check that your role uses the trust relationship that is specified in [About the IAM Role](#es-cognito-auth-role)\. Alternately, use the console to configure Amazon Cognito authentication\. The console creates a role for you\.  | 
+|  `An error occurred (ValidationException) when calling the CreateElasticsearchDomain operation: Amazon Elasticsearch must be allowed to use the passed role`  |  Amazon ES isn't specified in the trust relationship of the `CognitoAccessForAmazonES` role\. Check that your role uses the trust relationship that is specified in [About the CognitoAccessForAmazonES Role](#es-cognito-auth-role)\. Alternately, use the console to configure Amazon Cognito authentication\. The console creates a role for you\.  | 
 |  `An error occurred (ValidationException) when calling the CreateElasticsearchDomain operation: User is not authorized to perform: cognito-idp:action on resource: user pool`  | The role specified in \-\-cognito\-options does not have permissions to access Amazon Cognito\. Check that the role has the AWS managed AmazonESCognitoAccess policy attached\. Alternately, use the console to configure Amazon Cognito authentication\. The console creates a role for you\. | 
 | An error occurred \(ValidationException\) when calling the CreateElasticsearchDomain operation: User pool does not exist |  Amazon ES can't find the user pool\. Confirm that you created one and have the correct ID\. To find the ID, you can use the Amazon Cognito console or the following AWS CLI command: <pre>aws cognito-idp list-user-pools --max-results 60 --region region</pre>  | 
 |  `An error occurred (ValidationException) when calling the CreateElasticsearchDomain operation: IdentityPool not found`  |  Amazon ES can't find the identity pool\. Confirm that you created one and have the correct ID\. To find the ID, you can use the Amazon Cognito console or the following AWS CLI command: <pre>aws cognito-identity list-identity-pools --max-results 60 --region region</pre>  | 
@@ -305,10 +311,10 @@ The following tables list common configuration issues and solutions\.
 | Issue | Solution | 
 | --- | --- | 
 | The login page doesn't show my preferred identity providers\. |  Check that you enabled the identity provider for the Amazon ES app client as specified in [Configuring Identity Providers](#es-cognito-auth-identity-providers)\.  | 
-|  The login page doesn't look as if it's associated with my organization\.  |  See [\(Optional\) Customizing the Login Page](#es-cognito-auth-customize)\.  | 
+|  The login page doesn't look as if it's associated with my organization\.  |  See [\(Optional\) Customizing the Sign\-in Page](#es-cognito-auth-customize)\.  | 
 | My login credentials don't work\. |  Check that you have configured the identity provider as specified in [Configuring Identity Providers](#es-cognito-auth-identity-providers)\. If you use the user pool as your identity provider, check that the account exists and is confirmed on the **User and groups** page of the Amazon Cognito console\.  | 
 |  Kibana either doesn't load at all or doesn't work properly\.  |  The Amazon Cognito authenticated role needs `es:ESHttp*` permissions for the domain \(`/*`\) to access and use Kibana\. Check that you added an access policy as specified in [Allowing the Authenticated Role](#es-cognito-auth-config-ac)\.  | 
-| Invalid identity pool configuration\. Check assigned IAM roles for this pool\. | Amazon Cognito can't assume the authenticated role\. If you used a preexisting role rather than creating a new one for the identity pool, modify the trust relationship for the authenticated role:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Federated": "cognito-identity.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRoleWithWebIdentity"<br />    }<br />  ]<br />}</pre>Alternately, you can create a new role using the Amazon Cognito console\. | 
+| Invalid identity pool configuration\. Check assigned IAM roles for this pool\. | Amazon Cognito doesn't have permissions to assume the IAM role on behalf of the authenticated user\. Modify the trust relationship for the role to include:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Federated": "cognito-identity.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRoleWithWebIdentity",<br />    "Condition": {<br />      "StringEquals": {<br />        "cognito-identity.amazonaws.com:aud": "identity-pool-id"<br />      },<br />      "ForAnyValue:StringLike": {<br />        "cognito-identity.amazonaws.com:amr": "authenticated"<br />      }<br />    }<br />  }]<br />}</pre> | 
 | Token is not from a supported provider of this identity pool\. | This uncommon error can occur when you remove the app client from the user pool\. Try opening Kibana in a new browser session\. | 
 
 ## Disabling Amazon Cognito Authentication for Kibana<a name="es-cognito-auth-disable"></a>

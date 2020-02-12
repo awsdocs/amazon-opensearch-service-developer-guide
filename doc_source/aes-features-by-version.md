@@ -17,6 +17,7 @@ Many Amazon ES features have a minimum Elasticsearch version requirement\.
 |  Java high\-level REST client support  |  6\.0  | 
 |  Alerting  |  6\.2  | 
 |  SQL  |  6\.5  | 
+|  Fine\-grained access control  |  6\.7  | 
 
 Other features have no minimum version requirement:
 + VPC support

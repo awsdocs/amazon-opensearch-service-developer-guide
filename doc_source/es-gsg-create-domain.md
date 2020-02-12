@@ -15,19 +15,21 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. On the **Create Elasticsearch domain** page, for **Deployment type**, choose **Development and testing**\.
 
-1. For **Version**, choose an Elasticsearch version for your domain\. We recommend that you choose the latest supported version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
+1. For **Choose deployment type**, choose **Development and testing**\.
+
+1. For **Elasticsearch version**, choose the latest version\.
 
 1. Choose **Next**\.
 
 1. Enter a name for the domain\. In this tutorial, we use the domain name *movies* for the examples that we provide later in the tutorial\.
 
-1. For **Instance type**, choose an instance type for the Amazon ES domain\. For this tutorial, we recommend `t2.small.elasticsearch`, a small and inexpensive instance type suitable for testing purposes\.
+1. For **Instance count**, choose the number of instances that you want\. For this tutorial, use the default value of 1\.
 
 1. For **Instance count**, choose the number of instances that you want\. For this tutorial, use the default value of 1\.
 
 1. For **Storage type**, choose **EBS**\.
 
-   1. For **EBS volume type**, choose General Purpose \(SSD\)\. For more information, see [Amazon EBS Volume Types\.](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
+   1. For **EBS volume type**, choose General Purpose \(SSD\)\. For more information, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)\.
 
    1. For **EBS volume size**, enter the size in GiB of the external storage for *each* data node\. For this tutorial, use the default value of 10\.
 
@@ -37,7 +39,7 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. For simplicity in this tutorial, we recommend an IP\-based access policy\. For **Network configuration**, choose **Public access**\.
 
-1. For now, you can ignore **Amazon Cognito Authentication**\.
+1. For now, you can ignore fine\-grained access control and **Amazon Cognito Authentication**\.
 
 1. For **Access policy**, choose **IPv4 address** for **Type**, and then enter your public IP address into the **Enter Principal** field\. You can find your IP address by searching for "What is my IP?" on most search engines\.
 
@@ -45,11 +47,14 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. Under **Encryption**, keep all default values\.
 
-1. Choose **Next**\.
+1. Leave the encryption settings at their default values, and choose **Next**\.
 
 1. On the **Review** page, review your domain configuration, and then choose **Confirm**\.
 **Note**  
 New domains take about ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
+
+**Note**  
+New domains take roughly ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
 
 **To create an Amazon ES domain \(AWS CLI\)**
 + Run the following command to create an Amazon ES domain\.

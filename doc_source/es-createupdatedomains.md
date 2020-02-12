@@ -96,7 +96,15 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
    1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-Linked Role for VPC Access](es-vpc.md#es-enabling-slr)\.
 
-1. \(Optional\) If you want to protect Kibana with a login page, choose **Enable Amazon Cognito for authentication**\.
+1. In the **Fine\-grained access control** section, enable or disable fine\-grained access control:
+   + If you want to use IAM for user management, choose **Set IAM role as master user** and specify the ARN for an IAM role\.
+   + If you want to user the internal user database, choose **Create a master user** and specify a user name and password\.
+
+   Whichever option you choose, the master user can access all indices in the cluster and all Elasticsearch APIs\. For guidance on which option to choose, see [Key Concepts](fgac.md#fgac-concepts)\.
+
+   If you disable fine\-grained access control, you can still control access to your domain by placing it within a VPC, applying a restrictive access policy, or both\. You must enable node\-to\-node encryption and encryption at rest to use fine\-grained access control\.
+
+1. \(Optional\) If you want to use Amazon Cognito authentication for Kibana, choose **Enable Amazon Cognito authentication**\.
 
    1. Choose the Amazon Cognito user pool and identity pool that you want to use for Kibana authentication\. For guidance on creating these resources, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
 

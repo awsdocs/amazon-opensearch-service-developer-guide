@@ -50,7 +50,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 
 ## Starting an Upgrade<a name="starting-upgrades"></a>
 
-The upgrade process is irreversible and can't be paused nor canceled\. During an upgrade, you can't make configuration changes to the domain\. Before starting an upgrade, double\-check that you want to proceed\. You can use these same steps to perform the pre\-upgrade check without actually starting an upgrade\.
+The upgrade process is irreversible and can't be paused or canceled\. During an upgrade, you can't make configuration changes to the domain\. Before starting an upgrade, double\-check that you want to proceed\. You can use these same steps to perform the pre\-upgrade check without actually starting an upgrade\.
 
 If the cluster has dedicated master nodes, upgrades complete without downtime\. Otherwise, the cluster might be unresponsive for several seconds post\-upgrade while it elects a master node\.
 

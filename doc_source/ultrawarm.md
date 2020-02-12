@@ -22,6 +22,7 @@ For the public preview, UltraWarm has several important limitations:
 + To use warm storage, domains must be deployed across [three Availability Zones](es-managedomains.md#es-managedomains-multiaz) and use [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
 + If your domain uses a T2 instance type for your data nodes, you can't use warm storage\.
 + You can use warm storage only with Elasticsearch 6\.8\.
++ UltraWarm doesn't support fine\-grained access control at this time\.
 + You can migrate indices from hot storage to warm storage, but not the other way around\. To migrate indices back to hot storage, see [Restoring Warm Indices from Snapshots](#ultrawarm-snapshot)\.
 
 ## Calculating UltraWarm Storage Requirements<a name="ultrawarm-calc"></a>

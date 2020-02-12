@@ -4,7 +4,7 @@ A *virtual private cloud* \(VPC\) is a virtual network that is dedicated to your
 
 Placing an Amazon ES domain within a VPC enables secure communication between Amazon ES and other services within the VPC without the need for an internet gateway, NAT device, or VPN connection\. All traffic remains securely within the AWS Cloud\. Because of their logical isolation, domains that reside within a VPC have an extra layer of security when compared to domains that use public endpoints\.
 
-To support VPCs, Amazon ES places an endpoint into either one or two subnets of your VPC\. A *subnet* is a range of IP addresses in your VPC\. If you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) for your domain, Amazon ES places an endpoint into two subnets\. The subnets must be in different Availability Zones in the same region\. If you only use one Availability Zone, Amazon ES places an endpoint into only one subnet\.
+To support VPCs, Amazon ES places an endpoint into one, two, or three subnets of your VPC\. A *subnet* is a range of IP addresses in your VPC\. If you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) for your domain, each subnet must be in a different Availability Zone in the same region\. If you only use one Availability Zone, Amazon ES places an endpoint into only one subnet\.
 
 The following illustration shows the VPC architecture for one Availability Zone\.
 
@@ -41,7 +41,6 @@ Currently, operating an Amazon ES domain within a VPC has the following limitati
 + If you launch a new domain within a VPC, you can't later switch it to use a public endpoint\. The reverse is also true: If you create a domain with a public endpoint, you can't later place it within a VPC\. Instead, you must create a new domain and migrate your data\.
 + You can't launch your domain within a VPC that uses dedicated tenancy\. You must use a VPC with tenancy set to **Default**\.
 + After you place a domain within a VPC, you can't move it to a different VPC\. However, you can change the subnets and security group settings\.
-+ When creating a VPC domain, you must choose a subnet that uses either 10\.*x*\.*x*\.*x* or 172\.*x*\.*x*\.*x* for its CIDR block\.
 + Compared to public domains, VPC domains display less information in the Amazon ES console\. Specifically, the **Cluster health** tab does not include shard information, and the **Indices** tab is not present at all\.
 + Currently, Amazon ES does not support integration with Amazon Kinesis Data Firehose for VPC access domains\. To use this service with Amazon ES, you must use a public access domain\.
 + To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](https://docs.aws.amazon.com/vpc/latest/userguide/), and [Controlling Access to Kibana](es-kibana.md#es-kibana-access)\.
@@ -126,7 +125,7 @@ Before you can enable a connection between a VPC and your new Amazon ES domain, 
 
 ## Creating a VPC<a name="es-creating-vpc"></a>
 
-To create your VPC, you can use one of the following: the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. The VPC must have a subnet, or two subnets if you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz)\. The two subnets must be in different Availability Zones in the same region\.
+To create your VPC, you can use one of the following: the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. The VPC must have between one and three subnets, depending on the number of [Availability Zones](es-managedomains.md#es-managedomains-multiaz) for your domain\.
 
 The following procedure shows how to use the Amazon VPC console to create a VPC with a public subnet, reserve IP addresses for the subnet, and create a security group to control access to your Amazon ES domain\. For other VPC configurations, see [Scenarios and Examples](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\.
 
@@ -144,7 +143,7 @@ The following procedure shows how to use the Amazon VPC console to create a VPC 
 
 1. In the confirmation message that appears, choose **Close**\.
 
-1. If you intend to enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) for your Amazon ES domain, you must create a second subnet in a different Availability Zone in the same region\. Otherwise, skip to step 8\. 
+1. If you intend to enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) for your Amazon ES domain, you must create additional subnets\. Otherwise, skip to step 8\. 
 
    1. In the navigation pane, choose **Subnets\.**
 
@@ -154,7 +153,7 @@ The following procedure shows how to use the Amazon VPC console to create a VPC 
 
    1. For **VPC**, choose the VPC that you just created\.
 
-   1. For **Availability Zone**, choose an Availability Zone that differs from that of the first subnet\. The Availability Zones for both subnets must be in the same region\.
+   1. For **Availability Zone**, choose an Availability Zone that differs from that of the first subnet\. The Availability Zones for all subnets must be in the same region\.
 
    1. For **IPv4 CIDR block**, configure a CIDR block large enough to provide sufficient IP addresses for Amazon ES to use during maintenance activities\. For more information, see [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)\.
 **Note**  
@@ -192,7 +191,7 @@ Now you are ready to [launch an Amazon ES domain](es-createupdatedomains.md#es-c
 
 ## Reserving IP Addresses in a VPC Subnet<a name="es-reserving-ip-vpc-endpoints"></a>
 
-Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or two subnets of the VPC if you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
+Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or multiple subnets of the VPC if you enable [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
 
 The number of IP addresses that Amazon ES requires depends on the following:
 + Number of data nodes in your domain\. \(Master nodes are not included in the number\.\) 

@@ -19,6 +19,8 @@ POST elasticsearch_domain/_opendistro/_sql
 
 Calls to `_opendistro/_sql` include index names in the request body and thus have the same [access policy considerations](es-ac.md#es-ac-advanced) as the bulk, mget, and msearch APIs\. As always, follow the principle of [least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) when granting permissions to APIs\.
 
+For a security consideration regarding using SQL with fine\-grained access control, see [Fine\-Grained Access Control in Amazon Elasticsearch Service](fgac.md#fgac-limitations)\.
+
 ## JDBC Driver<a name="jdbc-driver"></a>
 
 The Java Database Connectivity \(JDBC\) driver lets you integrate Amazon ES domains with your favorite business intelligence \(BI\) applications\. To get started, see [the GitHub repository\.](https://github.com/opendistro-for-elasticsearch/sql-jdbc) The following table summarizes version compatibility for the driver\.

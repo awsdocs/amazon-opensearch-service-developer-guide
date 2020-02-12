@@ -28,7 +28,9 @@ Amazon ES includes the following features:
 + AWS Identity and Access Management \(IAM\) access control
 + Easy integration with Amazon VPC and VPC security groups
 + Encryption of data at rest and node\-to\-node encryption
-+ Amazon Cognito authentication for Kibana
++ Amazon Cognito or HTTP basic authentication for Kibana
++ Index\-level, document\-level, and field\-level security
++ Kibana multi\-tenancy
 
 **Stability**
 + Numerous geographical locations for your resources, known as *Regions* and *Availability Zones*

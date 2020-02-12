@@ -27,6 +27,7 @@ Amazon's trademarks and trade dress may not be used in
       + [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)
       + [Node-to-node Encryption for Amazon Elasticsearch Service](ntn.md)
    + [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)
+   + [Fine-Grained Access Control in Amazon Elasticsearch Service](fgac.md)
    + [Logging and Monitoring in Amazon Elasticsearch Service](es-managedomains-cloudtrailauditing.md)
    + [Compliance Validation for Amazon Elasticsearch Service](es-compliance.md)
    + [Resilience in Amazon Elasticsearch Service](disaster-recovery-resiliency.md)
