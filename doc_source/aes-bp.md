@@ -8,6 +8,7 @@ This chapter addresses some best practices for operating Amazon Elasticsearch Se
 + [Upgrade to the latest Elasticsearch versions](es-version-migration.md) as they become available on Amazon Elasticsearch Service\.
 + [Update to the latest service software](es-managedomains.md#es-service-software) as it becomes available\.
 + Size the domain appropriately for your workload\. For storage volume, shard size, and data node recommendations, see [Sizing Amazon ES Domains](sizing-domains.md) and [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\. For dedicated master node recommendations, see [Dedicated Master Nodes](es-managedomains-dedicatedmasternodes.md)\.
++ Have no more than 1,000 shards on any data node\. This limit is the default in Elasticsearch 7\.*x* and later\.
 + Use the latest\-generation instances available on the service\. For example, use I3 instances rather than I2 instances\.
 + Don't use burstable instances for production domains\. For example, don't use T2 instances as data nodes or dedicated master nodes\.
 + If appropriate for your network configuration, [create the domain within a VPC](es-vpc.md)\.

@@ -27,7 +27,7 @@ You must configure permissions to allow an IAM entity \(such as a user, group, o
 
 ## Creating a Service\-Linked Role for Amazon ES<a name="create-slr"></a>
 
-You don't need to manually create a service\-linked role\. When you create a VPC access domain using the AWS Management Console, Amazon ES creates the service\-linked role for you\. In order for this automatic creation to succeed, you must have permissions for the `iam:CreateServiceLinkedRole` action\.
+You don't need to manually create a service\-linked role\. When you create a VPC access domain using the AWS Management Console, Amazon ES creates the service\-linked role for you\. In order for this automatic creation to succeed, you must have permissions for the `es:CreateElasticsearchServiceRole` and `iam:CreateServiceLinkedRole` actions\.
 
 If you delete this service\-linked role and then need to create it again, you can use the same process to recreate the role in your account\.
 

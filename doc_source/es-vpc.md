@@ -203,7 +203,7 @@ Here is the basic formula: The number of IP addresses reserved in each subnet is
 + If a domain has 10 data nodes and two Availability Zones, the IP count is 10 / 2 \* 3 = 15\.
 + If a domain has 10 data nodes and one Availability Zone, the IP count is 10 \* 3 = 30\.
 
-When you create the domain, Amazon ES reserves the IP addresses\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console at [https://console\.aws\.amazon\.com/ec2/](https://console.aws.amazon.com/ec2/)\. The **Description** column shows which Amazon ES domain the network interface is associated with\.
+When you create the domain, Amazon ES reserves the IP addresses, uses some for the domain, and reserves the rest for [blue/green deployments](es-managedomains.md#es-managedomains-configuration-changes)\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console at [https://console\.aws\.amazon\.com/ec2/](https://console.aws.amazon.com/ec2/)\. The **Description** column shows which Amazon ES domain the network interface is associated with\.
 
 **Tip**  
 We recommend that you create dedicated subnets for the Amazon ES reserved IP addresses\. By using dedicated subnets, you avoid overlap with other applications and services and ensure that you can reserve additional IP addresses if you need to scale your cluster in the future\. To learn more, see [Creating a Subnet in Your VPC](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet)\.
@@ -212,7 +212,7 @@ We recommend that you create dedicated subnets for the Amazon ES reserved IP add
 
 A [service\-linked role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role) is a unique type of IAM role that delegates permissions to a service so that it can create and manage resources on your behalf\. Amazon ES requires a service\-linked role to access your VPC, create the domain endpoint, and place network interfaces in a subnet of your VPC\.
 
-Amazon ES automatically creates the role when you use the Amazon ES console to create a domain within a VPC\. For this automatic creation to succeed, you must have permissions for the `iam:CreateServiceLinkedRole` action\. To learn more, see [Service\-Linked Role Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#service-linked-role-permissions) in the *IAM User Guide*\.
+Amazon ES automatically creates the role when you use the Amazon ES console to create a domain within a VPC\. For this automatic creation to succeed, you must have permissions for the `es:CreateElasticsearchServiceRole` and `iam:CreateServiceLinkedRole` actions\. To learn more, see [Service\-Linked Role Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#service-linked-role-permissions) in the *IAM User Guide*\.
 
 After Amazon ES creates the role, you can view it \(`AWSServiceRoleForAmazonElasticsearchService`\) using the IAM console\.
 

@@ -25,8 +25,6 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. For **Instance count**, choose the number of instances that you want\. For this tutorial, use the default value of 1\.
 
-1. For **Instance count**, choose the number of instances that you want\. For this tutorial, use the default value of 1\.
-
 1. For **Storage type**, choose **EBS**\.
 
    1. For **EBS volume type**, choose General Purpose \(SSD\)\. For more information, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)\.

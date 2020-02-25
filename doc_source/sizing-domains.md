@@ -68,9 +68,9 @@ For a summary of the hardware resources that are allocated to each instance type
 
 Still, even those resources might be insufficient\. Some Elasticsearch users report that they need many times those resources to fulfill their requirements\. Finding the right hardware for your workload means making an educated initial estimate, testing with representative workloads, adjusting, and testing again:
 
-1. To start, we recommend a minimum of three instances to avoid potential Elasticsearch issues, such as the split brain issue\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for replication\.
+1. To start, we recommend a minimum of three nodes to avoid potential Elasticsearch issues, such as split brain\. If you have three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md), we still recommend a minimum of two data nodes for replication\.
 
-1. If you have a 184 GiB storage requirement and the recommended minimum number of three instances, use the equation 184 / 3 = 61 GiB to find the amount of storage that each instance needs\. In this example, you might select three `m5.large.elasticsearch` instances for your cluster, each using a 90 GiB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GiB of memory, so it's suited to lighter workloads\.
+1. If you have a 184 GiB storage requirement and the recommended minimum number of three nodes, use the equation 184 / 3 = 61 GiB to find the amount of storage that each node needs\. In this example, you might select three `m5.large.elasticsearch` instances, each using a 90 GiB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GiB of memory, so it's suited to lighter workloads\.
 
    For a more substantial example, consider a 14 TiB \(14,336 GiB\) storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r5.4xlarge.elasticsearch` instances, each using a 1 TiB EBS storage volume\.
 

@@ -83,7 +83,6 @@ We recommend that you configure the EC2 instance running the proxy server with a
 If you use a proxy server *and* [Amazon Cognito Authentication for Kibana](es-cognito-auth.md), you might need to add settings for Kibana and Amazon Cognito to avoid `redirect_mismatch` errors\. See the following `nginx.conf` example:
 
 ```
-{
 server {
     listen 443;
     server_name $host;

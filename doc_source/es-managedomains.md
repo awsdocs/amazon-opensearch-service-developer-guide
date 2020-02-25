@@ -64,11 +64,13 @@ If you change the configuration for a domain, Amazon ES creates a new cluster as
 **Note**  
 Service software updates differ from Elasticsearch version upgrades\. For information about upgrading to a later version of Elasticsearch, see [Upgrading Elasticsearch](es-version-migration.md)\.
 
-Amazon ES regularly releases system software updates that add features or otherwise improve your domains\. The console is the easiest way to see if an update is available\. For a history of service software updates, see [Release Notes](release-notes.md#release-table)\.
+Amazon ES regularly releases system software updates that add features or otherwise improve your domains\. The console is the easiest way to see if an update is available\. When new service software becomes available, you can request an update to your domain and benefit from new features more quickly\. You might also want to start the update at a low traffic time\.
 
-When new service software becomes available, you can request an update to your domain and benefit from new features more quickly\. You might also want to start the update at a low traffic time\.
+Some updates are required\. Others are optional\.
++ If you take no action on required updates, we still update the service software automatically after a certain timeframe \(typically two weeks\)\.
++ If the console does not include an automatic deployment date, the update is optional\.
 
-Some updates are required, and others are optional\. If you take no action on required updates, we still update the service software automatically after a certain timeframe \(typically two weeks\)\. Your domain might be ineligible for a service software update if it is in any of the states that are shown in the following table\.
+Your domain might be ineligible for a service software update if it is in any of the states that are shown in the following table\.
 
 
 | State | Description | 

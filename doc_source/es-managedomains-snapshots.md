@@ -12,38 +12,16 @@ All Amazon ES domains take automated snapshots, but frequency differs:
 
 If your cluster enters red status, Amazon ES stops taking automated snapshots\. If you don't correct the problem within two weeks, you can permanently lose your cluster's data\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
 
-**Tip**  
-Many users find tools like Curator convenient for index and snapshot management\. Use [pip](https://pip.pypa.io/en/stable/installing/) to install Curator:  
-
-```
-pip install elasticsearch-curator
-```
-Curator offers advanced filtering functionality that can help simplify management tasks on complex clusters\. Amazon ES supports Curator on domains running Elasticsearch version 5\.1 and above\. You can use Curator as a command line interface \(CLI\) or Python API\. If you use the CLI, export your credentials at the command line and configure `curator.yml` as follows:  
-
-```
-client:
-  hosts: search-my-domain.us-west-1.es.amazonaws.com
-  port: 443
-  use_ssl: True
-  aws_region: us-west-1
-  aws_sign_request: True
-  ssl_no_validate: False
-  timeout: 60
-
-logging:
-  loglevel: INFO
-```
-For sample Lambda functions that use the Python API, see [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)\.
-
 **Topics**
 + [Manual Snapshot Prerequisites](#es-managedomains-snapshot-prerequisites)
 + [Registering a Manual Snapshot Repository](#es-managedomains-snapshot-registerdirectory)
 + [Taking Manual Snapshots](#es-managedomains-snapshot-create)
 + [Restoring Snapshots](#es-managedomains-snapshot-restore)
++ [Using Curator for Snapshots](#es-managedomains-snapshot-curator)
 
 ## Manual Snapshot Prerequisites<a name="es-managedomains-snapshot-prerequisites"></a>
 
-To create index snapshots manually, you must work with IAM and Amazon S3\. Verify that you have met the following prerequisites before you attempt to take a snapshot\.
+To create snapshots manually, you must work with IAM and Amazon S3\. Verify that you have met the following prerequisites before you attempt to take a snapshot\.
 
 
 ****  
@@ -52,7 +30,7 @@ To create index snapshots manually, you must work with IAM and Amazon S3\. Verif
 | --- | --- | 
 | S3 bucket | Stores manual snapshots for your Amazon ES domain\. Make a note of the bucket's name\. You need it in two places:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html)For more information, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\. Do **not** apply an S3 Glacier lifecycle rule to this bucket\. Manual snapshots do not support the S3 Glacier storage class\. | 
 | IAM role | Delegates permissions to Amazon Elasticsearch Service\. The rest of this chapter refers to this role as `TheSnapshotRole`\. The trust relationship for the role must specify Amazon Elasticsearch Service in the `Principal` statement, as shown in the following example:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "es.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />}</pre>The role must have the following policy attached to it: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For more information, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\. | 
-| Permissions |  You must be able to assume the IAM role in order to register the snapshot repository\. You also need access to the `es:ESHttpPut` action\. The following policy includes these permissions: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheSnapshotRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/my-domain/*"<br />    }<br />  ]<br />}</pre> If you don't have `iam:PassRole` permissions to assume `TheSnapshotRole`, you might encounter the following common error: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheSnapshotRole"}</pre>  | 
+| Permissions |  You must be able to assume `TheSnapshotRole` in order to register the snapshot repository\. You also need access to the `es:ESHttpPut` action\. The following policy includes these permissions: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheSnapshotRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/my-domain/*"<br />    }<br />  ]<br />}</pre> If you don't have `iam:PassRole` permissions to assume `TheSnapshotRole`, you might encounter the following common error: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheSnapshotRole"}</pre>  | 
 
 ## Registering a Manual Snapshot Repository<a name="es-managedomains-snapshot-registerdirectory"></a>
 
@@ -61,7 +39,7 @@ You must register a snapshot repository with Amazon Elasticsearch Service before
 You can't use `curl` to perform this operation, because it doesn't support AWS request signing\. Instead, use the [sample Python client](#es-managedomains-snapshot-client-python), [Postman](https://www.getpostman.com/), or some other method to send a [signed request](es-request-signing.md) to register the snapshot repository\. The request takes the following form:
 
 ```
-PUT elasticsearch-domain-endpoint/_snapshot/my-snapshot-repo
+PUT elasticsearch-domain-endpoint/_snapshot/my-snapshot-repo-name
 {
   "type": "s3",
   "settings": {
@@ -72,10 +50,10 @@ PUT elasticsearch-domain-endpoint/_snapshot/my-snapshot-repo
 }
 ```
 
-Registering a snapshot directory is a one\-time operation, but to migrate from one domain to another, you must register the same snapshot repository on the old domain and the new domain\.
+Registering a snapshot directory is a one\-time operation, but to migrate from one domain to another, you must register the same snapshot repository on the old domain and the new domain\. The repository name is arbitrary\.
 
 **Important**  
-If the S3 bucket is in the us\-east\-1 region, you need to use `"endpoint": "s3.amazonaws.com"` instead of `"region": "us-east-1"`\.  
+If the S3 bucket is in the us\-east\-1 region, you must use `"endpoint": "s3.amazonaws.com"` instead of `"region": "us-east-1"`\.  
 To enable [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) for the snapshot repository, add `"server_side_encryption": true` to the `"settings"` JSON\.
 
 If your domain resides within a VPC, your computer must be connected to the VPC in order for the request to successfully register the snapshot repository\. Accessing a VPC varies by network configuration, but likely involves connecting to a VPN or corporate network\. To check that you can reach the Amazon ES domain, navigate to `https://your-vpc-domain.region.es.amazonaws.com` in a web browser and verify that you receive the default JSON response\.
@@ -89,7 +67,7 @@ Save the following sample Python code as a Python file, such as `register-repo.p
 **Tip**  
 A Java\-based code sample is available in [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
 
-You must update the following variables in your code: `host`, `region`, `path`, and `payload`\.
+You must update the following variables: `host`, `region`, `path`, and `payload`\.
 
 ```
 import boto3
@@ -104,14 +82,15 @@ awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, servi
 
 # Register repository
 
-path = '_snapshot/my-snapshot-repo' # the Elasticsearch API endpoint
+path = '_snapshot/my-snapshot-repo-name' # the Elasticsearch API endpoint
 url = host + path
 
 payload = {
   "type": "s3",
   "settings": {
     "bucket": "s3-bucket-name",
-    "region": "us-west-1",
+    # "endpoint": "us-east-1", # for us-east-1
+    "region": "us-west-1", # for all other regions
     "role_arn": "arn:aws:iam::123456789012:role/TheSnapshotRole"
   }
 }
@@ -222,7 +201,7 @@ If you switched the alias to another index, specify `"include_aliases": false` w
 **Note**  
 Most automated snapshots are stored in the `cs-automated` repository\. If your domain encrypts data at rest, they are stored in the `cs-automated-enc` repository\. If you don't see the manual snapshot repository that you're looking for, make sure that you [registered it](#es-managedomains-snapshot-registerdirectory) to the domain\.
 
-1. \(Optional\) Delete or rename all open indices in the Amazon ES domain\. You don't need to perform this step if you have no naming conflicts between indices on the cluster and indices in the snapshot\.
+1. \(Optional\) Delete or rename one or more indices in the Amazon ES domain\. You don't need to perform this step if you have no naming conflicts between indices on the cluster and indices in the snapshot\.
 
    You can't restore a snapshot of your indices to an Elasticsearch cluster that already contains indices with the same names\. Currently, Amazon ES does not support the Elasticsearch `_close` API, so you must use one of the following alternatives:
    + Delete the indices on the same Amazon ES domain, and then restore the snapshot\.
@@ -261,3 +240,29 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
 
 **Note**  
 If not all primary shards were available for the indices involved, a snapshot might have a `state` of `PARTIAL`\. This value indicates that data from at least one shard was not stored successfully\. You can still restore from a partial snapshot, but you might need to use older snapshots to restore any missing indices\.
+
+## Using Curator for Snapshots<a name="es-managedomains-snapshot-curator"></a>
+
+Some users find tools like Curator convenient for index and snapshot management\. Use [pip](https://pip.pypa.io/en/stable/installing/) to install Curator:
+
+```
+pip install elasticsearch-curator
+```
+
+Curator offers advanced filtering functionality that can help simplify management tasks on complex clusters\. Amazon ES supports Curator on domains running Elasticsearch version 5\.1 and above\. You can use Curator as a command line interface \(CLI\) or Python API\. If you use the CLI, export your credentials at the command line and configure `curator.yml` as follows:
+
+```
+client:
+  hosts: search-my-domain.us-west-1.es.amazonaws.com
+  port: 443
+  use_ssl: True
+  aws_region: us-west-1
+  aws_sign_request: True
+  ssl_no_validate: False
+  timeout: 60
+
+logging:
+  loglevel: INFO
+```
+
+For sample Lambda functions that use the Python API, see [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)\.
