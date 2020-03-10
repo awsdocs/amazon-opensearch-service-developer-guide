@@ -103,7 +103,7 @@ awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, servi
 
 now = datetime.now()
 # Clunky, but this approach keeps colons out of the URL.
-date_string = '-'.join((str(now.year), str(now.month), str(now.day), str(now.hour), str(now.second)))
+date_string = '-'.join((str(now.year), str(now.month), str(now.day), str(now.hour), str(now.minute)))
 
 snapshot_name = 'my-snapshot-prefix-' + date_string
 repository_name = 'my-repo'
