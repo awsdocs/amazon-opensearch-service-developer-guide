@@ -204,7 +204,7 @@ GET my-index/_settings
       }
     }
   }
-} disables
+}
 ```
 + `blocks.ultrawarm_allow_delete` specifies whether to block most `_settings` updates to the index \(`true`\) or allow them \(`false`\)\.
 + `number_of_replicas`, in this case, is the number of passive replicas, which don't consume disk space\.

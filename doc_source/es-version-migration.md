@@ -10,7 +10,8 @@ Currently, Amazon ES supports the following upgrade paths\.
 
 | From Version | To Version | 
 | --- | --- | 
-| 6\.8 | 7\.1 Elasticsearch 7\.*x* includes numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](es-managedomains-snapshots.md) of the 6\.8 domain, restoring it on a test 7\.1 domain, and using that test domain to identify potential upgrade issues\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\.  | 
+| 7\.x | 7\.*x* | 
+| 6\.8 | 7\.*x* Elasticsearch 7\.0 includes numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](es-managedomains-snapshots.md) of the 6\.8 domain, restoring it on a test 7\.*x* domain, and using that test domain to identify potential upgrade issues\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\.  | 
 | 6\.*x* | 6\.*x* | 
 | 5\.6 |  6\.*x*  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. Check that your client code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
 | 5\.x | 5\.6 | 
@@ -91,7 +92,7 @@ The following table shows how to use snapshots to migrate data to a domain that 
 
 | From Version | To Version | Migration Process | 
 | --- | --- | --- | 
-| 6\.x | 7\.1 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
+| 6\.x | 7\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 6\.x | 6\.8 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 6\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 
 | 5\.x | 5\.6 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)  | 

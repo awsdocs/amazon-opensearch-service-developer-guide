@@ -260,7 +260,7 @@ The `AWS/ES` namespace includes the following metrics for EBS volumes\.
 The `AWS/ES` namespace includes the following metrics for each instance in a domain\. Amazon ES also aggregates these instance metrics to provide insight into overall cluster health\. You can verify this behavior using the **Data samples** statistic in the console\. Note that each metric in the following table has relevant statistics for the node *and* the cluster\.
 
 **Important**  
-Different versions of Elasticsearch use different thread pools to process calls to the `_index` API\. Elasticsearch 1\.5 and 2\.3 use the index thread pool\. Elasticsearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. 6\.3 and later use the write thread pool\. Currently, Amazon ES doesn't provide metrics for the bulk and write thread pools\.
+Different versions of Elasticsearch use different thread pools to process calls to the `_index` API\. Elasticsearch 1\.5 and 2\.3 use the index thread pool\. Elasticsearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. 6\.3 and later use the write thread pool\. Currently, the Amazon ES console doesn't include a graph for the bulk thread pool\.
 
 
 | Metric | Description | 
@@ -329,6 +329,10 @@ The `AWS/ES` namespace includes the following metrics for [SQL support](sql-supp
 | SQLFailedRequestCountBySysErr |  The number of requests to the `_opendistro/_sql` API that failed due to a server problem or feature limitation\. For example, a request might return HTTP status code 503 due to a `VerificationException`\. Relevant statistics: Sum  | 
 | SQLRequestCount |  The number of requests to the `_opendistro/_sql` API\. Relevant statistics: Sum  | 
 | SQLUnhealthy |  A value of 1 indicates that, in response to certain requests, the SQL plugin is returning 5*xx* response codes or passing invalid query DSL to Elasticsearch\. Other requests should continue to succeed\. A value of 0 indicates no recent failures\. If you see a sustained value of 1, troubleshoot the requests your clients are making to the plugin\. Relevant statistics: Maximum  | 
+
+### KNN Metrics<a name="es-managedomains-cloudwatchmetrics-knn"></a>
+
+The `AWS/ES` namespace includes metrics for [KNN](knn.md)\. For a summary of each, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/#statistics)\.
 
 ## Tagging Amazon Elasticsearch Service Domains<a name="es-managedomains-awsresourcetagging"></a>
 

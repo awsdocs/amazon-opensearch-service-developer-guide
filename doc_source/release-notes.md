@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**February 11, 2020
-+ **Latest documentation update—**February 11, 2020
++ **Latest product release—**March 12, 2020
++ **Latest documentation update—**March 12, 2020
 
 ## Release Notes<a name="release-table"></a>
 
@@ -16,6 +16,10 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Elasticsearch 7\.4 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.4\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | March 12, 2020 | 
+| [KNN](#release-notes) | Amazon Elasticsearch Service adds support for k\-nearest neighbor \(KNN\) search\. This feature requires service software R20200302 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/knn.html)\. | March 3, 2020 | 
+| [Index State Management](#release-notes) | Amazon Elasticsearch Service adds Index State Management \(ISM\), which lets you automate routine tasks, such as deleting indices when they reach a certain age\. This feature requires service software R20200302 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ism.html)\. | March 3, 2020 | 
+| [Elasticsearch 5\.6\.16 Support](#release-notes) | Amazon Elasticsearch Service now supports the latest patch release for version 5\.6, which adds bug fixes and improves security\. Amazon ES will automatically upgrade existing 5\.6 domains to this release\. Note that this Elasticsearch release incorrectly reports its version as 5\.6\.17\. | March 2, 2020 | 
 | [Fine\-Grained Access Control](#release-notes) | Amazon Elasticsearch Service now supports [fine\-grained access control](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/fgac.html), which offers security at the index, document, and field level, Kibana multi\-tenancy, and optional HTTP basic authentication for your cluster\. | February 11, 2020 | 
 | [UltraWarm Storage \(Preview\)](#release-notes) | Amazon Elasticsearch Service adds UltraWarm, a new warm storage tier that uses Amazon S3 and a sophisticated caching solution to improve performance\. For indices that you are not actively writing to and query less frequently, UltraWarm storage offers significantly lower costs per GiB\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)\. | December 3, 2019 | 
 | [Encryption Features for China Regions](#release-notes) | Encryption of data at rest and node\-to\-node encryption are now available in the `cn-north-1` \(Beijing\) and `cn-northwest-1` \(Ningxia\) Regions\. | November 20, 2019 | 

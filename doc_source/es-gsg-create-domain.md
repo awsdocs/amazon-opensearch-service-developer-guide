@@ -51,9 +51,6 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 **Note**  
 New domains take about ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
 
-**Note**  
-New domains take roughly ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
-
 **To create an Amazon ES domain \(AWS CLI\)**
 + Run the following command to create an Amazon ES domain\.
 

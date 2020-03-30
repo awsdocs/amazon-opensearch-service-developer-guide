@@ -76,7 +76,7 @@ Because security groups already enforce IP\-based access policies, you can't app
 
 The enhanced security of a VPC can make connecting to your domain and running basic tests a real challenge\. If you already have an Amazon ES VPC domain and would rather not create a VPN server, try the following process:
 
-1. For your domain's access policy, choose **Do not require signing request with IAM credential**\. You can always update this setting after you finish testing\.
+1. For your domain's access policy, choose **Allow open access to the domain**\. You can always update this setting after you finish testing\.
 
 1. Create an Amazon Linux Amazon EC2 instance in the same VPC, subnet, and security group as your Amazon ES domain\.
 

@@ -248,10 +248,13 @@ Due to how fine\-grained access control [interacts with other security features]
 
 This tutorial covers a popular use case: an IAM master user with Amazon Cognito authentication for Kibana\. Although these steps use the Amazon Cognito user pool for authentication, this same basic process works for any Cognito authentication provider that lets you assign different IAM roles to different users \(SAML, for example\)\.
 
+**Note**  
+This tutorial assumes you have two existing IAM roles, one for the master user and one for more limited users\. If you don't have two roles, [create them](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html)\.
+
 **To get started with fine\-grained access control**
 
 1. [Create a domain](es-createupdatedomains.md) with the following settings:
-   + Elasticsearch 7\.1
+   + Elasticsearch 7\.4
    + Public access
    + Fine\-grained access control enabled with an IAM role as the master user \(`IAMMasterUserRole` for the rest of this tutorial\)
    + [Amazon Cognito authentication for Kibana](es-cognito-auth.md) enabled
@@ -418,7 +421,7 @@ This tutorial covers another popular use case: a master user in the internal use
 **To get started with fine\-grained access control**
 
 1. [Create a domain](es-createupdatedomains.md) with the following settings:
-   + Elasticsearch 7\.1
+   + Elasticsearch 7\.4
    + Public access
    + Fine\-grained access control with a master user in the internal user database \(`TheMasterUser` for the rest of this tutorial\)
    + Amazon Cognito authentication for Kibana *disabled*
