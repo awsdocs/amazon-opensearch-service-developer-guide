@@ -89,7 +89,7 @@ payload = {
   "type": "s3",
   "settings": {
     "bucket": "s3-bucket-name",
-    # "endpoint": "us-east-1", # for us-east-1
+    # "endpoint": "s3.amazonaws.com", # for us-east-1
     "region": "us-west-1", # for all other regions
     "role_arn": "arn:aws:iam::123456789012:role/TheSnapshotRole"
   }
