@@ -97,6 +97,8 @@ GET my-index/_search
 }
 ```
 
-## KNN Differences<a name="knn-settings"></a>
+## KNN Differences and Tuning<a name="knn-settings"></a>
 
 Open Distro for Elasticsearch lets you modify all [KNN settings](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/) using the `_cluster/settings` API\. On Amazon ES, you can change all settings except `knn.memory.circuit_breaker.enabled` and `knn.circuit_breaker.triggered`\. KNN statistics are included as [Amazon CloudWatch metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.
+
+In particular, check the `KNNGraphMemoryUsage` metric on each data node against the `knn.memory.circuit_breaker.limit` statistic and the available RAM for the instance type\. Amazon ES uses half of an instance's RAM for the Java heap \(up to a heap size of 32 GiB\)\. By default, KNN uses up to 60% of the remaining half, so an instance type with 32 GiB of RAM can accommodate 9\.6 GiB of graphs \(32 \* 0\.5 \* 0\.6\)\. Performance can suffer if graph memory usage exceeds this value\.

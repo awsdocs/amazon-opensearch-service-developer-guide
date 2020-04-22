@@ -38,11 +38,16 @@ Amazon ES includes the following features:
 + Dedicated master nodes to offload cluster management tasks
 + Automated snapshots to back up and restore Amazon ES domains
 
+**Flexibility**
++ SQL support for integration with business intelligence \(BI\) applications
++ Custom packages to improve search results
+
 **Integration with Popular Services**
 + Data visualization using Kibana
 + Integration with Amazon CloudWatch for monitoring Amazon ES domain metrics and setting alarms
 + Integration with AWS CloudTrail for auditing configuration API calls to Amazon ES domains
 + Integration with Amazon S3, Amazon Kinesis, and Amazon DynamoDB for loading streaming data into Amazon ES
++ Alerts from Amazon SNS when your data exceeds certain thresholds
 
 ## Supported Elasticsearch Versions<a name="aes-choosing-version"></a>
 

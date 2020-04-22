@@ -149,6 +149,13 @@ The **Nodes** metric is not accurate during changes to your cluster configuratio
 
 To protect your clusters from unexpected node terminations and restarts, create at least one replica for each index in your Amazon ES domain\.
 
+## Maximum Shard Limit<a name="aes-troubleshooting-shard-limit"></a>
+
+The 7\.*x* versions of Elasticsearch have a default setting of no more than 1,000 shards per node\. Elasticsearch throws an error if a request, such as creating a new index, would cause you to exceed this limit\. If you encounter this error, you have several options:
++ Add more data nodes to the cluster\.
++ Increase the `_cluster/settings/cluster.max_shards_per_node` setting\.
++ Use the [\_shrink API](aes-supported-es-operations.md#es_version_api_notes-shrink) to reduce the number of shards on the node\.
+
 ## Can't Close Index<a name="aes-troubleshooting-close-api"></a>
 
 Amazon ES doesn't support the `_close` API\. If you are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\. The other option is to use the `rename_pattern` and `rename_replacement` fields to rename the index as you restore it:

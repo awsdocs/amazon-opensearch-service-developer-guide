@@ -31,7 +31,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 
 | Issue | Description | 
 | --- | --- | 
-| Too many shards per node | The 7\.x versions of Elasticsearch have a default setting of no more than 1,000 shards per node\. If a node in your current cluster exceeds this setting, Amazon ES doesn't allow you to upgrade\. If you encounter this error, you have several options:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html) | 
+| Too many shards per node | The 7\.x versions of Elasticsearch have a default setting of no more than 1,000 shards per node\. If a node in your current cluster exceeds this setting, Amazon ES doesn't allow you to upgrade\. See [Maximum Shard Limit](aes-handling-errors.md#aes-troubleshooting-shard-limit) for troubleshooting options\. | 
 | Domain in processing | The domain is in the middle of a configuration change\. Check upgrade eligibility after the operation completes\. | 
 | Red cluster status | One or more indices in the cluster is red\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. | 
 | High error rate | The Elasticsearch cluster is returning a large number of 5xx errors when attempting to process requests\. This problem is usually the result of too many simultaneous read or write requests\. Consider reducing traffic to the cluster or scaling your domain\. | 

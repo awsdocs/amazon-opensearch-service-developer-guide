@@ -1,6 +1,6 @@
 # Using the AWS SDKs with Amazon Elasticsearch Service<a name="es-configuration-samples"></a>
 
-This chapter includes examples of how to use the AWS SDKs to interact with the Amazon Elasticsearch Service Configuration API\. These code samples show how to create, update, and delete Amazon ES domains\.
+This chapter includes examples of how to use the AWS SDKs to interact with the Amazon Elasticsearch Service configuration API\. These code samples show how to create, update, and delete Amazon ES domains\.
 
 **Important**  
 For examples of how to interact with the Elasticsearch APIs, such as `_index`, `_bulk`, `_search`, and `_snapshot`, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
@@ -169,9 +169,9 @@ public class AESSample {
     }
 
     /**
-     * Waits for the domain to finish processing changes. New domains typically take
-     * 10-15 minutes to initialize. Most updates to existing domains take a similar
-     * amount of time. This method checks every 15 seconds and finishes only when
+     * Waits for the domain to finish processing changes. New domains typically take 15-30 minutes
+     * to initialize, but can take longer depending on the configuration. Most updates to existing domains
+     * take a similar amount of time. This method checks every 15 seconds and finishes only when
      * the domain's processing status changes to false.
      *
      * @param client
@@ -185,9 +185,7 @@ public class AESSample {
         final DescribeElasticsearchDomainRequest describeRequest = new DescribeElasticsearchDomainRequest()
                 .withDomainName(domainName);
 
-        // Check whether the domain is processing, which usually takes 10-15 minutes
-        // after creation or a configuration change.
-        // This loop checks every 15 seconds.
+        // Every 15 seconds, check whether the domain is processing.
         DescribeElasticsearchDomainResult describeResponse = client.describeElasticsearchDomain(describeRequest);
         while (describeResponse.getDomainStatus().isProcessing()) {
             try {

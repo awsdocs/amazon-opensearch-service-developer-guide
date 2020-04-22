@@ -13,6 +13,8 @@ The following are *not* encrypted when you enable encryption of data at rest, bu
 
 To learn how to create AWS KMS master keys, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\.
 
+Regardless of whether encryption at rest is enabled, all domains automatically encrypt [custom packages](custom-packages.md) using AES\-256 and Amazon ES\-managed keys\.
+
 ## Enabling Encryption of Data at Rest<a name="enabling-ear"></a>
 
 By default, domains don't encrypt data at rest, and you can't configure existing domains to use the feature\. To enable the feature, you must [create another domain](es-createupdatedomains.md#es-createdomains) and migrate your data\. Encryption of data at rest requires Elasticsearch 5\.1 or later\.

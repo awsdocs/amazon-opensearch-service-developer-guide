@@ -3,11 +3,9 @@
 **Important**  
 This process is a concise tutorial for uploading a small amount of test data\. For more information, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
-You can upload data to an Amazon Elasticsearch Service domain for indexing using the Elasticsearch index and bulk APIs from the command line:
-+ Use the index API to add or update a single Elasticsearch document\.
-+ Use the bulk API to add or update multiple Elasticsearch documents that are described in the same JSON file\.
+You can upload data to an Amazon Elasticsearch Service domain using the command line or most programming languages\.
 
-The following example requests use [curl](https://curl.haxx.se/), a common HTTP client, for brevity and convenience\. Clients like curl can't perform the request signing that is required if your access policies specify IAM users or roles\. To successfully perform the instructions in this step, you must use an IP address\-based access policy that allows unauthenticated access, like you configured in [step 1](es-gsg-create-domain.md)\.
+The following example requests use [curl](https://curl.haxx.se/), a common HTTP client, for brevity and convenience\. Clients like curl can't perform the request signing that is required if your access policies specify IAM users or roles\. To successfully perform the instructions in this step, you must use fine\-grained access control with a master user name and password, like you configured in [step 1](es-gsg-create-domain.md)\.
 
 You can install curl on Windows and use it from the command prompt, but we recommend a tool like [Cygwin](https://www.cygwin.com/) or [the Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)\. macOS and most Linux distributions come with curl pre\-installed\.
 
@@ -15,7 +13,7 @@ You can install curl on Windows and use it from the command prompt, but we recom
 + Run the following command to add a single document to the *movies* domain:
 
   ```
-  curl -XPUT elasticsearch_domain_endpoint/movies/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
+  curl -XPUT -u master-user:master-user-password domain-endpoint/movies/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
   ```
 
 For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
@@ -36,7 +34,7 @@ For a detailed explanation of this command and how to make signed requests to Am
 1. Run the following command to upload the file to the *movies* domain:
 
    ```
-   curl -XPOST elasticsearch_domain_endpoint/_bulk --data-binary @bulk_movies.json -H 'Content-Type: application/json'
+   curl -XPOST -u master-user:master-user-password domain-endpoint/_bulk --data-binary @bulk_movies.json -H 'Content-Type: application/json'
    ```
 
 For more information about the bulk file format, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.

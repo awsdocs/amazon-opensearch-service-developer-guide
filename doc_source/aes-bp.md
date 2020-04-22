@@ -1,7 +1,7 @@
 # Amazon Elasticsearch Service Best Practices<a name="aes-bp"></a>
 
 This chapter addresses some best practices for operating Amazon Elasticsearch Service domains and provides general guidelines that apply to many use cases\. Production domains should adhere to the following standards:
-+ Apply a restrictive [resource\-based access policy](es-ac.md#es-ac-types-resource) to the domain, and follow the [principle of least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) when granting access to the Configuration API and the Elasticsearch APIs\.
++ Apply a restrictive [resource\-based access policy](es-ac.md#es-ac-types-resource) to the domain, and follow the [principle of least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) when granting access to the configuration API and the Elasticsearch APIs\.
 + Configure at least one replica, the Elasticsearch default, for each [index](es-indexing.md#es-indexing-intro)\.
 + Use three [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
 + Deploy the domain across three Availability Zones\. This configuration lets Amazon ES distribute replica shards to different Availability Zones than their corresponding primary shards\. For a list of Regions that have three Availability Zones and some other considerations, see [Configuring a Multi\-AZ Domain](es-managedomains.md#es-managedomains-multiaz)\.

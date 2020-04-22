@@ -646,7 +646,7 @@ Permissions vary based on the actions each service performs\. An AWS IoT rule or
 
 ## REST API Differences<a name="fgac-rest-api"></a>
 
-The fine\-grained access control REST API differs slightly depending on your Elasticsearch version\. Prior to making a `PUT` request, make a `GET` request to verify the expected request body\. For example, a `GET` request to `_opendistro/_security/api/user/` returns all users, which you can then modify and use to make valid `PUT` requests\.
+The fine\-grained access control REST API differs slightly depending on your Elasticsearch version\. Prior to making a `PUT` request, make a `GET` request to verify the expected request body\. For example, a `GET` request to `_opendistro/_security/api/user` returns all users, which you can then modify and use to make valid `PUT` requests\.
 
 On Elasticsearch 6\.*x*, requests to create users look like this:
 
@@ -705,3 +705,11 @@ GET _opendistro/_security/api/tenants
 ```
 
 For documentation on the 7\.*x* REST API, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/api/)\.
+
+**Tip**  
+If you use the internal user database, you can use [curl](https://curl.haxx.se/) to make requests and test your domain\. Try the following sample commands:  
+
+```
+curl -XGET -u master-user:master-user-password 'domain-endpoint/_search'
+curl -XGET -u master-user:master-user-password 'domain-endpoint/_opendistro/_security/api/user'
+```

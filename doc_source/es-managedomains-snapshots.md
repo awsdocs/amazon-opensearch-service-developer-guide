@@ -120,14 +120,19 @@ print(r.text)
 #
 # print(r.text)
 #
-# # Restore snapshots (all indices)
+# # Restore snapshot (all indices except Kibana and fine-grained access control)
 #
 # path = '_snapshot/my-snapshot-repo/my-snapshot/_restore'
 # url = host + path
 #
-# r = requests.post(url, auth=awsauth)
+# payload = {
+#   "indices": "-.kibana*,-.opendistro_security",
+#   "include_global_state": false
+# }
 #
-# print(r.text)
+# headers = {"Content-Type": "application/json"}
+#
+# r = requests.post(url, auth=awsauth, json=payload, headers=headers)
 #
 # # Restore snapshot (one index)
 #
@@ -226,16 +231,16 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
    curl -XPOST 'elasticsearch-domain-endpoint/_snapshot/repository/snapshot/_restore'
    ```
 
-   Due to special permissions on the `.kibana` index, attempts to restore all indices might fail, especially if you try to restore from an automated snapshot\. The following example restores just one index, `my-index`, from `2017-snapshot` in the `cs-automated` snapshot repository:
+   Due to special permissions on the Kibana and fine\-grained access control indices, attempts to restore all indices might fail, especially if you try to restore from an automated snapshot\. The following example restores just one index, `my-index`, from `2017-snapshot` in the `cs-automated` snapshot repository:
 
    ```
    curl -XPOST 'elasticsearch-domain-endpoint/_snapshot/cs-automated/2017-snapshot/_restore' -d '{"indices": "my-index"}' -H 'Content-Type: application/json'
    ```
 
-   Alternately, you might want to restore all indices *except* for the `.kibana` index:
+   Alternately, you might want to restore all indices *except* for the Kibana and fine\-grained access control indices:
 
    ```
-   curl -XPOST 'elasticsearch-domain-endpoint/_snapshot/cs-automated/2017-snapshot/_restore' -d '{"indices": "*,-.kibana"}' -H 'Content-Type: application/json'
+   curl -XPOST 'elasticsearch-domain-endpoint/_snapshot/cs-automated/2017-snapshot/_restore' -d '{"indices": "-.kibana*, -.opendistro_security"}' -H 'Content-Type: application/json'
    ```
 
 **Note**  

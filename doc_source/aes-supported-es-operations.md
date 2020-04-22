@@ -24,6 +24,30 @@ Amazon ES supports many versions of Elasticsearch\. The following topics show th
 
 ### Settings and Statistics<a name="es_version_api_notes-cs"></a>
 
+Amazon ES only accepts PUT requests to the `_cluster/settings` API that use the "flat" settings form\. It rejects requests that use the expanded settings form\.
+
+```
+// Accepted
+PUT _cluster/settings
+{
+  "persistent" : {
+    "action.auto_create_index" : false
+  }
+}
+
+// Rejected
+PUT _cluster/settings
+{
+  "persistent": {
+    "action": {
+      "auto_create_index": false
+    }
+  }
+}
+```
+
+The high\-level Java REST client uses the expanded form, so if you need to send settings requests, use the low\-level client\.
+
 Prior to Elasticsearch 5\.3, the `_cluster/settings` API on Amazon ES domains supported only the HTTP `PUT` method, not the `GET` method\. Later versions support the `GET` method, as shown in the following example:
 
 ```

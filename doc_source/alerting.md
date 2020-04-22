@@ -58,7 +58,7 @@ Amazon ES supports [Amazon SNS](https://aws.amazon.com/sns/) for notifications\.
 
 ### Alerting Settings<a name="alerting-diff-settings"></a>
 
-Open Distro for Elasticsearch lets you modify certain alerting settings using the `_cluster/settings` API \(for example, `opendistro.alerting.monitor.max_monitors`\)\. On Amazon ES, you can't change these settings\.
+Open Distro for Elasticsearch lets you modify [certain alerting settings](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/settings/#alerting-settings) using the `_cluster/settings` API \(for example, `opendistro.alerting.monitor.max_monitors`\)\. Amazon ES uses the default values, and you can't change them\.
 
 You can, however, disable the alerting feature\. Send the following request:
 

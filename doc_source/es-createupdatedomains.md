@@ -391,7 +391,7 @@ Specifies the percentage of Java heap space that is allocated to field data\. By
 Many customers query rotating daily indices\. We recommend that you begin benchmark testing with `indices.fielddata.cache.size` configured to 40% of the JVM heap for most such use cases\. However, if you have very large indices you might need a large field data cache\.
 
 **indices\.query\.bool\.max\_clause\_count**  
-Specifies the maximum number of clauses allowed in a Lucene Boolean query\. The default is 1,024\. Queries with more than the permitted number of clauses result in a `TooManyClauses` error\. For more information, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\.
+Specifies the maximum number of clauses allowed in a Lucene boolean query\. The default is 1,024\. Queries with more than the permitted number of clauses result in a `TooManyClauses` error\. For more information, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\.
 
 ### Configuring Advanced Options \(Console\)<a name="es-createdomain-configure-advanced-options-console"></a>
 
@@ -500,7 +500,7 @@ CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amaz
 
 1. Choose **Enable**\.
 
-   The status of your domain changes from **Active** to **Processing**\. The status must return to **Active** before log publishing is enabled\. This process can take up to 30 minutes\.
+   The status of your domain changes from **Active** to **Processing**\. The status must return to **Active** before log publishing is enabled\. This change typically takes 30 minutes, but can take longer depending on your domain configuration\.
 
 If you enabled one of the slow logs, see [Setting Elasticsearch Logging Thresholds for Slow Logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
 
@@ -557,7 +557,7 @@ Before you can enable log publishing, you must first create a CloudWatch log gro
 
 You can access these operations using the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\.
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `--log-publishing-options` option for `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig`\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md), including the `--log-publishing-options` option for `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig`\.
 
 If you enabled one of the slow logs, see [Setting Elasticsearch Logging Thresholds for Slow Logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
 

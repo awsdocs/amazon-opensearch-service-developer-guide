@@ -13,64 +13,28 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. Choose **Create a new domain**\.
 
-1. On the **Create Elasticsearch domain** page, for **Deployment type**, choose **Development and testing**\.
+1. On the **Create Elasticsearch domain** page, choose **Development and testing**\.
 
-1. For **Choose deployment type**, choose **Development and testing**\.
-
-1. For **Elasticsearch version**, choose the latest version\.
-
-1. Choose **Next**\.
+1. For **Elasticsearch version**, choose the latest version and **Next**\.
 
 1. Enter a name for the domain\. In this tutorial, we use the domain name *movies* for the examples that we provide later in the tutorial\.
 
-1. For **Instance count**, choose the number of instances that you want\. For this tutorial, use the default value of 1\.
+1. For **Data nodes**, choose the `c5.large.elasticsearch` instance type\. Use the default value of 1 instance\.
 
-1. For **Storage type**, choose **EBS**\.
-
-   1. For **EBS volume type**, choose General Purpose \(SSD\)\. For more information, see [Amazon EBS Volume Types](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)\.
-
-   1. For **EBS volume size**, enter the size in GiB of the external storage for *each* data node\. For this tutorial, use the default value of 10\.
+1. For **Data nodes storage**, use the default values\.
 
 1. For now, you can ignore the **Dedicated master nodes**, **Snapshot configuration**, and **Optional Elasticsearch cluster settings** sections\.
 
 1. Choose **Next**\.
 
-1. For simplicity in this tutorial, we recommend an IP\-based access policy\. For **Network configuration**, choose **Public access**\.
+1. For simplicity in this tutorial, we recommend a public access domain\. For **Network configuration**, choose **Public access**\.
 
-1. For now, you can ignore fine\-grained access control and **Amazon Cognito Authentication**\.
+1. For **Fine\-grained access control**, choose **Create master user**\. Specify a username and password\.
 
-1. For **Access policy**, choose **IPv4 address** for **Type**, and then enter your public IP address into the **Enter Principal** field\. You can find your IP address by searching for "What is my IP?" on most search engines\.
+1. For now, you can ignore **Amazon Cognito Authentication**\.
 
-1. Under **Select Action**, choose **Allow**\.
-
-1. Under **Encryption**, keep all default values\.
+1. For **Access policy**, choose **Allow open access to the domain**\. In this tutorial, fine\-grained access control handles authentication, not the domain access policy\.
 
 1. Leave the encryption settings at their default values, and choose **Next**\.
 
-1. On the **Review** page, review your domain configuration, and then choose **Confirm**\.
-**Note**  
-New domains take about ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
-
-**To create an Amazon ES domain \(AWS CLI\)**
-+ Run the following command to create an Amazon ES domain\.
-
-  The command creates a domain named *movies* with Elasticsearch version 6\.0\. It specifies one instance of the `t2.small.elasticsearch` instance type\. The instance type requires EBS storage, so it specifies a 10 GiB volume\. Finally, the command applies an IP\-based access policy that restricts access to the domain to a single IP address\.
-
-  You need to replace `your_ip_address` in the command with your public IP address, which you can find by searching for "What is my IP?" on [Google](https://www.google.com)\.
-
-  ```
-  aws es create-elasticsearch-domain --domain-name movies --elasticsearch-version 6.0 --elasticsearch-cluster-config InstanceType=t2.small.elasticsearch,InstanceCount=1 --ebs-options EBSEnabled=true,VolumeType=standard,VolumeSize=10 --access-policies '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":"*"},"Action":["es:*"],"Condition":{"IpAddress":{"aws:SourceIp":["your_ip_address"]}}}]}'
-  ```
-
-**Note**  
-New domains take about ten minutes to initialize\. After your domain is initialized, you can upload data and make changes to the domain\.
-
-Use the following command to query the status of the new domain:
-
-```
-aws es describe-elasticsearch-domain --domain movies
-```
-
-**To create an Amazon ES domain \(AWS SDKs\)**
-
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including the `CreateElasticsearchDomain` action\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\. 
+1. On the **Review** page, double\-check your configuration and choose **Confirm**\. New domains typically take 15\-30 minutes to initialize, but can take longer depending on the configuration\. After your domain initializes, make note of its endpoint\.

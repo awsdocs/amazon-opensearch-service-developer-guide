@@ -1,6 +1,6 @@
 # Using Curator to Rotate Data in Amazon Elasticsearch Service<a name="curator"></a>
 
-This chapter has sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\.
+This chapter has sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\. [Index State Management](ism.md) has some similar features and doesn't require Lambda\. Depending on your use case, it might be a better choice\.
 
 Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\.
 
@@ -100,7 +100,6 @@ region = '' # For example, us-west-1
 service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
-
 repository_name = 'my-repo'
 
 # Lambda execution starts here.
