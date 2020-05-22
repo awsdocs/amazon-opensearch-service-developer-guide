@@ -5,5 +5,5 @@ The AWS global infrastructure is built around AWS Regions and Availability Zones
 For more information about AWS Regions and Availability Zones, see [AWS Global Infrastructure](http://aws.amazon.com/about-aws/global-infrastructure/)\.
 
 In addition to the AWS global infrastructure, Amazon ES offers several features to help support your data resiliency and backup needs:
-+ [Multi\-AZ domains and replica shards](es-managedomains.md#es-managedomains-multiaz)
++ [Multi\-AZ domains and replica shards](es-managedomains-multiaz.md)
 + [Automated and manual snapshots](es-managedomains-snapshots.md)

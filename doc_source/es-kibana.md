@@ -1,12 +1,4 @@
-# Kibana and Logstash<a name="es-kibana"></a>
-
-This chapter describes some considerations for using Kibana and Logstash with Amazon Elasticsearch Service\.
-
-**Topics**
-+ [Kibana](#es-managedomains-kibana)
-+ [Loading Bulk Data with the Logstash Plugin](#es-managedomains-logstash)
-
-## Kibana<a name="es-managedomains-kibana"></a>
+# Kibana<a name="es-kibana"></a>
 
 Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `domain-endpoint/_plugin/kibana/`\. Queries using this default Kibana installation have a 300\-second timeout\.
 
@@ -15,7 +7,7 @@ The following sections address some common Kibana use cases:
 + [Configuring Kibana to Use a WMS Map Server](#es-kibana-map-server)
 + [Connecting a Local Kibana Server to Amazon ES](#es-kibana-local)
 
-### Controlling Access to Kibana<a name="es-kibana-access"></a>
+## Controlling Access to Kibana<a name="es-kibana-access"></a>
 
 Kibana does not natively support IAM users and roles, but Amazon ES offers several solutions for controlling access to Kibana:
 
@@ -27,7 +19,7 @@ Kibana does not natively support IAM users and roles, but Amazon ES offers sever
 | Public access |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html)  | 
 | VPC access |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html)  | 
 
-#### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
+### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
 
 **Note**  
 This process is only applicable if your domain uses public access and you don't want to use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. See [Controlling Access to Kibana](#es-kibana-access)\.
@@ -127,7 +119,7 @@ server {
 }
 ```
 
-### Configuring Kibana to Use a WMS Map Server<a name="es-kibana-map-server"></a>
+## Configuring Kibana to Use a WMS Map Server<a name="es-kibana-map-server"></a>
 
 Due to licensing restrictions, the default installation of Kibana on Amazon ES domains that use Elasticsearch 5\.*x* or greater does *not* include a map server for tile map visualizations\. Use the following procedure to configure Kibana to use a Web Map Service \(WMS\) map server\.
 
@@ -154,7 +146,7 @@ Due to licensing restrictions, the default installation of Kibana on Amazon ES d
 **Note**  
 Map services often have licensing fees or restrictions\. You are responsible for all such considerations on any map server that you specify\. You might find the map services from the [U\.S\. Geological Survey](https://viewer.nationalmap.gov/services/) useful for testing\.
 
-### Connecting a Local Kibana Server to Amazon ES<a name="es-kibana-local"></a>
+## Connecting a Local Kibana Server to Amazon ES<a name="es-kibana-local"></a>
 
 If you have invested significant time into configuring your own Kibana instance, you can use it instead of \(or in addition to\) the default Kibana instance that Amazon ES provides\.
 
@@ -170,44 +162,3 @@ If you have invested significant time into configuring your own Kibana instance,
   ```
 
 Older versions of Elasticsearch might only work over HTTP\. In all cases, add the `http` or `https` prefix\. For older versions, you must explicitly specify port 80 or 443\. For newer versions, you can omit the port\.
-
-## Loading Bulk Data with the Logstash Plugin<a name="es-managedomains-logstash"></a>
-
-Logstash provides a convenient way to use the bulk API to upload data into your Amazon ES domain with the S3 plugin\. The service also supports all other standard Logstash input plugins that are provided by Elasticsearch\. Amazon ES also supports two Logstash output plugins: the standard Elasticsearch plugin and the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin, which signs and exports Logstash events to Amazon ES\.
-
-You must install your own local instance of Logstash and make the following changes in the Logstash configuration file to enable interaction with Amazon ES\.
-
-
-****  
-
-| Configuration Field | Input \| Output Plugin | Description | 
-| --- | --- | --- | 
-| bucket | Input | Specifies the Amazon S3 bucket containing the data that you want to load into an Amazon ES domain\. | 
-| region | Input | Specifies the AWS Region where the Amazon S3 bucket resides\. | 
-| hosts | Output | Specifies the service endpoint for the target Amazon ES domain\. | 
-| ssl | Output | Specifies whether to use SSL to connect to Amazon ES\.  | 
-
-This example configures Logstash to do the following:
-+ Point the output plugin to an Amazon ES endpoint
-+ Point to the input plugin to the `wikipedia-stats-log` bucket in S3
-+ Use SSL to connect to Amazon ES 
-
-```
-input{
-    s3 {
-        bucket => "wikipedia-stats-log"
-        access_key_id => "lizards"
-        secret_access_key => "lollipops"
-        region => "us-east-1"
-    }
-}
-output{
-    elasticsearch {
-        hosts => "search-logs-demo0-cpxczkdpi4bkb4c44g3csyln5a.us-east-1.es.example.com"
-        ssl => true
-    }
-}
-```
-
-**Note**  
-The service request in the preceding example must be signed\. For more information about signing requests, see [Making and Signing Amazon ES Requests](es-ac.md#es-managedomains-signing-service-requests)\. Use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) output plugin to sign and export Logstash events to Amazon ES\. For instructions, see the plugin [https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md](https://github.com/awslabs/logstash-output-amazon_es/blob/master/README.md)\.

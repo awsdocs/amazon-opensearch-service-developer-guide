@@ -1,7 +1,7 @@
 # Upgrading Elasticsearch<a name="es-version-migration"></a>
 
 **Note**  
-Elasticsearch version upgrades differ from service software updates\. For information on updating the service software for your Amazon ES domain, see [Managing Amazon Elasticsearch Service Domains](es-managedomains.md)\.
+Elasticsearch version upgrades differ from service software updates\. For information on updating the service software for your Amazon ES domain, see [Service Software Updates](es-service-software.md)\.
 
 Amazon ES offers in\-place Elasticsearch upgrades for domains that run versions 5\.1 and later\. If you use services like Amazon Kinesis Data Firehose or Amazon CloudWatch Logs to stream data to Amazon ES, check that these services support the newer version of Elasticsearch before migrating\.
 
@@ -36,7 +36,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 | Red cluster status | One or more indices in the cluster is red\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. | 
 | High error rate | The Elasticsearch cluster is returning a large number of 5xx errors when attempting to process requests\. This problem is usually the result of too many simultaneous read or write requests\. Consider reducing traffic to the cluster or scaling your domain\. | 
 | Split brain | Split brain means that your Elasticsearch cluster has more than one master node and has split into two clusters that never will rejoin on their own\. You can avoid split brain by using the recommended number of [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. For help recovering from split brain, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
-| Master node not found | Amazon ES can't find the cluster's master node\. If your domain uses [multi\-AZ](es-managedomains.md#es-managedomains-multiaz), an Availability Zone failure might have caused the cluster to lose quorum and be unable to elect a new [master node](es-managedomains-dedicatedmasternodes.md)\. If the issue does not self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
+| Master node not found | Amazon ES can't find the cluster's master node\. If your domain uses [multi\-AZ](es-managedomains-multiaz.md), an Availability Zone failure might have caused the cluster to lose quorum and be unable to elect a new [master node](es-managedomains-dedicatedmasternodes.md)\. If the issue does not self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | Too many pending tasks | The master node is under heavy load and has many pending tasks\. Consider reducing traffic to the cluster or scaling your domain\. | 
 | Impaired storage volume | The disk volume of one or more nodes isn't functioning properly\. This issue often occurs alongside other issues, like a high error rate or too many pending tasks\. If it occurs in isolation and doesn't self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | KMS key issue | The KMS key that is used to encrypt the domain is either inaccessible or missing\. For more information, see [Monitoring Domains That Encrypt Data at Rest](encryption-at-rest.md#monitoring-ear)\. | 
@@ -65,7 +65,7 @@ If the cluster has dedicated master nodes, upgrades complete without downtime\. 
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to upgrade\.
 
-1. Choose **Upgrade domain**\.
+1. Choose **Actions** and **Upgrade domain**\.
 
 1. For **Operation**, choose **Upgrade**, **Submit**, and **Continue**\.
 

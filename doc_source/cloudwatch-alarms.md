@@ -9,4 +9,4 @@ For more information about setting alarms, see [Creating Amazon CloudWatch Alarm
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cloudwatch-alarms.html)
 
 **Note**  
-If you just want to *view* metrics, see [Monitoring CloudWatch Metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.
+If you just want to *view* metrics, see [Monitoring CloudWatch Metrics](es-managedomains-cloudwatchmetrics.md)\.

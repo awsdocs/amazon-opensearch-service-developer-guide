@@ -4,18 +4,19 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**April 21, 2020
-+ **Latest documentation update—**April 21, 2020
++ **Latest product release—**May 5, 2020
++ **Latest documentation update—**May 5, 2020
 
 ## Release Notes<a name="release-table"></a>
 
 The following table describes important changes to Amazon ES\. For notifications about updates, you can subscribe to the RSS feed\.
 
 **Important**  
- Service software updates add support for new features, security patches, bug fixes, and other improvements\. To use new features, you might need to update the service software on your domain\. For more information, see [Service Software Updates](es-managedomains.md#es-service-software)\.
+ Service software updates add support for new features, security patches, bug fixes, and other improvements\. To use new features, you might need to update the service software on your domain\. For more information, see [Service Software Updates](es-service-software.md)\.
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [UltraWarm](#release-notes) | UltraWarm storage for Amazon Elasticsearch Service has left public preview and is now generally available\. The feature now supports a wider range of Elasticsearch versions and AWS Regions\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)\. | May 5, 2020 | 
 | [Custom Dictionaries](#release-notes) | Amazon Elasticsearch Service lets you upload custom dictionary files for use with your cluster\. These files improve your search results by telling Elasticsearch to ignore certain high\-frequency words or to treat terms as equivalent\. For more information, see [Custom Packages](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/custom-packages.html)\. | April 21, 2020 | 
 | [Elasticsearch 7\.4 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.4\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | March 12, 2020 | 
 | [KNN](#release-notes) | Amazon Elasticsearch Service adds support for k\-nearest neighbor \(KNN\) search\. This feature requires service software R20200302 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/knn.html)\. | March 3, 2020 | 
@@ -60,7 +61,7 @@ The following table describes important changes Amazon ES before May 2018\.
 | Encryption of Data at Rest | Amazon ES now supports encryption of data at rest\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\. | December 7, 2017 | 
 | Elasticsearch 6\.0 Support | Amazon ES now supports Elasticsearch version 6\.0\. For migration considerations and instructions, see [Upgrading Elasticsearch](es-version-migration.md)\. | December 6, 2017 | 
 | VPC Support | Amazon ES now lets you launch domains within an Amazon Virtual Private Cloud\. VPC support provides an additional layer of security and simplifies communications between Amazon ES and other services within a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | October 17, 2017 | 
-| Slow Logs Publishing | Amazon ES now supports the publishing of slow logs to CloudWatch Logs\. To learn more, see [Configuring Logs](es-createupdatedomains.md#es-createdomain-configure-slow-logs)\. | October 16, 2017 | 
+| Slow Logs Publishing | Amazon ES now supports the publishing of slow logs to CloudWatch Logs\. To learn more, see [Configuring Logs](es-createdomain-configure-slow-logs.md)\. | October 16, 2017 | 
 | Elasticsearch 5\.5 Support | Amazon ES now supports Elasticsearch version 5\.5\. For new feature summaries, see the [Amazon announcement](https://aws.amazon.com/about-aws/whats-new/2017/09/elasticsearch-5_5-now-available-on-amazon-elasticsearch-service/) of availability\. You can now restore automated snapshots without contacting AWS Support and store scripts using the Elasticsearch `_scripts` API\. | September 7, 2017 | 
 | Elasticsearch 5\.3 Support | Amazon ES added support for Elasticsearch version 5\.3\. | June 1, 2017 | 
 | More Instances and EBS Capacity per Cluster | Amazon ES now supports up to 100 nodes and 150 TB EBS capacity per cluster\. | April 5, 2017 | 

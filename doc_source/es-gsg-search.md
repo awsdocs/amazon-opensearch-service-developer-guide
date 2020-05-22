@@ -1,6 +1,6 @@
 # Step 3: Search Documents in an Amazon ES Domain<a name="es-gsg-search"></a>
 
-To search documents in an Amazon Elasticsearch Service domain, use the Elasticsearch search API\. Or you can use [Kibana](es-kibana.md#es-managedomains-kibana) to search documents in the domain\.
+To search documents in an Amazon Elasticsearch Service domain, use the Elasticsearch search API\. Or you can use [Kibana](es-kibana.md) to search documents in the domain\.
 
 **To search documents from the command line**
 + Run the following command to search the *movies* domain for the word *mars*:

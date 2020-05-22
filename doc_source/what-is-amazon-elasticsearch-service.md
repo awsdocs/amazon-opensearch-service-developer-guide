@@ -64,33 +64,35 @@ Compared to earlier versions of Elasticsearch, the 7\.*x* and 6\.*x* versions of
 + **Vega visualizations** – Kibana 6\.2 and later versions support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
 + **Java high\-level REST client** – Compared to the low\-level client, this client offers a simplified development experience and supports most Elasticsearch APIs\. For a code example, see [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
 
-For more information, see [Supported Elasticsearch Operations](aes-supported-es-operations.md) and [Features by Elasticsearch Version](aes-features-by-version.md)\.
+For more information, see [Supported Elasticsearch Operations](aes-supported-es-operations.md), [Features by Elasticsearch Version](aes-features-by-version.md), and [Plugins by Elasticsearch Version](aes-supported-plugins.md)\.
 
 If you start a new Elasticsearch project, we strongly recommend that you choose the latest supported Elasticsearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see [Upgrading Elasticsearch](es-version-migration.md)\.
 
 ## Pricing for Amazon Elasticsearch Service<a name="aes-pricing"></a>
 
-With AWS, you pay only for what you use\. For Amazon ES, you pay for each hour of use of an EC2 instance and for the cumulative size of any EBS storage volumes attached to your instances\. [Standard AWS data transfer charges](https://aws.amazon.com/ec2/pricing/) also apply\.
+For Amazon ES, you pay for each hour of use of an EC2 instance and for the cumulative size of any EBS storage volumes attached to your instances\. [Standard AWS data transfer charges](https://aws.amazon.com/ec2/pricing/) also apply\.
 
-However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\. Similarly, Amazon ES does not bill for data transfer between [UltraWarm](ultrawarm.md) nodes and Amazon S3\.
+However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](es-managedomains-multiaz.md), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\. Similarly, Amazon ES does not bill for data transfer between [UltraWarm](ultrawarm.md) nodes and Amazon S3\.
 
-For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains.md#es-managedomains-config-charges)\.
+For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains-configuration-changes.md#es-managedomains-config-charges)\.
 
 ## Getting Started with Amazon Elasticsearch Service<a name="aes-get-started"></a>
 
 To get started, [sign up for an AWS account](https://aws.amazon.com/) if you don't already have one\. After you are set up with an account, complete the [Getting Started](es-gsg.md) tutorial for Amazon Elasticsearch Service\. Consult the following introductory topics if you need more information while learning about the service:
 + [Create a domain](es-createupdatedomains.md)
-+ [Size your domain appropriately](sizing-domains.md)
-+ [Control access to your domain](es-ac.md)
-+ Index data [manually](es-indexing.md) or from [other services](es-aws-integrations.md)
-+ Use [Kibana](es-kibana.md#es-managedomains-kibana) to search your data
++ [Size the domain](sizing-domains.md) appropriately for your workload
++ Control access to your domain using a [domain access policy](es-ac.md) or [fine\-grained access control](fgac.md)
++ Index data [manually](es-indexing.md) or from [other AWS services](es-aws-integrations.md)
++ Use [Kibana](es-kibana.md) to search your data and create visualizations
+
+For information on migrating to Amazon ES from a self\-managed Elasticsearch cluster, see [Migrating to Amazon Elasticsearch Service](migration.md)\.
 
 ## Related Services<a name="aes-related-services"></a>
 
 Amazon ES commonly is used with the following services:
 
 [Amazon CloudWatch](http://aws.amazon.com/documentation/cloudwatch/)  
-Amazon ES domains automatically send metrics to CloudWatch so that you can monitor domain health and performance\. For more information, see [Monitoring Cluster Metrics and Statistics with Amazon CloudWatch \(Console\)](es-managedomains.md#es-managedomains-cloudwatchmetrics)\.  
+Amazon ES domains automatically send metrics to CloudWatch so that you can monitor domain health and performance\. For more information, see [Monitoring Cluster Metrics with Amazon CloudWatch](es-managedomains-cloudwatchmetrics.md)\.  
 CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
 
 [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/)  

@@ -1,105 +1,15 @@
 # Introduction to Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
 
-Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has clients for many programming languages\. Advanced users can skip directly to [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
+Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has clients for many programming languages\. Advanced users can skip directly to [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md) or [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
 
-For situations in which new data arrives incrementally \(for example, customer orders from a small business\), you might use the `_index` API to index documents as they arrive\. For situations in which the flow of data is less frequent \(for example, weekly updates to a marketing website\), you might prefer to generate a file and send it to the `_bulk` API\. For large numbers of documents, lumping requests together and using the `_bulk` API offers superior performance\. If your documents are enormous, however, you might need to index them individually using the `_index` API\.
-
-For information about integrating data from other AWS services, see [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
-
-## Introduction to Indexing<a name="es-indexing-intro"></a>
-
-Before you can search data, you must *index* it\. Indexing is the method by which search engines organize data for fast retrieval\. The resulting structure is called, fittingly, an index\.
-
-In Elasticsearch, the basic unit of data is a JSON *document*\. Within an index, Elasticsearch identifies each document using a unique *ID*\.
-
-A request to the `_index` API looks like the following:
-
-```
-PUT elasticsearch_domain/index/_doc/id
-{ "A JSON": "document" }
-```
-
-A request to the `_bulk` API looks a little different, because you specify the index and ID in the bulk data:
-
-```
-POST elasticsearch_domain/_bulk
-{ "index": { "_index" : "index", "_id" : "id" } }
-{ "A JSON": "document" }
-```
-
-Bulk data must conform to a specific format, which requires a newline character \(`\n`\) at the end of every line, including the last line\. This is the basic format:
-
-```
-action_and_metadata\n
-optional_document\n
-action_and_metadata\n
-optional_document\n
-...
-```
-
-For a short sample file, see [Step 2: Upload Data to an Amazon ES Domain for Indexing](es-gsg-upload-data.md)\.
-
-Elasticsearch features automatic index creation when you add a document to an index that doesn't already exist\. It also features automatic ID generation if you don't specify an ID in the request\. This simple example automatically creates the `movies` index, indexes the document, and assigns it a unique ID:
-
-```
-POST elasticsearch_domain/movies/_doc
-{"title": "Spirited Away"}
-```
-
-**Important**  
-For automatic ID generation, use the `POST` method instead of `PUT`\.
-
-To verify that the document exists, you can perform the following search:
-
-```
-GET elasticsearch_domain/movies/_search?pretty
-```
-
-The response should contain the following:
-
-```
-"hits" : {
-  "total" : 1,
-  "max_score" : 1.0,
-  "hits" : [
-    {
-      "_index" : "movies",
-      "_type" : "_doc",
-      "_id" : "AV4WaTnYxBoJaZkSFeX9",
-      "_score" : 1.0,
-      "_source" : {
-        "title" : "Spirited Away"
-      }
-    }
-  ]
-}
-```
-
-Automatic ID generation has a clear downside: because the indexing code didn't specify a document ID, you can't easily update the document at a later time\. To specify an ID of `7`, use the following request:
-
-```
-PUT elasticsearch_domain/movies/_doc/7
-{"title": "Spirited Away"}
-```
-
-Rather than requiring `_doc,` older versions of Elasticsearch support arbitrary names for document types\. Some older versions also support more than one document type per index\. No matter which version of Elasticsearch you choose, we recommend using a single type, `_doc`, for all indices\.
-
-For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\. If you want to specify non\-default settings for shards and replicas, create the index before adding documents:
-
-```
-PUT elasticsearch_domain/more-movies
-{"settings": {"number_of_shards": 6, "number_of_replicas": 2}}
-```
-
-**Note**  
-For sample code, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
+For an introduction to indexing, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/index-data/)\.
 
 ## Naming Restrictions for Indices<a name="es-indexing-naming"></a>
 
 Elasticsearch indices have the following naming restrictions:
 + All letters must be lowercase\.
 + Index names cannot begin with `_` or `-`\.
-+ Index names cannot contain spaces, commas, `:`, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`\.
++ Index names can't contain spaces, commas, `:`, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`\.
 
 Don't include sensitive information in index, type, or document ID names\. Elasticsearch uses these names in its Uniform Resource Identifiers \(URIs\)\. Servers and applications often log HTTP requests, which can lead to unnecessary data exposure if URIs contain sensitive information:
 

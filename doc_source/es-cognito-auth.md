@@ -1,8 +1,8 @@
 # Amazon Cognito Authentication for Kibana<a name="es-cognito-auth"></a>
 
-Amazon Elasticsearch Service uses [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) to offer user name and password protection for [Kibana](es-kibana.md#es-managedomains-kibana)\. This authentication feature is optional and available only for domains using Elasticsearch 5\.1 or later\. If you don't configure Amazon Cognito authentication, you can still protect Kibana using an [IP\-based access policy](es-ac.md#es-ac-types-ip) and a [proxy server](es-kibana.md#es-kibana-proxy)\.
+Amazon Elasticsearch Service uses [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) to offer user name and password protection for [Kibana](es-kibana.md)\. This authentication feature is optional and available only for domains using Elasticsearch 5\.1 or later\. If you don't configure Amazon Cognito authentication, you can still protect Kibana using an [IP\-based access policy](es-ac.md#es-ac-types-ip) and a [proxy server](es-kibana.md#es-kibana-proxy)\.
 
-Much of the authentication process occurs in Amazon Cognito, but this chapter offers guidelines and requirements for configuring Amazon Cognito resources to work with Amazon ES domains\. [Standard pricing](https://aws.amazon.com/cognito/pricing/) applies to all Amazon Cognito resources\.
+Much of the authentication process occurs in Amazon Cognito, but this section offers guidelines and requirements for configuring Amazon Cognito resources to work with Amazon ES domains\. [Standard pricing](https://aws.amazon.com/cognito/pricing/) applies to all Amazon Cognito resources\.
 
 **Tip**  
 The first time that you configure a domain to use Amazon Cognito authentication for Kibana, we recommend using the console\. Amazon Cognito resources are extremely customizable, and the console can help you identify and understand the features that matter to you\.

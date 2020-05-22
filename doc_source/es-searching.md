@@ -1,9 +1,9 @@
 # Searching Data in Amazon Elasticsearch Service<a name="es-searching"></a>
 
-As you might expect from a search engine, Elasticsearch offers numerous options for searching your data\. This chapter introduces a few common ways of performing searches with Amazon ES\. You can use [Postman](https://www.getpostman.com) to test the various requests\. For code samples that send signed HTTP requests to Amazon ES, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
+This chapter introduces search and covers several Amazon Elasticsearch Service features that improve the experience\. For more comprehensive information on the Elasticsearch search API, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/full-text/)\.
 
 **Note**  
-All example requests in this chapter work with the Elasticsearch 6\.*x* APIs\. Some requests might not work with older Elasticsearch versions\.
+All example requests in this chapter work with the Elasticsearch 6\.*x* and 7\.*x* APIs\. Some requests might not work with older Elasticsearch versions\.
 
 ## URI Searches<a name="es-searching-uri"></a>
 

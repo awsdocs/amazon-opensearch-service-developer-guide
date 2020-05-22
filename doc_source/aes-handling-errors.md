@@ -100,12 +100,12 @@ To determine if a red cluster status is due to a continuous heavy processing loa
 | Relevant Metric | Description | Recovery | 
 | --- | --- | --- | 
 | JVMMemoryPressure |  Specifies the percentage of the Java heap used for all data nodes in a cluster\. View the **Maximum** statistic for this metric, and look for smaller and smaller drops in memory pressure as the Java garbage collector fails to reclaim sufficient memory\. This pattern likely is due to complex queries or large data fields\. The Concurrent Mark Sweep \(CMS\) garbage collector triggers when 75% of the “old generation” object space is full\. This collector runs alongside other threads to keep pauses to a minimum\. If CMS is unable to reclaim enough memory during these normal collections, Elasticsearch triggers a different garbage collection algorithm that halts all threads\. Nodes are unresponsive during these stop\-the\-world collections, which can affect cluster stability\. If memory usage continues to grow, Elasticsearch eventually crashes due to an out of memory error\. A good rule of thumb is to keep usage below 80%\. The `_nodes/stats/jvm` API offers a useful summary of JVM statistics, memory pool usage, and garbage collection information: <pre>GET elasticsearch_domain/_nodes/stats/jvm?pretty</pre>  |  Set memory circuit breakers for the JVM\. For more information, see [JVM OutOfMemoryError](#aes-handling-errors-jvm_out_of_memory_error)\. If the problem persists, delete unnecessary indices, reduce the number or complexity of requests to the domain, add instances, or use larger instance types\.  | 
-| CPUUtilization | Specifies the percentage of CPU resources used for data nodes in a cluster\. View the Maximum statistic for this metric, and look for a continuous pattern of high usage\. | Add data nodes or increase the size of the instance types of existing data nodes\. For more information, see [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\. | 
-| Nodes | Specifies the number of nodes in a cluster\. View the Minimum statistic for this metric\. This value fluctuates when the service deploys a new fleet of instances for a cluster\. | Add data nodes\. For more information, see [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\. | 
+| CPUUtilization | Specifies the percentage of CPU resources used for data nodes in a cluster\. View the Maximum statistic for this metric, and look for a continuous pattern of high usage\. | Add data nodes or increase the size of the instance types of existing data nodes\. | 
+| Nodes | Specifies the number of nodes in a cluster\. View the Minimum statistic for this metric\. This value fluctuates when the service deploys a new fleet of instances for a cluster\. | Add data nodes\. | 
 
 ## Yellow Cluster Status<a name="aes-handling-errors-yellow-cluster-status"></a>
 
-A yellow cluster status means that the primary shards for all indices are allocated to nodes in a cluster, but the replica shards for at least one index are not\. Single\-node clusters always initialize with a yellow cluster status because there is no other node to which Amazon ES can assign a replica\. To achieve green cluster status, increase your node count\. For more information, see [Sizing Amazon ES Domains](sizing-domains.md) and [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\.
+A yellow cluster status means that the primary shards for all indices are allocated to nodes in a cluster, but the replica shards for at least one index are not\. Single\-node clusters always initialize with a yellow cluster status because there is no other node to which Amazon ES can assign a replica\. To achieve green cluster status, increase your node count\. For more information, see [Sizing Amazon ES Domains](sizing-domains.md)\.
 
 ## ClusterBlockException<a name="troubleshooting-cluster-block"></a>
 
@@ -115,7 +115,7 @@ You might receive a `ClusterBlockException` error for the following reasons\.
 
 If no nodes have enough storage space to accommodate shard relocation, basic write operations like adding documents and creating indices can begin to fail\. [Calculating Storage Requirements](sizing-domains.md#aes-bp-storage) provides a summary of how Amazon ES uses disk space\.
 
-To avoid issues, monitor the `FreeStorageSpace` metric in the Amazon ES console and [create CloudWatch alarms](cloudwatch-alarms.md) to trigger when `FreeStorageSpace` drops below a certain threshold\. `GET /_cat/allocation?v` also provides a useful summary of shard allocation and disk usage\. To resolve issues associated with a lack of storage space, scale your Amazon ES domain to use larger instance types, more instances, or more EBS\-based storage\. For instructions, see [Configuring Amazon ES Domains](es-createupdatedomains.md#es-createdomains-configure-cluster)\.
+To avoid issues, monitor the `FreeStorageSpace` metric in the Amazon ES console and [create CloudWatch alarms](cloudwatch-alarms.md) to trigger when `FreeStorageSpace` drops below a certain threshold\. `GET /_cat/allocation?v` also provides a useful summary of shard allocation and disk usage\. To resolve issues associated with a lack of storage space, scale your Amazon ES domain to use larger instance types, more instances, or more EBS\-based storage\.
 
 ### Block Disks Due to Low Memory<a name="aes-handling-errors-block-disks"></a>
 
@@ -145,7 +145,7 @@ To check for this condition, open your domain dashboard on the Amazon ES console
 You can also [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when this issue occurs\.
 
 **Note**  
-The **Nodes** metric is not accurate during changes to your cluster configuration and during routine maintenance for the service\. This behavior is expected\. The metric will report the correct number of cluster nodes soon\. To learn more, see [About Configuration Changes](es-managedomains.md#es-managedomains-configuration-changes)\.
+The **Nodes** metric is not accurate during changes to your cluster configuration and during routine maintenance for the service\. This behavior is expected\. The metric will report the correct number of cluster nodes soon\. To learn more, see [Configuration Changes](es-managedomains-configuration-changes.md)\.
 
 To protect your clusters from unexpected node terminations and restarts, create at least one replica for each index in your Amazon ES domain\.
 
@@ -176,7 +176,7 @@ If you plan to reindex, shrink, or split an index, you likely want to stop writi
 
 You can't use SSH to access any of the nodes in your Elasticsearch cluster, and you can't directly modify `elasticsearch.yml`\. Instead, use the console, AWS CLI, or SDKs to configure your domain\. You can specify a few cluster\-level settings using the Elasticsearch REST APIs, as well\. To learn more, see [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md) and [Supported Elasticsearch Operations](aes-supported-es-operations.md)\.
 
-If you need more insight into the performance of the cluster, you can [publish error logs and slow logs to CloudWatch](es-createupdatedomains.md#es-createdomain-configure-slow-logs)\.
+If you need more insight into the performance of the cluster, you can [publish error logs and slow logs to CloudWatch](es-createdomain-configure-slow-logs.md)\.
 
 ## "Not Valid for the Object's Storage Class" Snapshot Error<a name="aes-troubleshooting-glacier-snapshots"></a>
 

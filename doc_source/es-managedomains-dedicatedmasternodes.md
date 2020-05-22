@@ -14,7 +14,7 @@ We recommend that you allocate **three** dedicated master nodes for each product
 
 1. Three dedicated master nodes, the recommended number, provides two backup nodes in the event of a master node failure and the necessary quorum \(2\) to elect a new master\.
 
-1. Four dedicated master nodes are no better than three and can cause issues if you use [multiple Availability Zones](es-managedomains.md#es-managedomains-multiaz) in a Region that has only two zones\.
+1. Four dedicated master nodes are no better than three and can cause issues if you use [multiple Availability Zones](es-managedomains-multiaz.md) in a Region that has only two zones\.
    + If one master node fails, you have the quorum \(3\) to elect a new master\. If two nodes fail, you lose that quorum, just as you do with three dedicated master nodes\.
    + If each Availability Zone has two dedicated master nodes and the zones are unable to communicate with each other, neither zone has the quorum to elect a new master\.
 
@@ -49,6 +49,6 @@ Although dedicated master nodes don't process search and query requests, their s
 |  10–30  |  `c5.xlarge.elasticsearch`  | 
 | 30–75 |  `c5.2xlarge.elasticsearch`  | 
 |  75–200  |  `r5.4xlarge.elasticsearch`  | 
-+ For information about how certain configuration changes can affect dedicated master nodes, see [About Configuration Changes](es-managedomains.md#es-managedomains-configuration-changes)\.
++ For information about how certain configuration changes can affect dedicated master nodes, see [Configuration Changes](es-managedomains-configuration-changes.md)\.
 + For clarification on instance count limits, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\.
 + For more information about specific instance types, including vCPU, memory, and pricing, see [Amazon Elasticsearch Instance Prices](https://aws.amazon.com/elasticsearch-service/pricing/)\.

@@ -1,6 +1,6 @@
 # Signing HTTP Requests to Amazon Elasticsearch Service<a name="es-request-signing"></a>
 
-This chapter includes examples of how to send signed HTTP requests to Amazon Elasticsearch Service using Elasticsearch clients and other common libraries\. These code samples are for interacting with the Elasticsearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles, you must sign requests to the Elasticsearch APIs\.
+This section includes examples of how to send signed HTTP requests to Amazon Elasticsearch Service using Elasticsearch clients and other common libraries\. These code samples are for interacting with the Elasticsearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles \(or you use an IAM master user with [fine\-grained access control](fgac.md)\), you must sign requests to the Elasticsearch APIs with your IAM credentials\.
 
 **Important**  
 For examples of how to interact with the configuration API, including operations like creating, updating, and deleting Amazon ES domains, see [Using the AWS SDKs with Amazon Elasticsearch Service](es-configuration-samples.md)\.
@@ -142,7 +142,7 @@ Both signed samples use the default credential chain\. Run `aws configure` using
 
 ## Python<a name="es-request-signing-python"></a>
 
-You can install elasticsearch\-py, the Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
+You can install [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/), an Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
 
 ```
 pip install boto3
@@ -151,7 +151,7 @@ pip install requests
 pip install requests-aws4auth
 ```
 
-The following sample code establishes a secure connection to the specified Amazon ES domain and indexes a single document using the `_index` API\. You must provide values for `region` and `host`\.
+The following sample code establishes a secure connection to the specified Amazon ES domain and indexes a single document\. You must provide values for `region` and `host`\.
 
 ```
 from elasticsearch import Elasticsearch, RequestsHttpConnection

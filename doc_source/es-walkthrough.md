@@ -1,4 +1,4 @@
-# Tutorial: Visualizing Customer Support Calls with Amazon Elasticsearch Service and Kibana<a name="es-walkthrough"></a>
+# Visualizing Customer Support Calls with Amazon Elasticsearch Service and Kibana<a name="es-walkthrough"></a>
 
 This chapter is a full walkthrough of the following situation: a business receives some number of customer support calls and wants to analyze them\. What is the subject of each call? How many were positive? How many were negative? How can managers search or review the the transcripts of these calls?
 

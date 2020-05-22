@@ -143,7 +143,7 @@ Users with the AWS\-managed `AmazonESReadOnlyAccess` policy can't see cluster he
 
 IP\-based policies restrict access to a domain to one or more IP addresses or CIDR blocks\. Technically, IP\-based policies are not a distinct type of policy\. Instead, they are just resource\-based policies that specify an anonymous principal and include a special [Condition](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) element\.
 
-The primary appeal of IP\-based policies is that they allow unsigned requests to an Amazon ES domain, which lets you use clients like [curl](https://curl.haxx.se/) and [Kibana](es-kibana.md#es-managedomains-kibana) or access the domain through a proxy server\. To learn more, see [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
+The primary appeal of IP\-based policies is that they allow unsigned requests to an Amazon ES domain, which lets you use clients like [curl](https://curl.haxx.se/) and [Kibana](es-kibana.md) or access the domain through a proxy server\. To learn more, see [Using a Proxy to Access Amazon ES from Kibana](es-kibana.md#es-kibana-proxy)\.
 
 **Note**  
 If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
@@ -350,9 +350,9 @@ POST https://search-test-domain.us-west-1.es.amazonaws.com/_bulk
 
 In this situation, the access policy fails to fulfill its intent\. To prevent users from bypassing these kinds of restrictions, you can change `rest.action.multi.allow_explicit_index` to false\. If this value is false, all calls to the bulk, mget, and msearch APIs that specify index names in the request body stop working\. In other words, calls to `_bulk` no longer work, but calls to `test-index/_bulk` do\. This second endpoint contains an index name, so you don't need to specify one in the request body\.
 
-[Kibana](es-kibana.md#es-managedomains-kibana) relies heavily on mget and msearch, so it is unlikely to work properly after this change\. For partial remediation, you can leave `rest.action.multi.allow_explicit_index` as true and deny certain users access to one or more of these APIs\.
+[Kibana](es-kibana.md) relies heavily on mget and msearch, so it is unlikely to work properly after this change\. For partial remediation, you can leave `rest.action.multi.allow_explicit_index` as true and deny certain users access to one or more of these APIs\.
 
-For information about changing this setting, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\.
+For information about changing this setting, see [Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options)\.
 
 Similarly, the following resource\-based policy contains two subtle issues:
 

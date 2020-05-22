@@ -1,4 +1,4 @@
-# Tutorial: Creating a Search Application with Amazon Elasticsearch Service<a name="search-example"></a>
+# Creating a Search Application with Amazon Elasticsearch Service<a name="search-example"></a>
 
 A common way to create a search application with Amazon ES is to use web forms to send user queries to a server\. Then you can authorize the server to call the Elasticsearch APIs directly and have the server send requests to Amazon ES\.
 

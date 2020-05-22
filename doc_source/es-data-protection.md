@@ -12,7 +12,3 @@ For data protection purposes, we recommend that you protect AWS account credenti
 We strongly recommend that you never put sensitive identifying information, such as your customers' account numbers, into domain names, index names, document types, or document IDs\. Elasticsearch uses these names in its Uniform Resource Identifiers \(URIs\)\. Servers and applications often log HTTP requests, which can lead to unnecessary data exposure if URIs contain sensitive information\.
 
 For more information about data protection, see the [AWS Shared Responsibility Model and GDPR](http://aws.amazon.com/blogs/security/the-aws-shared-responsibility-model-and-gdpr/) blog post on the *AWS Security Blog*\.
-
-**Topics**
-+ [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)
-+ [Node\-to\-node Encryption for Amazon Elasticsearch Service](ntn.md)

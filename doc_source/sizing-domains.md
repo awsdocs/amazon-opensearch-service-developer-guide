@@ -43,7 +43,7 @@ Insufficient storage space is one of the most common causes of cluster instabili
 
 Other storage considerations exist:
 + If your minimum storage requirement exceeds 1 PB, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
-+ If you have rolling indices and want to use a hot\-warm architecture, see [UltraWarm for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
++ If you have rolling indices and want to use a hot\-warm architecture, see [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)\.
 
 ## Choosing the Number of Shards<a name="aes-bp-sharding"></a>
 
@@ -56,6 +56,10 @@ For example, suppose you have 66 GiB of data\. You don't expect that number to i
  **\(Source Data \+ Room to Grow\) \* \(1 \+ Indexing Overhead\) / Desired Shard Size = Approximate Number of Primary Shards**
 
 This equation helps compensate for growth over time\. If you expect those same 67 GiB of data to quadruple over the next year, the approximate number of shards is \(66 \+ 198\) \* 1\.1 / 30 = 10\. Remember, though, you don't have those extra 198 GiB of data *yet*\. Check to make sure that this preparation for the future doesn't create unnecessarily tiny shards that consume huge amounts of CPU and memory in the present\. In this case, 66 \* 1\.1 / 10 shards = 7\.26 GiB per shard, which will consume extra resources and is below the recommended size range\. You might consider the more middle\-of\-the\-road approach of six shards, which leaves you with 12 GiB shards today and 48 GiB shards in the future\. Then again, you might prefer to start with three shards and reindex your data when the shards exceed 50 GiB\.
+
+A far less common issue involves limiting the number of shards per node\. If you size your shards appropriately, you typically run out of disk space long before encountering this limit\. For example, an `m5.large.elasticsearch` instance has a maximum disk size of 512 GiB\. If you stay below 80% disk usage and size your shards at 20 GiB, it can accommodate approximately 20 shards\. Elasticsearch 7\.*x* and later have a limit of *1,000* shards per node, adjustable using the `cluster.max_shards_per_node` setting\.
+
+Sizing shards appropriately almost always keeps you below this limit, but you can also consider the number of shards for each GiB of Java heap\. On a given node, have no more than 20 shards per GiB of Java heap\. For example, an `m5.large.elasticsearch` instance has a 4 GiB heap, so each node should have no more than 80 shards\. At that shard count, each shard is roughly 5 GiB in size, which is well below our recommendation\.
 
 ## Choosing Instance Types and Testing<a name="aes-bp-instances"></a>
 
@@ -76,7 +80,7 @@ Still, even those resources might be insufficient\. Some Elasticsearch users rep
 
    If your cluster includes hundreds of terabytes of data, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
 
-1. After configuring the cluster, you can [add your indices](es-indexing.md) using the number of shards you calculated earlier, perform some representative client testing using a realistic dataset, and [monitor CloudWatch metrics](es-managedomains.md#es-managedomains-cloudwatchmetrics) to see how the cluster handles the workload\.
+1. After configuring the cluster, you can [add your indices](es-indexing.md) using the number of shards you calculated earlier, perform some representative client testing using a realistic dataset, and [monitor CloudWatch metrics](es-managedomains-cloudwatchmetrics.md) to see how the cluster handles the workload\.
 
 1. If performance satisfies your needs, tests succeed, and CloudWatch metrics are normal, the cluster is ready to use\. Remember to [set CloudWatch alarms](cloudwatch-alarms.md) to detect unhealthy resource usage\.
 

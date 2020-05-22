@@ -1,10 +1,10 @@
 # Using Curator to Rotate Data in Amazon Elasticsearch Service<a name="curator"></a>
 
-This chapter has sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\. [Index State Management](ism.md) has some similar features and doesn't require Lambda\. Depending on your use case, it might be a better choice\.
+This section contains sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\. [Index State Management](ism.md) has some similar features and doesn't require Lambda or a separate EC2 instance\. Depending on your use case, it might be a better choice\.
 
 Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\.
 
-For information about configuring Lambda functions and creating deployment packages, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\. For even more information, see the [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/)\. This chapter contains only sample code, basic settings, triggers, and permissions\.
+For information about configuring Lambda functions and creating deployment packages, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\. For even more information, see the [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/)\. This section contains only sample code, basic settings, triggers, and permissions\.
 
 **Topics**
 + [Sample Code](#curator-sample)
@@ -14,7 +14,7 @@ For information about configuring Lambda functions and creating deployment packa
 
 ## Sample Code<a name="curator-sample"></a>
 
-The following sample code uses Curator and the official Python Elasticsearch client to delete any index whose name contains a time stamp indicating that the data is more than 30 days old\. For example, if an index name is `my-logs-2014.03.02`, the index is deleted\. Deletion occurs even if you create the index today, because this filter uses the name of the index to determine its age\.
+The following sample code uses Curator and [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/) to delete any index whose name contains a time stamp indicating that the data is more than 30 days old\. For example, if an index name is `my-logs-2014.03.02`, the index is deleted\. Deletion occurs even if you create the index today, because this filter uses the name of the index to determine its age\.
 
 The code also contains some commented\-out examples of other common filters, including one that determines age by creation date\. The AWS SDK for Python \(Boto 3\) and [requests\-aws4auth](https://pypi.org/project/requests-aws4auth/) library sign the requests to Amazon ES\.
 
@@ -151,7 +151,7 @@ Because taking and deleting snapshots can take a while, this code is more sensit
 
 ## Basic Settings<a name="curator-basic"></a>
 
-We recommend the following settings for the code samples in this chapter\.
+We recommend the following settings for these code samples\.
 
 
 | Sample Code | Memory | Timeout | 
@@ -171,7 +171,7 @@ Rather than reacting to some event \(such as a file upload to Amazon S3\), these
 
 ## Permissions<a name="curator-permissions"></a>
 
-Both Lambda functions in this chapter need the basic logging permissions that all Lambda functions need, plus HTTP method permissions for the Amazon ES domain:
+Both Lambda functions in this section need the basic logging permissions that all Lambda functions need, plus HTTP method permissions for the Amazon ES domain:
 
 ```
 {

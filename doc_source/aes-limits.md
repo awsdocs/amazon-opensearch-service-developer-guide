@@ -19,7 +19,7 @@ For a list of the instance types that Amazon ES supports, see [Supported Instanc
 
 ## UltraWarm Storage Limits<a name="limits-ultrawarm"></a>
 
-The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm for Amazon Elasticsearch Service \(Preview\)](ultrawarm.md)\.
+The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)\.
 
 
 ****  
@@ -158,7 +158,7 @@ The following table shows the maximum size of HTTP request payloads\.
 
 ## Java Process Limit<a name="aes-java-process-limit"></a>
 
-Amazon ES limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Configuring Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
+Amazon ES limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
 
 ## Domain Policy Limit<a name="aes-domain-policy-limit"></a>
 

@@ -146,7 +146,7 @@ After configuring a role, you *map* it to one or more users\. For example, you m
 
 ## Enabling Fine\-Grained Access Control<a name="fgac-enabling"></a>
 
-Enable fine\-grained access control using the console, AWS CLI, or configuration API\. The console offers the simplest experience\. For steps, see [Creating and Configuring Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\. Here are the requirements for enabling fine\-grained access control:
+Enable fine\-grained access control using the console, AWS CLI, or configuration API\. The console offers the simplest experience\. For steps, see [Creating and Managing Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\. Here are the requirements for enabling fine\-grained access control:
 + Elasticsearch 6\.7 or later
 + [Encryption of data at rest](encryption-at-rest.md) and [node\-to\-node encryption](ntn.md) enabled
 + **Require HTTPS for all traffic to the domain** enabled
