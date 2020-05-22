@@ -21,7 +21,7 @@ If you used the bulk data on the previous page, try searching for *rebel* instea
 
 1. Log in using your master user name and password\.
 
-1. To use Kibana, you must configure at least one index pattern\. Kibana uses these patterns to identity which indices you want to analyze\. For this tutorial, enter *movies*, and then choose **Create**\.
+1. To use Kibana, you must configure at least one index pattern\. Kibana uses these patterns to identify which indices you want to analyze\. For this tutorial, enter *movies*, and then choose **Create**\.
 
 1. The **Index Patterns** page shows your various document fields, such as `actor` and `director`\. For now, choose **Discover** to search your data\.
 
