@@ -5,4 +5,3 @@ This chapter contains common sample code for working with Amazon Elasticsearch S
 **Topics**
 + [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)
 + [Using the AWS SDKs with Amazon Elasticsearch Service](es-configuration-samples.md)
-+ [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)

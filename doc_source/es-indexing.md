@@ -1,4 +1,4 @@
-# Introduction to Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
+# Indexing Data in Amazon Elasticsearch Service<a name="es-indexing"></a>
 
 Because Elasticsearch uses a REST API, numerous methods exist for indexing documents\. You can use standard clients like [curl](https://curl.haxx.se/) or any programming language that can send HTTP requests\. To further simplify the process of interacting with it, Elasticsearch has clients for many programming languages\. Advanced users can skip directly to [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md) or [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
 

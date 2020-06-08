@@ -26,6 +26,8 @@ sneaker, tennis shoe, running shoe
 basketball shoe, hightop
 ```
 
+Certain dictionaries, such as Hunspell dictionaries, use multiple files and require their own directories on the file system\. At this time, Amazon ES only supports single\-file dictionaries\.
+
 ## Importing and Associating Packages<a name="custom-packages-assoc"></a>
 
 The console is the simplest way to import a package into Amazon ES and associate the package with a domain\. When you import a package from Amazon S3, Amazon ES stores its own copy of the package and automatically encrypts that copy using AES\-256 with Amazon ES\-managed keys\.
@@ -148,6 +150,9 @@ In this case, Elasticsearch returns the following response:
   }
 }
 ```
+
+**Tip**  
+Dictionary files use Java heap space proportional to their size\. For example, a 2 GiB dictionary file might consume 2 GiB of heap space on a node\. If you use large files, ensure that your nodes have enough heap space to accommodate them\. [Monitor](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-cluster-metrics) the `JVMMemoryPressure` metric, and scale your cluster as necessary\.
 
 ## Updating Custom Packages<a name="custom-packages-updating"></a>
 

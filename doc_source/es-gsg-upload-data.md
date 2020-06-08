@@ -1,7 +1,7 @@
 # Step 2: Upload Data to an Amazon ES Domain for Indexing<a name="es-gsg-upload-data"></a>
 
 **Important**  
-This process is a concise tutorial for uploading a small amount of test data\. For more information, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+This process is a concise tutorial for uploading a small amount of test data\. For more information, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 You can upload data to an Amazon Elasticsearch Service domain using the command line or most programming languages\.
 
@@ -16,7 +16,7 @@ You can install curl on Windows and use it from the command prompt, but we recom
   curl -XPUT -u master-user:master-user-password domain-endpoint/movies/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
   ```
 
-For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
 **To upload a JSON file that contains multiple documents to an Amazon ES domain**
 
@@ -37,4 +37,4 @@ For a detailed explanation of this command and how to make signed requests to Am
    curl -XPOST -u master-user:master-user-password domain-endpoint/_bulk --data-binary @bulk_movies.json -H 'Content-Type: application/json'
    ```
 
-For more information about the bulk file format, see [Introduction to Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+For more information about the bulk file format, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.

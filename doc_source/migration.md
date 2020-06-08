@@ -213,10 +213,18 @@ Most programming languages have libraries to assist with [signing requests](es-r
      -d '{"indices":"migration-index1,migration-index2,other-indices-*","include_global_state":false}'
    ```
 
-1. Finally, verify that your indices restored as expected:
+1. Finally, verify that your indices restored as expected\.
+
+   **Shorthand**
 
    ```
    GET _cat/indices?v
+   ```
+
+   **curl**
+
+   ```
+   curl -XGET -u master-user:master-user-password https://domain-endpoint/_cat/indices?v
    ```
 
 At this point, the migration is complete\. You might configure your clients to use the new Amazon ES endpoint, [resize the domain](sizing-domains.md) to suit your workload, check the shard count for your indices, switch to an [IAM master user](fgac.md#fgac-concepts), or start building Kibana dashboards\.

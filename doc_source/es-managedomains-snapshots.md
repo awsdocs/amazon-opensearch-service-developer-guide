@@ -4,7 +4,7 @@ Snapshots are backups of a cluster's indices and *state*\. State includes cluste
 
 On Amazon Elasticsearch Service, snapshots come in two forms: automated and manual\.
 + Automated snapshots are *only* for cluster recovery\. You can use them to [restore your domain](#es-managedomains-snapshot-restore) in the event of [red cluster status](aes-handling-errors.md#aes-handling-errors-red-cluster-status) or other data loss\. Amazon ES stores automated snapshots in a preconfigured Amazon S3 bucket at no additional charge\.
-+ Manual snapshots are for cluster recovery *or* moving data from one cluster to another\. As the name suggests, you have to initiate manual snapshots\. These snapshots are stored in your own Amazon S3 bucket, and standard S3 charges apply\. If you have a snapshot from a self\-managed Elasticsearch cluster, you can even use that snapshot to migrate to an Amazon ES domain\.
++ Manual snapshots are for cluster recovery *or* moving data from one cluster to another\. As the name suggests, you have to initiate manual snapshots\. These snapshots are stored in your own Amazon S3 bucket, and standard S3 charges apply\. If you have a snapshot from a self\-managed Elasticsearch cluster, you can even use that snapshot to [migrate to an Amazon ES domain](migration.md)\.
 
 All Amazon ES domains take automated snapshots, but frequency differs:
 + For domains running Elasticsearch 5\.3 and later, Amazon ES takes hourly automated snapshots and retains up to 336 of them for 14 days\.

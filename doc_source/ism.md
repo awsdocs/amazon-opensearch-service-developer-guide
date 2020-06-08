@@ -11,9 +11,9 @@ ISM requires Elasticsearch 6\.8 or later\. Full documentation for the feature is
 **Note**  
 After you attach a policy to an index, ISM creates a job that runs every 30 to 48 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 30 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indices at the same time\.
 
-## Example Policy<a name="ism-example"></a>
+## Sample Policies<a name="ism-example"></a>
 
-The following example policy moves an index from hot storage to [UltraWarm](ultrawarm.md) storage after seven days and deletes the index after 90 days\.
+This first sample policy moves an index from hot storage to [UltraWarm](ultrawarm.md) storage after seven days and deletes the index after 90 days\.
 
 In this case, an index is initially in the `hot` state\. After seven days, ISM moves it to the `warm` state\. 83 days later, the service sends a notification to an Amazon Chime room that the index is being deleted and then permanently deletes it\.
 
@@ -23,43 +23,35 @@ In this case, an index is initially in the `hot` state\. After seven days, ISM m
     "description": "Demonstrate a hot-warm-delete workflow.",
     "default_state": "hot",
     "schema_version": 1,
-    "states": [
-      {
+    "states": [{
         "name": "hot",
         "actions": [],
-        "transitions": [
-          {
-            "state_name": "warm",
-            "conditions": {
-              "min_index_age": "7d"
-            }
+        "transitions": [{
+          "state_name": "warm",
+          "conditions": {
+            "min_index_age": "7d"
           }
-        ]
+        }]
       },
       {
         "name": "warm",
-        "actions": [
-          {
-            "warm_migration": {},
-            "retry": {
-              "count": 5,
-              "delay": "1h"
-            }
+        "actions": [{
+          "warm_migration": {},
+          "retry": {
+            "count": 5,
+            "delay": "1h"
           }
-        ],
-        "transitions": [
-          {
-            "state_name": "delete",
-            "conditions": {
-              "min_index_age": "90d"
-            }
+        }],
+        "transitions": [{
+          "state_name": "delete",
+          "conditions": {
+            "min_index_age": "90d"
           }
-        ]
+        }]
       },
       {
         "name": "delete",
-        "actions": [
-          {
+        "actions": [{
             "notification": {
               "destination": {
                 "chime": {
@@ -75,6 +67,50 @@ In this case, an index is initially in the `hot` state\. After seven days, ISM m
             "delete": {}
           }
         ]
+      }
+    ]
+  }
+}
+```
+
+This second, simpler sample policy reduces replica count to zero after seven days to conserve disk space and then deletes the index after 21 days\. This policy assumes your index is non\-critical and no longer receiving write requests; having zero replicas carries some risk of data loss\.
+
+```
+{
+  "policy": {
+    "description": "Changes replica count and deletes.",
+    "schema_version": 1,
+    "default_state": "current",
+    "states": [{
+        "name": "current",
+        "actions": [],
+        "transitions": [{
+          "state_name": "old",
+          "conditions": {
+            "min_index_age": "7d"
+          }
+        }]
+      },
+      {
+        "name": "old",
+        "actions": [{
+          "replica_count": {
+            "number_of_replicas": 0
+          }
+        }],
+        "transitions": [{
+          "state_name": "delete",
+          "conditions": {
+            "min_index_age": "21d"
+          }
+        }]
+      },
+      {
+        "name": "delete",
+        "actions": [{
+          "delete": {}
+        }],
+        "transitions": []
       }
     ]
   }

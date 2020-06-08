@@ -7,7 +7,7 @@ For domains that run production workloads, we recommend the following configurat
   + US East \(N\. Virginia, Ohio\)
   + US West \(Oregon\)
   + EU \(Frankfurt, Ireland, London, Paris, Milan\)
-  + Asia Pacific \(Singapore, Sydney, Tokyo, Hong Kong\)
+  + Asia Pacific \(Singapore, Sydney, Tokyo, Hong Kong, Mumbai\)
   + Middle East \(Bahrain\)
   + Africa \(Cape Town\)
   + China \(Ningxia\)

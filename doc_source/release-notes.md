@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**May 5, 2020
-+ **Latest documentation update—**May 5, 2020
++ **Latest product release—**June 3, 2020
++ **Latest documentation update—**June 3, 2020
 
 ## Release Notes<a name="release-table"></a>
 
@@ -16,6 +16,8 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Cross\-Cluster Search](#release-notes) | Amazon Elasticsearch Service lets you perform queries and aggregations across multiple connected domains\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cross-cluster-search.html)\. | June 3, 2020 | 
+| [Anomaly Detection](#release-notes) | Amazon Elasticsearch Service lets you automatically detect anomalies in near\-real time\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ad.html)\. | June 3, 2020 | 
 | [UltraWarm](#release-notes) | UltraWarm storage for Amazon Elasticsearch Service has left public preview and is now generally available\. The feature now supports a wider range of Elasticsearch versions and AWS Regions\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)\. | May 5, 2020 | 
 | [Custom Dictionaries](#release-notes) | Amazon Elasticsearch Service lets you upload custom dictionary files for use with your cluster\. These files improve your search results by telling Elasticsearch to ignore certain high\-frequency words or to treat terms as equivalent\. For more information, see [Custom Packages](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/custom-packages.html)\. | April 21, 2020 | 
 | [Elasticsearch 7\.4 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.4\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | March 12, 2020 | 

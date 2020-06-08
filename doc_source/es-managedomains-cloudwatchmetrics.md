@@ -22,6 +22,8 @@ Amazon ES metrics fall into these categories:
 + [UltraWarm Metrics](#es-managedomains-cloudwatchmetrics-uw)
 + [Alerting Metrics](#es-managedomains-cloudwatchmetrics-alerting)
 + [SQL Metrics](#es-managedomains-cloudwatchmetrics-sql)
++ [KNN Metrics](#es-managedomains-cloudwatchmetrics-knn)
++ [Cross\-Cluster Search Metrics](#es-managedomains-cloudwatchmetrics-cross-cluster-search)
 
 **Note**  
 The service archives metrics for two weeks before discarding them\.
@@ -152,6 +154,23 @@ The `AWS/ES` namespace includes the following metrics for the [alerting feature]
 | AlertingNodesOnSchedule |  A value of 1 means that all alerting jobs are running on schedule \(or that no alerting jobs exist\)\. A value of 0 means some jobs are not running on schedule\. Relevant statistics: Maximum  | 
 | AlertingScheduledJobEnabled |  A value of 1 means that the `opendistro.scheduled_jobs.enabled` cluster setting is true\. A value of 0 means it is false, and scheduled jobs are disabled\. Relevant statistics: Maximum  | 
 
+## Anomaly Detection Metrics<a name="es-managedomains-cloudwatchmetrics-anomaly-detection"></a>
+
+The `AWS/ES` namespace includes the following metrics for the [anomaly detection feature](ad.md)\.
+
+
+| Metric | Description | 
+| --- | --- | 
+| AnomalyDetectionPluginUnhealthy |  A value of 1 means that the anomaly detection plugin is not functioning properly, either because of a high number of failures or because one of the indices that it uses is red\. A value of 0 indicates the plugin is working as expected\. Relevant statistics: Maximum  | 
+| AnomalyDetectionRequestCount |  The number of requests to detect anomalies\. Relevant statistics: Sum  | 
+| AnomalyDetectionFailureCount |  The number of failed requests to detect anomalies\.  Relevant statistics: Sum  | 
+| AnomalyResultsIndexStatusIndexExists |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to exists\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| AnomalyResultsIndexStatus\.red |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to is red\. A value of 0 means it is not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| AnomalyDetectorsIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-detectors` index exists\. A value of 0 means it does not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| AnomalyDetectorsIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-detectors` index is red\. A value of 0 means it is not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ModelsCheckpointIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index exists\. A value of 0 means it does not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ModelsCheckpointIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index is red\. A value of 0 means it is not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+
 ## SQL Metrics<a name="es-managedomains-cloudwatchmetrics-sql"></a>
 
 The `AWS/ES` namespace includes the following metrics for [SQL support](sql-support.md)\.
@@ -162,8 +181,30 @@ The `AWS/ES` namespace includes the following metrics for [SQL support](sql-supp
 | SQLFailedRequestCountByCusErr |  The number of requests to the `_opendistro/_sql` API that failed due to a client issue\. For example, a request might return HTTP status code 400 due to an `IndexNotFoundException`\. Relevant statistics: Sum  | 
 | SQLFailedRequestCountBySysErr |  The number of requests to the `_opendistro/_sql` API that failed due to a server problem or feature limitation\. For example, a request might return HTTP status code 503 due to a `VerificationException`\. Relevant statistics: Sum  | 
 | SQLRequestCount |  The number of requests to the `_opendistro/_sql` API\. Relevant statistics: Sum  | 
+| SQLDefaultCursorRequestCount |   Similar to `SQLRequestCount` but only counts pagination requests\. Relevant statistics: Sum  | 
 | SQLUnhealthy |  A value of 1 indicates that, in response to certain requests, the SQL plugin is returning 5*xx* response codes or passing invalid query DSL to Elasticsearch\. Other requests should continue to succeed\. A value of 0 indicates no recent failures\. If you see a sustained value of 1, troubleshoot the requests your clients are making to the plugin\. Relevant statistics: Maximum  | 
 
 ## KNN Metrics<a name="es-managedomains-cloudwatchmetrics-knn"></a>
 
 The `AWS/ES` namespace includes metrics for [KNN](knn.md)\. For a summary of each, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/#statistics)\.
+
+## Cross\-Cluster Search Metrics<a name="es-managedomains-cloudwatchmetrics-cross-cluster-search"></a>
+
+The `AWS/ES` namespace includes the following metrics for [Cross\-cluster search](cross-cluster-search.md)\.
+
+**Source domain metrics**
+
+
+| Metric | Dimension | Description | 
+| --- | --- | --- | 
+| CrossClusterOutboundConnections |  `ConnectionId`  |  Number of connected nodes\. If your response includes one or more skipped domains, use this metric to trace any unhealthy connections\. If this number drops to 0, then the connection is unhealthy\.  | 
+| CrossClusterOutboundRequests |  `ConnectionId`  |  Number of search requests sent to the destination domain\. Use to check if the load of cross\-cluster search requests are overwhelming your domain, correlate any spike in this metric with any JVM/CPU spike\.  | 
+
+**Destination domain metric**
+
+
+| Metric | Dimension | Description | 
+| --- | --- | --- | 
+| CrossClusterInboundRequests |  `ConnectionId`  |  Number of incoming connection requests received from the source domain\.  | 
+
+Add a CloudWatch alarm in the event that you lose a connection unexpectedly\. For steps to create an alarm, see [Create a CloudWatch Alarm Based on a Static Threshold](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html)\.

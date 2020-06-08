@@ -47,6 +47,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 | High JVM usage | JVM memory pressure is above 75%\. Reduce traffic to the cluster or scale the domain, and try again\. | 
 | Kibana alias problem | \.kibana is already configured as an alias and maps to an incompatible index, likely one from an earlier version of Kibana\. Reindex, and try again\. | 
 | Red Kibana status | Kibana status is red\. Try using Kibana when the upgrade completes\. If the red status persists, resolve it manually, and try again\. | 
+| Cross\-cluster compatibility | You can only upgrade if cross\-cluster compatibility is maintained between the source and destination domains post the upgrade\. During the upgrade process, any incompatible connections are identified\. To proceed with the upgrade, delete the incompatible connections\. | 
 | Other Amazon ES service issue | Issues with Amazon ES itself might cause your domain to display as ineligible for an upgrade\. If none of the preceding conditions apply to your domain and the problem persists for more than a day, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 
 ## Starting an Upgrade<a name="starting-upgrades"></a>

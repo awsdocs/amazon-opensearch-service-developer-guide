@@ -194,6 +194,14 @@ Host: search-my-sample-domain-ih2lhn2ew2scurji.us-west-2.es.amazonaws.com
 
 If you receive an `Invalid Host Header` error when making a request, check that your client includes the Amazon ES domain endpoint \(and not, for example, its IP address\) in the `Host` header\.
 
+## Invalid M3 Instance Type<a name="aes-m3-instance-types"></a>
+
+Amazon ES does not support adding or modifying M3 instances to existing domains running Elasticsearch versions 6\.7 or later\. You can continue to use M3 instances with Elasticsearch 6\.5 and earlier\.
+
+We recommend choosing a newer instance type\. For domains running Elasticsearch 6\.7 and later, the following restriction apply:
++ If your existing domain does not use M3 instances, you can no longer change to them\.
++ If you change an existing domain from an M3 instance type to another instance type, you can't switch back\.
+
 ## Can't Downgrade After Upgrade<a name="aes-troubleshooting-upgrade-snapshot"></a>
 
 [In\-place upgrades](es-version-migration.md) are irreversible, but if you contact [AWS Support](https://aws.amazon.com/premiumsupport/), they can help you restore the automatic, pre\-upgrade snapshot on a new domain\. For example, if you upgrade a domain from Elasticsearch 5\.6 to 6\.4, AWS Support can help you restore the pre\-upgrade snapshot on a new Elasticsearch 5\.6 domain\. If you took a manual snapshot of the original domain, you can [perform that step yourself](es-managedomains-snapshots.md)\.
