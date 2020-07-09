@@ -16,6 +16,7 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [SQL Improvements](#release-notes) | SQL support for Amazon Elasticsearch Service now supports many new operations, a dedicated Kibana user interface for data exploration, and an interactive CLI\. For more information, see [SQL Support](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/sql-support.html)\. | June 3, 2020 | 
 | [Cross\-Cluster Search](#release-notes) | Amazon Elasticsearch Service lets you perform queries and aggregations across multiple connected domains\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cross-cluster-search.html)\. | June 3, 2020 | 
 | [Anomaly Detection](#release-notes) | Amazon Elasticsearch Service lets you automatically detect anomalies in near\-real time\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ad.html)\. | June 3, 2020 | 
 | [UltraWarm](#release-notes) | UltraWarm storage for Amazon Elasticsearch Service has left public preview and is now generally available\. The feature now supports a wider range of Elasticsearch versions and AWS Regions\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)\. | May 5, 2020 | 

@@ -16,7 +16,7 @@ For information about configuring Lambda functions and creating deployment packa
 
 The following sample code uses Curator and [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/) to delete any index whose name contains a time stamp indicating that the data is more than 30 days old\. For example, if an index name is `my-logs-2014.03.02`, the index is deleted\. Deletion occurs even if you create the index today, because this filter uses the name of the index to determine its age\.
 
-The code also contains some commented\-out examples of other common filters, including one that determines age by creation date\. The AWS SDK for Python \(Boto 3\) and [requests\-aws4auth](https://pypi.org/project/requests-aws4auth/) library sign the requests to Amazon ES\.
+The code also contains some commented\-out examples of other common filters, including one that determines age by creation date\. The AWS SDK for Python \(Boto3\) and [requests\-aws4auth](https://pypi.org/project/requests-aws4auth/) library sign the requests to Amazon ES\.
 
 **Warning**  
 Both code samples in this section delete data—potentially a lot of data\. Modify and test each sample on a non\-critical domain until you're satisfied with its behavior\.

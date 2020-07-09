@@ -17,9 +17,20 @@ POST elasticsearch_domain/_opendistro/_sql
 
 ## Notes and Differences<a name="sql-diff"></a>
 
-Calls to `_opendistro/_sql` include index names in the request body, so they have the same [access policy considerations](es-ac.md#es-ac-advanced) as the bulk, mget, and msearch API operations\. As always, follow the principle of [least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) when you grant permissions to API operations\.
+Calls to `_opendistro/_sql` include index names in the request body, so they have the same [access policy considerations](es-ac.md#es-ac-advanced) as the bulk, mget, and msearch operations\. As always, follow the principle of [least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) when you grant permissions to API operations\.
 
 For security considerations related to using SQL with fine\-grained access control, see [Fine\-Grained Access Control in Amazon Elasticsearch Service](fgac.md#fgac-limitations)\.
+
+The Open Distro for Elasticsearch SQL plugin includes many [tuneable settings](https://opendistro.github.io/for-elasticsearch-docs/docs/sql/settings/), but on Amazon ES, use the `_opendistro/_sql/settings` path rather than the standard `_cluster/settings` path:
+
+```
+PUT _opendistro/_sql/settings
+{
+  "persistent": {
+    "opendistro.sql.cursor.enabled": true
+  }
+}
+```
 
 ## Workbench<a name="workbench"></a>
 

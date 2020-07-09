@@ -59,7 +59,7 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
    }
    ```
 **Important**  
-CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
+CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\. For steps on updating your policy, see [Enabling Log Publishing \(AWS CLI\)](#es-createdomain-configure-slow-logs-cli)\.
 
 1. Choose **Enable**\.
 
@@ -89,6 +89,8 @@ aws logs put-resource-policy --policy-name my-policy --policy-document '{ "Versi
 
 **Important**  
 CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable slow logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\.
+
+If you need to review this policy at a later time, use the `aws logs describe-resource-policies` command\. To update the policy, issue the same `aws logs put-resource-policy` command with a new policy document\.
 
 Finally, you can use the `--log-publishing-options` option to enable publishing\. The syntax for the option is the same for both the `create-elasticsearch-domain` and `update-elasticsearch-domain-config` commands\.
 

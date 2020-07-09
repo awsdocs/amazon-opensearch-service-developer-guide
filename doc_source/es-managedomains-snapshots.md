@@ -62,7 +62,7 @@ If you use fine\-grained access control, see [Manual Snapshots](fgac.md#fgac-sna
 
 ### Sample Python Client<a name="es-managedomains-snapshot-client-python"></a>
 
-Save the following sample Python code as a Python file, such as `register-repo.py`\. The client requires the [AWS SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/), [requests](http://docs.python-requests.org/) and [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) packages\. The client contains commented\-out examples for other snapshot operations\.
+Save the following sample Python code as a Python file, such as `register-repo.py`\. The client requires the [AWS SDK for Python \(Boto3\)](https://aws.amazon.com/sdk-for-python/), [requests](http://docs.python-requests.org/) and [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) packages\. The client contains commented\-out examples for other snapshot operations\.
 
 **Tip**  
 A Java\-based code sample is available in [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.

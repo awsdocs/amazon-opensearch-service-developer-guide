@@ -3,14 +3,7 @@
 Each AWS Region is a separate geographic area with multiple, isolated locations known as *Availability Zones*\. To prevent data loss and minimize cluster downtime in the event of a service disruption, you can distribute nodes across two or three Availability Zones in the same Region, a configuration known as *Multi\-AZ*\.
 
 For domains that run production workloads, we recommend the following configuration:
-+ Choose a Region that supports three Availability Zones with Amazon ES:
-  + US East \(N\. Virginia, Ohio\)
-  + US West \(Oregon\)
-  + EU \(Frankfurt, Ireland, London, Paris, Milan\)
-  + Asia Pacific \(Singapore, Sydney, Tokyo, Hong Kong, Mumbai\)
-  + Middle East \(Bahrain\)
-  + Africa \(Cape Town\)
-  + China \(Ningxia\)
++ Choose a Region that supports three Availability Zones with Amazon ES\.
 + Deploy the domain across three zones\.
 + Choose current\-generation instance types for dedicated master nodes and data nodes\.
 + Use three dedicated master nodes and at least three data nodes\.
@@ -46,7 +39,7 @@ This automatic distribution has some notable exceptions:
 + If you choose an older\-generation instance type that is not available in three Availability Zones, the following scenarios apply:
   + If you chose three Availability Zones for the domain, Amazon ES throws an error\. Choose a different instance type, and try again\.
   + If you chose two Availability Zones for the domain, Amazon ES distributes the dedicated master nodes across two zones\.
-+ Not all AWS Regions have three Availability Zones\. In these Regions, you can only configure a domain to use two zones \(and Amazon ES can only distribute dedicated master nodes across two zones\)\. For the list of Regions that support three Availability Zones, see [Configuring a Multi\-AZ Domain](#es-managedomains-multiaz)\.
++ Not all AWS Regions have three Availability Zones\. In these Regions, you can only configure a domain to use two zones \(and Amazon ES can only distribute dedicated master nodes across two zones\)\.
 
 ## Availability Zone Disruptions<a name="es-managedomains-za-summary"></a>
 

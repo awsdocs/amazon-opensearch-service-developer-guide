@@ -142,7 +142,7 @@ Both signed samples use the default credential chain\. Run `aws configure` using
 
 ## Python<a name="es-request-signing-python"></a>
 
-You can install [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/), an Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto 3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
+You can install [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/), an Elasticsearch client for Python, using [pip](https://pypi.python.org/pypi/pip)\. Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
 
 ```
 pip install boto3
@@ -279,13 +279,13 @@ gem install elasticsearch
 gem install faraday_middleware-aws-sigv4
 ```
 
-This sample code creates a new Elasticsearch client, configures Faraday middleware to sign requests, and indexes a single document\. You must provide values for `host` and `region`\.
+This sample code creates a new Elasticsearch client, configures Faraday middleware to sign requests, and indexes a single document\. You must provide values for `full_url_and_port` and `region`\.
 
 ```
 require 'elasticsearch'
 require 'faraday_middleware/aws_sigv4'
 
-host = '' # e.g. https://my-domain.region.es.amazonaws.com
+full_url_and_port = '' # e.g. https://my-domain.region.es.amazonaws.com:443
 index = 'ruby-index'
 type = '_doc'
 id = '1'
@@ -301,7 +301,7 @@ document = {
 region = '' # e.g. us-west-1
 service = 'es'
 
-client = Elasticsearch::Client.new(url: host) do |f|
+client = Elasticsearch::Client.new(url: full_url_and_port) do |f|
   f.request :aws_sigv4,
     service: service,
     region: region,

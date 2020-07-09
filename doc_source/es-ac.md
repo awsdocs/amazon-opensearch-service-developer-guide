@@ -265,10 +265,13 @@ For example, if a resource\-based policy grants you access to a domain, but an i
 ****  
 
 |  | Allowed in Resource\-based Policy | Denied in Resource\-based Policy | Neither Allowed nor Denied in Resource\-based Policy | 
-| --- | --- | --- | --- | 
+| --- |--- |--- |--- |
 | Allowed in Identity\-based Policy |  Allow  | Deny | Allow | 
+| --- |--- |--- |--- |
 | Denied in Identity\-based Policy | Deny | Deny | Deny | 
+| --- |--- |--- |--- |
 | Neither Allowed nor Denied in Identity\-based Policy | Allow | Deny | Deny | 
+| --- |--- |--- |--- |
 
 ## Policy Element Reference<a name="es-ac-reference"></a>
 

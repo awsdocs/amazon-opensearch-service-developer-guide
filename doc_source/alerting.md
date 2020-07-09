@@ -6,7 +6,7 @@ Alerting requires Elasticsearch 6\.2 or higher\. Full documentation for the feat
 
 ## Differences<a name="alerting-diff"></a>
 
-Compared to Open Distro for Elasticsearch, the Amazon Elasticsearch Service alerting feature has two notable differences: Amazon SNS support and fixed settings\.
+Compared to Open Distro for Elasticsearch, the Amazon Elasticsearch Service alerting feature has some notable differences\.
 
 ### Amazon SNS Support<a name="alerting-diff-sns"></a>
 
@@ -76,3 +76,7 @@ If you previously created monitors and want to stop the creation of daily alerti
 ```
 DELETE .opendistro-alerting-alert-history-*
 ```
+
+### Alerting Permissions<a name="alerting-diff-perms"></a>
+
+To use the Amazon ES alerting feature on a domain that uses [fine\-grained access control](fgac.md), you must map the `all_access` role to your user or backend role\.

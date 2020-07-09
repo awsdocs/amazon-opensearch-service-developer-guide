@@ -136,5 +136,5 @@ Open Distro for Elasticsearch lets you change all available ISM settings using t
   + `enabled`
   + `history.enabled`
 + **Index\-level settings:**
-  + `roll_over`
+  + `rollover_alias`
   + `policy_id`

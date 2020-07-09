@@ -17,7 +17,7 @@ Regardless of whether encryption at rest is enabled, all domains automatically e
 
 ## Enabling Encryption of Data at Rest<a name="enabling-ear"></a>
 
-By default, domains don't encrypt data at rest, and you can't configure existing domains to use the feature\. To enable the feature, you must [create another domain](es-createupdatedomains.md#es-createdomains) and migrate your data\. Encryption of data at rest requires Elasticsearch 5\.1 or later\.
+You can't enable encryption at rest on existing domains, only new ones\. Encryption of data at rest requires Elasticsearch 5\.1 or later\.
 
 To use the Amazon ES console to create a domain that encrypts data at rest, you must have read\-only permissions to AWS KMS, such as the following identity\-based policy:
 

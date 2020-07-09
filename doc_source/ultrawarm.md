@@ -13,7 +13,8 @@ Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated 
 + [Automating Migrations](#ultrawarm-ism)
 + [Listing Hot and Warm Indices](#ultrawarm-es-api)
 + [Returning Warm Indices to Hot Storage](#ultrawarm-migrating-back)
-+ [Restoring Warm Indices from Snapshots](#ultrawarm-snapshot)
++ [Restoring Warm Indices from Automated Snapshots](#ultrawarm-snapshot)
++ [Manual Snapshots of Warm Indices](#ultrawarm-manual-snapshot)
 + [Disabling UltraWarm](#ultrawarm-disable)
 
 ## Prerequisites<a name="ultrawarm-pp"></a>
@@ -205,7 +206,7 @@ GET my-index/_settings
 + `routing.allocation.require.box_type` specifies that the index should use warm nodes rather than standard data nodes\.
 + `routing.search_preference` instructs Amazon ES to query primary shards first and only use passive replicas if the query fails\. This setting reduces disk usage\.
 
-Indices in warm storage are read\-only unless you [return them to hot storage](#ultrawarm-migrating-back)\. You can query the indices, but you can't add data to them\. If you try, you encounter the following error:
+Indices in warm storage are read\-only unless you [return them to hot storage](#ultrawarm-migrating-back)\. You can query the indices and delete them, but you can't add, update, or delete individual documents\. If you try, you might encounter the following error:
 
 ```
 {
@@ -253,7 +254,7 @@ You can have up to 10 simultaneous migrations from warm to hot storage\. To chec
 
 After the migration finishes, check the index settings to make sure they meet your needs\. Indices return to hot storage with one replica\.
 
-## Restoring Warm Indices from Snapshots<a name="ultrawarm-snapshot"></a>
+## Restoring Warm Indices from Automated Snapshots<a name="ultrawarm-snapshot"></a>
 
 In addition to the standard repository for automated snapshots, UltraWarm adds a second repository, `cs-ultrawarm`\. Snapshots in `cs-ultrawarm` have the same 14\-day retention period as other automated snapshots\.
 
@@ -283,7 +284,7 @@ Unlike other automated snapshots, each snapshot in this repository contains only
    DELETE my-index
    ```
 
-   If you don't want to delete the index, [reindex](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/reindex-data/) it\.
+   If you don't want to delete the index, [return it to hot storage](#ultrawarm-migrating-back) and [reindex](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/reindex-data/) it\.
 
 1. Restore the snapshot:
 
@@ -291,7 +292,50 @@ Unlike other automated snapshots, each snapshot in this repository contains only
    POST _snapshot/cs-ultrawarm/snapshot-name/_restore
    ```
 
-   UltraWarm ignores any settings you specify in this restore request, so you can omit the request body\.
+   UltraWarm ignores any index settings you specify in this restore request, but you can specify options like `rename_pattern` and `rename_replacement`\. For a summary of Elasticsearch snapshot restore options, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/snapshot-restore/#restore-snapshots)\.
+
+## Manual Snapshots of Warm Indices<a name="ultrawarm-manual-snapshot"></a>
+
+You *can* take manual snapshots of warm indices, but we don't recommend it\. The automated `cs-ultrawarm` repository already contains a snapshot for each warm index at no additional charge\.
+
+By default, Amazon ES does not include warm indices in manual snapshots\. For example, the following call only includes hot indices:
+
+```
+PUT _snapshot/my-repository/my-snapshot
+```
+
+If you choose to take manual snapshots of warm indices, several important considerations apply\.
++ You can't mix hot and warm indices\. For example, the following request fails:
+
+  ```
+  PUT _snapshot/my-repository/my-snapshot
+  {
+    "indices": "warm-index-1,hot-index-1",
+    "include_global_state": false
+  }
+  ```
+
+  If they include a mix of hot and warm indices, wildcard \(`*`\) statements fail, as well\.
++ You can only include one warm index per snapshot\. For example, the following request fails:
+
+  ```
+  PUT _snapshot/my-repository/my-snapshot
+  {
+    "indices": "warm-index-1,warm-index-2,other-warm-indices-*",
+    "include_global_state": false
+  }
+  ```
+
+  This request succeeds:
+
+  ```
+  PUT _snapshot/my-repository/my-snapshot
+  {
+    "indices": "warm-index-1",
+    "include_global_state": false
+  }
+  ```
++ Manual snapshots always restore to hot storage, even if they originally included a warm index\.
 
 ## Disabling UltraWarm<a name="ultrawarm-disable"></a>
 

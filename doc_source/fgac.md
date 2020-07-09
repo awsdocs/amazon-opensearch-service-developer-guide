@@ -171,29 +171,29 @@ As noted in [Key Concepts](#fgac-concepts), you manage fine\-grained access cont
 
 ### Creating Roles<a name="fgac-roles"></a>
 
-You can create new roles for fine\-grained access control using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/users-roles/#create-roles)\.
+You can create new roles for fine\-grained access control using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#create-roles)\.
 
-Fine\-grained access control also includes a number of [predefined roles](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/users-roles/#predefined-roles)\. Clients such as Kibana and Logstash make a wide variety of requests to Elasticsearch, which can make it hard to manually create roles with the minimum set of permissions\. For example, the `kibana_user` role includes the permissions that a user needs to work with index patterns, visualizations, dashboards, and tenants\. We recommend [mapping it](#fgac-mapping) to any user or backend role that accesses Kibana, along with additional roles that allow access to other indices\.
+Fine\-grained access control also includes a number of [predefined roles](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#predefined-roles)\. Clients such as Kibana and Logstash make a wide variety of requests to Elasticsearch, which can make it hard to manually create roles with the minimum set of permissions\. For example, the `kibana_user` role includes the permissions that a user needs to work with index patterns, visualizations, dashboards, and tenants\. We recommend [mapping it](#fgac-mapping) to any user or backend role that accesses Kibana, along with additional roles that allow access to other indices\.
 
 #### Cluster\-Level Security<a name="fgac-cluster-level"></a>
 
-Cluster\-level permissions include the ability to execute broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** tab when creating a role\. For a list of cluster\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/default-action-groups/#cluster-level)\.
+Cluster\-level permissions include the ability to execute broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** tab when creating a role\. For a list of cluster\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#cluster-level)\.
 
 #### Index\-Level Security<a name="fgac-index-level"></a>
 
-Index\-level permissions include the ability to create new indices, search indices, read and write documents, delete documents, manage aliases, and more\. Manage these permissions using the **Index Permissions** tab when creating a role\. For a list of index\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/default-action-groups/#index-level)\.
+Index\-level permissions include the ability to create new indices, search indices, read and write documents, delete documents, manage aliases, and more\. Manage these permissions using the **Index Permissions** tab when creating a role\. For a list of index\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#index-level)\.
 
 #### Document\-Level Security<a name="fgac-document-level"></a>
 
 Document\-level security lets you restrict which documents in an index a user can see\. When creating a role, specify an index pattern and an Elasticsearch query\. Any users that you map to that role can see only the documents that match the query\. Document\-level security affects [the number of hits that you receive when you search](#fgac-example)\.
 
-For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/document-level-security/)\.
+For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/document-level-security/)\.
 
 #### Field\-Level Security<a name="fgac-field-level"></a>
 
 Field\-level security lets you control which document fields a user can see\. When creating a role, add a list of fields to either include or exclude\. If you include fields, any users you map to that role can see only those fields\. If you exclude fields, they can see all fields *except* the excluded ones\. Field\-level security affects [the number of fields included in hits when you search](#fgac-example)\.
 
-For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/field-level-security/)\.
+For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/field-level-security/)\.
 
 #### Field Masking<a name="fgac-field-masking"></a>
 
@@ -201,7 +201,7 @@ Field masking is an alternative to field\-level security that lets you anonymize
 
 ### Creating Users<a name="fgac-users"></a>
 
-If you enabled the internal user database, you can create users using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/users-roles/#create-users)\.
+If you enabled the internal user database, you can create users using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#create-users)\.
 
 If you chose IAM for your master user, ignore this portion of Kibana\. Create IAM users and IAM roles instead\. For more information, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/)\.
 
@@ -215,15 +215,15 @@ Role mapping is the most critical aspect of fine\-grained access control\. Fine\
 
 ![\[Role mapping page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/role-mapping-edit.png)
 
-You can map roles to users using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/users-roles/#map-users-to-roles)\.
+You can map roles to users using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#map-users-to-roles)\.
 
 ### Creating Action Groups<a name="fgac-ag"></a>
 
-Action groups are sets of permissions that you can reuse across different resources\. You can create new action groups using Kibana or the `_opendistro/_security` operation in the REST API, although the default action groups suffice for most use cases\. For more information about the default action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/default-action-groups/)\.
+Action groups are sets of permissions that you can reuse across different resources\. You can create new action groups using Kibana or the `_opendistro/_security` operation in the REST API, although the default action groups suffice for most use cases\. For more information about the default action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/)\.
 
 ### Kibana Multi\-Tenancy<a name="fgac-multitenancy"></a>
 
-Tenants are spaces for saving index patterns, visualizations, dashboards, and other Kibana objects\. Kibana multi\-tenancy lets you safely share your work with other Kibana users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. To learn more, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/multi-tenancy/#add-tenants)\.
+Tenants are spaces for saving index patterns, visualizations, dashboards, and other Kibana objects\. Kibana multi\-tenancy lets you safely share your work with other Kibana users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. To learn more, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/multi-tenancy/#add-tenants)\.
 
 **To view your current tenant or change tenants**
 
@@ -704,7 +704,7 @@ GET _opendistro/_security/api/tenants
 }
 ```
 
-For documentation on the 7\.*x* REST API, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/api/)\.
+For documentation on the 7\.*x* REST API, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/api/)\.
 
 **Tip**  
 If you use the internal user database, you can use [curl](https://curl.haxx.se/) to make requests and test your domain\. Try the following sample commands:  

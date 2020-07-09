@@ -121,27 +121,34 @@ server {
 
 ## Configuring Kibana to Use a WMS Map Server<a name="es-kibana-map-server"></a>
 
-Due to licensing restrictions, the default installation of Kibana on Amazon ES domains that use Elasticsearch 5\.*x* or greater does *not* include a map server for tile map visualizations\. Use the following procedure to configure Kibana to use a Web Map Service \(WMS\) map server\.
+The default installation of Kibana for Amazon ES includes a map service, except for domains in the India and China regions\. Regardless of your region, you can configure Kibana to use a different Web Map Service \(WMS\) server for coordinate map visualizations\. Region map visualizations only support the default map service\.
 
 **To configure Kibana to use a WMS map server:**
 
-1. Open Kibana\. You can find a link to Kibana in the domain summary at [https://console\.aws\.amazon\.com/es/](https://console.aws.amazon.com/es/)\.
+1. Open Kibana\.
 
 1. Choose **Management**\.
 
 1. Choose **Advanced Settings**\.
 
-1. Locate **visualization:tileMap:WMSdefaults**, and then choose the **edit** button to modify the default value\.
+1. Locate **visualization:tileMap:WMSdefaults**\.
 
-1. Change `enabled` to `true` and `url` to the URL of a valid WMS map server\.
+1. Change `enabled` to `true` and `url` to the URL of a valid WMS map server:
 
-1. \(Optional\) Locate **visualization:tileMap:WMSdefaults**, and then choose the **edit** button to modify the default value\.
+   ```
+   {
+     "enabled": true,
+     "url": "wms-server-url",
+     "options": {
+       "format": "image/png",
+       "transparent": true
+     }
+   }
+   ```
 
-1. \(Optional\) Change `"layers": "0"` to a comma\-separated list of map layers that you want to display\. Layers vary by map service\. The default value of `0` is often appropriate\.
+1. Choose **Save**\.
 
-1. Choose the **save** button\.
-
- To apply the new default value to visualizations, you might need to reload Kibana\.
+To apply the new default value to visualizations, you might need to reload Kibana\. If you have saved visualizations, choose **Options** after opening the visualization\. Verify that **WMS map server** is enabled and **WMS url** contains your preferred map server, and then choose **Apply changes**\.
 
 **Note**  
 Map services often have licensing fees or restrictions\. You are responsible for all such considerations on any map server that you specify\. You might find the map services from the [U\.S\. Geological Survey](https://viewer.nationalmap.gov/services/) useful for testing\.
