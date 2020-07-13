@@ -160,7 +160,79 @@ Uploading a new version of a package to Amazon S3 does *not* automatically updat
 
 After you associate the updated file with your domain, you can use it with new indices by using the requests in [Using Custom Packages with Elasticsearch](#custom-packages-using)\.
 
-If you want to use the updated file with existing indices though, you must reindex them\. First, create an index that uses the updated synonyms file:
+Depending on whether the packages are used at index time or search time you may or may not need to reindex your data to start using the new package\.
+
+### Search Time Analysis<a name="search-time-analysis"></a>
+
+Synonym and stopword filters can be used at search time only with minimal impact on performance and can help to keep indices smaller\. If you have a `default_search` analyzer like this:
+
+```
+GET my-index/_settings
+{
+  "analysis": {
+    "analyzer": {
+      "default_search": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": ["synonym_filter"]
+      }
+    },
+    "filter": {
+      "synonym_filter": {
+        "type": "synonym",
+        "synonyms_path": "analyzers/F111111111"
+      }
+    }
+  }
+}
+```
+
+Then update the synonym filter:
+
+```
+PUT my-index/_settings
+{
+  "analysis": {
+    "filter": {
+      "synonym_filter": {
+        "type": "synonym",
+        "synonyms_path": "analyzers/F222222222"
+      }
+    }
+  }
+}
+```
+
+### Index Time Analysis<a name="index-time-analysis"></a>
+
+If you want to use the updated package at index time such as a user dictionary for the kuromoji tokenizer, you must reindex your indices\. There are two ways to go about this.
+
+The first method is to update your existing index settings as in the search time analysis example:
+
+```
+PUT my-index/_settings
+{
+  "analysis": {
+    "tokenizer": {
+      "kuromoji_custom": {
+        "type": "kuromoji_tokenizer",
+        "mode": "search",
+        "user_dictionary": "analyzers/F222222222"
+      }
+    }
+  }
+}
+```
+
+Then reindex the data in place using the `_update_by_query` endpoint:
+
+```
+POST my-index/_update_by_query?conflicts=proceed
+```
+
+You may optionally use a standard search query to restrict which documents are reindexed. Note that if a document is updated before `_update_by_query` completes it will not be reindexed but is reported in the results of this query.
+
+The second method is to create a new index that uses the updated synonyms file:
 
 ```
 PUT my-new-index
