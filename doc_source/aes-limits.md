@@ -9,10 +9,12 @@ The following table shows Amazon ES limits for clusters and instances\.
 
 | Clusters and Instances | Limit | 
 | --- | --- | 
-| Maximum number of data nodes \(including warm nodes\) per cluster | 40 \(except for the T2 instance types, which have a maximum of 10\)  The default limit is 40 data nodes per cluster\. To request an increase up to 200 \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.  For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
-| Maximum number of warm nodes per cluster | 45 | 
-| Maximum number of dedicated master nodes | 5  You can use the T2 instance types for dedicated master nodes \(not recommended for production domains\) only if the number of data nodes is 10 or fewer\.  | 
-| Smallest supported instance type | `t2.micro.elasticsearch` \(versions 1\.5 and 2\.3\) and `t2.small.elasticsearch` \(version 5\.*x* and 6\.*x*\)\. | 
+| Maximum number of data nodes per cluster |  40 \(except for the T2 instance types, which have a maximum of 10\) To request an increase up to 200 data nodes \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
+| Maximum number of [warm](ultrawarm.md) nodes per cluster | 150 | 
+|  Maximum total number of data and warm nodes per cluster  |  200 You might have to request a data node limit increase to reach this total\. For example, your domain might have 80 data nodes and 120 warm nodes\.  | 
+| Maximum number of dedicated master nodes per cluster |  5 You can use the T2 instance types for dedicated master nodes \(not recommended for production domains\) only if the number of data nodes is 10 or fewer\.  | 
+|  Maximum total storage per cluster  |  3 PiB This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 36 `i3.8xlarge.elasticsearch` instances and 140 `ultrawarm1.large.elasticsearch` instances for a total of 2\.98 PiB of storage\.  | 
+| Smallest supported instance type per Elasticsearch version | `t2.micro.elasticsearch` \(versions 1\.5 and 2\.3\) and `t2.small.elasticsearch` \(version 5\.*x* and 6\.*x*\)\. | 
 | Maximum number of domains per account \(per Region\) | 100 | 
 
 For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
@@ -33,7 +35,7 @@ The following table lists the UltraWarm instance types and the maximum amount of
 
 The following table shows the minimum and maximum sizes for EBS volumes for each instance type that Amazon ES supports\. For information about which instance types include instance storage and additional hardware details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
 + If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, choose one of the SSD options\.
-+ 512 GiB is the maximum volume size that is supported with Elasticsearch version 1\.5\.
++ 512 GiB is the maximum volume size for Elasticsearch version 1\.5\.
 + Some older\-generation instance types include instance storage, but also support EBS storage\. If you choose EBS storage for one of these instance types, the storage volumes are *not* additive\. You can use either an EBS volume or the instance storage, not both\.
 
 

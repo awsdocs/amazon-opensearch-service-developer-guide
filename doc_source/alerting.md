@@ -10,7 +10,7 @@ Compared to Open Distro for Elasticsearch, the Amazon Elasticsearch Service aler
 
 ### Amazon SNS Support<a name="alerting-diff-sns"></a>
 
-Amazon ES supports [Amazon SNS](https://aws.amazon.com/sns/) for notifications\. This integration with Amazon SNS means that, in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), the alerting feature can send emails, text messages, and even execute AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
+Amazon ES supports [Amazon SNS](https://aws.amazon.com/sns/) for notifications\. This integration with Amazon SNS means that, in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), the alerting feature can send emails, text messages, and even run AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
 
 **To add Amazon SNS as a destination**
 

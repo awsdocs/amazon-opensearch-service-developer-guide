@@ -123,7 +123,7 @@ This example assumes that you are using the console\. Choose Python 2\.7 and a r
 
 ![\[Sample configuration for a Lambda function\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/lambda-function.png)
 
-After you create the function, you must add a trigger\. For this example, we want the code to execute whenever a log file arrives in an S3 bucket:
+After you create the function, you must add a trigger\. For this example, we want the code to run whenever a log file arrives in an S3 bucket:
 
 1. Choose S3\.
 
@@ -141,13 +141,13 @@ After you create the function, you must add a trigger\. For this example, we wan
 
 Finally, you can upload your deployment package:
 
-1. For **Handler**, type `sample.handler`\. This setting tells Lambda the file \(`sample.py`\) and method \(`handler`\) that it should execute after a trigger\.
+1. For **Handler**, type `sample.handler`\. This setting tells Lambda the file \(`sample.py`\) and method \(`handler`\) that it should run after a trigger\.
 
 1. For **Code entry type**, choose **Upload a \.ZIP file**, and then follow the prompts to upload your deployment package\.
 
 1. Choose **Save**\.
 
-At this point, you have a complete set of resources: a bucket for log files, a function that executes whenever a log file is added to the bucket, code that performs the parsing and indexing, and an Amazon ES domain for searching and visualization\.
+At this point, you have a complete set of resources: a bucket for log files, a function that runs whenever a log file is added to the bucket, code that performs the parsing and indexing, and an Amazon ES domain for searching and visualization\.
 
 ### Testing the Lambda Function<a name="es-aws-integrations-s3-lambda-es-configure"></a>
 
@@ -270,7 +270,7 @@ Then follow the instructions in [Creating the Lambda Function](#es-aws-integrati
 
 To learn more, see [Working with Amazon Kinesis Data Streams](https://docs.aws.amazon.com/streams/latest/dev/working-with-kinesis.html) in the *Amazon Kinesis Data Streams Developer Guide*\.
 
-At this point, you have a complete set of resources: a Kinesis data stream, a function that executes after the stream receives new data and indexes that data, and an Amazon ES domain for searching and visualization\.
+At this point, you have a complete set of resources: a Kinesis data stream, a function that runs after the stream receives new data and indexes that data, and an Amazon ES domain for searching and visualization\.
 
 ### Testing the Lambda Function<a name="es-aws-integrations-kinesis-testing"></a>
 
@@ -371,7 +371,7 @@ Then follow the instructions in [Creating the Lambda Function](#es-aws-integrati
 
 To learn more, see [Processing New Items in a DynamoDB Table](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.Lambda.Tutorial.html) in the *Amazon DynamoDB Developer Guide*\.
 
-At this point, you have a complete set of resources: a DynamoDB table for your source data, a DynamoDB stream of changes to the table, a function that executes after your source data changes and indexes those changes, and an Amazon ES domain for searching and visualization\.
+At this point, you have a complete set of resources: a DynamoDB table for your source data, a DynamoDB stream of changes to the table, a function that runs after your source data changes and indexes those changes, and an Amazon ES domain for searching and visualization\.
 
 ### Testing the Lambda Function<a name="es-aws-integrations-dynamodb-es-lambda-test"></a>
 

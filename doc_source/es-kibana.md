@@ -24,7 +24,7 @@ Kibana does not natively support IAM users and roles, but Amazon ES offers sever
 **Note**  
 This process is only applicable if your domain uses public access and you don't want to use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. See [Controlling Access to Kibana](#es-kibana-access)\.
 
-Because Kibana is a JavaScript application, requests originate from the user's IP address\. IP\-based access control might be impractical due to the sheer number of IP addresses you would need to whitelist in order for each user to have access to Kibana\. One workaround is to place a proxy server between Kibana and Amazon ES\. Then you can add an IP\-based access policy that allows requests from only one IP address, the proxy's\. The following diagram shows this configuration\.
+Because Kibana is a JavaScript application, requests originate from the user's IP address\. IP\-based access control might be impractical due to the sheer number of IP addresses you would need to allow in order for each user to have access to Kibana\. One workaround is to place a proxy server between Kibana and Amazon ES\. Then you can add an IP\-based access policy that allows requests from only one IP address, the proxy's\. The following diagram shows this configuration\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/KibanaProxy.png)
 

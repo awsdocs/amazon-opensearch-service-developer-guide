@@ -1511,7 +1511,7 @@ Upgrades an Amazon ES domain to a new version of Elasticsearch\. Alternately, ch
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain
 {
   "DomainName": "domain-name",
-  "TargetVersion": "7.4",
+  "TargetVersion": "7.7",
   "PerformCheckOnly": true|false
 }
 ```

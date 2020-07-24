@@ -66,7 +66,7 @@ Although the console is the easiest way to create a domain, in this case, you al
 ```
 aws es create-elasticsearch-domain \
   --domain-name migration-domain \
-  --elasticsearch-version 7.4 \
+  --elasticsearch-version 7.7 \
   --elasticsearch-cluster-config InstanceType=c5.large.elasticsearch,InstanceCount=2 \
   --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 \
   --node-to-node-encryption-options Enabled=true \

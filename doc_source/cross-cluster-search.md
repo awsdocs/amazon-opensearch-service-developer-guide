@@ -306,7 +306,7 @@ All cross\-cluster search requests between domains are encrypted in transit by d
      }
      ```
 
-     All destination clusters that you search need to be available for your search request to execute successfully\. Otherwise, the whole request fails—even if one of the domains is not available, no search results are returned\.
+     All destination clusters that you search need to be available for your search request to run successfully\. Otherwise, the whole request fails—even if one of the domains is not available, no search results are returned\.
 
 ## Kibana<a name="cross-cluster-search-kibana"></a>
 

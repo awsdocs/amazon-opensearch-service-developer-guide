@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**June 3, 2020
-+ **Latest documentation update—**June 3, 2020
++ **Latest product release—**July 23, 2020
++ **Latest documentation update—**July 23, 2020
 
 ## Release Notes<a name="release-table"></a>
 
@@ -16,6 +16,10 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [gzip Compression](#release-notes) | Amazon Elasticsearch Service now supports gzip compression for most HTTP requests and responses, which can reduce latency and conserve bandwidth\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/gzip.html)\. | July 23, 2020 | 
+| [KNN Cosine Similarity](#release-notes) | KNN now lets you search for "nearest neighbors" by cosine similarity in addition to Euclidean distance\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/knn.html)\. | July 23, 2020 | 
+| [Elasticsearch 7\.7 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.7\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | July 23, 2020 | 
+| [Kibana Map Service](#release-notes) | The default installation of Kibana for Amazon Elasticsearch Service now includes a map service, except for domains in the India and China regions\. For more information, see [Configuring Kibana to Use a WMS Map Server](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html#es-kibana-map-server)\. | June 18, 2020 | 
 | [SQL Improvements](#release-notes) | SQL support for Amazon Elasticsearch Service now supports many new operations, a dedicated Kibana user interface for data exploration, and an interactive CLI\. For more information, see [SQL Support](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/sql-support.html)\. | June 3, 2020 | 
 | [Cross\-Cluster Search](#release-notes) | Amazon Elasticsearch Service lets you perform queries and aggregations across multiple connected domains\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cross-cluster-search.html)\. | June 3, 2020 | 
 | [Anomaly Detection](#release-notes) | Amazon Elasticsearch Service lets you automatically detect anomalies in near\-real time\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ad.html)\. | June 3, 2020 | 

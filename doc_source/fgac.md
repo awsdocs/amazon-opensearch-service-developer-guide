@@ -177,7 +177,7 @@ Fine\-grained access control also includes a number of [predefined roles](https:
 
 #### Cluster\-Level Security<a name="fgac-cluster-level"></a>
 
-Cluster\-level permissions include the ability to execute broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** tab when creating a role\. For a list of cluster\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#cluster-level)\.
+Cluster\-level permissions include the ability to make broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** tab when creating a role\. For a list of cluster\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#cluster-level)\.
 
 #### Index\-Level Security<a name="fgac-index-level"></a>
 
@@ -254,7 +254,7 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
 **To get started with fine\-grained access control**
 
 1. [Create a domain](es-createupdatedomains.md) with the following settings:
-   + Elasticsearch 7\.4
+   + Elasticsearch 7\.7
    + Public access
    + Fine\-grained access control enabled with an IAM role as the master user \(`IAMMasterUserRole` for the rest of this tutorial\)
    + [Amazon Cognito authentication for Kibana](es-cognito-auth.md) enabled
@@ -421,7 +421,7 @@ This tutorial covers another popular use case: a master user in the internal use
 **To get started with fine\-grained access control**
 
 1. [Create a domain](es-createupdatedomains.md) with the following settings:
-   + Elasticsearch 7\.4
+   + Elasticsearch 7\.7
    + Public access
    + Fine\-grained access control with a master user in the internal user database \(`TheMasterUser` for the rest of this tutorial\)
    + Amazon Cognito authentication for Kibana *disabled*

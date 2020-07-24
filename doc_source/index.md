@@ -44,6 +44,7 @@ Amazon's trademarks and trade dress may not be used in
    + [Using Service-Linked Roles for Amazon ES](slr-es.md)
 + [Sample Code for Amazon Elasticsearch Service](es-samplecode.md)
    + [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)
+   + [Compressing HTTP Requests](gzip.md)
    + [Using the AWS SDKs with Amazon Elasticsearch Service](es-configuration-samples.md)
 + [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)
    + [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)

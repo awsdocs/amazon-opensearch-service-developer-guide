@@ -37,6 +37,7 @@ In this case, an index is initially in the `hot` state\. After seven days, ISM m
         "name": "warm",
         "actions": [{
           "warm_migration": {},
+          "timeout": "24h",
           "retry": {
             "count": 5,
             "delay": "1h"
@@ -123,11 +124,12 @@ Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service 
 
 ### ISM Operations<a name="alerting-diff-op"></a>
 
-Amazon ES supports a unique ISM operation, `warm_migration`\. If your domain has [UltraWarm](ultrawarm.md) enabled, this action transitions the index to warm storage\.
+Amazon ES supports a unique ISM operation, `warm_migration`\. If your domain has [UltraWarm](ultrawarm.md) enabled, this action transitions the index to warm storage\. The `warm_migration` action has a [default timeout](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions) of 12 hours\. For large clusters, you might need to change this value, as shown in the [sample policy](#ism-example)\.
 
 Amazon ES does not support the following ISM operations:
 + `open`
 + `close`
++ `snapshot`
 
 ### ISM Settings<a name="ism-diff-settings"></a>
 

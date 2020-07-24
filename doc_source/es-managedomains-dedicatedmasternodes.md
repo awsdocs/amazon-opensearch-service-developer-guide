@@ -2,7 +2,7 @@
 
 Amazon Elasticsearch Service uses *dedicated master nodes* to increase cluster stability\. A dedicated master node performs cluster management tasks, but does not hold data or respond to data upload requests\. This offloading of cluster management tasks increases the stability of your domain\.
 
-We recommend that you allocate **three** dedicated master nodes for each production Amazon ES domain:
+We recommend that you add **three** dedicated master nodes to each production Amazon ES domain\. Never choose an even number of dedicated master nodes\.
 
 1. One dedicated master node means that you have no backup in the event of a failure\.
 
@@ -14,9 +14,9 @@ We recommend that you allocate **three** dedicated master nodes for each product
 
 1. Three dedicated master nodes, the recommended number, provides two backup nodes in the event of a master node failure and the necessary quorum \(2\) to elect a new master\.
 
-1. Four dedicated master nodes are no better than three and can cause issues if you use [multiple Availability Zones](es-managedomains-multiaz.md) in a Region that has only two zones\.
+1. Four dedicated master nodes are no better than three and can cause issues if you use [multiple Availability Zones](es-managedomains-multiaz.md)\.
    + If one master node fails, you have the quorum \(3\) to elect a new master\. If two nodes fail, you lose that quorum, just as you do with three dedicated master nodes\.
-   + If each Availability Zone has two dedicated master nodes and the zones are unable to communicate with each other, neither zone has the quorum to elect a new master\.
+   + In a three Availability Zone configuration, two AZs have one dedicated master node, and one AZ has two\. If that AZ experiences a disruption, the remaining two AZs don't have the necessary quorum \(3\) to elect a new master\.
 
 1. Having five dedicated master nodes works as well as three and allows you to lose two nodes while maintaining a quorum\. But because only one dedicated master node is active at any given time, this configuration means paying for four idle nodes\. Many users find this level of failover protection excessive\.
 
