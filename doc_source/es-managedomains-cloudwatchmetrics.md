@@ -208,3 +208,15 @@ The `AWS/ES` namespace includes the following metrics for [Cross\-cluster search
 | CrossClusterInboundRequests |  `ConnectionId`  |  Number of incoming connection requests received from the source domain\.  | 
 
 Add a CloudWatch alarm in the event that you lose a connection unexpectedly\. For steps to create an alarm, see [Create a CloudWatch Alarm Based on a Static Threshold](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html)\.
+
+## Learning to Rank Metrics<a name="es-managedomains-cloudwatchmetrics-learning-to-rank"></a>
+
+The `AWS/ES` namespace includes the following metrics for [Learning to Rank](learning-to-rank.md)\.
+
+
+| Metric | Description | 
+| --- | --- | 
+| LTRRequestTotalCount |  Total count of ranking requests\.  | 
+| LTRRequestErrorCount |  Total count of unsuccessful requests\.  | 
+| LTRStoreIndexIsRed |  Tracks if one of the indices needed to run the plugin is red\.  | 
+| LTRMemoryUsage |  Total memory used by the plugin\.  | 

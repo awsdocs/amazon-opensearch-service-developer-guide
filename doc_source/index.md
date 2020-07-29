@@ -54,6 +54,7 @@ Amazon's trademarks and trade dress may not be used in
    + [SQL Support for Amazon Elasticsearch Service](sql-support.md)
    + [KNN](knn.md)
    + [Cross-Cluster Search for Amazon Elasticsearch Service](cross-cluster-search.md)
+   + [Learning to Rank for Amazon Elasticsearch Service](learning-to-rank.md)
 + [Kibana](es-kibana.md)
 + [Managing Indices](managing-indices.md)
    + [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)
