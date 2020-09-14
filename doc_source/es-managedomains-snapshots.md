@@ -127,7 +127,7 @@ print(r.text)
 #
 # payload = {
 #   "indices": "-.kibana*,-.opendistro_security",
-#   "include_global_state": false
+#   "include_global_state": False
 # }
 #
 # headers = {"Content-Type": "application/json"}
