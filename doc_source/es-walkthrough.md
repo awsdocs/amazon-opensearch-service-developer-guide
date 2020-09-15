@@ -6,7 +6,7 @@ A manual workflow might involve employees listening to recordings, noting the su
 
 Such a process would be extremely labor\-intensive\. Assuming an average time of 10 minutes per call, each employee could listen to only 48 calls per day\. Barring human bias, the data they generate would be highly accurate, but the *amount* of data would be minimal: just the subject of the call and a boolean for whether or not the customer was satisfied\. Anything more involved, such as a full transcript, would take a huge amount of time\.
 
-Using Amazon S3, Amazon Transcribe, Amazon Comprehend, and Amazon Elasticsearch Service \(Amazon ES\), you can automate a similar process with very little code and end up with much more data\. For example, you can get a full transcript of the call, keywords from the transcript, and an overall "sentiment" of the call \(positive, negative, neutral, or mixed\)\. Then you can use Elasticsearch and Kibana to search and visualize the data\.
+Using [Amazon S3](https://aws.amazon.com/s3/), [Amazon Transcribe](https://aws.amazon.com/transcribe/), [Amazon Comprehend](https://aws.amazon.com/comprehend/), and [Amazon Elasticsearch Service \(Amazon ES\)](https://aws.amazon.com/elasticsearch-service/), you can automate a similar process with very little code and end up with much more data\. For example, you can get a full transcript of the call, keywords from the transcript, and an overall "sentiment" of the call \(positive, negative, neutral, or mixed\)\. Then you can use Elasticsearch and Kibana to search and visualize the data\.
 
 While you can use this walkthrough as\-is, the intent is to spark ideas about how to enrich your JSON documents before you index them in Amazon ES\.
 
