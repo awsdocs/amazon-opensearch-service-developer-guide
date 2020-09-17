@@ -23,7 +23,7 @@ Cross\-cluster search supports Kibana, so you can create visualizations and dash
 ## Limitations<a name="cross-cluster-search-limitations"></a>
 
 Cross\-cluster search has several important limitations:
-+ You can only implement cross\-cluster search on new domains\. You must create at least two new domains to use this feature\.
++ You can only implement cross\-cluster search on domains created on or after June 3rd, 2020\.
 + You can't connect to self\-managed Elasticsearch clusters\.
 + You can't connect to domains in different AWS Regions\.
 + A domain can have a maximum of 20 outgoing connections\. Similarly, a domain can have a maximum of 20 incoming connections\.

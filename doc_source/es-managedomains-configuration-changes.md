@@ -14,7 +14,7 @@ The following operations cause blue/green deployments:
 + Enabling or disabling Amazon Cognito authentication for Kibana
 + Choosing a different Amazon Cognito user pool or identity pool
 + Modifying advanced settings
-+ Enabling or disabling the publication of error logs or slow logs to CloudWatch
++ Enabling or disabling the publication of error logs, audit logs, or slow logs to CloudWatch
 + Upgrading to a new Elasticsearch version
 + Enabling or disabling **Require HTTPS**
 + Enabling UltraWarm storage

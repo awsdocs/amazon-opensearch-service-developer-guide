@@ -2,7 +2,9 @@
 
 Short for its associated *k\-nearest neighbors* algorithm, KNN for Amazon Elasticsearch Service lets you search for points in a vector space and find the "nearest neighbors" for those points by Euclidean distance or cosine similarity\. Use cases include recommendations \(for example, an "other songs you might like" feature in a music application\), image recognition, and fraud detection\.
 
-KNN requires Elasticsearch 7\.1 or later\. Full documentation for the Elasticsearch feature, including descriptions of [settings and statistics](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/), is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
+KNN with Euclidean distance requires Elasticsearch 7\.1 or later\. Cosine similarity requires Elasticsearch 7\.7 or later\.
+
+Full documentation for the Elasticsearch feature, including descriptions of [settings and statistics](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/), is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
 
 ## Getting Started with KNN<a name="knn-gs"></a>
 

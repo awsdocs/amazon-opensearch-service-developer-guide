@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**July 23, 2020
-+ **Latest documentation update—**July 23, 2020
++ **Latest product release—**September 16, 2020
++ **Latest documentation update—**September 16, 2020
 
 ## Release Notes<a name="release-table"></a>
 
@@ -16,9 +16,11 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
-| [Learning to Rank](#release-notes) | Amazon Elasticsearch Service now supports the open source Learning to Rank plugin, which lets you use machine learning technologies to improve search relevance\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/learning-to-rank.html)\. | July 27, 2020 | 
-| [gzip Compression](#release-notes) | Amazon Elasticsearch Service now supports gzip compression for most HTTP requests and responses, which can reduce latency and conserve bandwidth\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/gzip.html)\. | July 23, 2020 | 
-| [KNN Cosine Similarity](#release-notes) | KNN now lets you search for "nearest neighbors" by cosine similarity in addition to Euclidean distance\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/knn.html)\. | July 23, 2020 | 
+| [Audit Logs](#release-notes) | Amazon Elasticsearch Service now supports audit logs for your data, which lets you track failed login attempts, user access to indices, documents, and fields, and much more\. This feature requires service software R20200910 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/audit-logs.html)\. | September 16, 2020 | 
+| [UltraWarm Updates](#release-notes) | UltraWarm for Amazon Elasticsearch Service adds new metrics, new settings, a larger migration queue, and a cancellation API\. These updates require service software R20200910 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)\. | September 14, 2020 | 
+| [Learning to Rank](#release-notes) | Amazon Elasticsearch Service now supports the open source Learning to Rank plugin, which lets you use machine learning technologies to improve search relevance\. This feature requires service software R20200721 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/learning-to-rank.html)\. | July 27, 2020 | 
+| [gzip Compression](#release-notes) | Amazon Elasticsearch Service now supports gzip compression for most HTTP requests and responses, which can reduce latency and conserve bandwidth\. This feature requires service software R20200721 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/gzip.html)\. | July 23, 2020 | 
+| [KNN Cosine Similarity](#release-notes) | KNN now lets you search for "nearest neighbors" by cosine similarity in addition to Euclidean distance\. This feature requires service software R20200721 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/knn.html)\. | July 23, 2020 | 
 | [Elasticsearch 7\.7 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.7\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | July 23, 2020 | 
 | [Kibana Map Service](#release-notes) | The default installation of Kibana for Amazon Elasticsearch Service now includes a map service, except for domains in the India and China regions\. For more information, see [Configuring Kibana to Use a WMS Map Server](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html#es-kibana-map-server)\. | June 18, 2020 | 
 | [SQL Improvements](#release-notes) | SQL support for Amazon Elasticsearch Service now supports many new operations, a dedicated Kibana user interface for data exploration, and an interactive CLI\. For more information, see [SQL Support](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/sql-support.html)\. | June 3, 2020 | 
@@ -69,7 +71,7 @@ The following table describes important changes Amazon ES before May 2018\.
 | Encryption of Data at Rest | Amazon ES now supports encryption of data at rest\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\. | December 7, 2017 | 
 | Elasticsearch 6\.0 Support | Amazon ES now supports Elasticsearch version 6\.0\. For migration considerations and instructions, see [Upgrading Elasticsearch](es-version-migration.md)\. | December 6, 2017 | 
 | VPC Support | Amazon ES now lets you launch domains within an Amazon Virtual Private Cloud\. VPC support provides an additional layer of security and simplifies communications between Amazon ES and other services within a VPC\. To learn more, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\. | October 17, 2017 | 
-| Slow Logs Publishing | Amazon ES now supports the publishing of slow logs to CloudWatch Logs\. To learn more, see [Configuring Logs](es-createdomain-configure-slow-logs.md)\. | October 16, 2017 | 
+| Slow Logs Publishing | Amazon ES now supports the publishing of slow logs to CloudWatch Logs\. To learn more, see [Configuring Elasticsearch Logs](es-createdomain-configure-slow-logs.md)\. | October 16, 2017 | 
 | Elasticsearch 5\.5 Support | Amazon ES now supports Elasticsearch version 5\.5\. For new feature summaries, see the [Amazon announcement](https://aws.amazon.com/about-aws/whats-new/2017/09/elasticsearch-5_5-now-available-on-amazon-elasticsearch-service/) of availability\. You can now restore automated snapshots without contacting AWS Support and store scripts using the Elasticsearch `_scripts` API\. | September 7, 2017 | 
 | Elasticsearch 5\.3 Support | Amazon ES added support for Elasticsearch version 5\.3\. | June 1, 2017 | 
 | More Instances and EBS Capacity per Cluster | Amazon ES now supports up to 100 nodes and 150 TB EBS capacity per cluster\. | April 5, 2017 | 

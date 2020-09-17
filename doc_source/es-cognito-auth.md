@@ -79,7 +79,7 @@ For instructions, see [Creating a Role to Delegate Permissions to an AWS Service
 After you complete the prerequisites, you can configure an Amazon ES domain to use Amazon Cognito for Kibana\.
 
 **Note**  
-Amazon Cognito is not available in all AWS Regions\. For a list of supported regions, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#cognito_identity_region)\. You don't need to use the same Region for Amazon Cognito that you use for Amazon ES\.
+Amazon Cognito is not available in all AWS Regions\. For a list of supported regions, see [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/cognito_identity.html)\. You don't need to use the same Region for Amazon Cognito that you use for Amazon ES\.
 
 ### Configuring Amazon Cognito Authentication \(Console\)<a name="es-cognito-auth-config-console"></a>
 

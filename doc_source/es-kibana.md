@@ -161,7 +161,7 @@ If you have invested significant time into configuring your own Kibana instance,
 + Make the following changes to `config/kibana.yml`:
 
   ```
-  kibana.index: ".kibana_1"
+  kibana.index: ".kibanalocal"
   # Use elasticsearch.url for versions older than 6.6
   # elasticsearch.url: "https://domain-endpoint:443"
   # Use elasticsearch.hosts for versions 6.6 and later

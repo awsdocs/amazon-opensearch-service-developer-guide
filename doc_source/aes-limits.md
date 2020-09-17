@@ -16,6 +16,8 @@ The following table shows Amazon ES limits for clusters and instances\.
 |  Maximum total storage per cluster  |  3 PiB This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 36 `i3.8xlarge.elasticsearch` instances and 140 `ultrawarm1.large.elasticsearch` instances for a total of 2\.98 PiB of storage\.  | 
 | Smallest supported instance type per Elasticsearch version | `t2.micro.elasticsearch` \(versions 1\.5 and 2\.3\) and `t2.small.elasticsearch` \(version 5\.*x* and 6\.*x*\)\. | 
 | Maximum number of domains per account \(per Region\) | 100 | 
+|  Maximum number of custom packages per account \(per Region\)  |  25  | 
+|  Maximum number of custom packages per domain  |  20  | 
 
 For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 

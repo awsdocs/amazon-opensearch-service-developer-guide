@@ -1,6 +1,6 @@
 # Dedicated Master Nodes<a name="es-managedomains-dedicatedmasternodes"></a>
 
-Amazon Elasticsearch Service uses *dedicated master nodes* to increase cluster stability\. A dedicated master node performs cluster management tasks, but does not hold data or respond to data upload requests\. This offloading of cluster management tasks increases the stability of your domain\.
+Amazon Elasticsearch Service uses *dedicated master nodes* to increase cluster stability\. A dedicated master node performs cluster management tasks, but does not hold data or respond to data upload requests\. This offloading of cluster management tasks increases the stability of your domain\. Just like all other node types, you pay an hourly rate for each dedicated master node\.
 
 We recommend that you add **three** dedicated master nodes to each production Amazon ES domain\. Never choose an even number of dedicated master nodes\.
 

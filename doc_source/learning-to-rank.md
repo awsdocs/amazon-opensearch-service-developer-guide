@@ -2,9 +2,9 @@
 
 Elasticsearch uses a probabilistic ranking framework called BM\-25 to calculate relevance scores\. If a distinctive keyword appears more frequently in a document, BM\-25 assigns a higher relevance score to that document\. This framework, however, doesn’t take into account user behavior like click\-through data, which can further improve relevance\.
 
-Learning to rank is an open source Elasticsearch plugin that lets you use machine learning and behavioral data to tune the relevance of documents\. The plugin uses models from the XGBoost and Ranklib libraries to rescore the search results\. 
+Learning to Rank is an open\-source Elasticsearch plugin that lets you use machine learning and behavioral data to tune the relevance of documents\. The plugin uses models from the XGBoost and Ranklib libraries to rescore the search results\. 
 
-Learning to rank requires Elasticsearch 7\.7 or later\. Full documentation for the feature, including detailed steps and API descriptions, is available in the [Learning to Rank](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html) documentation\.
+Learning to Rank requires Elasticsearch 7\.7 or later\. Full documentation for the feature, including detailed steps and API descriptions, is available in the [Learning to Rank](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html) documentation\.
 
 **Note**  
 To use the Learning to Rank plugin, you must have full admin permissions\. To learn more, see [Modifying the Master User](fgac.md#fgac-forget)\.
@@ -15,11 +15,11 @@ To use the Learning to Rank plugin, you must have full admin permissions\. To le
 
 ## Getting Started with Learning to Rank<a name="ltr-gsg-es"></a>
 
-You need to provide a judgment list, prepare a training dataset, and train the model outside of Amazon Elasticsearch Service\. The portions in blue occur outside of Amazon ES:
+You need to provide a judgment list, prepare a training dataset, and train the model outside of Amazon Elasticsearch Service \(Amazon ES\)\. The parts in blue occur outside of Amazon ES:
 
 ![\[Sample Learning to Rank plugin process.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/ltr.png)
 
-### Step 1: Initialize the Plugin<a name="ltr-example-es"></a>
+### Step 1: Initialize the Plugin<a name="ltr-example-es1"></a>
 
 To initialize the Learning to Rank plugin, send the following request to your Amazon Elasticsearch Service domain:
 
@@ -37,14 +37,14 @@ PUT _ltr
 
 This command creates a hidden `.ltrstore` index that stores metadata information such as feature sets and models\.
 
-### Step 2: Create a Judgment List<a name="ltr-example-es"></a>
+### Step 2: Create a Judgment List<a name="ltr-example-es2"></a>
 
 **Note**  
 You must perform this step outside of Amazon Elasticsearch Service\.
 
-A judgment list is a collection of examples from which a machine learning model learns\. Your judgment list should include keywords that are important to you and a set of graded documents for each keyword\.
+A judgment list is a collection of examples that a machine learning model learns from\. Your judgment list should include keywords that are important to you and a set of graded documents for each keyword\.
 
-In this example, we have a judgment list for a movie data set\. A grade of 4 indicates a perfect match\. A grade of 0 indicates the worst match\.
+In this example, we have a judgment list for a movie dataset\. A grade of 4 indicates a perfect match\. A grade of 0 indicates the worst match\.
 
 
 ****  
@@ -71,9 +71,9 @@ For a more complete example of a judgment list, see [sample judgments](https://g
 
 You can create this judgment list manually with the help of human annotators or infer it programmatically from analytics data\.
 
-### Step 3: Build a Feature Set<a name="ltr-example-es"></a>
+### Step 3: Build a Feature Set<a name="ltr-example-es3"></a>
 
-A feature is a field that corresponds to the relevance of a document\. For example, `title`, `overview`, `popularity score` \(number of views\), and so on\. 
+A feature is a field that corresponds to the relevance of a document—for example, `title`, `overview`, `popularity score` \(number of views\), and so on\. 
 
 Build a feature set with a Mustache template for each feature\. For more information about features, see [Working with Features](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/building-features.html)\.
 
@@ -120,13 +120,13 @@ If you query the original `.ltrstore` index, you get back your feature set:
 GET _ltr/_featureset
 ```
 
-### Step 4: Log the Feature Values<a name="ltr-example-es"></a>
+### Step 4: Log the Feature Values<a name="ltr-example-es4"></a>
 
 The feature values are the relevance scores calculated by BM\-25 for each feature\.
 
 Combine the feature set and judgment list to log the feature values\. For more information about logging features, see [Logging Feature Scores](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/logging-features.html)\.
 
-In this example, the `bool` query retrieves the graded documents with the filter and then selects the feature set with the `sltr` query\. The `ltr_log` query combines the documents and the features to log the corresponding feature values:
+In this example, the `bool` query retrieves the graded documents with the filter, and then selects the feature set with the `sltr` query\. The `ltr_log` query combines the documents and the features to log the corresponding feature values:
 
 ```
 POST tmdb/_search
@@ -312,9 +312,9 @@ A sample response might look like the following:
 }
 ```
 
-In the above example, the first feature doesn’t have a feature value because the keyword “rambo” doesn’t appear in the title field of the document with ID equal to 1368\. This is a missing feature value in the training data\. 
+In the previous example, the first feature doesn’t have a feature value because the keyword “rambo” doesn’t appear in the title field of the document with an ID equal to 1368\. This is a missing feature value in the training data\. 
 
-### Step 5: Create a Training Dataset<a name="ltr-example-es"></a>
+### Step 5: Create a Training Dataset<a name="ltr-example-es5"></a>
 
 **Note**  
 You must perform this step outside of Amazon Elasticsearch Service\.
@@ -339,7 +339,7 @@ Convert it into the final training dataset, which looks like this:
 
 You can perform this step manually or write a program to automate it\.
 
-### Step 6: Choose an Algorithm and Build the Model<a name="ltr-example-es"></a>
+### Step 6: Choose an Algorithm and Build the Model<a name="ltr-example-es6"></a>
 
 **Note**  
 You must perform this step outside of Amazon Elasticsearch Service\.
@@ -348,7 +348,7 @@ With the training dataset in place, the next step is to use XGBoost or Ranklib l
 
 For steps to use XGBoost and Ranklib to build the model, see the [XGBoost](https://xgboost.readthedocs.io/en/latest/index.html) and [RankLib](https://sourceforge.net/p/lemur/wiki/RankLib/) documentation, respectively\. To use Amazon SageMaker to build the XGBoost model, see [XGBoost Algorithm](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html)\. 
 
-### Step 7: Deploy the Model<a name="ltr-example-es"></a>
+### Step 7: Deploy the Model<a name="ltr-example-es7"></a>
 
 After you have built the model, deploy it into the Learning to Rank plugin\. For more information about deploying a model, see [Uploading A Trained Model](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/training-models.html)\. 
 
@@ -513,7 +513,7 @@ To see the model, send the following request:
 GET _ltr/_model/my_ranklib_model
 ```
 
-### Step 8: Search with Learning to Rank<a name="ltr-example-es"></a>
+### Step 8: Search with Learning to Rank<a name="ltr-example-es8"></a>
 
 After you deploy the model, you’re ready to search\. 
 
@@ -546,7 +546,7 @@ POST tmdb/_search
 }
 ```
 
-With Learning to Rank, you see “Rambo” as the 1st result because we have assigned it the highest grade in the judgment list:
+With Learning to Rank, you see “Rambo” as the first result because we have assigned it the highest grade in the judgment list:
 
 ```
 {
@@ -729,21 +729,21 @@ POST tmdb/_search
 }
 ```
 
-Based on how well you think the model is performing, adjust the judgment list and features\. Then, repeat steps 2\-8 to improve the ranking results over time\.
+Based on how well you think the model is performing, adjust the judgment list and features\. Then, repeat steps 2–8 to improve the ranking results over time\.
 
 ## Learning to Rank API<a name="ltr-api"></a>
 
 Use the Learning to Rank operations to programmatically work with feature sets and models\.
 
-### Create Store<a name="ltr-api"></a>
+### Create Store<a name="ltr-api-createstore"></a>
 
-This command creates a hidden `.ltrstore` index that stores metadata information such as feature sets and models\.
+Creates a hidden `.ltrstore` index that stores metadata information such as feature sets and models\.
 
 ```
 PUT _ltr
 ```
 
-### Delete Store<a name="ltr-api"></a>
+### Delete Store<a name="ltr-api-deletestore"></a>
 
 Deletes the hidden `.ltrstore` index and resets the plugin\.
 
@@ -751,7 +751,7 @@ Deletes the hidden `.ltrstore` index and resets the plugin\.
 DELETE _ltr
 ```
 
-### Create Feature Set<a name="ltr-api"></a>
+### Create Feature Set<a name="ltr-api-featureset"></a>
 
 Creates a feature set\.
 
@@ -759,7 +759,7 @@ Creates a feature set\.
 POST _ltr/_featureset/<name_of_features>
 ```
 
-### Delete Feature Set<a name="ltr-api"></a>
+### Delete Feature Set<a name="ltr-api-deletefeatureset"></a>
 
 Deletes a feature set\.
 
@@ -767,7 +767,7 @@ Deletes a feature set\.
 DELETE _ltr/_featureset/<name_of_feature_set>
 ```
 
-### Get Feature Set<a name="ltr-api"></a>
+### Get Feature Set<a name="ltr-api-getfeatureset"></a>
 
 Retrieves a feature set\.
 
@@ -775,7 +775,7 @@ Retrieves a feature set\.
 GET _ltr/_featureset/<name_of_feature_set>
 ```
 
-### Create Model<a name="ltr-api"></a>
+### Create Model<a name="ltr-api-createmodel"></a>
 
 Creates a model\.
 
@@ -783,7 +783,7 @@ Creates a model\.
 POST _ltr/_featureset/<name_of_feature_set>/_createmodel
 ```
 
-### Delete Model<a name="ltr-api"></a>
+### Delete Model<a name="ltr-api-deletemodel"></a>
 
 Deletes a model\.
 
@@ -791,7 +791,7 @@ Deletes a model\.
 DELETE _ltr/_model/<name_of_model>
 ```
 
-### Get Model<a name="ltr-api"></a>
+### Get Model<a name="ltr-api-getmodel"></a>
 
 Retrieves a model\.
 
@@ -799,7 +799,7 @@ Retrieves a model\.
 GET _ltr/_model/<name_of_model>
 ```
 
-### Get Stats<a name="ltr-api"></a>
+### Get Stats<a name="ltr-api-getstats"></a>
 
 Provides information about how the plugin is behaving\.
 
@@ -860,7 +860,7 @@ GET _opendistro/_ltr/nodeID,nodeID,/stats/stat,stat
 }
 ```
 
-The statistics are provided at two levels, node and cluster, as specified below:
+The statistics are provided at two levels, node and cluster, as specified in the following tables:
 
 
 **Node\-level stats**  
@@ -875,22 +875,22 @@ The statistics are provided at two levels, node and cluster, as specified below:
 | cache\.miss\_count | Number of cache misses\. A cache miss occurs when a user queries the plugin and the model has not yet been loaded into memory\. | 
 | cache\.entry\_count | Number of entries in the cache\. | 
 | cache\.memory\_usage\_in\_bytes | Total memory used in bytes\. | 
-| cache\.cache\_capacity\_reached | Indicate if the cache limit is reached\. | 
+| cache\.cache\_capacity\_reached | Indicates if the cache limit is reached\. | 
 
 
 **Cluster\-level stats**  
 
 | Field Name | Description | 
 | --- | --- | 
-| stores | Indicates where the feature sets and model metadata are stored \(default is “\.ltrstore”, otherwise it is prefixed with “\.ltrstore\_”, with a user supplied name\)\.  | 
+| stores | Indicates where the feature sets and model metadata are stored\. \(The default is “\.ltrstore”\. Otherwise, it's prefixed with “\.ltrstore\_”, with a user supplied name\)\.  | 
 | stores\.status | Status of the index\. | 
 | stores\.feature\_sets | Number of feature sets\. | 
 | stores\.features\_count | Number of features\. | 
 | stores\.model\_count | Number of models\. | 
 | status | The plugin status based on the status of the feature store indices \(red, yellow, or green\) and circuit breaker state \(open or closed\)\. | 
-| cache\.cache\_capacity\_reached | Indicate if the cache limit is reached\. | 
+| cache\.cache\_capacity\_reached | Indicates if the cache limit is reached\. | 
 
-### Get Cache Stats<a name="ltr-api"></a>
+### Get Cache Stats<a name="ltr-api-getcachestats"></a>
 
 Returns statistics about the cache and memory usage\.
 
@@ -976,7 +976,7 @@ GET opendistro/_ltr/_cachestats
 }
 ```
 
-### Clear Cache<a name="ltr-api"></a>
+### Clear Cache<a name="ltr-api-clearcache"></a>
 
 Clears the plugin cache\. Use this to refresh the model\.
 

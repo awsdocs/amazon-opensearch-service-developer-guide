@@ -1,9 +1,9 @@
-# Logging and Monitoring in Amazon Elasticsearch Service<a name="es-managedomains-cloudtrailauditing"></a>
+# Configuration API Monitoring in Amazon Elasticsearch Service<a name="es-managedomains-cloudtrailauditing"></a>
 
 Amazon Elasticsearch Service integrates with AWS CloudTrail, a service that provides a record of actions taken by a user, role, or an AWS service in Amazon ES\. CloudTrail captures all configuration API calls for Amazon ES as events\.
 
 **Note**  
-CloudTrail only captures calls to the [configuration API](es-configuration-api.md), such as `CreateElasticsearchDomain` and `GetUpgradeStatus`\. CloudTrail doesn't capture calls to the [Elasticsearch APIs](aes-supported-es-operations.md), such as `_search` and `_bulk`\.
+CloudTrail only captures calls to the [configuration API](es-configuration-api.md), such as `CreateElasticsearchDomain` and `GetUpgradeStatus`\. CloudTrail doesn't capture calls to the [Elasticsearch APIs](aes-supported-es-operations.md), such as `_search` and `_bulk`\. For these calls, see [Audit Logs for Amazon Elasticsearch Service](audit-logs.md)\.
 
 The captured calls include calls from the Amazon ES console, AWS CLI, or an AWS SDK\. If you create a trail, you can enable continuous delivery of CloudTrail events to an Amazon S3 bucket, including events for Amazon ES\. If you don't configure a trail, you can still view the most recent events on the CloudTrail console in **Event history**\. Using the information collected by CloudTrail, you can determine the request that was made to Amazon ES, the IP address from which the request was made, who made the request, when it was made, and additional details\.
 

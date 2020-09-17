@@ -11,6 +11,8 @@ Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated 
 + [Enabling UltraWarm](#ultrawarm-enable)
 + [Migrating Indices to UltraWarm Storage](#ultrawarm-migrating)
 + [Automating Migrations](#ultrawarm-ism)
++ [Migration Tuning](#ultrawarm-settings)
++ [Cancelling Migrations](#ultrawarm-cancel)
 + [Listing Hot and Warm Indices](#ultrawarm-es-api)
 + [Returning Warm Indices to Hot Storage](#ultrawarm-migrating-back)
 + [Restoring Warm Indices from Automated Snapshots](#ultrawarm-snapshot)
@@ -140,7 +142,7 @@ index    migration_type state
 my-index HOT_TO_WARM    RUNNING_SHARD_RELOCATION
 ```
 
-You can have up to 25 simultaneous migrations from hot to warm storage\. To check the current number, monitor the `HotToWarmMigrationQueueSize` [metric](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-uw)\.
+You can have up to 200 simultaneous migrations from hot to warm storage\. To check the current number of migrations in the queue, monitor the `HotToWarmMigrationQueueSize` [metric](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-uw)\.
 
 The migration process has the following states:
 
@@ -172,39 +174,39 @@ GET my-index/_settings
       "index": {
         "refresh_interval": "-1",
         "auto_expand_replicas": "false",
-        "blocks": {
-          "ultrawarm_allow_delete": "true"
-        },
         "provided_name": "my-index",
-        "creation_date": "1572886951679",
+        "creation_date": "1599241458998",
         "unassigned": {
           "node_left": {
             "delayed_timeout": "5m"
           }
         },
         "number_of_replicas": "1",
-        "uuid": "3iyTkhXvR8Cytc6sWKBirg",
+        "uuid": "GswyCdR0RSq0SJYmzsIpiw",
         "version": {
-          "created": "6080099"
+          "created": "7070099"
         },
         "routing": {
           "allocation": {
             "require": {
               "box_type": "warm"
             }
-          },
-          "search_preference": "_primary_first"
+          }
         },
-        "number_of_shards": "5"
+        "number_of_shards": "5",
+        "merge": {
+          "policy": {
+            "max_merge_at_once_explicit": "50"
+          }
+        }
       }
     }
   }
 }
 ```
-+ `blocks.ultrawarm_allow_delete` specifies whether to block most `_settings` updates to the index \(`true`\) or allow them \(`false`\)\.
 + `number_of_replicas`, in this case, is the number of passive replicas, which don't consume disk space\.
 + `routing.allocation.require.box_type` specifies that the index should use warm nodes rather than standard data nodes\.
-+ `routing.search_preference` instructs Amazon ES to query primary shards first and only use passive replicas if the query fails\. This setting reduces disk usage\.
++ `merge.policy.max_merge_at_once_explicit` specifies the number of segments to simultaneously merge during the migration\.
 
 Indices in warm storage are read\-only unless you [return them to hot storage](#ultrawarm-migrating-back)\. You can query the indices and delete them, but you can't add, update, or delete individual documents\. If you try, you might encounter the following error:
 
@@ -225,6 +227,39 @@ Indices in warm storage are read\-only unless you [return them to hot storage](#
 ## Automating Migrations<a name="ultrawarm-ism"></a>
 
 We recommend using [Index State Management](ism.md) to automate the migration process after an index reaches a certain age or meets other conditions\. The sample policy [here](ism.md#ism-example) demonstrates that workflow\.
+
+## Migration Tuning<a name="ultrawarm-settings"></a>
+
+Index migrations to UltraWarm storage require a force merge\. Each Elasticsearch index is composed of some number of shards, and each shard is composed of some number of Lucene segments\. The force merge operation purges documents that were marked for deletion and conserves disk space\. By default, UltraWarm merges indices into one segment\.
+
+You can change this value up to 1,000 segments using the `index.ultrawarm.migration.force_merge.max_num_segments` setting\. Higher values speed up the migration process, but increase query latency for the warm index after the migration finishes\. To change the setting, make the following request:
+
+```
+PUT my-index/_settings
+{
+  "index": {
+    "ultrawarm": {
+      "migration": {
+        "force_merge": {
+          "max_num_segments": 1
+        }
+      }
+    }
+  }
+}
+```
+
+To check how long this stage of the migration process takes, monitor the `HotToWarmMigrationForceMergeLatency` [metric](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-uw)\.
+
+## Cancelling Migrations<a name="ultrawarm-cancel"></a>
+
+UltraWarm handles migrations sequentially, in a queue\. If a migration is in the queue, but has not yet started, you can remove it from the queue using the following request:
+
+```
+POST _ultrawarm/migration/_cancel/my-index
+```
+
+If your domain uses fine\-grained access control, you must have the `indices:admin/ultrawarm/migration/cancel` permission to make this request\.
 
 ## Listing Hot and Warm Indices<a name="ultrawarm-es-api"></a>
 

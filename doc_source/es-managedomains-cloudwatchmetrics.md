@@ -14,7 +14,7 @@ Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. I
 
 If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [Configuration Changes](es-managedomains-configuration-changes.md)\.
 
-Amazon ES metrics fall into these categories:
+All metrics are in the `AWS/ES` namespace\. Metrics for individual nodes are in the `ClientId, DomainName, NodeId` dimension\. Cluster metrics are in the `Per-Domain, Per-Client Metrics` dimension\. Some node metrics are aggregated at the cluster level and thus included in both dimensions\. The service archives metrics for two weeks before discarding them\.
 + [Cluster Metrics](#es-managedomains-cloudwatchmetrics-cluster-metrics)
 + [Dedicated Master Node Metrics](#es-managedomains-cloudwatchmetrics-master-node-metrics)
 + [EBS Volume Metrics](#es-managedomains-cloudwatchmetrics-master-ebs-metrics)
@@ -25,12 +25,9 @@ Amazon ES metrics fall into these categories:
 + [KNN Metrics](#es-managedomains-cloudwatchmetrics-knn)
 + [Cross\-Cluster Search Metrics](#es-managedomains-cloudwatchmetrics-cross-cluster-search)
 
-**Note**  
-The service archives metrics for two weeks before discarding them\.
-
 ## Cluster Metrics<a name="es-managedomains-cloudwatchmetrics-cluster-metrics"></a>
 
-The `AWS/ES` namespace includes the following metrics for clusters\.
+Amazon Elasticsearch Service provides the following metrics for clusters\.
 
 
 | Metric | Description | 
@@ -57,7 +54,7 @@ The `AWS/ES` namespace includes the following metrics for clusters\.
 
 ## Dedicated Master Node Metrics<a name="es-managedomains-cloudwatchmetrics-master-node-metrics"></a>
 
-The `AWS/ES` namespace includes the following metrics for [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
+Amazon Elasticsearch Service provides the following metrics for [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
 
 
 | Metric | Description | 
@@ -71,7 +68,7 @@ The `AWS/ES` namespace includes the following metrics for [dedicated master node
 
 ## EBS Volume Metrics<a name="es-managedomains-cloudwatchmetrics-master-ebs-metrics"></a>
 
-The `AWS/ES` namespace includes the following metrics for EBS volumes\.
+Amazon Elasticsearch Service provides the following metrics for EBS volumes\.
 
 
 | Metric | Description | 
@@ -86,7 +83,7 @@ The `AWS/ES` namespace includes the following metrics for EBS volumes\.
 
 ## Instance Metrics<a name="es-managedomains-cloudwatchmetrics-instance-metrics"></a>
 
-The `AWS/ES` namespace includes the following metrics for each instance in a domain\. Amazon ES also aggregates these instance metrics to provide insight into overall cluster health\. You can verify this behavior using the **Data samples** statistic in the console\. Note that each metric in the following table has relevant statistics for the node *and* the cluster\.
+Amazon Elasticsearch Service provides the following metrics for each instance in a domain\. Amazon ES also aggregates these instance metrics to provide insight into overall cluster health\. You can verify this behavior using the **Data samples** statistic in the console\. Note that each metric in the following table has relevant statistics for the node *and* the cluster\.
 
 **Important**  
 Different versions of Elasticsearch use different thread pools to process calls to the `_index` API\. Elasticsearch 1\.5 and 2\.3 use the index thread pool\. Elasticsearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. 6\.3 and later use the write thread pool\. Currently, the Amazon ES console doesn't include a graph for the bulk thread pool\.
@@ -121,7 +118,7 @@ Different versions of Elasticsearch use different thread pools to process calls 
 
 ## UltraWarm Metrics<a name="es-managedomains-cloudwatchmetrics-uw"></a>
 
-The `AWS/ES` namespace includes the following metrics for [UltraWarm](ultrawarm.md) nodes\.
+Amazon Elasticsearch Service provides the following metrics for [UltraWarm](ultrawarm.md) nodes\.
 
 
 | Metric | Description | 
@@ -133,14 +130,20 @@ The `AWS/ES` namespace includes the following metrics for [UltraWarm](ultrawarm.
 |  `WarmSearchLatency`  |  The average time, in milliseconds, that it takes a shard on an UltraWarm node to complete a search operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum  | 
 |  `WarmSearchRate`  |  The total number of search requests per minute for all shards on an UltraWarm node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum  | 
 | WarmStorageSpaceUtilization |  The total amount of warm storage space that the cluster is using\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. Relevant statistics: Max  | 
-|  `HotStorageSpaceUtilization`  |  The total amount of hot storage space that the cluster is using\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. Relevant statistics: Max  | 
+|  `HotStorageSpaceUtilization`  |  The total amount of hot storage space that the cluster is using\. Relevant statistics: Max  | 
 | WarmSysMemoryUtilization |  The percentage of the warm node's memory that is in use\. Relevant statistics: Maximum  | 
-|  `HotToWarmMigrationQueueSize`  | The number of indices currently migrating from hot to warm storage\. Relevant statistics: Maximum | 
-|  `WarmToHotMigrationQueueSize`  |  The number of indices currently migrating from warm to hot storage\. Relevant statistics: Maximum  | 
+|  `HotToWarmMigrationQueueSize`  |  The number of indices currently waiting to migrate from hot to warm storage\. Relevant statistics: Maximum  | 
+|  `WarmToHotMigrationQueueSize`  |  The number of indices currently waiting to migrate from warm to hot storage\. Relevant statistics: Maximum  | 
+|  `HotToWarmMigrationFailureCount`  |  The total number of failed hot to warm migrations\. Relevant statistics: Sum  | 
+|  `HotToWarmMigrationForceMergeLatency`  |  The average latency of the force merge stage of the migration process\. If this stage consistently takes too long, consider increasing `index.ultrawarm.migration.force_merge.max_num_segments`\. Relevant statistics: Average  | 
+|  `HotToWarmMigrationSnapshotLatency`  |  The average latency of the snapshot stage of the migration process\. If this stage consistently takes too long, ensure that your shards are appropriately sized and distributed throughout the cluster\. Relevant statistics: Average  | 
+|  `HotToWarmMigrationProcessingLatency`  |  The average latency of successful hot to warm migrations, *not* including time spent in the queue\. This value is the sum of the amount of time it takes to complete the force merge, snapshot, and shard relocation stages of the migration process\. Relevant statistics: Average  | 
+|  `HotToWarmMigrationSuccessCount`  |  The total number of successful hot to warm migrations\. Relevant statistics: Sum  | 
+|  `HotToWarmMigrationSuccessLatency`  |  The average latency of successful hot to warm migrations, including time spent in the queue\. Relevant statistics: Average  | 
 
 ## Alerting Metrics<a name="es-managedomains-cloudwatchmetrics-alerting"></a>
 
-The `AWS/ES` namespace includes the following metrics for the [alerting feature](alerting.md)\.
+Amazon Elasticsearch Service provides the following metrics for the [alerting feature](alerting.md)\.
 
 
 | Metric | Description | 
@@ -156,7 +159,7 @@ The `AWS/ES` namespace includes the following metrics for the [alerting feature]
 
 ## Anomaly Detection Metrics<a name="es-managedomains-cloudwatchmetrics-anomaly-detection"></a>
 
-The `AWS/ES` namespace includes the following metrics for the [anomaly detection feature](ad.md)\.
+Amazon Elasticsearch Service provides the following metrics for the [anomaly detection feature](ad.md)\.
 
 
 | Metric | Description | 
@@ -173,7 +176,7 @@ The `AWS/ES` namespace includes the following metrics for the [anomaly detection
 
 ## SQL Metrics<a name="es-managedomains-cloudwatchmetrics-sql"></a>
 
-The `AWS/ES` namespace includes the following metrics for [SQL support](sql-support.md)\.
+Amazon Elasticsearch Service provides the following metrics for [SQL support](sql-support.md)\.
 
 
 | Metric | Description | 
@@ -186,11 +189,11 @@ The `AWS/ES` namespace includes the following metrics for [SQL support](sql-supp
 
 ## KNN Metrics<a name="es-managedomains-cloudwatchmetrics-knn"></a>
 
-The `AWS/ES` namespace includes metrics for [KNN](knn.md)\. For a summary of each, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/#statistics)\.
+Amazon Elasticsearch Service includes metrics for [KNN](knn.md)\. For a summary of each, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/#statistics)\.
 
 ## Cross\-Cluster Search Metrics<a name="es-managedomains-cloudwatchmetrics-cross-cluster-search"></a>
 
-The `AWS/ES` namespace includes the following metrics for [Cross\-cluster search](cross-cluster-search.md)\.
+Amazon Elasticsearch Service provides the following metrics for [Cross\-cluster search](cross-cluster-search.md)\.
 
 **Source domain metrics**
 
@@ -211,7 +214,7 @@ Add a CloudWatch alarm in the event that you lose a connection unexpectedly\. Fo
 
 ## Learning to Rank Metrics<a name="es-managedomains-cloudwatchmetrics-learning-to-rank"></a>
 
-The `AWS/ES` namespace includes the following metrics for [Learning to Rank](learning-to-rank.md)\.
+Amazon Elasticsearch Service provides the following metrics for [Learning to Rank](learning-to-rank.md)\.
 
 
 | Metric | Description | 

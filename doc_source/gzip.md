@@ -56,6 +56,9 @@ document = {
 
 # Send the request.
 print(es.index(index='movies', id='1', body=document, refresh=True))
+
+# # Older versions of the client might require doc_type.
+# print(es.index(index='movies', doc_type='_doc', id='1', body=document, refresh=True))
 ```
 
 Alternately, you can specify the proper headers, compress the request body yourself, and use a standard HTTP library like [Requests](https://2.python-requests.org)\. This code signs the request using HTTP basic credentials, which your domain might support if you use [fine\-grained access control](fgac.md)\.

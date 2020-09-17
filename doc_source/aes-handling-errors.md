@@ -132,9 +132,9 @@ A JVM `OutOfMemoryError` typically means that one of the following JVM circuit b
 
 | Circuit Breaker | Description | Cluster Setting Property | 
 | --- | --- | --- | 
-| Parent Breaker | Total percentage of JVM heap memory allowed for all circuit breakers\. The default value is 70%\. | indices\.breaker\.total\.limit | 
-| Field Data Breaker | Percentage of JVM heap memory allowed to load a single data field into memory\. The default value is 60%\. If you upload data with large fields, we recommend raising this limit\. | indices\.breaker\.fielddata\.limit | 
-| Request Breaker | Percentage of JVM heap memory allowed for data structures used to respond to a service request\. The default value is 40%\. If your service requests involve calculating aggregations, we recommend raising this limit\. | indices\.breaker\.request\.limit | 
+| Parent Breaker | Total percentage of JVM heap memory allowed for all circuit breakers\. The default value is 95%\. | indices\.breaker\.total\.limit | 
+| Field Data Breaker | Percentage of JVM heap memory allowed to load a single data field into memory\. The default value is 40%\. If you upload data with large fields, you might need to raise this limit\. | indices\.breaker\.fielddata\.limit | 
+| Request Breaker | Percentage of JVM heap memory allowed for data structures used to respond to a service request\. The default value is 60%\. If your service requests involve calculating aggregations, you might need to raise this limit\. | indices\.breaker\.request\.limit | 
 
 ## Failed Cluster Nodes<a name="aes-handling-errors-failed-cluster-nodes"></a>
 
@@ -171,6 +171,10 @@ POST /_snapshot/my-repository/my-snapshot/_restore
 ```
 
 If you plan to reindex, shrink, or split an index, you likely want to stop writing to it before performing the operation\.
+
+## Request Throttling<a name="aes-troubleshooting-throttle-api"></a>
+
+If you receive persistent `403 Request throttled due to too many requests` errors, consider scaling vertically\. Amazon Elasticsearch Service throttles requests if the payload would cause memory usage to exceed the maximum size of the Java heap\.
 
 ## Can't SSH into Node<a name="aes-troubleshooting-ssh"></a>
 

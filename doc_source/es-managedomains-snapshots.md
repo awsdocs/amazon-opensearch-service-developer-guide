@@ -53,7 +53,6 @@ PUT elasticsearch-domain-endpoint/_snapshot/my-snapshot-repo-name
 Registering a snapshot directory is a one\-time operation, but to migrate from one domain to another, you must register the same snapshot repository on the old domain and the new domain\. The repository name is arbitrary\.
 
 **Important**  
-If the S3 bucket is in the us\-east\-1 region, you must use `"endpoint": "s3.amazonaws.com"` instead of `"region": "us-east-1"`\.  
 To enable [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) for the snapshot repository, add `"server_side_encryption": true` to the `"settings"` JSON\.
 
 If your domain resides within a VPC, your computer must be connected to the VPC in order for the request to successfully register the snapshot repository\. Accessing a VPC varies by network configuration, but likely involves connecting to a VPN or corporate network\. To check that you can reach the Amazon ES domain, navigate to `https://your-vpc-domain.region.es.amazonaws.com` in a web browser and verify that you receive the default JSON response\.
@@ -89,8 +88,7 @@ payload = {
   "type": "s3",
   "settings": {
     "bucket": "s3-bucket-name",
-    # "endpoint": "s3.amazonaws.com", # for us-east-1
-    "region": "us-west-1", # for all other regions
+    "region": "us-west-1",
     "role_arn": "arn:aws:iam::123456789012:role/TheSnapshotRole"
   }
 }

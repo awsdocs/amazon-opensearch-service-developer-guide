@@ -9,7 +9,7 @@ This chapter presents a solution: use Amazon API Gateway to restrict users to a 
 **Note**  
 Standard API Gateway and Lambda pricing applies, but within the limited usage of this tutorial, costs should be negligible\.
 
-## Step 1: Index Sample Data<a name="search-example-es"></a>
+## Step 1: Index Sample Data<a name="search-example-index"></a>
 
 A prerequisite for these steps is an Amazon ES domain\. Download [sample\-movies\.zip](samples/sample-movies.zip), unzip it, and use the `_bulk` API to add the 5,000 documents to the `movies` index:
 

@@ -56,4 +56,4 @@ The Java Database Connectivity \(JDBC\) driver lets you integrate Amazon ES doma
 
 ## ODBC Driver<a name="odbc"></a>
 
-The Open Database Connectivity \(ODBC\) driver is a read\-only driver for Windows and macOS that lets you connect BI applications like Tableau to the SQL plugin\. For steps to install the ODBC driver and use it to connect to Tableau, see [ODBC Driver](https://opendistro.github.io/for-elasticsearch-docs/docs/sql/odbc/)\.
+The Open Database Connectivity \(ODBC\) driver is a read\-only ODBC driver for Windows and macOS that lets you connect business intelligence and data visualization applications like [Tableau](https://github.com/opendistro-for-elasticsearch/sql/blob/develop/sql-odbc/docs/user/tableau_support.md) and [Microsoft Excel](https://github.com/opendistro-for-elasticsearch/sql/blob/develop/sql-odbc/docs/user/microsoft_excel_support.md) to the SQL plugin\. For information on downloading and using the JAR file, see the [SQL repository on GitHub](https://github.com/opendistro-for-elasticsearch/sql/tree/master/sql-odbc)\.
