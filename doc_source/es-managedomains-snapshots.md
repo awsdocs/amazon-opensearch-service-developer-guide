@@ -132,6 +132,8 @@ print(r.text)
 #
 # r = requests.post(url, auth=awsauth, json=payload, headers=headers)
 #
+# print(r.text)
+#
 # # Restore snapshot (one index)
 #
 # path = '_snapshot/my-snapshot-repo/my-snapshot/_restore'
