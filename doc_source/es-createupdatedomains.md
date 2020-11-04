@@ -87,7 +87,7 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
 1. In the **Fine\-grained access control** section, enable or disable fine\-grained access control:
    + If you want to use IAM for user management, choose **Set IAM role as master user** and specify the ARN for an IAM role\.
-   + If you want to user the internal user database, choose **Create a master user** and specify a user name and password\.
+   + If you want to use the internal user database, choose **Create a master user** and specify a user name and password\.
 
    Whichever option you choose, the master user can access all indices in the cluster and all Elasticsearch APIs\. For guidance on which option to choose, see [Key Concepts](fgac.md#fgac-concepts)\.
 
