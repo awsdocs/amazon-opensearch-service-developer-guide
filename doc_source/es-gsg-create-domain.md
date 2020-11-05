@@ -19,6 +19,8 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. Enter a name for the domain\. In this tutorial, we use the domain name *movies* for the examples that we provide later in the tutorial\.
 
+1. For now, you can ignore **Custom endpoint**\.
+
 1. For **Data nodes**, choose the `c5.large.elasticsearch` instance type\. Use the default value of 1 instance\.
 
 1. For **Data nodes storage**, use the default values\.
@@ -31,7 +33,7 @@ An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are cl
 
 1. For **Fine\-grained access control**, choose **Create master user**\. Specify a username and password\.
 
-1. For now, you can ignore **Amazon Cognito Authentication**\.
+1. For now, you can ignore **SAML authentication** and **Amazon Cognito Authentication**\.
 
 1. For **Access policy**, choose **Allow open access to the domain**\. In this tutorial, fine\-grained access control handles authentication, not the domain access policy\.
 

@@ -10,14 +10,11 @@ The following sections address some common Kibana use cases:
 ## Controlling Access to Kibana<a name="es-kibana-access"></a>
 
 Kibana does not natively support IAM users and roles, but Amazon ES offers several solutions for controlling access to Kibana:
-
-
-****  
-
-| Domain Configuration | Access Control Options | 
-| --- | --- | 
-| Public access |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html)  | 
-| VPC access |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-kibana.html)  | 
++ Enable [SAML authentication for Kibana](saml.md)\.
++ Use [fine\-grained access control](fgac.md#fgac-concepts) with HTTP basic authentication\.
++ Configure [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
++ For public access domains, configure an [IP\-based access policy](es-ac.md#es-ac-types-ip), with or without a [proxy server](#es-kibana-proxy)\.
++ For VPC access domains, use an open access policy, with or without a proxy server, and [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control access\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 ### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
 

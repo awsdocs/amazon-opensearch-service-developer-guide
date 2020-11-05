@@ -133,7 +133,7 @@ GET _ultrawarm/migration/my-index/_status
 }
 ```
 
-If you migrate several indices in quick succession, you can get a summary of all migrations in plaintext, similar to the `_cat` API:
+Index health must be green to perform a migration\. If you migrate several indices in quick succession, you can get a summary of all migrations in plaintext, similar to the `_cat` API:
 
 ```
 GET _ultrawarm/migration/_status?v
@@ -291,9 +291,9 @@ After the migration finishes, check the index settings to make sure they meet yo
 
 ## Restoring Warm Indices from Automated Snapshots<a name="ultrawarm-snapshot"></a>
 
-In addition to the standard repository for automated snapshots, UltraWarm adds a second repository, `cs-ultrawarm`\. Snapshots in `cs-ultrawarm` have the same 14\-day retention period as other automated snapshots\.
+In addition to the standard repository for automated snapshots, UltraWarm adds a second repository for warm indices, `cs-ultrawarm`\. Each snapshot in this repository contains only one index\. If you delete a warm index, its snapshot remains in the `cs-ultrawarm` repository for 14 days, just like any other automated snapshot\.
 
-Unlike other automated snapshots, each snapshot in this repository contains only one index\. When you restore a snapshot from `cs-ultrawarm`, it restores to warm storage, not hot storage\. Snapshots in the `cs-automated` and `cs-automated-enc` repositories restore to hot storage\.
+When you restore a snapshot from `cs-ultrawarm`, it restores to warm storage, not hot storage\. Snapshots in the `cs-automated` and `cs-automated-enc` repositories restore to hot storage\.
 
 **To restore an UltraWarm snapshot to warm storage**
 
@@ -331,7 +331,7 @@ Unlike other automated snapshots, each snapshot in this repository contains only
 
 ## Manual Snapshots of Warm Indices<a name="ultrawarm-manual-snapshot"></a>
 
-You *can* take manual snapshots of warm indices, but we don't recommend it\. The automated `cs-ultrawarm` repository already contains a snapshot for each warm index at no additional charge\.
+You *can* take manual snapshots of warm indices, but we don't recommend it\. The automated `cs-ultrawarm` repository already contains a snapshot for each warm index, taken during the migration, at no additional charge\.
 
 By default, Amazon ES does not include warm indices in manual snapshots\. For example, the following call only includes hot indices:
 

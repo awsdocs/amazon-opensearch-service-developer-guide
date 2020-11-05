@@ -162,6 +162,7 @@ Fine\-grained access control has a Kibana plugin that simplifies management task
 ![\[Cognito sign-in page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/cognito-auth.png)
 + If you choose to use the internal user database, you can sign in to Kibana with your master user name and password\. You must access Kibana over HTTPS\. For more information about this configuration, see [Tutorial: Internal User Database and HTTP Basic Authentication](#fgac-walkthrough-basic)\.  
 ![\[Basic authentication sign-in page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/basic-auth-kibana.png)
++ If you choose to use SAML authentication, you can sign in using credentials from an external identity provider\. For more information, see [SAML Authentication for Kibana](saml.md)\.
 
 ## Managing Permissions<a name="fgac-access-control"></a>
 
@@ -238,11 +239,12 @@ Tenants are spaces for saving index patterns, visualizations, dashboards, and ot
 Due to how fine\-grained access control [interacts with other security features](#fgac-access-policies), we recommend several fine\-grained access control configurations that work well for most use cases\.
 
 
-| Description | Master User | Amazon Cognito Authentication for Kibana | Domain Access Policy | 
-| --- | --- | --- | --- | 
-| Use IAM credentials or basic authentication for calls to the Elasticsearch APIs, and use basic authentication to access Kibana\. Manage fine\-grained access control roles using Kibana or the REST API\. | User name and password | Disabled |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
-| Use IAM credentials for calls to the Elasticsearch APIs, and use Amazon Cognito to access Kibana\. Manage fine\-grained access control roles using Kibana or the REST API\. | IAM user or role | Enabled |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
-| Use IAM credentials for calls to the Elasticsearch APIs, and block most access to Kibana\. Manage fine\-grained access control roles using the REST API\. | IAM user or role | Disabled |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    },<br />    {<br />      "Effect": "Deny",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/_plugin/kibana*"<br />    }<br />  ]<br />}</pre>  | 
+| Description | Master User | Domain Access Policy | 
+| --- | --- | --- | 
+| Use IAM credentials for calls to the Elasticsearch APIs, and use [SAML authentication](saml.md) to access Kibana\. Manage fine\-grained access control roles using Kibana or the REST API\. | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
+| Use IAM credentials or basic authentication for calls to the Elasticsearch APIs, and use basic authentication to access Kibana\. Manage fine\-grained access control roles using Kibana or the REST API\. | User name and password |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
+| Use IAM credentials for calls to the Elasticsearch APIs, and use Amazon Cognito to access Kibana\. Manage fine\-grained access control roles using Kibana or the REST API\. | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
+| Use IAM credentials for calls to the Elasticsearch APIs, and block most access to Kibana\. Manage fine\-grained access control roles using the REST API\. | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    },<br />    {<br />      "Effect": "Deny",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/_plugin/kibana*"<br />    }<br />  ]<br />}</pre>  | 
 
 ## Tutorial: IAM Master User and Amazon Cognito<a name="fgac-walkthrough-iam"></a>
 
@@ -254,7 +256,7 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
 **To get started with fine\-grained access control**
 
 1. [Create a domain](es-createupdatedomains.md) with the following settings:
-   + Elasticsearch 7\.7
+   + Elasticsearch 7\.8
    + Public access
    + Fine\-grained access control enabled with an IAM role as the master user \(`IAMMasterUserRole` for the rest of this tutorial\)
    + [Amazon Cognito authentication for Kibana](es-cognito-auth.md) enabled
@@ -421,7 +423,7 @@ This tutorial covers another popular use case: a master user in the internal use
 **To get started with fine\-grained access control**
 
 1. [Create a domain](es-createupdatedomains.md) with the following settings:
-   + Elasticsearch 7\.7
+   + Elasticsearch 7\.8
    + Public access
    + Fine\-grained access control with a master user in the internal user database \(`TheMasterUser` for the rest of this tutorial\)
    + Amazon Cognito authentication for Kibana *disabled*
@@ -533,7 +535,7 @@ This tutorial covers another popular use case: a master user in the internal use
 Fine\-grained access control has several important limitations:
 + The `hosts` aspect of role mappings, which maps roles to hostnames or IP addresses, doesn't work if the domain is within a VPC\. You can still map roles to users and backend roles\.
 + Users in the internal user database can't change their own passwords\. Master users \(or users with equivalent permissions\) must change their passwords for them\.
-+ If you choose IAM for the master user and don't enable Amazon Cognito authentication, Kibana displays a nonfunctional sign\-in page\.
++ If you choose IAM for the master user and don't enable Amazon Cognito or SAML authentication, Kibana displays a nonfunctional sign\-in page\.
 + If you choose IAM for the master user, you can still create users in the internal user database\. Because HTTP basic authentication is not enabled under this configuration, however, any requests signed with those user credentials are rejected\.
 + If you use [SQL](sql-support.md) to query an index that you don't have access to, you receive a "no permissions" error\. If the index doesn't exist, you receive a "no such index" error\. This difference in error messages means that you can confirm the existence of an index if you happen to guess its name\.
 
@@ -566,7 +568,7 @@ If you forget the details of the master user, you can reconfigure it using the c
 
 1. Choose your domain\.
 
-1. Choose **Actions**, **Modify master user**\.
+1. Choose **Actions**, **Modify authentication**\.
 
 1. Choose either **Set IAM role as master user** or **Create new master user**\.
    + If you previously used an IAM master user, fine\-grained access control re\-maps the `all_access` role to the new IAM ARN that you specify\.

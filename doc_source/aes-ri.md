@@ -7,7 +7,9 @@ Amazon ES RIs require one\- or three\-year terms and have three payment options 
 + **Partial Upfront** – You pay a portion of the cost upfront, and you pay a discounted hourly rate for every hour within the term\.
 + **All Upfront** – You pay the entirety of the cost upfront\. You don't pay an hourly rate for the term\.
 
-Generally speaking, a larger upfront payment means a larger discount\. You can't cancel Reserved Instances—when you reserve them, you commit to paying for the entire term—and upfront payments are nonrefundable\. For full details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) and [FAQ](https://aws.amazon.com/elasticsearch-service/faqs/)\.
+Generally speaking, a larger upfront payment means a larger discount\. You can't cancel Reserved Instances—when you reserve them, you commit to paying for the entire term—and upfront payments are nonrefundable\.
+
+Amazon Elasticsearch Service RIs are not flexible; they only apply to the exact instance type that you reserve\. For example, a reservation for eight `c5.2xlarge.elasticsearch` instances does not apply to sixteen `c5.xlarge.elasticsearch` instances or four `c5.4xlarge.elasticsearch` instances\. For full details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) and [FAQ](https://aws.amazon.com/elasticsearch-service/faqs/)\.
 
 **Topics**
 + [Purchasing Reserved Instances \(Console\)](#aes-ri-console)

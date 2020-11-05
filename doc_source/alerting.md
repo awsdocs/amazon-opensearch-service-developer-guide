@@ -58,9 +58,17 @@ Amazon ES supports [Amazon SNS](https://aws.amazon.com/sns/) for notifications\.
 
 ### Alerting Settings<a name="alerting-diff-settings"></a>
 
-Open Distro for Elasticsearch lets you modify [certain alerting settings](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/settings/#alerting-settings) using the `_cluster/settings` API \(for example, `opendistro.alerting.monitor.max_monitors`\)\. Amazon ES uses the default values, and you can't change them\.
+Amazon ES lets you modify the following [alerting settings](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/settings/#alerting-settings):
++ `opendistro.scheduled_jobs.enabled`
++ `opendistro.alerting.alert_history_enabled`
++ `opendistro.alerting.alert_history_max_age`
++ `opendistro.alerting.alert_history_max_docs`
++ `opendistro.alerting.alert_history_retention_period`
++ `opendistro.alerting.alert_history_rollover_period`
 
-You can, however, disable the alerting feature\. Send the following request:
+All other settings use the default values, and you can't change them\.
+
+To disable the alerting feature, send the following request:
 
 ```
 PUT _cluster/settings
@@ -71,11 +79,39 @@ PUT _cluster/settings
 }
 ```
 
+This next request sets the alerting feature to automatically delete history indices after seven days, rather than the default value of 30:
+
+```
+PUT _cluster/settings
+{
+  "persistent": {
+    "opendistro.alerting.alert_history_retention_period": "7d"
+  }
+}
+```
+
 If you previously created monitors and want to stop the creation of daily alerting indices, delete all alert history indices:
 
 ```
 DELETE .opendistro-alerting-alert-history-*
 ```
+
+To reduce shard count for history indices, create an index template\. The following request sets history indices for both alerting and [Index State Management](ism.md) to one shard and one replica:
+
+```
+PUT _cluster/settings
+{
+  "index_patterns": [".opendistro-alerting-alert-history-*", ".opendistro-ism-managed-index-history-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    }
+  }
+}
+```
+
+Depending on your tolerance for data loss, you might even consider using zero replicas\.
 
 ### Alerting Permissions<a name="alerting-diff-perms"></a>
 

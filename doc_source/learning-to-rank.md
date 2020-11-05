@@ -67,7 +67,7 @@ Prepare your judgment list in the following format:
 where qid:1 represents "rambo"
 ```
 
-For a more complete example of a judgment list, see [sample judgments](https://github.com/o19s/elasticsearch-learning-to-rank/blob/master/demo/sample_judgments.txt)\.
+For a more complete example of a judgment list, see [movie judgments](https://github.com/o19s/elasticsearch-ltr-demo/blob/master/train/movie_judgments.txt)\.
 
 You can create this judgment list manually with the help of human annotators or infer it programmatically from analytics data\.
 

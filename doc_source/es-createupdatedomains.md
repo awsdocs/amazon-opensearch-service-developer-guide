@@ -37,6 +37,8 @@ Different deployment types present different options on subsequent pages\. These
    + Contains between 3 and 28 characters
    + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
 
+1. If you want to use a custom endpoint rather than the standard one of `https://search-mydomain-1a2a3a4a5a6a7a8a9a0a9a8a7a.us-east-1.es.amazonaws.com` , choose Enable custom endpoint\. Then provide a name and certificate\. For more information, see [Creating a Custom Endpoint](es-customendpoint.md)\.
+
 1. For **Availability Zones**, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains-multiaz.md)\.
 
 1. For **Instance type**, choose an instance type for the data nodes\. For more information, see [Supported Instance Types](aes-supported-instance-types.md)\.
@@ -93,13 +95,15 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
 
    If you disable fine\-grained access control, you can still control access to your domain by placing it within a VPC, applying a restrictive access policy, or both\. You must enable node\-to\-node encryption and encryption at rest to use fine\-grained access control\.
 
+1. \(Optional\) If you want to use SAML authentication for Kibana, choose **Prepare SAML authentication**\. After the domain is available, see [SAML Authentication for Kibana](saml.md) for additional steps\.
+
 1. \(Optional\) If you want to use Amazon Cognito authentication for Kibana, choose **Enable Amazon Cognito authentication**\.
 
    1. Choose the Amazon Cognito user pool and identity pool that you want to use for Kibana authentication\. For guidance on creating these resources, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
 
 1. For **Domain access policy**, add the ARNs or IP addresses that you want or choose a preconfigured policy from the dropdown list\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md) and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 **Note**  
-If you chose **VPC access** in step 17, IP\-based policies are prohibited\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you chose **VPC access** in step 18, IP\-based policies are prohibited\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
 
 1. \(Optional\) To require that all requests to the domain arrive over HTTPS, select the **Require HTTPS for all traffic to the domain** check box\.
 

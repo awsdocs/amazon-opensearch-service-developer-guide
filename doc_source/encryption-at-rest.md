@@ -19,7 +19,7 @@ Regardless of whether encryption at rest is enabled, all domains automatically e
 
 You can't enable encryption at rest on existing domains, only new ones\. Encryption of data at rest requires Elasticsearch 5\.1 or later\.
 
-To use the Amazon ES console to create a domain that encrypts data at rest, you must have read\-only permissions to AWS KMS, such as the following identity\-based policy:
+To use the Amazon ES console to create a domain that encrypts data at rest, you must have read permissions to AWS KMS, such as the following identity\-based policy:
 
 ```
 {
@@ -37,9 +37,9 @@ To use the Amazon ES console to create a domain that encrypts data at rest, you 
 }
 ```
 
-If you want to use a key other than **\(Default\) aws/es**, you must also have permissions to create [grants](https://docs.aws.amazon.com/kms/latest/developerguide/grants.html) for the key\. These permissions typically take the form of a resource\-based policy that you specify when you create the key\.
+If you want to use a master key other than **\(Default\) aws/es**, you must also have permissions to create [grants](https://docs.aws.amazon.com/kms/latest/developerguide/grants.html) for the key\. These permissions typically take the form of a resource\-based policy that you specify when you create the key\.
 
-If you want to keep your key exclusive to Amazon ES, you can add the [kms:ViaService](https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-via-service) condition to the key policy:
+If you want to keep your key exclusive to Amazon ES, you can add the [kms:ViaService](https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-via-service) condition to that key policy:
 
 ```
 "Condition": {

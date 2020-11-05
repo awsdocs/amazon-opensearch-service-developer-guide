@@ -9,10 +9,10 @@ The following table shows Amazon ES limits for clusters and instances\.
 
 | Clusters and Instances | Limit | 
 | --- | --- | 
-| Maximum number of data nodes per cluster |  40 \(except for the T2 instance types, which have a maximum of 10\) To request an increase up to 200 data nodes \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
+| Maximum number of data nodes per cluster |  40 \(except for the T2 and T3 instance types, which have a maximum of 10\) To request an increase up to 200 data nodes \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
 | Maximum number of [warm](ultrawarm.md) nodes per cluster | 150 | 
 |  Maximum total number of data and warm nodes per cluster  |  200 You might have to request a data node limit increase to reach this total\. For example, your domain might have 80 data nodes and 120 warm nodes\.  | 
-| Maximum number of dedicated master nodes per cluster |  5 You can use the T2 instance types for dedicated master nodes \(not recommended for production domains\) only if the number of data nodes is 10 or fewer\.  | 
+| Maximum number of dedicated master nodes per cluster |  5 You can use the T2 and T3 instance types for dedicated master nodes only if the number of data nodes is 10 or fewer\. We don't recommend T2 or `t3.small` instance types for production domains\.  | 
 |  Maximum total storage per cluster  |  3 PiB This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 36 `i3.8xlarge.elasticsearch` instances and 140 `ultrawarm1.large.elasticsearch` instances for a total of 2\.98 PiB of storage\.  | 
 | Smallest supported instance type per Elasticsearch version | `t2.micro.elasticsearch` \(versions 1\.5 and 2\.3\) and `t2.small.elasticsearch` \(version 5\.*x* and 6\.*x*\)\. | 
 | Maximum number of domains per account \(per Region\) | 100 | 
@@ -48,6 +48,8 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 | t2\.micro\.elasticsearch | 10 GiB | 35 GiB | 
 | t2\.small\.elasticsearch | 10 GiB | 35 GiB | 
 | t2\.medium\.elasticsearch | 10 GiB | 35 GiB | 
+| t3\.small\.elasticsearch | 10 GiB | 100 GiB | 
+| t3\.medium\.elasticsearch | 10 GiB | 200 GiB | 
 | m3\.medium\.elasticsearch | 10 GiB | 100 GiB | 
 | m3\.large\.elasticsearch | 10 GiB | 512 GiB | 
 | m3\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
@@ -110,6 +112,8 @@ The following table shows the maximum size of HTTP request payloads\.
 | t2\.micro\.elasticsearch | 10 MiB | 
 | t2\.small\.elasticsearch | 10 MiB | 
 | t2\.medium\.elasticsearch | 10 MiB | 
+| t3\.small\.elasticsearch | 10 MiB | 
+| t3\.medium\.elasticsearch | 10 MiB | 
 | m3\.medium\.elasticsearch | 10 MiB | 
 | m3\.large\.elasticsearch | 10 MiB | 
 | m3\.xlarge\.elasticsearch | 100 MiB | 

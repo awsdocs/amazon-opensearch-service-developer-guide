@@ -107,6 +107,8 @@ To determine if a red cluster status is due to a continuous heavy processing loa
 
 A yellow cluster status means that the primary shards for all indices are allocated to nodes in a cluster, but the replica shards for at least one index are not\. Single\-node clusters always initialize with a yellow cluster status because there is no other node to which Amazon ES can assign a replica\. To achieve green cluster status, increase your node count\. For more information, see [Sizing Amazon ES Domains](sizing-domains.md)\.
 
+Multi\-node clusters might briefly have a yellow cluster status after creating a new index or after a node failure\. This status self\-resolves as Elasticsearch replicates data across the cluster\. [Lack of disk space](#aes-handling-errors-watermark) can also cause yellow cluster status; the cluster can only distribute replica shards if nodes have the disk space to accommodate them\.
+
 ## ClusterBlockException<a name="troubleshooting-cluster-block"></a>
 
 You might receive a `ClusterBlockException` error for the following reasons\.
@@ -156,9 +158,33 @@ The 7\.*x* versions of Elasticsearch have a default setting of no more than 1,00
 + Increase the `_cluster/settings/cluster.max_shards_per_node` setting\.
 + Use the [\_shrink API](aes-supported-es-operations.md#es_version_api_notes-shrink) to reduce the number of shards on the node\.
 
+## Can't Enable Audit Logs<a name="aes-troubleshooting-audit-logs-error"></a>
+
+You might encounter the following error when you try to enable audit log publishing using the Amazon ES console:
+
+The Resource Access Policy specified for the CloudWatch Logs log group does not grant sufficient permissions for Amazon Elasticsearch Service to create a log stream\. Please check the Resource Access Policy\.
+
+If you encounter this error, verify that the `resource` element of your policy includes the correct log group ARN\. If it does, take the following steps:
+
+1. Wait several minutes\.
+
+1. Refresh the page in your web browser\.
+
+1. Choose **Use existing log group**\.
+
+1. Under **Existing log group**, choose the log group that you created before receiving the error message\.
+
+1. Choose **Select an existing policy**\.
+
+1. Under **Existing policy**, choose the policy that you created before receiving the error message\.
+
+1. Choose **Enable**\.
+
+If the error persists after repeating steps 1–7 several times, contact [AWS Support](https://aws.amazon.com/premiumsupport/)\.
+
 ## Can't Close Index<a name="aes-troubleshooting-close-api"></a>
 
-Amazon ES doesn't support the `_close` API\. If you are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\. The other option is to use the `rename_pattern` and `rename_replacement` fields to rename the index as you restore it:
+Amazon ES supports the `_close` API only for Elasticsearch versions 7\.8 or later\. If you're using an older version and are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\. The other option is to use the `rename_pattern` and `rename_replacement` fields to rename the index as you restore it:
 
 ```
 POST /_snapshot/my-repository/my-snapshot/_restore
@@ -196,7 +222,7 @@ Amazon ES requires that clients specify `Host` in the request headers\. A valid 
 Host: search-my-sample-domain-ih2lhn2ew2scurji.us-west-2.es.amazonaws.com
 ```
 
-If you receive an `Invalid Host Header` error when making a request, check that your client includes the Amazon ES domain endpoint \(and not, for example, its IP address\) in the `Host` header\.
+If you receive an `Invalid Host Header` error when making a request, check that your client or proxy includes the Amazon ES domain endpoint \(and not, for example, its IP address\) in the `Host` header\.
 
 ## Invalid M3 Instance Type<a name="aes-m3-instance-types"></a>
 

@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**September 16, 2020
-+ **Latest documentation update—**September 16, 2020
++ **Latest product release—**November 5, 2020
++ **Latest documentation update—**November 5, 2020
 
 ## Release Notes<a name="release-table"></a>
 
@@ -16,6 +16,11 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Custom Endpoints](#release-notes) | Amazon Elasticsearch Service now supports custom endpoints, which let you give your Amazon ES domain a new URL\. If you ever swap domains, you can maintain the same URL\. This feature requires service software R20201019 or later\. To learn more, see [Custom Endpoints](https://docs.aws.amazon.com/elasticsearch-service/latest/es-customendpoint.html)\. | November 5, 2020 | 
+| [New Language Plugins](#release-notes) | Amazon Elasticsearch Service now supports IK \(Chinese\) Analysis, Vietnamese Analysis, and Thai Analysis plugins on domains running Elasticsearch 7\.7 or later with service software R20201019 or later\. | October 28, 2020 | 
+| [Elasticsearch 7\.8 Support](#release-notes) | Amazon Elasticsearch Service now supports Elasticsearch version 7\.8\. To learn more, see [Supported Elasticsearch Versions](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version) and [Upgrading Elasticsearch](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-version-migration.html)\. | October 28, 2020 | 
+| [SAML Authentication for Kibana](#release-notes) | Amazon Elasticsearch Service now supports SAML authentication for Kibana, which lets you use third\-party identity providers to log in to Kibana, manage fine\-grained access control, search your data, and build visualizations\. This feature requires service software R20201019 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/saml.html)\. | October 27, 2020 | 
+| [T3 Instances](#release-notes) | Amazon Elasticsearch Service now supports the `t3.small` and `t3.medium` instance types\. For best practices around using these instance types, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-bp.html)\. | September 23, 2020 | 
 | [Audit Logs](#release-notes) | Amazon Elasticsearch Service now supports audit logs for your data, which lets you track failed login attempts, user access to indices, documents, and fields, and much more\. This feature requires service software R20200910 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/audit-logs.html)\. | September 16, 2020 | 
 | [UltraWarm Updates](#release-notes) | UltraWarm for Amazon Elasticsearch Service adds new metrics, new settings, a larger migration queue, and a cancellation API\. These updates require service software R20200910 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)\. | September 14, 2020 | 
 | [Learning to Rank](#release-notes) | Amazon Elasticsearch Service now supports the open source Learning to Rank plugin, which lets you use machine learning technologies to improve search relevance\. This feature requires service software R20200721 or later\. For more information, see [the documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/learning-to-rank.html)\. | July 27, 2020 | 

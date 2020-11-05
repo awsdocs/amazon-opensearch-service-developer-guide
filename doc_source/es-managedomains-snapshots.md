@@ -51,9 +51,8 @@ PUT elasticsearch-domain-endpoint/_snapshot/my-snapshot-repo-name
 ```
 
 Registering a snapshot directory is a one\-time operation, but to migrate from one domain to another, you must register the same snapshot repository on the old domain and the new domain\. The repository name is arbitrary\.
-
-**Important**  
-To enable [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) for the snapshot repository, add `"server_side_encryption": true` to the `"settings"` JSON\.
++ If you are migrating to a new domain \(or registering the same repository with multiple domains for some other reason\), add `"readonly": true` to `"settings"` when registering the repository on the new domain\. This setting helps avoid accidentally overwriting data from the old domain\.
++ To enable [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) for the snapshot repository, add `"server_side_encryption": true` to `"settings"`\.
 
 If your domain resides within a VPC, your computer must be connected to the VPC in order for the request to successfully register the snapshot repository\. Accessing a VPC varies by network configuration, but likely involves connecting to a VPN or corporate network\. To check that you can reach the Amazon ES domain, navigate to `https://your-vpc-domain.region.es.amazonaws.com` in a web browser and verify that you receive the default JSON response\.
 
@@ -133,7 +132,7 @@ print(r.text)
 # r = requests.post(url, auth=awsauth, json=payload, headers=headers)
 #
 # print(r.text)
-#
+# 
 # # Restore snapshot (one index)
 #
 # path = '_snapshot/my-snapshot-repo/my-snapshot/_restore'
@@ -240,7 +239,7 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
    Alternately, you might want to restore all indices *except* for the Kibana and fine\-grained access control indices:
 
    ```
-   curl -XPOST 'elasticsearch-domain-endpoint/_snapshot/cs-automated/2017-snapshot/_restore' -d '{"indices": "-.kibana*, -.opendistro_security"}' -H 'Content-Type: application/json'
+   curl -XPOST 'elasticsearch-domain-endpoint/_snapshot/cs-automated/2017-snapshot/_restore' -d '{"indices": "-.kibana*,-.opendistro_security"}' -H 'Content-Type: application/json'
    ```
 
 **Note**  

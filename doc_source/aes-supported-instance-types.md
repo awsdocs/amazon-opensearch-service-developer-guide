@@ -20,6 +20,7 @@ For information about which instance type is appropriate for your use case, see 
 |  R4  |   | 
 |  R5  | The R5 instance types require Elasticsearch version 5\.1 or later\. | 
 |  T2  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html)  | 
+|  T3  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-instance-types.html)  | 
 
 **Tip**  
 You can use different instance types for [dedicated master nodes](es-managedomains-dedicatedmasternodes.md) and data nodes\.

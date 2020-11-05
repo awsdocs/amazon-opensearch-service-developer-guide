@@ -17,6 +17,9 @@ Audit logs have the following limitations:
 
 Enabling audit logs is a two\-step process\. First, you must configure your domain to publish audit logs to CloudWatch Logs using the console, AWS CLI, or configuration API\. Then you can tune audit log settings using Kibana or the fine\-grained access control REST API\.
 
+**Important**  
+If you encounter an error while following these steps, see [Can't Enable Audit Logs](aes-handling-errors.md#aes-troubleshooting-audit-logs-error) for troubleshooting information\.
+
 **To enable audit logs for an Amazon ES domain \(console\)**
 
 1. Choose the domain and then the **Logs** tab\.
@@ -305,60 +308,59 @@ We recommend using Kibana to configure audit logs, but you can also use the fine
 ```
 PUT _opendistro/_security/api/audit/config
 {
-  "config": {
+  "enabled": true,
+  "audit": {
+    "enable_rest": true,
+    "disabled_rest_categories": [
+      "GRANTED_PRIVILEGES",
+      "AUTHENTICATED"
+    ],
+    "enable_transport": true,
+    "disabled_transport_categories": [
+      "GRANTED_PRIVILEGES",
+      "AUTHENTICATED"
+    ],
+    "resolve_bulk_requests": true,
+    "log_request_body": true,
+    "resolve_indices": true,
+    "exclude_sensitive_headers": true,
+    "ignore_users": [
+      "kibanaserver"
+    ],
+    "ignore_requests": [
+      "SearchRequest",
+      "indices:data/read/*",
+      "/_cluster/health"
+    ]
+  },
+  "compliance": {
     "enabled": true,
-    "audit": {
-      "enable_rest": true,
-      "disabled_rest_categories": [
-        "GRANTED_PRIVILEGES",
-        "AUTHENTICATED"
+    "internal_config": true,
+    "external_config": false,
+    "read_metadata_only": true,
+    "read_watched_fields": {
+      "read-index-1": [
+        "field-1",
+        "field-2"
       ],
-      "enable_transport": true,
-      "disabled_transport_categories": [
-        "GRANTED_PRIVILEGES",
-        "AUTHENTICATED"
-      ],
-      "resolve_bulk_requests": true,
-      "log_request_body": true,
-      "resolve_indices": true,
-      "exclude_sensitive_headers": true,
-      "ignore_users": [
-        "kibanaserver"
-      ],
-      "ignore_requests": [
-        "SearchRequest",
-        "indices:data/read/*"
+      "read-index-2": [
+        "field-3"
       ]
     },
-    "compliance": {
-      "enabled": true,
-      "internal_config": true,
-      "external_config": true,
-      "read_metadata_only": true,
-      "read_watched_fields": {
-        "read-index-1": [
-          "field-1",
-          "field-2"
-        ],
-        "read-index-2": [
-          "field-3"
-        ]
-      },
-      "read_ignore_users": [
-        "read-ignore-1"
-      ],
-      "write_metadata_only": true,
-      "write_log_diffs": false,
-      "write_watched_indices": [
-        "write-index-1",
-        "write-index-2",
-        "log-*",
-        "*"
-      ],
-      "write_ignore_users": [
-        "write-ignore-1"
-      ]
-    }
+    "read_ignore_users": [
+      "read-ignore-1"
+    ],
+    "write_metadata_only": true,
+    "write_log_diffs": false,
+    "write_watched_indices": [
+      "write-index-1",
+      "write-index-2",
+      "log-*",
+      "*"
+    ],
+    "write_ignore_users": [
+      "write-ignore-1"
+    ]
   }
 }
 ```

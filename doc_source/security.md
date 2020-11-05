@@ -17,5 +17,6 @@ This documentation helps you understand how to apply the shared responsibility m
 + [Compliance Validation for Amazon Elasticsearch Service](es-compliance.md)
 + [Resilience in Amazon Elasticsearch Service](disaster-recovery-resiliency.md)
 + [Infrastructure Security in Amazon Elasticsearch Service](infrastructure-security.md)
++ [SAML Authentication for Kibana](saml.md)
 + [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)
 + [Using Service\-Linked Roles for Amazon ES](slr-es.md)
