@@ -24,7 +24,7 @@ Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated 
 UltraWarm has a few important prerequisites:
 + UltraWarm requires Elasticsearch 6\.8 or higher\.
 + To use warm storage, domains must have [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
-+ If your domain uses a T2 instance type for your data nodes, you can't use warm storage\.
++ If your domain uses a T2 or T3 instance type for your data nodes, you can't use warm storage\.
 
 ## Calculating UltraWarm Storage Requirements<a name="ultrawarm-calc"></a>
 

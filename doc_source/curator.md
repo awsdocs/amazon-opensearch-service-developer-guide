@@ -2,7 +2,7 @@
 
 This section contains sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\. [Index State Management](ism.md) has some similar features and doesn't require Lambda or a separate EC2 instance\. Depending on your use case, it might be a better choice\.
 
-Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\.
+Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\. For installation instructions, see [Using Curator for Snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-curator)\.
 
 For information about configuring Lambda functions and creating deployment packages, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\. For even more information, see the [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/)\. This section contains only sample code, basic settings, triggers, and permissions\.
 

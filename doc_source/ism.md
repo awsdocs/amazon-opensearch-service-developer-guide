@@ -123,13 +123,11 @@ This second, simpler sample policy reduces replica count to zero after seven day
 Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service has several differences\. 
 
 ### ISM Operations<a name="alerting-diff-op"></a>
++ Amazon ES supports a unique ISM operation, `warm_migration`\. 
 
-Amazon ES supports a unique ISM operation, `warm_migration`\. If your domain has [UltraWarm](ultrawarm.md) enabled, this action transitions the index to warm storage\. The `warm_migration` action has a [default timeout](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions) of 12 hours\. For large clusters, you might need to change this value, as shown in the [sample policy](#ism-example)\.
-
-Amazon ES does not support the following ISM operations:
-+ `open`
-+ `close`
-+ `snapshot`
+  If your domain has [UltraWarm](ultrawarm.md) enabled, this action transitions the index to warm storage\. The `warm_migration` action has a [default timeout](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions) of 12 hours\. For large clusters, you might need to change this value, as shown in the [sample policy](#ism-example)\.
++ If your [runs Elasticsearch 7\.4 or later,](aes-supported-es-operations.md) Amazon ES supports the ISM `open` and `close` operations\.
++ Amazon ES does not support the ISM `snapshot` operation\.
 
 ### ISM Settings<a name="ism-diff-settings"></a>
 

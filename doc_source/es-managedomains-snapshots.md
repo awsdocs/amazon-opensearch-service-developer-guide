@@ -17,6 +17,7 @@ If your cluster enters red status, Amazon ES stops taking automated snapshots\. 
 + [Registering a Manual Snapshot Repository](#es-managedomains-snapshot-registerdirectory)
 + [Taking Manual Snapshots](#es-managedomains-snapshot-create)
 + [Restoring Snapshots](#es-managedomains-snapshot-restore)
++ [Deleting Manual Snapshots](#es-managedomains-snapshot-delete)
 + [Using Curator for Snapshots](#es-managedomains-snapshot-curator)
 
 ## Manual Snapshot Prerequisites<a name="es-managedomains-snapshot-prerequisites"></a>
@@ -205,9 +206,7 @@ If you switched the alias to another index, specify `"include_aliases": false` w
 **Note**  
 Most automated snapshots are stored in the `cs-automated` repository\. If your domain encrypts data at rest, they are stored in the `cs-automated-enc` repository\. If you don't see the manual snapshot repository that you're looking for, make sure that you [registered it](#es-managedomains-snapshot-registerdirectory) to the domain\.
 
-1. \(Optional\) Delete or rename one or more indices in the Amazon ES domain\. You don't need to perform this step if you have no naming conflicts between indices on the cluster and indices in the snapshot\.
-
-   You can't restore a snapshot of your indices to an Elasticsearch cluster that already contains indices with the same names\. Currently, Amazon ES does not support the Elasticsearch `_close` API, so you must use one of the following alternatives:
+1. \(Optional\) Delete or rename one or more indices in the Amazon ES domain\. You don't need to perform this step if you have no naming conflicts between indices on the cluster and indices in the snapshot\. You can't restore a snapshot of your indices to an Elasticsearch cluster that already contains indices with the same names\.
    + Delete the indices on the same Amazon ES domain, and then restore the snapshot\.
    + [Rename the indices as you restore them from the snapshot](aes-handling-errors.md#aes-troubleshooting-close-api), and later, reindex them\.
    + Restore the snapshot to a different Amazon ES domain \(only possible with manual snapshots\)\.
@@ -244,6 +243,14 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
 
 **Note**  
 If not all primary shards were available for the indices involved, a snapshot might have a `state` of `PARTIAL`\. This value indicates that data from at least one shard was not stored successfully\. You can still restore from a partial snapshot, but you might need to use older snapshots to restore any missing indices\.
+
+## Deleting Manual Snapshots<a name="es-managedomains-snapshot-delete"></a>
+
+To delete a manual snapshot, send the following request:
+
+```
+DELETE _snapshot/repository/snapshot
+```
 
 ## Using Curator for Snapshots<a name="es-managedomains-snapshot-curator"></a>
 

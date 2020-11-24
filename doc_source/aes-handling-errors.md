@@ -184,7 +184,7 @@ If the error persists after repeating steps 1–7 several times, contact [AWS Su
 
 ## Can't Close Index<a name="aes-troubleshooting-close-api"></a>
 
-Amazon ES supports the `_close` API only for Elasticsearch versions 7\.8 or later\. If you're using an older version and are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\. The other option is to use the `rename_pattern` and `rename_replacement` fields to rename the index as you restore it:
+Amazon ES supports the `_close` API only for Elasticsearch versions 7\.4 or later\. If you're using an older version and are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\. The other option is to use the `rename_pattern` and `rename_replacement` fields to rename the index as you restore it:
 
 ```
 POST /_snapshot/my-repository/my-snapshot/_restore

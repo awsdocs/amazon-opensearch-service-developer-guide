@@ -85,7 +85,7 @@ After you enable audit logs, configure them to match your needs\.
 
 1. Open Kibana, and choose **Security**\.
 
-1. Under **System**, choose **Audit logging**\.
+1. Choose **Audit logs**\.
 
 1. Choose **Enable audit logging**\.
 

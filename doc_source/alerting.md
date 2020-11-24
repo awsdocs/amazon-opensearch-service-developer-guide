@@ -65,6 +65,7 @@ Amazon ES lets you modify the following [alerting settings](https://opendistro.g
 + `opendistro.alerting.alert_history_max_docs`
 + `opendistro.alerting.alert_history_retention_period`
 + `opendistro.alerting.alert_history_rollover_period`
++ `opendistro.alerting.filter_by_backend_roles`
 
 All other settings use the default values, and you can't change them\.
 
@@ -115,4 +116,4 @@ Depending on your tolerance for data loss, you might even consider using zero re
 
 ### Alerting Permissions<a name="alerting-diff-perms"></a>
 
-To use the Amazon ES alerting feature on a domain that uses [fine\-grained access control](fgac.md), you must map the `all_access` role to your user or backend role\.
+The alerting feature supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/security/) in the Open Distro for Elasticsearch documentation\.

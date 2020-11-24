@@ -6,9 +6,6 @@ You can pair the anomaly detection plugin with the [Alerting for Amazon Elastics
 
 Anomaly detection requires Elasticsearch 7\.4 or later\. Full documentation for the feature, including detailed steps and API descriptions, is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/ad/)\.
 
-**Note**  
-To use the anomaly detection plugin, your user role must be mapped to the master role that gives you full access to the domain\. To learn more, see [Modifying the Master User](fgac.md#fgac-forget)\.
-
 ## Getting Started with Anomaly Detection<a name="ad-example-es"></a>
 
 To get started, choose **Anomaly Detection** in Kibana\.
@@ -25,6 +22,12 @@ For example, if you choose `min()`, the detector focuses on finding anomalies ba
 
 You can add a maximum of five features per detector\.
 
+You can optionally set a category field to categorize or slice your data with a dimension like IP address, product ID, country code, and so on\.
+
+With window size, you can set the number of aggregation intervals from your data stream to consider in a detection window\.
+
+Preview sample anomalies and adjust the feature settings if needed\.
+
 ### Step 3: Observe the Results<a name="ad-example-es3"></a>
 
 ![\[Sample anomaly detection dashboard.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/ad.png)
@@ -32,6 +35,7 @@ You can add a maximum of five features per detector\.
 + The **Anomaly history** chart plots the anomaly grade with the corresponding measure of confidence\.
 + The **Feature breakdown** graph plots the features based on the aggregation method\. You can vary the date\-time range of the detector\.
 + The **Anomaly occurrence** table shows the `Start time`, `End time`, `Data confidence`, and `Anomaly grade` for each anomaly detected\.
++ If you set the category field, you see an additional **Heat map** chart that correlates results for anomalous entities\. You can choose a filled rectangle to see a more detailed view of the anomaly\.
 
 ### Step 4: Set Up Alerts<a name="ad-example-es4"></a>
 

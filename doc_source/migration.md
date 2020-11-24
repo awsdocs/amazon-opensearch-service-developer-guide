@@ -66,7 +66,7 @@ Although the console is the easiest way to create a domain, in this case, you al
 ```
 aws es create-elasticsearch-domain \
   --domain-name migration-domain \
-  --elasticsearch-version 7.8 \
+  --elasticsearch-version 7.9 \
   --elasticsearch-cluster-config InstanceType=c5.large.elasticsearch,InstanceCount=2 \
   --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 \
   --node-to-node-encryption-options Enabled=true \
@@ -151,7 +151,7 @@ Then give your personal IAM user or role—whatever you used to configure the AW
 
 Then log in to Kibana using the master user credentials you specified when you created the Amazon ES domain\. You can find the Kibana URL in the Amazon ES console\. It takes the form of `https://domain-endpoint/_plugin/kibana/`\.
 
-In Kibana, choose **Security**, **Role Mappings**, and **Add**\. For **Role,** choose **manage\_snapshots**\. Then specify the ARN for your personal IAM user or role in the appropriate field\. User ARNs go in the **Users** section\. Role ARNs go in the **Backend roles** section\. This step uses [fine\-grained access control](fgac.md#fgac-mapping) to give your identity permissions to work with snapshots\.
+In Kibana, choose **Security**, **Roles**, and **manage\_snapshots**\. Choose **Mapped users**, **Manage mapping**\. Then specify the ARN for your personal IAM user or role in the appropriate field\. User ARNs go in the **Users** section\. Role ARNs go in the **External identities** section\. This step uses [fine\-grained access control](fgac.md#fgac-mapping) to give your identity permissions to work with snapshots\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/migration1.png)
 
@@ -190,7 +190,7 @@ Most programming languages have libraries to assist with [signing requests](es-r
    **curl**
 
    ```
-   curl -XGET -u master-user:master-user-password https://domain-endpoint/_snapshot/migration-repository/_all
+   curl -XGET -u 'master-user:master-user-password' https://domain-endpoint/_snapshot/migration-repository/_all
    ```
 
 1. Restore the snapshot\.
@@ -208,7 +208,7 @@ Most programming languages have libraries to assist with [signing requests](es-r
    **curl**
 
    ```
-   curl -XPOST -u master-user:master-user-password https://domain-endpoint/_snapshot/migration-repository/migration-snapshot/_restore \
+   curl -XPOST -u 'master-user:master-user-password' https://domain-endpoint/_snapshot/migration-repository/migration-snapshot/_restore \
      -H 'Content-Type: application/json' \
      -d '{"indices":"migration-index1,migration-index2,other-indices-*","include_global_state":false}'
    ```
@@ -224,7 +224,7 @@ Most programming languages have libraries to assist with [signing requests](es-r
    **curl**
 
    ```
-   curl -XGET -u master-user:master-user-password https://domain-endpoint/_cat/indices?v
+   curl -XGET -u 'master-user:master-user-password' https://domain-endpoint/_cat/indices?v
    ```
 
 At this point, the migration is complete\. You might configure your clients to use the new Amazon ES endpoint, [resize the domain](sizing-domains.md) to suit your workload, check the shard count for your indices, switch to an [IAM master user](fgac.md#fgac-concepts), or start building Kibana dashboards\.

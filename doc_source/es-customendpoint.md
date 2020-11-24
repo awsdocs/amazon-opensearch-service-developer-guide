@@ -37,3 +37,5 @@ To add or remove a custom endpoint on an existing Amazon ES domain, choose **Edi
 ## Next Steps<a name="es-customize-endpoint-next-steps"></a>
 
 After you enable a custom endpoint for your Amazon ES domain, you must create an alias or CNAME mapping in Amazon Route 53 \(or your preferred DNS service provider\) to route traffic to the custom endpoint and its subdomains\. Without this mapping, your custom endpoint will not work\. For steps on performing this mapping in Route 53, see [Configuring DNS routing for a new domain ](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-new-domain.html) and [Creating a hosted zone for a subdomain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html#dns-routing-traffic-for-subdomains-creating-hosted-zone)\. For other providers, consult their documentation\.
+
+If you use [SAML authentication for Kibana](saml.md), you must update your IdP with the new SSO URL\.

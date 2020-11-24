@@ -1,6 +1,8 @@
 # SAML Authentication for Kibana<a name="saml"></a>
 
-SAML authentication for Kibana lets you use your existing identity provider to offer single sign\-on \(SSO\) for Kibana on domains running Elasticsearch 6\.7 or later\. Rather than authenticating through [Amazon Cognito](es-cognito-auth.md) or the [internal user database](fgac.md#fgac-kibana), you can use third\-party identity providers to log in to Kibana, manage fine\-grained access control, search your data, and build visualizations\. Amazon Elasticsearch Service supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services, and Auth0\.
+SAML authentication for Kibana lets you use your existing identity provider to offer single sign\-on \(SSO\) for Kibana on domains running Elasticsearch 6\.7 or later\. To use this feature, you must enable [fine\-grained access control](fgac.md)\.
+
+Rather than authenticating through [Amazon Cognito](es-cognito-auth.md) or the [internal user database](fgac.md#fgac-kibana), SAML authentication for Kibana lets you use third\-party identity providers to log in to Kibana, manage fine\-grained access control, search your data, and build visualizations\. Amazon Elasticsearch Service supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services, and Auth0\.
 
 SAML authentication for Kibana is only for accessing Kibana through a web browser\. Your SAML credentials do *not* let you make direct HTTP requests to the Elasticsearch or Kibana APIs\.
 
@@ -33,6 +35,8 @@ Domains only support one Kibana authentication method at a time\. If you have [A
 1. Check **Enable SAML authentication**\.
 
 1. Note the service provider entity ID and the two SSO URLs\. You only need one of the SSO URLs\. For guidance, see [SAML Configuration Overview](#saml-overview)\.
+**Tip**  
+These URLs change if you later enable a [custom endpoint](es-customendpoint.md) for your domain\. In that situation, you must update your IdP\.
 
 1. Use these values to configure your identity provider\. This is the most complex part of the process, and unfortunately, terminology and steps vary wildly by provider\. Consult your provider's documentation\.
 
@@ -123,7 +127,7 @@ Domains only support one Kibana authentication method at a time\. If you have [A
 
    In both cases, log in as either the SAML master user or a user who belongs to the SAML master backend role\. To continue the example from step 7, log in as either `jdoe` or a member of the `admins` group\.
 
-1. After Kibana loads, choose **Security** and **Role Mappings**\.
+1. After Kibana loads, choose **Security** and **Roles**\.
 
 1. [Map roles](fgac.md#fgac-mapping) to allow other users to access Kibana\.
 
@@ -156,7 +160,7 @@ The following AWS CLI command enables SAML authentication for Kibana on an exist
 ```
 aws es update-elasticsearch-domain-config \
   --domain-name my-domain \
-  --advanced-security-options "{"SAMLOptions":{"Enabled":true,"MasterUserName":"my-idp-user","MasterBackendRole":"my-idp-group-or-role","Idp":{"EntityId":"entity-id","MetadataContent":"metadata-content-with-quotes-escaped"},"RolesKey":"optional-roles-key","SessionTimeoutMinutes":180,"SubjectKey":"optional-subject-key"}}"
+  --advanced-security-options '{"SAMLOptions":{"Enabled":true,"MasterUserName":"my-idp-user","MasterBackendRole":"my-idp-group-or-role","Idp":{"EntityId":"entity-id","MetadataContent":"metadata-content-with-quotes-escaped"},"RolesKey":"optional-roles-key","SessionTimeoutMinutes":180,"SubjectKey":"optional-subject-key"}}'
 ```
 
 You must escape all quotes and newline characters in the metadata XML\. For example, use `<KeyDescriptor use=\"signing\">\n` instead of `<KeyDescriptor use="signing">` and a line break\. For detailed information about using the AWS CLI, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.

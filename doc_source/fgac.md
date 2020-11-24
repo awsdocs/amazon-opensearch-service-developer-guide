@@ -139,7 +139,7 @@ After configuring a role, you *map* it to one or more users\. For example, you m
 *Users* are people or applications that make requests to the Elasticsearch cluster\. Users have credentials—either IAM access keys or a user name and password—that they specify when they make requests\. With fine\-grained access control on Amazon Elasticsearch Service, you choose one or the other for your *master user* when you configure your domain\. The master user has full permissions to the cluster and manages roles and role mappings\.
 + If you choose IAM for your master user, all requests to the cluster must be signed using AWS Signature Version 4\. For sample code, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
 
-  We recommend IAM if you want to use the same users on multiple clusters, if you want to use Amazon Cognito to access Kibana \(with or without an external identity provider\), or if you have Elasticsearch clients that support Signature Version 4 signing\.
+  We recommend IAM if you want to use the same users on multiple clusters, if you want to use Amazon Cognito to access Kibana, or if you have Elasticsearch clients that support Signature Version 4 signing\.
 + If you choose the internal user database, you can use HTTP basic authentication \(as well as IAM credentials\) to make requests to the cluster\. Most clients support basic authentication, including [curl](https://curl.haxx.se/)\. The internal user database is stored in an Elasticsearch index, so you can't share it with other clusters\.
 
   We recommend the internal user database if you don't need to reuse users across multiple clusters, if you want to use HTTP basic authentication to access Kibana \(rather than Amazon Cognito\), or if you have clients that only support basic authentication\. The internal user database is the simplest way to get started with Amazon ES\.
@@ -155,12 +155,14 @@ You can't enable fine\-grained access control on existing domains, only new ones
 
 ## Accessing Kibana as the Master User<a name="fgac-kibana"></a>
 
-Fine\-grained access control has a Kibana plugin that simplifies management tasks\. You can use Kibana to manage users, roles, mappings, action groups, and tenants\. The Kibana sign\-in page and underlying authentication method differs, however, depending on how you configured your domain\.
-+ If you choose to use IAM for user management, you must enable [Amazon Cognito Authentication for Kibana](es-cognito-auth.md) and sign in using credentials from your user pool to access Kibana\. Otherwise, Kibana shows a nonfunctional sign\-in page\. See [Limitations](#fgac-limitations)\.
+Fine\-grained access control has a Kibana plugin that simplifies management tasks\. You can use Kibana to manage users, roles, mappings, action groups, and tenants\. The Kibana sign\-in page and underlying authentication method differs, however, depending on how you manage users and configured your domain\.
++ If you want to use IAM for user management, use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md) to access Kibana\. Otherwise, Kibana shows a nonfunctional sign\-in page\. See [Limitations](#fgac-limitations)\.
 
-  One of the assumed roles from the Amazon Cognito identity pool must match the IAM role that you specified for the master user\. For more information about this configuration, see [\(Optional\) Configuring Granular Access](es-cognito-auth.md#es-cognito-auth-granular) and [Tutorial: IAM Master User and Amazon Cognito](#fgac-walkthrough-iam)\.  
+  With Amazon Cognito authentication, one of the assumed roles from the identity pool must match the IAM role that you specified for the master user\. For more information about this configuration, see [\(Optional\) Configuring Granular Access](es-cognito-auth.md#es-cognito-auth-granular) and [Tutorial: IAM Master User and Amazon Cognito](#fgac-walkthrough-iam)\.  
 ![\[Cognito sign-in page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/cognito-auth.png)
-+ If you choose to use the internal user database, you can sign in to Kibana with your master user name and password\. You must access Kibana over HTTPS\. For more information about this configuration, see [Tutorial: Internal User Database and HTTP Basic Authentication](#fgac-walkthrough-basic)\.  
++ If you choose to use the internal user database, you can sign in to Kibana with your master user name and password\. You must access Kibana over HTTPS\. Amazon Cognito and SAML authentication for Kibana both replace this login screen\.
+
+  For more information about this configuration, see [Tutorial: Internal User Database and HTTP Basic Authentication](#fgac-walkthrough-basic)\.  
 ![\[Basic authentication sign-in page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/basic-auth-kibana.png)
 + If you choose to use SAML authentication, you can sign in using credentials from an external identity provider\. For more information, see [SAML Authentication for Kibana](saml.md)\.
 
@@ -178,11 +180,11 @@ Fine\-grained access control also includes a number of [predefined roles](https:
 
 #### Cluster\-Level Security<a name="fgac-cluster-level"></a>
 
-Cluster\-level permissions include the ability to make broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** tab when creating a role\. For a list of cluster\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#cluster-level)\.
+Cluster\-level permissions include the ability to make broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** section when creating a role\. For a list of cluster\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#cluster-level)\.
 
 #### Index\-Level Security<a name="fgac-index-level"></a>
 
-Index\-level permissions include the ability to create new indices, search indices, read and write documents, delete documents, manage aliases, and more\. Manage these permissions using the **Index Permissions** tab when creating a role\. For a list of index\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#index-level)\.
+Index\-level permissions include the ability to create new indices, search indices, read and write documents, delete documents, manage aliases, and more\. Manage these permissions using the **Index Permissions** section when creating a role\. For a list of index\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#index-level)\.
 
 #### Document\-Level Security<a name="fgac-document-level"></a>
 
@@ -210,11 +212,11 @@ If you chose IAM for your master user, ignore this portion of Kibana\. Create IA
 
 Role mapping is the most critical aspect of fine\-grained access control\. Fine\-grained access control has some predefined roles to help you get started, but unless you map roles to users, every request to the cluster ends in a permissions error\.
 
-*Backend roles* offer another way of mapping roles to users\. Rather than mapping the same role to dozens of different users, you can map the role to a single backend role, and then make sure that all users have that backend role\. Backend roles can be IAM roles or arbitrary strings that you specify when you create users in the internal user database\.
+*Backend roles*, also called *external identities*, offer another way of mapping roles to users\. Rather than mapping the same role to dozens of different users, you can map the role to a single backend role, and then make sure that all users have that backend role\. Backend roles can be IAM roles or arbitrary strings\.
 + Specify users, IAM user ARNs, and Amazon Cognito user strings in the **Users** section\. Cognito user strings take the form of `Cognito/user-pool-id/username`\.
-+ Specify backend roles and IAM role ARNs in the **Backend roles** section\.
++ Specify backend roles and IAM role ARNs in the **External identities** section\.
 
-![\[Role mapping page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/role-mapping-edit.png)
+![\[Role mapping screen\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/role-mapping-edit.png)
 
 You can map roles to users using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#map-users-to-roles)\.
 
@@ -230,7 +232,9 @@ Tenants are spaces for saving index patterns, visualizations, dashboards, and ot
 
 1. Navigate to Kibana and sign in\.
 
-1. Choose **Tenants**\.
+1. In the upper\-right, choose your user icon\.
+
+1. Choose **Switch tenants**\.
 
 1. Verify your tenant before creating visualizations or dashboards\. If you want to share your work with all other Kibana users, choose **Global**\. To share your work with a subset of Kibana users, choose a different shared tenant\. Otherwise, choose **Private**\.
 
@@ -248,7 +252,7 @@ Due to how fine\-grained access control [interacts with other security features]
 
 ## Tutorial: IAM Master User and Amazon Cognito<a name="fgac-walkthrough-iam"></a>
 
-This tutorial covers a popular use case: an IAM master user with Amazon Cognito authentication for Kibana\. Although these steps use the Amazon Cognito user pool for authentication, this same basic process works for any Cognito authentication provider that lets you assign different IAM roles to different users \(SAML, for example\)\.
+This tutorial covers a popular use case: an IAM master user with Amazon Cognito authentication for Kibana\. Although these steps use the Amazon Cognito user pool for authentication, this same basic process works for any Cognito authentication provider that lets you assign different IAM roles to different users\.
 
 **Note**  
 This tutorial assumes you have two existing IAM roles, one for the master user and one for more limited users\. If you don't have two roles, [create them](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html)\.
@@ -352,13 +356,13 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
 
 1. Add the sample flight data\.
 
-1. Choose **Security**, **Roles**, **Add a new role**\.
+1. Choose **Security**, **Roles**, **Create role**\.
 
-1. Name the role `new-role`, and then choose **Index Permissions**\.
+1. Name the role `new-role`\.
 
-1. Choose **Add index permissions**, and then specify `kibana_sample_data_fli*` for the index pattern\.
+1. For index permissions, specify `kibana_sample_data_fli*` for the index pattern\.
 
-1. Choose **Add Action**, **read**\.
+1. For the action group, choose **read**\.
 
 1. For **Document Level Security Query**, specify the following query:
 
@@ -370,21 +374,15 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
    }
    ```
 
-   Then choose **Test DLS query syntax**\.
+1. For field\-level security, choose **Exclude fields** and specify `FlightNum`\.
 
-1. For **Include or exclude fields**, choose **Exclude fields**, and then choose **Add Field**\. Specify `FlightNum`\.
+1. For **Anonymize fields**, specify `Dest`\.
 
-1. For **Anonymize fields**, choose **Add Field**\. Specify `Dest`\.
+1. Choose **Create**\.
 
-1. Choose **Save Role Definition**\.
+1. Choose **Mapped users**, **Manage mapping**\. Then add the ARN for `IAMLimitedUserRole` as an external identity and choose **Map**\.
 
-1. Choose **Back**, **Role Mappings**, **Add a new role mapping**\.
-
-1. For **Role**, choose **new\-role**\. Choose **Add Backend Role**, and specify the ARN for `IAMLimitedUserRole`\. Then choose **Submit**\.
-
-1. Choose **Add a new role mapping** again\.
-
-1. For **Role**, choose **kibana\_user**\. Choose **Add Backend Role**, and specify the ARN for `IAMLimitedUserRole`\. Then choose **Submit**\.
+1. Return to the list of roles and choose **kibana\_user**\. Choose **Mapped users**, **Manage mapping**\. Then add the ARN for `IAMLimitedUserRole` as an external identity and choose **Map**\.
 
 1. In a new, private browser window, navigate to Kibana, sign in using `limited-user`, and then choose **Explore on my own**\.
 
@@ -423,7 +421,7 @@ This tutorial covers another popular use case: a master user in the internal use
 **To get started with fine\-grained access control**
 
 1. [Create a domain](es-createupdatedomains.md) with the following settings:
-   + Elasticsearch 7\.8
+   + Elasticsearch 7\.9
    + Public access
    + Fine\-grained access control with a master user in the internal user database \(`TheMasterUser` for the rest of this tutorial\)
    + Amazon Cognito authentication for Kibana *disabled*
@@ -460,17 +458,17 @@ This tutorial covers another popular use case: a master user in the internal use
 
 1. Add the sample flight data\.
 
-1. Choose **Security**, **Internal User Database**, **Add a new internal user**\.
+1. Choose **Security**, **Internal users**, **Create internal user**\.
 
-1. Name the user `new-user`, specify a password, and give the user the backend role of `new-backend-role`\. Then choose **Submit**\.
+1. Name the user `new-user` and specify a password\. Then choose **Create**\.
 
-1. Choose **Back**, **Roles**, **Add a new role**\.
+1. Choose **Roles**, **Create role**\.
 
-1. Name the role `new-role`, and then choose **Index Permissions**\.
+1. Name the role `new-role`\.
 
-1. Choose **Add index permissions**, and then specify `kibana_sample_data_fli*` for the index pattern\.
+1. For index permissions, specify `kibana_sample_data_fli*` for the index pattern\.
 
-1. Choose **Add Action Group**, **read**\.
+1. For the action group, choose **read**\.
 
 1. For **Document Level Security Query**, specify the following query:
 
@@ -482,23 +480,15 @@ This tutorial covers another popular use case: a master user in the internal use
    }
    ```
 
-   Then choose **Test DLS query syntax**\.
+1. For field\-level security, choose **Exclude fields** and specify `FlightNum`\.
 
-1. For **Include or exclude fields**, choose **Exclude fields**, and then choose **Add Field**\. Specify `FlightNum`\.
+1. For **Anonymize fields**, specify `Dest`\.
 
-1. For **Anonymize fields**, choose **Add Field**\. Specify `Dest`\.
+1. Choose **Create**\.
 
-1. Choose **Save Role Definition**\.
+1. Choose **Mapped users**, **Manage mapping**\. Then add `new-user` to **Users** and choose **Map**\.
 
-1. Choose **Back**, **Role Mappings**, **Add a new role mapping**\.
-
-1. For **Role**, choose **new\-role**\. Choose **Add Backend Role**, and then specify `new-backend-role`\. Then choose **Submit**\.
-
-1. Choose **Add a new role mapping** again\.
-
-1. For **Role**, choose `kibana_user`\. Choose **Add User** and specify `new-user`\. Then choose **Submit**\.
-
-   Only `new-user` has the `kibana_user` role, but all users with the `new-backend-role` backend role have the `new-role` role\.
+1. Return to the list of roles and choose **kibana\_user**\. Choose **Mapped users**, **Manage mapping**\. Then add `new-user` to **Users** and choose **Map**\.
 
 1. In a new, private browser window, navigate to Kibana, sign in using `new-user`, and then choose **Explore on my own**\.
 
@@ -712,6 +702,6 @@ For documentation on the 7\.*x* REST API, see the [Open Distro for Elasticsearch
 If you use the internal user database, you can use [curl](https://curl.haxx.se/) to make requests and test your domain\. Try the following sample commands:  
 
 ```
-curl -XGET -u master-user:master-user-password 'domain-endpoint/_search'
-curl -XGET -u master-user:master-user-password 'domain-endpoint/_opendistro/_security/api/user'
+curl -XGET -u 'master-user:master-user-password' 'domain-endpoint/_search'
+curl -XGET -u 'master-user:master-user-password' 'domain-endpoint/_opendistro/_security/api/user'
 ```

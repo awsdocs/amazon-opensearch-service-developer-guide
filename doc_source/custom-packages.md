@@ -34,11 +34,7 @@ The console is the simplest way to import a package into Amazon ES and associate
 
 **To import and associate a package with a domain \(console\)**
 
-1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
-
-1. Under **Analytics**, choose **Elasticsearch Service**\.
-
-1. In the navigation pane, choose **Packages**\.
+1. In the Amazon Elasticsearch Service console, choose **Packages**\.
 
 1. Choose **Import**\.
 
@@ -60,7 +56,7 @@ Alternately, use the AWS CLI, SDKs, or configuration API to import and associate
 
 ## Using Custom Packages with Elasticsearch<a name="custom-packages-using"></a>
 
-After you associate a file with a domain, you can use it in parameters such as `synonyms_path`, `stopwords_path`, and `user_dictionary` when you create tokenizers and token filters\. The exact parameter varies by object\. Several objects support `synonyms_path` and `stopwords_path`, but `user_dictionary` is exclusive to the kuromoji plugin\. The following example request adds a synonym file to a new index:
+After you associate a file with a domain, you can use it in parameters such as `synonyms_path`, `stopwords_path`, and `user_dictionary` when you create tokenizers and token filters\. The exact parameter varies by object\. Several objects support `synonyms_path` and `stopwords_path`, but `user_dictionary` is exclusive to the kuromoji plugin\. The following example adds a synonyms file to a new index:
 
 ```
 PUT my-index
@@ -69,16 +65,17 @@ PUT my-index
     "index": {
       "analysis": {
         "analyzer": {
-          "synonym_analyzer": {
+          "my_analyzer": {
             "type": "custom",
             "tokenizer": "standard",
-            "filter": ["synonym_filter"]
+            "filter": ["my_filter"]
           }
         },
         "filter": {
-          "synonym_filter": {
+          "my_filter": {
             "type": "synonym",
-            "synonyms_path": "analyzers/F111111111"
+            "synonyms_path": "analyzers/F111111111",
+            "updateable": true
           }
         }
       }
@@ -88,7 +85,8 @@ PUT my-index
     "properties": {
       "description": {
         "type": "text",
-        "analyzer": "synonym_analyzer"
+        "analyzer": "standard",
+        "search_analyzer": "my_analyzer"
       }
     }
   }
@@ -99,7 +97,9 @@ This request creates a custom analyzer for the index that uses the standard toke
 + Tokenizers break streams of characters into *tokens* \(typically words\) based on some set of rules\. The simplest example is the whitespace tokenizer, which breaks the preceding characters into a token each time it encounters a whitespace character\. A more complex example is the standard tokenizer, which uses a set of grammar\-based rules to work across many languages\.
 + Token filters add, modify, or delete tokens\. For example, a synonym token filter adds tokens when it finds a word in the synonyms list\. The stop token filter removes tokens when finds a word in the stop words list\.
 
-This request also adds a text field \(`description`\) to the mapping and tells Elasticsearch to use the new analyzer for that field\. 
+This request also adds a text field \(`description`\) to the mapping and tells Elasticsearch to use the new analyzer as its search analyzer\. You can see that it still uses the standard analyzer as its index analyzer\.
+
+Finally, note the line `"updateable": true` in the token filter\. This field only applies to search analyzers, not index analyzers, and is critical if you later want to [update the search analyzer](#custom-packages-updating) automatically\.
 
 For testing purposes, add some documents to the index:
 
@@ -156,82 +156,118 @@ Dictionary files use Java heap space proportional to their size\. For example, a
 
 ## Updating Custom Packages<a name="custom-packages-updating"></a>
 
-Uploading a new version of a package to Amazon S3 does *not* automatically update the package on Amazon Elasticsearch Service\. Amazon ES stores its own copy of the file, so if you upload a new version to S3, you must [import the file into Amazon ES again and associate it with your domains](#custom-packages-assoc)\.
+Uploading a new version of a package to Amazon S3 does *not* automatically update the package on Amazon Elasticsearch Service\. Amazon ES stores its own copy of the file, so if you upload a new version to S3, you must manually update it\.
 
-After you associate the updated file with your domain, you can use it with new indices by using the requests in [Using Custom Packages with Elasticsearch](#custom-packages-using)\.
+Each of your associated domains stores *its* own copy of the file, as well\. To keep search behavior predictable, domains continue to use their current package version until you explicitly update them\.
 
-If you want to use the updated file with existing indices though, you must reindex them\. First, create an index that uses the updated synonyms file:
+**To update a package \(console\)**
 
-```
-PUT my-new-index
-{
-  "settings": {
-    "index": {
-      "analysis": {
-        "analyzer": {
-          "synonym_analyzer": {
-            "type": "custom",
-            "tokenizer": "standard",
-            "filter": ["synonym_filter"]
-          }
-        },
-        "filter": {
-          "synonym_filter": {
-            "type": "synonym",
-            "synonyms_path": "analyzers/F222222222"
+1. In the Amazon Elasticsearch Service console, choose **Packages**\.
+
+1. Choose a package and **Update package**\.
+
+1. Provide the S3 path to the file, and then choose **Update package**\.
+
+1. Return to the **Packages** screen\.
+
+1. When the package status changes to **Available**, select it\. Then choose one or more associated domains, **Apply update**, and confirm\. Wait for the association status to change to **Active**\.
+
+1. The next steps vary depending on how you configured your indices:
+   + If your domains runs Elasticsearch 7\.8 or later and only uses search analyzers with the [updateable](#custom-packages-using) field set to true, you don't need to take any further action\. Amazon ES automatically updates your indices using the [\_opendistro/\_refresh\_search\_analyzers API](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/refresh-analyzer/)\.
+   + If your domain runs an earlier version of Elasticsearch, uses index analyzers, or doesn't use the `updateable` field, see [Manual Index Updates](#custom-packages-updating-index-analyzers)\.
+
+Although the console is the simplest method, you can also use the AWS CLI, SDKs, or configuration API to update Amazon ES packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+
+### Manual Index Updates<a name="custom-packages-updating-index-analyzers"></a>
+
+To use an updated package, you must manually update your indices if you meet any of the following conditions:
++ Your domain runs Elasticsearch 7\.7\. or earlier\.
++ You use custom packages as index analyzers\.
++ You use custom packages as search analyzers, but don't include the [updateable](#custom-packages-using) field\.
+
+To update analyzers with the new package files, you have two options:
++ Close and open any indices that you want to update:
+
+  ```
+  POST my-index/_close
+  POST my-index/_open
+  ```
++ Reindex the indices\. First, create an index that uses the updated synonyms file \(or an entirely new file\):
+
+  ```
+  PUT my-new-index
+  {
+    "settings": {
+      "index": {
+        "analysis": {
+          "analyzer": {
+            "synonym_analyzer": {
+              "type": "custom",
+              "tokenizer": "standard",
+              "filter": ["synonym_filter"]
+            }
+          },
+          "filter": {
+            "synonym_filter": {
+              "type": "synonym",
+              "synonyms_path": "analyzers/F222222222"
+            }
           }
         }
       }
-    }
-  },
-  "mappings": {
-    "properties": {
-      "description": {
-        "type": "text",
-        "analyzer": "synonym_analyzer"
-      }
-    }
-  }
-}
-```
-
-Then [reindex](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/reindex-data/) the old index to that new index:
-
-```
-POST _reindex
-{
-  "source": {
-    "index": "my-index"
-  },
-  "dest": {
-    "index": "my-new-index"
-  }
-}
-```
-
-If you frequently update synonym files, use [index aliases](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/index-alias/) to maintain a consistent path to the latest index:
-
-```
-POST _aliases
-{
-  "actions": [
-    {
-      "remove": {
-        "index": "my-index",
-        "alias": "latest-index"
-      }
     },
-    {
-      "add": {
-        "index": "my-new-index",
-        "alias": "latest-index"
+    "mappings": {
+      "properties": {
+        "description": {
+          "type": "text",
+          "analyzer": "synonym_analyzer"
+        }
       }
     }
-  ]
-}
-```
+  }
+  ```
 
-If you don't need the old index, delete it\. If you no longer need the older version of the package, [dissociate and remove it](#custom-packages-dissoc)\.
+  Then [reindex](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/reindex-data/) the old index to that new index:
+
+  ```
+  POST _reindex
+  {
+    "source": {
+      "index": "my-index"
+    },
+    "dest": {
+      "index": "my-new-index"
+    }
+  }
+  ```
+
+  If you frequently update index analyzers, use [index aliases](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/index-alias/) to maintain a consistent path to the latest index:
+
+  ```
+  POST _aliases
+  {
+    "actions": [
+      {
+        "remove": {
+          "index": "my-index",
+          "alias": "latest-index"
+        }
+      },
+      {
+        "add": {
+          "index": "my-new-index",
+          "alias": "latest-index"
+        }
+      }
+    ]
+  }
+  ```
+
+  If you don't need the old index, delete it:
+
+  ```
+  DELETE my-index
+  ```
 
 ## Dissociating and Removing Packages<a name="custom-packages-dissoc"></a>
 

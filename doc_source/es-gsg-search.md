@@ -6,7 +6,7 @@ To search documents in an Amazon Elasticsearch Service domain, use the Elasticse
 + Run the following command to search the *movies* domain for the word *mars*:
 
   ```
-  curl -XGET -u master-user:master-user-password 'domain-endpoint/movies/_search?q=mars&pretty=true'
+  curl -XGET -u 'master-user:master-user-password' 'domain-endpoint/movies/_search?q=mars&pretty=true'
   ```
 
 If you used the bulk data on the previous page, try searching for *rebel* instead\.

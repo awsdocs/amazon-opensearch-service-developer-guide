@@ -166,3 +166,11 @@ If you have invested significant time into configuring your own Kibana instance,
   ```
 
 Older versions of Elasticsearch might only work over HTTP\. In all cases, add the `http` or `https` prefix\. For older versions, you must explicitly specify port 80 or 443\. For newer versions, you can omit the port\.
+
+## Additional Features<a name="kibana-additions"></a>
+
+The default Kibana installation on each Amazon ES domain has some additional features compared to the open source version of Kibana:
++ User interfaces for the various [Open Distro for Elasticsearch plugins](aes-supported-plugins.md)
++ [Tenants](fgac.md#fgac-multitenancy)
++ [Gantt charts](https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/gantt/)
++ [Notebooks \(experimental\)](https://opendistro.github.io/for-elasticsearch-docs/docs/notebooks/)

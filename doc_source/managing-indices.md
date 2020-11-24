@@ -6,3 +6,4 @@ After you add data to Amazon Elasticsearch Service, you often need to reindex th
 + [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)
 + [Index State Management](ism.md)
 + [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)
++ [Remote Reindex in Amazon Elasticsearch Service](remote-reindex.md)

@@ -13,7 +13,7 @@ You can install curl on Windows and use it from the command prompt, but we recom
 + Run the following command to add a single document to the *movies* domain:
 
   ```
-  curl -XPUT -u master-user:master-user-password domain-endpoint/movies/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
+  curl -XPUT -u 'master-user:master-user-password' 'domain-endpoint/movies/_doc/1' -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
   ```
 
 For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
@@ -34,7 +34,7 @@ For a detailed explanation of this command and how to make signed requests to Am
 1. Run the following command to upload the file to the *movies* domain:
 
    ```
-   curl -XPOST -u master-user:master-user-password domain-endpoint/_bulk --data-binary @bulk_movies.json -H 'Content-Type: application/json'
+   curl -XPOST -u 'master-user:master-user-password' 'domain-endpoint/_bulk' --data-binary @bulk_movies.json -H 'Content-Type: application/json'
    ```
 
 For more information about the bulk file format, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.

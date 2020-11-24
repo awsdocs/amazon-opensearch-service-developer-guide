@@ -39,6 +39,7 @@ All configuration service requests must be signed\. For more information, see [S
 | [DescribeReservedElasticsearchInstances](#es-configuration-api-actions-describereservedelasticsearchinstances) | GET | 
 | [DissociatePackage](#es-configuration-api-actions-dissociatepackage) | POST | 
 | [GetCompatibleElasticsearchVersions](#es-configuration-api-actions-get-compat-vers) | GET | 
+| [GetPackageVersionHistory](#es-configuration-api-actions-get-pac-ver-hist) | GET | 
 | [GetUpgradeHistory](#es-configuration-api-actions-get-upgrade-hist) | GET | 
 | [GetUpgradeStatus](#es-configuration-api-actions-get-upgrade-stat) | GET | 
 | [ListDomainNames](#es-configuration-api-actions-listdomainnames) | GET | 
@@ -48,12 +49,13 @@ All configuration service requests must be signed\. For more information, see [S
 | [ListElasticsearchVersions](#es-configuration-api-actions-listelasticsearchversions) | GET | 
 | [ListPackagesForDomain](#es-configuration-api-actions-listpackagesfordomain) | GET | 
 | [ListTags](#es-configuration-api-actions-listtags) | GET | 
-| [`PurchaseReservedElasticsearchInstanceOffering`](#es-configuration-api-actions-purchasereservedelasticsearchinstance) | POST | 
+| [PurchaseReservedElasticsearchInstanceOffering](#es-configuration-api-actions-purchasereservedelasticsearchinstance) | POST | 
 | [RejectInboundCrossClusterSearchConnection](#es-configuration-api-actions-reject-inbound-cross-cluster-search-connection) | PUT | 
 | [RemoveTags](#es-configuration-api-actions-removetags) | POST | 
 | [StartElasticsearchServiceSoftwareUpdate](#es-configuration-api-actions-startupdate) | POST | 
 | [StopElasticsearchServiceSoftwareUpdate](#es-configuration-api-actions-stopupdate) | POST | 
 | [UpdateElasticsearchDomainConfig](#es-configuration-api-actions-updateelasticsearchdomainconfig) | POST | 
+| [UpdatePackage](#es-configuration-api-actions-updatepackage) | POST | 
 | [UpgradeElasticsearchDomain](#es-configuration-api-actions-upgrade-domain) | POST | 
 
 ### AcceptInboundCrossClusterSearchConnection<a name="es-configuration-api-actions-accept-inbound-cross-cluster-search-connection"></a>
@@ -921,14 +923,14 @@ This operation does not use the HTTP request body\.
 | --- | --- | --- | 
 | CompatibleElasticsearchVersions | Map | A map of Elasticsearch versions and the versions that you can upgrade them to:<pre>{<br />  "CompatibleElasticsearchVersions": [{<br />    "SourceVersion": "6.7",<br />    "TargetVersions": ["6.8"]<br />  }]<br />}</pre> | 
 
-### GetUpgradeHistory<a name="es-configuration-api-actions-get-upgrade-hist"></a>
+### GetPackageVersionHistory<a name="es-configuration-api-actions-get-pac-ver-hist"></a>
 
-Returns a list of the domain's 10 most\-recent upgrade operations\.
+Returns a map of Elasticsearch versions and the versions you can upgrade them to\.
 
 #### Syntax<a name="w36aac33b7c53b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/history?maxResults=max-results&amp;nextToken=next-token
+GET https://es.us-east-1.amazonaws.com/2015-01-01/packages/package-id/history?maxResults=max-results&amp;nextToken=next-token
 ```
 
 #### Request Parameters<a name="w36aac33b7c53b7"></a>
@@ -938,8 +940,8 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/h
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
+| PackageID | String | Yes | The name of an existing domain\. | 
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
-| DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
 #### Request Body<a name="w36aac33b7c53b9"></a>
@@ -953,16 +955,16 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| UpgradeHistoryList | UpgradeHistoryList | Container for result logs of the past 10 upgrade operations\. | 
+| PackageVersionHistoryList | Map | A list of commit messages, updates tmies, and versions for the given package:<pre>"PackageVersionHistoryList": [<br />  {<br />    CommitMessage": "Add new synonyms",<br />    "CreatedAt": 1.605225005466E9,<br />    "PackageVersion": "v4"<br />  }<br />]</pre> | 
 
-### GetUpgradeStatus<a name="es-configuration-api-actions-get-upgrade-stat"></a>
+### GetUpgradeHistory<a name="es-configuration-api-actions-get-upgrade-hist"></a>
 
-Returns the most\-recent status of a domain's Elasticsearch version upgrade\.
+Returns a list of the domain's 10 most\-recent upgrade operations\.
 
 #### Syntax<a name="w36aac33b7c55b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/status
+GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/history?maxResults=max-results&amp;nextToken=next-token
 ```
 
 #### Request Parameters<a name="w36aac33b7c55b7"></a>
@@ -972,7 +974,9 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/s
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
+| MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
+| NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
 #### Request Body<a name="w36aac33b7c55b9"></a>
 
@@ -985,27 +989,59 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| UpgradeStepItem | UpgradeStepItem | Container for the most\-recent status of a domain's version upgrade\. | 
+| UpgradeHistoryList | UpgradeHistoryList | Container for result logs of the past 10 upgrade operations\. | 
 
-### ListDomainNames<a name="es-configuration-api-actions-listdomainnames"></a>
+### GetUpgradeStatus<a name="es-configuration-api-actions-get-upgrade-stat"></a>
 
-Displays the names of all Amazon ES domains owned by the current user *in the active Region*\.
+Returns the most\-recent status of a domain's Elasticsearch version upgrade\.
 
 #### Syntax<a name="w36aac33b7c57b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2015-01-01/domain
+GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/status
 ```
 
 #### Request Parameters<a name="w36aac33b7c57b7"></a>
 
-This operation does not use request parameters\.
+
+****  
+
+| Parameter | Data Type | Required? | Description | 
+| --- | --- | --- | --- | 
+| DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
 
 #### Request Body<a name="w36aac33b7c57b9"></a>
 
 This operation does not use the HTTP request body\.
 
 #### Response Elements<a name="w36aac33b7c57c11"></a>
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| UpgradeStepItem | UpgradeStepItem | Container for the most\-recent status of a domain's version upgrade\. | 
+
+### ListDomainNames<a name="es-configuration-api-actions-listdomainnames"></a>
+
+Displays the names of all Amazon ES domains owned by the current user *in the active Region*\.
+
+#### Syntax<a name="w36aac33b7c59b5"></a>
+
+```
+GET https://es.us-east-1.amazonaws.com/2015-01-01/domain
+```
+
+#### Request Parameters<a name="w36aac33b7c59b7"></a>
+
+This operation does not use request parameters\.
+
+#### Request Body<a name="w36aac33b7c59b9"></a>
+
+This operation does not use the HTTP request body\.
+
+#### Response Elements<a name="w36aac33b7c59c11"></a>
 
 
 ****  
@@ -1053,46 +1089,10 @@ This operation does not use the HTTP request body\.
 
 Lists all Elasticsearch instance types that are supported for a given Elasticsearch version and the features that these instance types support\.
 
-#### Syntax<a name="w36aac33b7c61b5"></a>
-
-```
-GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypeDetails/elasticsearch-version?domainName=domain-name&maxResults=max-results&nextToken=next-token
-```
-
-#### Request Parameters<a name="w36aac33b7c61b7"></a>
-
-
-****  
-
-| Parameter | Data Type | Required? | Description | 
-| --- | --- | --- | --- | 
-| ElasticsearchVersion | String | Yes | The Elasticsearch version\. | 
-| DomainName | String | No | The Amazon ES domain name\. | 
-| MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
-| NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
-
-#### Request Body<a name="w36aac33b7c61b9"></a>
-
-This operation does not use the HTTP request body\.
-
-#### Response Elements<a name="w36aac33b7c61c11"></a>
-
-
-****  
-
-| Field | Data Type | Description | 
-| --- | --- | --- | 
-| ElasticsearchInstanceTypes | List | List of supported instance types for the given Elasticsearch version and the features that these instance types support\. | 
-| NextToken | String |  Used for pagination\. Only necessary if a previous API call produced a result containing `NextToken`\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
-
-### ListElasticsearchInstanceTypes \(Deprecated\)<a name="es-configuration-api-actions-listelasticsearchinstancetypes"></a>
-
-Lists all Elasticsearch instance types that are supported for a given Elasticsearch version\. This action is deprecated\. Use [ListElasticsearchInstanceTypeDetails](#es-configuration-api-actions-listelasticsearchinstancetypedetails) instead\.
-
 #### Syntax<a name="w36aac33b7c63b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypes/elasticsearch-version?domainName=domain-name&maxResults=max-results&nextToken=next-token
+GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypeDetails/elasticsearch-version?domainName=domain-name&maxResults=max-results&nextToken=next-token
 ```
 
 #### Request Parameters<a name="w36aac33b7c63b7"></a>
@@ -1118,17 +1118,17 @@ This operation does not use the HTTP request body\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| ElasticsearchInstanceTypes | List | List of supported instance types for the given Elasticsearch version\. | 
-| NextToken | String | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
+| ElasticsearchInstanceTypes | List | List of supported instance types for the given Elasticsearch version and the features that these instance types support\. | 
+| NextToken | String |  Used for pagination\. Only necessary if a previous API call produced a result containing `NextToken`\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
 
-### ListElasticsearchVersions<a name="es-configuration-api-actions-listelasticsearchversions"></a>
+### ListElasticsearchInstanceTypes \(Deprecated\)<a name="es-configuration-api-actions-listelasticsearchinstancetypes"></a>
 
-Lists all supported Elasticsearch versions on Amazon ES\.
+Lists all Elasticsearch instance types that are supported for a given Elasticsearch version\. This action is deprecated\. Use [ListElasticsearchInstanceTypeDetails](#es-configuration-api-actions-listelasticsearchinstancetypedetails) instead\.
 
 #### Syntax<a name="w36aac33b7c65b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2015-01-01/es/versions?maxResults=max-results&nextToken=next-token
+GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypes/elasticsearch-version?domainName=domain-name&maxResults=max-results&nextToken=next-token
 ```
 
 #### Request Parameters<a name="w36aac33b7c65b7"></a>
@@ -1138,6 +1138,8 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/versions?maxResults=max-res
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
+| ElasticsearchVersion | String | Yes | The Elasticsearch version\. | 
+| DomainName | String | No | The Amazon ES domain name\. | 
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
@@ -1146,6 +1148,40 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/versions?maxResults=max-res
 This operation does not use the HTTP request body\.
 
 #### Response Elements<a name="w36aac33b7c65c11"></a>
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| ElasticsearchInstanceTypes | List | List of supported instance types for the given Elasticsearch version\. | 
+| NextToken | String | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
+
+### ListElasticsearchVersions<a name="es-configuration-api-actions-listelasticsearchversions"></a>
+
+Lists all supported Elasticsearch versions on Amazon ES\.
+
+#### Syntax<a name="w36aac33b7c67b5"></a>
+
+```
+GET https://es.us-east-1.amazonaws.com/2015-01-01/es/versions?maxResults=max-results&nextToken=next-token
+```
+
+#### Request Parameters<a name="w36aac33b7c67b7"></a>
+
+
+****  
+
+| Parameter | Data Type | Required? | Description | 
+| --- | --- | --- | --- | 
+| MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
+| NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
+
+#### Request Body<a name="w36aac33b7c67b9"></a>
+
+This operation does not use the HTTP request body\.
+
+#### Response Elements<a name="w36aac33b7c67c11"></a>
 
 
 ****  
@@ -1194,13 +1230,13 @@ This operation does not use the HTTP request body\.
 
 Displays all resource tags for an Amazon ES domain\.
 
-#### Syntax<a name="w36aac33b7c69b5"></a>
+#### Syntax<a name="w36aac33b7c71b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/tags?arn=domain-arn
 ```
 
-#### Request Parameters<a name="w36aac33b7c69b7"></a>
+#### Request Parameters<a name="w36aac33b7c71b7"></a>
 
 
 ****  
@@ -1209,11 +1245,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/tags?arn=domain-arn
 | --- | --- | --- | --- | 
 | ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain\. | 
 
-#### Request Body<a name="w36aac33b7c69b9"></a>
+#### Request Body<a name="w36aac33b7c71b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c69c11"></a>
+#### Response Elements<a name="w36aac33b7c71c11"></a>
 
 
 ****  
@@ -1226,7 +1262,7 @@ This operation does not use the HTTP request body\.
 
 Purchases a Reserved Instance\.
 
-#### Syntax<a name="w36aac33b7c71b5"></a>
+#### Syntax<a name="w36aac33b7c73b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/purchaseReservedInstanceOffering
@@ -1237,11 +1273,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/purchaseReservedInstanceOf
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c71b7"></a>
+#### Request Parameters<a name="w36aac33b7c73b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c71b9"></a>
+#### Request Body<a name="w36aac33b7c73b9"></a>
 
 
 ****  
@@ -1252,7 +1288,7 @@ This operation does not use HTTP request parameters\.
 |  ReservedElasticsearchInstanceOfferingId  | String | Yes | The offering ID\. | 
 | InstanceCount | Integer | Yes | The number of instances that you want to reserve\. | 
 
-#### Response Elements<a name="w36aac33b7c71c11"></a>
+#### Response Elements<a name="w36aac33b7c73c11"></a>
 
 
 ****  
@@ -1266,21 +1302,21 @@ This operation does not use HTTP request parameters\.
 
 Allows the destination domain owner to reject an inbound cross\-cluster search connection request\.
 
-#### Syntax<a name="w36aac33b7c73b5"></a>
+#### Syntax<a name="w36aac33b7c75b5"></a>
 
 ```
 PUT https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/inboundConnection/{ConnectionId}/reject
 ```
 
-#### Request Parameters<a name="w36aac33b7c73b7"></a>
+#### Request Parameters<a name="w36aac33b7c75b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c73b9"></a>
+#### Request Body<a name="w36aac33b7c75b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c73c11"></a>
+#### Response Elements<a name="w36aac33b7c75c11"></a>
 
 
 ****  
@@ -1293,7 +1329,7 @@ This operation does not use the HTTP request body\.
 
 Removes the specified resource tags from an Amazon ES domain\.
 
-#### Syntax<a name="w36aac33b7c75b5"></a>
+#### Syntax<a name="w36aac33b7c77b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/tags-removal
@@ -1303,37 +1339,6 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/tags-removal
     "tag-key1",
     "tag-key2"
   ]
-}
-```
-
-#### Request Parameters<a name="w36aac33b7c75b7"></a>
-
-This operation does not use HTTP request parameters\.
-
-#### Request Body<a name="w36aac33b7c75b9"></a>
-
-
-****  
-
-| Parameter | Data Type | Required? | Description | 
-| --- | --- | --- | --- | 
-| ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
-| TagKeys | [`TagKey`](#es-configuration-api-datatypes-tagkey) | Yes | List of tag keys for resource tags that you want to remove from an Amazon ES domain\. | 
-
-#### Response Elements<a name="w36aac33b7c75c11"></a>
-
-The `RemoveTags` operation does not return a response element\.
-
-### StartElasticsearchServiceSoftwareUpdate<a name="es-configuration-api-actions-startupdate"></a>
-
-Schedules a service software update for an Amazon ES domain\.
-
-#### Syntax<a name="w36aac33b7c77b5"></a>
-
-```
-POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/start
-{
-  "DomainName": "domain-name"
 }
 ```
 
@@ -1348,25 +1353,21 @@ This operation does not use HTTP request parameters\.
 
 | Parameter | Data Type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to update to the latest service software\. | 
+| ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
+| TagKeys | [`TagKey`](#es-configuration-api-datatypes-tagkey) | Yes | List of tag keys for resource tags that you want to remove from an Amazon ES domain\. | 
 
 #### Response Elements<a name="w36aac33b7c77c11"></a>
 
+The `RemoveTags` operation does not return a response element\.
 
-****  
+### StartElasticsearchServiceSoftwareUpdate<a name="es-configuration-api-actions-startupdate"></a>
 
-| Field | Data Type | Description | 
-| --- | --- | --- | 
-| ServiceSoftwareOptions | ServiceSoftwareOptions | Container for the state of your domain relative to the latest service software\. | 
-
-### StopElasticsearchServiceSoftwareUpdate<a name="es-configuration-api-actions-stopupdate"></a>
-
-Stops a scheduled service software update for an Amazon ES domain\. Only works if the domain's `UpdateStatus` is `PENDING_UPDATE`\.
+Schedules a service software update for an Amazon ES domain\.
 
 #### Syntax<a name="w36aac33b7c79b5"></a>
 
 ```
-POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/stop
+POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/start
 {
   "DomainName": "domain-name"
 }
@@ -1392,13 +1393,48 @@ This operation does not use HTTP request parameters\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
+| ServiceSoftwareOptions | ServiceSoftwareOptions | Container for the state of your domain relative to the latest service software\. | 
+
+### StopElasticsearchServiceSoftwareUpdate<a name="es-configuration-api-actions-stopupdate"></a>
+
+Stops a scheduled service software update for an Amazon ES domain\. Only works if the domain's `UpdateStatus` is `PENDING_UPDATE`\.
+
+#### Syntax<a name="w36aac33b7c81b5"></a>
+
+```
+POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/stop
+{
+  "DomainName": "domain-name"
+}
+```
+
+#### Request Parameters<a name="w36aac33b7c81b7"></a>
+
+This operation does not use HTTP request parameters\.
+
+#### Request Body<a name="w36aac33b7c81b9"></a>
+
+
+****  
+
+| Parameter | Data Type | Required? | Description | 
+| --- | --- | --- | --- | 
+| DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to update to the latest service software\. | 
+
+#### Response Elements<a name="w36aac33b7c81c11"></a>
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
 | ServiceSoftwareOptions | [`ServiceSoftwareOptions`](#es-configuration-api-datatypes-servicesoftware) | Container for the state of your domain relative to the latest service software\. | 
 
 ### UpdateElasticsearchDomainConfig<a name="es-configuration-api-actions-updateelasticsearchdomainconfig"></a>
 
 Modifies the configuration of an Amazon ES domain, such as the instance type and the number of instances\. You need to specify only the values that you want to update\.
 
-#### Syntax<a name="w36aac33b7c81b5"></a>
+#### Syntax<a name="w36aac33b7c83b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/config
@@ -1484,11 +1520,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/confi
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c81b7"></a>
+#### Request Parameters<a name="w36aac33b7c83b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c81b9"></a>
+#### Request Body<a name="w36aac33b7c83b9"></a>
 
 
 ****  
@@ -1507,7 +1543,7 @@ This operation does not use HTTP request parameters\.
 | DomainEndpointOptions | [DomainEndpointOptions](#es-configuration-api-datatypes-domainendpointoptions) | No | Additional options for the domain endpoint, such as whether to require HTTPS for all traffic\. | 
 | AdvancedSecurityOptions | [AdvancedSecurityOptions](#es-configuration-api-datatypes-advancedsec) | No | Options for fine\-grained access control\. | 
 
-#### Response Elements<a name="w36aac33b7c81c11"></a>
+#### Response Elements<a name="w36aac33b7c83c11"></a>
 
 
 ****  
@@ -1516,11 +1552,55 @@ This operation does not use HTTP request parameters\.
 | --- | --- | 
 | DomainConfig | [ElasticsearchDomainConfig](#es-configuration-api-datatypes-esdomainconfig) | 
 
+### UpdatePackage<a name="es-configuration-api-actions-updatepackage"></a>
+
+Update a package for use with Amazon ES domains\.
+
+#### Syntax<a name="es-configuration-api-actions-updatepackage-s"></a>
+
+```
+POST https://es.us-east-1.amazonaws.com/2015-01-01/packages/update
+{
+  "PackageID": "F11111111",
+  "PackageDescription": "My synonym file.",
+  "CommitMessage": "Added some synonyms.",
+  "PackageSource": {
+    "S3BucketName": "my-s3-bucket",
+    "S3Key": "synonyms.txt"
+  }
+}
+```
+
+#### Request Parameters<a name="es-configuration-api-actions-updatepackage-p"></a>
+
+This operation does not use request parameters\.
+
+#### Request Body<a name="es-configuration-api-actions-updatepackage-b"></a>
+
+
+****  
+
+| Parameter | Data Type | Required? | Description | 
+| --- | --- | --- | --- | 
+| PackageID | String | Yes | Unique ID for the package\. | 
+| PackageDescription | String | No | Description of the package\. | 
+| CommitMessage | String | No | Commit message for the updated file\. | 
+| PackageSource | [PackageSource](#es-configuration-api-datatypes-packagesource) | Yes | S3 bucket and key for the package\. | 
+
+#### Response Elements<a name="es-configuration-api-actions-updatepackage-r"></a>
+
+
+****  
+
+| Field | Data Type | 
+| --- | --- | 
+| PackageDetails | [PackageDetails](#es-configuration-api-datatypes-packagedetails) | 
+
 ### UpgradeElasticsearchDomain<a name="es-configuration-api-actions-upgrade-domain"></a>
 
 Upgrades an Amazon ES domain to a new version of Elasticsearch\. Alternately, checks upgrade eligibility\.
 
-#### Syntax<a name="w36aac33b7c83b5"></a>
+#### Syntax<a name="w36aac33b7c87b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain
@@ -1531,11 +1611,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c83b7"></a>
+#### Request Parameters<a name="w36aac33b7c87b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c83b9"></a>
+#### Request Body<a name="w36aac33b7c87b9"></a>
 
 
 ****  
@@ -1546,7 +1626,7 @@ This operation does not use HTTP request parameters\.
 | TargetVersion | String | Yes | Elasticsearch version to which you want to upgrade\. See [GetCompatibleElasticsearchVersions](#es-configuration-api-actions-get-compat-vers)\. | 
 | PerformCheckOnly | Boolean | No | Defaults to false\. If true, Amazon ES checks the eligibility of the domain, but does not perform the upgrade\. | 
 
-#### Response Elements<a name="w36aac33b7c83c11"></a>
+#### Response Elements<a name="w36aac33b7c87c11"></a>
 
 
 ****  
