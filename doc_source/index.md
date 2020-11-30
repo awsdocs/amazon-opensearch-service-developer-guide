@@ -55,7 +55,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Searching Data in Amazon Elasticsearch Service](es-searching.md)
    + [Custom Packages for Amazon Elasticsearch Service](custom-packages.md)
    + [SQL Support for Amazon Elasticsearch Service](sql-support.md)
-   + [Piped Processing Language](ppl.md)
+   + [Piped Processing Language](ppl-support.md)
    + [KNN](knn.md)
    + [Cross-Cluster Search for Amazon Elasticsearch Service](cross-cluster-search.md)
    + [Learning to Rank for Amazon Elasticsearch Service](learning-to-rank.md)
