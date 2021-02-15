@@ -95,7 +95,7 @@ server {
 
         # Update cookie domain and path
         proxy_cookie_domain $kibana_host $host;
-        proxy_cookie_path / /_plugin/kibana/;
+        proxy_cookie_path ~^/$ /_plugin/kibana/;
 
         # Response buffer settings
         proxy_buffer_size 128k;
