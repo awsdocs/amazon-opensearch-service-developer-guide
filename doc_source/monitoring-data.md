@@ -7,3 +7,4 @@ Alerting notifies you when your data exceeds certain thresholds\. Anomaly detect
 **Topics**
 + [Alerting for Amazon Elasticsearch Service](alerting.md)
 + [Anomaly Detection for Amazon Elasticsearch Service](ad.md)
++ [Trace Analytics for Amazon Elasticsearch Service](trace-analytics.md)

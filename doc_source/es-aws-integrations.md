@@ -119,7 +119,7 @@ If you use macOS, these commands might not work properly\. As a workaround, add 
 
 After you create the deployment package, you can create the Lambda function\. When you create a function, choose a name, runtime \(for example, Python 2\.7\), and IAM role\. The IAM role defines the permissions for your function\. For detailed instructions, see [Create a Simple Lambda Function](https://docs.aws.amazon.com/lambda/latest/dg/get-started-create-function.html) in the *AWS Lambda Developer Guide*\.
 
-This example assumes that you are using the console\. Choose Python 2\.7 and a role that has S3 read permissions and Amazon ES write permissions, as shown in the following screenshot\.
+This example assumes you're using the console\. Choose Python 2\.7 and a role that has S3 read permissions and Amazon ES write permissions, as shown in the following screenshot:
 
 ![\[Sample configuration for a Lambda function\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/lambda-function.png)
 

@@ -1,24 +1,36 @@
 # Alerting for Amazon Elasticsearch Service<a name="alerting"></a>
 
-The alerting feature notifies you when data from one or more Elasticsearch indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the past 20 minutes\. To get started, open Kibana and choose **Alerting**\.
+Configure alerts in Amazon Elasticsearch Service \(Amazon ES\) to get notified when data from one or more Elasticsearch indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
 
-Alerting requires Elasticsearch 6\.2 or higher\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/)\.
+Alerting requires Elasticsearch version 6\.2 or later\. For full documentation, including API descriptions, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/)\. This topic highlights the differences in alerting in \(Amazon ES\) compared to the open\-source version\.
+
+**To get started with alerting**
+
+1. Choose **Alerting** from the Kibana main menu\.
+
+1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\.
+
+1. Create a monitor in one of three ways: visually, using a query, or using an anomaly detector\.
+
+1. Define a condition to trigger the monitor\.
+
+1. Add one or more actions to the monitor\.
+
+For detailed steps, see [Monitors](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/monitors/) in the Open Distro for Elasticsearch documentation\.
 
 ## Differences<a name="alerting-diff"></a>
 
-Compared to Open Distro for Elasticsearch, the Amazon Elasticsearch Service alerting feature has some notable differences\.
+Compared to Open Distro for Elasticsearch, alerting in Amazon ES has some notable differences\.
 
 ### Amazon SNS Support<a name="alerting-diff-sns"></a>
 
-Amazon ES supports [Amazon SNS](https://aws.amazon.com/sns/) for notifications\. This integration with Amazon SNS means that, in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), the alerting feature can send emails, text messages, and even run AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
+Amazon ES supports Amazon Simple Notification Service \([Amazon SNS](https://aws.amazon.com/sns/)\) for notifications\. This integration means that in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), you can also send emails, text messages, and even run AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
 
 **To add Amazon SNS as a destination**
 
-1. Open Kibana\.
+1. Choose **Alerting** from the Kibana main menu\.
 
-1. Choose **Alerting**\.
-
-1. Choose the **Destinations** tab and then **Add Destination**\.
+1. Go to the **Destinations** tab and then choose **Add destination**\.
 
 1. Provide a unique name for the destination\.
 
@@ -67,9 +79,9 @@ Amazon ES lets you modify the following [alerting settings](https://opendistro.g
 + `opendistro.alerting.alert_history_rollover_period`
 + `opendistro.alerting.filter_by_backend_roles`
 
-All other settings use the default values, and you can't change them\.
+All other settings use the default values which you can't change\.
 
-To disable the alerting feature, send the following request:
+To disable alerting, send the following request:
 
 ```
 PUT _cluster/settings
@@ -80,7 +92,7 @@ PUT _cluster/settings
 }
 ```
 
-This next request sets the alerting feature to automatically delete history indices after seven days, rather than the default value of 30:
+The following request configures alerting to automatically delete history indices after seven days, rather than the default 30 days:
 
 ```
 PUT _cluster/settings
@@ -100,7 +112,7 @@ DELETE .opendistro-alerting-alert-history-*
 To reduce shard count for history indices, create an index template\. The following request sets history indices for both alerting and [Index State Management](ism.md) to one shard and one replica:
 
 ```
-PUT _cluster/settings
+PUT _template/template-name
 {
   "index_patterns": [".opendistro-alerting-alert-history-*", ".opendistro-ism-managed-index-history-*"],
   "template": {
@@ -112,8 +124,8 @@ PUT _cluster/settings
 }
 ```
 
-Depending on your tolerance for data loss, you might even consider using zero replicas\.
+Depending on your tolerance for data loss, you might even consider using zero replicas\. For more information about creating and managing index templates, see [Index template](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/index-templates/) in the Open Distro for Elasticsearch documentation\. 
 
 ### Alerting Permissions<a name="alerting-diff-perms"></a>
 
-The alerting feature supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/security/) in the Open Distro for Elasticsearch documentation\.
+Alerting supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/security/) in the Open Distro for Elasticsearch documentation\.

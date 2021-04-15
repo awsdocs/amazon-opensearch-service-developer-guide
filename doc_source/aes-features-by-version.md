@@ -1,6 +1,6 @@
 # Features by Elasticsearch Version<a name="aes-features-by-version"></a>
 
-Many Amazon ES features have a minimum Elasticsearch version requirement\.
+Many Amazon ES features have a minimum Elasticsearch version requirement\. If you meet the minimum Elasticsearch version for a feature, but the feature isn't available on your domain, update your domain's [service software](es-service-software.md)\.
 
 
 ****  

@@ -23,7 +23,26 @@ output {
 }
 ```
 
-If your domain uses an IAM\-based domain access policy or fine\-grained access control with an IAM master user, you must sign all requests to Amazon ES using IAM credentials\. In this case, the simplest solution to sign requests from Logstash is to use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin\. First, install the plugin\.
+Configuration varies by Beats application and use case, but your Filebeat OSS configuration might look like this:
+
+```
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /path/to/logs/dir/*.log
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+setup.ilm.enabled: false
+setup.ilm.check_exists: false
+setup.template.settings:
+  index.number_of_shards: 1
+output.logstash:
+  hosts: ["logstash-host:5044"]
+```
+
+If your domain uses an IAM\-based domain access policy or fine\-grained access control with an IAM master user, you must sign all requests to Amazon ES using IAM credentials\. In this case, the simplest solution to sign requests from Logstash OSS is to use the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin\. First, install the plugin\.
 
 ```
 bin/logstash-plugin install logstash-output-amazon_es
@@ -57,4 +76,4 @@ output {
 }
 ```
 
-If your Amazon ES domain is in a VPC, Logstash must run on a machine in that same VPC and have access to the domain through the VPC security groups\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If your Amazon ES domain is in a VPC, the Logstash OSS machine must be able to connect to the VPC and have access to the domain through the VPC security groups\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.

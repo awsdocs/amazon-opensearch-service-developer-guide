@@ -1,10 +1,12 @@
 # SAML Authentication for Kibana<a name="saml"></a>
 
-SAML authentication for Kibana lets you use your existing identity provider to offer single sign\-on \(SSO\) for Kibana on domains running Elasticsearch 6\.7 or later\. To use this feature, you must enable [fine\-grained access control](fgac.md)\.
-
-Rather than authenticating through [Amazon Cognito](es-cognito-auth.md) or the [internal user database](fgac.md#fgac-kibana), SAML authentication for Kibana lets you use third\-party identity providers to log in to Kibana, manage fine\-grained access control, search your data, and build visualizations\. Amazon Elasticsearch Service supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services, and Auth0\.
+SAML authentication for Kibana lets you use your existing identity provider to offer single sign\-on \(SSO\) for Kibana\. Rather than authenticating through [Amazon Cognito](es-cognito-auth.md) or the [internal user database](fgac.md#fgac-kibana), SAML authentication for Kibana lets you use third\-party identity providers to log in to Kibana, manage fine\-grained access control, search your data, and build visualizations\.
 
 SAML authentication for Kibana is only for accessing Kibana through a web browser\. Your SAML credentials do *not* let you make direct HTTP requests to the Elasticsearch or Kibana APIs\.
+
+## Prerequisites<a name="saml-prerequisites"></a>
++ An Amazon ES domain running Elasticsearch 6\.7 or later with [fine\-grained access control](fgac.md) enabled
++ A third\-party identity provider \(IdP\) that supports the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services, Auth0, and many more
 
 ## SAML Configuration Overview<a name="saml-overview"></a>
 
@@ -18,15 +20,13 @@ Amazon ES provides two single sign\-on URLs, SP\-initiated and IdP\-initiated, b
 
 In either case, the goal is to log in through your identity provider and receive a SAML assertion that contains your username \(required\) and any [backend roles](fgac.md#fgac-concepts) \(optional, but recommended\)\. This information allows [fine\-grained access control](fgac.md) to assign permissions to SAML users\. In external identity providers, backend roles are typically called "roles" or "groups\."
 
-**Note**  
-You can't change the SSO URL, so SAML authentication for Kibana does not support proxy servers\.
+## Limitations<a name="saml-limitations"></a>
++ You can't change the SSO URL, so SAML authentication for Kibana does not support proxy servers\.
++ Domains only support one Kibana authentication method at a time\. If you have [Amazon Cognito authentication for Kibana](es-cognito-auth.md) enabled, you must disable it before you can enable SAML\.
 
 ## Enabling SAML Authentication<a name="saml-enable"></a>
 
 You can only enable SAML authentication for Kibana on existing domains, not during the creation of new ones\. Due to the size of the IdP metadata file, we highly recommend using the AWS console\.
-
-**Tip**  
-Domains only support one Kibana authentication method at a time\. If you have [Amazon Cognito authentication for Kibana](es-cognito-auth.md) enabled, you must disable it before you can enable SAML\.
 
 **To enable SAML authentication for Kibana \(console\)**
 
@@ -35,16 +35,13 @@ Domains only support one Kibana authentication method at a time\. If you have [A
 1. Check **Enable SAML authentication**\.
 
 1. Note the service provider entity ID and the two SSO URLs\. You only need one of the SSO URLs\. For guidance, see [SAML Configuration Overview](#saml-overview)\.
-**Tip**  
-These URLs change if you later enable a [custom endpoint](es-customendpoint.md) for your domain\. In that situation, you must update your IdP\.
 
-1. Use these values to configure your identity provider\. This is the most complex part of the process, and unfortunately, terminology and steps vary wildly by provider\. Consult your provider's documentation\.
+   These URLs change if you later enable a [custom endpoint](es-customendpoint.md) for your domain\. In that situation, you must update your IdP\.
 
-   In Okta, for example, you create a "SAML 2\.0 web application\." For **Single sign on URL**, specify the SSO URL that you chose in step 3\. For **Audience URI \(SP Entity ID\)**, specify the SP entity ID\.
-
-   Rather than users and backend roles, Okta has users and groups\. For **Group Attribute Statements**, we recommend adding `role` to the **Name** field and the regular expression `.+` to the **Filter** field\. This statement tells the Okta identity provider to include all user groups under the `role` field of the SAML assertion after a user authenticates\.
-
-   In Auth0, you create a "regular web application" and then enable the SAML 2\.0 add\-on\. In Keycloak, you create a "client\."
+1. Use these values to configure your identity provider\. This is the most complex part of the process, and unfortunately, terminology and steps vary wildly by provider\. Consult your provider's documentation and see the following sections:
+   + [Tips for Okta](#saml-okta)
+   + [Tips for Keycloak](#saml-keycloak)
+   + [Tips for Auth0](#saml-auth0)
 
 1. After you configure your identity provider, it generates an IdP metadata file\. This XML file contains information on the provider, such as a TLS certificate, single sign\-on endpoints, and the identity provider's entity ID\.
 
@@ -113,7 +110,7 @@ These URLs change if you later enable a [custom endpoint](es-customendpoint.md) 
 
 1. Expand the **Optional SAML settings** section\.
 
-1. By default, Amazon ES checks the `NameID` element of the SAML assertion for the username\. If your assertion includes the username as an attribute, specify the attribute name in the **Subject key** field\.
+1. Leave the **Subject key** field empty to use the `NameID` element of the SAML assertion for the username\. If your assertion doesn't use this standard element and instead includes the username as a custom attribute, specify that attribute here\.
 
    If you want to use backend roles \(recommended\), specify an attribute from the assertion in the **Role key** field, such as `role` or `group`\. This is another situation in which tools like [SAML\-tracer](https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/) can help\.
 
@@ -198,7 +195,7 @@ You must escape all quotes and newline characters in the metadata XML\. For exam
 
 | Error | Details | 
 | --- | --- | 
-| Your request: '*/some/path*' is not allowed\. | Verify that you provided the correct [SSO URL](#saml-enable) \(step 3\) to your identity provider\. | 
+|  Your request: '*/some/path*' is not allowed\.  |  Verify that you provided the correct [SSO URL](#saml-enable) \(step 3\) to your identity provider\.  | 
 |  Please provide valid identity provider metadata document to enable SAML\.  |  Your IdP metadata file does not conform to the SAML 2\.0 standard\. Check for errors using a validation tool\.  | 
 |  SAML configuration options aren't visible in the console\.  |  Update to the latest [service software](es-service-software.md)\.  | 
 |  SAML configuration error: Something went wrong while retrieving the SAML configuration, please check your settings\.  |  This generic error can occur for many reasons\. [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/saml.html)  | 
@@ -231,3 +228,27 @@ You must escape all quotes and newline characters in the metadata XML\. For exam
      ]
    }
    ```
+
+## Tips for Okta<a name="saml-okta"></a>
+
+In Okta, create a "SAML 2\.0 web application\." For **Single sign on URL**, specify the SSO URL that you chose in step 3 of [Enabling SAML Authentication](#saml-enable)\. For **Audience URI \(SP Entity ID\)**, specify the SP entity ID\.
+
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/okta1.png)
+
+Rather than users and backend roles, Okta has users and groups\. For **Group Attribute Statements**, we recommend adding `role` to the **Name** field and the regular expression `.+` to the **Filter** field\. This statement tells the Okta identity provider to include all user groups under the `role` field of the SAML assertion after a user authenticates\.
+
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/okta2.png)
+
+## Tips for Keycloak<a name="saml-keycloak"></a>
+
+Depending on your IdP configuration, you might want to create a new *realm* in Keycloak for your Kibana users\. Whether you use a new or existing realm, choose **SAML 2\.0 Identify Provider Metadata** under the **Endpoints** section of your realm settings to get your IdP metadata file, which you need in step 5 of [Enabling SAML Authentication](#saml-enable)\.
+
+The realm must have a *client* for Kibana\. Use the `saml` protocol and `RSA_SHA512` for the signature algorithm\. Provide the SP\-initiated SSO URL for **Valid Redirect URIs**, **Master SAML Processing URL**, and **Logout Service Redirect Binding URL**\.
+
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/keycloak3.png)
+
+Keycloak offers several ways to map users to roles, but for testing, you might find it convenient to create two new client roles and two new users\. Then map those new roles directly to the new users\. For your roles, choose Basic for **SAML Attribute NameFormat**
+
+## Tips for Auth0<a name="saml-auth0"></a>
+
+In Auth0, you create a "regular web application" and then enable the SAML 2\.0 add\-on\. 

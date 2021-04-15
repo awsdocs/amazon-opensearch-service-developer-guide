@@ -1,26 +1,29 @@
-# Step 2: Upload Data to an Amazon ES Domain for Indexing<a name="es-gsg-upload-data"></a>
+# Step 2: Upload data to an Amazon ES domain for indexing<a name="es-gsg-upload-data"></a>
 
 **Important**  
-This process is a concise tutorial for uploading a small amount of test data\. For more information, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+This is a concise tutorial for uploading a small amount of test data to Amazon Elasticsearch Service \(Amazon ES\)\. For more about uploading data in a production domain, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
-You can upload data to an Amazon Elasticsearch Service domain using the command line or most programming languages\.
+You can upload data to an Amazon ES domain using the command line or most programming languages\.
 
-The following example requests use [curl](https://curl.haxx.se/), a common HTTP client, for brevity and convenience\. Clients like curl can't perform the request signing that is required if your access policies specify IAM users or roles\. To successfully perform the instructions in this step, you must use fine\-grained access control with a master user name and password, like you configured in [step 1](es-gsg-create-domain.md)\.
+The following example requests use [curl](https://curl.haxx.se/) \(a common HTTP client\) for brevity and convenience\. Clients like curl can't perform the request signing that's required if your access policies specify IAM users or roles\. To successfully complete this process, you must use fine\-grained access control with a primary user name and password like you configured in [Step 1](es-gsg-create-domain.md)\.
 
-You can install curl on Windows and use it from the command prompt, but we recommend a tool like [Cygwin](https://www.cygwin.com/) or [the Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)\. macOS and most Linux distributions come with curl pre\-installed\.
+You can install curl on Windows and use it from the command prompt, but we recommend a tool like [Cygwin](https://www.cygwin.com/) or the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)\. macOS and most Linux distributions come with curl preinstalled\.
 
-**To upload a single document to an Amazon ES domain**
-+ Run the following command to add a single document to the *movies* domain:
+## Option 1: Upload a single document<a name="es-gsg-single-document"></a>
 
-  ```
-  curl -XPUT -u 'master-user:master-user-password' 'domain-endpoint/movies/_doc/1' -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
-  ```
+Run the following command to add a single document to the *movies* domain:
+
+```
+curl -XPUT -u 'master-user:master-user-password' 'domain-endpoint/movies/_doc/1' -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
+```
 
 For a detailed explanation of this command and how to make signed requests to Amazon ES, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
 
+## Option 2: Upload multiple documents<a name="es-gsg-multiple-document"></a>
+
 **To upload a JSON file that contains multiple documents to an Amazon ES domain**
 
-1. Create a file called `bulk_movies.json`\. Copy and paste the following content into it, and add a trailing newline:
+1. Create a file called `bulk_movies.json`\. Paste the following content into the file and add a trailing newline:
 
    ```
    { "index" : { "_index": "movies", "_id" : "2" } }
@@ -38,3 +41,5 @@ For a detailed explanation of this command and how to make signed requests to Am
    ```
 
 For more information about the bulk file format, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+
+**Next**: [Search documents in an Amazon ES domain](es-gsg-search.md)

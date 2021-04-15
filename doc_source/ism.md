@@ -6,7 +6,7 @@ A policy contains a default state and a list of states for the index to transiti
 
 For example, you can define a policy that moves your index into a `read_only` state after 30 days and then ultimately deletes it after 90 days\.
 
-ISM requires Elasticsearch 6\.8 or later\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/)\.
+ISM requires Elasticsearch 6\.8 or later\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/)\.
 
 **Note**  
 After you attach a policy to an index, ISM creates a job that runs every 30 to 48 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 30 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indices at the same time\.
@@ -125,9 +125,11 @@ Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service 
 ### ISM Operations<a name="alerting-diff-op"></a>
 + Amazon ES supports a unique ISM operation, `warm_migration`\. 
 
-  If your domain has [UltraWarm](ultrawarm.md) enabled, this action transitions the index to warm storage\. The `warm_migration` action has a [default timeout](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions) of 12 hours\. For large clusters, you might need to change this value, as shown in the [sample policy](#ism-example)\.
-+ If your [runs Elasticsearch 7\.4 or later,](aes-supported-es-operations.md) Amazon ES supports the ISM `open` and `close` operations\.
-+ Amazon ES does not support the ISM `snapshot` operation\.
+  If your domain has [UltraWarm](ultrawarm.md) enabled, the `warm_migration` action transitions the index to warm storage\. Even if the `warm_migration` action doesn’t complete within the [set timeout period](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions), the migration to warm indices still continues\.
+
+  Setting an `error_notifcation` for the `warm_migration` action might notify you that the `warm_migration` action failed, if it didn’t complete within the timeout period\. This failed notification is only for your own reference\. The actual warm migration operation has no inherent timeout and continues to run until it eventually succeeds or fails\. 
++ If your domain runs Elasticsearch 7\.4 or later, Amazon ES supports the ISM `open` and `close` operations\.
++ If your domain runs Elasticsearch 7\.7 or later, Amazon ES supports the ISM `snapshot` operation\.
 
 ### ISM Settings<a name="ism-diff-settings"></a>
 
@@ -138,3 +140,5 @@ Open Distro for Elasticsearch lets you change all available ISM settings using t
 + **Index\-level settings:**
   + `rollover_alias`
   + `policy_id`
+
+   

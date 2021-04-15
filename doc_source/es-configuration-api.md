@@ -28,6 +28,7 @@ All configuration service requests must be signed\. For more information, see [S
 | [DeleteInboundCrossClusterSearchConnection](#es-configuration-api-actions-delete-inbound-cross-cluster-search-connection) | DELETE | 
 | [DeleteOutboundCrossClusterSearchConnection](#es-configuration-api-actions-delete-outbound-cross-cluster-search-connection) | DELETE | 
 | [DeletePackage](#es-configuration-api-actions-deletepackage) | DELETE | 
+| [DescribeDomainAutoTunes](#es-configuration-api-actions-describeautotune) | GET | 
 | [DescribeElasticsearchDomain](#es-configuration-api-actions-describeelasticsearchdomain) | GET | 
 | [DescribeElasticsearchDomainConfig](#es-configuration-api-actions-describeelasticsearchdomainconfig) | GET | 
 | [DescribeElasticsearchDomains](#es-configuration-api-actions-describeesdomains) | POST | 
@@ -62,21 +63,21 @@ All configuration service requests must be signed\. For more information, see [S
 
 Allows the destination domain owner to accept an inbound cross\-cluster search connection request\.
 
-#### Syntax<a name="w36aac33b7b9b5"></a>
+#### Syntax<a name="w38aac33b7b9b5"></a>
 
 ```
 PUT https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/inboundConnection/{ConnectionId}/accept
 ```
 
-#### Request Parameters<a name="w36aac33b7b9b7"></a>
+#### Request Parameters<a name="w38aac33b7b9b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7b9b9"></a>
+#### Request Body<a name="w38aac33b7b9b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7b9c11"></a>
+#### Response Elements<a name="w38aac33b7b9c11"></a>
 
 
 ****  
@@ -240,6 +241,24 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain
       "MasterUserPassword": "my-master-password"
     }
   },
+  "AutoTuneOptions": {
+    "DesiredState": "ENABLED|DISABLED",
+    "MaintenanceSchedules": [{
+      "StartAt": 1234567890,
+      "Duration": {
+        "Value": 2,
+        "Unit": "HOURS"
+      },
+      "CronExpressionForRecurrence": "0 0 ? * 3 *"
+    }]
+  },
+  "ElasticsearchVersion": "7.9",
+  "TagList": [
+    {
+      "Key": "stack",
+      "Value": "prod"
+    }
+  ],
   "ElasticsearchVersion": "7.1",
   "DomainName": "my-domain",
   "AccessPolicies": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"123456789012\"]},\"Action\":[\"es:es:ESHttp*\"],\"Resource\":\"arn:aws:es:us-east-1:123456789012:domain/my-domain/*\"}]}"
@@ -271,6 +290,8 @@ This operation does not use HTTP request parameters\.
 | NodeToNodeEncryptionOptions | [NodeToNodeEncryptionOptions](#es-configuration-api-datatypes-node-to-node) | No | Enables node\-to\-node encryption\. | 
 | DomainEndpointOptions | [DomainEndpointOptions](#es-configuration-api-datatypes-domainendpointoptions) | No | Additional options for the domain endpoint, such as whether to require HTTPS for all traffic\. | 
 | AdvancedSecurityOptions | [AdvancedSecurityOptions](#es-configuration-api-datatypes-advancedsec) | No | Options for fine\-grained access control\. | 
+| AutoTuneOptions | [AutoTuneOptions](#es-configuration-api-datatypes-autotune) | No | Options for Auto\-Tune\. | 
+| TagList | [TagList](#es-configuration-api-datatypes-taglist) | No | List of tags you want to add to the domain on creation\. | 
 
 #### Response Elements<a name="es-configuration-api-actions-createelasticsearchdomain-r"></a>
 
@@ -285,7 +306,7 @@ This operation does not use HTTP request parameters\.
 
 Creates a new cross\-cluster search connection from a source domain to a destination domain\.
 
-#### Syntax<a name="w36aac33b7c17b5"></a>
+#### Syntax<a name="w38aac33b7c17b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/outboundConnection
@@ -303,11 +324,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/outboundConnection
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c17b7"></a>
+#### Request Parameters<a name="w38aac33b7c17b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c17b9"></a>
+#### Request Body<a name="w38aac33b7c17b9"></a>
 
 
 ****  
@@ -318,7 +339,7 @@ This operation does not use HTTP request parameters\.
 | SourceDomainInfo | Object | Yes | Name and region of the source domain\. | 
 | DestinationDomainInfo | Object | Yes | Name and region of the destination domain\. | 
 
-#### Response Elements<a name="w36aac33b7c17c11"></a>
+#### Response Elements<a name="w38aac33b7c17c11"></a>
 
 
 ****  
@@ -436,21 +457,21 @@ The `DeleteElasticsearchServiceRole` operation does not return a data structure\
 
 Allows the destination domain owner to delete an existing inbound cross\-cluster search connection\.
 
-#### Syntax<a name="w36aac33b7c25b5"></a>
+#### Syntax<a name="w38aac33b7c25b5"></a>
 
 ```
 DELETE https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/inboundConnection/{ConnectionId}
 ```
 
-#### Request Parameters<a name="w36aac33b7c25b7"></a>
+#### Request Parameters<a name="w38aac33b7c25b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c25b9"></a>
+#### Request Body<a name="w38aac33b7c25b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c25c11"></a>
+#### Response Elements<a name="w38aac33b7c25c11"></a>
 
 
 ****  
@@ -463,21 +484,21 @@ This operation does not use the HTTP request body\.
 
 Allows the source domain owner to delete an existing outbound cross\-cluster search connection\.
 
-#### Syntax<a name="w36aac33b7c27b5"></a>
+#### Syntax<a name="w38aac33b7c27b5"></a>
 
 ```
 DELETE https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/outboundConnection/{ConnectionId}
 ```
 
-#### Request Parameters<a name="w36aac33b7c27b7"></a>
+#### Request Parameters<a name="w38aac33b7c27b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c27b9"></a>
+#### Request Body<a name="w38aac33b7c27b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c27c11"></a>
+#### Response Elements<a name="w38aac33b7c27c11"></a>
 
 
 ****  
@@ -518,17 +539,50 @@ This operation does not use the HTTP request body\.
 | --- | --- | 
 | PackageDetails | [PackageDetails](#es-configuration-api-datatypes-packagedetails) | 
 
+### DescribeDomainAutoTunes<a name="es-configuration-api-actions-describeautotune"></a>
+
+Returns the list of optimizations that Auto\-Tune has made to the domain\.
+
+#### Syntax<a name="w38aac33b7c31b5"></a>
+
+```
+GET https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/domain-name/autoTunes
+```
+
+#### Request Parameters<a name="w38aac33b7c31b7"></a>
+
+
+****  
+
+| Parameter | Data Type | Required? | Description | 
+| --- | --- | --- | --- | 
+| DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want Auto\-Tune details about\. | 
+
+#### Request Body<a name="w38aac33b7c31b9"></a>
+
+This operation does not use the HTTP request body\.
+
+#### Response Elements<a name="w38aac33b7c31c11"></a>
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| AutoTunes | List | List of optimizations\. | 
+| NextToken | String | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
+
 ### DescribeElasticsearchDomain<a name="es-configuration-api-actions-describeelasticsearchdomain"></a>
 
 Describes the domain configuration for the specified Amazon ES domain, including the domain ID, domain service endpoint, and domain ARN\.
 
-#### Syntax<a name="w36aac33b7c31b5"></a>
+#### Syntax<a name="w38aac33b7c33b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/domain-name
 ```
 
-#### Request Parameters<a name="w36aac33b7c31b7"></a>
+#### Request Parameters<a name="w38aac33b7c33b7"></a>
 
 
 ****  
@@ -537,11 +591,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/domain-name
 | --- | --- | --- | --- | 
 | DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to describe\. | 
 
-#### Request Body<a name="w36aac33b7c31b9"></a>
+#### Request Body<a name="w38aac33b7c33b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c31c11"></a>
+#### Response Elements<a name="w38aac33b7c33c11"></a>
 
 
 ****  
@@ -554,13 +608,13 @@ This operation does not use the HTTP request body\.
 
 Displays the configuration of an Amazon ES domain\.
 
-#### Syntax<a name="w36aac33b7c33b5"></a>
+#### Syntax<a name="w38aac33b7c35b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/domain-name/config
 ```
 
-#### Request Parameters<a name="w36aac33b7c33b7"></a>
+#### Request Parameters<a name="w38aac33b7c35b7"></a>
 
 
 ****  
@@ -569,11 +623,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/domain-name/config
 | --- | --- | --- | --- | 
 | DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain configuration that you want to describe\. | 
 
-#### Request Body<a name="w36aac33b7c33b9"></a>
+#### Request Body<a name="w38aac33b7c35b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c33c11"></a>
+#### Response Elements<a name="w38aac33b7c35c11"></a>
 
 
 ****  
@@ -586,7 +640,7 @@ This operation does not use the HTTP request body\.
 
 Describes the domain configuration for up to five specified Amazon ES domains\. Information includes the domain ID, domain service endpoint, and domain ARN\.
 
-#### Syntax<a name="w36aac33b7c35b5"></a>
+#### Syntax<a name="w38aac33b7c37b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain-info
@@ -598,11 +652,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain-info
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c35b7"></a>
+#### Request Parameters<a name="w38aac33b7c37b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c35b9"></a>
+#### Request Body<a name="w38aac33b7c37b9"></a>
 
 
 ****  
@@ -611,7 +665,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | --- | 
 | DomainNames | [DomainNameList](#es-configuration-api-datatypes-domainnamelist) | Yes | Array of Amazon ES domain names\. | 
 
-#### Response Elements<a name="w36aac33b7c35c11"></a>
+#### Response Elements<a name="w38aac33b7c37c11"></a>
 
 
 ****  
@@ -624,13 +678,13 @@ This operation does not use HTTP request parameters\.
 
 Describes the instance count, storage, and master node limits for a given Elasticsearch version and instance type\.
 
-#### Syntax<a name="w36aac33b7c37b5"></a>
+#### Syntax<a name="w38aac33b7c39b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypeLimits/elasticsearch-version/instance-type?domainName=domain-name
 ```
 
-#### Request Parameters<a name="w36aac33b7c37b7"></a>
+#### Request Parameters<a name="w38aac33b7c39b7"></a>
 
 
 ****  
@@ -641,11 +695,13 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypeLimits/elastics
 | InstanceType | String | Yes | Instance type\. To view instance types by Region, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. | 
 | DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | No | The name of an existing domain\. Only specify if you need the limits for an existing domain\. | 
 
-#### Request Body<a name="w36aac33b7c37b9"></a>
+
+
+#### Request Body<a name="w38aac33b7c39b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c37c11"></a>
+#### Response Elements<a name="w38aac33b7c39c11"></a>
 
 
 ****  
@@ -658,7 +714,7 @@ This operation does not use the HTTP request body\.
 
 Lists all the inbound cross\-cluster search connections for a destination domain\.
 
-#### Syntax<a name="w36aac33b7c39b5"></a>
+#### Syntax<a name="w38aac33b7c41b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/inboundConnection/search
@@ -675,11 +731,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/inboundConnection/sear
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c39b7"></a>
+#### Request Parameters<a name="w38aac33b7c41b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c39b9"></a>
+#### Request Body<a name="w38aac33b7c41b9"></a>
 
 
 ****  
@@ -690,7 +746,7 @@ This operation does not use HTTP request parameters\.
 | MaxResults | Integer | No | Limits the number of results\. The default is 100\.  | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Response Elements<a name="w36aac33b7c39c11"></a>
+#### Response Elements<a name="w38aac33b7c41c11"></a>
 
 
 ****  
@@ -704,7 +760,7 @@ This operation does not use HTTP request parameters\.
 
 Lists all outbound cross\-cluster search connections for a source domain\.
 
-#### Syntax<a name="w36aac33b7c41b5"></a>
+#### Syntax<a name="w38aac33b7c43b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/outboundConnection/search
@@ -721,11 +777,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/outboundConnection/sea
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c41b7"></a>
+#### Request Parameters<a name="w38aac33b7c43b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c41b9"></a>
+#### Request Body<a name="w38aac33b7c43b9"></a>
 
 
 ****  
@@ -736,7 +792,7 @@ This operation does not use HTTP request parameters\.
 | MaxResults | Integer | No | Limits the number of results\. The default is 100\.  | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Response Elements<a name="w36aac33b7c41c11"></a>
+#### Response Elements<a name="w38aac33b7c43c11"></a>
 
 
 ****  
@@ -794,13 +850,13 @@ This operation does not use request parameters\.
 
 Describes the available Reserved Instance offerings for a given Region\.
 
-#### Syntax<a name="w36aac33b7c45b5"></a>
+#### Syntax<a name="w38aac33b7c47b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/reservedInstanceOfferings?offeringId=offering-id&maxResults=max-results&nextToken=next-token
 ```
 
-#### Request Parameters<a name="w36aac33b7c45b7"></a>
+#### Request Parameters<a name="w38aac33b7c47b7"></a>
 
 
 ****  
@@ -811,11 +867,13 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/reservedInstanceOfferings?o
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result that contains NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w36aac33b7c45b9"></a>
+
+
+#### Request Body<a name="w38aac33b7c47b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c45c11"></a>
+#### Response Elements<a name="w38aac33b7c47c11"></a>
 
 
 ****  
@@ -828,13 +886,13 @@ This operation does not use the HTTP request body\.
 
 Describes the instance that you have reserved in a given Region\.
 
-#### Syntax<a name="w36aac33b7c47b5"></a>
+#### Syntax<a name="w38aac33b7c49b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/reservedInstances?reservationId=reservation-id&maxResults=max-results&nextToken=next-token
 ```
 
-#### Request Parameters<a name="w36aac33b7c47b7"></a>
+#### Request Parameters<a name="w38aac33b7c49b7"></a>
 
 
 ****  
@@ -845,11 +903,13 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/reservedInstances?reservati
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result that contains NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w36aac33b7c47b9"></a>
+
+
+#### Request Body<a name="w38aac33b7c49b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c47c11"></a>
+#### Response Elements<a name="w38aac33b7c49c11"></a>
 
 
 ****  
@@ -895,13 +955,13 @@ This operation does not use the HTTP request body\.
 
 Returns a map of Elasticsearch versions and the versions you can upgrade them to\.
 
-#### Syntax<a name="w36aac33b7c51b5"></a>
+#### Syntax<a name="w38aac33b7c53b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/compatibleVersions?domainName=domain-name
 ```
 
-#### Request Parameters<a name="w36aac33b7c51b7"></a>
+#### Request Parameters<a name="w38aac33b7c53b7"></a>
 
 
 ****  
@@ -910,11 +970,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/compatibleVersions?domainNa
 | --- | --- | --- | --- | 
 | DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | No | The name of an existing domain\. | 
 
-#### Request Body<a name="w36aac33b7c51b9"></a>
+#### Request Body<a name="w38aac33b7c53b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c51c11"></a>
+#### Response Elements<a name="w38aac33b7c53c11"></a>
 
 
 ****  
@@ -927,13 +987,13 @@ This operation does not use the HTTP request body\.
 
 Returns a map of Elasticsearch versions and the versions you can upgrade them to\.
 
-#### Syntax<a name="w36aac33b7c53b5"></a>
+#### Syntax<a name="w38aac33b7c55b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/packages/package-id/history?maxResults=max-results&amp;nextToken=next-token
 ```
 
-#### Request Parameters<a name="w36aac33b7c53b7"></a>
+#### Request Parameters<a name="w38aac33b7c55b7"></a>
 
 
 ****  
@@ -944,11 +1004,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/packages/package-id/history?ma
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w36aac33b7c53b9"></a>
+#### Request Body<a name="w38aac33b7c55b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c53c11"></a>
+#### Response Elements<a name="w38aac33b7c55c11"></a>
 
 
 ****  
@@ -961,13 +1021,13 @@ This operation does not use the HTTP request body\.
 
 Returns a list of the domain's 10 most\-recent upgrade operations\.
 
-#### Syntax<a name="w36aac33b7c55b5"></a>
+#### Syntax<a name="w38aac33b7c57b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/history?maxResults=max-results&amp;nextToken=next-token
 ```
 
-#### Request Parameters<a name="w36aac33b7c55b7"></a>
+#### Request Parameters<a name="w38aac33b7c57b7"></a>
 
 
 ****  
@@ -978,11 +1038,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/h
 | DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w36aac33b7c55b9"></a>
+#### Request Body<a name="w38aac33b7c57b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c55c11"></a>
+#### Response Elements<a name="w38aac33b7c57c11"></a>
 
 
 ****  
@@ -995,13 +1055,13 @@ This operation does not use the HTTP request body\.
 
 Returns the most\-recent status of a domain's Elasticsearch version upgrade\.
 
-#### Syntax<a name="w36aac33b7c57b5"></a>
+#### Syntax<a name="w38aac33b7c59b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/status
 ```
 
-#### Request Parameters<a name="w36aac33b7c57b7"></a>
+#### Request Parameters<a name="w38aac33b7c59b7"></a>
 
 
 ****  
@@ -1010,11 +1070,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain/domain-name/s
 | --- | --- | --- | --- | 
 | DomainName | [DomainName](#es-configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
 
-#### Request Body<a name="w36aac33b7c57b9"></a>
+#### Request Body<a name="w38aac33b7c59b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c57c11"></a>
+#### Response Elements<a name="w38aac33b7c59c11"></a>
 
 
 ****  
@@ -1027,21 +1087,21 @@ This operation does not use the HTTP request body\.
 
 Displays the names of all Amazon ES domains owned by the current user *in the active Region*\.
 
-#### Syntax<a name="w36aac33b7c59b5"></a>
+#### Syntax<a name="w38aac33b7c61b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/domain
 ```
 
-#### Request Parameters<a name="w36aac33b7c59b7"></a>
+#### Request Parameters<a name="w38aac33b7c61b7"></a>
 
 This operation does not use request parameters\.
 
-#### Request Body<a name="w36aac33b7c59b9"></a>
+#### Request Body<a name="w38aac33b7c61b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c59c11"></a>
+#### Response Elements<a name="w38aac33b7c61c11"></a>
 
 
 ****  
@@ -1089,13 +1149,13 @@ This operation does not use the HTTP request body\.
 
 Lists all Elasticsearch instance types that are supported for a given Elasticsearch version and the features that these instance types support\.
 
-#### Syntax<a name="w36aac33b7c63b5"></a>
+#### Syntax<a name="w38aac33b7c65b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypeDetails/elasticsearch-version?domainName=domain-name&maxResults=max-results&nextToken=next-token
 ```
 
-#### Request Parameters<a name="w36aac33b7c63b7"></a>
+#### Request Parameters<a name="w38aac33b7c65b7"></a>
 
 
 ****  
@@ -1107,11 +1167,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypeDetails/elastic
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w36aac33b7c63b9"></a>
+#### Request Body<a name="w38aac33b7c65b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c63c11"></a>
+#### Response Elements<a name="w38aac33b7c65c11"></a>
 
 
 ****  
@@ -1125,13 +1185,13 @@ This operation does not use the HTTP request body\.
 
 Lists all Elasticsearch instance types that are supported for a given Elasticsearch version\. This action is deprecated\. Use [ListElasticsearchInstanceTypeDetails](#es-configuration-api-actions-listelasticsearchinstancetypedetails) instead\.
 
-#### Syntax<a name="w36aac33b7c65b5"></a>
+#### Syntax<a name="w38aac33b7c67b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypes/elasticsearch-version?domainName=domain-name&maxResults=max-results&nextToken=next-token
 ```
 
-#### Request Parameters<a name="w36aac33b7c65b7"></a>
+#### Request Parameters<a name="w38aac33b7c67b7"></a>
 
 
 ****  
@@ -1143,11 +1203,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/instanceTypes/elasticsearch
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w36aac33b7c65b9"></a>
+#### Request Body<a name="w38aac33b7c67b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c65c11"></a>
+#### Response Elements<a name="w38aac33b7c67c11"></a>
 
 
 ****  
@@ -1161,13 +1221,13 @@ This operation does not use the HTTP request body\.
 
 Lists all supported Elasticsearch versions on Amazon ES\.
 
-#### Syntax<a name="w36aac33b7c67b5"></a>
+#### Syntax<a name="w38aac33b7c69b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/es/versions?maxResults=max-results&nextToken=next-token
 ```
 
-#### Request Parameters<a name="w36aac33b7c67b7"></a>
+#### Request Parameters<a name="w38aac33b7c69b7"></a>
 
 
 ****  
@@ -1177,11 +1237,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/es/versions?maxResults=max-res
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request Body<a name="w36aac33b7c67b9"></a>
+#### Request Body<a name="w38aac33b7c69b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c67c11"></a>
+#### Response Elements<a name="w38aac33b7c69c11"></a>
 
 
 ****  
@@ -1230,13 +1290,13 @@ This operation does not use the HTTP request body\.
 
 Displays all resource tags for an Amazon ES domain\.
 
-#### Syntax<a name="w36aac33b7c71b5"></a>
+#### Syntax<a name="w38aac33b7c73b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2015-01-01/tags?arn=domain-arn
 ```
 
-#### Request Parameters<a name="w36aac33b7c71b7"></a>
+#### Request Parameters<a name="w38aac33b7c73b7"></a>
 
 
 ****  
@@ -1245,11 +1305,11 @@ GET https://es.us-east-1.amazonaws.com/2015-01-01/tags?arn=domain-arn
 | --- | --- | --- | --- | 
 | ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) for the Amazon ES domain\. | 
 
-#### Request Body<a name="w36aac33b7c71b9"></a>
+#### Request Body<a name="w38aac33b7c73b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c71c11"></a>
+#### Response Elements<a name="w38aac33b7c73c11"></a>
 
 
 ****  
@@ -1262,7 +1322,7 @@ This operation does not use the HTTP request body\.
 
 Purchases a Reserved Instance\.
 
-#### Syntax<a name="w36aac33b7c73b5"></a>
+#### Syntax<a name="w38aac33b7c75b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/purchaseReservedInstanceOffering
@@ -1273,11 +1333,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/purchaseReservedInstanceOf
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c73b7"></a>
+#### Request Parameters<a name="w38aac33b7c75b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c73b9"></a>
+#### Request Body<a name="w38aac33b7c75b9"></a>
 
 
 ****  
@@ -1288,7 +1348,7 @@ This operation does not use HTTP request parameters\.
 |  ReservedElasticsearchInstanceOfferingId  | String | Yes | The offering ID\. | 
 | InstanceCount | Integer | Yes | The number of instances that you want to reserve\. | 
 
-#### Response Elements<a name="w36aac33b7c73c11"></a>
+#### Response Elements<a name="w38aac33b7c75c11"></a>
 
 
 ****  
@@ -1302,21 +1362,21 @@ This operation does not use HTTP request parameters\.
 
 Allows the destination domain owner to reject an inbound cross\-cluster search connection request\.
 
-#### Syntax<a name="w36aac33b7c75b5"></a>
+#### Syntax<a name="w38aac33b7c77b5"></a>
 
 ```
 PUT https://es.us-east-1.amazonaws.com/2015-01-01/es/ccs/inboundConnection/{ConnectionId}/reject
 ```
 
-#### Request Parameters<a name="w36aac33b7c75b7"></a>
+#### Request Parameters<a name="w38aac33b7c77b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c75b9"></a>
+#### Request Body<a name="w38aac33b7c77b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response Elements<a name="w36aac33b7c75c11"></a>
+#### Response Elements<a name="w38aac33b7c77c11"></a>
 
 
 ****  
@@ -1329,7 +1389,7 @@ This operation does not use the HTTP request body\.
 
 Removes the specified resource tags from an Amazon ES domain\.
 
-#### Syntax<a name="w36aac33b7c77b5"></a>
+#### Syntax<a name="w38aac33b7c79b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/tags-removal
@@ -1342,11 +1402,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/tags-removal
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c77b7"></a>
+#### Request Parameters<a name="w38aac33b7c79b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c77b9"></a>
+#### Request Body<a name="w38aac33b7c79b9"></a>
 
 
 ****  
@@ -1356,7 +1416,7 @@ This operation does not use HTTP request parameters\.
 | ARN | [`ARN`](#es-configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [Identifiers for IAM Entities](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management\. | 
 | TagKeys | [`TagKey`](#es-configuration-api-datatypes-tagkey) | Yes | List of tag keys for resource tags that you want to remove from an Amazon ES domain\. | 
 
-#### Response Elements<a name="w36aac33b7c77c11"></a>
+#### Response Elements<a name="w38aac33b7c79c11"></a>
 
 The `RemoveTags` operation does not return a response element\.
 
@@ -1364,7 +1424,7 @@ The `RemoveTags` operation does not return a response element\.
 
 Schedules a service software update for an Amazon ES domain\.
 
-#### Syntax<a name="w36aac33b7c79b5"></a>
+#### Syntax<a name="w38aac33b7c81b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/start
@@ -1373,11 +1433,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/star
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c79b7"></a>
+#### Request Parameters<a name="w38aac33b7c81b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c79b9"></a>
+#### Request Body<a name="w38aac33b7c81b9"></a>
 
 
 ****  
@@ -1386,7 +1446,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to update to the latest service software\. | 
 
-#### Response Elements<a name="w36aac33b7c79c11"></a>
+#### Response Elements<a name="w38aac33b7c81c11"></a>
 
 
 ****  
@@ -1399,7 +1459,7 @@ This operation does not use HTTP request parameters\.
 
 Stops a scheduled service software update for an Amazon ES domain\. Only works if the domain's `UpdateStatus` is `PENDING_UPDATE`\.
 
-#### Syntax<a name="w36aac33b7c81b5"></a>
+#### Syntax<a name="w38aac33b7c83b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/stop
@@ -1408,11 +1468,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/stop
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c81b7"></a>
+#### Request Parameters<a name="w38aac33b7c83b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c81b9"></a>
+#### Request Body<a name="w38aac33b7c83b9"></a>
 
 
 ****  
@@ -1421,7 +1481,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | --- | 
 | DomainName | [`DomainName`](#es-configuration-api-datatypes-domainname) | Yes | Name of the Amazon ES domain that you want to update to the latest service software\. | 
 
-#### Response Elements<a name="w36aac33b7c81c11"></a>
+#### Response Elements<a name="w38aac33b7c83c11"></a>
 
 
 ****  
@@ -1434,7 +1494,7 @@ This operation does not use HTTP request parameters\.
 
 Modifies the configuration of an Amazon ES domain, such as the instance type and the number of instances\. You need to specify only the values that you want to update\.
 
-#### Syntax<a name="w36aac33b7c83b5"></a>
+#### Syntax<a name="w38aac33b7c85b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/config
@@ -1460,6 +1520,13 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/confi
   },
   "SnapshotOptions": {
     "AutomatedSnapshotStartHour": 3
+  },
+  "EncryptionAtRestOptions": {
+    "Enabled": true|false,
+    "KmsKeyId":"arn:aws:kms:us-east-1:123456789012:alias/my-key"
+  },
+  "NodeToNodeEncryptionOptions": {
+    "Enabled": true|false
   },
   "VPCOptions": {
     "SubnetIds": ["subnet-abcdefg1", "subnet-abcdefg2", "subnet-abcdefg3"],
@@ -1515,16 +1582,39 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/confi
       "SubjectKey": "optional-subject-key"
     }
   },
+  "AutoTuneOptions": {
+    "DesiredState": "ENABLED|DISABLED",
+    "MaintenanceSchedules": [{
+      "StartAt": 4104152288000,
+      "Duration": {
+        "Value": 2,
+        "Unit": "HOURS"
+      },
+      "CronExpressionForRecurrence": "30 11 ? * 3,6 *"
+    }]
+  },
+  "AutoTuneOptions": {
+    "DesiredState": "ENABLED|DISABLED",
+    "MaintenanceSchedules": [{
+      "StartAt": 1234567890,
+      "Duration": {
+        "Value": 2,
+        "Unit": "HOURS"
+      },
+      "CronExpressionForRecurrence": "* * * * *"
+    }],
+    "RollbackOnDisable": "NO_ROLLBACK|DEFAULT_ROLLBACK"
+  },
   "DomainName": "my-domain",
   "AccessPolicies": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:us-east-1:123456789012:domain/my-domain/*\"}]}"
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c83b7"></a>
+#### Request Parameters<a name="w38aac33b7c85b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c83b9"></a>
+#### Request Body<a name="w38aac33b7c85b9"></a>
 
 
 ****  
@@ -1542,8 +1632,11 @@ This operation does not use HTTP request parameters\.
 | CognitoOptions | [`CognitoOptions`](#es-configuration-api-datatypes-cognitooptions) | No | Key\-value pairs to configure Amazon ES to use Amazon Cognito authentication for Kibana\. | 
 | DomainEndpointOptions | [DomainEndpointOptions](#es-configuration-api-datatypes-domainendpointoptions) | No | Additional options for the domain endpoint, such as whether to require HTTPS for all traffic\. | 
 | AdvancedSecurityOptions | [AdvancedSecurityOptions](#es-configuration-api-datatypes-advancedsec) | No | Options for fine\-grained access control\. | 
+| AutoTuneOptions | [AutoTuneOptions](#es-configuration-api-datatypes-autotune) | No | Options for Auto\-Tune\. | 
+| NodeToNodeEncryptionOptions | [NodeToNodeEncryptionOptions](#es-configuration-api-datatypes-node-to-node) | No | Enables node\-to\-node encryption\. | 
+| EncryptionAtRestOptions | [EncryptionAtRestOptions](#es-configuration-api-datatypes-encryptionatrest) | No | Key\-value pairs to enable encryption at rest\. | 
 
-#### Response Elements<a name="w36aac33b7c83c11"></a>
+#### Response Elements<a name="w38aac33b7c85c11"></a>
 
 
 ****  
@@ -1600,7 +1693,7 @@ This operation does not use request parameters\.
 
 Upgrades an Amazon ES domain to a new version of Elasticsearch\. Alternately, checks upgrade eligibility\.
 
-#### Syntax<a name="w36aac33b7c87b5"></a>
+#### Syntax<a name="w38aac33b7c89b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain
@@ -1611,11 +1704,11 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/upgradeDomain
 }
 ```
 
-#### Request Parameters<a name="w36aac33b7c87b7"></a>
+#### Request Parameters<a name="w38aac33b7c89b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request Body<a name="w36aac33b7c87b9"></a>
+#### Request Body<a name="w38aac33b7c89b9"></a>
 
 
 ****  
@@ -1626,7 +1719,7 @@ This operation does not use HTTP request parameters\.
 | TargetVersion | String | Yes | Elasticsearch version to which you want to upgrade\. See [GetCompatibleElasticsearchVersions](#es-configuration-api-actions-get-compat-vers)\. | 
 | PerformCheckOnly | Boolean | No | Defaults to false\. If true, Amazon ES checks the eligibility of the domain, but does not perform the upgrade\. | 
 
-#### Response Elements<a name="w36aac33b7c87c11"></a>
+#### Response Elements<a name="w38aac33b7c89c11"></a>
 
 
 ****  
@@ -1652,15 +1745,6 @@ Key\-value pairs to specify advanced Elasticsearch configuration options\.
 | indices\.fielddata\.cache\.size | Key\-value pair:`"indices.fielddata.cache.size":"80"` | Note the use of a string rather than an integer\. Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is unbounded\. | 
 | indices\.query\.bool\.max\_clause\_count | Key\-value pair:`"indices.query.bool.max_clause_count":"1024"` | Note the use of a string rather than an integer\. Specifies the maximum number of clauses allowed in a Lucene boolean query\. 1,024 is the default\. Queries with more than the permitted number of clauses that result in a TooManyClauses error\. To learn more, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\. | 
 
-### ARN<a name="es-configuration-api-datatypes-arn"></a>
-
-
-****  
-
-| Field | Data Type | Description | 
-| --- | --- | --- | 
-| ARN | String | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [IAM ARNs](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns) in the AWS Identity and Access Management documentation\. | 
-
 ### AdvancedSecurityOptions<a name="es-configuration-api-datatypes-advancedsec"></a>
 
 
@@ -1672,6 +1756,26 @@ Key\-value pairs to specify advanced Elasticsearch configuration options\.
 | InternalUserDatabaseEnabled | Boolean | True to enable the internal user database\. | 
 | MasterUserOptions | [MasterUserOptions](#es-configuration-api-datatypes-masteruser) | Container for information about the master user\. | 
 | SAMLOptions | SAMLOptions | Container for information about the SAML configuration for Kibana\. | 
+
+### ARN<a name="es-configuration-api-datatypes-arn"></a>
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| ARN | String | Amazon Resource Name \(ARN\) of an Amazon ES domain\. For more information, see [IAM ARNs](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns) in the AWS Identity and Access Management documentation\. | 
+
+### AutoTuneOptions<a name="es-configuration-api-datatypes-autotune"></a>
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| DesiredState | String | Either ENABLED or DISABLED\. | 
+| MaintenanceSchedules | List |  A list of maintenance schedules during which Auto\-Tune can deploy changes: <pre>{<br />  "StartAt": 1234567890,<br />  "Duration": {<br />    "Value": 2,<br />    "Unit": "HOURS"<br />  },<br />  "CronExpressionForRecurrence": "* * ? * * *"<br />}</pre> Maintenance schedules are overwrite, not append\. If your request includes no schedules, the request deletes all existing schedules\. To preserve existing schedules, make a call to [DescribeElasticsearchDomainConfig](#es-configuration-api-actions-describeelasticsearchdomainconfig) first and use the `MaintenanceSchedules` portion of the response as the basis for this section\. `StartAt` is Epoch time, and `Value` is a long integer\.  | 
+| RollbackOnDisable | String | When disabling Auto\-Tune, specify NO\_ROLLBACK to retain all prior Auto\-Tune settings or DEFAULT\_ROLLBACK to revert to the Amazon ES defaults\.If you specify DEFAULT\_ROLLBACK, you must include a `MaintenanceSchedule` in the request\. Otherwise, Amazon ES is unable to perform the rollback\. | 
 
 ### CognitoOptions<a name="es-configuration-api-datatypes-cognitooptions"></a>
 
@@ -2037,7 +2141,7 @@ Domain\-specific endpoint used to submit index, search, and data upload requests
 
 ### SnapshotOptions<a name="es-configuration-api-datatypes-snapshotoptions"></a>
 
-**DEPRECATED**\. See [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\. Container for parameters required to configure the time of daily automated snapshots of the indices in an Amazon ES domain\.
+**DEPRECATED**\. See [Creating Amazon ES Index Snapshots](es-managedomains-snapshots.md)\. Container for parameters required to configure the time of daily automated snapshots of the indices in an Amazon ES domain\.
 
 
 ****  
@@ -2132,5 +2236,3 @@ Amazon ES throws the following errors:
 | <a name="es-configuration-api-errors-limitexceeded"></a>LimitExceededException | Thrown when trying to create more than the allowed number and type of Amazon ES domain resources and sub\-resources\. Returns HTTP status code 409\. | 
 | <a name="es-configuration-api-errors-resourcenotfound"></a>ResourceNotFoundException | Thrown when accessing or deleting a resource that does not exist\. Returns HTTP status code 400\. | 
 | <a name="es-configuration-api-errors-resourcealreadyexists"></a>ResourceAlreadyExistsException | Thrown when a client attempts to create a resource that already exists in an Amazon ES domain\. Returns HTTP status code 400\. | 
-| <a name="es-configuration-api-errors-accessdenied"></a>AccessDeniedException |  | 
-| <a name="es-configuration-api-errors-conflict"></a>ConflictException |  | 

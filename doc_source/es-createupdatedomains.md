@@ -67,7 +67,7 @@ You can choose different instance types for your dedicated master nodes and data
 
 1. \(Optional\) To enable [UltraWarm storage](ultrawarm.md), choose **Enable UltraWarm data nodes**\. Each instance type has a [maximum amount of storage](aes-limits.md#limits-ultrawarm) that it can address\. Multiply that amount by the number of warm data nodes for the total addressable warm storage\.
 
-1. \(Optional\) For domains running Elasticsearch 5\.3 and later, **Automated snapshot start hour** has no effect\. For more information about automated snapshots, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
+1. \(Optional\) For domains running Elasticsearch 5\.3 and later, **Automated snapshot start hour** has no effect\. For more information about automated snapshots, see [Creating Amazon ES Index Snapshots](es-managedomains-snapshots.md)\.
 
 1. \(Optional\) Choose **Optional Elasticsearch cluster settings**\. For a summary of these options, see [Advanced Options](#es-createdomain-configure-advanced-options)\.
 
@@ -190,8 +190,8 @@ Use advanced options to configure the following:
 Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to `false` prevents users from bypassing access control for subresources\. By default, the value is `true`\. For more information, see [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
 
 **indices\.fielddata\.cache\.size**  
-Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is unbounded\.   
-Many customers query rotating daily indices\. We recommend that you begin benchmark testing with `indices.fielddata.cache.size` configured to 40% of the JVM heap for most such use cases\. However, if you have very large indices you might need a large field data cache\.
+Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is 20% of the JVM heap\.  
+Many customers query rotating daily indices\. We recommend that you begin benchmark testing with `indices.fielddata.cache.size` configured to 40% of the JVM heap for most of these use cases\. For very large indices, you might need a large field data cache\.
 
 **indices\.query\.bool\.max\_clause\_count**  
 Specifies the maximum number of clauses allowed in a Lucene boolean query\. The default is 1,024\. Queries with more than the permitted number of clauses result in a `TooManyClauses` error\. For more information, see [the Lucene documentation](https://lucene.apache.org/core/6_6_0/core/org/apache/lucene/search/BooleanQuery.html)\.

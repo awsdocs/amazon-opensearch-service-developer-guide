@@ -17,11 +17,14 @@ The following operations cause blue/green deployments:
 + Enabling or disabling the publication of error logs, audit logs, or slow logs to CloudWatch
 + Upgrading to a new Elasticsearch version
 + Enabling or disabling **Require HTTPS**
-+ Enabling UltraWarm storage
++ Enabling encryption of data at rest or node\-to\-node encryption
++ Enabling or disabling UltraWarm
++ Disabling auto\-tune and rolling back its changes
 
 In *most* cases, the following operations do not cause blue/green deployments:
 + Changing access policy
 + Changing the automated snapshot hour
++ Enabling auto\-tune or disabling it without rolling back its changes
 + If your domain has dedicated master nodes, changing data node or UltraWarm node count
 
 There are some exceptions\. For example, if you haven't reconfigured your domain since the launch of three Availability Zone support, Amazon ES might perform a one\-time blue/green deployment to redistribute your dedicated master nodes across Availability Zones\.
@@ -40,7 +43,7 @@ To prevent overloading dedicated master nodes, you can [monitor usage with the A
 ## Charges for Configuration Changes<a name="es-managedomains-config-charges"></a>
 
 If you change the configuration for a domain, Amazon ES creates a new cluster as described in [Configuration Changes](#es-managedomains-configuration-changes)\. During the migration of old to new, you incur the following charges:
-+ If you change the instance type, you are charged for both clusters for the first hour\. After the first hour, you are charged only for the new cluster\.
++ If you change the instance type, you're charged for both clusters for the first hour\. After the first hour, you're only charged for the new cluster\. EBS volumes aren't charged twice because they're part of your cluster, so their billing follows instance billing\.
 
   **Example:** You change the configuration from three `m3.xlarge` instances to four `m4.large` instances\. For the first hour, you are charged for both clusters \(3 \* `m3.xlarge` \+ 4 \* `m4.large`\)\. After the first hour, you are charged only for the new cluster \(4 \* `m4.large`\)\.
 + If you don’t change the instance type, you are charged only for the largest cluster for the first hour\. After the first hour, you are charged only for the new cluster\.

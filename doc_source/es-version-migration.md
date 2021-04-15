@@ -86,7 +86,7 @@ For more information, see the [AWS CLI Command Reference](https://docs.aws.amazo
 
 In\-place upgrades are the easier, faster, and more reliable way to upgrade a domain to a later Elasticsearch version\. Snapshots are a good option if you need to migrate from a pre\-5\.1 version of Elasticsearch or want to migrate to an entirely new cluster\.
 
-The following table shows how to use snapshots to migrate data to a domain that uses a different Elasticsearch version\. For more information about taking and restoring snapshots, see [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)\.
+The following table shows how to use snapshots to migrate data to a domain that uses a different Elasticsearch version\. For more information about taking and restoring snapshots, see [Creating Amazon ES Index Snapshots](es-managedomains-snapshots.md)\.
 
 
 ****  

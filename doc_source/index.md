@@ -1,7 +1,7 @@
 # Amazon Elasticsearch Service Developer Guide
 
 -----
-*****Copyright &copy; 2020 Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
+*****Copyright &copy;  Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
 
 -----
 Amazon's trademarks and trade dress may not be used in 
@@ -16,10 +16,10 @@ Amazon's trademarks and trade dress may not be used in
 ## Contents
 + [What Is Amazon Elasticsearch Service?](what-is-amazon-elasticsearch-service.md)
 + [Getting Started with Amazon Elasticsearch Service](es-gsg.md)
-   + [Step 1: Create an Amazon ES Domain](es-gsg-create-domain.md)
-   + [Step 2: Upload Data to an Amazon ES Domain for Indexing](es-gsg-upload-data.md)
-   + [Step 3: Search Documents in an Amazon ES Domain](es-gsg-search.md)
-   + [Step 4: Delete an Amazon ES Domain](es-gsg-deleting.md)
+   + [Step 1: Create an Amazon ES domain](es-gsg-create-domain.md)
+   + [Step 2: Upload data to an Amazon ES domain for indexing](es-gsg-upload-data.md)
+   + [Step 3: Search documents in an Amazon ES domain](es-gsg-search.md)
+   + [Step 4: Delete an Amazon ES domain](es-gsg-deleting.md)
 + [Creating and Managing Amazon Elasticsearch Service Domains](es-createupdatedomains.md)
    + [Configuration Changes](es-managedomains-configuration-changes.md)
    + [Service Software Updates](es-service-software.md)
@@ -27,9 +27,10 @@ Amazon's trademarks and trade dress may not be used in
    + [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)
    + [Monitoring Cluster Metrics with Amazon CloudWatch](es-managedomains-cloudwatchmetrics.md)
    + [Configuring Elasticsearch Logs](es-createdomain-configure-slow-logs.md)
-   + [Working with Amazon Elasticsearch Service Index Snapshots](es-managedomains-snapshots.md)
+   + [Creating Amazon ES Index Snapshots](es-managedomains-snapshots.md)
    + [Upgrading Elasticsearch](es-version-migration.md)
    + [Creating a Custom Endpoint](es-customendpoint.md)
+   + [Amazon Elasticsearch Service Auto-Tune](auto-tune.md)
    + [Tagging Amazon Elasticsearch Service Domains](es-managedomains-awsresourcetagging.md)
 + [Security in Amazon Elasticsearch Service](security.md)
    + [Data Protection in Amazon Elasticsearch Service](es-data-protection.md)
@@ -63,11 +64,13 @@ Amazon's trademarks and trade dress may not be used in
 + [Managing Indices](managing-indices.md)
    + [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)
    + [Index State Management](ism.md)
+   + [Index Rollups for Amazon Elasticsearch Service](rollup.md)
    + [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)
    + [Remote Reindex in Amazon Elasticsearch Service](remote-reindex.md)
 + [Monitoring Data](monitoring-data.md)
    + [Alerting for Amazon Elasticsearch Service](alerting.md)
    + [Anomaly Detection for Amazon Elasticsearch Service](ad.md)
+   + [Trace Analytics for Amazon Elasticsearch Service](trace-analytics.md)
 + [Amazon Elasticsearch Service Best Practices](aes-bp.md)
    + [Sizing Amazon ES Domains](sizing-domains.md)
    + [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)

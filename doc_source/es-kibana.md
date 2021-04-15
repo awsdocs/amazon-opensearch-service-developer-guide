@@ -118,7 +118,9 @@ server {
 
 ## Configuring Kibana to Use a WMS Map Server<a name="es-kibana-map-server"></a>
 
-The default installation of Kibana for Amazon ES includes a map service, except for domains in the India and China regions\. Regardless of your region, you can configure Kibana to use a different Web Map Service \(WMS\) server for coordinate map visualizations\. Region map visualizations only support the default map service\.
+The default installation of Kibana for Amazon ES includes a map service, except for domains in the India and China regions\. The map service supports up to 10 zoom levels\.
+
+Regardless of your region, you can configure Kibana to use a different Web Map Service \(WMS\) server for coordinate map visualizations\. Region map visualizations only support the default map service\.
 
 **To configure Kibana to use a WMS map server:**
 
@@ -172,5 +174,8 @@ Older versions of Elasticsearch might only work over HTTP\. In all cases, add th
 The default Kibana installation on each Amazon ES domain has some additional features compared to the open source version of Kibana:
 + User interfaces for the various [Open Distro for Elasticsearch plugins](aes-supported-plugins.md)
 + [Tenants](fgac.md#fgac-multitenancy)
++ Reports
+
+  Use the **Reporting** menu to generate on\-demand CSV reports from the Discover page and PDF or PNG reports of dashboards or visualizations\. Amazon ES does not support scheduled reports\.
 + [Gantt charts](https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/gantt/)
 + [Notebooks \(experimental\)](https://opendistro.github.io/for-elasticsearch-docs/docs/notebooks/)

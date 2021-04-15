@@ -113,3 +113,6 @@ AWS Lambda is a compute service that lets you run code without provisioning or m
 
 [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
 Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more about streaming data to Amazon ES, see [Loading Streaming Data into Amazon ES from Amazon DynamoDB](es-aws-integrations.md#es-aws-integrations-dynamodb-es)\.
+
+[Amazon QuickSight](http://aws.amazon.com/documentation/quicksight/)  
+You can visualize data from Amazon ES using Amazon QuickSight dashboards\. For more information, see [Using Amazon Elasticsearch Service with Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/connecting-to-es.html) in the *Amazon QuickSight User Guide*

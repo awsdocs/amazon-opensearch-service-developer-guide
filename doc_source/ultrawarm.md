@@ -2,22 +2,9 @@
 
 UltraWarm provides a cost\-effective way to store large amounts of read\-only data on Amazon Elasticsearch Service\. Standard data nodes use "hot" storage, which takes the form of instance stores or Amazon EBS volumes attached to each node\. Hot storage provides the fastest possible performance for indexing and searching new data\.
 
-Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated caching solution to improve performance\. For indices that you are not actively writing to and query less frequently, UltraWarm offers significantly lower costs per GiB of data\. In Elasticsearch, these warm indices behave just like any other index\. You can query them using the same APIs or use them to create dashboards in Kibana\.
+Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated caching solution to improve performance\. For indices that you are not actively writing to, query less frequently, and don't need the same performance from, UltraWarm offers significantly lower costs per GiB of data\. Because warm indices are read\-only unless you return them to hot storage, UltraWarm is best\-suited to immutable data, such as logs\.
 
-**Topics**
-+ [Prerequisites](#ultrawarm-pp)
-+ [Calculating UltraWarm Storage Requirements](#ultrawarm-calc)
-+ [UltraWarm Pricing](#ultrawarm-pricing)
-+ [Enabling UltraWarm](#ultrawarm-enable)
-+ [Migrating Indices to UltraWarm Storage](#ultrawarm-migrating)
-+ [Automating Migrations](#ultrawarm-ism)
-+ [Migration Tuning](#ultrawarm-settings)
-+ [Cancelling Migrations](#ultrawarm-cancel)
-+ [Listing Hot and Warm Indices](#ultrawarm-es-api)
-+ [Returning Warm Indices to Hot Storage](#ultrawarm-migrating-back)
-+ [Restoring Warm Indices from Automated Snapshots](#ultrawarm-snapshot)
-+ [Manual Snapshots of Warm Indices](#ultrawarm-manual-snapshot)
-+ [Disabling UltraWarm](#ultrawarm-disable)
+In Elasticsearch, warm indices behave just like any other index\. You can query them using the same APIs or use them to create dashboards in Kibana\.
 
 ## Prerequisites<a name="ultrawarm-pp"></a>
 
@@ -25,15 +12,19 @@ UltraWarm has a few important prerequisites:
 + UltraWarm requires Elasticsearch 6\.8 or higher\.
 + To use warm storage, domains must have [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use warm storage\.
++ At minimum, users must be mapped to the `ultrawarm_manager` role in Kibana to make UltraWarm API calls\. 
 
-## Calculating UltraWarm Storage Requirements<a name="ultrawarm-calc"></a>
+## UltraWarm Storage Requirements and Performance Considerations<a name="ultrawarm-calc"></a>
 
-As covered in [Calculating Storage Requirements](sizing-domains.md#aes-bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and Amazon ES reserved space\. For example, a 10 GiB primary shard with one replica shard requires roughly 26 GiB of hot storage\.
+As covered in [Calculating Storage Requirements](sizing-domains.md#aes-bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and Amazon ES reserved space\. For example, a 20 GiB primary shard with one replica shard requires roughly 53 GiB of hot storage\.
 
-Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 10 GiB shard requires 10 GiB of warm storage\. If you provision an `ultrawarm1.large.elasticsearch` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm Storage Limits](aes-limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
+Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 20 GiB shard requires 20 GiB of warm storage\. If you provision an `ultrawarm1.large.elasticsearch` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm Storage Limits](aes-limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
 
-**Tip**  
-With UltraWarm, we still recommend a maximum shard size of 50 GiB\.
+With UltraWarm, we still recommend a maximum shard size of 50 GiB\. The [number of CPU cores and amount of RAM allocated to each UltraWarm instance type](https://aws.amazon.com/elasticsearch-service/pricing/#UltraWarm_pricing) gives you an idea of the number of shards they can simultaneously search\.
+
+For example, each `ultrawarm1.medium.elasticsearch` instance has two CPU cores and can address up to 1\.5 TiB of storage on S3\. Two of these instances have a combined 3 TiB of storage, which works out to approximately 62 shards if each shard is 50 GiB\. If a request to the cluster only searches four of these shards, performance might be excellent\. If the request is broad and searches all 62 of them, the four CPU cores might struggle to perform the operation\. Monitor the `WarmCPUUtilization` and `WarmJVMMemoryPressure` [UltraWarm metrics](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-uw) to understand how the instances handle your workloads\.
+
+If your searches are broad or frequent, consider leaving the indices in hot storage\. Just like any other Elasticsearch workload, the most important step to determining if UltraWarm meets your needs is to perform representative client testing using a realistic dataset\.
 
 ## UltraWarm Pricing<a name="ultrawarm-pricing"></a>
 
@@ -142,7 +133,7 @@ index    migration_type state
 my-index HOT_TO_WARM    RUNNING_SHARD_RELOCATION
 ```
 
-You can have up to 200 simultaneous migrations from hot to warm storage\. To check the current number of migrations in the queue, monitor the `HotToWarmMigrationQueueSize` [metric](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-uw)\.
+You can have up to 200 simultaneous migrations from hot to warm storage\. To check the current number of migrations in the queue, monitor the `HotToWarmMigrationQueueSize` [metric](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-uw)\. Indices remain available throughout the migration process—no downtime\.
 
 The migration process has the following states:
 
@@ -208,7 +199,7 @@ GET my-index/_settings
 + `routing.allocation.require.box_type` specifies that the index should use warm nodes rather than standard data nodes\.
 + `merge.policy.max_merge_at_once_explicit` specifies the number of segments to simultaneously merge during the migration\.
 
-Indices in warm storage are read\-only unless you [return them to hot storage](#ultrawarm-migrating-back)\. You can query the indices and delete them, but you can't add, update, or delete individual documents\. If you try, you might encounter the following error:
+Indices in warm storage are read\-only unless you [return them to hot storage](#ultrawarm-migrating-back), which makes UltraWarm best\-suited to immutable data, such as logs\. You can query the indices and delete them, but you can't add, update, or delete individual documents\. If you try, you might encounter the following error:
 
 ```
 {

@@ -1,6 +1,6 @@
 # Amazon Cognito Authentication for Kibana<a name="es-cognito-auth"></a>
 
-Amazon Elasticsearch Service supports [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) for Kibana authentication\. This feature is optional and available only for domains using Elasticsearch 5\.1 or later\. If you don't configure Amazon Cognito authentication, you can still protect Kibana using an [IP\-based access policy](es-ac.md#es-ac-types-ip) and a [proxy server](es-kibana.md#es-kibana-proxy), HTTP basic authentication, or SAML\.
+Amazon Elasticsearch Service supports [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html) for Kibana authentication\. This feature is optional and available only for domains using Elasticsearch 5\.1 or later\. If you don't configure Amazon Cognito authentication, you can still protect Kibana using an [IP\-based access policy](es-ac.md#es-ac-types-ip) and a [proxy server](es-kibana.md#es-kibana-proxy), HTTP basic authentication, or [SAML](saml.md)\.
 
 Much of the authentication process occurs in Amazon Cognito, but this section offers guidelines and requirements for configuring Amazon Cognito resources to work with Amazon ES domains\. [Standard pricing](https://aws.amazon.com/cognito/pricing/) applies to all Amazon Cognito resources\.
 
@@ -140,7 +140,7 @@ If [CognitoAccessForAmazonES](#es-cognito-auth-role) already exists, you need fe
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to configure\.
 
-1. Choose **Edit domain**\.
+1. Choose **Actions**, **Modify authentication**\.
 
 1. For **Amazon Cognito authentication**, choose **Enable Amazon Cognito authentication**\.
 
@@ -329,7 +329,7 @@ Use the following procedure to disable Amazon Cognito authentication for Kibana\
 
 1. In the navigation pane, under **My domains**, choose the domain that you want to configure\.
 
-1. Choose **Edit domain**\.
+1. Choose **Actions**, **Modify authentication**\.
 
 1. For **Amazon Cognito authentication**, clear the **Enable Amazon Cognito authentication** check box\.
 

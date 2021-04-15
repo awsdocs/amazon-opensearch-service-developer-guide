@@ -1,10 +1,12 @@
 # Other Supported Resources<a name="aes-supported-resources"></a>
 
-**bootstrap\.mlockall**  
-The service enables `bootstrap.mlockall` in `elasticsearch.yml`, which locks JVM memory and prevents the operating system from swapping it to disk\. This applies to all supported instance types except for the following:  
+**bootstrap\.memory\_lock**  
+The service enables `bootstrap.memory_lock` in `elasticsearch.yml`, which locks JVM memory and prevents the operating system from swapping it to disk\. This applies to all supported instance types except for the following:  
 + `t2.micro.elasticsearch`
 + `t2.small.elasticsearch`
 + `t2.medium.elasticsearch`
++ `t3.small.elasticsearch`
++ `t3.medium.elasticsearch`
 
 **Scripting module**  
 The service supports scripting for Elasticsearch 5\.*x* and later domains\. The service does not support scripting for 1\.5 or 2\.3\.  

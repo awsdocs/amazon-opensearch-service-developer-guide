@@ -1,14 +1,14 @@
 # Encryption of Data at Rest for Amazon Elasticsearch Service<a name="encryption-at-rest"></a>
 
 Amazon ES domains offer encryption of data at rest, a security feature that helps prevent unauthorized access to your data\. The feature uses AWS Key Management Service \(AWS KMS\) to store and manage your encryption keys and the Advanced Encryption Standard algorithm with 256\-bit keys \(AES\-256\) to perform the encryption\. If enabled, the feature encrypts the following aspects of a domain:
-+ Indices
++ All indices \(including those in UltraWarm storage\)
 + Elasticsearch logs
 + Swap files
 + All other data in the application directory
 + Automated snapshots
 
 The following are *not* encrypted when you enable encryption of data at rest, but you can take additional steps to protect them:
-+ Manual snapshots: Currently, you can't use KMS master keys to encrypt manual snapshots\. You can, however, use [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) to encrypt the bucket that you use as a snapshot repository\. For instructions, see [Registering a Manual Snapshot Repository](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory)\.
++ Manual snapshots: You currently can't use KMS master keys to encrypt manual snapshots\. You can, however, use server\-side encryption with S3\-managed keys or customer master keys \(CMKs\) to encrypt the bucket you use as a snapshot repository\. For instructions, see [Registering a Manual Snapshot Repository](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory)\.
 + Slow logs and error logs: If you [publish logs](es-createdomain-configure-slow-logs.md) and want to encrypt them, you can encrypt their CloudWatch Logs log group using the same AWS KMS master key as the Amazon ES domain\. For more information, see [Encrypt Log Data in CloudWatch Logs Using AWS KMS](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html) in the *Amazon CloudWatch Logs User Guide*\.
 
 Amazon ES supports only symmetric customer master keys, not asymmetric ones\. To learn how to create symmetric customer master keys, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\.
@@ -17,9 +17,9 @@ Regardless of whether encryption at rest is enabled, all domains automatically e
 
 ## Enabling Encryption of Data at Rest<a name="enabling-ear"></a>
 
-You can't enable encryption at rest on existing domains, only new ones\. Encryption of data at rest requires Elasticsearch 5\.1 or later\.
+Encryption of data at rest on new domains requires Elasticsearch 5\.1 or later\. Enabling the feature on existing domains requires Elasticsearch 6\.7 or later\. Choose the existing domain in the AWS console, **Actions**, and **Modify encryption**\.
 
-To use the Amazon ES console to create a domain that encrypts data at rest, you must have read permissions to AWS KMS, such as the following identity\-based policy:
+To use the Amazon ES console to configure encryption of data at rest, you must have read permissions to AWS KMS, such as the following identity\-based policy:
 
 ```
 {

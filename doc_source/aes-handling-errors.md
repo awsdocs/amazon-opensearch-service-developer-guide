@@ -198,9 +198,13 @@ POST /_snapshot/my-repository/my-snapshot/_restore
 
 If you plan to reindex, shrink, or split an index, you likely want to stop writing to it before performing the operation\.
 
+## Client License Checks<a name="aes-troubleshooting-license"></a>
+
+The default distributions of Logstash and Beats include a proprietary license check and fail to connect to the open source version of Elasticsearch\. Make sure you use the Apache 2\.0 \(OSS\) distributions of these clients with Amazon ES\.
+
 ## Request Throttling<a name="aes-troubleshooting-throttle-api"></a>
 
-If you receive persistent `403 Request throttled due to too many requests` errors, consider scaling vertically\. Amazon Elasticsearch Service throttles requests if the payload would cause memory usage to exceed the maximum size of the Java heap\.
+If you receive persistent `403 Request throttled due to too many requests` or `429 Too Many Requests` errors, consider scaling vertically\. Amazon Elasticsearch Service throttles requests if the payload would cause memory usage to exceed the maximum size of the Java heap\.
 
 ## Can't SSH into Node<a name="aes-troubleshooting-ssh"></a>
 

@@ -8,11 +8,10 @@ If you send data to Amazon ES over HTTPS, node\-to\-node encryption helps ensure
 
 ## Enabling Node\-to\-node Encryption<a name="enabling-ntn"></a>
 
-By default, domains do not use node\-to\-node encryption, and you can't configure existing domains to use the feature\. To enable the feature, you must [create another domain](es-createupdatedomains.md#es-createdomains) and [migrate your data](es-version-migration.md#snapshot-based-migration)\. Node\-to\-node encryption requires Elasticsearch 6\.0 or later\.
+Node\-to\-node encryption on new domains requires Elasticsearch 6\.0 or later\. Enabling the feature on existing domains requires Elasticsearch 6\.7 or later\. Choose the existing domain in the AWS console, **Actions**, and **Modify encryption**\.
+
+Alternatively, you can use the AWS CLI or configuration API\.
 
 ## Disabling Node\-to\-node Encryption<a name="disabling-ntn"></a>
 
 After you configure a domain to use node\-to\-node encryption, you can't disable the setting\. Instead, you can take a [manual snapshot](es-managedomains-snapshots.md) of the encrypted domain, [create another domain](es-createupdatedomains.md#es-createdomains), migrate your data, and delete the old domain\.
-
-## Other Considerations<a name="ntn-considerations"></a>
-+ Kibana still works on domains that use node\-to\-node encryption\.

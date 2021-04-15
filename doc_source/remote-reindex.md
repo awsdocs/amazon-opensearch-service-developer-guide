@@ -2,7 +2,7 @@
 
 Remote reindex lets you copy indices from a remote cluster to a local one\. You can migrate indices from any Amazon ES domains or self\-managed Elasticsearch clusters\.
 
-Remote reindexing requires Elasticsearch 6\.7 or later on the local domain\. The remote domain can be any version\.
+Remote reindexing requires Elasticsearch 6\.7 or later on the local domain\. The remote domain must be lower or the same major version as the local domain\. Within the same major version, the remote domain can be any minor version\. For example, remote reindexing from 7\.10\.x to 7\.9 is supported, but 7\.x to 6\.x isn't supported\.
 
 Full documentation for the `reindex` operation, including detailed steps and supported options, is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/reindex-data/)\.
 
@@ -88,7 +88,7 @@ POST <local-domain-endpoint>/_reindex
 }
 ```
 
-If the remote domain is hosted inside a VPC, configure a proxy with a publicly accessible endpoint\. The proxy domain must have a certificate signed by a public certificate authority and not a self\-signed certificate\.
+If the remote domain is hosted inside a VPC and it does not have VPC\-level connectivity, configure a proxy with a publicly accessible endpoint\. The proxy domain must have a certificate signed by a public certificate authority \(CA\)\. Self\-signed or private CA\-signed certificates are not supported\.
 
 ## Remote Reindex with non\-Amazon ES Domains<a name="remote-reindex-nonesdomain"></a>
 
@@ -112,7 +112,7 @@ POST <local-domain-endpoint>/_reindex
 }
 ```
 
-In this case, only basic authorization with username and password is supported\.
+In this case, only basic authorization with username and password is supported\. The remote domain must have a certificate signed by a public CA\. Self\-signed or private CA\-signed certificates are not supported\.
 
 ## Remote Reindex for Large Datasets<a name="remote-reindex-largedatasets"></a>
 

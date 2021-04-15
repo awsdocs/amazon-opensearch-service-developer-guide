@@ -26,19 +26,75 @@ To learn more, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.m
 
 ## Step 2: Create the API<a name="search-example-api"></a>
 
-Using API Gateway to create a more limited API simplifies the process of interacting with the Elasticsearch `_search` API\. It also lets you enable security features like Amazon Cognito authentication and request throttling\. Create and deploy an API according to the following table\.
+Using API Gateway lets you create a more limited API and simplifies the process of interacting with the Elasticsearch `_search` API\. API Gateway lets you enable security features like Amazon Cognito authentication and request throttling\. Perform the following steps to create and deploy an API:
+
+### Create and configure the API<a name="create-api"></a>
+
+Create your API using the API Gateway console\.
+
+1. Within API Gateway, choose **Create API**\.
+
+1. Locate **REST API** \(not private\) and choose **Build**\.
+
+1. Configure the following fields:
+   + API name: **search\-es\-api**
+   + Description: **Public API for searching an Amazon Elasticsearch Service domain**
+   + Endpoint Type: **Regional**
+
+1. Choose **Create API**\. 
+
+1. Choose **Actions** > **Create Method**\.
+
+1. Choose **GET** in the dropdown and click the checkmark to confirm\.
+
+1. Configure the following settings, then click **Save**:
 
 
-****  
-
-| Setting | Values | 
+| Setting | Value | 
 | --- | --- | 
-| API |  Type: New API **Settings** API name: search\-es\-api Description: Public API for searching an Amazon Elasticsearch Service domain Endpoint type: Regional  | 
-| Resource |  `/`  | 
-| HTTP Method |  `GET`  | 
-| Method Request |  **Settings** Authorization: none Request validator: Validate query string parameters and headers API key required: false **URL Query String Parameters** Name: q Required: Yes  | 
-| Integration Request |  Integration type: Lambda function Use Lambda proxy integration: Yes Lambda Region: *us\-west\-1* Lambda function: search\-es\-lambda Invoke with caller credentials: No Credentials cache: Do not add caller credentials to cache key Use default timeout: Yes  | 
-| Stage |  Name: search\-es\-api\-test **Default Method Throttling** Enable throttling: Yes Rate: 1000 Burst: 500  | 
+| Integration type | Lambda function | 
+| Use Lambda proxy integration | Yes | 
+| Lambda region | us\-west\-1 | 
+| Lambda function | search\-es\-lambda \(you'll configure this later in Lambda\) | 
+| Use default timeout | Yes | 
+
+### Configure the method request<a name="method-request"></a>
+
+Choose **Method Request** and configure the following settings:
+
+
+| Setting | Value | 
+| --- | --- | 
+| Authorization | NONE | 
+| Request Validator |  Validate query string parameters and headers   | 
+| API Key Required | false | 
+
+**URL Query String Parameters**
+
+
+| Setting | Value | 
+| --- | --- | 
+| Name | q | 
+| Required |  Yes  | 
+
+### Deploy the API and configure a stage<a name="deploy-api"></a>
+
+ The API Gateway console lets you deploy an API by creating a deployment and associating it with a new or existing stage\. 
+
+1. Choose **Actions** > **Deploy API**\.
+
+1. For **Deployment stage** choose **New Stage** and name the stage `search-es-api-test`\.
+
+1. Choose **Deploy\.**
+
+1. Configure the following settings in the stage editor, then choose **Save Changes**:
+
+
+| Setting | Value | 
+| --- | --- | 
+| Enable throttling | Yes | 
+| Rate |  1000  | 
+| Burst | 500 | 
 
 These settings configure an API that has only one method: a `GET` request to the endpoint root \(`https://some-id.execute-api.us-west-1.amazonaws.com/search-es-api-test`\)\. The request requires a single parameter \(`q`\), the query string to search for\. When called, the method passes the request to Lambda, which runs the `search-es-lambda` function\. For more information, see [Creating an API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html) and [Deploying an API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html)\.
 
@@ -98,8 +154,6 @@ def handler(event, context):
 
 The function must have the following trigger\.
 
-
-****  
 
 | Trigger | API | Deployment Stage | Security | 
 | --- | --- | --- | --- | 

@@ -30,9 +30,9 @@ The Amazon ES console is the simplest way to enable the publishing of logs to Cl
 
 1. Under **Analytics**, choose **Elasticsearch Service**\.
 
-1. In the navigation pane, under **My domains**, choose the domain that you want to update\.
+1. In the navigation pane, under **My domains**, choose the domain you want to update\.
 
-1. On the **Logs** tab, choose **Enable** for the log that you want\. 
+1. On the **Logs** tab, choose **Setup** for the log you want\. 
 
 1. Create a CloudWatch log group, or choose an existing one\.
 **Note**  
@@ -84,7 +84,7 @@ aws logs describe-log-groups --log-group-name my-log-group
 Now you can give Amazon ES permissions to write to the log group\. You must provide the log group's ARN near the end of the command:
 
 ```
-aws logs put-resource-policy --policy-name my-policy --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:PutLogEventsBatch","logs:CreateLogStream"],"Resource": "cw_log_group_arn"}]}'
+aws logs put-resource-policy --policy-name my-policy --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:CreateLogStream"],"Resource": "cw_log_group_arn"}]}'
 ```
 
 **Important**  

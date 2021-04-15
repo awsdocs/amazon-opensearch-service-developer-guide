@@ -25,6 +25,10 @@ Amazon ES supports many versions of Elasticsearch\. The following topics show th
 
 ## Notable API Differences<a name="es_version_api_notes"></a>
 
+### Index Templates<a name="es_version_api_notes-it"></a>
+
+ Elasticsearch switched from `_template` to `_index_template` in version 7\.8\. At present, Amazon ES supports only the older `_template` path\.
+
 ### Settings and Statistics<a name="es_version_api_notes-cs"></a>
 
 Amazon ES only accepts PUT requests to the `_cluster/settings` API that use the "flat" settings form\. It rejects requests that use the expanded settings form\.

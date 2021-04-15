@@ -4,8 +4,8 @@ This topic describes important changes to Amazon Elasticsearch Service\.
 
 **Relevant Dates to this History:**
 + **Current product version—**2015\-01\-01
-+ **Latest product release—**November 24, 2020
-+ **Latest documentation update—**November 24, 2020
++ **Latest product release—**March 3, 2021
++ **Latest documentation update—**March 3, 2021
 
 ## Release Notes<a name="release-table"></a>
 
@@ -16,7 +16,13 @@ The following table describes important changes to Amazon ES\. For notifications
 
 | Change | Description | Date | 
 | --- |--- |--- |
-| [Remote Reindex](#release-notes) | Amazon Elasticsearch Service now supports remote reindex, which lets you migrate indices from remote domains\. This feature requires service software R20201117 or later\. To learn more, see [Remote Reindex](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/remotereindex.html)\. | November 24, 2020 | 
+| [Tag\-Based Access Control](#release-notes) | You can now use AWS tags to control access to the Amazon ES configuration API\. For more information, see [Identity and Access Management](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-ac.html)\. | March 2, 2021 | 
+| [Auto\-Tune](#release-notes) | Amazon Elasticsearch Service adds Auto\-Tune, a new feature that uses performance and usage metrics from your cluster to suggest changes to the JVM settings on your nodes\. For more information, see the [documentation](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html)\. This feature requires service software R20201117 or later\. | February 24, 2021 | 
+| [Trace Analytics](#release-notes) | The default installation of Kibana for Amazon Elasticsearch Service now includes the Trace Analytics plugin, which lets you monitor trace data from your distributed applications\. The plugin requires a domain running Elasticsearch 7\.9 or later and service software R20210201 or later\. To learn more, see the [documentation](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/trace-analytics.html)\. | February 17, 2021 | 
+| [Kibana Reports](#release-notes) | The default installation of Kibana for Amazon Elasticsearch Service now supports on\-demand reports for the Discover, Visualize, and Dashboard pages\. This feature requires Elasticsearch 7\.9 or later and service software R20210201 or later\. | February 17, 2021 | 
+| [Kibana 5\.6\.16 Support](#release-notes) | Amazon Elasticsearch Service domains running Elasticsearch 5\.6 now support the latest patch release for Kibana 5\.6, which adds bug fixes and improves security\. Amazon ES will automatically upgrade domains to this patch release\. | February 17, 2021 | 
+| [Encryption for Existing Domains](#release-notes) | Amazon Elasticsearch Service now supports enabling encryption of data at rest and node\-to\-node encryption on existing domains running Elasticsearch 6\.7 or later\. After you enable these features, you can't disable them\. | January 27, 2021 | 
+| [Remote Reindex](#release-notes) | Amazon Elasticsearch Service now supports remote reindex, which lets you migrate indices from remote domains\. This feature requires service software R20201117 or later\. To learn more, see [Remote Reindex](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/remote-reindex.html)\. | November 24, 2020 | 
 | [Piped Processing Language](#release-notes) | Amazon Elasticsearch Service now supports Piped Processing Language \(PPL\), a query language that lets you use pipe \(\|\) syntax to query data stored in Elasticsearch\. This feature requires service software R20201117 or later\. To learn more, see [Piped Processing Language](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ppl.html)\. | November 24, 2020 | 
 | [Kibana Notebooks](#release-notes) | Amazon Elasticsearch Service adds support for Kibana notebooks, which lets you combine live visualizations and narrative text in a single interface\. This feature requires service software R20201117 or later\. To learn more, see [Kibana notebooks \(experimental\)](https://opendistro.github.io/for-elasticsearch-docs/docs/notebooks/)\. | November 24, 2020 | 
 | [Gantt Charts](#release-notes) | The default installation of Kibana for Amazon Elasticsearch Service now supports a new visualization type, Gantt charts\. This feature requires service software R20201117 or later\. | November 24, 2020 | 
@@ -77,7 +83,7 @@ The following table describes important changes Amazon ES before May 2018\.
 | --- | --- | --- | 
 | Amazon Cognito Authentication for Kibana | Amazon ES now offers login page protection for Kibana\. To learn more, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. | April 2, 2018 | 
 | Elasticsearch 6\.2 Support |  Amazon Elasticsearch Service now supports Elasticsearch version 6\.2\.  | March 14, 2018 | 
-| Korean Analysis Plugin | Amazon ES now supports a memory\-optimized version of the [Seunjeon](https://bitbucket.org/eunjeon/seunjeon/raw/master/elasticsearch/) Korean analysis plugin\. | March 13, 2018 | 
+| Korean Analysis Plugin | Amazon ES now supports a memory\-optimized version of the [Seunjeon](https://bitbucket.org/eunjeon/seunjeon/src/master/elasticsearch/) Korean analysis plugin\. | March 13, 2018 | 
 | Instant Access Control Updates | Changes to the access control policies on Amazon ES domains now take effect instantly\. | March 7, 2018 | 
 | Petabyte Scale | Amazon ES now supports I3 instance types and total domain storage of up to 1\.5 PB\. To learn more, see [Petabyte Scale for Amazon Elasticsearch Service](petabyte-scale.md)\. | 19 December 2017 | 
 | Encryption of Data at Rest | Amazon ES now supports encryption of data at rest\. To learn more, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\. | December 7, 2017 | 

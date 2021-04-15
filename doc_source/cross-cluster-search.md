@@ -26,7 +26,7 @@ Cross\-cluster search has several important limitations:
 + You can only implement cross\-cluster search on domains created on or after June 3rd, 2020\.
 + You can't connect to self\-managed Elasticsearch clusters\.
 + You can't connect to domains in different AWS Regions\.
-+ A domain can have a maximum of 20 outgoing connections\. Similarly, a domain can have a maximum of 20 incoming connections\.
++ A domain can have a maximum of 20 outgoing connections\. Similarly, a domain can have a maximum of 20 incoming connections\. In other words, one domain can connect to a maximum of 20 other domains\.
 + Domains must either share the same major version, or be on the final minor version and the next major version \(for example, 6\.8 and 7\.x are compatible\)\.
 + You can't use custom dictionaries or SQL with cross\-cluster search\.
 + You can't use AWS CloudFormation to connect domains\.

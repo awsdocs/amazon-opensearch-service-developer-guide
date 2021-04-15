@@ -2,9 +2,18 @@
 
 Short for its associated *k\-nearest neighbors* algorithm, KNN for Amazon Elasticsearch Service lets you search for points in a vector space and find the "nearest neighbors" for those points by Euclidean distance or cosine similarity\. Use cases include recommendations \(for example, an "other songs you might like" feature in a music application\), image recognition, and fraud detection\.
 
-KNN with Euclidean distance requires Elasticsearch 7\.1 or later\. Cosine similarity requires Elasticsearch 7\.7 or later\.
+Use the following table to find the version of the KNN plugin running on your Amazon Elasticsearch Service domain\. Each KNN plugin version corresponds to an [Open Distro for Elasticsearch version](https://opendistro.github.io/for-elasticsearch-docs/version-history/)\.
 
-Full documentation for the Elasticsearch feature, including descriptions of [settings and statistics](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/), is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
+
+| Elasticsearch Version | KNN Plugin Version | Notable Features | 
+| --- | --- | --- | 
+| 7\.1 |  1\.3\.0\.0  | Euclidean distance | 
+| 7\.4 |  1\.4\.0\.0  |  | 
+| 7\.7 |  1\.8\.0\.0  | Cosine similarity | 
+| 7\.8 |  1\.9\.0\.0  |  | 
+| 7\.9 |  1\.11\.0\.0  | Warmup API, custom scoring | 
+
+Full documentation for the Elasticsearch feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
 
 ## Getting Started with KNN<a name="knn-gs"></a>
 
@@ -103,4 +112,4 @@ GET my-index/_search
 
 Open Distro for Elasticsearch lets you modify all [KNN settings](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/) using the `_cluster/settings` API\. On Amazon ES, you can change all settings except `knn.memory.circuit_breaker.enabled` and `knn.circuit_breaker.triggered`\. KNN statistics are included as [Amazon CloudWatch metrics](es-managedomains-cloudwatchmetrics.md)\.
 
-In particular, check the `KNNGraphMemoryUsage` metric on each data node against the `knn.memory.circuit_breaker.limit` statistic and the available RAM for the instance type\. Amazon ES uses half of an instance's RAM for the Java heap \(up to a heap size of 32 GiB\)\. By default, KNN uses up to 60% of the remaining half, so an instance type with 32 GiB of RAM can accommodate 9\.6 GiB of graphs \(32 \* 0\.5 \* 0\.6\)\. Performance can suffer if graph memory usage exceeds this value\.
+In particular, check the `KNNGraphMemoryUsage` metric on each data node against the `knn.memory.circuit_breaker.limit` statistic and the available RAM for the instance type\. Amazon ES uses half of an instance's RAM for the Java heap \(up to a heap size of 32 GiB\)\. By default, KNN uses up to 50% of the remaining half, so an instance type with 32 GiB of RAM can accommodate 8 GiB of graphs \(32 \* 0\.5 \* 0\.5\)\. Performance can suffer if graph memory usage exceeds this value\.
