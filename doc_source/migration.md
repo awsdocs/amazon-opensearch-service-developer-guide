@@ -1,6 +1,6 @@
 # Migrating to Amazon Elasticsearch Service<a name="migration"></a>
 
-Index snapshots are a popular way to migrate from a self\-managed Elasticsearch cluster to Amazon Elasticsearch Service\. Broadly, the process consists of the following steps:
+Index snapshots are a popular way to migrate from a self\-managed Elasticsearch cluster to Amazon Elasticsearch Service \(Amazon ES\)\. Broadly, the process consists of the following steps:
 
 1. Take a snapshot of the existing cluster, and upload the snapshot to an Amazon S3 bucket\.
 
@@ -18,7 +18,7 @@ Although you can use the [repository\-s3](https://opendistro.github.io/for-elast
 
 For smaller clusters, a one\-time approach is to take a [shared file system snapshot](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/snapshot-restore/#shared-file-system) and then use the AWS CLI to upload it to S3\. If you already have a snapshot, skip to step 4\.
 
-**To take a snapshot and upload it to Amazon S3**
+****To take a snapshot and upload it to Amazon S3****
 
 1. Add the `path.repo` setting to `elasticsearch.yml` on all nodes, and then restart each node\.
 
@@ -133,7 +133,7 @@ In the AWS Identity and Access Management \(IAM\) console, [create a role](https
 }
 ```
 
-Then give your personal IAM user or role—whatever you used to configure the AWS CLI earlier—permissions to assume `AmazonESSnapshotRole`\. Create the following policy and [attach it](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) to your identity\.
+Then give your personal IAM user or role—whatever you used to configure the AWS CLI earlier—permissions to assume `AmazonESSnapshotRole`\. Create the following policy and [attach it](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) to your identity:
 
 **Permissions**
 
@@ -151,7 +151,7 @@ Then give your personal IAM user or role—whatever you used to configure the AW
 
 Then log in to Kibana using the master user credentials you specified when you created the Amazon ES domain\. You can find the Kibana URL in the Amazon ES console\. It takes the form of `https://domain-endpoint/_plugin/kibana/`\.
 
-In Kibana, choose **Security**, **Roles**, and **manage\_snapshots**\. Choose **Mapped users**, **Manage mapping**\. Then specify the ARN for your personal IAM user or role in the appropriate field\. User ARNs go in the **Users** section\. Role ARNs go in the **External identities** section\. This step uses [fine\-grained access control](fgac.md#fgac-mapping) to give your identity permissions to work with snapshots\.
+From the Kibana main menu, choose **Security**, **Roles**, and **manage\_snapshots**\. Choose **Mapped users**, **Manage mapping**\. Then specify the ARN for your personal IAM user or role in the appropriate field\. User ARNs go in the **Users** section\. Role ARNs go in the **Backend roles** section\. This step uses [fine\-grained access control](fgac.md#fgac-mapping) to give your identity permissions to work with snapshots\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/migration1.png)
 

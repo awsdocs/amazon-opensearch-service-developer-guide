@@ -61,6 +61,8 @@ A far less common issue involves limiting the number of shards per node\. If you
 
 Sizing shards appropriately almost always keeps you below this limit, but you can also consider the number of shards for each GiB of Java heap\. On a given node, have no more than 20 shards per GiB of Java heap\. For example, an `m5.large.elasticsearch` instance has a 4 GiB heap, so each node should have no more than 80 shards\. At that shard count, each shard is roughly 5 GiB in size, which is well below our recommendation\.
 
+The **Notifications** panel in the Amazon ES console sends a Domain Health Notification if your domain contains one or more shards with sizes greater than 50 GiB\. For more information about notifications, see [Notifications in Amazon Elasticsearch Service](es-managedomains-notifications.md)\. 
+
 ## Choosing Instance Types and Testing<a name="aes-bp-instances"></a>
 
 After you calculate your storage requirements and choose the number of shards that you need, you can start to make hardware decisions\. Hardware requirements vary dramatically by workload, but we can still offer some basic recommendations\.

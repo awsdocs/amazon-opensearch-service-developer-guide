@@ -12,7 +12,7 @@ UltraWarm has a few important prerequisites:
 + UltraWarm requires Elasticsearch 6\.8 or higher\.
 + To use warm storage, domains must have [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use warm storage\.
-+ At minimum, users must be mapped to the `ultrawarm_manager` role in Kibana to make UltraWarm API calls\. 
++ If the domain uses [fine\-grained access control](fgac.md), users must be mapped to the `ultrawarm_manager` role in Kibana to make UltraWarm API calls\.
 
 ## UltraWarm Storage Requirements and Performance Considerations<a name="ultrawarm-calc"></a>
 

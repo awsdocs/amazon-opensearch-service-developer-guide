@@ -55,12 +55,12 @@ In both situations, Amazon ES sends two events to your [Personal Health Dashboar
 
 ## Red Cluster Status<a name="aes-handling-errors-red-cluster-status"></a>
 
-A red cluster status means that at least one primary shard and its replicas are not allocated to a node\. Amazon ES stops taking automatic snapshots, even of healthy indices, while the red cluster status persists\.
+A red cluster status means that at least one primary shard and its replicas are not allocated to a node\. Amazon ES keeps trying to take automated snapshots of all indices regardless of their status, but the snapshots fail while the red cluster status persists\.
 
 The most common causes of a red cluster status are [failed cluster nodes](#aes-handling-errors-failed-cluster-nodes) and the Elasticsearch process crashing due to a continuous heavy processing load\.
 
 **Note**  
-Amazon ES stores automatic snapshots for 14 days, so if the red cluster status persists for more than two weeks, you can permanently lose your cluster's data\. If your Amazon ES domain enters a red cluster status, AWS Support might contact you to ask whether you want to address the problem yourself or you want the support team to assist\. You can [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when a red cluster status occurs\.
+Amazon ES stores automated snapshots for 14 days regardless of the cluster status\. Therefore, if the red cluster status persists for more than two weeks, the last healthy automated snapshot will be deleted and you could permanently lose your cluster's data\. If your Amazon ES domain enters a red cluster status, AWS Support might contact you to ask whether you want to address the problem yourself or you want the support team to assist\. You can [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when a red cluster status occurs\.
 
 Ultimately, red shards cause red clusters, and red indices cause red shards\. To identity the indices causing the red cluster status, Elasticsearch has some helpful APIs\.
 + `GET /_cluster/allocation/explain` chooses the first unassigned shard that it finds and explains why it cannot be allocated to a node:

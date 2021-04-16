@@ -23,6 +23,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Creating and Managing Amazon Elasticsearch Service Domains](es-createupdatedomains.md)
    + [Configuration Changes](es-managedomains-configuration-changes.md)
    + [Service Software Updates](es-service-software.md)
+   + [Notifications in Amazon Elasticsearch Service](es-managedomains-notifications.md)
    + [Configuring a Multi-AZ Domain](es-managedomains-multiaz.md)
    + [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)
    + [Monitoring Cluster Metrics with Amazon CloudWatch](es-managedomains-cloudwatchmetrics.md)

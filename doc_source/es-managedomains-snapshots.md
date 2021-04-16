@@ -8,7 +8,7 @@ Amazon ES snapshots come in two forms: automated and manual\.
 
 All Amazon ES domains take automated snapshots, but the frequency differs in the following ways:
 + For domains running Elasticsearch version 5\.3 and later, Amazon ES takes hourly automated snapshots and retains up to 336 of them for 14 days\.
-+ For domains running Elasticsearch version 5\.1 and earlier, Amazon ES takes daily automated snapshots during the hour you specify and retains up to 14 of them for 30 days\.
++ For domains running Elasticsearch version 5\.1 and earlier, Amazon ES takes daily automated snapshots during the hour you specify, retains up to 14 of them, and does not retain any snapshot data for more than 30 days\.
 
 If your cluster enters red status, Amazon ES stops taking automated snapshots\. If you don't correct the problem within two weeks, you can permanently lose the data in your cluster\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
 

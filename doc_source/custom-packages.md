@@ -3,11 +3,24 @@
 Amazon Elasticsearch Service lets you upload custom dictionary files \(for example, stop words and synonyms\) for use with your cluster\. The generic term for these types of files is *packages*\. Dictionary files improve your search results by telling Elasticsearch to ignore certain high\-frequency words or to treat terms like "frozen custard," "gelato," and "ice cream" as equivalent\. They can also improve [stemming](https://en.wikipedia.org/wiki/Stemming), such as in the Japanese \(kuromoji\) Analysis plugin\.
 
 **Topics**
++ [Package Permissions Requirements](#custom-packages-iam)
 + [Uploading Packages to Amazon S3](#custom-packages-gs)
 + [Importing and Associating Packages](#custom-packages-assoc)
 + [Using Custom Packages with Elasticsearch](#custom-packages-using)
 + [Updating Custom Packages](#custom-packages-updating)
 + [Dissociating and Removing Packages](#custom-packages-dissoc)
+
+## Package Permissions Requirements<a name="custom-packages-iam"></a>
+
+Users without administrator access require certain AWS Identity and Access Management \(IAM\) actions in order to manage packages:
++ `es:CreatePackage` \- create a package in an Amazon ES region
++ `es:DeletePackage` \- delete a package from an Amazon ES region
++ `es:AssociatePackage` \- associate a package to a domain
++ `es:DissociatePackage` \- dissociate a package from a domain
+
+You also need permissions on the Amazon S3 bucket path or object where the custom package resides\. 
+
+Grant all permission within IAM, not in the domain access policy\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)\.
 
 ## Uploading Packages to Amazon S3<a name="custom-packages-gs"></a>
 

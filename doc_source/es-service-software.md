@@ -3,23 +3,23 @@
 **Note**  
 Service software updates differ from Elasticsearch version upgrades\. For information about upgrading to a later version of Elasticsearch, see [Upgrading Elasticsearch](es-version-migration.md)\.
 
-Amazon ES regularly releases system software updates that add features or otherwise improve your domains\. The **Notifications** panel in the console is the easiest way to see if an update is available or check the status of an update\. You can also receive these notifications through [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/create-eventbridge-rule.html) \(and its predecessor, Amazon CloudWatch Events\)\.
+Amazon ES regularly releases system software updates that add features or otherwise improve your domains\. The **Notifications** panel in the console is the easiest way to see if an update is available or check the status of an update\. For more information about notifications, see [Notifications in Amazon Elasticsearch Service](es-managedomains-notifications.md)\. You can also receive these notifications through [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/create-eventbridge-rule.html)\.
 
-Each notification includes details about the service software update\. To confirm whether the update is required or optional, use the `DescribeElasticsearchDomain` API command and check the `OptionalDeployment` parameter\. Consider the following when deciding whether to update your domain:
+Each notification includes details about the service software update\. The notification severity is `Informational` if the update is optional and `High` if it's requred\. Consider the following when deciding whether to update your domain:
 + If you take no action on required updates, Amazon ES still updates your domain service software automatically after a certain timeframe \(typically two weeks\)\. In this situation, Amazon ES sends notifications when it starts the update and when the update is complete\.
 + If you start an update manually, Amazon ES doesn't send a notification when it starts the update, only when the update is complete\.
 
-Manually updating your domain lets you take advantage of new features more quickly\. Consider starting the update at a low traffic time\. Your domain is ineligible for a service software update if it's in any of the states shown in the following table\.
+Manually updating your domain lets you take advantage of new features more quickly\. Consider starting the update at a low traffic time\. Your domain is ineligible for a service software update if it's in any of the following states:
 
 
 | State | Description | 
 | --- | --- | 
-| Domain in processing | The domain is in the middle of a configuration change\. Check update eligibility after the operation completes\. | 
-| Red cluster status | One or more indices in the cluster is red\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. | 
-| High error rate | The Elasticsearch cluster is returning a large number of 5xx errors when attempting to process requests\. This problem is usually the result of too many simultaneous read or write requests\. Consider reducing traffic to the cluster or scaling your domain\. | 
-| Split brain | Split brain means your Elasticsearch cluster has more than one master node and has split into two clusters that never will rejoin on their own\. You can avoid split brain by using the recommended number of [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. For help recovering from split brain, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
-| Amazon Cognito integration issue | Your domain uses [authentication for Kibana](es-cognito-auth.md), and Amazon ES can't find one or more Amazon Cognito resources\. This problem usually occurs if the Amazon Cognito user pool is missing\. To correct the issue, recreate the missing resource and configure the Amazon ES domain to use it\. | 
-| Other Amazon ES service issue | Issues with Amazon ES itself might cause your domain to display as ineligible for an update\. If none of the previous conditions apply to your domain and the problem persists for more than a day, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
+| Domain in processing |  The domain is in the middle of a configuration change\. Check update eligibility after the operation completes\.  | 
+| Red cluster status |  One or more indices in the cluster is red\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.  | 
+| High error rate |  The Elasticsearch cluster is returning a large number of 5*xx* errors when attempting to process requests\. This problem is usually the result of too many simultaneous read or write requests\. Consider reducing traffic to the cluster or scaling your domain\.  | 
+| Split brain |  *Split brain* means your Elasticsearch cluster has more than one master node and has split into two clusters that never will rejoin on their own\. You can avoid split brain by using the recommended number of [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. For help recovering from split brain, contact [AWS Support](https://console.aws.amazon.com/support/home)\.  | 
+| Amazon Cognito integration issue |  Your domain uses [authentication for Kibana](es-cognito-auth.md), and Amazon ES can't find one or more Amazon Cognito resources\. This problem usually occurs if the Amazon Cognito user pool is missing\. To correct the issue, recreate the missing resource and configure the Amazon ES domain to use it\.  | 
+| Other Amazon ES service issue |  Issues with Amazon ES itself might cause your domain to display as ineligible for an update\. If none of the previous conditions apply to your domain and the problem persists for more than a day, contact [AWS Support](https://console.aws.amazon.com/support/home)\.  | 
 
 **To request a service software update \(console\)**
 
@@ -29,7 +29,7 @@ Manually updating your domain lets you take advantage of new features more quick
 
 1. In the navigation pane, under **My domains**, choose the domain you want to update\.
 
-1. For **Service software release**, use the documentation link to compare your current version to the latest version\. Then choose **Update**\.
+1. For **Service software release**, follow the documentation link to compare your current version to the latest version\. Then choose **Update**\.
 
 **To request a service software update \(AWS CLI and AWS SDKs\)**
 
