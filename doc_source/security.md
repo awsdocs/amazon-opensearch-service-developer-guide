@@ -9,14 +9,14 @@ Security is a shared responsibility between AWS and you\. The [shared responsibi
 This documentation helps you understand how to apply the shared responsibility model when using Amazon ES\. The following topics show you how to configure Amazon ES to meet your security and compliance objectives\. You also learn how to use other AWS services that help you to monitor and secure your Amazon ES resources\. 
 
 **Topics**
-+ [Data Protection in Amazon Elasticsearch Service](es-data-protection.md)
++ [Data protection in Amazon Elasticsearch Service](es-data-protection.md)
 + [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)
-+ [Fine\-Grained Access Control in Amazon Elasticsearch Service](fgac.md)
-+ [Audit Logs for Amazon Elasticsearch Service](audit-logs.md)
-+ [Configuration API Monitoring in Amazon Elasticsearch Service](es-managedomains-cloudtrailauditing.md)
-+ [Compliance Validation for Amazon Elasticsearch Service](es-compliance.md)
++ [Fine\-grained access control in Amazon Elasticsearch Service](fgac.md)
++ [Managing audit logs in Amazon Elasticsearch Service](audit-logs.md)
++ [Monitoring Amazon Elasticsearch Service configuration API activity](es-managedomains-cloudtrailauditing.md)
++ [Compliance validation for Amazon Elasticsearch Service](es-compliance.md)
 + [Resilience in Amazon Elasticsearch Service](disaster-recovery-resiliency.md)
-+ [Infrastructure Security in Amazon Elasticsearch Service](infrastructure-security.md)
-+ [SAML Authentication for Kibana](saml.md)
-+ [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)
-+ [Using Service\-Linked Roles for Amazon ES](slr-es.md)
++ [Infrastructure security in Amazon Elasticsearch Service](infrastructure-security.md)
++ [SAML authentication for Kibana](saml.md)
++ [Configuring Amazon Cognito authentication for Kibana](es-cognito-auth.md)
++ [Using service\-linked roles to provide Amazon Elasticsearch Service access to resources](slr-es.md)

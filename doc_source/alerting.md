@@ -1,10 +1,10 @@
-# Alerting for Amazon Elasticsearch Service<a name="alerting"></a>
+# Configuring alerts in Amazon Elasticsearch Service<a name="alerting"></a>
 
-Configure alerts in Amazon Elasticsearch Service \(Amazon ES\) to get notified when data from one or more Elasticsearch indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
+Configure alerts in Amazon Elasticsearch Service \(Amazon ES\) to get notified when data from one or more indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
 
 Alerting requires Elasticsearch version 6\.2 or later\. For full documentation, including API descriptions, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/)\. This topic highlights the differences in alerting in \(Amazon ES\) compared to the open\-source version\.
 
-**To get started with alerting**
+****To get started with alerting****
 
 1. Choose **Alerting** from the Kibana main menu\.
 
@@ -14,7 +14,9 @@ Alerting requires Elasticsearch version 6\.2 or later\. For full documentation, 
 
 1. Define a condition to trigger the monitor\.
 
-1. Add one or more actions to the monitor\.
+1. \(Optional\) Add one or more actions to the monitor\.
+**Tip**  
+After an action successfully sends a message, securing access to that message \(for example, access to a Slack channel\) is your responsibility\. If your domain contains sensitive data, consider using triggers without actions and periodically checking Kibana for alerts\.
 
 For detailed steps, see [Monitors](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/monitors/) in the Open Distro for Elasticsearch documentation\.
 
@@ -22,7 +24,7 @@ For detailed steps, see [Monitors](https://opendistro.github.io/for-elasticsearc
 
 Compared to Open Distro for Elasticsearch, alerting in Amazon ES has some notable differences\.
 
-### Amazon SNS Support<a name="alerting-diff-sns"></a>
+### Amazon SNS support<a name="alerting-diff-sns"></a>
 
 Amazon ES supports Amazon Simple Notification Service \([Amazon SNS](https://aws.amazon.com/sns/)\) for notifications\. This integration means that in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), you can also send emails, text messages, and even run AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
 
@@ -68,7 +70,7 @@ Amazon ES supports Amazon Simple Notification Service \([Amazon SNS](https://aws
 
 1. Choose **Create**\.
 
-### Alerting Settings<a name="alerting-diff-settings"></a>
+### Alerting settings<a name="alerting-diff-settings"></a>
 
 Amazon ES lets you modify the following [alerting settings](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/settings/#alerting-settings):
 + `opendistro.scheduled_jobs.enabled`
@@ -126,6 +128,6 @@ PUT _template/template-name
 
 Depending on your tolerance for data loss, you might even consider using zero replicas\. For more information about creating and managing index templates, see [Index template](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/index-templates/) in the Open Distro for Elasticsearch documentation\. 
 
-### Alerting Permissions<a name="alerting-diff-perms"></a>
+### Alerting permissions<a name="alerting-diff-perms"></a>
 
 Alerting supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/security/) in the Open Distro for Elasticsearch documentation\.

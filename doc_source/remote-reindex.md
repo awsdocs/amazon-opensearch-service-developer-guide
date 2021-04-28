@@ -1,6 +1,6 @@
-# Remote Reindex in Amazon Elasticsearch Service<a name="remote-reindex"></a>
+# Migrating Amazon Elasticsearch Service indices using remote reindex<a name="remote-reindex"></a>
 
-Remote reindex lets you copy indices from a remote cluster to a local one\. You can migrate indices from any Amazon ES domains or self\-managed Elasticsearch clusters\.
+Remote reindex lets you copy indices from a remote Amazon Elasticsearch Service \(Amazon ES\) cluster to a local one\. You can migrate indices from any Amazon ES domains or self\-managed Elasticsearch clusters\.
 
 Remote reindexing requires Elasticsearch 6\.7 or later on the local domain\. The remote domain must be lower or the same major version as the local domain\. Within the same major version, the remote domain can be any minor version\. For example, remote reindexing from 7\.10\.x to 7\.9 is supported, but 7\.x to 6\.x isn't supported\.
 
@@ -8,10 +8,10 @@ Full documentation for the `reindex` operation, including detailed steps and sup
 
 **Topics**
 + [Prerequisites](#remote-reindex-prereq)
-+ [Remote Reindex with Amazon ES Domains](#remote-reindex-esdomain)
-+ [Remote Reindex with non\-Amazon ES Domains](#remote-reindex-nonesdomain)
-+ [Remote Reindex for Large Datasets](#remote-reindex-largedatasets)
-+ [Remote Reindex Settings](#remote-reindex-settings)
++ [Reindex data between Amazon ES domains](#remote-reindex-esdomain)
++ [Reindex data between non\-Amazon ES domains](#remote-reindex-nonesdomain)
++ [Reindex large datasets](#remote-reindex-largedatasets)
++ [Remote reindex settings](#remote-reindex-settings)
 
 ## Prerequisites<a name="remote-reindex-prereq"></a>
 
@@ -20,11 +20,11 @@ Remote reindex has the following requirements:
 + The request must be authorized by the remote domain like any other REST request\. If the remote domain is an FGAC\-enabled Amazon ES domain, you must have permission to perform reindex on the local domain and read the index on the remote domain\. For more security considerations, see [Fine\-Grained Access Control](fgac.md)\.
 + We recommend you create an index with the desired setting on your local domain before you start the reindex process\.
 
-## Remote Reindex with Amazon ES Domains<a name="remote-reindex-esdomain"></a>
+## Reindex data between Amazon ES domains<a name="remote-reindex-esdomain"></a>
 
 The most basic scenario is that the remote index is in the same region as your local domain with a publicly accessible endpoint and you have signed IAM credentials\.
 
-Specify the source index in the remote domain that you want reindex from and destination index on your local domain that you want to reindex to:
+Specify the source index in the remote domain that you want to reindex from and the destination index on your local domain that you want to reindex to:
 
 ```
 POST <local-domain-endpoint>/_reindex
@@ -90,7 +90,7 @@ POST <local-domain-endpoint>/_reindex
 
 If the remote domain is hosted inside a VPC and it does not have VPC\-level connectivity, configure a proxy with a publicly accessible endpoint\. The proxy domain must have a certificate signed by a public certificate authority \(CA\)\. Self\-signed or private CA\-signed certificates are not supported\.
 
-## Remote Reindex with non\-Amazon ES Domains<a name="remote-reindex-nonesdomain"></a>
+## Reindex data between non\-Amazon ES domains<a name="remote-reindex-nonesdomain"></a>
 
 If the remote index is hosted outside of Amazon ES, like in a self\-managed EC2 instance, specify `external` parameter as `true`:
 
@@ -114,9 +114,14 @@ POST <local-domain-endpoint>/_reindex
 
 In this case, only basic authorization with username and password is supported\. The remote domain must have a certificate signed by a public CA\. Self\-signed or private CA\-signed certificates are not supported\.
 
-## Remote Reindex for Large Datasets<a name="remote-reindex-largedatasets"></a>
+## Reindex large datasets<a name="remote-reindex-largedatasets"></a>
 
-Remote reindex sends a scroll request to the remote domain with the following default values: search context of 5 minutes, socket timeout of 30 seconds, and batch size of 1,000\. We recommend tuning these parameters to accommodate your data\. For large documents, consider a smaller batch size and/or longer timeout\. For more information, see [Scroll search](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/ux/#scroll-search)\.
+Remote reindex sends a scroll request to the remote domain with the following default values: 
++ Search context of 5 minutes
++ Socket timeout of 30 seconds
++ Batch size of 1,000
+
+We recommend tuning these parameters to accommodate your data\. For large documents, consider a smaller batch size and/or longer timeout\. For more information, see [Scroll search](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/ux/#scroll-search)\.
 
 ```
 POST <local-domain-endpoint>/_reindex?pretty=true&scroll=10h&wait_for_completion=false
@@ -173,9 +178,9 @@ POST <local-domain-endpoint>/_reindex
 
 Remote reindex does not support slicing, so you cannot perform multiple scroll operations for the same request in parallel\.
 
-## Remote Reindex Settings<a name="remote-reindex-settings"></a>
+## Remote reindex settings<a name="remote-reindex-settings"></a>
 
-In addition to the standard reindexing options, Amazon ES supports the following options\.
+In addition to the standard reindexing options, Amazon ES supports the following options:
 
 
 | Options | Valid values | Description | Required | 

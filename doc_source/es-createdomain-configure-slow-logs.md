@@ -1,6 +1,12 @@
-# Configuring Elasticsearch Logs<a name="es-createdomain-configure-slow-logs"></a>
+# Configuring logs in Amazon Elasticsearch Service<a name="es-createdomain-configure-slow-logs"></a>
 
-Amazon ES exposes four Elasticsearch logs through Amazon CloudWatch Logs: error logs, search slow logs, index slow logs, and [audit logs](audit-logs.md)\. Search slow logs, index slow logs, and error logs are useful for troubleshooting performance and stability issues\. Audit logs track user activity for compliance purposes\. All the logs are *disabled* by default\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
+Amazon Elasticsearch Service \(Amazon ES\) exposes the following Elasticsearch logs through Amazon CloudWatch Logs: 
++ Error logs
++ Search slow logs
++ Index slow logs
++ [Audit logs](audit-logs.md)
+
+Search slow logs, index slow logs, and error logs are useful for troubleshooting performance and stability issues\. Audit logs track user activity for compliance purposes\. All the logs are *disabled* by default\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
 
 **Note**  
 Error logs are available only for Elasticsearch versions 5\.1 and greater\. Slow logs are available for all Elasticsearch versions\.
@@ -20,7 +26,7 @@ Error logs can help with troubleshooting in many situations, including the follo
 + Indexing issues
 + Snapshot failures
 
-## Enabling Log Publishing \(Console\)<a name="es-createdomain-configure-slow-logs-console"></a>
+## Enabling log publishing \(console\)<a name="es-createdomain-configure-slow-logs-console"></a>
 
 The Amazon ES console is the simplest way to enable the publishing of logs to CloudWatch\.
 
@@ -59,15 +65,15 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
    }
    ```
 **Important**  
-CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\. For steps on updating your policy, see [Enabling Log Publishing \(AWS CLI\)](#es-createdomain-configure-slow-logs-cli)\.
+CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutResourcePolicy.html)\. If you plan to enable logs for several Amazon ES domains, you should create and reuse a broader policy that includes multiple log groups to avoid reaching this limit\. For steps on updating your policy, see [Enabling log publishing \(AWS CLI\)](#es-createdomain-configure-slow-logs-cli)\.
 
 1. Choose **Enable**\.
 
    The status of your domain changes from **Active** to **Processing**\. The status must return to **Active** before log publishing is enabled\. This change typically takes 30 minutes, but can take longer depending on your domain configuration\.
 
-If you enabled one of the slow logs, see [Setting Elasticsearch Logging Thresholds for Slow Logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Audit Log Kibana UI](audit-logs.md#audit-log-kibana-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\. 
+If you enabled one of the slow logs, see [Setting Elasticsearch logging thresholds for slow logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Configuring audit logs in Kibana](audit-logs.md#audit-log-kibana-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\. 
 
-## Enabling Log Publishing \(AWS CLI\)<a name="es-createdomain-configure-slow-logs-cli"></a>
+## Enabling log publishing \(AWS CLI\)<a name="es-createdomain-configure-slow-logs-cli"></a>
 
 Before you can enable log publishing, you need a CloudWatch log group\. If you don't already have one, you can create one using the following command:
 
@@ -111,9 +117,9 @@ aws es update-elasticsearch-domain-config --domain-name my-domain --log-publishi
 
 To disable publishing to CloudWatch, run the same command with `Enabled=false`\.
 
-If you enabled one of the slow logs, see [Setting Elasticsearch Logging Thresholds for Slow Logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Audit Log Kibana UI](audit-logs.md#audit-log-kibana-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
+If you enabled one of the slow logs, see [Setting Elasticsearch logging thresholds for slow logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Configuring audit logs in Kibana](audit-logs.md#audit-log-kibana-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
 
-## Enabling Log Publishing \(AWS SDKs\)<a name="es-createdomain-configure-slow-logs-sdk"></a>
+## Enabling log publishing \(AWS SDKs\)<a name="es-createdomain-configure-slow-logs-sdk"></a>
 
 Before you can enable log publishing, you must first create a CloudWatch log group, get its ARN, and give Amazon ES permissions to write to it\. The relevant operations are documented in the [Amazon CloudWatch Logs API Reference](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/):
 + `CreateLogGroup`
@@ -122,11 +128,11 @@ Before you can enable log publishing, you must first create a CloudWatch log gro
 
 You can access these operations using the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\.
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md), including the `--log-publishing-options` option for `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig`\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md), including the `--log-publishing-options` option for `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig`\.
 
-If you enabled one of the slow logs, see [Setting Elasticsearch Logging Thresholds for Slow Logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
+If you enabled one of the slow logs, see [Setting Elasticsearch logging thresholds for slow logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
 
-## Setting Elasticsearch Logging Thresholds for Slow Logs<a name="es-createdomain-configure-slow-logs-indices"></a>
+## Setting Elasticsearch logging thresholds for slow logs<a name="es-createdomain-configure-slow-logs-indices"></a>
 
 Elasticsearch disables slow logs by default\. After you enable the *publishing* of slow logs to CloudWatch, you still must specify logging thresholds for each Elasticsearch index\. These thresholds define precisely what should be logged and at which log level\.
 
@@ -156,7 +162,7 @@ If you want to disable slow logs for an index, return any thresholds that you ch
 
 Disabling publishing to CloudWatch using the Amazon ES console or AWS CLI does *not* stop Elasticsearch from generating logs; it only stops the *publishing* of those logs\. Be sure to check your index settings if you no longer need the slow logs\.
 
-## Viewing Logs<a name="es-createdomain-configure-slow-logs-viewing"></a>
+## Viewing logs<a name="es-createdomain-configure-slow-logs-viewing"></a>
 
 Viewing the application and slow logs in CloudWatch is just like viewing any other CloudWatch log\. For more information, see [View Log Data](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html#ViewingLogData) in the *Amazon CloudWatch Logs User Guide*\.
 

@@ -1,8 +1,8 @@
-# Amazon Elasticsearch Service Limits<a name="aes-limits"></a>
+# Amazon Elasticsearch Service limits<a name="aes-limits"></a>
 
-The following tables show limits for Amazon ES resources, including the number of nodes per cluster, the minimum and maximum sizes for EBS volumes, and network limits\.
+The following tables show limits for Amazon Elasticsearch Service \(Amazon ES\) resources, including the number of nodes per cluster, the minimum and maximum sizes for EBS volumes, and network limits\.
 
-## Cluster and Instance Limits<a name="clusterresource"></a>
+## Cluster and instance limits<a name="clusterresource"></a>
 
 The following table shows Amazon ES limits for clusters and instances\.
 
@@ -21,7 +21,7 @@ The following table shows Amazon ES limits for clusters and instances\.
 
 For a list of the instance types that Amazon ES supports, see [Supported Instance Types](aes-supported-instance-types.md)\.
 
-## UltraWarm Storage Limits<a name="limits-ultrawarm"></a>
+## UltraWarm storage limits<a name="limits-ultrawarm"></a>
 
 The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)\.
 
@@ -33,7 +33,7 @@ The following table lists the UltraWarm instance types and the maximum amount of
 | ultrawarm1\.medium\.elasticsearch | 1\.5 TiB | 
 | ultrawarm1\.large\.elasticsearch | 20 TiB | 
 
-## EBS Volume Size Limits<a name="ebsresource"></a>
+## EBS volume size limits<a name="ebsresource"></a>
 
 The following table shows the minimum and maximum sizes for EBS volumes for each instance type that Amazon ES supports\. For information about which instance types include instance storage and additional hardware details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
 + If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, choose one of the SSD options\.
@@ -100,7 +100,7 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 | i3\.8xlarge\.elasticsearch | N/A | N/A | 
 | i3\.16xlarge\.elasticsearch | N/A | N/A | 
 
-## Network Limits<a name="network-limits"></a>
+## Network limits<a name="network-limits"></a>
 
 The following table shows the maximum size of HTTP request payloads\.
 
@@ -164,10 +164,10 @@ The following table shows the maximum size of HTTP request payloads\.
 | i3\.8xlarge\.elasticsearch | 100 MiB | 
 | i3\.16xlarge\.elasticsearch | 100 MiB | 
 
-## Java Process Limit<a name="aes-java-process-limit"></a>
+## Java process limit<a name="aes-java-process-limit"></a>
 
-Amazon ES limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Advanced Options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
+Amazon ES limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Advanced options](es-createupdatedomains.md#es-createdomain-configure-advanced-options) and [JVM OutOfMemoryError](aes-handling-errors.md#aes-handling-errors-jvm_out_of_memory_error)\.
 
-## Domain Policy Limit<a name="aes-domain-policy-limit"></a>
+## Domain policy limit<a name="aes-domain-policy-limit"></a>
 
 Amazon ES limits [access policies on domains](es-ac.md#es-ac-types-resource) to 100 KiB\.

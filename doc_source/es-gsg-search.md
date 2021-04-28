@@ -1,4 +1,4 @@
-# Step 3: Search documents in an Amazon ES domain<a name="es-gsg-search"></a>
+# Step 3: Search documents in Amazon ES<a name="es-gsg-search"></a>
 
 To search documents in an Amazon Elasticsearch Service \(Amazon ES\) domain, use the Elasticsearch search API\. Alternatively, you can use [Kibana](es-kibana.md) to search documents in the domain\.
 
@@ -34,4 +34,4 @@ Kibana is a popular open source visualization tool designed to work with Elastic
 
 1. In the search bar, enter *mars* if you uploaded a single document, or *rebel* if you uploaded multiple documents, and then press **Enter**\. Note how the similarity score \(`_score`\) increases if you search for a more specific phrase such as *mars attacks*\.
 
-**Next**: [Delete an Amazon ES domain ](es-gsg-deleting.md)
+**Next**: [Delete a domain ](es-gsg-deleting.md)

@@ -1,6 +1,6 @@
-# Loading Data with Logstash<a name="es-managedomains-logstash"></a>
+# Loading data into Amazon Elasticsearch Service with Logstash<a name="es-managedomains-logstash"></a>
 
-The open source version of Logstash \(Logstash OSS\) provides a convenient way to use the bulk API to upload data into your Amazon ES domain\. The service supports all standard Logstash input plugins, including the Amazon S3 input plugin\. Amazon ES supports two Logstash output plugins: the standard Elasticsearch plugin and the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin, which uses IAM credentials to sign and export Logstash events to Amazon ES\.
+The open source version of Logstash \(Logstash OSS\) provides a convenient way to use the bulk API to upload data into your Amazon Elasticsearch Service \(Amazon ES\) domain\. The service supports all standard Logstash input plugins, including the Amazon S3 input plugin\. Amazon ES supports two Logstash output plugins: the standard Elasticsearch plugin and the [logstash\-output\-amazon\-es](https://github.com/awslabs/logstash-output-amazon_es) plugin, which uses IAM credentials to sign and export Logstash events to Amazon ES\.
 
 If your Amazon ES domain uses [fine\-grained access control](fgac.md) with HTTP basic authentication, configuration is similar to any other Elasticsearch cluster\. This example configuration file takes its input from the open source version of Filebeat \(Filebeat OSS\)\.
 
@@ -76,4 +76,4 @@ output {
 }
 ```
 
-If your Amazon ES domain is in a VPC, the Logstash OSS machine must be able to connect to the VPC and have access to the domain through the VPC security groups\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If your Amazon ES domain is in a VPC, the Logstash OSS machine must be able to connect to the VPC and have access to the domain through the VPC security groups\. For more information, see [About access policies on VPC domains](es-vpc.md#es-vpc-security)\.

@@ -1,38 +1,38 @@
-# Fine\-Grained Access Control in Amazon Elasticsearch Service<a name="fgac"></a>
+# Fine\-grained access control in Amazon Elasticsearch Service<a name="fgac"></a>
 
-Fine\-grained access control offers additional ways of controlling access to your data on Amazon Elasticsearch Service\. For example, depending on who makes the request, you might want a search to return results from only one index\. You might want to hide certain fields in your documents or exclude certain documents altogether\. Fine\-grained access control offers the following features:
+Fine\-grained access control offers additional ways of controlling access to your data on Amazon Elasticsearch Service \(Amazon ES\)\. For example, depending on who makes the request, you might want a search to return results from only one index\. You might want to hide certain fields in your documents or exclude certain documents altogether\. Fine\-grained access control offers the following benefits:
 + Role\-based access control
 + Security at the index, document, and field level
 + Kibana multi\-tenancy
 + HTTP basic authentication for Elasticsearch and Kibana
 
 **Topics**
-+ [The Bigger Picture: Fine\-Grained Access Control and Amazon ES Security](#fgac-access-policies)
-+ [Key Concepts](#fgac-concepts)
-+ [Enabling Fine\-Grained Access Control](#fgac-enabling)
-+ [Accessing Kibana as the Master User](#fgac-kibana)
-+ [Managing Permissions](#fgac-access-control)
-+ [Recommended Configurations](#fgac-recommendations)
-+ [Tutorial: IAM Master User and Amazon Cognito](#fgac-walkthrough-iam)
-+ [Tutorial: Internal User Database and HTTP Basic Authentication](#fgac-walkthrough-basic)
++ [The bigger picture: fine\-grained access control and Amazon ES security](#fgac-access-policies)
++ [Key concepts](#fgac-concepts)
++ [Enabling fine\-grained access control](#fgac-enabling)
++ [Accessing Kibana as the master user](#fgac-kibana)
++ [Managing permissions](#fgac-access-control)
++ [Recommended configurations](#fgac-recommendations)
++ [Tutorial: IAM master user and Amazon Cognito](#fgac-walkthrough-iam)
++ [Tutorial: Internal user database and HTTP basic authentication](#fgac-walkthrough-basic)
 + [Limitations](#fgac-limitations)
-+ [Modifying the Master User](#fgac-forget)
-+ [Additional Master Users](#fgac-more-masters)
-+ [Manual Snapshots](#fgac-snapshots)
++ [Modifying the master user](#fgac-forget)
++ [Additional master users](#fgac-more-masters)
++ [Manual snapshots](#fgac-snapshots)
 + [Integrations](#fgac-integrations)
-+ [REST API Differences](#fgac-rest-api)
++ [REST API differences](#fgac-rest-api)
 
-## The Bigger Picture: Fine\-Grained Access Control and Amazon ES Security<a name="fgac-access-policies"></a>
+## The bigger picture: fine\-grained access control and Amazon ES security<a name="fgac-access-policies"></a>
 
 Amazon Elasticsearch Service security has three main layers:
 
-Network  
-The first security layer is the network, which determines whether requests reach an Amazon ES domain\. If you choose **Public access** when you create a domain, requests from any internet\-connected client can reach the domain endpoint\. If you choose **VPC access**, clients must connect to the VPC \(and the associated security groups must permit it\) for a request to reach the endpoint\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+**Network**  
+The first security layer is the network, which determines whether requests reach an Amazon ES domain\. If you choose **Public access** when you create a domain, requests from any internet\-connected client can reach the domain endpoint\. If you choose **VPC access**, clients must connect to the VPC \(and the associated security groups must permit it\) for a request to reach the endpoint\. For more information, see [Launching your Amazon Elasticsearch Service domains using a VPC](es-vpc.md)\.
 
-Domain access policy  
+**Domain access policy**  
 The second security layer is the domain access policy\. After a request reaches a domain endpoint, the [resource\-based access policy](es-ac.md#es-ac-types-resource) allows or denies the request access to a given URI\. The access policy accepts or rejects requests at the "edge" of the domain, before they reach Elasticsearch itself\.
 
-Fine\-grained access control  
+**Fine\-grained access control**  
 The third and final security layer is fine\-grained access control\. After a resource\-based access policy allows a request to reach a domain endpoint, fine\-grained access control evaluates the user credentials and either authenticates the user or denies the request\. If fine\-grained access control authenticates the user, it fetches all roles mapped to that user and uses the complete set of permissions to determine how to handle the request\.
 
 **Note**  
@@ -130,88 +130,88 @@ The response has fewer hits and fewer fields for each hit\. Also, the `release_d
 
 If a user provides invalid credentials, the cluster returns an `Unauthorized` exception\.
 
-## Key Concepts<a name="fgac-concepts"></a>
+## Key concepts<a name="fgac-concepts"></a>
 
 *Roles* are the core way of using fine\-grained access control\. In this case, roles are distinct from IAM roles\. Roles contain any combination of permissions: cluster\-wide, index\-specific, document level, and field level\.
 
 After configuring a role, you *map* it to one or more users\. For example, you might map three roles to a single user: one role that provides access to Kibana, one that provides read\-only access to `index1`, and one that provides write access to `index2`\. Or you could include all of those permissions in a single role\.
 
 *Users* are people or applications that make requests to the Elasticsearch cluster\. Users have credentials—either IAM access keys or a user name and password—that they specify when they make requests\. With fine\-grained access control on Amazon Elasticsearch Service, you choose one or the other for your *master user* when you configure your domain\. The master user has full permissions to the cluster and manages roles and role mappings\.
-+ If you choose IAM for your master user, all requests to the cluster must be signed using AWS Signature Version 4\. For sample code, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
++ If you choose IAM for your master user, all requests to the cluster must be signed using AWS Signature Version 4\. For sample code, see [Signing HTTP requests to Amazon Elasticsearch Service](es-request-signing.md)\.
 
   We recommend IAM if you want to use the same users on multiple clusters, if you want to use Amazon Cognito to access Kibana, or if you have Elasticsearch clients that support Signature Version 4 signing\.
 + If you choose the internal user database, you can use HTTP basic authentication \(as well as IAM credentials\) to make requests to the cluster\. Most clients support basic authentication, including [curl](https://curl.haxx.se/)\. The internal user database is stored in an Elasticsearch index, so you can't share it with other clusters\.
 
   We recommend the internal user database if you don't need to reuse users across multiple clusters, if you want to use HTTP basic authentication to access Kibana \(rather than Amazon Cognito\), or if you have clients that only support basic authentication\. The internal user database is the simplest way to get started with Amazon ES\.
 
-## Enabling Fine\-Grained Access Control<a name="fgac-enabling"></a>
+## Enabling fine\-grained access control<a name="fgac-enabling"></a>
 
-Enable fine\-grained access control using the console, AWS CLI, or configuration API\. The console offers the simplest experience\. For steps, see [Creating and Managing Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\. Here are the requirements for enabling fine\-grained access control:
+Enable fine\-grained access control using the console, AWS CLI, or configuration API\. The console offers the simplest experience\. For steps, see [Creating and managing Amazon Elasticsearch Service domains](es-createupdatedomains.md)\. Here are the requirements for enabling fine\-grained access control:
 + Elasticsearch 6\.7 or later
 + [Encryption of data at rest](encryption-at-rest.md) and [node\-to\-node encryption](ntn.md) enabled
 + **Require HTTPS for all traffic to the domain** enabled
 
 You can't enable fine\-grained access control on existing domains, only new ones\. After you enable fine\-grained access control, you can't disable it\.
 
-## Accessing Kibana as the Master User<a name="fgac-kibana"></a>
+## Accessing Kibana as the master user<a name="fgac-kibana"></a>
 
 Fine\-grained access control has a Kibana plugin that simplifies management tasks\. You can use Kibana to manage users, roles, mappings, action groups, and tenants\. The Kibana sign\-in page and underlying authentication method differs, however, depending on how you manage users and configured your domain\.
-+ If you want to use IAM for user management, use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md) to access Kibana\. Otherwise, Kibana shows a nonfunctional sign\-in page\. See [Limitations](#fgac-limitations)\.
++ If you want to use IAM for user management, use [Configuring Amazon Cognito authentication for Kibana](es-cognito-auth.md) to access Kibana\. Otherwise, Kibana shows a nonfunctional sign\-in page\. See [Limitations](#fgac-limitations)\.
 
-  With Amazon Cognito authentication, one of the assumed roles from the identity pool must match the IAM role that you specified for the master user\. For more information about this configuration, see [\(Optional\) Configuring Granular Access](es-cognito-auth.md#es-cognito-auth-granular) and [Tutorial: IAM Master User and Amazon Cognito](#fgac-walkthrough-iam)\.  
+  With Amazon Cognito authentication, one of the assumed roles from the identity pool must match the IAM role that you specified for the master user\. For more information about this configuration, see [\(Optional\) Configuring granular access](es-cognito-auth.md#es-cognito-auth-granular) and [Tutorial: IAM master user and Amazon Cognito](#fgac-walkthrough-iam)\.  
 ![\[Cognito sign-in page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/cognito-auth.png)
 + If you choose to use the internal user database, you can sign in to Kibana with your master user name and password\. You must access Kibana over HTTPS\. Amazon Cognito and SAML authentication for Kibana both replace this login screen\.
 
-  For more information about this configuration, see [Tutorial: Internal User Database and HTTP Basic Authentication](#fgac-walkthrough-basic)\.  
+  For more information about this configuration, see [Tutorial: Internal user database and HTTP basic authentication](#fgac-walkthrough-basic)\.  
 ![\[Basic authentication sign-in page\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/basic-auth-kibana.png)
-+ If you choose to use SAML authentication, you can sign in using credentials from an external identity provider\. For more information, see [SAML Authentication for Kibana](saml.md)\.
++ If you choose to use SAML authentication, you can sign in using credentials from an external identity provider\. For more information, see [SAML authentication for Kibana](saml.md)\.
 
-## Managing Permissions<a name="fgac-access-control"></a>
+## Managing permissions<a name="fgac-access-control"></a>
 
-As noted in [Key Concepts](#fgac-concepts), you manage fine\-grained access control permissions using roles, users, and mappings\. This section describes how to create and apply those resources\. We recommend that you [sign in to Kibana as the master user](#fgac-kibana) to perform these operations\.
+As noted in [Key concepts](#fgac-concepts), you manage fine\-grained access control permissions using roles, users, and mappings\. This section describes how to create and apply those resources\. We recommend that you [sign in to Kibana as the master user](#fgac-kibana) to perform these operations\.
 
 ![\[Security home page in Kibana\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/kibana-fgac-home.png)
 
-### Creating Roles<a name="fgac-roles"></a>
+### Creating roles<a name="fgac-roles"></a>
 
 You can create new roles for fine\-grained access control using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#create-roles)\.
 
 Fine\-grained access control also includes a number of [predefined roles](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#predefined-roles)\. Clients such as Kibana and Logstash make a wide variety of requests to Elasticsearch, which can make it hard to manually create roles with the minimum set of permissions\. For example, the `kibana_user` role includes the permissions that a user needs to work with index patterns, visualizations, dashboards, and tenants\. We recommend [mapping it](#fgac-mapping) to any user or backend role that accesses Kibana, along with additional roles that allow access to other indices\.
 
-#### Cluster\-Level Security<a name="fgac-cluster-level"></a>
+#### Cluster\-level security<a name="fgac-cluster-level"></a>
 
 Cluster\-level permissions include the ability to make broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** section when creating a role\. For a list of cluster\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#cluster-level)\.
 
-#### Index\-Level Security<a name="fgac-index-level"></a>
+#### Index\-level security<a name="fgac-index-level"></a>
 
 Index\-level permissions include the ability to create new indices, search indices, read and write documents, delete documents, manage aliases, and more\. Manage these permissions using the **Index Permissions** section when creating a role\. For a list of index\-level action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/#index-level)\.
 
-#### Document\-Level Security<a name="fgac-document-level"></a>
+#### Document\-level security<a name="fgac-document-level"></a>
 
 Document\-level security lets you restrict which documents in an index a user can see\. When creating a role, specify an index pattern and an Elasticsearch query\. Any users that you map to that role can see only the documents that match the query\. Document\-level security affects [the number of hits that you receive when you search](#fgac-example)\.
 
 For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/document-level-security/)\.
 
-#### Field\-Level Security<a name="fgac-field-level"></a>
+#### Field\-level security<a name="fgac-field-level"></a>
 
 Field\-level security lets you control which document fields a user can see\. When creating a role, add a list of fields to either include or exclude\. If you include fields, any users you map to that role can see only those fields\. If you exclude fields, they can see all fields *except* the excluded ones\. Field\-level security affects [the number of fields included in hits when you search](#fgac-example)\.
 
 For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/field-level-security/)\.
 
-#### Field Masking<a name="fgac-field-masking"></a>
+#### Field masking<a name="fgac-field-masking"></a>
 
 Field masking is an alternative to field\-level security that lets you anonymize the data in a field rather than remove it altogether\. When creating a role, add a list of fields to mask\. Field masking affects [whether you can see the contents of a field when you search](#fgac-example)\.
 
 **Tip**  
 If you apply the standard masking to a field, Amazon ES uses a secure, random hash that can cause inaccurate aggregation results\. To perform aggregations on masked fields, use pattern\-based masking instead\.
 
-### Creating Users<a name="fgac-users"></a>
+### Creating users<a name="fgac-users"></a>
 
 If you enabled the internal user database, you can create users using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#create-users)\.
 
 If you chose IAM for your master user, ignore this portion of Kibana\. Create IAM users and IAM roles instead\. For more information, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/)\.
 
-### Mapping Roles to Users<a name="fgac-mapping"></a>
+### Mapping roles to users<a name="fgac-mapping"></a>
 
 Role mapping is the most critical aspect of fine\-grained access control\. Fine\-grained access control has some predefined roles to help you get started, but unless you map roles to users, every request to the cluster ends in a permissions error\.
 
@@ -223,11 +223,11 @@ Role mapping is the most critical aspect of fine\-grained access control\. Fine\
 
 You can map roles to users using Kibana or the `_opendistro/_security` operation in the REST API\. For more information, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/users-roles/#map-users-to-roles)\.
 
-### Creating Action Groups<a name="fgac-ag"></a>
+### Creating action groups<a name="fgac-ag"></a>
 
 Action groups are sets of permissions that you can reuse across different resources\. You can create new action groups using Kibana or the `_opendistro/_security` operation in the REST API, although the default action groups suffice for most use cases\. For more information about the default action groups, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/default-action-groups/)\.
 
-### Kibana Multi\-Tenancy<a name="fgac-multitenancy"></a>
+### Kibana multi\-tenancy<a name="fgac-multitenancy"></a>
 
 Tenants are spaces for saving index patterns, visualizations, dashboards, and other Kibana objects\. Kibana multi\-tenancy lets you safely share your work with other Kibana users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. To learn more, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/multi-tenancy/#add-tenants)\.
 
@@ -241,7 +241,7 @@ Tenants are spaces for saving index patterns, visualizations, dashboards, and ot
 
 1. Verify your tenant before creating visualizations or dashboards\. If you want to share your work with all other Kibana users, choose **Global**\. To share your work with a subset of Kibana users, choose a different shared tenant\. Otherwise, choose **Private**\.
 
-## Recommended Configurations<a name="fgac-recommendations"></a>
+## Recommended configurations<a name="fgac-recommendations"></a>
 
 Due to how fine\-grained access control [interacts with other security features](#fgac-access-policies), we recommend several fine\-grained access control configurations that work well for most use cases\.
 
@@ -253,7 +253,7 @@ Due to how fine\-grained access control [interacts with other security features]
 |  Use IAM credentials for calls to the Elasticsearch APIs, and use Amazon Cognito to access Kibana\. Manage fine\-grained access control roles using Kibana or the REST API\.  | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
 |  Use IAM credentials for calls to the Elasticsearch APIs, and block most access to Kibana\. Manage fine\-grained access control roles using the REST API\.  | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    },<br />    {<br />      "Effect": "Deny",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/_plugin/kibana*"<br />    }<br />  ]<br />}</pre>  | 
 
-## Tutorial: IAM Master User and Amazon Cognito<a name="fgac-walkthrough-iam"></a>
+## Tutorial: IAM master user and Amazon Cognito<a name="fgac-walkthrough-iam"></a>
 
 This tutorial covers a popular use case: an IAM master user with Amazon Cognito authentication for Kibana\. Although these steps use the Amazon Cognito user pool for authentication, this same basic process works for any Cognito authentication provider that lets you assign different IAM roles to different users\.
 
@@ -417,7 +417,7 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
 
 1. In your original browser window, signed in as `master-user`, choose **Dev Tools**, and then perform the same searches\. Note the difference in permissions, number of hits, matching documents, and included fields\.
 
-## Tutorial: Internal User Database and HTTP Basic Authentication<a name="fgac-walkthrough-basic"></a>
+## Tutorial: Internal user database and HTTP basic authentication<a name="fgac-walkthrough-basic"></a>
 
 This tutorial covers another popular use case: a master user in the internal user database and HTTP basic authentication for Kibana\.
 
@@ -549,7 +549,7 @@ Fine\-grained access control has several important limitations:
   }
   ```
 
-## Modifying the Master User<a name="fgac-forget"></a>
+## Modifying the master user<a name="fgac-forget"></a>
 
 If you forget the details of the master user, you can reconfigure it using the console, AWS CLI, or configuration API\.
 
@@ -570,7 +570,7 @@ If you forget the details of the master user, you can reconfigure it using the c
 
 1. Choose **Submit**\.
 
-## Additional Master Users<a name="fgac-more-masters"></a>
+## Additional master users<a name="fgac-more-masters"></a>
 
 You designate a master user when you create a domain, but if you want, you can use this master user to create additional master users\. You have two options: Kibana or the REST API\.
 + In Kibana, choose **Security**, **Role Mappings**, and then map the new master user to the `all_access` and `security_manager` roles\.  
@@ -609,11 +609,11 @@ You designate a master user when you create a domain, but if you want, you can u
 
   These requests *replace* the current role mappings, so perform `GET` requests first so that you can include all current roles in the `PUT` requests\. The REST API is especially useful if you can't access Kibana and want to map an IAM role from Amazon Cognito to the `all_access` role\.
 
-## Manual Snapshots<a name="fgac-snapshots"></a>
+## Manual snapshots<a name="fgac-snapshots"></a>
 
-Fine\-grained access control introduces some additional complications with taking manual snapshots\. To register a snapshot repository—even if you use HTTP basic authentication for all other purposes—you must map the `manage_snapshots` role to an IAM role that has `iam:PassRole` permissions to assume `TheSnapshotRole`, as defined in [Manual Snapshot Prerequisites](es-managedomains-snapshots.md#es-managedomains-snapshot-prerequisites)\.
+Fine\-grained access control introduces some additional complications with taking manual snapshots\. To register a snapshot repository—even if you use HTTP basic authentication for all other purposes—you must map the `manage_snapshots` role to an IAM role that has `iam:PassRole` permissions to assume `TheSnapshotRole`, as defined in [Prerequisites](es-managedomains-snapshots.md#es-managedomains-snapshot-prerequisites)\.
 
-Then use that IAM role to send a signed request to the domain, as outlined in [Registering a Manual Snapshot Repository](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory)\.
+Then use that IAM role to send a signed request to the domain, as outlined in [Registering a manual snapshot repository](es-managedomains-snapshots.md#es-managedomains-snapshot-registerdirectory)\.
 
 ## Integrations<a name="fgac-integrations"></a>
 
@@ -640,7 +640,7 @@ If you use [other AWS services](es-aws-integrations.md) with Amazon ES, you must
 
 Permissions vary based on the actions each service performs\. An AWS IoT rule or AWS Lambda function that indexes data likely needs similar permissions to Kinesis Data Firehose, while a Lambda function that only performs searches can use a more limited set\.
 
-## REST API Differences<a name="fgac-rest-api"></a>
+## REST API differences<a name="fgac-rest-api"></a>
 
 The fine\-grained access control REST API differs slightly depending on your Elasticsearch version\. Prior to making a `PUT` request, make a `GET` request to verify the expected request body\. For example, a `GET` request to `_opendistro/_security/api/user` returns all users, which you can then modify and use to make valid `PUT` requests\.
 

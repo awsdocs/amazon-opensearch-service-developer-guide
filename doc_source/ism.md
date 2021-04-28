@@ -1,19 +1,20 @@
-# Index State Management<a name="ism"></a>
+# Index State Management in Amazon Elasticsearch Service<a name="ism"></a>
 
-Index State Management \(ISM\) lets you define custom management policies to automate routine tasks and apply them to indices and index patterns\. You no longer need to set up and manage external processes to run your index operations\.
+Index State Management \(ISM\) lets you define custom management policies to automate routine tasks and apply them to indices and index patterns in Amazon Elasticsearch Service \(Amazon ES\)\. You no longer need to set up and manage external processes to run your index operations\.
 
-A policy contains a default state and a list of states for the index to transition between\. Within each state, you can define a list of actions to perform and conditions that trigger these transitions\. A typical use case is to periodically delete old indices after a certain period of time\.
+A policy contains a default state and a list of states for the index to transition between\. Within each state, you can define a list of actions to perform and conditions that trigger these transitions\. A typical use case is to periodically delete old indices after a certain period of time\. For example, you can define a policy that moves your index into a `read_only` state after 30 days and then ultimately deletes it after 90 days\.
 
-For example, you can define a policy that moves your index into a `read_only` state after 30 days and then ultimately deletes it after 90 days\.
+After you attach a policy to an index, ISM creates a job that runs every 30 to 48 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 30 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indices at the same time\.
 
 ISM requires Elasticsearch 6\.8 or later\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/)\.
 
-**Note**  
-After you attach a policy to an index, ISM creates a job that runs every 30 to 48 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 30 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indices at the same time\.
+## Sample policies<a name="ism-example"></a>
 
-## Sample Policies<a name="ism-example"></a>
+The following sample policies demonstrate how to automate common ISM use cases\.
 
-This first sample policy moves an index from hot storage to [UltraWarm](ultrawarm.md) storage after seven days and deletes the index after 90 days\.
+### Hot to warm storage<a name="ism-example-warm"></a>
+
+This sample policy moves an index from hot storage to [UltraWarm](ultrawarm.md) storage after seven days and deletes the index after 90 days\.
 
 In this case, an index is initially in the `hot` state\. After seven days, ISM moves it to the `warm` state\. 83 days later, the service sends a notification to an Amazon Chime room that the index is being deleted and then permanently deletes it\.
 
@@ -74,7 +75,9 @@ In this case, an index is initially in the `hot` state\. After seven days, ISM m
 }
 ```
 
-This second, simpler sample policy reduces replica count to zero after seven days to conserve disk space and then deletes the index after 21 days\. This policy assumes your index is non\-critical and no longer receiving write requests; having zero replicas carries some risk of data loss\.
+### Reduce replica count<a name="ism-example-replica"></a>
+
+This sample policy reduces replica count to zero after seven days to conserve disk space and then deletes the index after 21 days\. This policy assumes your index is non\-critical and no longer receiving write requests; having zero replicas carries some risk of data loss\.
 
 ```
 {
@@ -118,11 +121,62 @@ This second, simpler sample policy reduces replica count to zero after seven day
 }
 ```
 
+### Take an index snapshot<a name="ism-example-snapshot"></a>
+
+This sample policy uses the `[snapshot](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#snapshot)` operation to take a snapshot of an index as soon as it contains at least one document\. `repository` is the name of the manual snapshot repository you registered in Amazon S3\. `snapshot` is the name of the snapshot\. For snapshot prerequisites and steps to register a repository, see [Creating index snapshots in Amazon Elasticsearch Service](es-managedomains-snapshots.md)\.
+
+```
+{
+  "policy": {
+    "description": "Takes an index snapshot.",
+    "schema_version": 1,
+    "default_state": "empty",
+    "states": [{
+        "name": "empty",
+        "actions": [],
+        "transitions": [{
+          "state_name": "occupied",
+          "conditions": {
+            "min_doc_count": 1
+          }
+        }]
+      },
+      {
+        "name": "occupied",
+        "actions": [{
+          "snapshot": {
+            "repository": "<my-repository>",
+            "snapshot": "<my-snapshot>"
+            }
+          }],
+          "transitions": []
+      }
+    ]
+  }
+}
+```
+
+After you create a policy, your next step is to attach this policy to an index or indices:
+
+```
+PUT _template/<template_name>
+{
+  "index_patterns": [
+    "index_name-*"
+  ],
+  "template": {
+    "settings": {
+      "opendistro.index_state_management.policy_id": "policy_id"
+    }
+  }
+}
+```
+
 ## Differences<a name="ism-diff"></a>
 
 Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service has several differences\. 
 
-### ISM Operations<a name="alerting-diff-op"></a>
+### ISM operations<a name="alerting-diff-op"></a>
 + Amazon ES supports a unique ISM operation, `warm_migration`\. 
 
   If your domain has [UltraWarm](ultrawarm.md) enabled, the `warm_migration` action transitions the index to warm storage\. Even if the `warm_migration` action doesn’t complete within the [set timeout period](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions), the migration to warm indices still continues\.
@@ -131,7 +185,7 @@ Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service 
 + If your domain runs Elasticsearch 7\.4 or later, Amazon ES supports the ISM `open` and `close` operations\.
 + If your domain runs Elasticsearch 7\.7 or later, Amazon ES supports the ISM `snapshot` operation\.
 
-### ISM Settings<a name="ism-diff-settings"></a>
+### ISM settings<a name="ism-diff-settings"></a>
 
 Open Distro for Elasticsearch lets you change all available ISM settings using the `_cluster/settings` API\. On Amazon ES, you can only change the following settings:
 + **Cluster\-level settings:**

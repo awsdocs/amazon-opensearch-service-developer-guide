@@ -1,11 +1,22 @@
-# Searching Data in Amazon Elasticsearch Service<a name="es-searching"></a>
+# Searching data in Amazon Elasticsearch Service<a name="es-searching"></a>
 
-This chapter introduces search and covers several Amazon Elasticsearch Service features that improve the experience\. For more comprehensive information on the Elasticsearch search API, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/full-text/)\.
+There are several common methods for searching documents in Amazon Elasticsearch Service \(Amazon ES\), including URI searches and request body searches\. Amazon ES offers additional functionality that improves the search experience, such as custom packages, SQL support, and asynchronous search\. For a comprehensive Elasticsearch search API reference, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/full-text/)\.
 
 **Note**  
-All example requests in this chapter work with the Elasticsearch 6\.*x* and 7\.*x* APIs\. Some requests might not work with older Elasticsearch versions\.
+The following sample requests work with the Elasticsearch 6\.*x* and 7\.*x* APIs\. Some requests might not work with older Elasticsearch versions\.
 
-## URI Searches<a name="es-searching-uri"></a>
+**Topics**
++ [URI searches](#es-searching-uri)
++ [Request body searches](#es-searching-dsl)
++ [Custom packages for Amazon Elasticsearch Service](custom-packages.md)
++ [Querying your Amazon Elasticsearch Service data with SQL](sql-support.md)
++ [Querying Amazon Elasticsearch Service data using Piped Processing Language](ppl-support.md)
++ [k\-Nearest Neighbor \(k\-NN\) search in Amazon Elasticsearch Service](knn.md)
++ [Cross\-cluster search for Amazon Elasticsearch Service](cross-cluster-search.md)
++ [Learning to Rank for Amazon Elasticsearch Service](learning-to-rank.md)
++ [Asynchronous search for Amazon Elasticsearch Service](asynchronous-search.md)
+
+## URI searches<a name="es-searching-uri"></a>
 
 Universal Resource Identifier \(URI\) searches are the simplest form of search\. In a URI search, you specify the query as an HTTP request parameter:
 
@@ -76,7 +87,7 @@ You can include additional parameters in the request, but the supported paramete
 GET https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search?q=title:house&size=20&sort=year:desc
 ```
 
-## Request Body Searches<a name="es-searching-dsl"></a>
+## Request body searches<a name="es-searching-dsl"></a>
 
 To perform more complex searches, use the HTTP request body and the Elasticsearch domain\-specific language \(DSL\) for queries\. The query DSL lets you specify the full range of Elasticsearch search options\. The following `match` query is similar to the final [URI search](#es-searching-uri) example:
 
@@ -116,7 +127,7 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search
 }
 ```
 
-### Boosting Fields<a name="es-searching-dsl-boost"></a>
+### Boosting fields<a name="es-searching-dsl-boost"></a>
 
 You can improve search relevancy by "boosting" certain fields\. Boosts are multipliers that weigh matches in one field more heavily than matches in other fields\. In the following example, a match for *john* in the `title` field influences `_score` twice as much as a match in the `plot` field and four times as much as a match in the `actors` or `directors` fields\. The result is that films like *John Wick* and *John Carter* are near the top of the search results, and films starring John Travolta are near the bottom\.
 
@@ -133,7 +144,7 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search
 }
 ```
 
-### Paginating Search Results<a name="es-searching-dsl-pagination"></a>
+### Paginating search results<a name="es-searching-dsl-pagination"></a>
 
 If you need to display a large number of search results, you can implement pagination using the `from` parameter\. The following request returns results 20–39 of the zero\-indexed list of search results:
 
@@ -151,7 +162,7 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search
 }
 ```
 
-### Search Result Highlighting<a name="es-searching-dsl-highlighting"></a>
+### Search result highlighting<a name="es-searching-dsl-highlighting"></a>
 
 The `highlight` option tells Elasticsearch to return an additional object inside of the `hits` array if the query matched one or more fields:
 

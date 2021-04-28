@@ -1,12 +1,12 @@
-# Index Rollups for Amazon Elasticsearch Service<a name="rollup"></a>
+# Summarizing indices in Amazon Elasticsearch Service with index rollups<a name="rollup"></a>
 
-Index rollup lets you reduce storage costs by periodically rolling up old data into summarized indices\.
+Index rollups in Amazon Elasticsearch Service \(Amazon ES\) let you reduce storage costs by periodically rolling up old data into summarized indices\.
 
-You pick the fields that interest you and use index rollup to create a new index with only those fields aggregated into coarser time buckets\. You can store months or years of historical data at a fraction of the cost with the same query performance\.
+You pick the fields that interest you and use an index rollup to create a new index with only those fields aggregated into coarser time buckets\. You can store months or years of historical data at a fraction of the cost with the same query performance\.
 
 Index rollups requires Elasticsearch 7\.9 or later\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/im/index-rollups/)\.
 
-## Creating an Index Rollup Job<a name="rollup-example"></a>
+## Creating an index rollup job<a name="rollup-example"></a>
 
 To get started, choose **Index Management** in Kibana\. Select **Rollup Jobs** and choose **Create rollup job**\.
 

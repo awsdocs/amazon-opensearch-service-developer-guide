@@ -1,25 +1,25 @@
-# Kibana<a name="es-kibana"></a>
+# Using Kibana with Amazon Elasticsearch Service<a name="es-kibana"></a>
 
-Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon ES provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `domain-endpoint/_plugin/kibana/`\. Queries using this default Kibana installation have a 300\-second timeout\.
+Kibana is a popular open source visualization tool designed to work with Elasticsearch\. Amazon Elasticsearch Service \(Amazon ES\) provides an installation of Kibana with every Amazon ES domain\. You can find a link to Kibana on your domain dashboard on the Amazon ES console\. The URL is `domain-endpoint/_plugin/kibana/`\. Queries using this default Kibana installation have a 300\-second timeout\.
 
 The following sections address some common Kibana use cases:
-+ [Controlling Access to Kibana](#es-kibana-access)
-+ [Configuring Kibana to Use a WMS Map Server](#es-kibana-map-server)
-+ [Connecting a Local Kibana Server to Amazon ES](#es-kibana-local)
++ [Controlling access to Kibana](#es-kibana-access)
++ [Configuring Kibana to use a WMS map server](#es-kibana-map-server)
++ [Connecting a local Kibana server to Amazon ES](#es-kibana-local)
 
-## Controlling Access to Kibana<a name="es-kibana-access"></a>
+## Controlling access to Kibana<a name="es-kibana-access"></a>
 
 Kibana does not natively support IAM users and roles, but Amazon ES offers several solutions for controlling access to Kibana:
 + Enable [SAML authentication for Kibana](saml.md)\.
 + Use [fine\-grained access control](fgac.md#fgac-concepts) with HTTP basic authentication\.
-+ Configure [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
++ Configure [Configuring Amazon Cognito authentication for Kibana](es-cognito-auth.md)\.
 + For public access domains, configure an [IP\-based access policy](es-ac.md#es-ac-types-ip), with or without a [proxy server](#es-kibana-proxy)\.
-+ For VPC access domains, use an open access policy, with or without a proxy server, and [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control access\. To learn more, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
++ For VPC access domains, use an open access policy, with or without a proxy server, and [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control access\. To learn more, see [About access policies on VPC domains](es-vpc.md#es-vpc-security)\.
 
-### Using a Proxy to Access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
+### Using a proxy to access Amazon ES from Kibana<a name="es-kibana-proxy"></a>
 
 **Note**  
-This process is only applicable if your domain uses public access and you don't want to use [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\. See [Controlling Access to Kibana](#es-kibana-access)\.
+This process is only applicable if your domain uses public access and you don't want to use [Configuring Amazon Cognito authentication for Kibana](es-cognito-auth.md)\. See [Controlling access to Kibana](#es-kibana-access)\.
 
 Because Kibana is a JavaScript application, requests originate from the user's IP address\. IP\-based access control might be impractical due to the sheer number of IP addresses you would need to allow in order for each user to have access to Kibana\. One workaround is to place a proxy server between Kibana and Amazon ES\. Then you can add an IP\-based access policy that allows requests from only one IP address, the proxy's\. The following diagram shows this configuration\.
 
@@ -69,7 +69,7 @@ To enable this sort of configuration, you need a resource\-based policy that spe
 
 We recommend that you configure the EC2 instance running the proxy server with an Elastic IP address\. This way, you can replace the instance when necessary and still attach the same public IP address to it\. To learn more, see [Elastic IP Addresses](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) in the *Amazon EC2 User Guide for Linux Instances*\.
 
-If you use a proxy server *and* [Amazon Cognito Authentication for Kibana](es-cognito-auth.md), you might need to add settings for Kibana and Amazon Cognito to avoid `redirect_mismatch` errors\. See the following `nginx.conf` example:
+If you use a proxy server *and* [Configuring Amazon Cognito authentication for Kibana](es-cognito-auth.md), you might need to add settings for Kibana and Amazon Cognito to avoid `redirect_mismatch` errors\. See the following `nginx.conf` example:
 
 ```
 server {
@@ -116,7 +116,7 @@ server {
 }
 ```
 
-## Configuring Kibana to Use a WMS Map Server<a name="es-kibana-map-server"></a>
+## Configuring Kibana to use a WMS map server<a name="es-kibana-map-server"></a>
 
 The default installation of Kibana for Amazon ES includes a map service, except for domains in the India and China regions\. The map service supports up to 10 zoom levels\.
 
@@ -152,7 +152,7 @@ To apply the new default value to visualizations, you might need to reload Kiban
 **Note**  
 Map services often have licensing fees or restrictions\. You are responsible for all such considerations on any map server that you specify\. You might find the map services from the [U\.S\. Geological Survey](https://viewer.nationalmap.gov/services/) useful for testing\.
 
-## Connecting a Local Kibana Server to Amazon ES<a name="es-kibana-local"></a>
+## Connecting a local Kibana server to Amazon ES<a name="es-kibana-local"></a>
 
 If you have invested significant time into configuring your own Kibana instance, you can use it instead of \(or in addition to\) the default Kibana instance that Amazon ES provides\.
 
@@ -169,7 +169,7 @@ If you have invested significant time into configuring your own Kibana instance,
 
 Older versions of Elasticsearch might only work over HTTP\. In all cases, add the `http` or `https` prefix\. For older versions, you must explicitly specify port 80 or 443\. For newer versions, you can omit the port\.
 
-## Additional Features<a name="kibana-additions"></a>
+## Additional features<a name="kibana-additions"></a>
 
 The default Kibana installation on each Amazon ES domain has some additional features compared to the open source version of Kibana:
 + User interfaces for the various [Open Distro for Elasticsearch plugins](aes-supported-plugins.md)

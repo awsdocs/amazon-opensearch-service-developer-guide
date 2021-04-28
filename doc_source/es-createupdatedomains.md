@@ -1,14 +1,14 @@
-# Creating and Managing Amazon Elasticsearch Service Domains<a name="es-createupdatedomains"></a>
+# Creating and managing Amazon Elasticsearch Service domains<a name="es-createupdatedomains"></a>
 
 This chapter describes how to create and manage Amazon Elasticsearch Service \(Amazon ES\) domains\. An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\.
 
 Unlike the brief instructions in the [Getting Started](es-gsg.md) tutorial, this chapter describes all options and provides relevant reference information\. You can complete each procedure by using instructions for the Amazon ES console, the AWS Command Line Interface \(AWS CLI\), or the AWS SDKs\.
 
-## Creating Amazon ES Domains<a name="es-createdomains"></a>
+## Creating Amazon ES domains<a name="es-createdomains"></a>
 
 This section describes how to create Amazon ES domains by using the Amazon ES console or by using the AWS CLI with the `create-elasticsearch-domain` command\.
 
-### Creating Amazon ES Domains \(Console\)<a name="es-createdomains-console"></a>
+### Creating Amazon ES domains \(console\)<a name="es-createdomains-console"></a>
 
 Use the following procedure to create an Amazon ES domain by using the console\.
 
@@ -27,7 +27,7 @@ Use the following procedure to create an Amazon ES domain by using the console\.
 **Important**  
 Different deployment types present different options on subsequent pages\. These steps include all options \(the **Custom** deployment type\)\.
 
-1. For **Elasticsearch version**, we recommend that you choose the latest version\. For more information, see [Supported Elasticsearch Versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
+1. For **Elasticsearch version**, we recommend that you choose the latest version\. For more information, see [Supported Elasticsearch versions](what-is-amazon-elasticsearch-service.md#aes-choosing-version)\.
 
 1. Choose **Next**\.
 
@@ -37,17 +37,17 @@ Different deployment types present different options on subsequent pages\. These
    + Contains between 3 and 28 characters
    + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
 
-1. If you want to use a custom endpoint rather than the standard one of `https://search-mydomain-1a2a3a4a5a6a7a8a9a0a9a8a7a.us-east-1.es.amazonaws.com` , choose Enable custom endpoint\. Then provide a name and certificate\. For more information, see [Creating a Custom Endpoint](es-customendpoint.md)\.
+1. If you want to use a custom endpoint rather than the standard one of `https://search-mydomain-1a2a3a4a5a6a7a8a9a0a9a8a7a.us-east-1.es.amazonaws.com` , choose Enable custom endpoint\. Then provide a name and certificate\. For more information, see [Creating a custom endpoint for Amazon Elasticsearch Service](es-customendpoint.md)\.
 
-1. For **Availability Zones**, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a Multi\-AZ Domain](es-managedomains-multiaz.md)\.
+1. For **Availability Zones**, choose **1\-AZ**, **2\-AZ**, or **3\-AZ**\. For more information, see [Configuring a multi\-AZ domain in Amazon Elasticsearch Service](es-managedomains-multiaz.md)\.
 
-1. For **Instance type**, choose an instance type for the data nodes\. For more information, see [Supported Instance Types](aes-supported-instance-types.md)\.
+1. For **Instance type**, choose an instance type for the data nodes\. For more information, see [Supported instance types in Amazon Elasticsearch Service ](aes-supported-instance-types.md)\.
 **Note**  
 Not all Availability Zones support all instance types\. If you choose **3\-AZ**, we recommend choosing current\-generation instance types such as R5 or I3\.
 
 1. For **Number of nodes**, choose the number of data nodes\.
 
-   For maximum values, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon ES Domains](sizing-domains.md) and [Configuring a Multi\-AZ Domain](es-managedomains-multiaz.md)\.
+   For maximum values, see [Cluster and instance limits](aes-limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon Elasticsearch Service domains](sizing-domains.md) and [Configuring a multi\-AZ domain in Amazon Elasticsearch Service](es-managedomains-multiaz.md)\.
 
 1. For **Data nodes storage type**, choose either **Instance** \(default\) or **EBS**\.
 
@@ -55,7 +55,7 @@ Not all Availability Zones support all instance types\. If you choose **3\-AZ**,
 
    1. For **EBS volume type**, choose an EBS volume type\.
 
-      If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, enter the baseline IOPS performance that you want\. For more information, see [Amazon EBS Volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
+      If you choose **Provisioned IOPS \(SSD\)** for the EBS volume type, for **Provisioned IOPS**, enter the baseline IOPS performance that you want\. For more information, see [Amazon EBS volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
 
    1.  For **EBS storage size per node**, enter the size of the EBS volume that you want to attach to each data node\.
 
@@ -67,9 +67,9 @@ You can choose different instance types for your dedicated master nodes and data
 
 1. \(Optional\) To enable [UltraWarm storage](ultrawarm.md), choose **Enable UltraWarm data nodes**\. Each instance type has a [maximum amount of storage](aes-limits.md#limits-ultrawarm) that it can address\. Multiply that amount by the number of warm data nodes for the total addressable warm storage\.
 
-1. \(Optional\) For domains running Elasticsearch 5\.3 and later, **Automated snapshot start hour** has no effect\. For more information about automated snapshots, see [Creating Amazon ES Index Snapshots](es-managedomains-snapshots.md)\.
+1. \(Optional\) For domains running Elasticsearch 5\.3 and later, **Automated snapshot start hour** has no effect\. For more information about automated snapshots, see [Creating index snapshots in Amazon Elasticsearch Service](es-managedomains-snapshots.md)\.
 
-1. \(Optional\) Choose **Optional Elasticsearch cluster settings**\. For a summary of these options, see [Advanced Options](#es-createdomain-configure-advanced-options)\.
+1. \(Optional\) Choose **Optional Elasticsearch cluster settings**\. For a summary of these options, see [Advanced options](#es-createdomain-configure-advanced-options)\.
 
 1. Choose **Next**\.
 
@@ -81,47 +81,47 @@ The VPC and domain must be in the same AWS Region, and you must select a VPC wit
 
    1. For **Subnet**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. Amazon ES will place a VPC endpoint and *elastic network interfaces* in the subnets\.
 **Note**  
-You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP Addresses in a VPC Subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
+You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP addresses in a VPC subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
-   1. For **Security groups**, choose the VPC security groups that need access to the Amazon ES domain\. For more information, see [VPC Support for Amazon Elasticsearch Service Domains](es-vpc.md)\.
+   1. For **Security groups**, choose the VPC security groups that need access to the Amazon ES domain\. For more information, see [Launching your Amazon Elasticsearch Service domains using a VPC](es-vpc.md)\.
 
-   1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-Linked Role for VPC Access](es-vpc.md#es-enabling-slr)\.
+   1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-linked role for VPC access](es-vpc.md#es-enabling-slr)\.
 
 1. In the **Fine\-grained access control** section, enable or disable fine\-grained access control:
    + If you want to use IAM for user management, choose **Set IAM role as master user** and specify the ARN for an IAM role\.
    + If you want to use the internal user database, choose **Create a master user** and specify a user name and password\.
 
-   Whichever option you choose, the master user can access all indices in the cluster and all Elasticsearch APIs\. For guidance on which option to choose, see [Key Concepts](fgac.md#fgac-concepts)\.
+   Whichever option you choose, the master user can access all indices in the cluster and all Elasticsearch APIs\. For guidance on which option to choose, see [Key concepts](fgac.md#fgac-concepts)\.
 
    If you disable fine\-grained access control, you can still control access to your domain by placing it within a VPC, applying a restrictive access policy, or both\. You must enable node\-to\-node encryption and encryption at rest to use fine\-grained access control\.
 
-1. \(Optional\) If you want to use SAML authentication for Kibana, choose **Prepare SAML authentication**\. After the domain is available, see [SAML Authentication for Kibana](saml.md) for additional steps\.
+1. \(Optional\) If you want to use SAML authentication for Kibana, choose **Prepare SAML authentication**\. After the domain is available, see [SAML authentication for Kibana](saml.md) for additional steps\.
 
 1. \(Optional\) If you want to use Amazon Cognito authentication for Kibana, choose **Enable Amazon Cognito authentication**\.
 
-   1. Choose the Amazon Cognito user pool and identity pool that you want to use for Kibana authentication\. For guidance on creating these resources, see [Amazon Cognito Authentication for Kibana](es-cognito-auth.md)\.
+   1. Choose the Amazon Cognito user pool and identity pool that you want to use for Kibana authentication\. For guidance on creating these resources, see [Configuring Amazon Cognito authentication for Kibana](es-cognito-auth.md)\.
 
-1. For **Domain access policy**, add the ARNs or IP addresses that you want or choose a preconfigured policy from the dropdown list\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md) and [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+1. For **Domain access policy**, add the ARNs or IP addresses that you want or choose a preconfigured policy from the dropdown list\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md) and [About access policies on VPC domains](es-vpc.md#es-vpc-security)\.
 **Note**  
-If you chose **VPC access** in step 18, IP\-based policies are prohibited\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+If you chose **VPC access** in step 18, IP\-based policies are prohibited\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About access policies on VPC domains](es-vpc.md#es-vpc-security)\.
 
 1. \(Optional\) To require that all requests to the domain arrive over HTTPS, select the **Require HTTPS for all traffic to the domain** check box\.
 
-1. \(Optional\) To enable node\-to\-node encryption, select the **Node\-to\-node encryption** check box\. For more information, see [Node\-to\-node Encryption for Amazon Elasticsearch Service](ntn.md)\.
+1. \(Optional\) To enable node\-to\-node encryption, select the **Node\-to\-node encryption** check box\. For more information, see [Node\-to\-node encryption for Amazon Elasticsearch Service](ntn.md)\.
 
 1. \(Optional\) To enable encryption of data at rest, select the **Enable encryption of data at rest** check box\.
 
-   Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. For more information, see [Encryption of Data at Rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
+   Select **\(Default\) aws/es** to have Amazon ES create a KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS encryption key from the **KMS master key** menu\. For more information, see [Encryption of data at rest for Amazon Elasticsearch Service](encryption-at-rest.md)\.
 
 1. Choose **Next**\.
 
 1. On the **Review** page, review your domain configuration, and then choose **Confirm**\.
 
-### Creating Amazon ES Domains \(AWS CLI\)<a name="es-createdomains-cli"></a>
+### Creating Amazon ES domains \(AWS CLI\)<a name="es-createdomains-cli"></a>
 
-Instead of creating an Amazon ES domain by using the console, you can use the AWS CLI\. For syntax, see Amazon Elasticsearch Service in the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
+Instead of creating an Amazon ES domain by using the console, you can use the AWS CLI\. For syntax, see Amazon Elasticsearch Service in the [AWS CLI command reference](https://docs.aws.amazon.com/cli/latest/reference/es/index.html)\.
 
-#### Example Commands<a name="es-createdomains-cli-examples"></a>
+#### Example commands<a name="es-createdomains-cli-examples"></a>
 
 This first example demonstrates the following Amazon ES domain configuration:
 + Creates an Amazon ES domain named *mylogs* with Elasticsearch version 5\.5
@@ -158,15 +158,15 @@ aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 
 **Note**  
 If you attempt to create an Amazon ES domain and a domain with the same name already exists, the CLI does not report an error\. Instead, it returns details for the existing domain\.
 
-### Creating Amazon ES Domains \(AWS SDKs\)<a name="es-createdomains-sdk"></a>
+### Creating Amazon ES domains \(AWS SDKs\)<a name="es-createdomains-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES Configuration API Reference](es-configuration-api.md), including `CreateElasticsearchDomain`\. For sample code, see [Using the AWS SDKs with Amazon Elasticsearch Service](es-configuration-samples.md)\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon ES configuration API reference](es-configuration-api.md), including `CreateElasticsearchDomain`\. For sample code, see [Using the AWS SDKs to interact with Amazon Elasticsearch Service](es-configuration-samples.md)\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
-## Configuring Access Policies<a name="es-createdomain-configure-access-policies"></a>
+## Configuring access policies<a name="es-createdomain-configure-access-policies"></a>
 
-Amazon Elasticsearch Service offers several ways to configure access to your Amazon ES domains\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md) and [Fine\-Grained Access Control in Amazon Elasticsearch Service](fgac.md)\.
+Amazon Elasticsearch Service offers several ways to configure access to your Amazon ES domains\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md) and [Fine\-grained access control in Amazon Elasticsearch Service](fgac.md)\.
 
-The console provides preconfigured access policies that you can customize for the specific needs of your domain\. You also can import access policies from other Amazon ES domains\. For information about how these access policies interact with VPC access, see [About Access Policies on VPC Domains](es-vpc.md#es-vpc-security)\.
+The console provides preconfigured access policies that you can customize for the specific needs of your domain\. You also can import access policies from other Amazon ES domains\. For information about how these access policies interact with VPC access, see [About access policies on VPC domains](es-vpc.md#es-vpc-security)\.
 
 **To configure access policies \(console\)**
 
@@ -182,12 +182,12 @@ The console provides preconfigured access policies that you can customize for th
 
 1. Choose **Submit**\.
 
-## Advanced Options<a name="es-createdomain-configure-advanced-options"></a>
+## Advanced options<a name="es-createdomain-configure-advanced-options"></a>
 
 Use advanced options to configure the following:
 
 **rest\.action\.multi\.allow\_explicit\_index**  
-Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to `false` prevents users from bypassing access control for subresources\. By default, the value is `true`\. For more information, see [Advanced Options and API Considerations](es-ac.md#es-ac-advanced)\.
+Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to `false` prevents users from bypassing access control for subresources\. By default, the value is `true`\. For more information, see [Advanced options and API considerations](es-ac.md#es-ac-advanced)\.
 
 **indices\.fielddata\.cache\.size**  
 Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is 20% of the JVM heap\.  

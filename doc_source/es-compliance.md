@@ -1,6 +1,6 @@
-# Compliance Validation for Amazon Elasticsearch Service<a name="es-compliance"></a>
+# Compliance validation for Amazon Elasticsearch Service<a name="es-compliance"></a>
 
-Third\-party auditors assess the security and compliance of Amazon Elasticsearch Service as part of multiple AWS compliance programs\. These include SOC, PCI, and HIPAA\.
+Third\-party auditors assess the security and compliance of Amazon Elasticsearch Service \(Amazon ES\) as part of multiple AWS compliance programs\. These programs include SOC, PCI, and HIPAA\.
 
 For a list of AWS services in scope of specific compliance programs, see [AWS Services in Scope by Compliance Program](http://aws.amazon.com/compliance/services-in-scope/)\. For general information, see [AWS Compliance Programs](http://aws.amazon.com/compliance/programs/)\.
 

@@ -1,6 +1,6 @@
-# VPC Support for Amazon Elasticsearch Service Domains<a name="es-vpc"></a>
+# Launching your Amazon Elasticsearch Service domains using a VPC<a name="es-vpc"></a>
 
-A *virtual private cloud* \(VPC\) is a virtual network that is dedicated to your AWS account\. It's logically isolated from other virtual networks in the AWS Cloud\. You can launch AWS resources, such as Amazon ES domains, into your VPC\.
+You can launch AWS resources, such as Amazon Elasticsearch Service \(Amazon ES\) domains, into a *virtual private cloud* \(VPC\)\. A VPC is a virtual network that's dedicated to your AWS account\. It's logically isolated from other virtual networks in the AWS Cloud\. 
 
 Placing an Amazon ES domain within a VPC enables secure communication between Amazon ES and other services within the VPC without the need for an internet gateway, NAT device, or VPN connection\. All traffic remains securely within the AWS Cloud\. Because of their logical isolation, domains that reside within a VPC have an extra layer of security when compared to domains that use public endpoints\.
 
@@ -25,12 +25,12 @@ Amazon ES doesn't support IPv6 addresses with a VPC\. You can use a VPC that has
 
 **Topics**
 + [Limitations](#es-vpc-limitations)
-+ [About Access Policies on VPC Domains](#es-vpc-security)
-+ [Testing VPC Domains](#kibana-test)
-+ [Before You Begin: Prerequisites for VPC Access](#es-prerequisites-vpc-endpoints)
-+ [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)
-+ [Service\-Linked Role for VPC Access](#es-enabling-slr)
-+ [Migrating from Public Access to VPC Access](#es-migrating-public-to-vpc)
++ [About access policies on VPC domains](#es-vpc-security)
++ [Testing VPC domains](#kibana-test)
++ [Before you begin: prerequisites for VPC access](#es-prerequisites-vpc-endpoints)
++ [Reserving IP addresses in a VPC subnet](#es-reserving-ip-vpc-endpoints)
++ [Service\-linked role for VPC access](#es-enabling-slr)
++ [Migrating from public access to VPC access](#es-migrating-public-to-vpc)
 
 ## Limitations<a name="es-vpc-limitations"></a>
 
@@ -40,9 +40,9 @@ Currently, operating an Amazon ES domain within a VPC has the following limitati
 + You can't launch your domain within a VPC that uses dedicated tenancy\. You must use a VPC with tenancy set to **Default**\.
 + After you place a domain within a VPC, you can't move it to a different VPC\. However, you can change the subnets and security group settings\.
 + Compared to public domains, VPC domains display less information in the Amazon ES console\. Specifically, the **Cluster health** tab does not include shard information, and the **Indices** tab is not present at all\.
-+ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server or transit gateway\. To learn more, see [About Access Policies on VPC Domains](#es-vpc-security), the [Amazon VPC User Guide](https://docs.aws.amazon.com/vpc/latest/userguide/), and [Controlling Access to Kibana](es-kibana.md#es-kibana-access)\.
++ To access the default installation of Kibana for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server or transit gateway\. To learn more, see [About access policies on VPC domains](#es-vpc-security), the [Amazon VPC User Guide](https://docs.aws.amazon.com/vpc/latest/userguide/), and [Controlling access to Kibana](es-kibana.md#es-kibana-access)\.
 
-## About Access Policies on VPC Domains<a name="es-vpc-security"></a>
+## About access policies on VPC domains<a name="es-vpc-security"></a>
 
 Placing your Amazon ES domain within a VPC provides an inherent, strong layer of security\. When you create a domain with public access, the endpoint takes the following form:
 
@@ -58,7 +58,7 @@ When you create a domain with VPC access, the endpoint *looks* similar to a publ
 https://vpc-domain-name-identifier.region.es.amazonaws.com
 ```
 
-If you try to access the endpoint in a web browser, however, you might find that the request times out\. To perform even basic `GET` requests, your computer must be able to connect to the VPC\. This connection often takes the form of a VPN, transit gateway, managed network, or proxy server\. For details on the various forms it can take, see [Scenarios and Examples](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\. For a development\-focused example, see [Testing VPC Domains](#kibana-test)\.
+If you try to access the endpoint in a web browser, however, you might find that the request times out\. To perform even basic `GET` requests, your computer must be able to connect to the VPC\. This connection often takes the form of a VPN, transit gateway, managed network, or proxy server\. For details on the various forms it can take, see [Scenarios and Examples](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenarios.html) in the *Amazon VPC User Guide*\. For a development\-focused example, see [Testing VPC domains](#kibana-test)\.
 
 In addition to this connectivity requirement, VPCs let you manage access to the domain through [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)\. For many use cases, this combination of security features is sufficient, and you might feel comfortable applying an open access policy to the domain\.
 
@@ -69,7 +69,7 @@ For an additional layer of security, we recommend using fine\-grained access con
 **Note**  
 Because security groups already enforce IP\-based access policies, you can't apply IP\-based access policies to Amazon ES domains that reside within a VPC\. If you use public access, IP\-based policies are still available\.
 
-## Testing VPC Domains<a name="kibana-test"></a>
+## Testing VPC domains<a name="kibana-test"></a>
 
 The enhanced security of a VPC can make connecting to your domain and running basic tests a real challenge\. If you already have an Amazon ES VPC domain and would rather not create a VPN server, try the following process:
 
@@ -108,7 +108,7 @@ The enhanced security of a VPC can make connecting to your domain and running ba
 **Tip**  
 If you encounter curl errors due to a certificate mismatch, try the `--insecure` flag\.
 
-## Before You Begin: Prerequisites for VPC Access<a name="es-prerequisites-vpc-endpoints"></a>
+## Before you begin: prerequisites for VPC access<a name="es-prerequisites-vpc-endpoints"></a>
 
 Before you can enable a connection between a VPC and your new Amazon ES domain, you must do the following:
 + **Create a VPC**
@@ -116,9 +116,9 @@ Before you can enable a connection between a VPC and your new Amazon ES domain, 
   To create your VPC, you can use the Amazon VPC console, the AWS CLI, or one of the AWS SDKs\. For more information, see [Working with VPCs](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html) in the *Amazon VPC User Guide*\. If you already have a VPC, you can skip this step\.
 + **Reserve IP addresses **
 
-  Amazon ES enables the connection of a VPC to a domain by placing network interfaces in a subnet of the VPC\. Each network interface is associated with an IP address\. You must reserve a sufficient number of IP addresses in the subnet for the network interfaces\. For more information, see [Reserving IP Addresses in a VPC Subnet](#es-reserving-ip-vpc-endpoints)\. 
+  Amazon ES enables the connection of a VPC to a domain by placing network interfaces in a subnet of the VPC\. Each network interface is associated with an IP address\. You must reserve a sufficient number of IP addresses in the subnet for the network interfaces\. For more information, see [Reserving IP addresses in a VPC subnet](#es-reserving-ip-vpc-endpoints)\. 
 
-## Reserving IP Addresses in a VPC Subnet<a name="es-reserving-ip-vpc-endpoints"></a>
+## Reserving IP addresses in a VPC subnet<a name="es-reserving-ip-vpc-endpoints"></a>
 
 Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or multiple subnets of the VPC if you enable [multiple Availability Zones](es-managedomains-multiaz.md)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
 
@@ -135,9 +135,9 @@ Here is the basic formula: The number of IP addresses reserved in each subnet is
 When you create the domain, Amazon ES reserves the IP addresses, uses some for the domain, and reserves the rest for [blue/green deployments](es-managedomains-configuration-changes.md)\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console\. The **Description** column shows which Amazon ES domain the network interface is associated with\.
 
 **Tip**  
-We recommend that you create dedicated subnets for the Amazon ES reserved IP addresses\. By using dedicated subnets, you avoid overlap with other applications and services and ensure that you can reserve additional IP addresses if you need to scale your cluster in the future\. To learn more, see [Creating a Subnet in Your VPC](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet)\.
+We recommend that you create dedicated subnets for the Amazon ES reserved IP addresses\. By using dedicated subnets, you avoid overlap with other applications and services and ensure that you can reserve additional IP addresses if you need to scale your cluster in the future\. To learn more, see [Creating a subnet in uour VPC](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet)\.
 
-## Service\-Linked Role for VPC Access<a name="es-enabling-slr"></a>
+## Service\-linked role for VPC access<a name="es-enabling-slr"></a>
 
 A [service\-linked role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role) is a unique type of IAM role that delegates permissions to a service so that it can create and manage resources on your behalf\. Amazon ES requires a service\-linked role to access your VPC, create the domain endpoint, and place network interfaces in a subnet of your VPC\.
 
@@ -148,8 +148,8 @@ After Amazon ES creates the role, you can view it \(`AWSServiceRoleForAmazonElas
 **Note**  
 If you create a domain that uses a public endpoint, Amazon ES doesn’t need the service\-linked role and doesn't create it\.
 
-For full information on this role's permissions and how to delete it, see [Using Service\-Linked Roles for Amazon ES](slr-es.md)\.
+For full information on this role's permissions and how to delete it, see [Using service\-linked roles to provide Amazon Elasticsearch Service access to resources](slr-es.md)\.
 
-## Migrating from Public Access to VPC Access<a name="es-migrating-public-to-vpc"></a>
+## Migrating from public access to VPC access<a name="es-migrating-public-to-vpc"></a>
 
-When you create a domain, you specify whether it should have a public endpoint or reside within a VPC\. Once created, you cannot switch from one to the other\. Instead, you must create a new domain and either manually reindex or migrate your data\. Snapshots offer a convenient means of migrating data\. For information about taking and restoring snapshots, see [Creating Amazon ES Index Snapshots](es-managedomains-snapshots.md)\.
+When you create a domain, you specify whether it should have a public endpoint or reside within a VPC\. Once created, you cannot switch from one to the other\. Instead, you must create a new domain and either manually reindex or migrate your data\. Snapshots offer a convenient means of migrating data\. For information about taking and restoring snapshots, see [Creating index snapshots in Amazon Elasticsearch Service](es-managedomains-snapshots.md)\.

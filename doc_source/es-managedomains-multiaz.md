@@ -1,6 +1,6 @@
-# Configuring a Multi\-AZ Domain<a name="es-managedomains-multiaz"></a>
+# Configuring a multi\-AZ domain in Amazon Elasticsearch Service<a name="es-managedomains-multiaz"></a>
 
-Each AWS Region is a separate geographic area with multiple, isolated locations known as *Availability Zones*\. To prevent data loss and minimize cluster downtime in the event of a service disruption, you can distribute nodes across two or three Availability Zones in the same Region, a configuration known as *Multi\-AZ*\.
+To prevent data loss and minimize Amazon Elasticsearch Service \(Amazon ES\) cluster downtime in the event of a service disruption, you can distribute nodes across two or three *Availability Zones* in the same Region, a configuration known as Multi\-AZ\. Availability Zones are isolated locations within each AWS Region\.
 
 For domains that run production workloads, we recommend the following configuration:
 + Choose a Region that supports three Availability Zones with Amazon ES\.
@@ -11,7 +11,7 @@ For domains that run production workloads, we recommend the following configurat
 
 The rest of this section provides explanations for and context around these recommendations\.
 
-## Shard Distribution<a name="es-managedomains-za-shards"></a>
+## Shard distribution<a name="es-managedomains-za-shards"></a>
 
 If you enable Multi\-AZ, you should create at least one replica for each index in your cluster\. Without replicas, Amazon ES can't distribute copies of your data to other Availability Zones, which largely defeats the purpose of Multi\-AZ\. Fortunately, the default configuration for any index is a replica count of 1\. As the following diagram shows, Amazon ES makes a best effort to distribute primary shards and their corresponding replica shards to different zones\.
 
@@ -29,7 +29,7 @@ In this situation, Amazon ES has to overload one node in order to distribute the
 
 To avoid these kinds of situations, which can strain individual nodes and hurt performance, we recommend that you choose an instance count that is a multiple of three if you plan to have two or more replicas per index\.
 
-## Dedicated Master Node Distribution<a name="es-managedomains-za-dm"></a>
+## Dedicated master node distribution<a name="es-managedomains-za-dm"></a>
 
 Even if you select two Availability Zones when configuring your domain, Amazon ES automatically distributes [dedicated master nodes](es-managedomains-dedicatedmasternodes.md) across three Availability Zones\. This distribution helps prevent cluster downtime if a zone experiences a service disruption\. If you use the recommended three dedicated master nodes and one Availability Zone goes down, your cluster still has a quorum \(2\) of dedicated master nodes and can elect a new master\. The following diagram demonstrates this configuration\.
 
@@ -41,7 +41,7 @@ This automatic distribution has some notable exceptions:
   + If you chose two Availability Zones for the domain, Amazon ES distributes the dedicated master nodes across two zones\.
 + Not all AWS Regions have three Availability Zones\. In these Regions, you can only configure a domain to use two zones \(and Amazon ES can only distribute dedicated master nodes across two zones\)\.
 
-## Availability Zone Disruptions<a name="es-managedomains-za-summary"></a>
+## Availability zone disruptions<a name="es-managedomains-za-summary"></a>
 
 Availability Zone disruptions are rare, but do occur\. The following table lists different Multi\-AZ configurations and behaviors during a disruption\.
 

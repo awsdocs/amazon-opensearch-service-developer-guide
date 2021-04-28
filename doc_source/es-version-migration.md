@@ -1,11 +1,11 @@
 # Upgrading Elasticsearch<a name="es-version-migration"></a>
 
 **Note**  
-Elasticsearch version upgrades differ from service software updates\. For information on updating the service software for your Amazon ES domain, see [Service Software Updates](es-service-software.md)\.
+Elasticsearch version upgrades differ from service software updates\. For information on updating the service software for your Amazon ES domain, see [Service software updates in Amazon Elasticsearch Service](es-service-software.md)\.
 
-Amazon ES offers in\-place Elasticsearch upgrades for domains that run versions 5\.1 and later\. If you use services like Amazon Kinesis Data Firehose or Amazon CloudWatch Logs to stream data to Amazon ES, check that these services support the newer version of Elasticsearch before migrating\.
+Amazon Elasticsearch Service \(Amazon ES\) offers in\-place Elasticsearch upgrades for domains that run versions 5\.1 and later\. If you use services like Amazon Kinesis Data Firehose or Amazon CloudWatch Logs to stream data to Amazon ES, check that these services support the newer version of Elasticsearch before migrating\.
 
-Currently, Amazon ES supports the following upgrade paths\.
+Currently, Amazon ES supports the following upgrade paths:
 
 
 | From Version | To Version | 
@@ -20,26 +20,26 @@ The upgrade process consists of three steps:
 
 1. **Pre\-upgrade checks** – Amazon ES performs a series of checks for issues that can block an upgrade and doesn't proceed to the next step unless these checks succeed\.
 
-1. **Snapshot** – Amazon ES takes a snapshot of the Elasticsearch cluster and doesn't proceed to the next step unless the snapshot succeeds\. If the upgrade fails, Amazon ES uses this snapshot to restore the cluster to its original state\. For more information about this snapshot, see [Can't Downgrade After Upgrade](aes-handling-errors.md#aes-troubleshooting-upgrade-snapshot)\.
+1. **Snapshot** – Amazon ES takes a snapshot of the Elasticsearch cluster and doesn't proceed to the next step unless the snapshot succeeds\. If the upgrade fails, Amazon ES uses this snapshot to restore the cluster to its original state\. For more information about this snapshot, see [Can't downgrade after upgrade](aes-handling-errors.md#aes-troubleshooting-upgrade-snapshot)\.
 
 1. **Upgrade** – Amazon ES starts the upgrade, which can take from 15 minutes to several hours to complete\. Kibana might be unavailable during some or all of the upgrade\.
 
-## Troubleshooting an Upgrade<a name="upgrade-failures"></a>
+## Troubleshooting an upgrade<a name="upgrade-failures"></a>
 
 In\-place Elasticsearch upgrades require healthy domains\. Your domain might be ineligible for an upgrade or fail to upgrade for a wide variety of reasons\. The following table shows the most common issues\.
 
 
 | Issue | Description | 
 | --- | --- | 
-| Too many shards per node | The 7\.x versions of Elasticsearch have a default setting of no more than 1,000 shards per node\. If a node in your current cluster exceeds this setting, Amazon ES doesn't allow you to upgrade\. See [Maximum Shard Limit](aes-handling-errors.md#aes-troubleshooting-shard-limit) for troubleshooting options\. | 
+| Too many shards per node | The 7\.x versions of Elasticsearch have a default setting of no more than 1,000 shards per node\. If a node in your current cluster exceeds this setting, Amazon ES doesn't allow you to upgrade\. See [Exceeded maximum shard limit](aes-handling-errors.md#aes-troubleshooting-shard-limit) for troubleshooting options\. | 
 | Domain in processing | The domain is in the middle of a configuration change\. Check upgrade eligibility after the operation completes\. | 
-| Red cluster status | One or more indices in the cluster is red\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. | 
+| Red cluster status | One or more indices in the cluster is red\. For troubleshooting steps, see [Red cluster status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. | 
 | High error rate | The Elasticsearch cluster is returning a large number of 5xx errors when attempting to process requests\. This problem is usually the result of too many simultaneous read or write requests\. Consider reducing traffic to the cluster or scaling your domain\. | 
 | Split brain | Split brain means that your Elasticsearch cluster has more than one master node and has split into two clusters that never will rejoin on their own\. You can avoid split brain by using the recommended number of [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\. For help recovering from split brain, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | Master node not found | Amazon ES can't find the cluster's master node\. If your domain uses [multi\-AZ](es-managedomains-multiaz.md), an Availability Zone failure might have caused the cluster to lose quorum and be unable to elect a new [master node](es-managedomains-dedicatedmasternodes.md)\. If the issue does not self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | Too many pending tasks | The master node is under heavy load and has many pending tasks\. Consider reducing traffic to the cluster or scaling your domain\. | 
 | Impaired storage volume | The disk volume of one or more nodes isn't functioning properly\. This issue often occurs alongside other issues, like a high error rate or too many pending tasks\. If it occurs in isolation and doesn't self\-resolve, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
-| KMS key issue | The KMS key that is used to encrypt the domain is either inaccessible or missing\. For more information, see [Monitoring Domains That Encrypt Data at Rest](encryption-at-rest.md#monitoring-ear)\. | 
+| KMS key issue | The KMS key that is used to encrypt the domain is either inaccessible or missing\. For more information, see [Monitoring domains that encrypt data at rest](encryption-at-rest.md#monitoring-ear)\. | 
 | Snapshot in progress | The domain is currently taking a snapshot\. Check upgrade eligibility after the snapshot finishes\. Also check that you can list manual snapshot repositories, list snapshots within those repositories, and take manual snapshots\. If Amazon ES is unable to check whether a snapshot is in progress, upgrades can fail\. | 
 | Snapshot timeout or failure | The pre\-upgrade snapshot took too long to complete or failed\. Check cluster health, and try again\. If the problem persists, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 | Incompatible indices | One or more indices is incompatible with the target Elasticsearch version\. This problem can occur if you migrated the indices from an older version of Elasticsearch, like 2\.3\. Reindex the indices, and try again\. | 
@@ -50,7 +50,7 @@ In\-place Elasticsearch upgrades require healthy domains\. Your domain might be 
 | Cross\-cluster compatibility | You can only upgrade if cross\-cluster compatibility is maintained between the source and destination domains post the upgrade\. During the upgrade process, any incompatible connections are identified\. To proceed with the upgrade, delete the incompatible connections\. | 
 | Other Amazon ES service issue | Issues with Amazon ES itself might cause your domain to display as ineligible for an upgrade\. If none of the preceding conditions apply to your domain and the problem persists for more than a day, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 
-## Starting an Upgrade<a name="starting-upgrades"></a>
+## Starting an upgrade<a name="starting-upgrades"></a>
 
 The upgrade process is irreversible and can't be paused or canceled\. During an upgrade, you can't make configuration changes to the domain\. Before starting an upgrade, double\-check that you want to proceed\. You can use these same steps to perform the pre\-upgrade check without actually starting an upgrade\.
 
@@ -80,13 +80,13 @@ You can use the following operations to identify the right Elasticsearch version
 + `get-upgrade-status` \(`GetUpgradeStatus`\)
 + `get-upgrade-history` \(`GetUpgradeHistory`\)
 
-For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
 
-## Using a Snapshot to Migrate Data<a name="snapshot-based-migration"></a>
+## Using a snapshot to migrate data<a name="snapshot-based-migration"></a>
 
 In\-place upgrades are the easier, faster, and more reliable way to upgrade a domain to a later Elasticsearch version\. Snapshots are a good option if you need to migrate from a pre\-5\.1 version of Elasticsearch or want to migrate to an entirely new cluster\.
 
-The following table shows how to use snapshots to migrate data to a domain that uses a different Elasticsearch version\. For more information about taking and restoring snapshots, see [Creating Amazon ES Index Snapshots](es-managedomains-snapshots.md)\.
+The following table shows how to use snapshots to migrate data to a domain that uses a different Elasticsearch version\. For more information about taking and restoring snapshots, see [Creating index snapshots in Amazon Elasticsearch Service](es-managedomains-snapshots.md)\.
 
 
 ****  

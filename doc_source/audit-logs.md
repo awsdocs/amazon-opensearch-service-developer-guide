@@ -1,11 +1,11 @@
-# Audit Logs for Amazon Elasticsearch Service<a name="audit-logs"></a>
+# Managing audit logs in Amazon Elasticsearch Service<a name="audit-logs"></a>
 
-If your domain uses fine\-grained access control, Amazon Elasticsearch Service offers optional audit logs for your data\. These logs are highly customizable and show a variety of user activity, including failed login attempts and which users accessed certain indices, documents, or fields\. The default configuration tracks a popular set of user actions, but we recommend tailoring the settings to your exact needs\.
+If your Amazon Elasticsearch Service \(Amazon ES\) domain uses fine\-grained access control, you can enable audit logs for your data\. Audit logs are highly customizable and let you track user activity on your Elasticsearch clusters, including authentication success and failures, requests to Elasticsearch, index changes, and incoming search queries\. The default configuration tracks a popular set of user actions, but we recommend tailoring the settings to your exact needs\.
 
 Just like [Elasticsearch application logs and slow logs](es-createdomain-configure-slow-logs.md), Amazon ES publishes audit logs to CloudWatch Logs\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
 
 **Note**  
-To enable audit logs, your user role must be mapped to the `security_manager` role, which gives you access to the `_opendistro/_security` REST API\. To learn more, see [Modifying the Master User](fgac.md#fgac-forget)\.
+To enable audit logs, your user role must be mapped to the `security_manager` role, which gives you access to the `_opendistro/_security` REST API\. To learn more, see [Modifying the master user](fgac.md#fgac-forget)\.
 
 ## Limitations<a name="audit-logs-limitations"></a>
 
@@ -13,12 +13,12 @@ Audit logs have the following limitations:
 + Audit logs don't include cross\-cluster search requests that were rejected by the destination's domain access policy\.
 + The maximum size of each audit log message is 10,000 characters\. The audit log message is truncated if it exceeds this limit\.
 
-## Enabling Audit Logs<a name="audit-log-enabling"></a>
+## Enabling audit logs<a name="audit-log-enabling"></a>
 
 Enabling audit logs is a two\-step process\. First, you must configure your domain to publish audit logs to CloudWatch Logs using the console, AWS CLI, or configuration API\. Then you can tune audit log settings using Kibana or the fine\-grained access control REST API\.
 
 **Important**  
-If you encounter an error while following these steps, see [Can't Enable Audit Logs](aes-handling-errors.md#aes-troubleshooting-audit-logs-error) for troubleshooting information\.
+If you encounter an error while following these steps, see [Can't enable audit logs](aes-handling-errors.md#aes-troubleshooting-audit-logs-error) for troubleshooting information\.
 
 **To enable audit logs for an Amazon ES domain \(console\)**
 
@@ -51,7 +51,7 @@ If you encounter an error while following these steps, see [Can't Enable Audit L
 
 1. Choose **Enable**\.
 
-### Sample CLI Command<a name="audit-log-enabling-cli"></a>
+### Sample CLI command<a name="audit-log-enabling-cli"></a>
 
 The following AWS CLI command enables audit logs on an existing domain:
 
@@ -61,7 +61,7 @@ aws es update-elasticsearch-domain-config --domain-name my-domain --log-publishi
 
 You can also enable audit logs when you create a domain\. For detailed information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.
 
-### Sample Configuration API Request<a name="audit-log-enabling-api"></a>
+### Sample configuration API request<a name="audit-log-enabling-api"></a>
 
 The following request to the configuration API enables audit logs on an existing domain:
 
@@ -77,9 +77,9 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/my-domain/config
 }
 ```
 
-For detailed information, see [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+For detailed information, see [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
 
-## Audit Log Kibana UI<a name="audit-log-kibana-ui"></a>
+## Configuring audit logs in Kibana<a name="audit-log-kibana-ui"></a>
 
 After you enable audit logs, configure them to match your needs\.
 
@@ -93,7 +93,7 @@ After you enable audit logs, configure them to match your needs\.
 
 The Kibana UI offers full control of audit log settings under **General settings** and **Compliance settings**\. For a description of all configuration options, see [Audit Log Settings](#audit-log-settings)\.
 
-## Audit Log Layers and Categories<a name="audit-log-layers"></a>
+## Audit log layers and categories<a name="audit-log-layers"></a>
 
 Cluster communication occurs over two separate *layers*: the REST layer and the transport layer\.
 + The REST layer covers communication with HTTP clients such as curl, Logstash, Kibana, the [Java high\-level REST client](es-request-signing.md#es-request-signing-java), the Python [Requests](https://2.python-requests.org/) library—all HTTP requests that arrive at the cluster\.
@@ -126,11 +126,11 @@ You can have any combination of categories and message attributes\. For example,
 + GRANTED\_PRIVILEGE on transport layer \(authorization\)
 + COMPLIANCE\_DOC\_WRITE \(document written to an index\)
 
-## Audit Log Settings<a name="audit-log-settings"></a>
+## Audit log settings<a name="audit-log-settings"></a>
 
 Audit logs have numerous configuration options\.
 
-### General Settings<a name="audit-logs-general-settings"></a>
+### General settings<a name="audit-logs-general-settings"></a>
 
 General settings let you enable or disable individual categories or entire layers\. We highly recommend leaving GRANTED\_PRIVILEGES and AUTHENTICATED as excluded categories\. Otherwise, these categories are logged for every valid request to the cluster\.
 
@@ -159,7 +159,7 @@ Use ignore settings to exclude a set of users or API paths:
 |  Ignored users  |  ignore\_users  |  Specify users that you want to exclude\.  | 
 |  Ignored requests  |  ignore\_requests  |  Specify request patterns that you want to exclude\.  | 
 
-### Compliance Settings<a name="audit-logs-compliance-settings"></a>
+### Compliance settings<a name="audit-logs-compliance-settings"></a>
 
 Compliance settings let you tune for index, document, or field\-level access\.
 
@@ -187,7 +187,7 @@ You can specify the following settings for write events\.
 |  Ignored users  |  write\_ignore\_users  |  Do not include certain users for write events\.  | 
 |  Watch indices  |  write\_watched\_indices  |  Specify the indices or index patters to watch for write events\. Adding watched fields generates one log per document access, which can dramatically increase the size of the audit logs\.  | 
 
-## Audit Log Example<a name="audit-log-example"></a>
+## Audit log example<a name="audit-log-example"></a>
 
 This section includes an example configuration, search request, and the resulting audit log for all read and write events of an index\.
 
@@ -301,7 +301,7 @@ To include the request body, return to **Compliance settings** in Kibana and dis
 
 For a description of each audit log field, see [Audit log field reference](https://opendistro.github.io/for-elasticsearch-docs/docs/security/audit-logs/field-reference/)\. For information on searching and analyzing your audit log data, see [Analyzing Log Data with CloudWatch Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) in the *Amazon CloudWatch Logs User Guide*\. 
 
-## Audit Log REST API<a name="audit-log-rest-api"></a>
+## Configuring audit logs using the REST API<a name="audit-log-rest-api"></a>
 
 We recommend using Kibana to configure audit logs, but you can also use the fine\-grained access control REST API\. This section contains a sample request\. Full documentation on the REST API is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/api/)\.
 

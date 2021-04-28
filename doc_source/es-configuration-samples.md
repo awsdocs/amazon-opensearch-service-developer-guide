@@ -1,9 +1,9 @@
-# Using the AWS SDKs with Amazon Elasticsearch Service<a name="es-configuration-samples"></a>
+# Using the AWS SDKs to interact with Amazon Elasticsearch Service<a name="es-configuration-samples"></a>
 
-This section includes examples of how to use the AWS SDKs to interact with the Amazon Elasticsearch Service configuration API\. These code samples show how to create, update, and delete Amazon ES domains\.
+This section includes examples of how to use the AWS SDKs to interact with the Amazon Elasticsearch Service \(Amazon ES\) configuration API\. These code samples show how to create, update, and delete Amazon ES domains\.
 
 **Important**  
-For examples of how to interact with the Elasticsearch APIs, such as `_index`, `_bulk`, `_search`, and `_snapshot`, see [Signing HTTP Requests to Amazon Elasticsearch Service](es-request-signing.md)\.
+For examples of how to interact with the Elasticsearch APIs, such as `_index`, `_bulk`, `_search`, and `_snapshot`, see [Signing HTTP requests to Amazon Elasticsearch Service](es-request-signing.md)\.
 
 ## Java<a name="es-configuration-samples-java"></a>
 

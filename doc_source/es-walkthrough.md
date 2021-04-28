@@ -1,4 +1,4 @@
-# Visualizing Customer Support Calls with Amazon Elasticsearch Service and Kibana<a name="es-walkthrough"></a>
+# Visualizing customer support calls with Amazon Elasticsearch Service and Kibana<a name="es-walkthrough"></a>
 
 This chapter is a full walkthrough of the following situation: a business receives some number of customer support calls and wants to analyze them\. What is the subject of each call? How many were positive? How many were negative? How can managers search or review the the transcripts of these calls?
 
@@ -27,13 +27,13 @@ In general, performing the steps in this walkthrough should cost less than $2\. 
   To learn more, see [Amazon Comprehend Pricing](https://aws.amazon.com/comprehend/pricing/)\.
 
 **Topics**
-+ [Step 1: Configure Prerequisites](#es-walkthrough-prereq)
-+ [Step 2: Copy Sample Code](#es-walkthrough-script)
-+ [\(Optional\) Step 3: Add Sample Data](#es-walkthrough-sample-data)
-+ [Step 4: Analyze and Visualize Your Data](#es-walkthrough-analysis)
-+ [Step 5: Clean Up Resources and Next Steps](#es-walkthrough-next-steps)
++ [Step 1: Configure prerequisites](#es-walkthrough-prereq)
++ [Step 2: Copy sample code](#es-walkthrough-script)
++ [\(Optional\) Step 3: Index sample data](#es-walkthrough-sample-data)
++ [Step 4: Analyze and visualize your data](#es-walkthrough-analysis)
++ [Step 5: Clean up resources and next steps](#es-walkthrough-next-steps)
 
-## Step 1: Configure Prerequisites<a name="es-walkthrough-prereq"></a>
+## Step 1: Configure prerequisites<a name="es-walkthrough-prereq"></a>
 
 Before proceeding, you must have the following resources\.
 
@@ -43,7 +43,7 @@ Before proceeding, you must have the following resources\.
 | Prerequisite | Description | 
 | --- | --- | 
 | Amazon S3 Bucket | For more information, see [Creating a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. | 
-| Amazon ES Domain | The destination for data\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
+| Amazon ES Domain | The destination for data\. For more information, see [Creating Amazon ES domains](es-createupdatedomains.md#es-createdomains)\. | 
 
 If you don't already have these resources, you can create them using the following AWS CLI commands:
 
@@ -58,7 +58,7 @@ aws es create-elasticsearch-domain --domain-name my-transcribe-test --elasticsea
 **Note**  
 These commands use the `us-west-2` region, but you can use any region that Amazon Comprehend supports\. To learn more, see the [AWS General Reference](https://docs.aws.amazon.com/general/latest/gr/rande.html#comprehend_region)\.
 
-## Step 2: Copy Sample Code<a name="es-walkthrough-script"></a>
+## Step 2: Copy sample code<a name="es-walkthrough-script"></a>
 
 1. Copy and paste the following Python 3 sample code into a new file named `call-center.py`:
 
@@ -236,7 +236,7 @@ To improve the quality of the transcription, you can configure a [custom vocabul
 **Tip**  
 [LibriVox](https://librivox.org/) has public domain audiobooks that you can use for testing\.
 
-## \(Optional\) Step 3: Add Sample Data<a name="es-walkthrough-sample-data"></a>
+## \(Optional\) Step 3: Index sample data<a name="es-walkthrough-sample-data"></a>
 
 If you don't have a bunch of call recordings handy—and who does?—you can [index](es-indexing.md) the sample documents in [sample\-calls\.zip](samples/sample-calls.zip), which are comparable to what `call-center.py` produces\.
 
@@ -309,7 +309,7 @@ If you don't have a bunch of call recordings handy—and who does?—you can [in
    }
    ```
 
-## Step 4: Analyze and Visualize Your Data<a name="es-walkthrough-analysis"></a>
+## Step 4: Analyze and visualize your data<a name="es-walkthrough-analysis"></a>
 
 Now that you have some data in Amazon ES, you can visualize it using Kibana\.
 
@@ -347,9 +347,9 @@ Now that you have some data in Amazon ES, you can visualize it using Kibana\.
 1. Now that you have three visualizations, you can add them to a Kibana dashboard\. Choose **Dashboard**, create a dashboard, and add your visualizations\.  
 ![\[Sample Kibana dashboard.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/dashboard-2.png)
 
-## Step 5: Clean Up Resources and Next Steps<a name="es-walkthrough-next-steps"></a>
+## Step 5: Clean up resources and next steps<a name="es-walkthrough-next-steps"></a>
 
-To avoid unnecessary charges, delete the S3 bucket and Amazon ES domain\. To learn more, see [Delete a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html#delete-bucket) in the *Amazon Simple Storage Service Developer Guide* and [Delete an Amazon ES Domain](es-gsg-deleting.md) in this guide\.
+To avoid unnecessary charges, delete the S3 bucket and Amazon ES domain\. To learn more, see [Delete a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html#delete-bucket) in the *Amazon Simple Storage Service Developer Guide* and [Delete an Amazon ES domain](es-gsg-deleting.md) in this guide\.
 
 Transcripts require much less disk space than MP3 files\. You might be able to shorten your MP3 retention window—for example, from three months of call recordings to one month—retain years of transcripts, and still save on storage costs\.
 

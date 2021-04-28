@@ -12,9 +12,9 @@ Because the *movies* domain from this tutorial is for test purposes, make sure t
 
 1. Choose **Delete the domain** and then choose **Delete**\.
 
-## Next Steps<a name="es-gsg-nextsteps-document"></a>
+## Next steps<a name="es-gsg-nextsteps-document"></a>
 
 Now that you know how to create a domain and index data, you might want to try some of the following exercises:
-+ Learn about more advanced options for creating a domain\. For more information, see [Creating and Managing Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\.
-+ Discover how to manage the indices in your domain\. For more information, see [Managing Indices](managing-indices.md)\.
-+ Try out one of the tutorials for working with Amazon Elasticsearch Service\. For more information, see [Amazon Elasticsearch Service Tutorials](tutorials.md)\.
++ Learn about more advanced options for creating a domain\. For more information, see [Creating and managing Amazon Elasticsearch Service domains](es-createupdatedomains.md)\.
++ Discover how to manage the indices in your domain\. For more information, see [Managing indices in Amazon Elasticsearch Service](managing-indices.md)\.
++ Try out one of the tutorials for working with Amazon Elasticsearch Service\. For more information, see [Amazon Elasticsearch service tutorials](tutorials.md)\.

@@ -6,6 +6,21 @@ Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated 
 
 In Elasticsearch, warm indices behave just like any other index\. You can query them using the same APIs or use them to create dashboards in Kibana\.
 
+**Topics**
++ [Prerequisites](#ultrawarm-pp)
++ [UltraWarm storage requirements and performance considerations](#ultrawarm-calc)
++ [UltraWarm pricing](#ultrawarm-pricing)
++ [Enabling UltraWarm](#ultrawarm-enable)
++ [Migrating indices to UltraWarm storage](#ultrawarm-migrating)
++ [Automating migrations](#ultrawarm-ism)
++ [Migration tuning](#ultrawarm-settings)
++ [Cancelling migrations](#ultrawarm-cancel)
++ [Listing hot and warm indices](#ultrawarm-es-api)
++ [Returning warm indices to hot storage](#ultrawarm-migrating-back)
++ [Restoring warm indices from automated snapshots](#ultrawarm-snapshot)
++ [Manual snapshots of warm indices](#ultrawarm-manual-snapshot)
++ [Disabling UltraWarm](#ultrawarm-disable)
+
 ## Prerequisites<a name="ultrawarm-pp"></a>
 
 UltraWarm has a few important prerequisites:
@@ -14,11 +29,11 @@ UltraWarm has a few important prerequisites:
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use warm storage\.
 + If the domain uses [fine\-grained access control](fgac.md), users must be mapped to the `ultrawarm_manager` role in Kibana to make UltraWarm API calls\.
 
-## UltraWarm Storage Requirements and Performance Considerations<a name="ultrawarm-calc"></a>
+## UltraWarm storage requirements and performance considerations<a name="ultrawarm-calc"></a>
 
-As covered in [Calculating Storage Requirements](sizing-domains.md#aes-bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and Amazon ES reserved space\. For example, a 20 GiB primary shard with one replica shard requires roughly 53 GiB of hot storage\.
+As covered in [Calculating storage requirements](sizing-domains.md#aes-bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and Amazon ES reserved space\. For example, a 20 GiB primary shard with one replica shard requires roughly 53 GiB of hot storage\.
 
-Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 20 GiB shard requires 20 GiB of warm storage\. If you provision an `ultrawarm1.large.elasticsearch` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm Storage Limits](aes-limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
+Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 20 GiB shard requires 20 GiB of warm storage\. If you provision an `ultrawarm1.large.elasticsearch` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm storage limits](aes-limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
 
 With UltraWarm, we still recommend a maximum shard size of 50 GiB\. The [number of CPU cores and amount of RAM allocated to each UltraWarm instance type](https://aws.amazon.com/elasticsearch-service/pricing/#UltraWarm_pricing) gives you an idea of the number of shards they can simultaneously search\.
 
@@ -26,7 +41,7 @@ For example, each `ultrawarm1.medium.elasticsearch` instance has two CPU cores a
 
 If your searches are broad or frequent, consider leaving the indices in hot storage\. Just like any other Elasticsearch workload, the most important step to determining if UltraWarm meets your needs is to perform representative client testing using a realistic dataset\.
 
-## UltraWarm Pricing<a name="ultrawarm-pricing"></a>
+## UltraWarm pricing<a name="ultrawarm-pricing"></a>
 
 With hot storage, you pay for what you provision\. Some instances require an attached Amazon EBS volume, while others include an instance store\. Whether that storage is empty or full, you pay the same price\.
 
@@ -39,9 +54,9 @@ The console is the simplest way to create a domain that uses warm storage\. Whil
 You can also use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](es-configuration-api.md) to enable UltraWarm, specifically the `WarmEnabled`, `WarmCount`, and `WarmType` options in `ElasticsearchClusterConfig`\.
 
 **Note**  
-Domains support a maximum number of warm nodes\. For details, see [Amazon Elasticsearch Service Limits](aes-limits.md)\.
+Domains support a maximum number of warm nodes\. For details, see [Amazon Elasticsearch Service limits](aes-limits.md)\.
 
-### Sample CLI Command<a name="ultrawarm-sample-cli"></a>
+### Sample CLI command<a name="ultrawarm-sample-cli"></a>
 
 The following AWS CLI command creates a domain with three data nodes, three dedicated master nodes, and six warm nodes with a restrictive access policy:
 
@@ -51,7 +66,7 @@ aws es create-elasticsearch-domain --domain-name my-domain --elasticsearch-clust
 
 For detailed information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.
 
-### Sample Configuration API Request<a name="ultrawarm-sample-config-api"></a>
+### Sample configuration API request<a name="ultrawarm-sample-config-api"></a>
 
 The following request to the configuration API creates a domain with three data nodes, three dedicated master nodes, and six warm nodes with all encryption features enabled and a restrictive access policy:
 
@@ -93,9 +108,9 @@ POST https://es.us-east-2.amazonaws.com/2015-01-01/es/domain
 }
 ```
 
-For detailed information, see [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+For detailed information, see [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
 
-## Migrating Indices to UltraWarm Storage<a name="ultrawarm-migrating"></a>
+## Migrating indices to UltraWarm storage<a name="ultrawarm-migrating"></a>
 
 If you finish writing to an index and no longer need the fastest possible search performance, migrate it from hot to warm:
 
@@ -215,11 +230,11 @@ Indices in warm storage are read\-only unless you [return them to hot storage](#
 }
 ```
 
-## Automating Migrations<a name="ultrawarm-ism"></a>
+## Automating migrations<a name="ultrawarm-ism"></a>
 
-We recommend using [Index State Management](ism.md) to automate the migration process after an index reaches a certain age or meets other conditions\. The sample policy [here](ism.md#ism-example) demonstrates that workflow\.
+We recommend using [Index State Management in Amazon Elasticsearch Service](ism.md) to automate the migration process after an index reaches a certain age or meets other conditions\. The sample policy [here](ism.md#ism-example) demonstrates that workflow\.
 
-## Migration Tuning<a name="ultrawarm-settings"></a>
+## Migration tuning<a name="ultrawarm-settings"></a>
 
 Index migrations to UltraWarm storage require a force merge\. Each Elasticsearch index is composed of some number of shards, and each shard is composed of some number of Lucene segments\. The force merge operation purges documents that were marked for deletion and conserves disk space\. By default, UltraWarm merges indices into one segment\.
 
@@ -242,7 +257,7 @@ PUT my-index/_settings
 
 To check how long this stage of the migration process takes, monitor the `HotToWarmMigrationForceMergeLatency` [metric](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-uw)\.
 
-## Cancelling Migrations<a name="ultrawarm-cancel"></a>
+## Cancelling migrations<a name="ultrawarm-cancel"></a>
 
 UltraWarm handles migrations sequentially, in a queue\. If a migration is in the queue, but has not yet started, you can remove it from the queue using the following request:
 
@@ -252,7 +267,7 @@ POST _ultrawarm/migration/_cancel/my-index
 
 If your domain uses fine\-grained access control, you must have the `indices:admin/ultrawarm/migration/cancel` permission to make this request\.
 
-## Listing Hot and Warm Indices<a name="ultrawarm-es-api"></a>
+## Listing hot and warm indices<a name="ultrawarm-es-api"></a>
 
 UltraWarm adds two additional options, similar to `_all`, to help manage hot and warm indices\. For a list of all warm or hot indices, make the following requests:
 
@@ -268,7 +283,7 @@ _cat/indices/_warm
 _cluster/state/_all/_hot
 ```
 
-## Returning Warm Indices to Hot Storage<a name="ultrawarm-migrating-back"></a>
+## Returning warm indices to hot storage<a name="ultrawarm-migrating-back"></a>
 
 If you need to write to an index again, migrate it back to hot storage:
 
@@ -280,7 +295,7 @@ You can have up to 10 simultaneous migrations from warm to hot storage\. To chec
 
 After the migration finishes, check the index settings to make sure they meet your needs\. Indices return to hot storage with one replica\.
 
-## Restoring Warm Indices from Automated Snapshots<a name="ultrawarm-snapshot"></a>
+## Restoring warm indices from automated snapshots<a name="ultrawarm-snapshot"></a>
 
 In addition to the standard repository for automated snapshots, UltraWarm adds a second repository for warm indices, `cs-ultrawarm`\. Each snapshot in this repository contains only one index\. If you delete a warm index, its snapshot remains in the `cs-ultrawarm` repository for 14 days, just like any other automated snapshot\.
 
@@ -320,7 +335,7 @@ When you restore a snapshot from `cs-ultrawarm`, it restores to warm storage, no
 
    UltraWarm ignores any index settings you specify in this restore request, but you can specify options like `rename_pattern` and `rename_replacement`\. For a summary of Elasticsearch snapshot restore options, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/snapshot-restore/#restore-snapshots)\.
 
-## Manual Snapshots of Warm Indices<a name="ultrawarm-manual-snapshot"></a>
+## Manual snapshots of warm indices<a name="ultrawarm-manual-snapshot"></a>
 
 You *can* take manual snapshots of warm indices, but we don't recommend it\. The automated `cs-ultrawarm` repository already contains a snapshot for each warm index, taken during the migration, at no additional charge\.
 

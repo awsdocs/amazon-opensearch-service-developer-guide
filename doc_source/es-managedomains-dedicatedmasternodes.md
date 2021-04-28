@@ -1,6 +1,6 @@
-# Dedicated Master Nodes<a name="es-managedomains-dedicatedmasternodes"></a>
+# Dedicated master nodes in Amazon Elasticsearch Service<a name="es-managedomains-dedicatedmasternodes"></a>
 
-Amazon Elasticsearch Service uses *dedicated master nodes* to increase cluster stability\. A dedicated master node performs cluster management tasks, but does not hold data or respond to data upload requests\. This offloading of cluster management tasks increases the stability of your domain\. Just like all other node types, you pay an hourly rate for each dedicated master node\.
+Amazon Elasticsearch Service \(Amazon ES\) uses *dedicated master nodes* to increase cluster stability\. A dedicated master node performs cluster management tasks, but does not hold data or respond to data upload requests\. This offloading of cluster management tasks increases the stability of your domain\. Just like all other node types, you pay an hourly rate for each dedicated master node\.
 
 We recommend that you add **three** dedicated master nodes to each production Amazon ES domain\. Never choose an even number of dedicated master nodes\.
 
@@ -49,6 +49,6 @@ Although dedicated master nodes don't process search and query requests, their s
 |  10–30  |  `c5.xlarge.elasticsearch`  | 
 | 30–75 |  `c5.2xlarge.elasticsearch`  | 
 |  75–200  |  `r5.4xlarge.elasticsearch`  | 
-+ For information about how certain configuration changes can affect dedicated master nodes, see [Configuration Changes](es-managedomains-configuration-changes.md)\.
-+ For clarification on instance count limits, see [Cluster and Instance Limits](aes-limits.md#clusterresource)\.
++ For information about how certain configuration changes can affect dedicated master nodes, see [Making configuration changes in Amazon ES](es-managedomains-configuration-changes.md)\.
++ For clarification on instance count limits, see [Cluster and instance limits](aes-limits.md#clusterresource)\.
 + For more information about specific instance types, including vCPU, memory, and pricing, see [Amazon Elasticsearch Instance Prices](https://aws.amazon.com/elasticsearch-service/pricing/)\.

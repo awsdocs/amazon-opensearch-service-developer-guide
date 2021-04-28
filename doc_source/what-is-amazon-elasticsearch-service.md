@@ -10,10 +10,10 @@ You can use the Amazon ES console to set up and configure a domain in minutes\. 
 
 **Topics**
 + [Features of Amazon Elasticsearch Service](#what-is-aes-features)
-+ [Supported Elasticsearch Versions](#aes-choosing-version)
++ [Supported Elasticsearch versions](#aes-choosing-version)
 + [Pricing for Amazon Elasticsearch Service](#aes-pricing)
-+ [Getting Started with Amazon Elasticsearch Service](#aes-get-started)
-+ [Related Services](#aes-related-services)
++ [Getting started with Amazon Elasticsearch Service](#aes-get-started)
++ [Related services](#aes-related-services)
 
 ## Features of Amazon Elasticsearch Service<a name="what-is-aes-features"></a>
 
@@ -50,10 +50,10 @@ Amazon ES includes the following features:
 + Integration with Amazon S3, Amazon Kinesis, and Amazon DynamoDB for loading streaming data into Amazon ES
 + Alerts from Amazon SNS when your data exceeds certain thresholds
 
-## Supported Elasticsearch Versions<a name="aes-choosing-version"></a>
+## Supported Elasticsearch versions<a name="aes-choosing-version"></a>
 
 Amazon ES currently supports the following Elasticsearch versions:
-+ 7\.9, 7\.8, 7\.7, 7\.4, 7\.1
++ 7\.10, 7\.9, 7\.8, 7\.7, 7\.4, 7\.1
 + 6\.8, 6\.7, 6\.5, 6\.4, 6\.3, 6\.2, 6\.0
 + 5\.6, 5\.5, 5\.3, 5\.1
 + 2\.3
@@ -65,7 +65,7 @@ Compared to earlier versions of Elasticsearch, the 7\.*x* and 6\.*x* versions of
 + **Vega visualizations** – Kibana 6\.2 and later versions support the [Vega](https://vega.github.io/vega/) visualization language, which lets you make context\-aware Elasticsearch queries, combine multiple data sources into a single graph, add user interactivity to graphs, and much more\.
 + **Java high\-level REST client** – Compared to the low\-level client, this client offers a simplified development experience and supports most Elasticsearch APIs\. For a code example, see [Signing HTTP Requests](es-request-signing.md#es-request-signing-java)\.
 
-For more information, see [Supported Elasticsearch Operations](aes-supported-es-operations.md), [Features by Elasticsearch Version](aes-features-by-version.md), and [Plugins by Elasticsearch Version](aes-supported-plugins.md)\.
+For more information, see [Supported Elasticsearch operations](aes-supported-es-operations.md), [Features by Elasticsearch version](aes-features-by-version.md), and [Plugins by Elasticsearch version](aes-supported-plugins.md)\.
 
 If you start a new Elasticsearch project, we strongly recommend that you choose the latest supported Elasticsearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see [Upgrading Elasticsearch](es-version-migration.md)\.
 
@@ -75,9 +75,9 @@ For Amazon ES, you pay for each hour of use of an EC2 instance and for the cumul
 
 However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](es-managedomains-multiaz.md), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\. Similarly, Amazon ES does not bill for data transfer between [UltraWarm](ultrawarm.md) nodes and Amazon S3\.
 
-For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for Configuration Changes](es-managedomains-configuration-changes.md#es-managedomains-config-charges)\.
+For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for configuration changes](es-managedomains-configuration-changes.md#es-managedomains-config-charges)\.
 
-## Getting Started with Amazon Elasticsearch Service<a name="aes-get-started"></a>
+## Getting started with Amazon Elasticsearch Service<a name="aes-get-started"></a>
 
 To get started, [sign up for an AWS account](https://aws.amazon.com/) if you don't already have one\. After you are set up with an account, complete the [Getting Started](es-gsg.md) tutorial for Amazon Elasticsearch Service\. Consult the following introductory topics if you need more information while learning about the service:
 + [Create a domain](es-createupdatedomains.md)
@@ -88,31 +88,31 @@ To get started, [sign up for an AWS account](https://aws.amazon.com/) if you don
 
 For information on migrating to Amazon ES from a self\-managed Elasticsearch cluster, see [Migrating to Amazon Elasticsearch Service](migration.md)\.
 
-## Related Services<a name="aes-related-services"></a>
+## Related services<a name="aes-related-services"></a>
 
 Amazon ES commonly is used with the following services:
 
 [Amazon CloudWatch](http://aws.amazon.com/documentation/cloudwatch/)  
-Amazon ES domains automatically send metrics to CloudWatch so that you can monitor domain health and performance\. For more information, see [Monitoring Cluster Metrics with Amazon CloudWatch](es-managedomains-cloudwatchmetrics.md)\.  
-CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading Streaming Data into Amazon ES from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
+Amazon ES domains automatically send metrics to CloudWatch so that you can monitor domain health and performance\. For more information, see [Monitoring Amazon Elasticsearch Service cluster metrics with Amazon CloudWatch](es-managedomains-cloudwatchmetrics.md)\.  
+CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading streaming data from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
 
 [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/)  
-Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Configuration API Monitoring in Amazon Elasticsearch Service](es-managedomains-cloudtrailauditing.md)\.
+Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Monitoring Amazon Elasticsearch Service configuration API activity ](es-managedomains-cloudtrailauditing.md)\.
 
 [Amazon Kinesis](http://aws.amazon.com/documentation/kinesis/)  
-Kinesis is a managed service for real\-time processing of streaming data at a massive scale\. For more information, see [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams](es-aws-integrations.md#es-aws-integrations-kinesis) and [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose](es-aws-integrations.md#es-aws-integrations-fh)\.
+Kinesis is a managed service for real\-time processing of streaming data at a massive scale\. For more information, see [Loading streaming data from Amazon Kinesis Data Streams](es-aws-integrations.md#es-aws-integrations-kinesis) and [Loading streaming data from Amazon Kinesis Data Firehose](es-aws-integrations.md#es-aws-integrations-fh)\.
 
 [Amazon S3](http://aws.amazon.com/documentation/s3/)  
-Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. This guide provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading Streaming Data into Amazon ES from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.
+Amazon Simple Storage Service \(Amazon S3\) provides storage for the internet\. This guide provides Lambda sample code for integration with Amazon S3\. For more information, see [Loading streaming data from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\.
 
 [AWS IAM](http://aws.amazon.com/iam/)  
 AWS Identity and Access Management \(IAM\) is a web service that you can use to manage access to your Amazon ES domains\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)\.
 
 [AWS Lambda](http://aws.amazon.com/documentation/lambda/)  
-AWS Lambda is a compute service that lets you run code without provisioning or managing servers\. This guide provides Lambda sample code to stream data from DynamoDB, Amazon S3, and Kinesis\. For more information, see [Loading Streaming Data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
+AWS Lambda is a compute service that lets you run code without provisioning or managing servers\. This guide provides Lambda sample code to stream data from DynamoDB, Amazon S3, and Kinesis\. For more information, see [Loading streaming data into Amazon Elasticsearch Service](es-aws-integrations.md)\.
 
 [Amazon DynamoDB](http://aws.amazon.com/documentation/dynamodb/)  
-Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more about streaming data to Amazon ES, see [Loading Streaming Data into Amazon ES from Amazon DynamoDB](es-aws-integrations.md#es-aws-integrations-dynamodb-es)\.
+Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more about streaming data to Amazon ES, see [Loading streaming data from Amazon DynamoDB](es-aws-integrations.md#es-aws-integrations-dynamodb-es)\.
 
 [Amazon QuickSight](http://aws.amazon.com/documentation/quicksight/)  
 You can visualize data from Amazon ES using Amazon QuickSight dashboards\. For more information, see [Using Amazon Elasticsearch Service with Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/connecting-to-es.html) in the *Amazon QuickSight User Guide*

@@ -1,8 +1,10 @@
-# Compressing HTTP Requests<a name="gzip"></a>
+# Compressing HTTP requests in Amazon Elasticsearch Service<a name="gzip"></a>
 
-Amazon Elasticsearch Service \(Amazon ES\) domains running Elasticsearch 6\.0 or later support gzip compression for most HTTP requests and responses, which can reduce latency and conserve bandwidth\. Some Elasticsearch clients have built\-in support for gzip compression, and many programming languages have libraries that simplify the process\.
+You can compress HTTP requests and responses in Amazon Elasticsearch Service \(Amazon ES\) domains using gzip compression\. Gzip compression can help you reduce the size of your documents and lower bandwidth utilization and latency, thereby leading to improved transfer speeds\.
 
-## Enabling gzip Compression<a name="gzip-enable"></a>
+Gzip compression is supported for all domains running Elasticsearch 6\.0 or later\. Some Elasticsearch clients have built\-in support for gzip compression, and many programming languages have libraries that simplify the process\.
+
+## Enabling gzip compression<a name="gzip-enable"></a>
 
 Not to be confused with similar Elasticsearch settings, `http_compression.enabled` is specific to Amazon ES and enables or disables gzip compression on a domain\. Domains running Elasticsearch 7\.*x* have the featured enabled by default, whereas domains running 6\.*x* have it disabled by default\.
 
@@ -19,11 +21,11 @@ PUT _cluster/settings
 
 Requests to `_cluster/settings` must be uncompressed, so you might need to use a separate client or standard HTTP request to update cluster settings\.
 
-## Required Headers<a name="gzip-headers"></a>
+## Required headers<a name="gzip-headers"></a>
 
 When including a gzip\-compressed request body, keep the standard `Content-Type: application/json` header, and add the `Content-Encoding: gzip` header\. To accept a gzip\-compressed response, add the `Accept-Encoding: gzip` header, as well\. If an Elasticsearch client supports gzip compression, it likely includes these headers automatically\.
 
-## Sample Code \(Python 3\)<a name="gzip-code"></a>
+## Sample code \(Python 3\)<a name="gzip-code"></a>
 
 The following sample uses [elasticsearch\-py](https://elasticsearch-py.readthedocs.io) to perform the compression and send the request\. This code signs the request using your IAM credentials\.
 

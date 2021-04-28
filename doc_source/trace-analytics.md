@@ -18,7 +18,7 @@ Finally, [Data Prepper](https://opendistro.github.io/for-elasticsearch-docs/docs
 
 For a Docker Compose file that demonstrates the end\-to\-end flow of data, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/trace/get-started/)\.
 
-## OpenTelemetry Collector Sample Configuration<a name="trace-otc"></a>
+## OpenTelemetry Collector sample configuration<a name="trace-otc"></a>
 
 To use the OpenTelemetry Collector with Data Prepper, try the following sample configuration:
 
@@ -44,7 +44,7 @@ service:
       exporters: [otlp/data-prepper]
 ```
 
-## Data Prepper Sample Configuration<a name="trace-dp"></a>
+## Data Prepper sample configuration<a name="trace-dp"></a>
 
 To send trace data to an Amazon ES domain, try the following sample configuration files\.
 
@@ -170,7 +170,7 @@ Data Prepper uses port 21890 to receive data, and it must be able to connect to 
 
 Full documentation for Data Prepper is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/trace/data-prepper/)\. For convenience, we also provide an [AWS CloudFormation template](https://github.com/opendistro-for-elasticsearch/data-prepper/blob/main/deployment-template/ec2/data-prepper-ec2-deployment-cfn.yaml)that installs Data Prepper on an Amazon EC2 instance\.
 
-## Exploring Trace Data<a name="trace-kibana"></a>
+## Exploring trace data<a name="trace-kibana"></a>
 
 The **Dashboard** view groups traces together by HTTP method and path so that you can see the average latency, error rate, and trends associated with a particular operation\. For a more focused view, try filtering by trace group name\.
 

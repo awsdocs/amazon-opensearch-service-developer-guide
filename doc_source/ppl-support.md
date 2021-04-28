@@ -1,6 +1,6 @@
-# Piped Processing Language<a name="ppl-support"></a>
+# Querying Amazon Elasticsearch Service data using Piped Processing Language<a name="ppl-support"></a>
 
-Piped Processing Language \(PPL\) is a query language that lets you use pipe \(`|`\) syntax to query data stored in Amazon Elasticsearch Service\.
+Piped Processing Language \(PPL\) is a query language that lets you use pipe \(`|`\) syntax to query data stored in Amazon Elasticsearch Service \(Amazon ES\)\.
 
 The PPL syntax consists of commands delimited by a pipe character \(`|`\) where data flows from left to right through each pipeline\. For example, the PPL syntax to find the number of hosts with HTTP 403 or 503 errors, aggregate them per host, and sort them in the order of impact is as follows:
 

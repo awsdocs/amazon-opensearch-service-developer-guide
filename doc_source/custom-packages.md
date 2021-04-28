@@ -1,16 +1,16 @@
-# Custom Packages for Amazon Elasticsearch Service<a name="custom-packages"></a>
+# Custom packages for Amazon Elasticsearch Service<a name="custom-packages"></a>
 
-Amazon Elasticsearch Service lets you upload custom dictionary files \(for example, stop words and synonyms\) for use with your cluster\. The generic term for these types of files is *packages*\. Dictionary files improve your search results by telling Elasticsearch to ignore certain high\-frequency words or to treat terms like "frozen custard," "gelato," and "ice cream" as equivalent\. They can also improve [stemming](https://en.wikipedia.org/wiki/Stemming), such as in the Japanese \(kuromoji\) Analysis plugin\.
+Amazon Elasticsearch Service \(Amazon ES\) lets you upload custom dictionary files, such as stop words and synonyms, for use with your cluster\. The generic term for these types of files is *packages*\. Dictionary files improve your search results by telling Elasticsearch to ignore certain high\-frequency words or to treat terms like "frozen custard," "gelato," and "ice cream" as equivalent\. They can also improve [stemming](https://en.wikipedia.org/wiki/Stemming), such as in the Japanese \(kuromoji\) Analysis plugin\.
 
 **Topics**
-+ [Package Permissions Requirements](#custom-packages-iam)
-+ [Uploading Packages to Amazon S3](#custom-packages-gs)
-+ [Importing and Associating Packages](#custom-packages-assoc)
-+ [Using Custom Packages with Elasticsearch](#custom-packages-using)
-+ [Updating Custom Packages](#custom-packages-updating)
-+ [Dissociating and Removing Packages](#custom-packages-dissoc)
++ [Package permissions requirements](#custom-packages-iam)
++ [Uploading packages to Amazon S3](#custom-packages-gs)
++ [Importing and associating packages](#custom-packages-assoc)
++ [Using custom packages with Elasticsearch](#custom-packages-using)
++ [Updating custom packages](#custom-packages-updating)
++ [Dissociating and removing packages](#custom-packages-dissoc)
 
-## Package Permissions Requirements<a name="custom-packages-iam"></a>
+## Package permissions requirements<a name="custom-packages-iam"></a>
 
 Users without administrator access require certain AWS Identity and Access Management \(IAM\) actions in order to manage packages:
 + `es:CreatePackage` \- create a package in an Amazon ES region
@@ -22,7 +22,7 @@ You also need permissions on the Amazon S3 bucket path or object where the custo
 
 Grant all permission within IAM, not in the domain access policy\. For more information, see [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)\.
 
-## Uploading Packages to Amazon S3<a name="custom-packages-gs"></a>
+## Uploading packages to Amazon S3<a name="custom-packages-gs"></a>
 
 Before you can associate a package with your domain, you must upload it to an Amazon S3 bucket\. For instructions, see [Uploading S3 Objects](https://docs.aws.amazon.com/AmazonS3/latest/gsg/upload-objects.html) in the *Amazon Simple Storage Service Getting Started Guide*\.
 
@@ -41,7 +41,7 @@ basketball shoe, hightop
 
 Certain dictionaries, such as Hunspell dictionaries, use multiple files and require their own directories on the file system\. At this time, Amazon ES only supports single\-file dictionaries\.
 
-## Importing and Associating Packages<a name="custom-packages-assoc"></a>
+## Importing and associating packages<a name="custom-packages-assoc"></a>
 
 The console is the simplest way to import a package into Amazon ES and associate the package with a domain\. When you import a package from Amazon S3, Amazon ES stores its own copy of the package and automatically encrypts that copy using AES\-256 with Amazon ES\-managed keys\.
 
@@ -65,9 +65,9 @@ The console is the simplest way to import a package into Amazon ES and associate
 
 1. When the package status is **Available**, note its ID\. Use `analyzers/id` as the file path in [requests to Elasticsearch](#custom-packages-using)\.
 
-Alternately, use the AWS CLI, SDKs, or configuration API to import and associate packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+Alternately, use the AWS CLI, SDKs, or configuration API to import and associate packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
 
-## Using Custom Packages with Elasticsearch<a name="custom-packages-using"></a>
+## Using custom packages with Elasticsearch<a name="custom-packages-using"></a>
 
 After you associate a file with a domain, you can use it in parameters such as `synonyms_path`, `stopwords_path`, and `user_dictionary` when you create tokenizers and token filters\. The exact parameter varies by object\. Several objects support `synonyms_path` and `stopwords_path`, but `user_dictionary` is exclusive to the kuromoji plugin\. The following example adds a synonyms file to a new index:
 
@@ -167,7 +167,7 @@ In this case, Elasticsearch returns the following response:
 **Tip**  
 Dictionary files use Java heap space proportional to their size\. For example, a 2 GiB dictionary file might consume 2 GiB of heap space on a node\. If you use large files, ensure that your nodes have enough heap space to accommodate them\. [Monitor](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-cluster-metrics) the `JVMMemoryPressure` metric, and scale your cluster as necessary\.
 
-## Updating Custom Packages<a name="custom-packages-updating"></a>
+## Updating custom packages<a name="custom-packages-updating"></a>
 
 Uploading a new version of a package to Amazon S3 does *not* automatically update the package on Amazon Elasticsearch Service\. Amazon ES stores its own copy of the file, so if you upload a new version to S3, you must manually update it\.
 
@@ -187,11 +187,11 @@ Each of your associated domains stores *its* own copy of the file, as well\. To 
 
 1. The next steps vary depending on how you configured your indices:
    + If your domains runs Elasticsearch 7\.8 or later and only uses search analyzers with the [updateable](#custom-packages-using) field set to true, you don't need to take any further action\. Amazon ES automatically updates your indices using the [\_opendistro/\_refresh\_search\_analyzers API](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/refresh-analyzer/)\.
-   + If your domain runs an earlier version of Elasticsearch, uses index analyzers, or doesn't use the `updateable` field, see [Manual Index Updates](#custom-packages-updating-index-analyzers)\.
+   + If your domain runs an earlier version of Elasticsearch, uses index analyzers, or doesn't use the `updateable` field, see [Manual index updates](#custom-packages-updating-index-analyzers)\.
 
-Although the console is the simplest method, you can also use the AWS CLI, SDKs, or configuration API to update Amazon ES packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+Although the console is the simplest method, you can also use the AWS CLI, SDKs, or configuration API to update Amazon ES packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
 
-### Manual Index Updates<a name="custom-packages-updating-index-analyzers"></a>
+### Manual index updates<a name="custom-packages-updating-index-analyzers"></a>
 
 To use an updated package, you must manually update your indices if you meet any of the following conditions:
 + Your domain runs Elasticsearch 7\.7\. or earlier\.
@@ -282,7 +282,7 @@ To update analyzers with the new package files, you have two options:
   DELETE my-index
   ```
 
-## Dissociating and Removing Packages<a name="custom-packages-dissoc"></a>
+## Dissociating and removing packages<a name="custom-packages-dissoc"></a>
 
 Dissociating a package from a domain means that you can no longer use that file when you create new indices\. Any indices that already use the file can continue using it\.
 
@@ -304,4 +304,4 @@ The console is the simplest way to dissociate a package from a domain and remove
 
 1. Select the package and choose **Delete**\.
 
-Alternately, use the AWS CLI, SDKs, or configuration API to dissociate and remove packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+Alternately, use the AWS CLI, SDKs, or configuration API to dissociate and remove packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.

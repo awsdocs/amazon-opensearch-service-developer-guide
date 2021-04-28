@@ -1,12 +1,12 @@
-# Creating a Custom Endpoint<a name="es-customendpoint"></a>
+# Creating a custom endpoint for Amazon Elasticsearch Service<a name="es-customendpoint"></a>
 
-Creating a custom endpoint for your Amazon Elasticsearch Service domain makes it easier for you to refer to your Elasticsearch and Kibana URLs\. You can include your company's branding or just use a shorter, easier\-to\-remember endpoint than the standard one\.
+Creating a custom endpoint for your Amazon Elasticsearch Service \(Amazon ES\) domain makes it easier for you to refer to your Elasticsearch and Kibana URLs\. You can include your company's branding or just use a shorter, easier\-to\-remember endpoint than the standard one\.
 
 If you ever need to switch to a new domain, just update your DNS to point to the new URL and continue using the same endpoint as before\.
 
 You secure custom endpoints by either generating a certificate in AWS Certificate Manager \(ACM\) or importing one of your own\.
 
-## Custom Endpoints for New Domains<a name="es-customize-endpoint"></a>
+## Custom endpoints for new domains<a name="es-customize-endpoint"></a>
 
 You can enable a custom endpoint for a new Amazon ES domain by using the Amazon Elasticsearch Service console, AWS CLI, or configuration API\.
 
@@ -28,14 +28,14 @@ The certificate must have the custom endpoint name and be in the same account as
    + Choose **Confirm**\.
    + After the new domain finishes processing, you can view your custom endpoint by choosing your domain and checking the **Overview** tab\.
 
-   To use the CLI or configuration API, use the `CreateElasticsearchDomain` and ` UpdateElasticsearchDomainConfig` operations\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon Elasticsearch Service Configuration API Reference](es-configuration-api.md)\.
+   To use the CLI or configuration API, use the `CreateElasticsearchDomain` and ` UpdateElasticsearchDomainConfig` operations\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
 
-## Custom Endpoints for Existing Domains<a name="es-enable-disable-custom-endpoint"></a>
+## Custom endpoints for existing domains<a name="es-enable-disable-custom-endpoint"></a>
 
 To add or remove a custom endpoint on an existing Amazon ES domain, choose **Edit domain** and follow steps 3–6 above\.
 
-## Next Steps<a name="es-customize-endpoint-next-steps"></a>
+## Next steps<a name="es-customize-endpoint-next-steps"></a>
 
-After you enable a custom endpoint for your Amazon ES domain, you must create an alias or CNAME mapping in Amazon Route 53 \(or your preferred DNS service provider\) to route traffic to the custom endpoint and its subdomains\. Without this mapping, your custom endpoint will not work\. For steps on performing this mapping in Route 53, see [Configuring DNS routing for a new domain ](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-new-domain.html) and [Creating a hosted zone for a subdomain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html#dns-routing-traffic-for-subdomains-creating-hosted-zone)\. For other providers, consult their documentation\.
+After you enable a custom endpoint for your Amazon ES domain, you must create a CNAME mapping in Amazon Route 53 \(or your preferred DNS service provider\) to route traffic to the custom endpoint and its subdomains\. Without this mapping, your custom endpoint will not work\. For steps on performing this mapping in Route 53, see [Configuring DNS routing for a new domain ](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-new-domain.html) and [Creating a hosted zone for a subdomain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html#dns-routing-traffic-for-subdomains-creating-hosted-zone)\. For other providers, consult their documentation\.
 
 If you use [SAML authentication for Kibana](saml.md), you must update your IdP with the new SSO URL\.

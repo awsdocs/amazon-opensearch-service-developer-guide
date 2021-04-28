@@ -12,7 +12,7 @@ Index snapshots are a popular way to migrate from a self\-managed Elasticsearch 
 
 This walkthrough provides more detailed steps and alternate options, where applicable\.
 
-## Take and Upload the Snapshot<a name="migration-take-snapshot"></a>
+## Take and upload the snapshot<a name="migration-take-snapshot"></a>
 
 Although you can use the [repository\-s3](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/snapshot-restore/#amazon-s3) plugin to take snapshots directly to S3, you have to install the plugin on every node, tweak `elasticsearch.yml`, restart each node, add your AWS credentials, and finally take the snapshot\. The plugin is a great option for ongoing use or for migrating larger clusters\.
 
@@ -59,7 +59,7 @@ For smaller clusters, a one\-time approach is to take a [shared file system snap
 
    Depending on the size of the snapshot and the speed of your internet connection, this operation can take a while\.
 
-## Create the Domain<a name="migration-create-domain"></a>
+## Create a domain<a name="migration-create-domain"></a>
 
 Although the console is the easiest way to create a domain, in this case, you already have the terminal open and the AWS CLI installed\. Modify the following command to create a domain that fits your needs:
 
@@ -84,7 +84,7 @@ Before issuing the command, change the domain name, master user credentials, and
 **Important**  
 Snapshots are only forward\-compatible, and only by one major version\. For example, you can't restore a snapshot from a 2\.*x* cluster on a 1\.*x* cluster or a 6\.*x* cluster, only a 2\.*x* or 5\.*x* cluster\. Minor version matters, too\. You can't restore a snapshot from a self\-managed 5\.3\.3 cluster on a 5\.3\.2 Amazon ES domain\. We recommend choosing the most\-recent version of Elasticsearch that your snapshot supports\.
 
-## Provide Permissions<a name="migration-permissions"></a>
+## Provide permissions to the S3 bucket<a name="migration-permissions"></a>
 
 In the AWS Identity and Access Management \(IAM\) console, [create a role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) with the following permissions and trust relationship\. Name the role `AmazonESSnapshotRole` so that it's easy to find\.
 
@@ -155,7 +155,7 @@ From the Kibana main menu, choose **Security**, **Roles**, and **manage\_snapsho
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/migration1.png)
 
-## Restore the Snapshot<a name="migration-restore"></a>
+## Restore the snapshot<a name="migration-restore"></a>
 
 At this point, you have two ways to access your Amazon ES domain: HTTP basic authentication with your master user credentials or AWS authentication using your IAM credentials\. Because snapshots use Amazon S3, which has no concept of the master user, you must use your IAM credentials to register the snapshot repository with your Amazon ES domain\.
 

@@ -1,4 +1,4 @@
-# Plugins by Elasticsearch Version<a name="aes-supported-plugins"></a>
+# Plugins by Elasticsearch version<a name="aes-supported-plugins"></a>
 
 Amazon Elasticsearch Service \(Amazon ES\) domains come prepackaged with plugins from the Elasticsearch community\. The service automatically deploys and manages plugins for you, but it deploys different plugins depending on the version of Elasticsearch you choose for your domain\.
 

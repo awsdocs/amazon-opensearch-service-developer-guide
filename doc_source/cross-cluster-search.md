@@ -1,10 +1,8 @@
-# Cross\-Cluster Search for Amazon Elasticsearch Service<a name="cross-cluster-search"></a>
+# Cross\-cluster search for Amazon Elasticsearch Service<a name="cross-cluster-search"></a>
 
-Cross\-cluster search for Amazon Elasticsearch Service lets you perform queries and aggregations across multiple connected domains\.
+Cross\-cluster search in Amazon Elasticsearch Service \(Amazon ES\) lets you perform queries and aggregations across multiple connected domains\. It often makes more sense to use multiple smaller domains instead of a single large domain, especially when you're running different types of workloads\.
 
-It often makes more sense to use multiple smaller domains instead of a single large domain, especially when you're running different types of workloads\.
-
-Workload\-specific domains enable you to:
+Workload\-specific domains enable you to perform the following tasks:
 + Optimize each domain by choosing instance types for specific workloads\.
 + Establish fault\-isolation boundaries across workloads\. This means that if one of your workloads fails, the fault is contained within that specific domain and doesn't impact your other workloads\. 
 + Scale more easily across domains\.
@@ -13,11 +11,11 @@ Cross\-cluster search supports Kibana, so you can create visualizations and dash
 
 **Topics**
 + [Limitations](#cross-cluster-search-limitations)
-+ [Cross\-Cluster Search Prerequisites](#cross-cluster-search-pp)
-+ [Cross\-Cluster Search Pricing](#cross-cluster-search-pricing)
-+ [Setting Up a Connection](#cross-cluster-search-set-up-connection)
-+ [Removing a Connection](#cross-cluster-search-remove-connection)
-+ [Setting Up Security and Sample Walkthrough](#cross-cluster-search-walkthrough)
++ [Cross\-cluster search prerequisites](#cross-cluster-search-pp)
++ [Cross\-cluster search pricing](#cross-cluster-search-pricing)
++ [Setting up a connection](#cross-cluster-search-set-up-connection)
++ [Removing a connection](#cross-cluster-search-remove-connection)
++ [Setting up security and sample walkthrough](#cross-cluster-search-walkthrough)
 + [Kibana](#cross-cluster-search-kibana)
 
 ## Limitations<a name="cross-cluster-search-limitations"></a>
@@ -32,18 +30,18 @@ Cross\-cluster search has several important limitations:
 + You can't use AWS CloudFormation to connect domains\.
 + You can't use cross\-cluster search on M3 and T2 instances\.
 
-## Cross\-Cluster Search Prerequisites<a name="cross-cluster-search-pp"></a>
+## Cross\-cluster search prerequisites<a name="cross-cluster-search-pp"></a>
 
 Before you set up cross\-cluster search, make sure that your domains meet the following requirements:
 + Elasticsearch version 6\.7 or later
 + Fine\-grained access control enabled
 + Node\-to\-node encryption enabled
 
-## Cross\-Cluster Search Pricing<a name="cross-cluster-search-pricing"></a>
+## Cross\-cluster search pricing<a name="cross-cluster-search-pricing"></a>
 
 There is no additional charge for searching across domains\.
 
-## Setting Up a Connection<a name="cross-cluster-search-set-up-connection"></a>
+## Setting up a connection<a name="cross-cluster-search-set-up-connection"></a>
 
 The “source” domain refers to the domain that a cross\-cluster search request originates from\. In other words, the source domain is the one that you send the initial search request to\.
 
@@ -74,7 +72,7 @@ The source domain creates an "outbound" connection to the destination domain\. T
 
 After the connection is established, any traffic that flows between the nodes of the connected domains is encrypted\. If you connect a VPC domain to a non\-VPC domain and the non\-VPC domain is a public endpoint that can receive traffic from the internet, the cross\-cluster traffic between the domains is still encrypted and secure\. 
 
-## Removing a Connection<a name="cross-cluster-search-remove-connection"></a>
+## Removing a connection<a name="cross-cluster-search-remove-connection"></a>
 
 Removing a connection stops any cross\-cluster operation on its indices\.
 
@@ -88,7 +86,7 @@ You could perform these steps on either the source or destination domain to remo
 
 You can't delete a domain with active cross\-cluster connections\. To delete a domain, first remove all incoming and outgoing connections from that domain\. This is to make sure you take into account the cross\-cluster domain users before deleting the domain\.
 
-## Setting Up Security and Sample Walkthrough<a name="cross-cluster-search-walkthrough"></a>
+## Setting up security and sample walkthrough<a name="cross-cluster-search-walkthrough"></a>
 
 1. You send a cross\-cluster search request to the source domain\.
 

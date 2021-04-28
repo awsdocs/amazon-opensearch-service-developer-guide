@@ -1,19 +1,19 @@
-# Loading Streaming Data into Amazon Elasticsearch Service<a name="es-aws-integrations"></a>
+# Loading streaming data into Amazon Elasticsearch Service<a name="es-aws-integrations"></a>
 
-You can load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon Elasticsearch Service domain from many different sources\. Some sources, like Amazon Kinesis Data Firehose and Amazon CloudWatch Logs, have built\-in support for Amazon ES\. Others, like Amazon S3, Amazon Kinesis Data Streams, and Amazon DynamoDB, use AWS Lambda functions as event handlers\. The Lambda functions respond to new data by processing it and streaming it to your domain\.
+You can load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon Elasticsearch Service \(Amazon ES\) domain from many different sources\. Some sources, like Amazon Kinesis Data Firehose and Amazon CloudWatch Logs, have built\-in support for Amazon ES\. Others, like Amazon S3, Amazon Kinesis Data Streams, and Amazon DynamoDB, use AWS Lambda functions as event handlers\. The Lambda functions respond to new data by processing it and streaming it to your domain\.
 
 **Note**  
 Lambda supports several popular programming languages and is available in most AWS Regions\. For more information, see [Building Lambda Functions](https://docs.aws.amazon.com/lambda/latest/dg/lambda-app.html) in the *AWS Lambda Developer Guide* and [AWS Lambda Regions](https://docs.aws.amazon.com/general/latest/gr/rande.html#lambda_region) in the *AWS General Reference*\.
 
 **Topics**
-+ [Loading Streaming Data into Amazon ES from Amazon S3](#es-aws-integrations-s3-lambda-es)
-+ [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams](#es-aws-integrations-kinesis)
-+ [Loading Streaming Data into Amazon ES from Amazon DynamoDB](#es-aws-integrations-dynamodb-es)
-+ [Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose](#es-aws-integrations-fh)
-+ [Loading Streaming Data into Amazon ES from Amazon CloudWatch](#es-aws-integrations-cloudwatch-es)
-+ [Loading Data into Amazon ES from AWS IoT](#es-aws-integrations-cloudwatch-iot)
++ [Loading streaming data from Amazon S3](#es-aws-integrations-s3-lambda-es)
++ [Loading streaming data from Amazon Kinesis Data Streams](#es-aws-integrations-kinesis)
++ [Loading streaming data from Amazon DynamoDB](#es-aws-integrations-dynamodb-es)
++ [Loading streaming data from Amazon Kinesis Data Firehose](#es-aws-integrations-fh)
++ [Loading streaming data from Amazon CloudWatch](#es-aws-integrations-cloudwatch-es)
++ [Loading streaming data from AWS IoT](#es-aws-integrations-cloudwatch-iot)
 
-## Loading Streaming Data into Amazon ES from Amazon S3<a name="es-aws-integrations-s3-lambda-es"></a>
+## Loading streaming data from Amazon S3<a name="es-aws-integrations-s3-lambda-es"></a>
 
 You can use Lambda to send data to your Amazon ES domain from Amazon S3\. New data that arrives in an S3 bucket triggers an event notification to Lambda, which then runs your custom code to perform the indexing\.
 
@@ -34,7 +34,7 @@ Before proceeding, you must have the following resources\.
 | Amazon S3 Bucket | For more information, see [Creating a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. The bucket must reside in the same region as your Amazon ES domain\. | 
 | Amazon ES Domain | The destination for data after your Lambda function processes it\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
 
-### Creating the Lambda Deployment Package<a name="es-aws-integrations-s3-lambda-es-deployment-package"></a>
+### Create the Lambda deployment package<a name="es-aws-integrations-s3-lambda-es-deployment-package"></a>
 
 Deployment packages are ZIP or JAR files that contain your code and its dependencies\. This section includes Python sample code\. For other programming languages, see [Creating a Deployment Package](https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html) in the *AWS Lambda Developer Guide*\.
 
@@ -115,7 +115,7 @@ If you use macOS, these commands might not work properly\. As a workaround, add 
    zip -r lambda.zip *
    ```
 
-### Creating the Lambda Function<a name="es-aws-integrations-s3-lambda-es-create"></a>
+### Create the Lambda function<a name="es-aws-integrations-s3-lambda-es-create"></a>
 
 After you create the deployment package, you can create the Lambda function\. When you create a function, choose a name, runtime \(for example, Python 2\.7\), and IAM role\. The IAM role defines the permissions for your function\. For detailed instructions, see [Create a Simple Lambda Function](https://docs.aws.amazon.com/lambda/latest/dg/get-started-create-function.html) in the *AWS Lambda Developer Guide*\.
 
@@ -196,7 +196,7 @@ GET https://es-domain/lambda-index/_search?pretty
 }
 ```
 
-## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Streams<a name="es-aws-integrations-kinesis"></a>
+## Loading streaming data from Amazon Kinesis Data Streams<a name="es-aws-integrations-kinesis"></a>
 
 You can load streaming data from Kinesis Data Streams to Amazon ES\. New data that arrives in the data stream triggers an event notification to Lambda, which then runs your custom code to perform the indexing\. This section includes some unsophisticated Python sample code\. For more robust code in Node\.js, see [amazon\-elasticsearch\-lambda\-samples](https://github.com/aws-samples/amazon-elasticsearch-lambda-samples) on GitHub\.
 
@@ -213,9 +213,9 @@ Before proceeding, you must have the following resources\.
 | Amazon ES Domain | The destination for data after your Lambda function processes it\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
 | IAM Role |  This role must have basic Amazon ES, Kinesis, and Lambda permissions, such as the following: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents",<br />        "kinesis:GetShardIterator",<br />        "kinesis:GetRecords",<br />        "kinesis:DescribeStream",<br />        "kinesis:ListStreams"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre> The role must have the following trust relationship: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre> To learn more, see [Creating IAM Roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\.  | 
 
-### Creating the Lambda Function<a name="es-aws-integrations-kinesis-lambda"></a>
+### Create the Lambda function<a name="es-aws-integrations-kinesis-lambda"></a>
 
-Follow the instructions in [Creating the Lambda Deployment Package](#es-aws-integrations-s3-lambda-es-deployment-package), but create a directory named `kinesis-to-es` and use the following code for `sample.py`:
+Follow the instructions in [Create the Lambda deployment package](#es-aws-integrations-s3-lambda-es-deployment-package), but create a directory named `kinesis-to-es` and use the following code for `sample.py`:
 
 ```
 import base64
@@ -263,7 +263,7 @@ pip install requests -t .
 pip install requests_aws4auth -t .
 ```
 
-Then follow the instructions in [Creating the Lambda Function](#es-aws-integrations-s3-lambda-es-create), but specify the IAM role from [Prerequisites](#es-aws-integrations-kinesis-lambda-prereq) and the following settings for the trigger:
+Then follow the instructions in [Create the Lambda function](#es-aws-integrations-s3-lambda-es-create), but specify the IAM role from [Prerequisites](#es-aws-integrations-kinesis-lambda-prereq) and the following settings for the trigger:
 + **Kinesis stream**: your Kinesis stream
 + **Batch size**: 100
 + **Starting position**: Trim horizon
@@ -272,7 +272,7 @@ To learn more, see [Working with Amazon Kinesis Data Streams](https://docs.aws.a
 
 At this point, you have a complete set of resources: a Kinesis data stream, a function that runs after the stream receives new data and indexes that data, and an Amazon ES domain for searching and visualization\.
 
-### Testing the Lambda Function<a name="es-aws-integrations-kinesis-testing"></a>
+### Test the Lambda Function<a name="es-aws-integrations-kinesis-testing"></a>
 
 After you create the function, you can test it by adding a new record to the data stream using the AWS CLI:
 
@@ -301,7 +301,7 @@ GET https://es-domain/lambda-kine-index/_search
 }
 ```
 
-## Loading Streaming Data into Amazon ES from Amazon DynamoDB<a name="es-aws-integrations-dynamodb-es"></a>
+## Loading streaming data from Amazon DynamoDB<a name="es-aws-integrations-dynamodb-es"></a>
 
 You can use AWS Lambda to send data to your Amazon ES domain from Amazon DynamoDB\. New data that arrives in the database table triggers an event notification to Lambda, which then runs your custom code to perform the indexing\.
 
@@ -318,9 +318,9 @@ Before proceeding, you must have the following resources\.
 | Amazon ES Domain | The destination for data after your Lambda function processes it\. For more information, see [Creating Amazon ES Domains](es-createupdatedomains.md#es-createdomains)\. | 
 | IAM Role | This role must have basic Amazon ES, DynamoDB, and Lambda execution permissions, such as the following:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "dynamodb:DescribeStream",<br />        "dynamodb:GetRecords",<br />        "dynamodb:GetShardIterator",<br />        "dynamodb:ListStreams",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre>The role must have the following trust relationship:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre>To learn more, see [Creating IAM Roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\. | 
 
-### Creating the Lambda Function<a name="es-aws-integrations-dynamodb-es-lambda"></a>
+### Create the Lambda function<a name="es-aws-integrations-dynamodb-es-lambda"></a>
 
-Follow the instructions in [Creating the Lambda Deployment Package](#es-aws-integrations-s3-lambda-es-deployment-package), but create a directory named `ddb-to-es` and use the following code for `sample.py`:
+Follow the instructions in [Create the Lambda deployment package](#es-aws-integrations-s3-lambda-es-deployment-package), but create a directory named `ddb-to-es` and use the following code for `sample.py`:
 
 ```
 import boto3
@@ -364,7 +364,7 @@ pip install requests -t .
 pip install requests_aws4auth -t .
 ```
 
-Then follow the instructions in [Creating the Lambda Function](#es-aws-integrations-s3-lambda-es-create), but specify the IAM role from [Prerequisites](#es-aws-integrations-dynamodb-es-prereq) and the following settings for the trigger:
+Then follow the instructions in [Create the Lambda function](#es-aws-integrations-s3-lambda-es-create), but specify the IAM role from [Prerequisites](#es-aws-integrations-dynamodb-es-prereq) and the following settings for the trigger:
 + **Table**: your DynamoDB table
 + **Batch size**: 100
 + **Starting position**: Trim horizon
@@ -373,7 +373,7 @@ To learn more, see [Processing New Items in a DynamoDB Table](https://docs.aws.a
 
 At this point, you have a complete set of resources: a DynamoDB table for your source data, a DynamoDB stream of changes to the table, a function that runs after your source data changes and indexes those changes, and an Amazon ES domain for searching and visualization\.
 
-### Testing the Lambda Function<a name="es-aws-integrations-dynamodb-es-lambda-test"></a>
+### Test the Lambda function<a name="es-aws-integrations-dynamodb-es-lambda-test"></a>
 
 After you create the function, you can test it by adding a new item to the DynamoDB table using the AWS CLI:
 
@@ -405,7 +405,7 @@ GET https://es-domain/lambda-index/lambda-type/00001
 }
 ```
 
-## Loading Streaming Data into Amazon ES from Amazon Kinesis Data Firehose<a name="es-aws-integrations-fh"></a>
+## Loading streaming data from Amazon Kinesis Data Firehose<a name="es-aws-integrations-fh"></a>
 
 Kinesis Data Firehose supports Amazon ES as a delivery destination\. For instructions about how to load streaming data into Amazon ES, see [Creating a Kinesis Data Firehose Delivery Stream](https://docs.aws.amazon.com/firehose/latest/dev/basic-create.html) and [Choose Amazon ES for Your Destination](https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html#create-destination-elasticsearch) in the *Amazon Kinesis Data Firehose Developer Guide*\.
 
@@ -413,10 +413,10 @@ Before you load data into Amazon ES, you might need to perform transforms on the
 
 As you configure a delivery stream, Kinesis Data Firehose features a "one\-click" IAM role that gives it the resource access it needs to send data to Amazon ES, back up data on Amazon S3, and transform data using Lambda\. Because of the complexity involved in creating such a role manually, we recommend using the provided role\.
 
-## Loading Streaming Data into Amazon ES from Amazon CloudWatch<a name="es-aws-integrations-cloudwatch-es"></a>
+## Loading streaming data from Amazon CloudWatch<a name="es-aws-integrations-cloudwatch-es"></a>
 
 You can load streaming data from CloudWatch Logs to your Amazon ES domain by using a CloudWatch Logs subscription\. For information about Amazon CloudWatch subscriptions, see [Real\-time Processing of Log Data with Subscriptions](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/Subscriptions.html)\. For configuration information, see [Streaming CloudWatch Logs Data to Amazon Elasticsearch Service](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CWL_ES_Stream.html) in the *Amazon CloudWatch Developer Guide*\.
 
-## Loading Data into Amazon ES from AWS IoT<a name="es-aws-integrations-cloudwatch-iot"></a>
+## Loading streaming data from AWS IoT<a name="es-aws-integrations-cloudwatch-iot"></a>
 
 You can send data from AWS IoT using [rules](https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html)\. To learn more, see [Amazon ES Action](https://docs.aws.amazon.com/iot/latest/developerguide/elasticsearch-rule.html) in the *AWS IoT Developer Guide*\.

@@ -1,7 +1,7 @@
 # Step 1: Create an Amazon ES domain<a name="es-gsg-create-domain"></a>
 
 **Important**  
-This is a concise tutorial for configuring a *test * Amazon Elasticsearch Service \(Amazon ES\) domain\. Do not use this process to create production domains\. For a comprehensive version of the same process, see [Creating and Managing Amazon Elasticsearch Service Domains](es-createupdatedomains.md)\.
+This is a concise tutorial for configuring a *test * Amazon Elasticsearch Service \(Amazon ES\) domain\. Do not use this process to create production domains\. For a comprehensive version of the same process, see [Creating and managing Amazon Elasticsearch Service domains](es-createupdatedomains.md)\.
 
 An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\. You can create an Amazon ES domain by using the console, the AWS CLI, or the AWS SDKs\.
 

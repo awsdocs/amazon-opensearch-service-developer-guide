@@ -1,18 +1,27 @@
-# Creating Amazon ES Index Snapshots<a name="es-managedomains-snapshots"></a>
+# Creating index snapshots in Amazon Elasticsearch Service<a name="es-managedomains-snapshots"></a>
 
-Snapshots are backups of an Amazon Elasticsearch Service \(Amazon ES\) cluster's indices and state\. State includes cluster settings, node information, index settings, and shard allocation\.
+Snapshots in Amazon Elasticsearch Service \(Amazon ES\) are backups of a cluster's indices and state\. *State* includes cluster settings, node information, index settings, and shard allocation\.
 
-Amazon ES snapshots come in two forms: automated and manual\.
-+ **Automated snapshots** are only for cluster recovery\. You can use them to restore your domain in the event of red cluster status or data loss\. For more information, see [Restoring Snapshots](#es-managedomains-snapshot-restore) below\. Amazon ES stores automated snapshots in a preconfigured Amazon S3 bucket at no additional charge\.
+Amazon ES snapshots come in the following forms:
++ **Automated snapshots** are only for cluster recovery\. You can use them to restore your domain in the event of red cluster status or data loss\. For more information, see [Restoring snapshots](#es-managedomains-snapshot-restore) below\. Amazon ES stores automated snapshots in a preconfigured Amazon S3 bucket at no additional charge\.
 + **Manual snapshots** are for cluster recovery *or* for moving data from one cluster to another\. You have to initiate manual snapshots\. These snapshots are stored in your own Amazon S3 bucket and standard S3 charges apply\. If you have a snapshot from a self\-managed Elasticsearch cluster, you can use that snapshot to migrate to an Amazon ES domain\. For more information, see [Migrating to Amazon Elasticsearch Service](migration.md)\.
 
 All Amazon ES domains take automated snapshots, but the frequency differs in the following ways:
-+ For domains running Elasticsearch version 5\.3 and later, Amazon ES takes hourly automated snapshots and retains up to 336 of them for 14 days\.
-+ For domains running Elasticsearch version 5\.1 and earlier, Amazon ES takes daily automated snapshots during the hour you specify, retains up to 14 of them, and does not retain any snapshot data for more than 30 days\.
++ For domains running Elasticsearch 5\.3 and later, Amazon ES takes hourly automated snapshots and retains up to 336 of them for 14 days\.
++ For domains running Elasticsearch 5\.1 and earlier, Amazon ES takes daily automated snapshots during the hour you specify, retains up to 14 of them, and doesn't retain any snapshot data for more than 30 days\.
 
-If your cluster enters red status, Amazon ES stops taking automated snapshots\. If you don't correct the problem within two weeks, you can permanently lose the data in your cluster\. For troubleshooting steps, see [Red Cluster Status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
+If your cluster enters red status, all automated snapshots fail while the cluster status persists\. If you don't correct the problem within two weeks, you can permanently lose the data in your cluster\. For troubleshooting steps, see [Red cluster status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\.
 
-## Manual Snapshot Prerequisites<a name="es-managedomains-snapshot-prerequisites"></a>
+**Topics**
++ [Prerequisites](#es-managedomains-snapshot-prerequisites)
++ [Registering a manual snapshot repository](#es-managedomains-snapshot-registerdirectory)
++ [Taking manual snapshots](#es-managedomains-snapshot-create)
++ [Restoring snapshots](#es-managedomains-snapshot-restore)
++ [Deleting manual snapshots](#es-managedomains-snapshot-delete)
++ [Automating snapshots with Index State Management](#es-managedomains-snapshot-ism)
++ [Using Curator for snapshots](#es-managedomains-snapshot-curator)
+
+## Prerequisites<a name="es-managedomains-snapshot-prerequisites"></a>
 
 To create snapshots manually, you need to work with IAM and Amazon S3\. Make sure you meet the following prerequisites before you attempt to take a snapshot:
 
@@ -22,12 +31,12 @@ To create snapshots manually, you need to work with IAM and Amazon S3\. Make sur
 | Prerequisite  | Description | 
 | --- | --- | 
 | S3 bucket | Create an S3 bucket to store manual snapshots for your Amazon ES domain\. For instructions, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\. Remember the name of the bucket to use it in the following places:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html) Do not apply an S3 Glacier lifecycle rule to this bucket\. Manual snapshots don't support the S3 Glacier storage class\. | 
-| IAM role | Create an IAM role to delegate permissions to Amazon Elasticsearch Service\. For instructions, see [Creating an IAM role \(console\)](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) in the *IAM User Guide*\. The rest of this chapter refers to this role as `TheSnapshotRole`\. **Attach an IAM policy** Attach the following policy to `TheSnapshotRole` to allow access to the S3 bucket: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For instructions to attach a policy to a role, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\. **Edit the trust relationship** Edit the trust relationship of `TheSnapshotRole` to specify Amazon ES in the `Principal` statement as shown in the following example: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "es.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />  <br />}</pre> For instructions to edit the trust relationship, see [Modifying a role trust policy](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy) in the *IAM User Guide*\. | 
+| IAM role | Create an IAM role to delegate permissions to Amazon ES\. For instructions, see [Creating an IAM role \(console\)](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) in the *IAM User Guide*\. The rest of this chapter refers to this role as `TheSnapshotRole`\. **Attach an IAM policy** Attach the following policy to `TheSnapshotRole` to allow access to the S3 bucket: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For instructions to attach a policy to a role, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\. **Edit the trust relationship** Edit the trust relationship of `TheSnapshotRole` to specify Amazon ES in the `Principal` statement as shown in the following example: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "es.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />  <br />}</pre> For instructions to edit the trust relationship, see [Modifying a role trust policy](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy) in the *IAM User Guide*\. | 
 | Permissions |  In order to register the snapshot repository, you need to be able to pass `TheSnapshotRole` to Amazon ES\. You also need access to the `es:ESHttpPut` action\. To grant both of these permissions, add the following policy to the role you're signing your requests with: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheSnapshotRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/domain-name/*"<br />    }<br />  ]<br />}</pre> If your role doesn't have `iam:PassRole` permissions to pass `TheSnapshotRole` you might encounter the following common error when you try to register a repository in the next step: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheSnapshotRole"}</pre>  | 
 
-## Registering a Manual Snapshot Repository<a name="es-managedomains-snapshot-registerdirectory"></a>
+## Registering a manual snapshot repository<a name="es-managedomains-snapshot-registerdirectory"></a>
 
-You need to register a snapshot repository with Amazon ES before you can take manual index snapshots\. This one\-time operation requires that you sign your AWS request with credentials that are allowed to access `TheSnapshotRole`, as described in [Manual Snapshot Prerequisites](#es-managedomains-snapshot-prerequisites)\.
+You need to register a snapshot repository with Amazon ES before you can take manual index snapshots\. This one\-time operation requires that you sign your AWS request with credentials that are allowed to access `TheSnapshotRole`, as described in [Prerequisites](#es-managedomains-snapshot-prerequisites)\.
 
 ### Step 1: Map the manage\_snapshots role \(if using fine\-grained access control\)<a name="es-managedomains-snapshot-fgac"></a>
 
@@ -67,7 +76,7 @@ PUT elasticsearch-domain-endpoint/_snapshot/my-snapshot-repo-name
 }
 ```
 
-If your domain resides within a VPC, your computer must be connected to the VPC for the request to successfully register the snapshot repository\. Accessing a VPC varies by network configuration, but likely involves connecting to a VPN or corporate network\. To check that you can reach the Amazon ES domain, navigate to `https://your-vpc-domain.region.es.amazonaws.com` in a web browser and verify that you receive the default JSON response\.
+If your domain resides within a virtual private cloud \(VPC\), your computer must be connected to the VPC for the request to successfully register the snapshot repository\. Accessing a VPC varies by network configuration, but likely involves connecting to a VPN or corporate network\. To check that you can reach the Amazon ES domain, navigate to `https://your-vpc-domain.region.es.amazonaws.com` in a web browser and verify that you receive the default JSON response\.
 
 #### Encrypting snapshot repositories<a name="es-managedomains-snapshot-encryption"></a>
 
@@ -89,7 +98,7 @@ Consider the following guidelines when migrating to a new domain or registering 
   The bucket is in this region: us-east-2. Please use this region to retry the request. 
   ```
 
-  If this happens, try replacing `"region": "us-east-2"` with `"endpoint": "s3.amazonaws.com"` in the PUT statement and retry the request\.
+  If you encounter this error, try replacing `"region": "us-east-2"` with `"endpoint": "s3.amazonaws.com"` in the PUT statement and retry the request\.
 
 #### Using the sample Python client<a name="es-managedomains-snapshot-client-python"></a>
 
@@ -180,7 +189,7 @@ print(r.text)
 # print(r.text)
 ```
 
-## Taking Manual Snapshots<a name="es-managedomains-snapshot-create"></a>
+## Taking manual snapshots<a name="es-managedomains-snapshot-create"></a>
 
 Snapshots are not instantaneous\. They take time to complete and don't represent perfect point\-in\-time views of the cluster\. While a snapshot is in progress, you can still index documents and make other requests to the cluster, but new documents and updates to existing documents generally aren't included in the snapshot\. The snapshot includes primary shards as they existed when Elasticsearch initiated the snapshot\. Depending on the size of your snapshot thread pool, different shards might be included in the snapshot at slightly different times\.
 
@@ -217,7 +226,7 @@ The time required to take a snapshot increases with the size of the Amazon ES do
 curl -XGET 'elasticsearch-domain-endpoint/_snapshot/repository-name/_all?pretty'
 ```
 
-## Restoring Snapshots<a name="es-managedomains-snapshot-restore"></a>
+## Restoring snapshots<a name="es-managedomains-snapshot-restore"></a>
 
 **Warning**  
 If you use index aliases, cease write requests to an alias, or switch the alias to another index, prior to deleting its index\. Halting write requests helps avoid the following scenario:  
@@ -282,7 +291,7 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
 **Note**  
 If not all primary shards were available for the indices involved, a snapshot might have a `state` of `PARTIAL`\. This value indicates that data from at least one shard wasn't stored successfully\. You can still restore from a partial snapshot, but you might need to use older snapshots to restore any missing indices\.
 
-## Deleting Manual Snapshots<a name="es-managedomains-snapshot-delete"></a>
+## Deleting manual snapshots<a name="es-managedomains-snapshot-delete"></a>
 
 To delete a manual snapshot, run the following command:
 
@@ -290,7 +299,11 @@ To delete a manual snapshot, run the following command:
 DELETE _snapshot/repository-name/snapshot-name
 ```
 
-## Using Curator for Snapshots<a name="es-managedomains-snapshot-curator"></a>
+## Automating snapshots with Index State Management<a name="es-managedomains-snapshot-ism"></a>
+
+You can use the Index State Management \(ISM\) `[snapshot](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#snapshot)` operation to automatically trigger snapshots of indices based on changes in their age, size, or number of documents\. For an example ISM policy using the `snapshot` operation, see [Sample Policies](ism.md#ism-example)\.
+
+## Using Curator for snapshots<a name="es-managedomains-snapshot-curator"></a>
 
 Some users find tools like Curator convenient for index and snapshot management\. Use [pip](https://pip.pypa.io/en/stable/installing/) to install Curator:
 
@@ -314,4 +327,4 @@ logging:
   loglevel: INFO
 ```
 
-For sample Lambda functions that use the Python API, see [Using Curator to Rotate Data in Amazon Elasticsearch Service](curator.md)\.
+For sample Lambda functions that use the Python API, see [Using Curator to rotate data in Amazon Elasticsearch Service](curator.md)\.

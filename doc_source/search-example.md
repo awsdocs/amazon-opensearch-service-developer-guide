@@ -1,6 +1,6 @@
-# Creating a Search Application with Amazon Elasticsearch Service<a name="search-example"></a>
+# Creating a search application with Amazon Elasticsearch Service<a name="search-example"></a>
 
-A common way to create a search application with Amazon ES is to use web forms to send user queries to a server\. Then you can authorize the server to call the Elasticsearch APIs directly and have the server send requests to Amazon ES\.
+A common way to create a search application with Amazon Elasticsearch Service \(Amazon ES\) is to use web forms to send user queries to a server\. Then you can authorize the server to call the Elasticsearch APIs directly and have the server send requests to Amazon ES\.
 
 If you want to write client\-side code that doesn't rely on a server, however, you should compensate for the security and performance risks\. Allowing unsigned, public access to the Elasticsearch APIs is inadvisable\. Users might access unsecured endpoints or impact cluster performance through overly broad queries \(or too many queries\)\.
 
@@ -9,7 +9,7 @@ This chapter presents a solution: use Amazon API Gateway to restrict users to a 
 **Note**  
 Standard API Gateway and Lambda pricing applies, but within the limited usage of this tutorial, costs should be negligible\.
 
-## Step 1: Index Sample Data<a name="search-example-index"></a>
+## Step 1: Index sample data<a name="search-example-index"></a>
 
 A prerequisite for these steps is an Amazon ES domain\. Download [sample\-movies\.zip](samples/sample-movies.zip), unzip it, and use the `_bulk` API to add the 5,000 documents to the `movies` index:
 
@@ -22,15 +22,15 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/_bulk
 ...
 ```
 
-To learn more, see [Indexing Data in Amazon Elasticsearch Service](es-indexing.md)\.
+To learn more, see [Indexing data in Amazon Elasticsearch Service](es-indexing.md)\.
 
-## Step 2: Create the API<a name="search-example-api"></a>
+## Step 2: Create the API in API Gateway<a name="search-example-api"></a>
 
 Using API Gateway lets you create a more limited API and simplifies the process of interacting with the Elasticsearch `_search` API\. API Gateway lets you enable security features like Amazon Cognito authentication and request throttling\. Perform the following steps to create and deploy an API:
 
 ### Create and configure the API<a name="create-api"></a>
 
-Create your API using the API Gateway console\.
+**To create your API using the API Gateway console**
 
 1. Within API Gateway, choose **Create API**\.
 
@@ -98,9 +98,15 @@ Choose **Method Request** and configure the following settings:
 
 These settings configure an API that has only one method: a `GET` request to the endpoint root \(`https://some-id.execute-api.us-west-1.amazonaws.com/search-es-api-test`\)\. The request requires a single parameter \(`q`\), the query string to search for\. When called, the method passes the request to Lambda, which runs the `search-es-lambda` function\. For more information, see [Creating an API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html) and [Deploying an API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html)\.
 
-## Step 3: Create the Lambda Function<a name="search-example-lambda"></a>
+## Step 3: Create and deploy the Lambda function<a name="search-example-lambda"></a>
 
-In this solution, API Gateway passes requests to the following Python 2\.7 Lambda function, which queries Amazon ES and returns results:
+After you create your API in API Gateway, create the Lambda function that it passes requests to\.
+
+### Create the Lambda function<a name="sample-lamdba-python"></a>
+
+In this solution, API Gateway passes requests to the following Python 3\.8 Lambda function, which queries Amazon ES and returns results\. Name the function `search-es-lambda`\.
+
+Because this sample function uses external libraries, you need to create a deployment package and upload it to Lambda for the code to work\. For more information about creating Lambda functions and deployment packages, see [Creating a Deployment Package \(Python\)](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Create the Lambda deployment package](es-aws-integrations.md#es-aws-integrations-s3-lambda-es-deployment-package) in this guide\.
 
 ```
 import boto3
@@ -113,12 +119,12 @@ service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-host = '' # For example, search-mydomain-id.us-west-1.es.amazonaws.com
+host = '' # The ES domain endpoint with https:// and a trailing slash
 index = 'movies'
-url = 'https://' + host + '/' + index + '/_search'
+url = host + '/' + index + '/_search'
 
 # Lambda execution starts here
-def handler(event, context):
+def lambda_handler(event, context):
 
     # Put the user query into the query DSL for more accurate search results.
     # Note that certain fields are boosted (^).
@@ -152,18 +158,22 @@ def handler(event, context):
     return response
 ```
 
-The function must have the following trigger\.
+#### Modify the handler<a name="sample-lamdba-handler"></a>
+
+The *handler* is the method in your function code that processes events\. You need to change the handler name according to the name of the file in your deployment package where the Lambda function is located\. For example, if your file is named `es-function.py`, rename the handler to `es-function.lambda_handler`\. For more information, see [Lambda function handler in Python](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html)\.
+
+#### Configure a trigger<a name="sample-lamdba-trigger"></a>
+
+Choose **Add trigger** and create the HTTP endpoint that invokes your function\. The trigger must have the following configuration:
 
 
 | Trigger | API | Deployment Stage | Security | 
 | --- | --- | --- | --- | 
 | API Gateway | search\-es\-api | search\-es\-api\-test | Open | 
 
-Because this sample function uses external libraries, you must create a deployment package and upload it to Lambda for the code to work\. For more information about creating Lambda functions and deployment packages, see [Creating a Deployment Package \(Python\)](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Creating the Lambda Deployment Package](es-aws-integrations.md#es-aws-integrations-s3-lambda-es-deployment-package) in this guide\.
+## Step 4: Modify the domain access policy<a name="search-example-perms"></a>
 
-## Step 4: Modify the Domain Access Policy<a name="search-example-perms"></a>
-
-Your Amazon ES domain must allow the Lambda function to make `GET` requests to the `movies` index\. The following policy provides `search-es-role` \(created through Lambda\) access to the `movies` index:
+Your Amazon ES domain must allow the Lambda function to make `GET` requests to the `movies` index\. The following policy provides `search-es-lambda-role` \(created through Lambda\) access to the `movies` index:
 
 ```
 {
@@ -172,18 +182,21 @@ Your Amazon ES domain must allow the Lambda function to make `GET` requests to t
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::123456789012:role/service-role/search-es-role"
+        "AWS": "arn:aws:iam::123456789012:role/service-role/search-es-lambda-role-1abcdefg"
       },
       "Action": "es:ESHttpGet",
-      "Resource": "arn:aws:es:us-west-1:123456789012:domain/web/movies/_search"
+      "Resource": "arn:aws:es:us-west-1:123456789012:domain/domain-name/movies/_search"
     }
   ]
 }
 ```
 
-For more information, see [Configuring Access Policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
+**Note**  
+To get the exact name of the role that Lambda automatically creates, go to the AWS Identity and Access Management \(IAM\) console, choose **Roles**, and search for "lambda"\.
 
-## Step 5: Test the Web Application<a name="search-example-webpage"></a>
+For more information about access policies, see [Configuring access policies](es-createupdatedomains.md#es-createdomain-configure-access-policies)\.
+
+## Step 5: Test the web application<a name="search-example-webpage"></a>
 
 **To test the web application**
 
@@ -194,7 +207,7 @@ For more information, see [Configuring Access Policies](es-createupdatedomains.m
 1. Open `index.html` and try running searches for *thor*, *house*, and a few other terms\.  
 ![\[A sample search for thor.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/search-ui.png)
 
-## Next Steps<a name="search-example-next"></a>
+## Next steps<a name="search-example-next"></a>
 
 This chapter is just a starting point to demonstrate a concept\. You might consider the following modifications:
 + Add your own data to the Amazon ES domain\.
