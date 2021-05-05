@@ -55,7 +55,7 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
    
    host = '' # the Amazon ES domain, including https://
    index = 'lambda-s3-index'
-   type = 'lambda-type'
+   type = '_doc'
    url = host + '/' + index + '/' + type
    
    headers = { "Content-Type": "application/json" }
@@ -171,7 +171,7 @@ GET https://es-domain/lambda-index/_search?pretty
     "hits" : [
       {
         "_index" : "lambda-s3-index",
-        "_type" : "lambda-type",
+        "_type" : "_doc",
         "_id" : "vTYXaWIBJWV_TTkEuSDg",
         "_score" : 1.0,
         "_source" : {
@@ -182,7 +182,7 @@ GET https://es-domain/lambda-index/_search?pretty
       },
       {
         "_index" : "lambda-s3-index",
-        "_type" : "lambda-type",
+        "_type" : "_doc",
         "_id" : "vjYmaWIBJWV_TTkEuCAB",
         "_score" : 1.0,
         "_source" : {
@@ -231,7 +231,7 @@ awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, servi
 
 host = '' # the Amazon ES domain, including https://
 index = 'lambda-kine-index'
-type = 'lambda-kine-type'
+type = '_doc'
 url = host + '/' + index + '/' + type + '/'
 
 headers = { "Content-Type": "application/json" }
@@ -288,7 +288,7 @@ GET https://es-domain/lambda-kine-index/_search
   "hits" : [
     {
       "_index": "lambda-kine-index",
-      "_type": "lambda-kine-type",
+      "_type": "_doc",
       "_id": "shardId-000000000000:49583511615762699495012960821421456686529436680496087042",
       "_score": 1,
       "_source": {
@@ -334,7 +334,7 @@ awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, servi
 
 host = '' # the Amazon ES domain, with https://
 index = 'lambda-index'
-type = 'lambda-type'
+type = '_doc'
 url = host + '/' + index + '/' + type + '/'
 
 headers = { "Content-Type": "application/json" }
@@ -384,10 +384,10 @@ aws dynamodb put-item --table-name es-test --item '{"director": {"S": "Kevin Cos
 Then use the Amazon ES console or Kibana to verify that `lambda-index` contains a document\. You can also use the following request:
 
 ```
-GET https://es-domain/lambda-index/lambda-type/00001
+GET https://es-domain/lambda-index/_doc/00001
 {
     "_index": "lambda-index",
-    "_type": "lambda-type",
+    "_type": "_doc",
     "_id": "00001",
     "_version": 1,
     "found": true,
