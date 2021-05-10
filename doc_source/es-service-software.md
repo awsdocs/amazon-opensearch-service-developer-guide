@@ -5,7 +5,7 @@ Service software updates differ from Elasticsearch version upgrades\. For inform
 
 Amazon Elasticsearch Service \(Amazon ES\) regularly releases system software updates that add features or otherwise improve your domains\. The **Notifications** panel in the console is the easiest way to see if an update is available or check the status of an update\. For more information about notifications, see [Notifications in Amazon Elasticsearch Service](es-managedomains-notifications.md)\. You can also receive these notifications through [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/create-eventbridge-rule.html)\.
 
-Each notification includes details about the service software update\. The notification severity is `Informational` if the update is optional and `High` if it's requred\. Consider the following when deciding whether to update your domain:
+Each notification includes details about the service software update\. The notification severity is `Informational` if the update is optional and `High` if it's required\. Consider the following when deciding whether to update your domain:
 + If you take no action on required updates, Amazon ES still updates your domain service software automatically after a certain timeframe \(typically two weeks\)\. In this situation, Amazon ES sends notifications when it starts the update and when the update is complete\.
 + If you start an update manually, Amazon ES doesn't send a notification when it starts the update, only when the update is complete\.
 
