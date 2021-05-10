@@ -27,7 +27,7 @@ The size of your source data, however, is just one aspect of your storage requir
 
 1. **Amazon ES overhead**: Amazon ES reserves 20% of the storage space of each instance \(up to 20 GiB\) for segment merges, logs, and other internal operations\.
 
-   Because of this 20 GiB maximum, the total amount of reserved space can vary dramatically depending on the number of instances in your domain\. For example, a domain might have three `m4.xlarge.elasticsearch` instances, each with 500 GiB of storage space, for a total of 1\.46 TiB\. In this case, the total reserved space is only 60 GiB\. Another domain might have 10 `m3.medium.elasticsearch` instances, each with 100 GiB of storage space, for a total of 0\.98 TiB\. Here, the total reserved space is 200 GiB, even though the first domain is 50% larger\.
+   Because of this 20% maximum, the total amount of reserved space can vary dramatically depending on the number of instances in your domain\. For example, a domain might have three `m4.xlarge.elasticsearch` instances, each with 500 GiB of storage space, for a total of 1\.46 TiB\. In this case, the total reserved space is only 60 GiB\. Another domain might have 10 `m3.medium.elasticsearch` instances, each with 100 GiB of storage space, for a total of 0\.98 TiB\. Here, the total reserved space is 200 GiB, even though the first domain is 50% larger\.
 
    In the following formula, we apply a "worst\-case" estimate for overhead that includes additional free space to help minimize the impact of node failures and Availability Zone outages\.
 
