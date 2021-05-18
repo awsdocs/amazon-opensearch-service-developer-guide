@@ -1,7 +1,7 @@
 # Amazon Elasticsearch Service Developer Guide
 
 -----
-*****Copyright &copy;  Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
+*****Copyright &copy; Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
 
 -----
 Amazon's trademarks and trade dress may not be used in 
@@ -14,7 +14,7 @@ Amazon's trademarks and trade dress may not be used in
 
 -----
 ## Contents
-+ [What Is Amazon Elasticsearch Service?](what-is-amazon-elasticsearch-service.md)
++ [What is Amazon Elasticsearch Service?](what-is-amazon-elasticsearch-service.md)
 + [Getting started with Amazon Elasticsearch Service](es-gsg.md)
    + [Step 1: Create an Amazon ES domain](es-gsg-create-domain.md)
    + [Step 2: Upload data to Amazon ES for indexing](es-gsg-upload-data.md)
@@ -64,7 +64,8 @@ Amazon's trademarks and trade dress may not be used in
    + [Asynchronous search for Amazon Elasticsearch Service](asynchronous-search.md)
 + [Using Kibana with Amazon Elasticsearch Service](es-kibana.md)
 + [Managing indices in Amazon Elasticsearch Service](managing-indices.md)
-   + [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)
+   + [UltraWarm storage for Amazon Elasticsearch Service](ultrawarm.md)
+   + [Cold storage for Amazon Elasticsearch Service](cold-storage.md)
    + [Index State Management in Amazon Elasticsearch Service](ism.md)
    + [Summarizing indices in Amazon Elasticsearch Service with index rollups](rollup.md)
    + [Using Curator to rotate data in Amazon Elasticsearch Service](curator.md)

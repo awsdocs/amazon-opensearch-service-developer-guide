@@ -1,6 +1,6 @@
-# UltraWarm for Amazon Elasticsearch Service<a name="ultrawarm"></a>
+# UltraWarm storage for Amazon Elasticsearch Service<a name="ultrawarm"></a>
 
-UltraWarm provides a cost\-effective way to store large amounts of read\-only data on Amazon Elasticsearch Service\. Standard data nodes use "hot" storage, which takes the form of instance stores or Amazon EBS volumes attached to each node\. Hot storage provides the fastest possible performance for indexing and searching new data\.
+UltraWarm provides a cost\-effective way to store large amounts of read\-only data on Amazon Elasticsearch Service \(Amazon ES\)\. Standard data nodes use "hot" storage, which takes the form of instance stores or Amazon EBS volumes attached to each node\. Hot storage provides the fastest possible performance for indexing and searching new data\.
 
 Rather than attached storage, UltraWarm nodes use Amazon S3 and a sophisticated caching solution to improve performance\. For indices that you are not actively writing to, query less frequently, and don't need the same performance from, UltraWarm offers significantly lower costs per GiB of data\. Because warm indices are read\-only unless you return them to hot storage, UltraWarm is best\-suited to immutable data, such as logs\.
 
@@ -19,6 +19,7 @@ In Elasticsearch, warm indices behave just like any other index\. You can query 
 + [Returning warm indices to hot storage](#ultrawarm-migrating-back)
 + [Restoring warm indices from automated snapshots](#ultrawarm-snapshot)
 + [Manual snapshots of warm indices](#ultrawarm-manual-snapshot)
++ [Migrating warm indices to cold storage](#ultrawarm-cold)
 + [Disabling UltraWarm](#ultrawarm-disable)
 
 ## Prerequisites<a name="ultrawarm-pp"></a>
@@ -28,6 +29,32 @@ UltraWarm has a few important prerequisites:
 + To use warm storage, domains must have [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use warm storage\.
 + If the domain uses [fine\-grained access control](fgac.md), users must be mapped to the `ultrawarm_manager` role in Kibana to make UltraWarm API calls\.
+
+**Note**  
+The `ultrawarm_manager` role might not be defined on some preexisting Amazon ES domains\. If you don't see the role in Kibana, you need to [manually create it](#ultrawarm-create-role)\.
+
+### Configure permissions<a name="ultrawarm-create-role"></a>
+
+If you enable UltraWarm on a preexisting Amazon ES domain, the `ultrawarm_manager` role might not be defined on the domain\. Non\-admin users must be mapped to this role in order to manage warm indices on domains using fine\-grained access control\. To manually create the `ultrawarm_manager` role, perform the following steps:
+
+1. In Kibana, go to **Security** and choose **Permissions**\.
+
+1. Choose **Create action group** and configure the following groups:     
+[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/ultrawarm.html)
+
+1. Choose **Roles** and **Create role**\.
+
+1. Name the role **ultrawarm\_manager**\.
+
+1. For **Cluster permissions, **select `ultrawarm_cluster` and `cluster_monitor`\.
+
+1. For **Index**, type `*`\.
+
+1. For **Index permissions**, select `ultrawarm_index_read`, `ultrawarm_index_write`, and `indices_monitor`\.
+
+1. Choose **Create**\.
+
+1. After you create the role, [map it](fgac.md#fgac-mapping) to any user or backend role that will manage UltraWarm indices\.
 
 ## UltraWarm storage requirements and performance considerations<a name="ultrawarm-calc"></a>
 
@@ -58,26 +85,36 @@ Domains support a maximum number of warm nodes\. For details, see [Amazon Elasti
 
 ### Sample CLI command<a name="ultrawarm-sample-cli"></a>
 
-The following AWS CLI command creates a domain with three data nodes, three dedicated master nodes, and six warm nodes with a restrictive access policy:
+The following AWS CLI command creates a domain with three data nodes, three dedicated master nodes, six warm nodes, and fine\-grained access control enabled:
 
 ```
-aws es create-elasticsearch-domain --domain-name my-domain --elasticsearch-cluster-config InstanceCount=3,InstanceType=r5.large.elasticsearch,DedicatedMasterEnabled=true,DedicatedMasterType=c5.large.elasticsearch,DedicatedMasterCount=3,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3},WarmEnabled=true,WarmCount=6,WarmType=ultrawarm1.medium.elasticsearch --elasticsearch-version 6.8 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=11 --access-policies '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":["123456789012"]},"Action":["es:*"],"Resource":"arn:aws:es:us-east-1:123456789012:domain/my-domain/*"}]}' --region us-east-1
+aws es create-elasticsearch-domain \
+  --domain-name my-domain \
+  --elasticsearch-version 7.10 \
+  --elasticsearch-cluster-config InstanceCount=3,InstanceType=r6g.large.elasticsearch,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.elasticsearch,DedicatedMasterCount=3,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3},WarmEnabled=true,WarmCount=6,WarmType=ultrawarm1.medium.elasticsearch \
+  --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=11 \
+  --node-to-node-encryption-options Enabled=true \
+  --encryption-at-rest-options Enabled=true \
+  --domain-endpoint-options EnforceHTTPS=true,TLSSecurityPolicy=Policy-Min-TLS-1-2-2019-07 \
+  --advanced-security-options Enabled=true,InternalUserDatabaseEnabled=true,MasterUserOptions='{MasterUserName=master-user,MasterUserPassword=master-password}' \
+  --access-policies '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":["123456789012"]},"Action":["es:*"],"Resource":"arn:aws:es:us-west-1:123456789012:domain/my-domain/*"}]}' \
+  --region us-east-1
 ```
 
 For detailed information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.
 
 ### Sample configuration API request<a name="ultrawarm-sample-config-api"></a>
 
-The following request to the configuration API creates a domain with three data nodes, three dedicated master nodes, and six warm nodes with all encryption features enabled and a restrictive access policy:
+The following request to the configuration API creates a domain with three data nodes, three dedicated master nodes, and six warm nodes with fine\-grained access control enabled and a restrictive access policy:
 
 ```
 POST https://es.us-east-2.amazonaws.com/2015-01-01/es/domain
 {
   "ElasticsearchClusterConfig": {
     "InstanceCount": 3,
-    "InstanceType": "r5.large.elasticsearch",
+    "InstanceType": "r6g.large.elasticsearch",
     "DedicatedMasterEnabled": true,
-    "DedicatedMasterType": "c5.large.elasticsearch",
+    "DedicatedMasterType": "r6g.large.elasticsearch",
     "DedicatedMasterCount": 3,
     "ZoneAwarenessEnabled": true,
     "ZoneAwarenessConfig": {
@@ -102,7 +139,15 @@ POST https://es.us-east-2.amazonaws.com/2015-01-01/es/domain
     "EnforceHTTPS": true,
     "TLSSecurityPolicy": "Policy-Min-TLS-1-2-2019-07"
   },
-  "ElasticsearchVersion": "6.8",
+   "AdvancedSecurityOptions": {
+    "Enabled": true,
+    "InternalUserDatabaseEnabled": true,
+    "MasterUserOptions": {
+      "MasterUserName": "master-user",
+      "MasterUserPassword": "master-password"
+    }
+  },
+  "ElasticsearchVersion": "7.10",
   "DomainName": "my-domain",
   "AccessPolicies": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"123456789012\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:us-east-1:123456789012:domain/my-domain/*\"}]}"
 }
@@ -377,6 +422,10 @@ If you choose to take manual snapshots of warm indices, several important consid
   }
   ```
 + Manual snapshots always restore to hot storage, even if they originally included a warm index\.
+
+## Migrating warm indices to cold storage<a name="ultrawarm-cold"></a>
+
+If you have data in UltraWarm that you query infrequently, consider migrating it to cold storage\. Cold storage is meant for data you only access occasionally or is no longer in active use\. You can't read from or write to cold indices, but you can migrate them back to warm storage at no cost whenever you need to query them\. For instructions, see [Migrating indices to cold storage](cold-storage.md#coldstorage-migrating)\.
 
 ## Disabling UltraWarm<a name="ultrawarm-disable"></a>
 

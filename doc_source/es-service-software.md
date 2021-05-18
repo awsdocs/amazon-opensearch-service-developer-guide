@@ -9,7 +9,7 @@ Each notification includes details about the service software update\. The notif
 + If you take no action on required updates, Amazon ES still updates your domain service software automatically after a certain timeframe \(typically two weeks\)\. In this situation, Amazon ES sends notifications when it starts the update and when the update is complete\.
 + If you start an update manually, Amazon ES doesn't send a notification when it starts the update, only when the update is complete\.
 
-Manually updating your domain lets you take advantage of new features more quickly\. Consider starting the update at a low traffic time\. Your domain is ineligible for a service software update if it's in any of the following states:
+Manually updating your domain lets you take advantage of new features more quickly\. When you choose **Update**, Amazon ES places the request in a queue and begins the update when it has time \(typically within minutes\)\. Consider updating your domain at a low traffic time\. Your domain is ineligible for a service software update if it's in any of the following states:
 
 
 | State | Description | 

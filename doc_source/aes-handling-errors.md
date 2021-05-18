@@ -198,6 +198,23 @@ POST /_snapshot/my-repository/my-snapshot/_restore
 
 If you plan to reindex, shrink, or split an index, you likely want to stop writing to it before performing the operation\.
 
+## Mapper parsing exception while indexing<a name="aes-troubleshooting-dynamic-template"></a>
+
+Elasticsearch 7\.10 deprecated several parameters \(`ignore_malformed`, `coerce`, and others\) for use within dynamic templates\. If you add a document to an index with a dynamic template that contains a deprecated parameter, Elasticsearch throws an exception:
+
+```
+"error" : {
+    "root_cause" : [
+      {
+        "type" : "mapper_parsing_exception",
+        "reason" : "unknown parameter [ignore_malformed] on mapper [mykeyword] of type [text]"
+      }
+    ]
+  }
+```
+
+If you encounter this error, remove the deprecated parameter from your template and retry the request\. 
+
 ## Client license checks<a name="aes-troubleshooting-license"></a>
 
 The default distributions of Logstash and Beats include a proprietary license check and fail to connect to the open source version of Elasticsearch\. Make sure you use the Apache 2\.0 \(OSS\) distributions of these clients with Amazon ES\.
@@ -235,6 +252,12 @@ Amazon ES does not support adding or modifying M3 instances to existing domains 
 We recommend choosing a newer instance type\. For domains running Elasticsearch 6\.7 and later, the following restriction apply:
 + If your existing domain does not use M3 instances, you can no longer change to them\.
 + If you change an existing domain from an M3 instance type to another instance type, you can't switch back\.
+
+## Hot queries stop working after enabling UltraWarm<a name="aes-troubleshooting-uw"></a>
+
+When you enable UltraWarm on a domain, if there are no preexisting overrides to the `search.max_buckets` setting, Amazon ES automatically sets the value to `10000` to prevent memory\-heavy queries from saturating warm nodes\. If your hot queries are using more than 10,000 buckets, they might stop working when you enable UltraWarm\. 
+
+Because you can't modify this setting due to the managed nature of Amazon Elasticsearch Service, you need to open a support case to increase the limit\. Limit increases don't require a premium support subscription\.
 
 ## Can't downgrade after upgrade<a name="aes-troubleshooting-upgrade-snapshot"></a>
 

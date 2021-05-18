@@ -20,7 +20,7 @@ The following operations cause blue/green deployments:
 + Upgrading to a new Elasticsearch version
 + Enabling or disabling **Require HTTPS**
 + Enabling encryption of data at rest or node\-to\-node encryption
-+ Enabling or disabling UltraWarm
++ Enabling or disabling UltraWarm or cold storage
 + Disabling auto\-tune and rolling back its changes
 
 ## Changes that don't cause blue/green deployments<a name="es-managedomains-nobg"></a>

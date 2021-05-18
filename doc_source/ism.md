@@ -8,6 +8,9 @@ After you attach a policy to an index, ISM creates a job that runs every 30 to 4
 
 ISM requires Elasticsearch 6\.8 or later\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/)\.
 
+**Note**  
+The `policy_id` setting is no longer supported in index templates\. You can continue to automatically manage newly created indices with the [ISM template field](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\.
+
 ## Sample policies<a name="ism-example"></a>
 
 The following sample policies demonstrate how to automate common ISM use cases\.
@@ -67,6 +70,58 @@ In this case, an index is initially in the `hot` state\. After seven days, ISM m
           },
           {
             "delete": {}
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Hot to warm to cold storage<a name="ism-example-cold"></a>
+
+ This sample policy moves an index from hot storage to UltraWarm, and eventually to  [cold storage](cold-storage.md)\. 
+
+ The index is initially in the `hot` state\. After ten days, ISM moves it  to the `warm` state\. 80 days later, it moves the index to the  `cold` state\. 
+
+```
+{
+  "policy": {
+    "description": "Demonstrate a hot-warm-cold workflow.",
+    "default_state": "hot",
+    "schema_version": 1,
+    "states": [{
+        "name": "hot",
+        "actions": [],
+        "transitions": [{
+          "state_name": "warm",
+          "conditions": {
+            "min_index_age": "10d"
+          }
+        }]
+      },
+      {
+        "name": "warm",
+        "actions": [{
+          "warm_migration": {},
+          "retry": {
+            "count": 5,
+            "delay": "1h"
+          }
+        }],
+        "transitions": [{
+          "state_name": "cold",
+          "conditions": {
+            "min_index_age": "90d"
+          }
+        }]
+      },
+      {
+        "name": "cold",
+        "actions": [{
+            "cold_migration": {
+              "timestamp_field": "@timestamp"
+            }
           }
         ]
       }
@@ -156,32 +211,50 @@ This sample policy uses the `[snapshot](https://opendistro.github.io/for-elastic
 }
 ```
 
-After you create a policy, your next step is to attach this policy to an index or indices:
+## Attach a policy to an index<a name="ism-attach"></a>
+
+After you create a policy, the next step is to attach it to an index or indices:
 
 ```
-PUT _template/<template_name>
+POST _opendistro/_ism/add/my-index
 {
-  "index_patterns": [
-    "index_name-*"
-  ],
-  "template": {
-    "settings": {
-      "opendistro.index_state_management.policy_id": "policy_id"
+  "policy_id": "my-policy-id"
+}
+```
+
+Alternatively, select the index in Kibana and choose **Apply policy**\.
+
+## ISM templates<a name="ism-template"></a>
+
+You can set up an `ism_template` field in a policy so when you create an index that matches the template pattern, the policy is automatically attached to that index\. In this example, any index you create with a name that begins with "log" is automatically matched to the ISM policy `my-policy-id`:
+
+```
+PUT _opendistro/_ism/policies/my-policy-id
+{
+  "policy": {
+    "description": "Example policy.",
+    "default_state": "...",
+    "states": [...],
+    "ism_template": {
+      "index_patterns": ["log*"],
+      "priority": 100
     }
   }
 }
 ```
+
+For an example ISM template policy, see [Sample policy with ISM template](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\.
 
 ## Differences<a name="ism-diff"></a>
 
 Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service has several differences\. 
 
 ### ISM operations<a name="alerting-diff-op"></a>
-+ Amazon ES supports a unique ISM operation, `warm_migration`\. 
++ Amazon ES supports one unique ISM operation, `warm_migration` and `cold_migration`\.
 
   If your domain has [UltraWarm](ultrawarm.md) enabled, the `warm_migration` action transitions the index to warm storage\. Even if the `warm_migration` action doesn’t complete within the [set timeout period](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions), the migration to warm indices still continues\.
 
-  Setting an `error_notifcation` for the `warm_migration` action might notify you that the `warm_migration` action failed, if it didn’t complete within the timeout period\. This failed notification is only for your own reference\. The actual warm migration operation has no inherent timeout and continues to run until it eventually succeeds or fails\. 
+  Setting an `error_notifcation` for the `warm_migration` action might notify you that the `warm_migration` action failed if it didn’t complete within the timeout period\. This failed notification is only for your own reference\. The actual warm migration operation has no inherent timeout and continues to run until it eventually succeeds or fails\. 
 + If your domain runs Elasticsearch 7\.4 or later, Amazon ES supports the ISM `open` and `close` operations\.
 + If your domain runs Elasticsearch 7\.7 or later, Amazon ES supports the ISM `snapshot` operation\.
 
@@ -193,6 +266,5 @@ Open Distro for Elasticsearch lets you change all available ISM settings using t
   + `history.enabled`
 + **Index\-level settings:**
   + `rollover_alias`
-  + `policy_id`
 
    

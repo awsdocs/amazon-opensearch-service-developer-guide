@@ -135,7 +135,7 @@ Here is the basic formula: The number of IP addresses reserved in each subnet is
 When you create the domain, Amazon ES reserves the IP addresses, uses some for the domain, and reserves the rest for [blue/green deployments](es-managedomains-configuration-changes.md)\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console\. The **Description** column shows which Amazon ES domain the network interface is associated with\.
 
 **Tip**  
-We recommend that you create dedicated subnets for the Amazon ES reserved IP addresses\. By using dedicated subnets, you avoid overlap with other applications and services and ensure that you can reserve additional IP addresses if you need to scale your cluster in the future\. To learn more, see [Creating a subnet in uour VPC](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet)\.
+We recommend that you create dedicated subnets for the Amazon ES reserved IP addresses\. By using dedicated subnets, you avoid overlap with other applications and services and ensure that you can reserve additional IP addresses if you need to scale your cluster in the future\. To learn more, see [Creating a subnet in your VPC](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#AddaSubnet)\.
 
 ## Service\-linked role for VPC access<a name="es-enabling-slr"></a>
 

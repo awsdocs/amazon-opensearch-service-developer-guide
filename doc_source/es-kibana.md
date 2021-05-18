@@ -169,6 +169,12 @@ If you have invested significant time into configuring your own Kibana instance,
 
 Older versions of Elasticsearch might only work over HTTP\. In all cases, add the `http` or `https` prefix\. For older versions, you must explicitly specify port 80 or 443\. For newer versions, you can omit the port\.
 
+## Managing indices in Kibana<a name="kibana-indices"></a>
+
+The Kibana installation on your Amazon ES domain provides a useful UI for managing indices in different storage tiers on your domain\. Choose **Index Management** from the Kibana main menu to view all indices in hot, [UltraWarm](ultrawarm.md), and [cold](cold-storage.md) storage, as well as indices managed by Index State Management \(ISM\) policies\. Use index management to move indices between warm and cold storage, and to monitor migrations between the three tiers\. 
+
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/KibanaIndices.png)
+
 ## Additional features<a name="kibana-additions"></a>
 
 The default Kibana installation on each Amazon ES domain has some additional features compared to the open source version of Kibana:

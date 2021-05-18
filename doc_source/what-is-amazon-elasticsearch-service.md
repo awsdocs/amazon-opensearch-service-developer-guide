@@ -1,4 +1,4 @@
-# What Is Amazon Elasticsearch Service?<a name="what-is-amazon-elasticsearch-service"></a>
+# What is Amazon Elasticsearch Service?<a name="what-is-amazon-elasticsearch-service"></a>
 
 Amazon Elasticsearch Service \(Amazon ES\) is a managed service that makes it easy to deploy, operate, and scale Elasticsearch clusters in the AWS Cloud\. Elasticsearch is a popular open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. With Amazon ES, you get direct access to the Elasticsearch APIs; existing code and applications work seamlessly with the service\.
 
@@ -20,9 +20,10 @@ You can use the Amazon ES console to set up and configure a domain in minutes\. 
 Amazon ES includes the following features:
 
 **Scale**
-+ Numerous configurations of CPU, memory, and storage capacity, known as *instance types*
++ Numerous configurations of CPU, memory, and storage capacity known as *instance types*, including cost\-effective Graviton instances
 + Up to 3 PB of attached storage
 + Cost\-effective [UltraWarm](ultrawarm.md) storage for read\-only data
++ [Cold storage](cold-storage.md) for infrequently accessed data
 
 **Security**
 + AWS Identity and Access Management \(IAM\) access control
@@ -73,7 +74,7 @@ If you start a new Elasticsearch project, we strongly recommend that you choose 
 
 For Amazon ES, you pay for each hour of use of an EC2 instance and for the cumulative size of any EBS storage volumes attached to your instances\. [Standard AWS data transfer charges](https://aws.amazon.com/ec2/pricing/) also apply\.
 
-However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](es-managedomains-multiaz.md), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\. Similarly, Amazon ES does not bill for data transfer between [UltraWarm](ultrawarm.md) nodes and Amazon S3\.
+However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](es-managedomains-multiaz.md), Amazon ES does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. Amazon ES neither meters nor bills for this traffic\. Similarly, Amazon ES does not bill for data transfer between [UltraWarm](ultrawarm.md)/[cold](cold-storage.md) nodes and Amazon S3\.
 
 For full pricing details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for configuration changes](es-managedomains-configuration-changes.md#es-managedomains-config-charges)\.
 

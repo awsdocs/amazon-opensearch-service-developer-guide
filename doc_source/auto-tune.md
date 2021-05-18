@@ -10,9 +10,36 @@ Auto\-Tune is available in commercial Regions on domains running Elasticsearch 6
 
 ## Enabling or disabling Auto\-Tune<a name="auto-tune-enable"></a>
 
-Amazon ES enables Auto\-Tune by default on new domains\. To disable it, clear the check box for the option in the console, or specify `DesiredState` as `"DISABLED"` in the AWS CLI or configuration API\.
+Amazon ES enables Auto\-Tune by default on new domains\. To enable or disable Auto\-Tune on existing domains, we recommend using the console, which greatly simplifies the process\. In the console, choose your domain and **Edit domain**, then configure the settings in the **Auto\-Tune** section\.
 
-To enable or disable Auto\-Tune on existing domains, we recommend using the console, which greatly simplifies the process\. In the console, choose your domain and then choose **Edit domain**\.
+**AWS CLI**
+
+To use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/), configure the `auto-tune-options` parameters\. The following sample command enables Auto\-Tune on an existing domain with a maintenance schedule that repeats every day at 12:00pm UTC:
+
+```
+aws es update-elasticsearch-domain-config --domain-name mylogs --auto-tune-options '{"DesiredState": "ENABLED","MaintenanceSchedules":[{"StartAt":"2021-12-19","Duration":{"Value":2,"Unit":"HOURS"},"CronExpressionForRecurrence": "cron(0 12 * * ? *)"}]}'
+```
+
+**Configuration API**
+
+To use the [configuration API](es-configuration-api.md), configure the `AutoTuneOptions` settings: 
+
+```
+POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/domain-name/config
+{
+  "AutoTuneOptions": {
+    "DesiredState": "ENABLED",
+    "MaintenanceSchedules": [{
+      "StartAt": 4104152288000,
+      "Duration": {
+        "Value": 2,
+        "Unit": "HOURS"
+      },
+    "CronExpressionForRecurrence": "cron(0 12 * * ? *)"
+    }]
+  }
+}
+```
 
 Auto\-Tune has two broad categories of changes:
 + Nondisruptive changes that it applies as the cluster runs

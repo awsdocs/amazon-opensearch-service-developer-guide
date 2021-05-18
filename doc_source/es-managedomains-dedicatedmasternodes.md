@@ -45,10 +45,10 @@ Although dedicated master nodes don't process search and query requests, their s
 
 |  **Instance Count**  |  **Recommended Minimum Dedicated Master Instance Type**  | 
 | --- | --- | 
-|  1–10  |  `c5.large.elasticsearch`  | 
-|  10–30  |  `c5.xlarge.elasticsearch`  | 
-| 30–75 |  `c5.2xlarge.elasticsearch`  | 
-|  75–200  |  `r5.4xlarge.elasticsearch`  | 
+|  1–10  | `c5.large.elasticsearch` or `c6g.large.elasticsearch` | 
+|  10–30  |  `c5.xlarge.elasticsearch` or `c6g.xlarge.elasticsearch`  | 
+| 30–75 |  `c5.2xlarge.elasticsearch` or `c6g.2xlarge.elasticsearch`  | 
+|  75–200  |  `r5.4xlarge.elasticsearch` or `r6g.4xlarge.elasticsearch`  | 
 + For information about how certain configuration changes can affect dedicated master nodes, see [Making configuration changes in Amazon ES](es-managedomains-configuration-changes.md)\.
 + For clarification on instance count limits, see [Cluster and instance limits](aes-limits.md#clusterresource)\.
 + For more information about specific instance types, including vCPU, memory, and pricing, see [Amazon Elasticsearch Instance Prices](https://aws.amazon.com/elasticsearch-service/pricing/)\.

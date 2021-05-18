@@ -10,7 +10,7 @@ Currently, Amazon ES supports the following upgrade paths:
 
 | From Version | To Version | 
 | --- | --- | 
-| 7\.x | 7\.*x* | 
+| 7\.x | 7\.*x* Elasticsearch 7\.10 introduces a breaking change with regard to dynamic templates\. For more information, see [Mapper parsing exception while indexing](aes-handling-errors.md#aes-troubleshooting-dynamic-template)\.  | 
 | 6\.8 | 7\.*x* Elasticsearch 7\.0 includes numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](es-managedomains-snapshots.md) of the 6\.8 domain, restoring it on a test 7\.*x* domain, and using that test domain to identify potential upgrade issues\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* has a default shard count of one\. Amazon ES 7\.*x* domains retain the previous default of five\.  | 
 | 6\.*x* | 6\.*x* | 
 | 5\.6 |  6\.*x*  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. Check that your client code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, Amazon ES reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 

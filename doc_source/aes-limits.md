@@ -13,7 +13,7 @@ The following table shows Amazon ES limits for clusters and instances\.
 | Maximum number of [warm](ultrawarm.md) nodes per cluster | 150 | 
 |  Maximum total number of data and warm nodes per cluster  |  200 You might have to request a data node limit increase to reach this total\. For example, your domain might have 80 data nodes and 120 warm nodes\.  | 
 | Maximum number of dedicated master nodes per cluster |  5 You can use the T2 and T3 instance types for dedicated master nodes only if the number of data nodes is 10 or fewer\. We don't recommend T2 or `t3.small` instance types for production domains\.  | 
-|  Maximum total storage per cluster  |  3 PiB This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 36 `i3.8xlarge.elasticsearch` instances and 140 `ultrawarm1.large.elasticsearch` instances for a total of 2\.98 PiB of storage\.  | 
+|  Maximum total storage per cluster  |  3 PiB This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 45 `r6gd.16xlarge.elasticsearch` instances and 140 `ultrawarm1.large.elasticsearch` instances for a total of 2\.88 PiB of storage\.  | 
 | Smallest supported instance type per Elasticsearch version | `t2.micro.elasticsearch` \(versions 1\.5 and 2\.3\) and `t2.small.elasticsearch` \(version 5\.*x* and 6\.*x*\)\. | 
 | Maximum number of domains per account \(per Region\) | 100 | 
 |  Maximum number of custom packages per account \(per Region\)  |  25  | 
@@ -23,7 +23,7 @@ For a list of the instance types that Amazon ES supports, see [Supported Instanc
 
 ## UltraWarm storage limits<a name="limits-ultrawarm"></a>
 
-The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)\.
+The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm storage for Amazon Elasticsearch Service](ultrawarm.md)\.
 
 
 ****  
@@ -36,7 +36,7 @@ The following table lists the UltraWarm instance types and the maximum amount of
 ## EBS volume size limits<a name="ebsresource"></a>
 
 The following table shows the minimum and maximum sizes for EBS volumes for each instance type that Amazon ES supports\. For information about which instance types include instance storage and additional hardware details, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
-+ If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.micro`, `t2.small`, and `t2.medium`\. For the maximum sizes listed in the following table, choose one of the SSD options\.
++ If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.micro`, `t2.small`, `t2.medium`, and all Graviton instances \(M6G, C6G, R6G, and R6GD\), which don't support magnetic storage\. For the maximum sizes listed in the following table, choose one of the SSD options\.
 + 512 GiB is the maximum volume size for Elasticsearch version 1\.5\.
 + Some older\-generation instance types include instance storage, but also support EBS storage\. If you choose EBS storage for one of these instance types, the storage volumes are *not* additive\. You can use either an EBS volume or the instance storage, not both\.
 
@@ -64,6 +64,12 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 | m5\.2xlarge\.elasticsearch | 10 GiB | 1\.5 TiB | 
 | m5\.4xlarge\.elasticsearch | 10 GiB | 3 TiB | 
 | m5\.12xlarge\.elasticsearch | 10 GiB | 9 TiB | 
+| m6g\.large\.elasticsearch | 10 GiB | 512 GiB | 
+| m6g\.xlarge\.elasticsearch | 10 GiB | 1 TiB | 
+| m6g\.2xlarge\.elasticsearch | 10 GiB | 1\.5 TiB | 
+| m6g\.4xlarge\.elasticsearch | 10 GiB | 3 TiB | 
+| m6g\.8xlarge\.elasticsearch | 10 GiB | 6 TiB | 
+| m6g\.12xlarge\.elasticsearch | 10 GiB | 9 TiB | 
 | c4\.large\.elasticsearch | 10 GiB | 100 GiB | 
 | c4\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
 | c4\.2xlarge\.elasticsearch | 10 GiB | 1 TiB | 
@@ -75,6 +81,12 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 | c5\.4xlarge\.elasticsearch | 10 GiB | 1\.5 TiB | 
 | c5\.9xlarge\.elasticsearch | 10 GiB | 3\.5 TiB | 
 | c5\.18xlarge\.elasticsearch | 10 GiB | 7 TiB | 
+| c6g\.large\.elasticsearch | 10 GiB | 256 GiB | 
+| c6g\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
+| c6g\.2xlarge\.elasticsearch | 10 GiB | 1 TiB | 
+| c6g\.4xlarge\.elasticsearch | 10 GiB | 1\.5 TiB | 
+| c6g\.8xlarge\.elasticsearch | 10 GiB | 3 TiB | 
+| c6g\.12xlarge\.elasticsearch | 10 GiB | 4\.5 TiB | 
 | r3\.large\.elasticsearch | 10 GiB | 512 GiB | 
 | r3\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
 | r3\.2xlarge\.elasticsearch | 10 GiB | 512 GiB | 
@@ -91,6 +103,19 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 | r5\.2xlarge\.elasticsearch | 10 GiB | 3 TiB | 
 | r5\.4xlarge\.elasticsearch | 10 GiB | 6 TiB | 
 | r5\.12xlarge\.elasticsearch | 10 GiB | 12 TiB | 
+| r6g\.large\.elasticsearch | 10 GiB | 1 TiB | 
+| r6g\.xlarge\.elasticsearch | 10 GiB | 1\.5 TiB | 
+| r6g\.2xlarge\.elasticsearch | 10 GiB | 3 TiB | 
+| r6g\.4xlarge\.elasticsearch | 10 GiB | 6 TiB | 
+| r6g\.8xlarge\.elasticsearch | 10 GiB | 8 TiB | 
+| r6g\.12xlarge\.elasticsearch | 10 GiB | 12 TiB | 
+| r6gd\.large\.elasticsearch | N/A | N/A | 
+| r6gd\.xlarge\.elasticsearch | N/A | N/A | 
+| r6gd\.2xlarge\.elasticsearch | N/A | N/A | 
+| r6gd\.4xlarge\.elasticsearch | N/A | N/A | 
+| r6gd\.8xlarge\.elasticsearch | N/A | N/A | 
+| r6gd\.12xlarge\.elasticsearch | N/A | N/A | 
+| r6gd\.16xlarge\.elasticsearch | N/A | N/A | 
 | i2\.xlarge\.elasticsearch | 10 GiB | 512 GiB | 
 | i2\.2xlarge\.elasticsearch | 10 GiB | 512 GiB | 
 | i3\.large\.elasticsearch  | N/A | N/A | 
@@ -128,6 +153,12 @@ The following table shows the maximum size of HTTP request payloads\.
 | m5\.2xlarge\.elasticsearch | 100 MiB | 
 | m5\.4xlarge\.elasticsearch | 100 MiB | 
 | m5\.12xlarge\.elasticsearch | 100 MiB | 
+| m6g\.large\.elasticsearch | 10 MiB | 
+| m6g\.xlarge\.elasticsearch | 100 MiB | 
+| m6g\.2xlarge\.elasticsearch | 100 MiB | 
+| m6g\.4xlarge\.elasticsearch | 100 MiB | 
+| m6g\.8xlarge\.elasticsearch | 100 MiB | 
+| m6g\.12xlarge\.elasticsearch | 100 MiB | 
 | c4\.large\.elasticsearch | 10 MiB | 
 | c4\.xlarge\.elasticsearch | 100 MiB | 
 | c4\.2xlarge\.elasticsearch | 100 MiB | 
@@ -139,6 +170,12 @@ The following table shows the maximum size of HTTP request payloads\.
 | c5\.4xlarge\.elasticsearch | 100 MiB | 
 | c5\.9xlarge\.elasticsearch | 100 MiB | 
 | c5\.18xlarge\.elasticsearch | 100 MiB | 
+| c6g\.large\.elasticsearch | 10 MiB | 
+| c6g\.xlarge\.elasticsearch | 100 MiB | 
+| c6g\.2xlarge\.elasticsearch | 100 MiB | 
+| c6g\.4xlarge\.elasticsearch | 100 MiB | 
+| c6g\.8xlarge\.elasticsearch | 100 MiB | 
+| c6g\.12xlarge\.elasticsearch | 100 MiB | 
 | r3\.large\.elasticsearch | 10 MiB | 
 | r3\.xlarge\.elasticsearch | 100 MiB | 
 | r3\.2xlarge\.elasticsearch | 100 MiB | 
@@ -155,6 +192,19 @@ The following table shows the maximum size of HTTP request payloads\.
 | r5\.2xlarge\.elasticsearch | 100 MiB | 
 | r5\.4xlarge\.elasticsearch | 100 MiB | 
 | r5\.12xlarge\.elasticsearch | 100 MiB | 
+| r6g\.large\.elasticsearch | 100 MiB | 
+| r6g\.xlarge\.elasticsearch | 100 MiB | 
+| r6g\.2xlarge\.elasticsearch | 100 MiB | 
+| r6g\.4xlarge\.elasticsearch | 100 MiB | 
+| r6g\.8xlarge\.elasticsearch | 100 MiB | 
+| r6g\.12xlarge\.elasticsearch | 100 MiB | 
+| r6gd\.large\.elasticsearch | 100 MiB | 
+| r6gd\.xlarge\.elasticsearch | 100 MiB | 
+| r6gd\.2xlarge\.elasticsearch | 100 MiB | 
+| r6gd\.4xlarge\.elasticsearch | 100 MiB | 
+| r6gd\.8xlarge\.elasticsearch | 100 MiB | 
+| r6gd\.12xlarge\.elasticsearch | 100 MiB | 
+| r6gd\.16xlarge\.elasticsearch | 100 MiB | 
 | i2\.xlarge\.elasticsearch | 100 MiB | 
 | i2\.2xlarge\.elasticsearch | 100 MiB | 
 | i3\.large\.elasticsearch | 100 MiB | 

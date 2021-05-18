@@ -5,7 +5,7 @@ Short for its associated *k\-nearest neighbors* algorithm, k\-NN for Amazon Elas
 Use the following table to find the version of the k\-NN plugin running on your Amazon Elasticsearch Service domain\. Each k\-NN plugin version corresponds to an [Open Distro for Elasticsearch version](https://opendistro.github.io/for-elasticsearch-docs/version-history/)\.
 
 
-| Elasticsearch Version | k\-NN Plugin Version | Notable Features | 
+| Elasticsearch version | k\-NN plugin version | Notable features | 
 | --- | --- | --- | 
 | 7\.1 |  1\.3\.0\.0  | Euclidean distance | 
 | 7\.4 |  1\.4\.0\.0  |  | 
@@ -14,7 +14,7 @@ Use the following table to find the version of the k\-NN plugin running on your 
 | 7\.9 |  1\.11\.0\.0  | Warmup API, custom scoring | 
 | 7\.10 | 1\.13\.0\.0 | Hamming distance, L1 Norm distance, Painless scripting | 
 
-Full documentation for the Elasticsearch feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
+Full documentation for the k\-NN plugin is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
 
 ## Getting started with k\-NN<a name="knn-gs"></a>
 

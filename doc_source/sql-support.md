@@ -2,7 +2,20 @@
 
 You can use SQL to query your Amazon Elasticsearch Service \(Amazon ES\), rather than using the JSON\-based [Elasticsearch query DSL](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/full-text/)\. Querying with SQL is useful if you're already familiar with the language or want to integrate your domain with an application that uses it\.
 
-SQL support is available on domains running Elasticsearch 6\.5 or higher\. Full documentation is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/sql/)\.
+Use the following table to find the version of the SQL plugin that's supported by each Elasticsearch version\. Each SQL plugin version corresponds to an [Open Distro for Elasticsearch version](https://opendistro.github.io/for-elasticsearch-docs/version-history/)\.
+
+
+| Elasticsearch version | SQL plugin version | Notable features | 
+| --- | --- | --- | 
+|  7\.1  | [1\.1\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.1.0.0) |  | 
+|  7\.3  | [1\.3\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.3.0.0) | CAST function, multiple string and number operators | 
+| 7\.4 |  [1\.4\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.4.0.0)  | Add additional date/time functions, support IF, IFNULL, and ISNULL functions | 
+| 7\.7 |  [1\.8\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.8.0.0)  |  | 
+| 7\.8 |  [1\.9\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.9.0.0)  |  | 
+| 7\.9 |  [1\.11\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.11.0.0)  | Add additional date/time functions, ORDER BY keyword | 
+|  7\.10  | [1\.13\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.13.0.0) | NULL FIRST and LAST for window functions, CAST\(\) function, SHOW and DESCRIBE commands | 
+
+SQL support is available on domains running Elasticsearch 6\.5 or higher\. Full documentation of the SQL plugin is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/sql/)\.
 
 ## Sample call<a name="sql-sample"></a>
 
@@ -47,6 +60,7 @@ The Java Database Connectivity \(JDBC\) driver lets you integrate Amazon ES doma
 
 | Elasticsearch Version | JDBC Driver Version | 
 | --- | --- | 
+| 7\.10 | [1\.13\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-1.13.0.0.jar) | 
 | 7\.9 | [1\.11\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-1.11.0.0.jar) | 
 | 7\.8 | [1\.9\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-1.9.0.0.jar) | 
 | 7\.7 | [1\.8\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-1.8.0.0.jar) | 

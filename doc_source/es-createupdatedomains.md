@@ -67,6 +67,8 @@ You can choose different instance types for your dedicated master nodes and data
 
 1. \(Optional\) To enable [UltraWarm storage](ultrawarm.md), choose **Enable UltraWarm data nodes**\. Each instance type has a [maximum amount of storage](aes-limits.md#limits-ultrawarm) that it can address\. Multiply that amount by the number of warm data nodes for the total addressable warm storage\.
 
+1. \(Optional\) To enable [cold storage](cold-storage.md), choose **Enable cold storage**\. You must enable UltraWarm to enable cold storage\.
+
 1. \(Optional\) For domains running Elasticsearch 5\.3 and later, **Automated snapshot start hour** has no effect\. For more information about automated snapshots, see [Creating index snapshots in Amazon Elasticsearch Service](es-managedomains-snapshots.md)\.
 
 1. \(Optional\) Choose **Optional Elasticsearch cluster settings**\. For a summary of these options, see [Advanced options](#es-createdomain-configure-advanced-options)\.
@@ -94,6 +96,8 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
    Whichever option you choose, the master user can access all indices in the cluster and all Elasticsearch APIs\. For guidance on which option to choose, see [Key concepts](fgac.md#fgac-concepts)\.
 
    If you disable fine\-grained access control, you can still control access to your domain by placing it within a VPC, applying a restrictive access policy, or both\. You must enable node\-to\-node encryption and encryption at rest to use fine\-grained access control\.
+**Note**  
+We *strongly* recommend enabling fine\-grained access control to protect the data on your domain\. Fine\-grained access control provides security at the cluster, index, document, and field levels\.
 
 1. \(Optional\) If you want to use SAML authentication for Kibana, choose **Prepare SAML authentication**\. After the domain is available, see [SAML authentication for Kibana](saml.md) for additional steps\.
 
@@ -124,35 +128,35 @@ Instead of creating an Amazon ES domain by using the console, you can use the AW
 #### Example commands<a name="es-createdomains-cli-examples"></a>
 
 This first example demonstrates the following Amazon ES domain configuration:
-+ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 5\.5
-+ Populates the domain with two instances of the `m4.large.elasticsearch` instance type
-+ Uses a 100 GiB Magnetic disk EBS volume for storage for each data node
++ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 7\.10
++ Populates the domain with two instances of the `r6g.large.elasticsearch` instance type
++ Uses a 100 GiB General Purpose \(SSD\) EBS volume for storage for each data node
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
 ```
-aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=standard,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 7.10 --elasticsearch-cluster-config  InstanceType=r6g.large.elasticsearch,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
-+ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 5\.5
-+ Populates the domain with six instances of the `m4.large.elasticsearch` instance type
++ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 7\.10
++ Populates the domain with six instances of the `r6g.large.elasticsearch` instance type
 + Uses a 100 GiB General Purpose \(SSD\) EBS volume for storage for each data node
 + Restricts access to the service to a single user, identified by the user's AWS account ID: 555555555555 
 + Distributes instances across three Availability Zones
 
 ```
-aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.large.elasticsearch,InstanceCount=6,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3} --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/*" } ] }'
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 7.10 --elasticsearch-cluster-config  InstanceType=r6g.large.elasticsearch,InstanceCount=6,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3} --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/*" } ] }'
 ```
 
 The next example demonstrates the following Amazon ES domain configuration:
-+ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 5\.5
-+ Populates the domain with ten instances of the `m4.xlarge.elasticsearch` instance type
-+ Populates the domain with three instances of the `m4.large.elasticsearch` instance type to serve as dedicated master nodes
++ Creates an Amazon ES domain named *mylogs* with Elasticsearch version 7\.10
++ Populates the domain with ten instances of the `r6g.xlarge.elasticsearch` instance type
++ Populates the domain with three instances of the `r6g.large.elasticsearch` instance type to serve as dedicated master nodes
 + Uses a 100 GiB Provisioned IOPS EBS volume for storage, configured with a baseline performance of 1000 IOPS for each data node
 + Restricts access to a single user and to a single subresource, the `_search` API
 
 ```
-aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 5.5 --elasticsearch-cluster-config  InstanceType=m4.xlarge.elasticsearch,InstanceCount=10,DedicatedMasterEnabled=true,DedicatedMasterType=m4.large.elasticsearch,DedicatedMasterCount=3 --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,Iops=1000 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::555555555555:root" }, "Action": "es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/_search" } ] }'
+aws es create-elasticsearch-domain --domain-name mylogs --elasticsearch-version 7.10 --elasticsearch-cluster-config  InstanceType=r6g.xlarge.elasticsearch,InstanceCount=10,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.elasticsearch,DedicatedMasterCount=3 --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,Iops=1000 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::555555555555:root" }, "Action": "es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/_search" } ] }'
 ```
 
 **Note**  

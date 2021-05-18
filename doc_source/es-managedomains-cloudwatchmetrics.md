@@ -14,12 +14,13 @@ Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. I
 
 If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [Making configuration changes in Amazon ES](es-managedomains-configuration-changes.md)\.
 
-All metrics are in the `AWS/ES` namespace\. Metrics for individual nodes are in the `ClientId, DomainName, NodeId` dimension\. Cluster metrics are in the `Per-Domain, Per-Client Metrics` dimension\. Some node metrics are aggregated at the cluster level and thus included in both dimensions\. The service archives metrics for two weeks before discarding them\.
+All metrics are in the `AWS/ES` namespace\. Metrics for individual nodes are in the `ClientId, DomainName, NodeId` dimension\. Cluster metrics are in the `Per-Domain, Per-Client Metrics` dimension\. Some node metrics are aggregated at the cluster level and thus included in both dimensions\. Shart metrics are in the `ClientId, DomainName, NodeId, ShardRole` dimension\. The service archives metrics for two weeks before discarding them\.
 + [Cluster metrics](#es-managedomains-cloudwatchmetrics-cluster-metrics)
 + [Dedicated master node metrics](#es-managedomains-cloudwatchmetrics-master-node-metrics)
 + [EBS volume metrics](#es-managedomains-cloudwatchmetrics-master-ebs-metrics)
 + [Instance metrics](#es-managedomains-cloudwatchmetrics-instance-metrics)
 + [UltraWarm metrics](#es-managedomains-cloudwatchmetrics-uw)
++ [Cold storage metrics](#es-managedomains-cloudwatchmetrics-coldstorage)
 + [Alerting metrics](#es-managedomains-cloudwatchmetrics-alerting)
 + [Anomaly detection metrics](#es-managedomains-cloudwatchmetrics-anomaly-detection)
 + [Asynchronous search metrics](#es-managedomains-cloudwatchmetrics-asynchronous-search)
@@ -141,23 +142,40 @@ Amazon Elasticsearch Service provides the following metrics for [UltraWarm](ultr
 | WarmFreeStorageSpace |  The amount of free warm storage space in MiB\. Because UltraWarm uses Amazon S3 rather than attached disks, `Sum` is the only relevant statistic\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Sum  | 
 | WarmJVMMemoryPressure |  The maximum percentage of the Java heap used for the UltraWarm nodes\. Relevant statistics: Maximum  | 
 | WarmSearchableDocuments |  The total number of searchable documents across all warm indices in the cluster\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Sum  | 
-|  `WarmSearchLatency`  |  The average time, in milliseconds, that it takes a shard on an UltraWarm node to complete a search operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum  | 
-|  `WarmSearchRate`  |  The total number of search requests per minute for all shards on an UltraWarm node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum  | 
-| WarmStorageSpaceUtilization |  The total amount of warm storage space that the cluster is using\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. Relevant statistics: Maximum  | 
-|  `HotStorageSpaceUtilization`  |  The total amount of hot storage space that the cluster is using\. Relevant statistics: Maximum  | 
+|  WarmSearchLatency  |  The average time, in milliseconds, that it takes a shard on an UltraWarm node to complete a search operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum  | 
+|  WarmSearchRate  |  The total number of search requests per minute for all shards on an UltraWarm node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum  | 
+| WarmStorageSpaceUtilization |  The total amount of warm storage space, in MiB, that the cluster is using\.  Relevant statistics: Maximum  | 
+|  HotStorageSpaceUtilization  |  The total amount of hot storage space that the cluster is using\.  Relevant statistics: Maximum  | 
 | WarmSysMemoryUtilization |  The percentage of the warm node's memory that is in use\. Relevant statistics: Maximum  | 
-|  `HotToWarmMigrationQueueSize`  |  The number of indices currently waiting to migrate from hot to warm storage\. Relevant statistics: Maximum  | 
-|  `WarmToHotMigrationQueueSize`  |  The number of indices currently waiting to migrate from warm to hot storage\. Relevant statistics: Maximum  | 
-|  `HotToWarmMigrationFailureCount`  |  The total number of failed hot to warm migrations\. Relevant statistics: Sum  | 
-|  `HotToWarmMigrationForceMergeLatency`  |  The average latency of the force merge stage of the migration process\. If this stage consistently takes too long, consider increasing `index.ultrawarm.migration.force_merge.max_num_segments`\. Relevant statistics: Average  | 
-|  `HotToWarmMigrationSnapshotLatency`  |  The average latency of the snapshot stage of the migration process\. If this stage consistently takes too long, ensure that your shards are appropriately sized and distributed throughout the cluster\. Relevant statistics: Average  | 
-|  `HotToWarmMigrationProcessingLatency`  |  The average latency of successful hot to warm migrations, *not* including time spent in the queue\. This value is the sum of the amount of time it takes to complete the force merge, snapshot, and shard relocation stages of the migration process\. Relevant statistics: Average  | 
-|  `HotToWarmMigrationSuccessCount`  |  The total number of successful hot to warm migrations\. Relevant statistics: Sum  | 
-|  `HotToWarmMigrationSuccessLatency`  |  The average latency of successful hot to warm migrations, including time spent in the queue\. Relevant statistics: Average  | 
+|  HotToWarmMigrationQueueSize  |  The number of indices currently waiting to migrate from hot to warm storage\. Relevant statistics: Maximum  | 
+|  WarmToHotMigrationQueueSize  |  The number of indices currently waiting to migrate from warm to hot storage\. Relevant statistics: Maximum  | 
+|  HotToWarmMigrationFailureCount  |  The total number of failed hot to warm migrations\. Relevant statistics: Sum  | 
+|  HotToWarmMigrationForceMergeLatency  |  The average latency of the force merge stage of the migration process\. If this stage consistently takes too long, consider increasing `index.ultrawarm.migration.force_merge.max_num_segments`\. Relevant statistics: Average  | 
+|  HotToWarmMigrationSnapshotLatency  |  The average latency of the snapshot stage of the migration process\. If this stage consistently takes too long, ensure that your shards are appropriately sized and distributed throughout the cluster\. Relevant statistics: Average  | 
+|  HotToWarmMigrationProcessingLatency  |  The average latency of successful hot to warm migrations, *not* including time spent in the queue\. This value is the sum of the amount of time it takes to complete the force merge, snapshot, and shard relocation stages of the migration process\. Relevant statistics: Average  | 
+|  HotToWarmMigrationSuccessCount  |  The total number of successful hot to warm migrations\. Relevant statistics: Sum  | 
+|  HotToWarmMigrationSuccessLatency  |  The average latency of successful hot to warm migrations, including time spent in the queue\. Relevant statistics: Average  | 
+
+## Cold storage metrics<a name="es-managedomains-cloudwatchmetrics-coldstorage"></a>
+
+Amazon Elasticsearch Service provides the following metrics for [cold storage](cold-storage.md)\.
+
+
+| Metric | Description | 
+| --- | --- | 
+| ColdStorageSpaceUtilization  |  The total amount of cold storage space, in MiB, that the cluster is using\.  Relevant statistics: Max  | 
+| ColdToWarmMigrationFailureCount |  The total number of failed cold to warm migrations\. Relevant statistics: Sum  | 
+| ColdToWarmMigrationLatency |  The amount of time for successful cold to warm migrations to complete\. Relevant statistics: Average  | 
+| ColdToWarmMigrationQueueSize |  The number of indices currently waiting to migrate from cold to warm storage\.  Relevant statistics: Maximum  | 
+| ColdToWarmMigrationSuccessCount  |  The total number of successful cold to warm migrations\. Relevant statistics: Sum  | 
+| WarmToColdMigrationFailureCount  |  The total number of failed warm to cold migrations\. Relevant statistics: Sum  | 
+| WarmToColdMigrationLatency |  The amount of time for successful warm to cold migrations to complete\. Relevant statistics: Average  | 
+| WarmToColdMigrationQueueSize |  The number of indices currently waiting to migrate from warm to cold storage\.  Relevant statistics: Maximum  | 
+| WarmToColdMigrationSuccessCount |  The total number of successful warm to cold migrations\. Relevant statistics: Sum  | 
 
 ## Alerting metrics<a name="es-managedomains-cloudwatchmetrics-alerting"></a>
 
-Amazon Elasticsearch Service provides the following metrics for the [alerting feature](alerting.md)\.
+Amazon Elasticsearch Service provides the following metrics for [alerting](alerting.md)\.
 
 
 | Metric | Description | 
@@ -257,7 +275,7 @@ Amazon Elasticsearch Service includes the following metrics for the k\-nearest n
 
 ## Cross\-cluster search metrics<a name="es-managedomains-cloudwatchmetrics-cross-cluster-search"></a>
 
-Amazon Elasticsearch Service provides the following metrics for [Cross\-cluster search](cross-cluster-search.md)\.
+Amazon Elasticsearch Service provides the following metrics for [cross\-cluster search](cross-cluster-search.md)\.
 
 **Source domain metrics**
 

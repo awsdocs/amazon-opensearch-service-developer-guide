@@ -8,34 +8,36 @@ You secure custom endpoints by either generating a certificate in AWS Certificat
 
 ## Custom endpoints for new domains<a name="es-customize-endpoint"></a>
 
-You can enable a custom endpoint for a new Amazon ES domain by using the Amazon Elasticsearch Service console, AWS CLI, or configuration API\.
+You can enable a custom endpoint for a new Amazon ES domain using the Amazon ES console, AWS CLI, or configuration API\.
 
 **To customize your endpoint \(console\)**
 
-1. From the Amazon Elasticsearch dashboard, choose **Create a new domain**\.
+1. From the Amazon ES, choose **Create a new domain**\. 
 
-1. For **Elasticsearch domain name**, enter your domain name\.
+1. Select a deployment type and version and choose **Next**\.
 
-1. To add a **Custom endpoint**, select the **Enable custom endpoint** check box\.
+1. Provide a domain name\.
 
-1. For **Custom hostname**, enter your preferred custom endpoint hostname\. Your custom endpoint hostname should be a fully qualified domain name \(FQDN\), such as www\.yourdomain\.com or example\.yourdomain\.com\. 
+1. Under **Custom endpoint**, select **Enable custom endpoint**\.
+
+1. For **Custom hostname**, enter your preferred custom endpoint hostname\. The hostname should be a fully qualified domain name \(FQDN\), such as www\.yourdomain\.com or example\.yourdomain\.com\. 
 **Note**  
-You must obtain a new certificate for your custom endpoint's subdomains if you don't have a [wildcard certificate](https://en.wikipedia.org/wiki/Wildcard_certificate)\. 
+If you don't have a [wildcard certificate](https://en.wikipedia.org/wiki/Wildcard_certificate) you must obtain a new certificate for your custom endpoint's subdomains\.
 
-1. For **AWS certificate**, choose the SSL certificate that you want to use for your domain\. If you don't see a certificate that is available to choose, you can import a certificate into ACM or use ACM to provision one for you\. For more information, see [Issuing and Managing Certificates](https://docs.aws.amazon.com/acm/latest/userguide/gs.html) in the *AWS Certificate Manager User Guide*\. 
+1. For **AWS certificate**, choose the SSL certificate to use for your domain\. If no certificates are available, you can import one into ACM or use ACM to provision one\. For more information, see [Issuing and Managing Certificates](https://docs.aws.amazon.com/acm/latest/userguide/gs.html) in the *AWS Certificate Manager User Guide*\. 
 **Note**  
 The certificate must have the custom endpoint name and be in the same account as your Amazon ES domain\.
-   + Choose **Confirm**\.
-   + After the new domain finishes processing, you can view your custom endpoint by choosing your domain and checking the **Overview** tab\.
+   + Follow the rest of the steps to create your domain and choose **Confirm**\.
+   + Select the domain when it's finished processing to view your custom endpoint\.
 
-   To use the CLI or configuration API, use the `CreateElasticsearchDomain` and ` UpdateElasticsearchDomainConfig` operations\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
+   To use the CLI or configuration API, use the `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig` operations\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
 
 ## Custom endpoints for existing domains<a name="es-enable-disable-custom-endpoint"></a>
 
-To add or remove a custom endpoint on an existing Amazon ES domain, choose **Edit domain** and follow steps 3–6 above\.
+To add a custom endpoint to an existing Amazon ES domain, choose **Edit domain** and perform steps 4–6 above\. 
 
 ## Next steps<a name="es-customize-endpoint-next-steps"></a>
 
-After you enable a custom endpoint for your Amazon ES domain, you must create a CNAME mapping in Amazon Route 53 \(or your preferred DNS service provider\) to route traffic to the custom endpoint and its subdomains\. Without this mapping, your custom endpoint will not work\. For steps on performing this mapping in Route 53, see [Configuring DNS routing for a new domain ](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-new-domain.html) and [Creating a hosted zone for a subdomain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html#dns-routing-traffic-for-subdomains-creating-hosted-zone)\. For other providers, consult their documentation\.
+After you enable a custom endpoint for your Amazon ES domain, you must create a CNAME mapping in Amazon Route 53 \(or your preferred DNS service provider\) to route traffic to the custom endpoint and its subdomains\. Without this mapping, your custom endpoint won't work\. For steps to create this mapping in Route 53, see [Configuring DNS routing for a new domain ](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-new-domain.html) and [Creating a hosted zone for a subdomain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html#dns-routing-traffic-for-subdomains-creating-hosted-zone)\. For other providers, consult their documentation\.
 
 If you use [SAML authentication for Kibana](saml.md), you must update your IdP with the new SSO URL\.

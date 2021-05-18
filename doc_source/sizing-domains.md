@@ -27,7 +27,7 @@ The size of your source data, however, is just one aspect of your storage requir
 
 1. **Amazon ES overhead**: Amazon ES reserves 20% of the storage space of each instance \(up to 20 GiB\) for segment merges, logs, and other internal operations\.
 
-   Because of this 20 GiB maximum, the total amount of reserved space can vary dramatically depending on the number of instances in your domain\. For example, a domain might have three `m4.xlarge.elasticsearch` instances, each with 500 GiB of storage space, for a total of 1\.46 TiB\. In this case, the total reserved space is only 60 GiB\. Another domain might have 10 `m3.medium.elasticsearch` instances, each with 100 GiB of storage space, for a total of 0\.98 TiB\. Here, the total reserved space is 200 GiB, even though the first domain is 50% larger\.
+   Because of this 20 GiB maximum, the total amount of reserved space can vary dramatically depending on the number of instances in your domain\. For example, a domain might have three `m6g.xlarge.elasticsearch` instances, each with 500 GiB of storage space, for a total of 1\.46 TiB\. In this case, the total reserved space is only 60 GiB\. Another domain might have 10 `m3.medium.elasticsearch` instances, each with 100 GiB of storage space, for a total of 0\.98 TiB\. Here, the total reserved space is 200 GiB, even though the first domain is 50% larger\.
 
    In the following formula, we apply a "worst\-case" estimate for overhead that includes additional free space to help minimize the impact of node failures and Availability Zone outages\.
 
@@ -43,7 +43,7 @@ Insufficient storage space is one of the most common causes of cluster instabili
 
 Other storage considerations exist:
 + If your minimum storage requirement exceeds 1 PB, see [Petabyte scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
-+ If you have rolling indices and want to use a hot\-warm architecture, see [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md)\.
++ If you have rolling indices and want to use a hot\-warm architecture, see [UltraWarm storage for Amazon Elasticsearch Service](ultrawarm.md)\.
 
 ## Choosing the number of shards<a name="aes-bp-sharding"></a>
 
@@ -55,19 +55,17 @@ For example, suppose you have 66 GiB of data\. You don't expect that number to i
 
  **\(Source Data \+ Room to Grow\) \* \(1 \+ Indexing Overhead\) / Desired Shard Size = Approximate Number of Primary Shards**
 
-This equation helps compensate for growth over time\. If you expect those same 67 GiB of data to quadruple over the next year, the approximate number of shards is \(66 \+ 198\) \* 1\.1 / 30 = 10\. Remember, though, you don't have those extra 198 GiB of data *yet*\. Check to make sure that this preparation for the future doesn't create unnecessarily tiny shards that consume huge amounts of CPU and memory in the present\. In this case, 66 \* 1\.1 / 10 shards = 7\.26 GiB per shard, which will consume extra resources and is below the recommended size range\. You might consider the more middle\-of\-the\-road approach of six shards, which leaves you with 12 GiB shards today and 48 GiB shards in the future\. Then again, you might prefer to start with three shards and reindex your data when the shards exceed 50 GiB\.
+This equation helps compensate for data growth over time\. If you expect those same 66 GiB of data to quadruple over the next year, the approximate number of shards is \(66 \+ 198\) \* 1\.1 / 30 = 10\. Remember, though, you don't have those extra 198 GiB of data *yet*\. Check to make sure that this preparation for the future doesn't create unnecessarily tiny shards that consume huge amounts of CPU and memory in the present\. In this case, 66 \* 1\.1 / 10 shards = 7\.26 GiB per shard, which will consume extra resources and is below the recommended size range\. You might consider the more middle\-of\-the\-road approach of six shards, which leaves you with 12 GiB shards today and 48 GiB shards in the future\. Then again, you might prefer to start with three shards and reindex your data when the shards exceed 50 GiB\.
 
-A far less common issue involves limiting the number of shards per node\. If you size your shards appropriately, you typically run out of disk space long before encountering this limit\. For example, an `m5.large.elasticsearch` instance has a maximum disk size of 512 GiB\. If you stay below 80% disk usage and size your shards at 20 GiB, it can accommodate approximately 20 shards\. Elasticsearch 7\.*x* and later have a limit of *1,000* shards per node, adjustable using the `cluster.max_shards_per_node` setting\.
+A far less common issue involves limiting the number of shards per node\. If you size your shards appropriately, you typically run out of disk space long before encountering this limit\. For example, an `m6g.large.elasticsearch` instance has a maximum disk size of 512 GiB\. If you stay below 80% disk usage and size your shards at 20 GiB, it can accommodate approximately 20 shards\. Elasticsearch 7\.*x* and later have a limit of *1,000* shards per node, adjustable using the `cluster.max_shards_per_node` setting\.
 
 Sizing shards appropriately almost always keeps you below this limit, but you can also consider the number of shards for each GiB of Java heap\. On a given node, have no more than 20 shards per GiB of Java heap\. For example, an `m5.large.elasticsearch` instance has a 4 GiB heap, so each node should have no more than 80 shards\. At that shard count, each shard is roughly 5 GiB in size, which is well below our recommendation\.
-
-The **Notifications** panel in the Amazon ES console sends a Domain Health Notification if your domain contains one or more shards with sizes greater than 50 GiB\. For more information about notifications, see [Notifications in Amazon Elasticsearch Service](es-managedomains-notifications.md)\. 
 
 ## Choosing instance types and testing<a name="aes-bp-instances"></a>
 
 After you calculate your storage requirements and choose the number of shards that you need, you can start to make hardware decisions\. Hardware requirements vary dramatically by workload, but we can still offer some basic recommendations\.
 
-In general, [the storage limits](aes-limits.md) for each instance type map to the amount of CPU and memory that you might need for light workloads\. For example, an `m4.large.elasticsearch` instance has a maximum EBS volume size of 512 GiB, 2 vCPU cores, and 8 GiB of memory\. If your cluster has many shards, performs taxing aggregations, updates documents frequently, or processes a large number of queries, those resources might be insufficient for your needs\. If you believe your cluster falls into one of these categories, try starting with a configuration closer to 2 vCPU cores and 8 GiB of memory for every 100 GiB of your storage requirement\.
+In general, [the storage limits](aes-limits.md) for each instance type map to the amount of CPU and memory that you might need for light workloads\. For example, an `m6g.large.elasticsearch` instance has a maximum EBS volume size of 512 GiB, 2 vCPU cores, and 8 GiB of memory\. If your cluster has many shards, performs taxing aggregations, updates documents frequently, or processes a large number of queries, those resources might be insufficient for your needs\. If you believe your cluster falls into one of these categories, try starting with a configuration closer to 2 vCPU cores and 8 GiB of memory for every 100 GiB of your storage requirement\.
 
 **Tip**  
 For a summary of the hardware resources that are allocated to each instance type, see [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
@@ -80,9 +78,9 @@ To start, we recommend a minimum of three nodes to avoid potential Elasticsearch
 
 ### Step 2: Calculate storage requirements per node<a name="aes-determine-storage"></a>
 
-If you have a 184 GiB storage requirement and the recommended minimum number of three nodes, use the equation 184 / 3 = 61 GiB to find the amount of storage that each node needs\. In this example, you might select three `m5.large.elasticsearch` instances, each using a 90 GiB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GiB of memory, so it's suited to lighter workloads\.
+If you have a 184 GiB storage requirement and the recommended minimum number of three nodes, use the equation 184 / 3 = 61 GiB to find the amount of storage that each node needs\. In this example, you might select three `m6g.large.elasticsearch` instances, each using a 90 GiB EBS storage volume so that you have a safety net and some room for growth over time\. This configuration provides 6 vCPU cores and 24 GiB of memory, so it's suited to lighter workloads\.
 
-For a more substantial example, consider a 14 TiB \(14,336 GiB\) storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r5.4xlarge.elasticsearch` instances, each using a 1 TiB EBS storage volume\.
+For a more substantial example, consider a 14 TiB \(14,336 GiB\) storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.elasticsearch` instances\. If you don't need the fast, local storage, you could also test 18 `r6g.4xlarge.elasticsearch` instances, each using a 1 TiB EBS storage volume\.
 
 If your cluster includes hundreds of terabytes of data, see [Petabyte scale for Amazon Elasticsearch Service](petabyte-scale.md)\.
 

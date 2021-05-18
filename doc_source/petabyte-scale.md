@@ -8,7 +8,7 @@ While this section frequently references the `i3.16xlarge.elasticsearch` instanc
 Domains of this size exceed the default limit of 40 instances per domain\. To request a service limit increase of up to 200 instances per domain, open a case at the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\.
 
 **Pricing**  
-Before creating a domain of this size, check the [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) page to ensure that the associated costs match your expectations\. Examine [UltraWarm for Amazon Elasticsearch Service](ultrawarm.md) to see if a hot\-warm architecture fits your use case\.
+Before creating a domain of this size, check the [Amazon Elasticsearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/) page to ensure that the associated costs match your expectations\. Examine [UltraWarm storage for Amazon Elasticsearch Service](ultrawarm.md) to see if a hot\-warm architecture fits your use case\.
 
 **Storage**  
 The `i3` instance types are designed to provide fast, local non\-volatile memory express \(NVMe\) storage\. Because this local storage tends to offer performance benefits when compared to Amazon Elastic Block Store, EBS volumes are not an option when you select these instance types in Amazon ES\. If you prefer EBS storage, use another instance type, such as `r5.12xlarge.elasticsearch`\.

@@ -178,8 +178,10 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain
     "InstanceType": "r5.large.elasticsearch",
     "WarmCount": 3,
     "WarmEnabled": true|false,
-    "WarmType": "ultrawarm1.large.elasticsearch"
-  },
+    "WarmType": "ultrawarm1.large.elasticsearch",
+    "ColdStorageOptions": {
+       "Enabled": true|false
+    },
   "EBSOptions": {
     "EBSEnabled": true|false,
     "VolumeType": "io1|gp2|standard",
@@ -234,6 +236,7 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain
     }
   },
   "AdvancedSecurityOptions": {
+    "Enabled": true|false,
     "InternalUserDatabaseEnabled": true|false,
     "MasterUserOptions": {
       "MasterUserARN": "arn:aws:iam::123456789012:role/my-master-user-role"
@@ -249,7 +252,7 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain
         "Value": 2,
         "Unit": "HOURS"
       },
-      "CronExpressionForRecurrence": "0 0 ? * 3 *"
+      "CronExpressionForRecurrence": "cron(0 0 ? * 3 *)"
     }]
   },
   "ElasticsearchVersion": "7.9",
@@ -1510,8 +1513,10 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/confi
     "DedicatedMasterCount": 3,
     "InstanceType": "r5.large.elasticsearch",
     "WarmCount": 6,
-    "WarmType": "ultrawarm1.medium.elasticsearch"
-  },
+    "WarmType": "ultrawarm1.medium.elasticsearch",
+    "ColdStorageOptions": {
+       "Enabled": true|false
+    },
   "EBSOptions": {
     "EBSEnabled": true|false,
     "VolumeType": "io1|gp2|standard",
@@ -1565,6 +1570,7 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/confi
     }
   },
   "AdvancedSecurityOptions": {
+    "Enabled": true|false,
     "InternalUserDatabaseEnabled": true|false,
     "MasterUserOptions": {
       "MasterUserARN": "arn:aws:iam::123456789012:role/my-master-user-role"
@@ -1585,23 +1591,12 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/<DOMAIN_NAME>/confi
   "AutoTuneOptions": {
     "DesiredState": "ENABLED|DISABLED",
     "MaintenanceSchedules": [{
-      "StartAt": 4104152288000,
-      "Duration": {
-        "Value": 2,
-        "Unit": "HOURS"
-      },
-      "CronExpressionForRecurrence": "30 11 ? * 3,6 *"
-    }]
-  },
-  "AutoTuneOptions": {
-    "DesiredState": "ENABLED|DISABLED",
-    "MaintenanceSchedules": [{
       "StartAt": 1234567890,
       "Duration": {
         "Value": 2,
         "Unit": "HOURS"
       },
-      "CronExpressionForRecurrence": "* * * * *"
+      "CronExpressionForRecurrence": "cron(0 0 ? * 3 *)"
     }],
     "RollbackOnDisable": "NO_ROLLBACK|DEFAULT_ROLLBACK"
   },
@@ -1774,7 +1769,7 @@ Key\-value pairs to specify advanced Elasticsearch configuration options\.
 | Field | Data Type | Description | 
 | --- | --- | --- | 
 | DesiredState | String | Either ENABLED or DISABLED\. | 
-| MaintenanceSchedules | List |  A list of maintenance schedules during which Auto\-Tune can deploy changes: <pre>{<br />  "StartAt": 1234567890,<br />  "Duration": {<br />    "Value": 2,<br />    "Unit": "HOURS"<br />  },<br />  "CronExpressionForRecurrence": "* * ? * * *"<br />}</pre> Maintenance schedules are overwrite, not append\. If your request includes no schedules, the request deletes all existing schedules\. To preserve existing schedules, make a call to [DescribeElasticsearchDomainConfig](#es-configuration-api-actions-describeelasticsearchdomainconfig) first and use the `MaintenanceSchedules` portion of the response as the basis for this section\. `StartAt` is Epoch time, and `Value` is a long integer\.  | 
+| MaintenanceSchedules | List |  A list of maintenance schedules during which Auto\-Tune can deploy changes: <pre>{<br />  "StartAt": 1234567890,<br />  "Duration": {<br />    "Value": 2,<br />    "Unit": "HOURS"<br />  },<br />  "CronExpressionForRecurrence": "cron(* * ? * * *)"<br />}</pre> Maintenance schedules are overwrite, not append\. If your request includes no schedules, the request deletes all existing schedules\. To preserve existing schedules, make a call to [DescribeElasticsearchDomainConfig](#es-configuration-api-actions-describeelasticsearchdomainconfig) first and use the `MaintenanceSchedules` portion of the response as the basis for this section\. `StartAt` is Epoch time, and `Value` is a long integer\.  | 
 | RollbackOnDisable | String | When disabling Auto\-Tune, specify NO\_ROLLBACK to retain all prior Auto\-Tune settings or DEFAULT\_ROLLBACK to revert to the Amazon ES defaults\.If you specify DEFAULT\_ROLLBACK, you must include a `MaintenanceSchedule` in the request\. Otherwise, Amazon ES is unable to perform the rollback\. | 
 
 ### CognitoOptions<a name="es-configuration-api-datatypes-cognitooptions"></a>
@@ -1788,6 +1783,17 @@ Key\-value pairs to specify advanced Elasticsearch configuration options\.
 | UserPoolId | String | The Amazon Cognito user pool ID that you want Amazon ES to use for Kibana authentication\. | 
 | IdentityPoolId | String | The Amazon Cognito identity pool ID that you want Amazon ES to use for Kibana authentication\. | 
 | RoleArn | String | The AmazonESCognitoAccess role that allows Amazon ES to configure your user pool and identity pool\. | 
+
+### ColdStorageOptions<a name="es-configuration-api-datatypes-cs"></a>
+
+Container for the parameters required to enable cold storage for an Amazon ES domain\.
+
+
+****  
+
+| Field | Data Type | Description | 
+| --- | --- | --- | 
+| Enabled | Boolean | Whether to enable or disable cold storage on the domain\. See [Cold storage for Amazon Elasticsearch Service](cold-storage.md)\. | 
 
 ### CreateElasticsearchDomainRequest<a name="es-configuration-api-datatypes-createesdomainrequest"></a>
 
@@ -1906,6 +1912,7 @@ Container for the cluster configuration of an Amazon ES domain\.
 | WarmCount | Integer | The number of warm nodes in the cluster\. | 
 | WarmType | String | The instance type for the cluster's warm nodes\. | 
 | WarmStorage | Integer | The total provisioned amount of warm storage in GiB\. | 
+| ColdStorageOptions | [`ColdStorageOptions`](#es-configuration-api-datatypes-cs) | Container for cold storage configuration options\. | 
 
 ### ElasticsearchDomainConfig<a name="es-configuration-api-datatypes-esdomainconfig"></a>
 
@@ -2075,7 +2082,7 @@ Basic information about a package\.
 
 | Field | Data Type | Description | 
 | --- | --- | --- | 
-| CreatedAt | Timestamp | Name of the bucket containing the package\. | 
+| CreatedAt | Timestamp | The time the package was created\. | 
 | ErrorDetails | String | Additional information if the package is in an error state\. Null otherwise\. | 
 | PackageDescription | String | User\-specified description of the package\. | 
 | PackageID | String | Internal ID of the package\. | 
