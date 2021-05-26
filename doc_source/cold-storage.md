@@ -1,6 +1,6 @@
 # Cold storage for Amazon Elasticsearch Service<a name="cold-storage"></a>
 
-Cold storage lets you store any amount of infrequently accessed or historical data on your Amazon Elasticsearch Service \(Amazon ES\) domain and analyze it on demand, at a lower cost than other storage tiers\. Cold storage is appropriate if you need to do periodic research or forensic analysis on your older data\. Practical examples of data suitable for cold storage include infrequently accessed logs, data that must be preserved to meet compliance requirements, or logs that have historical value\. 
+Cold storage lets you store any amount of infrequently accessed or historical data on your Amazon Elasticsearch Service \(Amazon ES\) domain and analyze it on demand, at a lower cost than other storage tiers\. Cold storage is appropriate if you need to do periodic research or forensic analysis on your older data\. Practical examples of data suitable for cold storage include infrequently accessed logs, data that must be preserved to meet compliance requirements, or logs that have historical value\.
 
 Similar to [UltraWarm](ultrawarm.md) storage, cold storage is backed by Amazon S3\. When you need to query cold data, you can selectively attach it to existing UltraWarm nodes\. You can manage the migration and lifecycle of your cold data manually or with Index State Management policies\.
 
@@ -29,7 +29,7 @@ Cold storage has the following prerequisites:
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use cold storage\.
 + If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be [mapped](fgac.md#fgac-mapping) to the `cold_manager` role in Kibana in order to manage cold indices\.
 
-**Note**  
+**Note**
 The `cold_manager` role might not exist on some preexisting Amazon ES domains\. If you don't see the role in Kibana, you need to [manually create it](#coldstorage-create-role)\.
 
 ### Configure permissions<a name="coldstorage-create-role"></a>
@@ -38,7 +38,7 @@ If you enable cold storage on a preexisting Amazon ES domain, the `cold_manager`
 
 1. In Kibana, go to **Security** and choose **Permissions**\.
 
-1. Choose **Create action group** and configure the following groups:     
+1. Choose **Create action group** and configure the following groups:
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cold-storage.html)
 
 1. Choose **Roles** and **Create role**\.
@@ -67,7 +67,7 @@ You don't incur any transfer charges when moving data between cold and warm stor
 
 ## Enabling cold storage<a name="coldstorage-enable"></a>
 
-The console is the simplest way to create a domain that uses cold storage\. While creating the domain, choose **Enable cold storage**\. The same process works on existing domains as long as you meet the [prerequisites](ultrawarm.md#ultrawarm-pp)\. Even after the domain state changes from **Processing** to **Active**, cold storage might not be available for several hours\.
+The console is the simplest way to create a domain that uses cold storage\. While creating the domain, choose **Enable cold storage**\. The same process works on existing domains as long as you meet the [prerequisites](cold-storage.md#coldstorage-pp)\. Even after the domain state changes from **Processing** to **Active**, cold storage might not be available for several hours\.
 
 You can also use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](es-configuration-api.md) to enable cold storage\.
 
@@ -153,10 +153,10 @@ You can manage hot, warm and cold indices with the existing Kibana interface in 
 When you migrate indices to cold storage, you provide a time range for the data to make discovery easier\. You can select a timestamp field based on the data in your index, manually provide a start and end timestamp, or choose to not specify one\.
 
 
-| Parameter | Supported value | Description | 
-| --- | --- | --- | 
-| timestamp\_field | The date/time field from the index mapping\. |  The minimum and maximum values of the provided field are computed and stored as the `start_time` and `end_time` metadata for the cold index\.  | 
-| start\_time and end\_time |  One of the following formats: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cold-storage.html)  |  The provided values are stored as the `start_time` and `end_time` metadata for the cold index\.   | 
+| Parameter | Supported value | Description |
+| --- | --- | --- |
+| timestamp\_field | The date/time field from the index mapping\. |  The minimum and maximum values of the provided field are computed and stored as the `start_time` and `end_time` metadata for the cold index\.  |
+| start\_time and end\_time |  One of the following formats: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cold-storage.html)  |  The provided values are stored as the `start_time` and `end_time` metadata for the cold index\.   |
 
 If you don't want to specify a timestamp, add `?ignore=timestamp` to the request instead\.
 
@@ -191,7 +191,7 @@ FAILED_INDEX_DETACH - The index detach process failed and all retries are exhaus
 
 You can use [Index State Management](ism.md) to automate the migration process after an index reaches a certain age or meets other conditions\. See the [sample policy](ism.md#ism-example-cold), which demonstrates how to automatically migrate indices from hot to UltraWarm to cold storage\.
 
-**Note**  
+**Note**
 An explicit `timestamp_field` is required in order to move indices to cold storage using an Index State Management policy\.
 
 ## Canceling migrations to cold storage<a name="coldstorage-cancel"></a>
@@ -214,12 +214,12 @@ GET _cold/indices/_search
 
 ### Filtering<a name="coldstorage-filter"></a>
 
-You can filter cold indices based on a prefix\-based index pattern and time range offsets\. 
+You can filter cold indices based on a prefix\-based index pattern and time range offsets\.
 
 The following request lists indices that match the prefix pattern of `event-*`:
 
 ```
-GET _cold/indices/_search 
+GET _cold/indices/_search
  {
    "filters":{
       "index_pattern": "event-*"
@@ -269,7 +269,7 @@ GET _cold/indices/_search?page_size=100
 
 ## Migrating cold indices to warm storage<a name="coldstorage-migrating-back"></a>
 
-After you narrow down your list of cold indices with the filtering criteria in the previous section, migrate them back to UltraWarm where you can query the data and use it to create visualizations\. 
+After you narrow down your list of cold indices with the filtering criteria in the previous section, migrate them back to UltraWarm where you can query the data and use it to create visualizations\.
 
 The following request migrates two cold indices back to warm storage:
 
@@ -335,7 +335,7 @@ You can update the `start_time` and `end_time` fields for a cold index:
 
 ```
 PATCH _cold/my-index
- { 
+ {
  "start_time": "2020-01-01",
  "end_time": "2020-02-01"
  }
@@ -343,7 +343,7 @@ PATCH _cold/my-index
 
 You can't update the `timestamp_field` of an index in cold storage\.
 
-**Note**  
+**Note**
 Kibana doesn't support the PATCH method\. Use [curl](https://curl.haxx.se/), [Postman](https://www.getpostman.com/), or some other method to update cold metadata\.
 
 ## Deleting cold indices<a name="cold-delete"></a>
@@ -356,8 +356,8 @@ DELETE _cold/my-index
 
 ## Disabling cold storage<a name="coldstorage-disable"></a>
 
-The Amazon ES console is the simplest way to disable cold storage\. Select the domain and choose **Edit domain**, then deselect **Enable cold storage**\. 
+The Amazon ES console is the simplest way to disable cold storage\. Select the domain and choose **Edit domain**, then deselect **Enable cold storage**\.
 
 To use the AWS CLI or configuration API, under `ColdStorageOptions`, set `"Enabled"="false"`\.
 
-Before you disable cold storage, you must either delete all cold indices or migrate them back to warm storage, otherwise the disable action fails\. 
+Before you disable cold storage, you must either delete all cold indices or migrate them back to warm storage, otherwise the disable action fails\.
