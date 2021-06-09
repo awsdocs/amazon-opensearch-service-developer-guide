@@ -82,6 +82,7 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
            
            # Match the regular expressions to each line and index the JSON
            for line in lines:
+               line = line.decode("utf-8")
                ip = ip_pattern.search(line).group(1)
                timestamp = time_pattern.search(line).group(1)
                message = message_pattern.search(line).group(1)
