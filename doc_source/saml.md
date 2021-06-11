@@ -2,6 +2,9 @@
 
 SAML authentication for Kibana lets you use your existing identity provider to offer single sign\-on \(SSO\) for Kibana on Amazon Elasticsearch Service \(Amazon ES\) domains running Elasticsearch 6\.7 or later\. To use SAML authentication, you must enable [fine\-grained access control](fgac.md)\.
 
+**Note**  
+You can't enable fine-grained access control on existing domains, only new ones. By extension, this means you can only enable SAML authentication on new domains or existing ones that have fine-grained access control already enabled\.
+
 Rather than authenticating through [Amazon Cognito](es-cognito-auth.md) or the [internal user database](fgac.md#fgac-kibana), SAML authentication for Kibana lets you use third\-party identity providers to log in to Kibana, manage fine\-grained access control, search your data, and build visualizations\. Amazon ES supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services \(ADFS\), and Auth0\. Requests from Amazon ES to third\-party providers aren't explicitly encrypted with a service provider certificate\.
 
 SAML authentication for Kibana is only for accessing Kibana through a web browser\. Your SAML credentials do *not* let you make direct HTTP requests to the Elasticsearch or Kibana APIs\. 
