@@ -17,7 +17,7 @@ Full documentation for the `reindex` operation, including detailed steps and sup
 
 Remote reindex has the following requirements:
 + The remote domain must be accessible from the local domain\. For a remote domain that resides within a VPC, the local domain must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server\. To learn more, see [VPC Support](es-vpc.md)\. 
-+ The request must be authorized by the remote domain like any other REST request\. If the remote domain is an FGAC\-enabled Amazon ES domain, you must have permission to perform reindex on the local domain and read the index on the remote domain\. For more security considerations, see [Fine\-Grained Access Control](fgac.md)\.
++ The request must be authorized by the remote domain like any other REST request\. If the remote domain has fine\-grained access control enabled, you must have permission to perform reindex on the local domain and read the index on the remote domain\. For more security considerations, see [Fine\-Grained Access Control](fgac.md)\.
 + We recommend you create an index with the desired setting on your local domain before you start the reindex process\.
 
 ## Reindex data between Amazon ES domains<a name="remote-reindex-esdomain"></a>

@@ -58,7 +58,7 @@ The SQL CLI is a standalone Python application that you can launch with the `odf
 The Java Database Connectivity \(JDBC\) driver lets you integrate Amazon ES domains with your favorite business intelligence \(BI\) applications\. To get started, see the [GitHub repository](https://github.com/opendistro-for-elasticsearch/sql-jdbc)\. The following table summarizes version compatibility for the driver\.
 
 
-| Elasticsearch Version | JDBC Driver Version | 
+| Elasticsearch version | JDBC driver version | 
 | --- | --- | 
 | 7\.10 | [1\.13\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-1.13.0.0.jar) | 
 | 7\.9 | [1\.11\.0](https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-clients/opendistro-sql-jdbc/opendistro-sql-jdbc-1.11.0.0.jar) | 

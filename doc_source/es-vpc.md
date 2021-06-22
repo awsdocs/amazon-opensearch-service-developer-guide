@@ -122,15 +122,13 @@ Before you can enable a connection between a VPC and your new Amazon ES domain, 
 
 Amazon ES connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or multiple subnets of the VPC if you enable [multiple Availability Zones](es-managedomains-multiaz.md)\)\. Each network interface is associated with an IP address\. Before you create your Amazon ES domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
 
-The number of IP addresses that Amazon ES requires depends on the following:
-+ Number of data nodes in your domain\. \(Master nodes are not included in the number\.\) 
-+ Number of Availability Zones\. If you enable two or three Availability Zones, you need only half or one\-third the number of IP addresses per subnet that you need for one Availability Zone\.
+The number of IP addresses that Amazon ES requires depends on the ratio of data nodes to master nodes\.
 
-Here is the basic formula: The number of IP addresses reserved in each subnet is three times the number of nodes, divided by the number of Availability Zones\.
+Here's the basic formula: The number of IP addresses reserved in each subnet is three times the number of data nodes, plus the number of master nodes\.
 
 **Examples**
-+ If a domain has 10 data nodes and two Availability Zones, the IP count is 10 / 2 \* 3 = 15\.
-+ If a domain has 10 data nodes and one Availability Zone, the IP count is 10 \* 3 = 30\.
++ If a domain has 10 data nodes and three master nodes, the IP count is \(10 \* 3\) \+ 3 = 33\.
++ If a domain has five data nodes and three master nodes, the IP count is \(5 \* 3\) \+ 3 = 18\.
 
 When you create the domain, Amazon ES reserves the IP addresses, uses some for the domain, and reserves the rest for [blue/green deployments](es-managedomains-configuration-changes.md)\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console\. The **Description** column shows which Amazon ES domain the network interface is associated with\.
 

@@ -28,7 +28,7 @@ Kibana is a popular open source visualization tool designed to work with Elastic
 
 1. To use Kibana, you need to configure at least one index pattern\. Kibana uses these patterns to identify which indices you want to analyze\. Open the Kibana main menu, choose **Stack Management**, choose **Index Patterns**, and then choose **Create index pattern**\. For this tutorial, enter *movies*\.
 
-1. Choose **Next step** and then choose **Create index pattern**\. After the index is created, you can view the various document fields such as `actor` and `director`\. 
+1. Choose **Next step** and then choose **Create index pattern**\. After the pattern is created, you can view the various document fields such as `actor` and `director`\. Go back to the **Index Patterns** tab and make sure `movies` is set as the default\. 
 
 1. To begin searching your data, open the main menu again and choose **Discover**\.
 

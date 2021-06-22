@@ -173,9 +173,11 @@ Uploading a new version of a package to Amazon S3 does *not* automatically updat
 
 Each of your associated domains stores *its* own copy of the file, as well\. To keep search behavior predictable, domains continue to use their current package version until you explicitly update them\.
 
-**To update a package \(console\)**
+### Update a custom package \(console\)<a name="custom-packages-update-console"></a>
 
-1. In the Amazon Elasticsearch Service console, choose **Packages**\.
+To update a custom package, modify the file in Amazon S3, update the package in Amazon ES, and then apply the update\.
+
+1. In the Amazon ES console, choose **Packages**\.
 
 1. Choose a package and **Update package**\.
 
@@ -190,6 +192,105 @@ Each of your associated domains stores *its* own copy of the file, as well\. To 
    + If your domain runs an earlier version of Elasticsearch, uses index analyzers, or doesn't use the `updateable` field, see [Manual index updates](#custom-packages-updating-index-analyzers)\.
 
 Although the console is the simplest method, you can also use the AWS CLI, SDKs, or configuration API to update Amazon ES packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
+
+### Automate package updates \(Python\)<a name="custom-packages-update-python"></a>
+
+Instead of manually updating a package in the console, you can use the SDKs to automate the update process\. The following sample Python script uploads a new package file to Amazon S3, updates the package in Amazon ES, and applies the new package to the specified domain\. After confirming the update was successful, it makes a sample call to Elasticsearch demonstrating the new synonyms have been applied\.
+
+You must provide values for `host`, `region`, `file_name`, `bucket_name`, `s3_key`, `package_id`, `domain_name`, and `query`\.
+
+```
+from requests_aws4auth import AWS4Auth
+import boto3
+import requests
+import time
+import json
+import sys
+
+host = '' # The ES domain endpoint with https:// and a trailing slash. For example, https://my-test-domain.us-east-1.es.amazonaws.com/
+region = '' # For example, us-east-1
+file_name = '' # The path to the file to upload
+bucket_name = '' # The name of the S3 bucket to upload to
+s3_key = '' # The name of the S3 key (file name) to upload to
+package_id = '' # The unique identifier of the ES package to update
+domain_name = '' # The domain to associate the package with
+query = '' # A test query to confirm the package has been successfully updated
+
+service = 'es'
+credentials = boto3.Session().get_credentials()
+awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
+
+# ****** Upload file to S3 ******
+
+def upload_to_s3(file_name, bucket_name, s3_key):
+
+  s3 = boto3.client('s3')
+  try:
+    s3.upload_file(file_name, bucket_name, s3_key)
+    print('Upload successful')
+    return True
+  except FileNotFoundError:
+    sys.exit('File not found. Make sure you specified the correct file path.')
+
+# ****** Update the package in ES *******
+
+def update_package(package_id, bucket_name, s3_key):
+
+  es = boto3.client('es')
+  print(package_id, bucket_name, s3_key)
+  response = es.update_package(
+      PackageID= package_id,
+      PackageSource={
+          'S3BucketName': bucket_name,
+          'S3Key': s3_key
+      }
+  )
+  print(response)
+
+# Associate the package to the domain
+def associate_package(package_id, domain_name):
+
+  es = boto3.client('es')
+  response = es.associate_package(PackageID=package_id, DomainName=domain_name)
+  print(response)
+  print('Associating...')
+
+# Wait for the package to be updated
+def wait_for_update(domain_name, package_id):
+
+  es = boto3.client('es')
+  response = es.list_packages_for_domain(DomainName=domain_name)
+  package_details = response['DomainPackageDetailsList']
+  for package in package_details:
+    if package['PackageID'] == package_id:
+      status = package['DomainPackageStatus']
+      if status == 'ACTIVE':
+        print('Association successful.')
+        return
+      elif status == 'ASSOCIATION_FAILED':
+        sys.exit('Association failed. Please try again.')
+      else:
+        time.sleep(10) # Wait 10 seconds before rechecking the status
+        wait_for_update(domain_name, package_id)
+
+# ****** Make sample search call to ES ******
+
+def sample_search(query):
+
+  path = '_search'
+  params = {'q': query}
+  url = host + path
+  response = requests.get(url, params=params, auth=awsauth)
+  print('Searching for ' + '"' + query + '"')
+  print(response.text)
+```
+
+**Note**  
+If you receive a "package not found" error when you run the script using the AWS CLI, it likely means Boto3 is using whichever region is specified in \~/\.aws/config, which isn't the region your S3 bucket is in\. Either run `aws configure` and specify the correct region, or explicitly add the region to the client:   
+
+```
+es = boto3.client('es', region_name='us-east-1')
+```
 
 ### Manual index updates<a name="custom-packages-updating-index-analyzers"></a>
 

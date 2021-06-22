@@ -38,17 +38,15 @@ To create snapshots manually, you need to work with IAM and Amazon S3\. Make sur
 
 You need to register a snapshot repository with Amazon ES before you can take manual index snapshots\. This one\-time operation requires that you sign your AWS request with credentials that are allowed to access `TheSnapshotRole`, as described in [Prerequisites](#es-managedomains-snapshot-prerequisites)\.
 
-### Step 1: Map the manage\_snapshots role \(if using fine\-grained access control\)<a name="es-managedomains-snapshot-fgac"></a>
+### Step 1: Map the snapshot role in Kibana \(if using fine\-grained access control\)<a name="es-managedomains-snapshot-fgac"></a>
 
 Fine\-grained access control introduces an additional step when registering a repository\. Even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM role that has `iam:PassRole` permissions to pass `TheSnapshotRole`\.
 
 1. Navigate to the Kibana plugin for your Amazon ES domain\. You can find the Kibana endpoint on your domain dashboard on the Amazon ES console\. 
 
-1. Open the main menu and choose **Security** and then **Roles**\.
+1. From the main menu choose **Security**, **Roles**, and select the **manage\_snapshots** role\.
 
-1. Search for and select the `manage_snapshots` role\.
-
-1. Go to the **Mapped users** tab and choose **Manage mapping**\. 
+1. Choose **Mapped users**, **Manage mapping**\. 
 
 1. Under **Backend roles**, add the domain ARN of the role that has permissions to pass `TheSnapshotRole`\. The ARN has the following format: 
 
@@ -203,7 +201,7 @@ You specify the following information when you create a snapshot:
 + The name of your snapshot repository
 + A name for the snapshot
 
-The examples in this chapter use [curl](https://curl.haxx.se/), a common HTTP client, for convenience and brevity\. However, if your access policies specify IAM users or roles, however, you must sign your snapshot requests\. You can use the commented\-out examples in the [sample Python client](#es-managedomains-snapshot-client-python) to make signed HTTP requests to the same endpoints that the curl commands use\.
+The examples in this chapter use [curl](https://curl.haxx.se/), a common HTTP client, for convenience and brevity\. However, if your access policies specify IAM users or roles, you must sign your snapshot requests\. You can use the commented\-out examples in the [sample Python client](#es-managedomains-snapshot-client-python) to make signed HTTP requests to the same endpoints that the curl commands use\.
 
 To take a manual snapshot, perform the following steps:
 

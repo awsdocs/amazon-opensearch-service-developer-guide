@@ -1,4 +1,4 @@
-# Configuring logs in Amazon Elasticsearch Service<a name="es-createdomain-configure-slow-logs"></a>
+# Monitoring Elasticsearch logs with Amazon CloudWatch Logs<a name="es-createdomain-configure-slow-logs"></a>
 
 Amazon Elasticsearch Service \(Amazon ES\) exposes the following Elasticsearch logs through Amazon CloudWatch Logs: 
 + Error logs
@@ -90,7 +90,9 @@ aws logs describe-log-groups --log-group-name my-log-group
 Now you can give Amazon ES permissions to write to the log group\. You must provide the log group's ARN near the end of the command:
 
 ```
-aws logs put-resource-policy --policy-name my-policy --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:CreateLogStream"],"Resource": "cw_log_group_arn"}]}'
+aws logs put-resource-policy \
+  --policy-name my-policy \
+  --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:CreateLogStream"],"Resource": "cw_log_group_arn"}]}'
 ```
 
 **Important**  
@@ -112,7 +114,9 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
 The following example enables the publishing of search and index slow logs for the specified domain:
 
 ```
-aws es update-elasticsearch-domain-config --domain-name my-domain --log-publishing-options "SEARCH_SLOW_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-log-group,Enabled=true},INDEX_SLOW_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-other-log-group,Enabled=true}"
+aws es update-elasticsearch-domain-config \
+  --domain-name my-domain \
+  --log-publishing-options "SEARCH_SLOW_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-log-group,Enabled=true},INDEX_SLOW_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-other-log-group,Enabled=true}"
 ```
 
 To disable publishing to CloudWatch, run the same command with `Enabled=false`\.
@@ -131,6 +135,75 @@ You can access these operations using the [AWS SDKs](https://aws.amazon.com/tool
 The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md), including the `--log-publishing-options` option for `CreateElasticsearchDomain` and `UpdateElasticsearchDomainConfig`\.
 
 If you enabled one of the slow logs, see [Setting Elasticsearch logging thresholds for slow logs](#es-createdomain-configure-slow-logs-indices)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
+
+## Enabling log publishing \(CloudFormation\)<a name="es-createdomain-configure-slow-logs-cfn"></a>
+
+Before you can use AWS CloudFormation to create a domain with log publishing enabled, you first need to create a CloudWatch log group and give Amazon ES permissions to write to it\. In this example, we create a log group called `elasticsearch-logs`, assign the appropriate permissions, and then use CloudFormation to create a domain with log publishing enabled for application logs, search slow logs, and index slow logs\.
+
+First, create a log group:
+
+```
+aws logs create-log-group --log-group-name elasticsearch-logs
+```
+
+Find and note the log group's ARN:
+
+```
+aws logs describe-log-groups --log-group-name elasticsearch-logs
+```
+
+In this example the ARN is `arn:aws:logs:us-east-1:123456789012:log-group:elasticsearch-logs:*`\.
+
+Give Amazon ES permissions to write to the log group:
+
+```
+aws logs put-resource-policy \
+  --policy-name my-policy \
+  --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:CreateLogStream"],"Resource": "arn:aws:logs:us-east-1:123456789012:log-group:elasticsearch-logs:*"}]}'
+```
+
+Finally, create the following CloudFormation stack which generates an Amazon ES domain with log publishing enabled\. The access policy permits the root user for the AWS account to make all HTTP requests to the domain:
+
+```
+Resources:
+  ElasticsearchDomain:
+    Type: "AWS::Elasticsearch::Domain"
+    Properties:
+      DomainName: my-domain
+      ElasticsearchVersion: "7.10"
+      ElasticsearchClusterConfig:
+        InstanceCount: 2
+        InstanceType: "r6g.xlarge.elasticsearch"
+        DedicatedMasterEnabled: true
+        DedicatedMasterCount: 3
+        DedicatedMasterType: "r6g.xlarge.elasticsearch"
+      EBSOptions:
+        EBSEnabled: true
+        VolumeSize: 10
+        VolumeType: "gp2"
+      SnapshotOptions:
+        AutomatedSnapshotStartHour: "0"
+      AccessPolicies:
+        Version: "2012-10-17"
+        Statement:
+            Effect: "Allow"
+            Principal:
+                AWS: "arn:aws:iam::123456789012:user/es-user"
+            Action: "es:*"
+            Resource: "arn:aws:es:us-east-1:123456789012:domain/my-domain/*"
+      LogPublishingOptions:
+        ES_APPLICATION_LOGS:
+          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:elasticsearch-logs:*"
+          Enabled: true
+        SEARCH_SLOW_LOGS:
+          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:elasticsearch-logs:*"
+          Enabled: true
+        INDEX_SLOW_LOGS:
+          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:elasticsearch-logs:*"
+          Enabled: true
+```
+
+For detailed syntax information, see the [log publishing options](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-logpublishingoption.html) in the *AWS CloudFormation User Guide\.*
 
 ## Setting Elasticsearch logging thresholds for slow logs<a name="es-createdomain-configure-slow-logs-indices"></a>
 

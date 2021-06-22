@@ -8,86 +8,25 @@ After you attach a policy to an index, ISM creates a job that runs every 30 to 4
 
 ISM requires Elasticsearch 6\.8 or later\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/)\.
 
-**Note**  
-The `policy_id` setting is no longer supported in index templates\. You can continue to automatically manage newly created indices with the [ISM template field](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\.
+**Important**  
+The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indices\. You can continue to automatically manage newly created indices with the [ISM template field](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
 
 ## Sample policies<a name="ism-example"></a>
 
 The following sample policies demonstrate how to automate common ISM use cases\.
 
-### Hot to warm storage<a name="ism-example-warm"></a>
-
-This sample policy moves an index from hot storage to [UltraWarm](ultrawarm.md) storage after seven days and deletes the index after 90 days\.
-
-In this case, an index is initially in the `hot` state\. After seven days, ISM moves it to the `warm` state\. 83 days later, the service sends a notification to an Amazon Chime room that the index is being deleted and then permanently deletes it\.
-
-```
-{
-  "policy": {
-    "description": "Demonstrate a hot-warm-delete workflow.",
-    "default_state": "hot",
-    "schema_version": 1,
-    "states": [{
-        "name": "hot",
-        "actions": [],
-        "transitions": [{
-          "state_name": "warm",
-          "conditions": {
-            "min_index_age": "7d"
-          }
-        }]
-      },
-      {
-        "name": "warm",
-        "actions": [{
-          "warm_migration": {},
-          "timeout": "24h",
-          "retry": {
-            "count": 5,
-            "delay": "1h"
-          }
-        }],
-        "transitions": [{
-          "state_name": "delete",
-          "conditions": {
-            "min_index_age": "90d"
-          }
-        }]
-      },
-      {
-        "name": "delete",
-        "actions": [{
-            "notification": {
-              "destination": {
-                "chime": {
-                  "url": "<URL>"
-                }
-              },
-              "message_template": {
-                "source": "The index {{ctx.index}} is being deleted."
-              }
-            }
-          },
-          {
-            "delete": {}
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
 ### Hot to warm to cold storage<a name="ism-example-cold"></a>
 
- This sample policy moves an index from hot storage to UltraWarm, and eventually to  [cold storage](cold-storage.md)\. 
+This sample policy moves an index from hot storage to [UltraWarm](ultrawarm.md), and eventually to  [cold storage](cold-storage.md), then deletes the index\.
 
- The index is initially in the `hot` state\. After ten days, ISM moves it  to the `warm` state\. 80 days later, it moves the index to the  `cold` state\. 
+The index is initially in the `hot` state\. After ten days, ISM moves it  to the `warm` state\. 80 days later, it moves the index to the  `cold` state\. After a year, the service sends a notification to an Amazon Chime room that the index is being deleted and then permanently deletes it\. 
+
+Note that cold indices require the `cold_delete` operation rather than the normal `delete` operation\. Also note that an explicit `timestamp_field` is required in your data in order to manage cold indices with ISM\.
 
 ```
 {
   "policy": {
-    "description": "Demonstrate a hot-warm-cold workflow.",
+    "description": "Demonstrate a hot-warm-cold-delete workflow.",
     "default_state": "hot",
     "schema_version": 1,
     "states": [{
@@ -123,7 +62,31 @@ In this case, an index is initially in the `hot` state\. After seven days, ISM m
               "timestamp_field": "@timestamp"
             }
           }
-        ]
+        ],
+        "transitions": [{
+          "state_name": "delete",
+          "conditions": {
+             "min_index_age": "365d"
+          }
+        }]
+      },
+      {
+        "name": "delete",
+        "actions": [{
+          "notification": {
+            "destination": {
+              "chime": {
+                "url": "<URL>"
+              }
+            },
+            "message_template": {
+              "source": "The index {{ctx.index}} is being deleted."
+            }
+          }
+        },
+        {
+          "cold_delete": {}
+        }]
       }
     ]
   }
@@ -250,7 +213,7 @@ For an example ISM template policy, see [Sample policy with ISM template](https:
 Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service has several differences\. 
 
 ### ISM operations<a name="alerting-diff-op"></a>
-+ Amazon ES supports one unique ISM operation, `warm_migration` and `cold_migration`\.
++ Amazon ES supports three unique ISM operations, `warm_migration`, `cold_migration`, and `cold_delete`\.
 
   If your domain has [UltraWarm](ultrawarm.md) enabled, the `warm_migration` action transitions the index to warm storage\. Even if the `warm_migration` action doesn’t complete within the [set timeout period](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions), the migration to warm indices still continues\.
 

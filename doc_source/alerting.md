@@ -8,7 +8,7 @@ Alerting requires Elasticsearch version 6\.2 or later\. For full documentation, 
 
 1. Choose **Alerting** from the Kibana main menu\.
 
-1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the destination\. For example, your Amazon ES domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\.
+1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the destination\. For example, your Amazon ES domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\. The Amazon ES domain must have a public IP address to send alerts to a custom webhook\.
 
 1. Create a monitor in one of three ways: visually, using a query, or using an anomaly detector\.
 

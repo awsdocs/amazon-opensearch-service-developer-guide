@@ -85,7 +85,7 @@ The VPC and domain must be in the same AWS Region, and you must select a VPC wit
 **Note**  
 You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP addresses in a VPC subnet](es-vpc.md#es-reserving-ip-vpc-endpoints)\.
 
-   1. For **Security groups**, choose the VPC security groups that need access to the Amazon ES domain\. For more information, see [Launching your Amazon Elasticsearch Service domains using a VPC](es-vpc.md)\.
+   1. For **Security groups**, choose one or more VPC security groups that allow your required application to reach the Amazon ES domain on the ports \(80 or 443\) and protocols \(HTTP or HTTPs\) exposed by the domain\. For more information, see [Launching your Amazon Elasticsearch Service domains using a VPC](es-vpc.md)\.
 
    1. For **IAM role**, keep the default role\. Amazon ES uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-linked role for VPC access](es-vpc.md#es-enabling-slr)\.
 

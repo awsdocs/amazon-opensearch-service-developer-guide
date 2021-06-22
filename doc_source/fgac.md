@@ -246,7 +246,7 @@ Tenants are spaces for saving index patterns, visualizations, dashboards, and ot
 Due to how fine\-grained access control [interacts with other security features](#fgac-access-policies), we recommend several fine\-grained access control configurations that work well for most use cases\.
 
 
-| Description | Master User | Domain Access Policy | 
+| Description | Master user | Domain access policy | 
 | --- | --- | --- | 
 |  Use IAM credentials for calls to the Elasticsearch APIs, and use [SAML authentication](saml.md) to access Kibana\. Manage fine\-grained access control roles using Kibana or the REST API\.  | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
 |  Use IAM credentials or basic authentication for calls to the Elasticsearch APIs\. Manage fine\-grained access control roles using Kibana or the REST API\. This configuration offers a lot of flexiblity, especially if you have Elasticsearch clients that only support basic authentication\. If you have an existing identity provider, use [SAML authentication](saml.md) to access Kibana\. Otherwise, manage Kibana users in the internal user database\.  | User name and password |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 

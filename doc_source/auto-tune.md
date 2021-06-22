@@ -1,23 +1,45 @@
 # Auto\-Tune for Amazon Elasticsearch Service<a name="auto-tune"></a>
 
-Auto\-Tune in Amazon Elasticsearch Service \(Amazon ES\) uses performance and usage metrics from your Elasticsearch cluster to suggest changes to the Java virtual machine \(JVM\) settings on your nodes\. These optional changes improve cluster speed and stability\. 
+Auto\-Tune in Amazon Elasticsearch Service \(Amazon ES\) uses performance and usage metrics from your Elasticsearch cluster to suggest memory\-related configuration changes, including queue and cache sizes and Java virtual machine \(JVM\) settings on your nodes\. These optional changes improve cluster speed and stability\. 
 
 Some changes deploy immediately, while others require you to schedule a maintenance window\. You can revert to the default Amazon ES settings at any time\.
 
-As Auto\-Tune gathers and analyzes performance metrics for your domain, view its recommendations in the Amazon ES console on the **Notifications** page\.
+As Auto\-Tune gathers and analyzes performance metrics for your domain, you can view its recommendations in the Amazon ES console on the **Notifications** page\.
 
 Auto\-Tune is available in commercial Regions on domains running Elasticsearch 6\.7 or later with a [supported instance type](aes-supported-instance-types.md)\.
 
+## Types of changes<a name="auto-tune-types"></a>
+
+Auto\-Tune has two broad categories of changes:
++ Nondisruptive changes that it applies as the cluster runs
++ Changes that require a [blue/green deployment](es-managedomains-configuration-changes.md)
+
+Based on your domain's performance metrics, Auto\-Tune can suggest adjustments to the following settings:
+
+
+| Change type | Category | Description | 
+| --- | --- | --- | 
+|  JVM heap size  |  Blue/green  |  By default, Amazon ES uses 50% of an instance's RAM for the JVM heap, up to a heap size of 32 GiB\.  Increasing this percentage gives Elasticsearch more memory, but leaves less for the operating system and other processes\. Larger values can decrease the number of garbage collection pauses, but increase the length of those pauses\.  | 
+|  JVM young generation settings  |  Blue/green  |  JVM "young generation" settings affect the frequency of minor garbage collections\. More frequent minor collections can decrease the number of major collections and pauses\.  | 
+|  Queue size  |  Nondisruptive  |  By default, the search queue size is `1000` and the write queue size is `10000`\. Auto\-Tune automatically scales the search and write queues if additional heap is available to handle requests\.  | 
+|  Cache size  |  Nondisruptive  |  The *field cache* monitors on\-heap data structures, so it's important to monitor the cache's use\. Auto\-Tune scales the field data cache size to avoid out of memory and circuit breaker issues\.  The *shard request cache* is managed at the node level and has a default maximum size of 1% of the heap\. Auto\-Tune scales the shard request cache size to accept more search and index requests than what the configured cluster can handle\.  | 
+
+If you enable Auto\-Tune without setting a maintenance window, Auto\-Tune only applies nondisruptive changes\. The performance benefits over time are generally smaller, but you avoid the overhead associated with blue/green deployments\.
+
+For guidance on configuring maintenance windows, see [Scheduling changes](#auto-tune-schedule)\.
+
 ## Enabling or disabling Auto\-Tune<a name="auto-tune-enable"></a>
 
-Amazon ES enables Auto\-Tune by default on new domains\. To enable or disable Auto\-Tune on existing domains, we recommend using the console, which greatly simplifies the process\. In the console, choose your domain and **Edit domain**, then configure the settings in the **Auto\-Tune** section\.
+Amazon ES enables Auto\-Tune by default on new domains\. To enable or disable Auto\-Tune on existing domains, we recommend using the console, which greatly simplifies the process\. In the console, choose your domain and **Edit domain**, then configure the settings in the **Auto\-Tune** section\. Enabling Auto\-Tune doesn't cause a blue/green deployment\.
 
 **AWS CLI**
 
 To use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/), configure the `auto-tune-options` parameters\. The following sample command enables Auto\-Tune on an existing domain with a maintenance schedule that repeats every day at 12:00pm UTC:
 
 ```
-aws es update-elasticsearch-domain-config --domain-name mylogs --auto-tune-options '{"DesiredState": "ENABLED","MaintenanceSchedules":[{"StartAt":"2021-12-19","Duration":{"Value":2,"Unit":"HOURS"},"CronExpressionForRecurrence": "cron(0 12 * * ? *)"}]}'
+aws es update-elasticsearch-domain-config \
+  --domain-name mylogs \
+  --auto-tune-options '{"DesiredState": "ENABLED","MaintenanceSchedules":[{"StartAt":"2021-12-19","Duration":{"Value":2,"Unit":"HOURS"},"CronExpressionForRecurrence": "cron(0 12 * * ? *)"}]}'
 ```
 
 **Configuration API**
@@ -40,14 +62,6 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/domain-name/config
   }
 }
 ```
-
-Auto\-Tune has two broad categories of changes:
-+ Nondisruptive changes that it applies as the cluster runs
-+ Changes that require a [blue/green deployment](es-managedomains-configuration-changes.md)
-
-If you enable Auto\-Tune without setting a maintenance window, Auto\-Tune only applies nondisruptive changes\. The performance benefits over time are generally smaller, but you avoid the overhead associated with blue/green deployments\.
-
-For guidance on configuring maintenance windows, see [Scheduling changes](#auto-tune-schedule)\.
 
 ## Scheduling changes<a name="auto-tune-schedule"></a>
 
@@ -74,7 +88,7 @@ For example, the following expression translates to "every Tuesday and Friday at
 The following table includes valid values for each field\.
 
 
-| Field | Valid Values | 
+| Field | Valid values | 
 | --- | --- | 
 |  Minute  |  0–59  | 
 |  Hour  |  0–23  | 
@@ -84,13 +98,3 @@ The following table includes valid values for each field\.
 |  Year  |  1970–2199  | 
 
 Day of month and day of week overlap, so you can specify one, but not both\. You must mark the other as `?`\. For a full summary of wildcard options, see the [Amazon CloudWatch Events User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)\.
-
-## Types of changes<a name="auto-tune-types"></a>
-
-Based on your domain's performance metrics, Auto\-Tune can suggest adjustments to the following settings\.
-
-
-| Change Type | Description | 
-| --- | --- | 
-|  JVM heap size  |  By default, Amazon ES uses 50% of an instance's RAM for the JVM heap, up to a heap size of 32 GiB\.  Increasing this percentage gives Elasticsearch more memory, but leaves less for the operating system and other processes\. Larger values can decrease the number of garbage collection pauses, but increase the length of those pauses\.  | 
-|  JVM young generation settings  |  JVM "young generation" settings affect the frequency of minor garbage collections\. More frequent minor collections can decrease the number of major collections and pauses\.  | 

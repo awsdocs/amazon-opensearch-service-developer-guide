@@ -46,7 +46,7 @@ This automatic distribution has some notable exceptions:
 Availability Zone disruptions are rare, but do occur\. The following table lists different Multi\-AZ configurations and behaviors during a disruption\.
 
 
-| Number of Availability Zones in a Region | Number of Availability Zones That You Chose | Number of Dedicated Master Nodes | Behavior if One Availability Zone Experiences a Disruption | 
+| Number of Availability Zones in a region | Number of Availability Zones you chose | Number of dedicated master nodes | Behavior if one Availability Zone experiences a disruption | 
 | --- | --- | --- | --- | 
 | 2 or more | 2 | 0 |  Downtime\. Your cluster loses half of its data nodes and must replace at least one in the remaining Availability Zone before it can elect a master\.  | 
 | 2 | 2 | 3 |  50/50 chance of downtime\. Amazon ES distributes two dedicated master nodes into one Availability Zone and one into the other: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-multiaz.html)  | 

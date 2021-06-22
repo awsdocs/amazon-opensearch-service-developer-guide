@@ -157,17 +157,67 @@ Map services often have licensing fees or restrictions\. You are responsible for
 If you have invested significant time into configuring your own Kibana instance, you can use it instead of \(or in addition to\) the default Kibana instance that Amazon ES provides\.
 
 **To connect a local Kibana server to Amazon ES:**
-+ Make the following changes to `config/kibana.yml`:
 
-  ```
-  kibana.index: ".kibanalocal"
-  # Use elasticsearch.url for versions older than 6.6
-  # elasticsearch.url: "https://domain-endpoint:443"
-  # Use elasticsearch.hosts for versions 6.6 and later
-  elasticsearch.hosts: "https://domain-endpoint:443"
-  ```
+The following steps work for domains that use [Fine\-grained access control in Amazon Elasticsearch Service](fgac.md) with an open access policy\.
 
-Older versions of Elasticsearch might only work over HTTP\. In all cases, add the `http` or `https` prefix\. For older versions, you must explicitly specify port 80 or 443\. For newer versions, you can omit the port\.
+On your Amazon ES domain, create a user with the appropriate permissions:
+
+1. In Kibana, go to **Security**, **Internal users**, and choose **Create internal user**\.
+
+1. Provide a username and password and choose **Create**\.
+
+1. Go to **Roles** and select a role\.
+
+1. Select **Mapped users** and choose **Manage mapping**\.
+
+1. In **Users**, add your username and choose **Map**\.
+
+On your local Kibana server, open the `config/kibana.yml` file and add in your Amazon ES endpoint with the username and password:
+
+```
+elasticsearch.hosts: ['<amazon-elasticsearch-endpoint>']
+
+elasticsearch.username: 'username'
+elasticsearch.password: 'password'
+```
+
+You can use the following sample `kibana.yml` file:
+
+```
+server.host: '0.0.0.0'
+
+elasticsearch.hosts: ['<amazon-elasticsearch-url>']
+
+kibana.index: ".username"
+
+elasticsearch.ssl.verificationMode: none # if not using HTTPS
+
+opendistro_security.auth.type: basicauth
+opendistro_security.auth.anonymous_auth_enabled: false
+opendistro_security.cookie.secure: false # set to true when using HTTPS
+opendistro_security.cookie.ttl: 3600000
+opendistro_security.session.ttl: 3600000
+opendistro_security.session.keepalive: false
+opendistro_security.multitenancy.enabled: false
+opendistro_security.readonly_mode.roles: ['kibana_read_only']
+opendistro_security.auth.unauthenticated_routes: []
+opendistro_security.basicauth.login.title: 'Please log in using your user name and password'
+
+elasticsearch.username: 'username'
+elasticsearch.password: 'password'
+elasticsearch.requestHeadersWhitelist:
+[
+authorization,
+securitytenant,
+security_tenant,
+]
+```
+
+To see your Amazon ES indices, start your local Kibana server, go to **Dev Tools** and run the following command:
+
+```
+GET _cat/indices
+```
 
 ## Managing indices in Kibana<a name="kibana-indices"></a>
 

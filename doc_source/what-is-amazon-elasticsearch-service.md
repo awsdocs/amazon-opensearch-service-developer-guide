@@ -1,8 +1,8 @@
 # What is Amazon Elasticsearch Service?<a name="what-is-amazon-elasticsearch-service"></a>
 
-Amazon Elasticsearch Service \(Amazon ES\) is a managed service that makes it easy to deploy, operate, and scale Elasticsearch clusters in the AWS Cloud\. Elasticsearch is a popular open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. With Amazon ES, you get direct access to the Elasticsearch APIs; existing code and applications work seamlessly with the service\.
+Amazon Elasticsearch Service \(Amazon ES\) is a managed service that makes it easy to deploy, operate, and scale Elasticsearch clusters in the AWS Cloud\. Elasticsearch is a popular open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. For example, you can use Elasticsearch to add a search box to your website, analyze logs, metrics, and security event data, or store your data to automate business workflows\.
 
-Amazon ES provisions all the resources for your Elasticsearch cluster and launches it\. It also automatically detects and replaces failed Elasticsearch nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
+With Amazon ES, you get direct access to the Elasticsearch APIs; existing code and applications work seamlessly with the service\. Amazon ES provisions all the resources for your Elasticsearch cluster and launches it\. It also automatically detects and replaces failed Elasticsearch nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
 
 To get started using Amazon ES, you create a *domain*\. An Amazon ES domain is synonymous with an Elasticsearch cluster\. Domains are clusters with the settings, instance types, instance counts, and storage resources that you specify\. Each instance acts as one Elasticsearch node\.
 
@@ -14,6 +14,7 @@ You can use the Amazon ES console to set up and configure a domain in minutes\. 
 + [Pricing for Amazon Elasticsearch Service](#aes-pricing)
 + [Getting started with Amazon Elasticsearch Service](#aes-get-started)
 + [Related services](#aes-related-services)
++ [Related projects](#aes-related-projects)
 
 ## Features of Amazon Elasticsearch Service<a name="what-is-aes-features"></a>
 
@@ -98,7 +99,7 @@ Amazon ES domains automatically send metrics to CloudWatch so that you can monit
 CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to Amazon ES for analysis\. To learn more, see [Loading streaming data from Amazon CloudWatch](es-aws-integrations.md#es-aws-integrations-cloudwatch-es)\.
 
 [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/)  
-Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Monitoring Amazon Elasticsearch Service configuration API activity ](es-managedomains-cloudtrailauditing.md)\.
+Use AWS CloudTrail to get a history of the Amazon ES configuration API calls and related events for your account\. For more information, see [Monitoring Amazon Elasticsearch Service API calls with AWS CloudTrail](es-managedomains-cloudtrailauditing.md)\.
 
 [Amazon Kinesis](http://aws.amazon.com/documentation/kinesis/)  
 Kinesis is a managed service for real\-time processing of streaming data at a massive scale\. For more information, see [Loading streaming data from Amazon Kinesis Data Streams](es-aws-integrations.md#es-aws-integrations-kinesis) and [Loading streaming data from Amazon Kinesis Data Firehose](es-aws-integrations.md#es-aws-integrations-fh)\.
@@ -116,4 +117,9 @@ AWS Lambda is a compute service that lets you run code without provisioning or m
 Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more about streaming data to Amazon ES, see [Loading streaming data from Amazon DynamoDB](es-aws-integrations.md#es-aws-integrations-dynamodb-es)\.
 
 [Amazon QuickSight](http://aws.amazon.com/documentation/quicksight/)  
-You can visualize data from Amazon ES using Amazon QuickSight dashboards\. For more information, see [Using Amazon Elasticsearch Service with Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/connecting-to-es.html) in the *Amazon QuickSight User Guide*
+You can visualize data from Amazon ES using Amazon QuickSight dashboards\. For more information, see [Using Amazon Elasticsearch Service with Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/connecting-to-es.html) in the *Amazon QuickSight User Guide*\.
+
+## Related projects<a name="aes-related-projects"></a>
+
+[OpenSearch](https://aws.amazon.com/elasticsearch-service/the-elk-stack/what-is-opensearch/)  
+OpenSearch is an open source search, analytics, and visualization suite with many of the same advanced features as Amazon ES: fine\-grained access control, index management, alerting, anomaly detection, and more\.

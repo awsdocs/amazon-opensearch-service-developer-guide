@@ -34,7 +34,7 @@ import com.amazonaws.services.elasticsearch.model.UpdateElasticsearchDomainConfi
 import com.amazonaws.services.elasticsearch.model.VolumeType;
 
 /**
- * Sample class demonstrating how to use the AWS SDK for Java to create, update,
+ * Sample class demonstrating how to use the Amazon Web Services SDK for Java to create, update,
  * and delete Amazon Elasticsearch Service domains.
  */
 
@@ -45,7 +45,7 @@ public class AESSample {
         final String domainName = "my-test-domain";
 
         // Build the client using the default credentials chain.
-        // You can use the AWS CLI and run `aws configure` to set access key, secret
+        // You can use the CLI and run `aws configure` to set access key, secret
         // key, and default region.
         final AWSElasticsearch client = AWSElasticsearchClientBuilder
                 .standard()
@@ -65,12 +65,12 @@ public class AESSample {
 
     /**
      * Creates an Amazon Elasticsearch Service domain with the specified options.
-     * Some options require other AWS resources, such as an Amazon Cognito user pool
+     * Some options require other Amazon Web Services resources, such as an Amazon Cognito user pool
      * and identity pool, whereas others require just an instance type or instance
      * count.
      *
      * @param client
-     *            The AWSElasticsearch client to use for the requests to Amazon
+     *            The client to use for the requests to Amazon
      *            Elasticsearch Service
      * @param domainName
      *            The name of the domain you want to create
@@ -109,12 +109,12 @@ public class AESSample {
 
     /**
      * Updates the configuration of an Amazon Elasticsearch Service domain with the
-     * specified options. Some options require other AWS resources, such as an
+     * specified options. Some options require other Amazon Web Services resources, such as an
      * Amazon Cognito user pool and identity pool, whereas others require just an
      * instance type or instance count.
      *
      * @param client
-     *            The AWSElasticsearch client to use for the requests to Amazon
+     *            The client to use for the requests to Amazon
      *            Elasticsearch Service
      * @param domainName
      *            The name of the domain to update
@@ -149,7 +149,7 @@ public class AESSample {
      * several minutes.
      *
      * @param client
-     *            The AWSElasticsearch client to use for the requests to Amazon
+     *            The client to use for the requests to Amazon
      *            Elasticsearch Service
      * @param domainName
      *            The name of the domain that you want to delete
@@ -175,7 +175,7 @@ public class AESSample {
      * the domain's processing status changes to false.
      *
      * @param client
-     *            The AWSElasticsearch client to use for the requests to Amazon
+     *            The client to use for the requests to Amazon
      *            Elasticsearch Service
      * @param domainName
      *            The name of the domain that you want to check

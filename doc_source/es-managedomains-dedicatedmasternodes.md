@@ -2,11 +2,11 @@
 
 Amazon Elasticsearch Service \(Amazon ES\) uses *dedicated master nodes* to increase cluster stability\. A dedicated master node performs cluster management tasks, but does not hold data or respond to data upload requests\. This offloading of cluster management tasks increases the stability of your domain\. Just like all other node types, you pay an hourly rate for each dedicated master node\.
 
-We recommend that you add **three** dedicated master nodes to each production Amazon ES domain\. Never choose an even number of dedicated master nodes\.
+We recommend that you add **three** dedicated master nodes to each production Amazon ES domain\. Never choose an even number of dedicated master nodes\. Consider the following when choosing the number of dedicated master nodes:
 
-1. One dedicated master node means that you have no backup in the event of a failure\.
+1. One dedicated master node is explicitly prohibited by Amazon ES because you have no backup in the event of a failure\. You receive a validation exception if you try to create a domain with only one dedicated master node\.
 
-1. Two dedicated master nodes means that your cluster does not have the necessary quorum of nodes to elect a new master node in the event of a failure\.
+1. Two dedicated master nodes means that your cluster doesn't have the necessary quorum of nodes to elect a new master node in the event of a failure\.
 
    A quorum is the number of dedicated master nodes / 2 \+ 1 \(rounded down to the nearest whole number\), which Amazon ES sets to `discovery.zen.minimum_master_nodes` when you create your domain\.
 
@@ -43,7 +43,7 @@ Although dedicated master nodes don't process search and query requests, their s
 
 ****  
 
-|  **Instance Count**  |  **Recommended Minimum Dedicated Master Instance Type**  | 
+|  **Instance count**  |  **Recommended minimum dedicated master instance type**  | 
 | --- | --- | 
 |  1–10  | `c5.large.elasticsearch` or `c6g.large.elasticsearch` | 
 |  10–30  |  `c5.xlarge.elasticsearch` or `c6g.xlarge.elasticsearch`  | 

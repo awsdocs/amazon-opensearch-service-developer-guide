@@ -79,14 +79,14 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
            obj = s3.get_object(Bucket=bucket, Key=key)
            body = obj['Body'].read()
            lines = body.splitlines()
-           
+   
            # Match the regular expressions to each line and index the JSON
            for line in lines:
                line = line.decode("utf-8")
                ip = ip_pattern.search(line).group(1)
                timestamp = time_pattern.search(line).group(1)
                message = message_pattern.search(line).group(1)
-               
+   
                document = { "ip": ip, "timestamp": timestamp, "message": message }
                r = requests.post(url, auth=awsauth, json=document, headers=headers)
    ```
@@ -242,10 +242,10 @@ def handler(event, context):
     for record in event['Records']:
         id = record['eventID']
         timestamp = record['kinesis']['approximateArrivalTimestamp']
-        
+
         # Kinesis data is base64-encoded, so decode here
         message = base64.b64decode(record['kinesis']['data'])
-        
+
         # Create the JSON document
         document = { "id": id, "timestamp": timestamp, "message": message }
         # Index the document

@@ -157,7 +157,7 @@ For detailed information, see [Configuration API reference for Amazon Elasticsea
 
 ## Migrating indices to UltraWarm storage<a name="ultrawarm-migrating"></a>
 
-If you finish writing to an index and no longer need the fastest possible search performance, migrate it from hot to warm:
+If you finished writing to an index and no longer need the fastest possible search performance, migrate it from hot to warm:
 
 ```
 POST _ultrawarm/migration/my-index/_warm
@@ -277,7 +277,7 @@ Indices in warm storage are read\-only unless you [return them to hot storage](#
 
 ## Automating migrations<a name="ultrawarm-ism"></a>
 
-We recommend using [Index State Management in Amazon Elasticsearch Service](ism.md) to automate the migration process after an index reaches a certain age or meets other conditions\. The sample policy [here](ism.md#ism-example) demonstrates that workflow\.
+We recommend using [Index State Management in Amazon Elasticsearch Service](ism.md) to automate the migration process after an index reaches a certain age or meets other conditions\. See the [sample policy](ism.md#ism-example-cold) that demonstrates this workflow\.
 
 ## Migration tuning<a name="ultrawarm-settings"></a>
 

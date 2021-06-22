@@ -95,6 +95,8 @@ If your domain is in a VPC or uses fine\-grained access control, you can use an 
 
 For information about all available actions, see [Policy element reference](#es-ac-reference)\. For far more granular control over your data, use an open domain access policy with [fine\-grained access control](fgac.md)\.
 
+1. 
+
 ### Identity\-based policies<a name="es-ac-types-identity"></a>
 
 Unlike resource\-based policies, which are a part of each Amazon ES domain, you attach identity\-based policies to users or roles using the AWS Identity and Access Management \(IAM\) service\. Just like [resource\-based policies](#es-ac-types-resource), identity\-based policies specify who can access a service, which actions they can perform, and if applicable, the resources on which they can perform those actions\.
@@ -313,7 +315,7 @@ For example, if a resource\-based policy grants you access to a domain subresour
 
 ****  
 
-|  | Allowed in Resource\-based Policy | Denied in Resource\-based Policy | Neither Allowed nor Denied in Resource\-based Policy | 
+|  | Allowed in resource\-based policy | Denied in resource\-based policy | Neither allowed nor denied in resource\-based policy | 
 | --- |--- |--- |--- |
 | Allowed in Identity\-based Policy |  Allow  | Deny | Allow | 
 | --- |--- |--- |--- |
@@ -329,7 +331,7 @@ Amazon ES supports most policy elements in the [IAM Policy Elements Reference](h
 
 ****  
 
-| JSON Policy Element | Summary | 
+| JSON policy element | Summary | 
 | --- | --- | 
 | Version |  The current version of the policy language is `2012-10-17`\. All access policies should specify this value\.  | 
 | Effect |  This element specifies whether the statement allows or denies access to the specified actions\. Valid values are `Allow` or `Deny`\.  | 
@@ -345,7 +347,7 @@ Amazon ES has three AWS\-managed, identity\-based IAM policies\. See [Service\-l
 
 ****  
 
-| AWS\-Managed Policy | Description | 
+| AWS\-managed policy | Description | 
 | --- | --- | 
 |  `AmazonESFullAccess`   |  Provides full access to the Amazon ES configuration API and all HTTP methods for the Elasticsearch APIs\. [Fine\-grained access control](fgac.md) and [resource\-based policies](#es-ac-types-resource) can still restrict access\.  | 
 |  `AmazonESReadOnlyAccess`   | Provides read\-only access to the Amazon ES configuration API \(es:Describe\*, es:List\*, and es:Get\*\) and no access to the HTTP methods for the Elasticsearch APIs\. | 

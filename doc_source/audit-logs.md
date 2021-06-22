@@ -1,4 +1,4 @@
-# Managing audit logs in Amazon Elasticsearch Service<a name="audit-logs"></a>
+# Monitoring audit logs in Amazon Elasticsearch Service<a name="audit-logs"></a>
 
 If your Amazon Elasticsearch Service \(Amazon ES\) domain uses fine\-grained access control, you can enable audit logs for your data\. Audit logs are highly customizable and let you track user activity on your Elasticsearch clusters, including authentication success and failures, requests to Elasticsearch, index changes, and incoming search queries\. The default configuration tracks a popular set of user actions, but we recommend tailoring the settings to your exact needs\.
 
@@ -102,7 +102,7 @@ Cluster communication occurs over two separate *layers*: the REST layer and the 
 You can enable or disable audit logs for entire layers, as well as individual audit categories for a layer\. The following table contains a summary of audit categories and the layers for which they are available\.
 
 
-| Category | Description | Available for REST | Available for Transport | 
+| Category | Description | Available for REST | Available for transport | 
 | --- | --- | --- | --- | 
 |  FAILED\_LOGIN  | A request contained invalid credentials, and authentication failed\. | Yes | Yes | 
 |  MISSING\_PRIVILEGES  | A user did not have the privileges to make the request\. | Yes | Yes | 
@@ -135,7 +135,7 @@ Audit logs have numerous configuration options\.
 General settings let you enable or disable individual categories or entire layers\. We highly recommend leaving GRANTED\_PRIVILEGES and AUTHENTICATED as excluded categories\. Otherwise, these categories are logged for every valid request to the cluster\.
 
 
-| Name | Backend Setting | Description | 
+| Name | Backend setting | Description | 
 | --- | --- | --- | 
 |  REST layer  |  enable\_rest  |  Enable or disable events that occur on the REST layer\.  | 
 |  REST disabled categories  |  disabled\_rest\_categories  |  Specify audit categories to ignore on the REST layer\. Modifying these categories can dramatically increase the size of the audit logs\.  | 
@@ -145,7 +145,7 @@ General settings let you enable or disable individual categories or entire layer
 Attribute settings let you customize the amount of detail in each log line\.
 
 
-| Name | Backend Setting | Description | 
+| Name | Backend setting | Description | 
 | --- | --- | --- | 
 |  Bulk requests  |  resolve\_bulk\_requests  |  Enabling this setting generates a log for each document in a bulk request, which can dramatically increase the size of the audit logs\.  | 
 |  Request body  |  log\_request\_body  |  Include the request body of the requests\.  | 
@@ -154,7 +154,7 @@ Attribute settings let you customize the amount of detail in each log line\.
 Use ignore settings to exclude a set of users or API paths:
 
 
-| Name | Backend Setting | Description | 
+| Name | Backend setting | Description | 
 | --- | --- | --- | 
 |  Ignored users  |  ignore\_users  |  Specify users that you want to exclude\.  | 
 |  Ignored requests  |  ignore\_requests  |  Specify request patterns that you want to exclude\.  | 
@@ -164,14 +164,14 @@ Use ignore settings to exclude a set of users or API paths:
 Compliance settings let you tune for index, document, or field\-level access\.
 
 
-| Name | Backend Setting | Description | 
+| Name | Backend setting | Description | 
 | --- | --- | --- | 
 |  Compliance logging  |  enable\_compliance  |  Enable or disable compliance logging\.  | 
 
 You can specify the following settings for read events\.
 
 
-| Name | Backend Setting | Description | 
+| Name | Backend setting | Description | 
 | --- | --- | --- | 
 |  Read metadata  |  read\_metadata\_only  |  Include only metadata for read events\. Do not include any document fields\.  | 
 |  Ignored users  |  read\_ignore\_users  |  Do not include certain users for read events\.  | 
@@ -180,7 +180,7 @@ You can specify the following settings for read events\.
 You can specify the following settings for write events\.
 
 
-| Name | Backend Setting | Description | 
+| Name | Backend setting | Description | 
 | --- | --- | --- | 
 |  Write metadata  |  write\_metadata\_only  |  Include only metadata for write events\. Do not include any document fields\.  | 
 |  Log diffs  |  write\_log\_diffs  |  If write\_metadata\_only is false, include only the differences between write events\.  | 

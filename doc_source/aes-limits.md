@@ -7,7 +7,7 @@ The following tables show limits for Amazon Elasticsearch Service \(Amazon ES\) 
 The following table shows Amazon ES limits for clusters and instances\.
 
 
-| Clusters and Instances | Limit | 
+| Clusters and instances | Limit | 
 | --- | --- | 
 | Maximum number of data nodes per cluster |  40 \(except for the T2 and T3 instance types, which have a maximum of 10\) To request an increase up to 200 data nodes \(for Elasticsearch 2\.3 or later\), create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
 | Maximum number of [warm](ultrawarm.md) nodes per cluster | 150 | 
@@ -28,7 +28,7 @@ The following table lists the UltraWarm instance types and the maximum amount of
 
 ****  
 
-| Instance Type | Maximum Storage | 
+| Instance type | Maximum storage | 
 | --- | --- | 
 | ultrawarm1\.medium\.elasticsearch | 1\.5 TiB | 
 | ultrawarm1\.large\.elasticsearch | 20 TiB | 
@@ -43,7 +43,7 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 
 ****  
 
-| Instance Type | Minimum EBS Size | Maximum EBS Size | 
+| Instance type | Minimum EBS size | Maximum EBS size | 
 | --- | --- | --- | 
 | t2\.micro\.elasticsearch | 10 GiB | 35 GiB | 
 | t2\.small\.elasticsearch | 10 GiB | 35 GiB | 
@@ -132,7 +132,7 @@ The following table shows the maximum size of HTTP request payloads\.
 
 ****  
 
-| Instance Type | Maximum Size of HTTP Request Payloads | 
+| Instance type | Maximum size of HTTP request payloads | 
 | --- | --- | 
 | t2\.micro\.elasticsearch | 10 MiB | 
 | t2\.small\.elasticsearch | 10 MiB | 

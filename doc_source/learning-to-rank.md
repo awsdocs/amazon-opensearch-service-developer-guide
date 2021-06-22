@@ -49,7 +49,7 @@ In this example, we have a judgment list for a movie dataset\. A grade of 4 indi
 
 ****  
 
-| Grade | Keyword | Doc ID | Movie Name | 
+| Grade | Keyword | Doc ID | Movie name | 
 | --- | --- | --- | --- | 
 | 4 | rambo | 7555 | Rambo | 
 | 3 | rambo | 1370 | Rambo III | 
@@ -865,7 +865,7 @@ The statistics are provided at two levels, node and cluster, as specified in the
 
 **Node\-level stats**  
 
-| Field Name | Description | 
+| Field name | Description | 
 | --- | --- | 
 | request\_total\_count | Total count of ranking requests\. | 
 | request\_error\_count | Total count of unsuccessful requests\. | 
@@ -880,7 +880,7 @@ The statistics are provided at two levels, node and cluster, as specified in the
 
 **Cluster\-level stats**  
 
-| Field Name | Description | 
+| Field name | Description | 
 | --- | --- | 
 | stores | Indicates where the feature sets and model metadata are stored\. \(The default is “\.ltrstore”\. Otherwise, it's prefixed with “\.ltrstore\_”, with a user supplied name\)\.  | 
 | stores\.status | Status of the index\. | 

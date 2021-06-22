@@ -12,8 +12,6 @@ This documentation helps you understand how to apply the shared responsibility m
 + [Data protection in Amazon Elasticsearch Service](es-data-protection.md)
 + [Identity and Access Management in Amazon Elasticsearch Service](es-ac.md)
 + [Fine\-grained access control in Amazon Elasticsearch Service](fgac.md)
-+ [Managing audit logs in Amazon Elasticsearch Service](audit-logs.md)
-+ [Monitoring Amazon Elasticsearch Service configuration API activity](es-managedomains-cloudtrailauditing.md)
 + [Compliance validation for Amazon Elasticsearch Service](es-compliance.md)
 + [Resilience in Amazon Elasticsearch Service](disaster-recovery-resiliency.md)
 + [Infrastructure security in Amazon Elasticsearch Service](infrastructure-security.md)

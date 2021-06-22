@@ -14,7 +14,7 @@ For examples of how to interact with the configuration API, including operations
 
 ## Java<a name="es-request-signing-java"></a>
 
-The easiest way of sending a signed request is to use the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started, or you can [download a sample project for Amazon ES on GitHub](https://github.com/awsdocs/amazon-elasticsearch-service-developer-guide/blob/master/sample_code/java/amazon-es-docs-sample-client.zip)\.
+The easiest way of sending a signed request is to use the [Amazon Web Services Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started, or you can [download a sample project for Amazon ES on GitHub](https://github.com/awsdocs/amazon-elasticsearch-service-developer-guide/blob/master/sample_code/java/amazon-es-docs-sample-client.zip)\.
 
 The following example uses the Elasticsearch low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
 
@@ -57,16 +57,16 @@ public class AmazonElasticsearchServiceSample {
         // request.addParameter(name, value); // optional parameters
         Response response = esClient.performRequest(request);
         System.out.println(response.toString());
-        
+
         // Index a document
         entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
         String id = "1";
         request = new Request("PUT", indexingPath + "/" + id);
         request.setEntity(entity);
-        
+
         // Using a String instead of an HttpEntity sets Content-Type to application/json automatically.
         // request.setJsonEntity(sampleDocument);
-        
+
         response = esClient.performRequest(request);
         System.out.println(response.toString());
     }
@@ -82,7 +82,7 @@ public class AmazonElasticsearchServiceSample {
 }
 ```
 
-If you prefer the high\-level REST client, which offers most of the same features and simpler code, try the following sample, which also uses the [AWS Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor):
+If you prefer the high\-level REST client, which offers most of the same features and simpler code, try the following sample, which also uses the [Amazon Web Services Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor):
 
 ```
 import org.apache.http.HttpHost;
@@ -108,9 +108,9 @@ public class AmazonElasticsearchServiceSample {
     private static String index = "my-index";
     private static String type = "_doc";
     private static String id = "1";
-    
+
     static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
-    
+
     public static void main(String[] args) throws IOException {
         RestHighLevelClient esClient = esClient(serviceName, region);
 
@@ -125,7 +125,7 @@ public class AmazonElasticsearchServiceSample {
         IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
         System.out.println(response.toString());
     }
-    
+
     // Adds the interceptor to the ES REST client
     public static RestHighLevelClient esClient(String serviceName, String region) {
         AWS4Signer signer = new AWS4Signer();
@@ -469,7 +469,7 @@ func main() {
   json := `{ "title": "Thor: Ragnarok", "director": "Taika Waititi", "year": "2017" }`
   body := strings.NewReader(json)
 
-  // Get credentials from environment variables and create the AWS Signature Version 4 signer
+  // Get credentials from environment variables and create the Signature Version 4 signer
   credentials := credentials.NewEnvCredentials()
   signer := v4.NewSigner(credentials)
 

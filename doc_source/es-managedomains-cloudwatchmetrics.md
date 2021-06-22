@@ -1,20 +1,10 @@
 # Monitoring Amazon Elasticsearch Service cluster metrics with Amazon CloudWatch<a name="es-managedomains-cloudwatchmetrics"></a>
 
-## Interpreting health dashboards<a name="es-managedomains-cloudwatchmetrics-box-charts"></a>
+Amazon Elasticsearch Service \(Amazon ES\) publishes data from your domains to Amazon CloudWatch\. CloudWatch lets you retrieve statistics about those data points as an ordered set of time\-series data, known as *metrics*\. Amazon ES sends metrics to CloudWatch in 60\-second intervals\. If you use General Purpose or Magnetic EBS volumes, the EBS volume metrics update only every five minutes\. For more information about Amazon CloudWatch, see the [Amazon CloudWatch User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/)\.
 
-The **Instance health** tab in the Amazon ES console uses box charts to provide at\-a\-glance visibility into the health of each Elasticsearch node\.
+The Amazon ES console displays a series of charts based on the raw data from CloudWatch\. Depending on your needs, you might prefer to view cluster data in CloudWatch instead of the graphs in the console\. The service archives metrics for two weeks before discarding them\. The metrics are provided at no extra charge\.
 
-![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/box-charts.png)
-+ Each colored box shows the range of values for the node over the specified time period\.
-+ Blue boxes represent values that are consistent with other nodes\. Red boxes represent outliers\.
-+ The white line within each box shows the node's current value\.
-+ The “whiskers” on either side of each box show the minimum and maximum values for all nodes over the time period\.
-
-Amazon ES domains send performance metrics to Amazon CloudWatch every minute\. If you use General Purpose or Magnetic EBS volumes, the EBS volume metrics update only every five minutes\. To view these metrics, use the **Cluster health** and **Instance health** tabs in the Amazon Elasticsearch Service console\. The metrics are provided at no extra charge\.
-
-If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [Making configuration changes in Amazon ES](es-managedomains-configuration-changes.md)\.
-
-All metrics are in the `AWS/ES` namespace\. Metrics for individual nodes are in the `ClientId, DomainName, NodeId` dimension\. Cluster metrics are in the `Per-Domain, Per-Client Metrics` dimension\. Some node metrics are aggregated at the cluster level and thus included in both dimensions\. Shart metrics are in the `ClientId, DomainName, NodeId, ShardRole` dimension\. The service archives metrics for two weeks before discarding them\.
+Amazon ES publishes the following metrics to CloudWatch:
 + [Cluster metrics](#es-managedomains-cloudwatchmetrics-cluster-metrics)
 + [Dedicated master node metrics](#es-managedomains-cloudwatchmetrics-master-node-metrics)
 + [EBS volume metrics](#es-managedomains-cloudwatchmetrics-master-ebs-metrics)
@@ -27,6 +17,40 @@ All metrics are in the `AWS/ES` namespace\. Metrics for individual nodes are in 
 + [SQL metrics](#es-managedomains-cloudwatchmetrics-sql)
 + [k\-NN metrics](#es-managedomains-cloudwatchmetrics-knn)
 + [Cross\-cluster search metrics](#es-managedomains-cloudwatchmetrics-cross-cluster-search)
++ [Learning to Rank metrics](#es-managedomains-cloudwatchmetrics-learning-to-rank)
++ [Piped Processing Language metrics](#es-managedomains-cloudwatchmetrics-ppl)
+
+## Viewing metrics in CloudWatch<a name="es-managedomains-viewmetrics"></a>
+
+CloudWatch metrics are grouped first by the service namespace, and then by the various dimension combinations within each namespace\. 
+
+**To view metrics using the CloudWatch console**
+
+1. Open the CloudWatch console at [https://console\.aws\.amazon\.com/cloudwatch/](https://console.aws.amazon.com/cloudwatch/)\.
+
+1. In the navigation pane, choose **All metrics** and select the **AWS/ES** namespace\.
+
+1. Choose a dimension to view the corresponding metrics\. Metrics for individual nodes are in the `ClientId, DomainName, NodeId` dimension\. Cluster metrics are in the `Per-Domain, Per-Client Metrics` dimension\. Some node metrics are aggregated at the cluster level and thus included in both dimensions\. Shard metrics are in the `ClientId, DomainName, NodeId, ShardRole` dimension\.
+
+**To view a list of metrics using the AWS CLI**
+
+Run the following command:
+
+```
+aws cloudwatch list-metrics --namespace "AWS/ES"
+```
+
+## Interpreting health charts in Amazon ES<a name="es-managedomains-cloudwatchmetrics-box-charts"></a>
+
+To view metrics in Amazon ES, use the **Cluster health** and **Instance health** tabs\. The **Instance health** tab uses box charts to provide at\-a\-glance visibility into the health of each Elasticsearch node:
+
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/box-charts.png)
++ Each colored box shows the range of values for the node over the specified time period\.
++ Blue boxes represent values that are consistent with other nodes\. Red boxes represent outliers\.
++ The white line within each box shows the node's current value\.
++ The “whiskers” on either side of each box show the minimum and maximum values for all nodes over the time period\.
+
+If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [Making configuration changes in Amazon ES](es-managedomains-configuration-changes.md)\.
 
 ## Cluster metrics<a name="es-managedomains-cloudwatchmetrics-cluster-metrics"></a>
 
@@ -38,17 +62,27 @@ Amazon Elasticsearch Service provides the following metrics for clusters\.
 | ClusterStatus\.green |  A value of 1 indicates that all index shards are allocated to nodes in the cluster\. Relevant statistics: Maximum  | 
 | ClusterStatus\.yellow | A value of 1 indicates that the primary shards for all indices are allocated to nodes in the cluster, but replica shards for at least one index are not\. For more information, see [Yellow cluster status](aes-handling-errors.md#aes-handling-errors-yellow-cluster-status)\.Relevant statistics: Maximum | 
 | ClusterStatus\.red |  A value of 1 indicates that the primary and replica shards for at least one index are not allocated to nodes in the cluster\. For more information, see [Red cluster status](aes-handling-errors.md#aes-handling-errors-red-cluster-status)\. Relevant statistics: Maximum  | 
+| Shards\.active |  The total number of active primary and replica shards\. Relevant statistics: Maximum, Sum  | 
+| Shards\.unassigned |  The number of shards that are not allocated to nodes in the cluster\. Relevant statistics: Maximum, Sum  | 
+| Shards\.delayedUnassigned |  The number of shards whose node allocation has been delayed by the timeout settings\. Relevant statistics: Maximum, Sum  | 
+| Shards\.activePrimary |  The number of active primary shards\. Relevant statistics: Maximum, Sum  | 
+| Shards\.initializing |  The number of shards that are under initialization\. Relevant statistics: Sum  | 
+| Shards\.relocating |  The number of shards that are under relocation\. Relevant statistics: Sum  | 
 | Nodes |  The number of nodes in the Amazon ES cluster, including dedicated master nodes and UltraWarm nodes\. For more information, see [Making configuration changes in Amazon ES](es-managedomains-configuration-changes.md)\. Relevant statistics: Maximum  | 
 | SearchableDocuments |  The total number of searchable documents across all data nodes in the cluster\. Relevant statistics: Minimum, Maximum, Average  | 
 | DeletedDocuments |  The total number of documents marked for deletion across all data nodes in the cluster\. These documents no longer appear in search results, but Elasticsearch only removes deleted documents from disk during segment merges\. This metric increases after delete requests and decreases after segment merges\. Relevant statistics: Minimum, Maximum, Average  | 
 | CPUUtilization |  The percentage of CPU usage for data nodes in the cluster\. Maximum shows the node with the highest CPU usage\. Average represents all nodes in the cluster\. This metric is also available for individual nodes\. Relevant statistics: Maximum, Average  | 
-| FreeStorageSpace |  The free space for data nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum` and `Maximum` show the nodes with the least and most free space, respectively\. This metric is also available for individual nodes\. Amazon ES throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Lack of available storage space](aes-handling-errors.md#aes-handling-errors-watermark)\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\.  `FreeStorageSpace` will always be lower than the value that the Elasticsearch `_cluster/stats` API provides\. Amazon ES reserves a percentage of the storage space on each instance for internal operations\.  Relevant statistics: Minimum, Maximum, Average, Sum  | 
+| FreeStorageSpace |  The free space for data nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum` and `Maximum` show the nodes with the least and most free space, respectively\. This metric is also available for individual nodes\. Amazon ES throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Lack of available storage space](aes-handling-errors.md#aes-handling-errors-watermark)\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\.  `FreeStorageSpace` will always be lower than the values that the Elasticsearch `_cluster/stats` and `_cat/allocation` APIs provide\. Amazon ES reserves a percentage of the storage space on each instance for internal operations\. For more information, see [Calculating storage requirements](sizing-domains.md#aes-bp-storage)\.  Relevant statistics: Minimum, Maximum, Average, Sum  | 
 | ClusterUsedSpace |  The total used space for the cluster\. You must leave the period at one minute to get an accurate value\. The Amazon ES console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. Relevant statistics: Minimum, Maximum  | 
 | ClusterIndexWritesBlocked |  Indicates whether your cluster is accepting or blocking incoming write requests\. A value of 0 means that the cluster is accepting requests\. A value of 1 means that it is blocking requests\. Some common factors include the following: `FreeStorageSpace` is too low or `JVMMemoryPressure` is too high\. To alleviate this issue, consider adding more disk space or scaling your cluster\. Relevant statistics: Maximum  | 
 | JVMMemoryPressure |  The maximum percentage of the Java heap used for all data nodes in the cluster\. Amazon ES uses half of an instance's RAM for the Java heap, up to a heap size of 32 GiB\. You can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\. See [Recommended CloudWatch alarms for Amazon Elasticsearch Service](cloudwatch-alarms.md)\. Relevant statistics: Maximum  | 
 | AutomatedSnapshotFailure |  The number of failed automated snapshots for the cluster\. A value of `1` indicates that no automated snapshot was taken for the domain in the previous 36 hours\. Relevant statistics: Minimum, Maximum  | 
 | CPUCreditBalance |  The remaining CPU credits available for data nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-credits-baseline-concepts.html) in the *Amazon EC2 Developer Guide*\. This metric is available only for the T2 instance types\. Relevant statistics: Minimum  | 
 | KibanaHealthyNodes |  A health check for Kibana\. If the minimum, maximum, and average are all equal to 1, Kibana is behaving normally\. If you have 10 nodes with a maximum of 1, minimum of 0, and average of 0\.7, this means 7 nodes \(70%\) are healthy and 3 nodes \(30%\) are unhealthy\. Relevant statistics: Minimum, Maximum, Average  | 
+| ESReportingFailedRequestSysErrCount |  The number of requests to generate Kibana reports that failed due to server problems or feature limitations\. Relevant statistics: Sum  | 
+| ESReportingFailedRequestUserErrCount |  The number of requests to generate Kibana reports that failed due to client issues\. Relevant statistics: Sum  | 
+| ESReportingRequestCount |  The total number of requests to generate Kibana reports\. Relevant statistics: Sum  | 
+| ESReportingSuccessCount |  The number of successful requests to generate Kibana reports\. Relevant statistics: Sum  | 
 | KMSKeyError |  A value of 1 indicates that the KMS customer master key used to encrypt data at rest has been disabled\. To restore the domain to normal operations, re\-enable the key\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum  | 
 | KMSKeyInaccessible |  A value of 1 indicates that the KMS customer master key used to encrypt data at rest has been deleted or revoked its grants to Amazon ES\. You can't recover domains that are in this state\. If you have a manual snapshot, though, you can use it to migrate the domain's data to a new domain\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum  | 
 | InvalidHostHeaderRequests |  The number of HTTP requests made to the Elasticsearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. Amazon ES rejects invalid requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\. If you see large values for this metric, confirm that your Elasticsearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum  | 
@@ -99,6 +133,7 @@ Use `GET _cluster/settings?include_defaults=true` to check thread pool and queue
 | IndexingRate |  The number of indexing operations per minute\. A single call to the `_bulk` API that adds two documents and updates two counts as four operations, which might be spread across one or more nodes\. If that index has one or more replicas, other nodes in the cluster also record a total of four indexing operations\. Document deletions do not count towards this metric\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum  | 
 | SearchLatency |  The average time, in milliseconds, that it takes a shard on a data node to complete a search operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum  | 
 | SearchRate |  The total number of search requests per minute for all shards on a data node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum  | 
+| SegmentCount |  The number of segments on a data node\. The more segments you have, the longer each search takes\. Elasticsearch occasionally merges smaller segments into a larger one\. Relevant node statistics: Maximum, Average Relevant cluster statistics: Sum, Maximum, Average  | 
 | SysMemoryUtilization |  The percentage of the instance's memory that is in use\. High values for this metric are normal and usually do not represent a problem with your cluster\. For a better indicator of potential performance and stability issues, see the `JVMMemoryPressure` metric\. Relevant node statistics: Minimum, Maximum, Average Relevant cluster statistics: Minimum, Maximum, Average  | 
 | JVMGCYoungCollectionCount |  The number of times that "young generation" garbage collection has run\. A large, ever\-growing number of runs is a normal part of cluster operations\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
 | JVMGCYoungCollectionTime |  The amount of time, in milliseconds, that the cluster has spent performing "young generation" garbage collection\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
@@ -121,6 +156,9 @@ Use `GET _cluster/settings?include_defaults=true` to check thread pool and queue
 | ThreadpoolSearchQueue |  The number of queued tasks in the search thread pool\. If the queue size is consistently high, consider scaling your cluster\. The maximum search queue size is 1,000\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
 | ThreadpoolSearchRejected |  The number of rejected tasks in the search thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum  | 
 | ThreadpoolSearchThreads |  The size of the search thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
+| Threadpoolsql\-workerQueue |  The number of queued tasks in the SQL search thread pool\. If the queue size is consistently high, consider scaling your cluster\.  Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
+| Threadpoolsql\-workerRejected |  The number of rejected tasks in the SQL search thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum  | 
+| Threadpoolsql\-workerThreads |  The size of the SQL search thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
 | ThreadpoolBulkQueue |  The number of queued tasks in the bulk thread pool\. If the queue size is consistently high, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
 | ThreadpoolBulkRejected |  The number of rejected tasks in the bulk thread pool\. If this number continually grows, consider scaling your cluster\. Relevant node statistics: Maximum Relevant cluster statistics: Sum  | 
 | ThreadpoolBulkThreads |  The size of the bulk thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
@@ -140,7 +178,6 @@ Amazon Elasticsearch Service provides the following metrics for [UltraWarm](ultr
 | --- | --- | 
 | WarmCPUUtilization |  The percentage of CPU usage for UltraWarm nodes in the cluster\. Maximum shows the node with the highest CPU usage\. Average represents all UltraWarm nodes in the cluster\. This metric is also available for individual UltraWarm nodes\. Relevant statistics: Maximum, Average  | 
 | WarmFreeStorageSpace |  The amount of free warm storage space in MiB\. Because UltraWarm uses Amazon S3 rather than attached disks, `Sum` is the only relevant statistic\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Sum  | 
-| WarmJVMMemoryPressure |  The maximum percentage of the Java heap used for the UltraWarm nodes\. Relevant statistics: Maximum  | 
 | WarmSearchableDocuments |  The total number of searchable documents across all warm indices in the cluster\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Sum  | 
 |  WarmSearchLatency  |  The average time, in milliseconds, that it takes a shard on an UltraWarm node to complete a search operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum  | 
 |  WarmSearchRate  |  The total number of search requests per minute for all shards on an UltraWarm node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum  | 
@@ -153,8 +190,15 @@ Amazon Elasticsearch Service provides the following metrics for [UltraWarm](ultr
 |  HotToWarmMigrationForceMergeLatency  |  The average latency of the force merge stage of the migration process\. If this stage consistently takes too long, consider increasing `index.ultrawarm.migration.force_merge.max_num_segments`\. Relevant statistics: Average  | 
 |  HotToWarmMigrationSnapshotLatency  |  The average latency of the snapshot stage of the migration process\. If this stage consistently takes too long, ensure that your shards are appropriately sized and distributed throughout the cluster\. Relevant statistics: Average  | 
 |  HotToWarmMigrationProcessingLatency  |  The average latency of successful hot to warm migrations, *not* including time spent in the queue\. This value is the sum of the amount of time it takes to complete the force merge, snapshot, and shard relocation stages of the migration process\. Relevant statistics: Average  | 
-|  HotToWarmMigrationSuccessCount  |  The total number of successful hot to warm migrations\. Relevant statistics: Sum  | 
-|  HotToWarmMigrationSuccessLatency  |  The average latency of successful hot to warm migrations, including time spent in the queue\. Relevant statistics: Average  | 
+| HotToWarmMigrationSuccessCount  |  The total number of successful hot to warm migrations\. Relevant statistics: Sum  | 
+| HotToWarmMigrationSuccessLatency  |  The average latency of successful hot to warm migrations, including time spent in the queue\. Relevant statistics: Average  | 
+| WarmThreadpoolSearchThreads | The size of the UltraWarm search thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| WarmThreadpoolSearchRejected |  The number of rejected tasks in the UltraWarm search thread pool\. If this number continually grows, consider adding more UltraWarm nodes\. Relevant node statistics: Maximum Relevant cluster statistics: Sum  | 
+| WarmThreadpoolSearchQueue | The number of queued tasks in the UltraWarm search thread pool\. If the queue size is consistently high, consider adding more UltraWarm nodes\.Relevant node statistics: MaximumRelevant cluster statistics: Sum, Maximum, Average | 
+| WarmJVMMemoryPressure |  The maximum percentage of the Java heap used for the UltraWarm nodes\. Relevant statistics: Maximum  | 
+| WarmJVMGCYoungCollectionCount |  The number of times that "young generation" garbage collection has run on UltraWarm nodes\. A large, ever\-growing number of runs is a normal part of cluster operations\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
+| WarmJVMGCYoungCollectionTime |  The amount of time, in milliseconds, that the cluster has spent performing "young generation" garbage collection on UltraWarm nodes\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
+| WarmJVMGCOldCollectionCount |  The number of times that "old generation" garbage collection has run on UltraWarm nodes\. In a cluster with sufficient resources, this number should remain small and grow infrequently\.  Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
 
 ## Cold storage metrics<a name="es-managedomains-cloudwatchmetrics-coldstorage"></a>
 
@@ -196,15 +240,17 @@ Amazon Elasticsearch Service provides the following metrics for [anomaly detecti
 
 | Metric | Description | 
 | --- | --- | 
-| AnomalyDetectionPluginUnhealthy |  A value of 1 means that the anomaly detection plugin is not functioning properly, either because of a high number of failures or because one of the indices that it uses is red\. A value of 0 indicates the plugin is working as expected\. Relevant statistics: Maximum  | 
-| AnomalyDetectionRequestCount |  The number of requests to detect anomalies\. Relevant statistics: Sum  | 
-| AnomalyDetectionFailureCount |  The number of failed requests to detect anomalies\.  Relevant statistics: Sum  | 
-| AnomalyResultsIndexStatusIndexExists |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to exists\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| AnomalyResultsIndexStatus\.red |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to is red\. A value of 0 means it is not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| AnomalyDetectorsIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-detectors` index exists\. A value of 0 means it does not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| AnomalyDetectorsIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-detectors` index is red\. A value of 0 means it is not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| ModelsCheckpointIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index exists\. A value of 0 means it does not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| ModelsCheckpointIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index is red\. A value of 0 means it is not\. Until you use the anomaly detection feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADPluginUnhealthy |  A value of 1 means that the anomaly detection plugin is not functioning properly, either because of a high number of failures or because one of the indices that it uses is red\. A value of 0 indicates the plugin is working as expected\. Relevant statistics: Maximum  | 
+| ADExecuteRequestCount |  The number of requests to detect anomalies\. Relevant statistics: Sum  | 
+|  ADExecuteFailureCount  |  The number of failed requests to detect anomalies\.  Relevant statistics: Sum  | 
+| ADHCExecuteFailureCount |  The number of failed requests to detect anomalies for high cardinality detectors\. Relevant statistics: Sum  | 
+| ADHCExecuteRequestCount |  The number of requests to detect anomalies for high cardinality detectors\. Relevant statistics: Sum  | 
+| ADAnomalyResultsIndexStatusIndexExists |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to exists\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADAnomalyResultsIndexStatus\.red |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADAnomalyDetectorsIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-detectors` index exists\. A value of 0 means it does not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADAnomalyDetectorsIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-detectors` index is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADModelsCheckpointIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index exists\. A value of 0 means it does not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADModelsCheckpointIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
 
 ## Asynchronous search metrics<a name="es-managedomains-cloudwatchmetrics-asynchronous-search"></a>
 
@@ -217,6 +263,7 @@ Amazon Elasticsearch Service provides the following metrics for [asynchronous se
 | --- | --- | 
 | AsynchronousSearchSubmissionRate |  The number of asynchronous searches submitted in the last minute\.  | 
 | AsynchronousSearchInitializedRate |  The number of asynchronous searches initialized in the last minute\.  | 
+| AsynchronousSearchRunningCurrent |  The number of asynchronous searches currently running\.  | 
 | AsynchronousSearchCompletionRate |  The number of asynchronous searches successfully completed in the last minute\.  | 
 | AsynchronousSearchFailureRate |  The number of asynchronous searches that completed and failed in the last minute\.  | 
 | AsynchronousSearchPersistRate |  The number of asynchronous searches that persisted in the last minute\.  | 
@@ -303,5 +350,19 @@ Amazon Elasticsearch Service provides the following metrics for [Learning to Ran
 | --- | --- | 
 | LTRRequestTotalCount |  Total count of ranking requests\.  | 
 | LTRRequestErrorCount |  Total count of unsuccessful requests\.  | 
-| LTRStoreIndexIsRed |  Tracks if one of the indices needed to run the plugin is red\.  | 
+| LTRStatus\.red |  Tracks if one of the indices needed to run the plugin is red\.  | 
 | LTRMemoryUsage |  Total memory used by the plugin\.  | 
+| LTRFeatureMemoryUsageInBytes |  The amount of memory, in bytes, used by Learning to Rank feature fields\.  | 
+| LTRFeaturesetMemoryUsageInBytes |  The amount of memory, in bytes, used by all Learning to Rank feature sets\.  | 
+| LTRModelMemoryUsageInBytes |  The amount of memory, in bytes, used by all Learning to Rank models\.  | 
+
+## Piped Processing Language metrics<a name="es-managedomains-cloudwatchmetrics-ppl"></a>
+
+Amazon Elasticsearch Service provides the following metrics for [Piped Processing Language](ppl-support.md)\.
+
+
+| Metric | Description | 
+| --- | --- | 
+| PPLFailedRequestCountByCusErr |  The number of requests to the `_opendistro/_ppl` API that failed due to a client issue\. For example, a request might return HTTP status code 400 due to an `IndexNotFoundException`\.  | 
+| PPLFailedRequestCountBySysErr |  The number of requests to the `_opendistro/_ppl` API that failed due to a server problem or feature limitation\. For example, a request might return HTTP status code 503 due to a `VerificationException`\.  | 
+| PPLRequestCount |  The number of requests to the `_opendistro/_ppl` API\.   | 

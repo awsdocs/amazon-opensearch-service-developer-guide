@@ -19,7 +19,7 @@ For rolling indices, you can multiply the amount of data generated during a repr
 
 The size of your source data, however, is just one aspect of your storage requirements\. You also have to consider the following:
 
-1. **Number of replicas**: Each replica is a full copy of an index and needs the same amount of disk space\. By default, each Elasticsearch index has one replica\. We recommend at least one to prevent data loss\. Replicas also improve search performance, so you might want more if you have a read\-heavy workload\.
+1. **Number of replicas**: Each replica is a full copy of an index and needs the same amount of disk space\. By default, each Elasticsearch index has one replica\. We recommend at least one to prevent data loss\. Replicas also improve search performance, so you might want more if you have a read\-heavy workload\. Use `PUT /my-index/_settings` to update the `number_of_replicas` setting for your index\.
 
 1. **Elasticsearch indexing overhead**: The on\-disk size of an index varies, but is often 10% larger than the source data\. After indexing your data, you can use the `_cat/indices?v` API and `pri.store.size` value to calculate the exact overhead\. `_cat/allocation?v` also provides a useful summary\.
 

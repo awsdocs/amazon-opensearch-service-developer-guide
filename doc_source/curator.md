@@ -154,7 +154,7 @@ Because taking and deleting snapshots can take a while, this code is more sensit
 We recommend the following settings for these code samples\.
 
 
-| Sample Code | Memory | Timeout | 
+| Sample code | Memory | Timeout | 
 | --- | --- | --- | 
 | Index Deletion | 128 MB | 10 seconds | 
 | Snapshot Deletion | 128 MB | 3 minutes | 
@@ -164,7 +164,7 @@ We recommend the following settings for these code samples\.
 Rather than reacting to some event \(such as a file upload to Amazon S3\), these functions are meant to be scheduled\. You might prefer to run these functions more or less frequently\.
 
 
-| Sample Code | Service | Rule Type | Example Expression | 
+| Sample code | Service | Rule type | Example expression | 
 | --- | --- | --- | --- | 
 | Index Deletion | CloudWatch Events | Schedule expression | rate\(1 day\) | 
 | Snapshot Deletion | CloudWatch Events | Schedule expression | rate\(4 hours\) | 

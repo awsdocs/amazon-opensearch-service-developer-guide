@@ -53,8 +53,8 @@ For smaller clusters, a one\-time approach is to take a [shared file system snap
 1. Navigate to the snapshot directory\. Then run the following commands to create a new S3 bucket and upload the contents of the snapshot directory to that bucket:
 
    ```
-   aws s3 mb s3://migration-bucket --region us-west-2
-   aws s3 sync . s3://migration-bucket --sse AES256
+   aws s3 mb s3://bucket-name --region us-west-2
+   aws s3 sync . s3://bucket-name --sse AES256
    ```
 
    Depending on the size of the snapshot and the speed of your internet connection, this operation can take a while\.
@@ -66,7 +66,7 @@ Although the console is the easiest way to create a domain, in this case, you al
 ```
 aws es create-elasticsearch-domain \
   --domain-name migration-domain \
-  --elasticsearch-version 7.9 \
+  --elasticsearch-version 7.10 \
   --elasticsearch-cluster-config InstanceType=c5.large.elasticsearch,InstanceCount=2 \
   --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 \
   --node-to-node-encryption-options Enabled=true \
@@ -86,7 +86,7 @@ Snapshots are only forward\-compatible, and only by one major version\. For exam
 
 ## Provide permissions to the S3 bucket<a name="migration-permissions"></a>
 
-In the AWS Identity and Access Management \(IAM\) console, [create a role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) with the following permissions and trust relationship\. Name the role `AmazonESSnapshotRole` so that it's easy to find\.
+In the AWS Identity and Access Management \(IAM\) console, [create a role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) with the following permissions and [trust relationship](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy)\. When creating the role, choose **S3** as the **AWS Service**\. Name the role `AmazonESSnapshotRole` so it's easy to find\. 
 
 **Permissions**
 
@@ -99,7 +99,7 @@ In the AWS Identity and Access Management \(IAM\) console, [create a role](https
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:s3:::migration-bucket"
+        "arn:aws:s3:::bucket-name"
       ]
     },
     {
@@ -110,14 +110,14 @@ In the AWS Identity and Access Management \(IAM\) console, [create a role](https
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:s3:::migration-bucket/*"
+        "arn:aws:s3:::bucket-name/*"
       ]
     }
   ]
 }
 ```
 
-**Trust Relationship**
+**Trust relationship**
 
 ```
 {
@@ -149,11 +149,25 @@ Then give your personal IAM user or role—whatever you used to configure the AW
 }
 ```
 
-Then log in to Kibana using the master user credentials you specified when you created the Amazon ES domain\. You can find the Kibana URL in the Amazon ES console\. It takes the form of `https://domain-endpoint/_plugin/kibana/`\.
+### Map the snapshot role in Kibana \(if using fine\-grained access control\)<a name="migration-snapshot-role"></a>
 
-From the Kibana main menu, choose **Security**, **Roles**, and **manage\_snapshots**\. Choose **Mapped users**, **Manage mapping**\. Then specify the ARN for your personal IAM user or role in the appropriate field\. User ARNs go in the **Users** section\. Role ARNs go in the **Backend roles** section\. This step uses [fine\-grained access control](fgac.md#fgac-mapping) to give your identity permissions to work with snapshots\.
+If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM role so you can work with snapshots\.
 
-![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/migration1.png)
+**To give your identity permissions to work with snapshots**
+
+1. Log in to Kibana using the master user credentials you specified when you created the Amazon ES domain\. You can find the Kibana URL in the Amazon ES console\. It takes the form of `https://domain-endpoint/_plugin/kibana/`\.
+
+1. From the main menu choose **Security**, **Roles**, and select the **manage\_snapshots** role\.
+
+1. Choose **Mapped users**, **Manage mapping**\. 
+
+1. Under **Backend roles**, add the ARN of your personal IAM role in the appropriate field\. The ARN has the following format:
+
+   ```
+   arn:aws:iam::123456789123:role/role-name
+   ```
+
+1. Select **Map** and confirm the role shows up under **Mapped users**\.
 
 ## Restore the snapshot<a name="migration-restore"></a>
 
@@ -172,7 +186,7 @@ Most programming languages have libraries to assist with [signing requests](es-r
    {
      "type": "s3",
      "settings": {
-       "bucket": "migration-bucket",
+       "bucket": "bucket-name",
        "region": "us-west-2",
        "role_arn": "arn:aws:iam::123456789012:role/AmazonESSnapshotRole"
      }

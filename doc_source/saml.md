@@ -3,7 +3,7 @@
 SAML authentication for Kibana lets you use your existing identity provider to offer single sign\-on \(SSO\) for Kibana on Amazon Elasticsearch Service \(Amazon ES\) domains running Elasticsearch 6\.7 or later\. To use SAML authentication, you must enable [fine\-grained access control](fgac.md)\.
 
 **Note**  
-You can't enable fine-grained access control on existing domains, only new ones. By extension, this means you can only enable SAML authentication on new domains or existing ones that have fine-grained access control already enabled\.
+You can't enable fine\-grained access control on existing domains, only new ones\. By extension, this means you can only enable SAML authentication on new domains or existing ones that have fine\-grained access control already enabled\.
 
 Rather than authenticating through [Amazon Cognito](es-cognito-auth.md) or the [internal user database](fgac.md#fgac-kibana), SAML authentication for Kibana lets you use third\-party identity providers to log in to Kibana, manage fine\-grained access control, search your data, and build visualizations\. Amazon ES supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services \(ADFS\), and Auth0\. Requests from Amazon ES to third\-party providers aren't explicitly encrypted with a service provider certificate\.
 
@@ -22,7 +22,7 @@ Amazon ES provides two single sign\-on URLs, SP\-initiated and IdP\-initiated, b
 Regardless of which authentication type you use, the goal is to log in through your identity provider and receive a SAML assertion that contains your username \(required\) and any [backend roles](fgac.md#fgac-concepts) \(optional, but recommended\)\. This information allows [fine\-grained access control](fgac.md) to assign permissions to SAML users\. In external identity providers, backend roles are typically called "roles" or "groups\."
 
 **Note**  
-You can't change the SSO URL, so SAML authentication for Kibana does not support proxy servers\.
+You can't change the SSO URL from its service\-provided value, so SAML authentication for Kibana does not support proxy servers\.
 
 ## Enabling SAML authentication<a name="saml-enable"></a>
 
