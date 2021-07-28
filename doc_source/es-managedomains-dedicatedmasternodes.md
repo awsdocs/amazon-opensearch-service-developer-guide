@@ -45,7 +45,7 @@ Although dedicated master nodes don't process search and query requests, their s
 
 |  **Instance count**  |  **Recommended minimum dedicated master instance type**  | 
 | --- | --- | 
-|  1–10  | `c5.large.elasticsearch` or `c6g.large.elasticsearch` | 
+|  1–10  | `m5.large.elasticsearch` or `m6g.large.elasticsearch` | 
 |  10–30  |  `c5.xlarge.elasticsearch` or `c6g.xlarge.elasticsearch`  | 
 | 30–75 |  `c5.2xlarge.elasticsearch` or `c6g.2xlarge.elasticsearch`  | 
 |  75–200  |  `r5.4xlarge.elasticsearch` or `r6g.4xlarge.elasticsearch`  | 

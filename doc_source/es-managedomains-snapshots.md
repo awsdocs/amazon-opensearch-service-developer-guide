@@ -32,7 +32,7 @@ To create snapshots manually, you need to work with IAM and Amazon S3\. Make sur
 | --- | --- | 
 | S3 bucket | Create an S3 bucket to store manual snapshots for your Amazon ES domain\. For instructions, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\. Remember the name of the bucket to use it in the following places:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-snapshots.html) Do not apply an S3 Glacier lifecycle rule to this bucket\. Manual snapshots don't support the S3 Glacier storage class\. | 
 | IAM role | Create an IAM role to delegate permissions to Amazon ES\. For instructions, see [Creating an IAM role \(console\)](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) in the *IAM User Guide*\. The rest of this chapter refers to this role as `TheSnapshotRole`\. **Attach an IAM policy** Attach the following policy to `TheSnapshotRole` to allow access to the S3 bucket: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For instructions to attach a policy to a role, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\. **Edit the trust relationship** Edit the trust relationship of `TheSnapshotRole` to specify Amazon ES in the `Principal` statement as shown in the following example: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "es.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />  <br />}</pre> For instructions to edit the trust relationship, see [Modifying a role trust policy](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy) in the *IAM User Guide*\. | 
-| Permissions |  In order to register the snapshot repository, you need to be able to pass `TheSnapshotRole` to Amazon ES\. You also need access to the `es:ESHttpPut` action\. To grant both of these permissions, add the following policy to the role you're signing your requests with: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheSnapshotRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/domain-name/*"<br />    }<br />  ]<br />}</pre> If your role doesn't have `iam:PassRole` permissions to pass `TheSnapshotRole` you might encounter the following common error when you try to register a repository in the next step: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheSnapshotRole"}</pre>  | 
+| Permissions |  In order to register the snapshot repository, you need to be able to pass `TheSnapshotRole` to Amazon ES\. You also need access to the `es:ESHttpPut` action\. To grant both of these permissions, attach the following policy to the IAM user or role whose credentials are being used to sign the request: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheSnapshotRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/domain-name/*"<br />    }<br />  ]<br />}</pre> If your user or role doesn't have `iam:PassRole` permissions to pass `TheSnapshotRole` you might encounter the following common error when you try to register a repository in the next step: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheSnapshotRole"}</pre>  | 
 
 ## Registering a manual snapshot repository<a name="es-managedomains-snapshot-registerdirectory"></a>
 
@@ -40,7 +40,7 @@ You need to register a snapshot repository with Amazon ES before you can take ma
 
 ### Step 1: Map the snapshot role in Kibana \(if using fine\-grained access control\)<a name="es-managedomains-snapshot-fgac"></a>
 
-Fine\-grained access control introduces an additional step when registering a repository\. Even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM role that has `iam:PassRole` permissions to pass `TheSnapshotRole`\.
+Fine\-grained access control introduces an additional step when registering a repository\. Even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM user or role that has `iam:PassRole` permissions to pass `TheSnapshotRole`\.
 
 1. Navigate to the Kibana plugin for your Amazon ES domain\. You can find the Kibana endpoint on your domain dashboard on the Amazon ES console\. 
 
@@ -48,13 +48,17 @@ Fine\-grained access control introduces an additional step when registering a re
 
 1. Choose **Mapped users**, **Manage mapping**\. 
 
-1. Under **Backend roles**, add the domain ARN of the role that has permissions to pass `TheSnapshotRole`\. The ARN has the following format: 
+1. Add the domain ARN of the user or role that has permissions to pass `TheSnapshotRole`\. Put user ARNs under **Users** and role ARNs under **Backend roles**\.
+
+   ```
+   arn:aws:iam::123456789123:user/user-name
+   ```
 
    ```
    arn:aws:iam::123456789123:role/role-name
    ```
 
-1. Select **Map** and confirm the role shows up under **Mapped users**\.
+1. Select **Map** and confirm the user or role shows up under **Mapped users**\.
 
 ### Step 2: Register a repository<a name="es-managedomains-snapshot-register"></a>
 

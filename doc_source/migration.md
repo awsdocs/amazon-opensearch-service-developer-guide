@@ -151,7 +151,7 @@ Then give your personal IAM user or role—whatever you used to configure the AW
 
 ### Map the snapshot role in Kibana \(if using fine\-grained access control\)<a name="migration-snapshot-role"></a>
 
-If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM role so you can work with snapshots\.
+If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM user or role so you can work with snapshots\.
 
 **To give your identity permissions to work with snapshots**
 
@@ -161,13 +161,17 @@ If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you
 
 1. Choose **Mapped users**, **Manage mapping**\. 
 
-1. Under **Backend roles**, add the ARN of your personal IAM role in the appropriate field\. The ARN has the following format:
+1. Add the domain ARN of your personal IAM user or role in the appropriate field\. The ARN takes one of the following formats:
+
+   ```
+   arn:aws:iam::123456789123:user/user-name
+   ```
 
    ```
    arn:aws:iam::123456789123:role/role-name
    ```
 
-1. Select **Map** and confirm the role shows up under **Mapped users**\.
+1. Select **Map** and confirm the user or role shows up under **Mapped users**\.
 
 ## Restore the snapshot<a name="migration-restore"></a>
 

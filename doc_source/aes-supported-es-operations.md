@@ -26,10 +26,6 @@ Amazon ES supports many versions of Elasticsearch\. The following topics show th
 
 ## Notable API differences<a name="es_version_api_notes"></a>
 
-### Index templates<a name="es_version_api_notes-it"></a>
-
- Elasticsearch switched from `_template` to `_index_template` in version 7\.8\. At present, Amazon ES supports only the older `_template` path\.
-
 ### Settings and statistics<a name="es_version_api_notes-cs"></a>
 
 Amazon ES only accepts PUT requests to the `_cluster/settings` API that use the "flat" settings form\. It rejects requests that use the expanded settings form\.
@@ -149,6 +145,8 @@ For Elasticsearch 7\.10, Amazon ES supports the following operations\.
 
 1. See [Shrink](#es_version_api_notes-shrink)\.
 
+1. Legacy index templates \(`_template`\) were replaced by composable templates \(`_index_template`\) starting with Elasticsearch 7\.8\. Composable templates take precedence over legacy templates\. If no composable template matches a given index, a legacy template can still match and be applied\. The `_template` operation still works, but GET calls to the two template types return different results\.
+
 ## Version 7\.9<a name="es_version_7_9"></a>
 
 For Elasticsearch 7\.9, Amazon ES supports the following operations\.
@@ -168,6 +166,8 @@ For Elasticsearch 7\.9, Amazon ES supports the following operations\.
 
 1. See [Shrink](#es_version_api_notes-shrink)\.
 
+1. Legacy index templates \(`_template`\) were replaced by composable templates \(`_index_template`\) starting with Elasticsearch 7\.8\. Composable templates take precedence over legacy templates\. If no composable template matches a given index, a legacy template can still match and be applied\. The `_template` operation still works, but GET calls to the two template types return different results\.
+
 ## Version 7\.8<a name="es_version_7_8"></a>
 
 For Elasticsearch 7\.8, Amazon ES supports the following operations\.
@@ -186,6 +186,8 @@ For Elasticsearch 7\.8, Amazon ES supports the following operations\.
 1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API differences](#es_version_api_notes)\.
 
 1. See [Shrink](#es_version_api_notes-shrink)\.
+
+1. Legacy index templates \(`_template`\) were replaced by composable templates \(`_index_template`\) starting with Elasticsearch 7\.8\. Composable templates take precedence over legacy templates\. If no composable template matches a given index, a legacy template can still match and be applied\. The `_template` operation still works, but GET calls to the two template types return different results\.
 
 ## Version 7\.7<a name="es_version_7_7"></a>
 

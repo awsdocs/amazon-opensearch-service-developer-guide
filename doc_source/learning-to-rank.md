@@ -355,26 +355,24 @@ After you have built the model, deploy it into the Learning to Rank plugin\. For
 In this example, we build a `my_ranklib_model` model using the Ranklib library:
 
 ```
-## LambdaMART
-## Number of trees = 5
-## Number of leaves = 10
-## Number of threshold candidates = 256
-## Learning rate = 0.1
-## Stop early = 100
-```
-
-```
-POST _ltr/_featureset/movie_features/_createmodel
+POST _ltr/_featureset/movie_features/_createmodel?pretty
 {
   "model": {
     "name": "my_ranklib_model",
     "model": {
-      "type": "model/ranklib+json",
-      "definition": "<ensemble>
+      "type": "model/ranklib",
+      "definition": """## LambdaMART
+## No. of trees = 10
+## No. of leaves = 10
+## No. of threshold candidates = 256
+## Learning rate = 0.1
+## Stop early = 100
+
+<ensemble>
    <tree id="1" weight="0.1">
       <split>
          <feature>1</feature>
-         <threshold>10.357876</threshold>
+         <threshold>10.357875</threshold>
          <split pos="left">
             <feature>1</feature>
             <threshold>0.0</threshold>
@@ -383,7 +381,7 @@ POST _ltr/_featureset/movie_features/_createmodel
             </split>
             <split pos="right">
                <feature>1</feature>
-               <threshold>7.0105133</threshold>
+               <threshold>7.010513</threshold>
                <split pos="left">
                   <output>-2.0</output>
                </split>
@@ -400,7 +398,7 @@ POST _ltr/_featureset/movie_features/_createmodel
    <tree id="2" weight="0.1">
       <split>
          <feature>1</feature>
-         <threshold>10.357876</threshold>
+         <threshold>10.357875</threshold>
          <split pos="left">
             <feature>1</feature>
             <threshold>0.0</threshold>
@@ -409,7 +407,7 @@ POST _ltr/_featureset/movie_features/_createmodel
             </split>
             <split pos="right">
                <feature>1</feature>
-               <threshold>7.0105133</threshold>
+               <threshold>7.010513</threshold>
                <split pos="left">
                   <output>-1.67031991481781</output>
                </split>
@@ -432,7 +430,7 @@ POST _ltr/_featureset/movie_features/_createmodel
          </split>
          <split pos="right">
             <feature>1</feature>
-            <threshold>7.0105133</threshold>
+            <threshold>7.010513</threshold>
             <split pos="left">
                <feature>1</feature>
                <threshold>0.0</threshold>
@@ -452,7 +450,7 @@ POST _ltr/_featureset/movie_features/_createmodel
    <tree id="4" weight="0.1">
       <split>
          <feature>1</feature>
-         <threshold>10.357876</threshold>
+         <threshold>10.357875</threshold>
          <split pos="left">
             <feature>1</feature>
             <threshold>0.0</threshold>
@@ -461,7 +459,7 @@ POST _ltr/_featureset/movie_features/_createmodel
             </split>
             <split pos="right">
                <feature>1</feature>
-               <threshold>7.0105133</threshold>
+               <threshold>7.010513</threshold>
                <split pos="left">
                   <output>-1.3569872379302979</output>
                </split>
@@ -478,7 +476,7 @@ POST _ltr/_featureset/movie_features/_createmodel
    <tree id="5" weight="0.1">
       <split>
          <feature>1</feature>
-         <threshold>10.357876</threshold>
+         <threshold>10.357875</threshold>
          <split pos="left">
             <feature>1</feature>
             <threshold>0.0</threshold>
@@ -487,7 +485,7 @@ POST _ltr/_featureset/movie_features/_createmodel
             </split>
             <split pos="right">
                <feature>1</feature>
-               <threshold>7.0105133</threshold>
+               <threshold>7.010513</threshold>
                <split pos="left">
                   <output>-1.2721363306045532</output>
                </split>
@@ -501,7 +499,138 @@ POST _ltr/_featureset/movie_features/_createmodel
          </split>
       </split>
    </tree>
-</ensemble>"
+   <tree id="6" weight="0.1">
+      <split>
+         <feature>1</feature>
+         <threshold>10.357875</threshold>
+         <split pos="left">
+            <feature>1</feature>
+            <threshold>7.010513</threshold>
+            <split pos="left">
+               <feature>1</feature>
+               <threshold>0.0</threshold>
+               <split pos="left">
+                  <output>-1.2110036611557007</output>
+               </split>
+               <split pos="right">
+                  <output>-1.2110036611557007</output>
+               </split>
+            </split>
+            <split pos="right">
+               <output>-1.2110037803649902</output>
+            </split>
+         </split>
+         <split pos="right">
+            <output>1.2110037803649902</output>
+         </split>
+      </split>
+   </tree>
+   <tree id="7" weight="0.1">
+      <split>
+         <feature>1</feature>
+         <threshold>10.357875</threshold>
+         <split pos="left">
+            <feature>1</feature>
+            <threshold>7.010513</threshold>
+            <split pos="left">
+               <feature>1</feature>
+               <threshold>0.0</threshold>
+               <split pos="left">
+                  <output>-1.165616512298584</output>
+               </split>
+               <split pos="right">
+                  <output>-1.165616512298584</output>
+               </split>
+            </split>
+            <split pos="right">
+               <output>-1.165616512298584</output>
+            </split>
+         </split>
+         <split pos="right">
+            <output>1.165616512298584</output>
+         </split>
+      </split>
+   </tree>
+   <tree id="8" weight="0.1">
+      <split>
+         <feature>1</feature>
+         <threshold>10.357875</threshold>
+         <split pos="left">
+            <feature>1</feature>
+            <threshold>7.010513</threshold>
+            <split pos="left">
+               <feature>1</feature>
+               <threshold>0.0</threshold>
+               <split pos="left">
+                  <output>-1.131177544593811</output>
+               </split>
+               <split pos="right">
+                  <output>-1.131177544593811</output>
+               </split>
+            </split>
+            <split pos="right">
+               <output>-1.131177544593811</output>
+            </split>
+         </split>
+         <split pos="right">
+            <output>1.131177544593811</output>
+         </split>
+      </split>
+   </tree>
+   <tree id="9" weight="0.1">
+      <split>
+         <feature>2</feature>
+         <threshold>10.573917</threshold>
+         <split pos="left">
+            <output>1.1046180725097656</output>
+         </split>
+         <split pos="right">
+            <feature>1</feature>
+            <threshold>7.010513</threshold>
+            <split pos="left">
+               <feature>1</feature>
+               <threshold>0.0</threshold>
+               <split pos="left">
+                  <output>-1.1046180725097656</output>
+               </split>
+               <split pos="right">
+                  <output>-1.1046180725097656</output>
+               </split>
+            </split>
+            <split pos="right">
+               <output>-1.1046180725097656</output>
+            </split>
+         </split>
+      </split>
+   </tree>
+   <tree id="10" weight="0.1">
+      <split>
+         <feature>1</feature>
+         <threshold>10.357875</threshold>
+         <split pos="left">
+            <feature>1</feature>
+            <threshold>7.010513</threshold>
+            <split pos="left">
+               <feature>1</feature>
+               <threshold>0.0</threshold>
+               <split pos="left">
+                  <output>-1.0838804244995117</output>
+               </split>
+               <split pos="right">
+                  <output>-1.0838804244995117</output>
+               </split>
+            </split>
+            <split pos="right">
+               <output>-1.0838804244995117</output>
+            </split>
+         </split>
+         <split pos="right">
+            <output>1.0838804244995117</output>
+         </split>
+      </split>
+   </tree>
+</ensemble>
+"""
     }
   }
 }

@@ -206,7 +206,7 @@ PUT _opendistro/_ism/policies/my-policy-id
 }
 ```
 
-For an example ISM template policy, see [Sample policy with ISM template](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\.
+For a more detailed example, see [Sample policy with ISM template](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\.
 
 ## Differences<a name="ism-diff"></a>
 

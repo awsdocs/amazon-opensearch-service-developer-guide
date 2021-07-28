@@ -23,7 +23,7 @@ For a detailed explanation of this command and how to make signed requests to Am
 
 **To upload a JSON file that contains multiple documents to an Amazon ES domain**
 
-1. Create a file called `bulk_movies.json`\. Paste the following content into the file and add a trailing newline:
+1. Create a local file called `bulk_movies.json`\. Paste the following content into the file and add a trailing newline:
 
    ```
    { "index" : { "_index": "movies", "_id" : "2" } }
@@ -34,7 +34,7 @@ For a detailed explanation of this command and how to make signed requests to Am
    {"director": "Ray, Nicholas", "genre": ["Drama", "Romance"], "year": 1955, "actor": ["Hopper, Dennis", "Wood, Natalie", "Dean, James", "Mineo, Sal", "Backus, Jim", "Platt, Edward", "Ray, Nicholas", "Hopper, William", "Allen, Corey", "Birch, Paul", "Hudson, Rochelle", "Doran, Ann", "Hicks, Chuck", "Leigh, Nelson", "Williams, Robert", "Wessel, Dick", "Bryar, Paul", "Sessions, Almira", "McMahon, David", "Peters Jr., House"], "title": "Rebel Without a Cause"}
    ```
 
-1. Run the following command to upload the file to the *movies* domain:
+1. Run the following command in the local directory where the file is stored to upload it to the *movies* domain:
 
    ```
    curl -XPOST -u 'master-user:master-user-password' 'domain-endpoint/_bulk' --data-binary @bulk_movies.json -H 'Content-Type: application/json'

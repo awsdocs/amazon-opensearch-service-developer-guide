@@ -88,7 +88,11 @@ POST <local-domain-endpoint>/_reindex
 }
 ```
 
-If the remote domain is hosted inside a VPC and it does not have VPC\-level connectivity, configure a proxy with a publicly accessible endpoint\. The proxy domain must have a certificate signed by a public certificate authority \(CA\)\. Self\-signed or private CA\-signed certificates are not supported\.
+### Reindex data between Amazon ES domains in a VPC<a name="remote-reindex-vpc"></a>
+
+Every Amazon ES domain is made up of its own internal VPC infrastructure\. When you create a new Amazon ES domain in an existing virtual private cloud \(VPC\), an Elastic Network Interface \(ENI\) is created for each data node in the Amazon ES VPC\. Because the remote reindex operation is performed from the local Amazon ES domain, and therefore within its own private VPC, you don’t access the remote Amazon ES domain’s VPC\. Instead, you need a publicly accessible reverse proxy\.
+
+A proxy is required in order to use remote reindex between two VPC domains, even if the domains are located within the same VPC\. Create a proxy with a publicly accessible endpoint in front of the remote cluster and pass the proxy endpoint in the reindex body\. The proxy domain must have a certificate signed by a public certificate authority \(CA\)\. Self\-signed or private CA\-signed certificates are not supported\.
 
 ## Reindex data between non\-Amazon ES domains<a name="remote-reindex-nonesdomain"></a>
 

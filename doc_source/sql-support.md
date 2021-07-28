@@ -8,7 +8,7 @@ Use the following table to find the version of the SQL plugin that's supported b
 | Elasticsearch version | SQL plugin version | Notable features | 
 | --- | --- | --- | 
 |  7\.1  | [1\.1\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.1.0.0) |  | 
-|  7\.3  | [1\.3\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.3.0.0) | CAST function, multiple string and number operators | 
+|  7\.3  | [1\.3\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.3.0.0) | Multiple string and number operators | 
 | 7\.4 |  [1\.4\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.4.0.0)  | Add additional date/time functions, support IF, IFNULL, and ISNULL functions | 
 | 7\.7 |  [1\.8\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.8.0.0)  |  | 
 | 7\.8 |  [1\.9\.0](https://github.com/opendistro-for-elasticsearch/sql/releases/tag/v1.9.0.0)  |  | 
@@ -32,7 +32,7 @@ POST elasticsearch_domain/_opendistro/_sql
 
 Calls to `_opendistro/_sql` include index names in the request body, so they have the same [access policy considerations](es-ac.md#es-ac-advanced) as the bulk, mget, and msearch operations\. As always, follow the principle of [least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) when you grant permissions to API operations\.
 
-For security considerations related to using SQL with fine\-grained access control, see [Fine\-Grained Access Control in Amazon Elasticsearch Service](fgac.md#fgac-limitations)\.
+For security considerations related to using SQL with fine\-grained access control, see [Fine\-grained access control in Amazon Elasticsearch Service](fgac.md)\.
 
 The Open Distro for Elasticsearch SQL plugin includes many [tuneable settings](https://opendistro.github.io/for-elasticsearch-docs/docs/sql/settings/), but on Amazon ES, use the `_opendistro/_sql/settings` path rather than the standard `_cluster/settings` path:
 

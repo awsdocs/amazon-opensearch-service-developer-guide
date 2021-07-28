@@ -3,13 +3,16 @@
 **Note**  
 Service software updates differ from Elasticsearch version upgrades\. For information about upgrading to a later version of Elasticsearch, see [Upgrading Elasticsearch](es-version-migration.md)\.
 
-Amazon Elasticsearch Service \(Amazon ES\) regularly releases system software updates that add features or otherwise improve your domains\. The **Notifications** panel in the console is the easiest way to see if an update is available or check the status of an update\. For more information about notifications, see [Notifications in Amazon Elasticsearch Service](es-managedomains-notifications.md)\. You can also receive these notifications through [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/create-eventbridge-rule.html)\.
+Amazon Elasticsearch Service \(Amazon ES\) regularly releases system software updates that add features or otherwise improve your domains\. The **Notifications** panel in the console is the easiest way to see if an update is available or check the status of an update\. For more information, see [Notifications in Amazon Elasticsearch Service](es-managedomains-notifications.md)\.
 
 Each notification includes details about the service software update\. The notification severity is `Informational` if the update is optional and `High` if it's required\. Consider the following when deciding whether to update your domain:
 + If you take no action on required updates, Amazon ES still updates your domain service software automatically after a certain timeframe \(typically two weeks\)\. In this situation, Amazon ES sends notifications when it starts the update and when the update is complete\.
 + If you start an update manually, Amazon ES doesn't send a notification when it starts the update, only when the update is complete\.
++ Software updates use [blue/green deployments](es-managedomains-configuration-changes.md) to minimizes downtime\. Updates can temporarily strain a cluster's dedicated master nodes, so make sure to maintain sufficient capacity to handle the associated overhead\.
 
-Manually updating your domain lets you take advantage of new features more quickly\. When you choose **Update**, Amazon ES places the request in a queue and begins the update when it has time \(typically within minutes\)\. Consider updating your domain at a low traffic time\. Your domain is ineligible for a service software update if it's in any of the following states:
+Manually updating your domain lets you take advantage of new features more quickly\. When you choose **Update**, Amazon ES places the request in a queue and begins the update when it has time\. Updates typically complete within minutes, but can also take several hours or even days if your system is experiencing heavy load\. Consider updating your domain at a low traffic time to avoid long update periods\. 
+
+Your domain is ineligible for a service software update if it's in any of the following states:
 
 
 | State | Description | 

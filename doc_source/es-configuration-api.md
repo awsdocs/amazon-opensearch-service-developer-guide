@@ -20,6 +20,7 @@ All configuration service requests must be signed\. For more information, see [S
 | [AcceptInboundCrossClusterSearchConnection](#es-configuration-api-actions-accept-inbound-cross-cluster-search-connection) | PUT | 
 | [AddTags](#es-configuration-api-actions-addtags) | POST | 
 | [AssociatePackage](#es-configuration-api-actions-associatepackage) | POST | 
+| [CancelElasticsearchServiceSoftwareUpdate](#es-configuration-api-actions-stopupdate) | POST | 
 | [CreateElasticsearchDomain](#es-configuration-api-actions-createelasticsearchdomain) | POST | 
 | [CreateOutboundCrossClusterSearchConnection](#es-configuration-api-actions-create-outbound-cross-cluster-search-connection) | POST | 
 | [CreatePackage](#es-configuration-api-actions-createpackage) | POST | 
@@ -54,7 +55,6 @@ All configuration service requests must be signed\. For more information, see [S
 | [RejectInboundCrossClusterSearchConnection](#es-configuration-api-actions-reject-inbound-cross-cluster-search-connection) | PUT | 
 | [RemoveTags](#es-configuration-api-actions-removetags) | POST | 
 | [StartElasticsearchServiceSoftwareUpdate](#es-configuration-api-actions-startupdate) | POST | 
-| [StopElasticsearchServiceSoftwareUpdate](#es-configuration-api-actions-stopupdate) | POST | 
 | [UpdateElasticsearchDomainConfig](#es-configuration-api-actions-updateelasticsearchdomainconfig) | POST | 
 | [UpdatePackage](#es-configuration-api-actions-updatepackage) | POST | 
 | [UpgradeElasticsearchDomain](#es-configuration-api-actions-upgrade-domain) | POST | 
@@ -192,10 +192,7 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain
     "Enabled": true|false,
     "KmsKeyId":"arn:aws:kms:us-east-1:123456789012:alias/my-key"
   },
-  "SnapshotOptions": {
-    "AutomatedSnapshotStartHour": 3
-  },
-  "VPCOptions": {
+    "VPCOptions": {
     "VPCId": "vpc-12345678",
     "SubnetIds": ["subnet-abcdefg1", "subnet-abcdefg2", "subnet-abcdefg3"],
     "SecurityGroupIds": ["sg-12345678"]
@@ -1458,14 +1455,14 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | 
 | ServiceSoftwareOptions | ServiceSoftwareOptions | Container for the state of your domain relative to the latest service software\. | 
 
-### StopElasticsearchServiceSoftwareUpdate<a name="es-configuration-api-actions-stopupdate"></a>
+### CancelElasticsearchServiceSoftwareUpdate<a name="es-configuration-api-actions-stopupdate"></a>
 
 Stops a scheduled service software update for an Amazon ES domain\. Only works if the domain's `UpdateStatus` is `PENDING_UPDATE`\.
 
 #### Syntax<a name="w38aac35b7c83b5"></a>
 
 ```
-POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/stop
+POST https://es.us-east-1.amazonaws.com/2015-01-01/es/serviceSoftwareUpdate/cancel
 {
   "DomainName": "domain-name"
 }

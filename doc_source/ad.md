@@ -4,7 +4,14 @@ Anomaly detection in Amazon Elasticsearch Service \(Amazon ES\) automatically de
 
 You can pair the anomaly detection plugin with the [Configuring alerts in Amazon Elasticsearch Service](alerting.md) plugin to notify you as soon as an anomaly is detected\. 
 
-Anomaly detection requires Elasticsearch 7\.4 or later\. All instance types support anomaly detection except for `t2.micro` and `t2.small`\. Full documentation for anomaly detection, including detailed steps and API descriptions, is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/ad/)\.
+Full documentation for anomaly detection, including detailed steps and API descriptions, is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/ad/)\.
+
+## Prerequisites<a name="ad-prereq"></a>
+
+Anomaly detection has the following prerequisites:
++ Anomaly detection requires Elasticsearch 7\.4 or later\. 
++ Anomaly detection only supports [fine\-grained access control](fgac.md) on versions 7\.9 and later\. Prior to 7\.9, only admin users can create, view, and manage detectors\. 
++ If your domain uses fine\-grained access control, non\-admin users must be [mapped](fgac.md#fgac-mapping) to the `anomaly_read_access` role in Kibana in order to view detectors, or `anomaly_full_access` in order to create and manage detectors\.
 
 ## Getting started with anomaly detection<a name="ad-example-es"></a>
 

@@ -1,10 +1,11 @@
 # Making configuration changes in Amazon ES<a name="es-managedomains-configuration-changes"></a>
 
-Amazon ES uses a *blue/green* deployment process when updating domains\. Blue/green typically refers to the practice of running two production environments, one live and one idle, and switching the two as you make software changes\. In the case of Amazon ES, it refers to the practice of creating a new environment for domain updates and routing users to the new environment after those updates are complete\. The practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
+Amazon ES uses a *blue/green* deployment process when updating domains\. Blue/green typically refers to the practice of running two production environments, one live and one idle, and switching the two as you make software changes\. In the case of Amazon ES, it refers to the practice of creating a new environment for domains and routing users to the new environment after those updates are complete\. The practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
 
 ## Changes that cause blue/green deployments<a name="es-managedomains-bg"></a>
 
 The following operations cause blue/green deployments:
++ Service software updates
 + Changing instance type
 + If your domain *doesn't* have dedicated master nodes, changing data instance count
 + Enabling or disabling dedicated master nodes
@@ -35,7 +36,7 @@ There are some exceptions\. For example, if you haven't reconfigured your domain
 
 ## Initiating a configuration change<a name="es-managedomains-initiate"></a>
 
-When you initiate a configuration change, the domain state changes to **Processing** while Amazon ES creates a new environment with the latest [service software](es-service-software.md)\. During certain service software updates, the state remains **Active**\. In both cases, you can review the cluster health and Amazon CloudWatch metrics and see that the number of nodes in the cluster temporarily increases—often doubling—while the domain update occurs\. In the following illustration, you can see the number of nodes doubling from 11 to 22 during a configuration change and returning to 11 when the update is complete\.
+When you initiate a configuration change, the domain state changes to **Processing** until Amazon ES has created a new environment with the latest [service software](es-service-software.md), at which point it changes back to **Active**\. During certain service software updates, the state remains **Active** the whole time\. In both cases, you can review the cluster health and Amazon CloudWatch metrics and see that the number of nodes in the cluster temporarily increases—often doubling—while the domain update occurs\. In the following illustration, you can see the number of nodes doubling from 11 to 22 during a configuration change and returning to 11 when the update is complete\.
 
 ![\[Number of nodes doubling from 11 to 22 during a domain configuration change.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/NodesDoubled.png)
 

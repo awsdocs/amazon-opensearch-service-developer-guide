@@ -154,64 +154,63 @@ Map services often have licensing fees or restrictions\. You are responsible for
 
 ## Connecting a local Kibana server to Amazon ES<a name="es-kibana-local"></a>
 
-If you have invested significant time into configuring your own Kibana instance, you can use it instead of \(or in addition to\) the default Kibana instance that Amazon ES provides\.
+If you already invested significant time into configuring your own Kibana instance, you can use it instead of \(or in addition to\) the default Kibana instance that Amazon ES provides\. The following procedure works for domains that use [fine\-grained access control](fgac.md) with an open access policy\.
 
-**To connect a local Kibana server to Amazon ES:**
+**To connect a local Kibana server to Amazon ES**
 
-The following steps work for domains that use [Fine\-grained access control in Amazon Elasticsearch Service](fgac.md) with an open access policy\.
+1. On your Amazon ES domain, create a user with the appropriate permissions:
 
-On your Amazon ES domain, create a user with the appropriate permissions:
+   1. In Kibana, go to **Security**, **Internal users**, and choose **Create internal user**\.
 
-1. In Kibana, go to **Security**, **Internal users**, and choose **Create internal user**\.
+   1. Provide a username and password and choose **Create**\.
 
-1. Provide a username and password and choose **Create**\.
+   1. Go to **Roles** and select a role\.
 
-1. Go to **Roles** and select a role\.
+   1. Select **Mapped users** and choose **Manage mapping**\.
 
-1. Select **Mapped users** and choose **Manage mapping**\.
+   1. In **Users**, add your username and choose **Map**\.
 
-1. In **Users**, add your username and choose **Map**\.
+1. Download and install the appropriate version of the Open Distro for Elasticsearch [security plugin](https://opendistro.github.io/for-elasticsearch-docs/docs/install/plugins/#install-plugins) on your self\-managed Kibana OSS installation\. 
 
-On your local Kibana server, open the `config/kibana.yml` file and add in your Amazon ES endpoint with the username and password:
+1. On your local Kibana server, open the `config/kibana.yml` file and add your Amazon ES endpoint with the username and password you created earlier:
 
-```
-elasticsearch.hosts: ['<amazon-elasticsearch-endpoint>']
+   ```
+   elasticsearch.hosts: ['https://domain-endpoint']
+   elasticsearch.username: 'username'
+   elasticsearch.password: 'password'
+   ```
 
-elasticsearch.username: 'username'
-elasticsearch.password: 'password'
-```
+   You can use the following sample `kibana.yml` file:
 
-You can use the following sample `kibana.yml` file:
-
-```
-server.host: '0.0.0.0'
-
-elasticsearch.hosts: ['<amazon-elasticsearch-url>']
-
-kibana.index: ".username"
-
-elasticsearch.ssl.verificationMode: none # if not using HTTPS
-
-opendistro_security.auth.type: basicauth
-opendistro_security.auth.anonymous_auth_enabled: false
-opendistro_security.cookie.secure: false # set to true when using HTTPS
-opendistro_security.cookie.ttl: 3600000
-opendistro_security.session.ttl: 3600000
-opendistro_security.session.keepalive: false
-opendistro_security.multitenancy.enabled: false
-opendistro_security.readonly_mode.roles: ['kibana_read_only']
-opendistro_security.auth.unauthenticated_routes: []
-opendistro_security.basicauth.login.title: 'Please log in using your user name and password'
-
-elasticsearch.username: 'username'
-elasticsearch.password: 'password'
-elasticsearch.requestHeadersWhitelist:
-[
-authorization,
-securitytenant,
-security_tenant,
-]
-```
+   ```
+   server.host: '0.0.0.0'
+   
+   elasticsearch.hosts: ['https://domain-endpoint']
+   
+   kibana.index: ".username"
+   
+   elasticsearch.ssl.verificationMode: none # if not using HTTPS
+   
+   opendistro_security.auth.type: basicauth
+   opendistro_security.auth.anonymous_auth_enabled: false
+   opendistro_security.cookie.secure: false # set to true when using HTTPS
+   opendistro_security.cookie.ttl: 3600000
+   opendistro_security.session.ttl: 3600000
+   opendistro_security.session.keepalive: false
+   opendistro_security.multitenancy.enabled: false
+   opendistro_security.readonly_mode.roles: ['kibana_read_only']
+   opendistro_security.auth.unauthenticated_routes: []
+   opendistro_security.basicauth.login.title: 'Please log in using your user name and password'
+   
+   elasticsearch.username: 'username'
+   elasticsearch.password: 'password'
+   elasticsearch.requestHeadersWhitelist:
+   [
+   authorization,
+   securitytenant,
+   security_tenant,
+   ]
+   ```
 
 To see your Amazon ES indices, start your local Kibana server, go to **Dev Tools** and run the following command:
 
@@ -232,6 +231,6 @@ The default Kibana installation on each Amazon ES domain has some additional fea
 + [Tenants](fgac.md#fgac-multitenancy)
 + Reports
 
-  Use the **Reporting** menu to generate on\-demand CSV reports from the Discover page and PDF or PNG reports of dashboards or visualizations\. Amazon ES does not support scheduled reports\.
+  Use the **Reporting** menu to generate on\-demand CSV reports from the Discover page and PDF or PNG reports of dashboards or visualizations\. CSV reports have a 10,000 row limit, and Amazon ES does not support scheduled reports\.
 + [Gantt charts](https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/gantt/)
 + [Notebooks \(experimental\)](https://opendistro.github.io/for-elasticsearch-docs/docs/notebooks/)
