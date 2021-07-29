@@ -19,7 +19,7 @@ The following operations cause blue/green deployments:
 + Changing instance type
 + If your domain *doesn't* have dedicated master nodes, changing data instance count
 + Enabling or disabling dedicated master nodes
-+ Changing dedicated master node count
++ Changing dedicated master node count or dedicated master node instance type
 + Enabling or disabling Multi\-AZ
 + Changing storage type, volume type, or volume size
 + Choosing different VPC subnets
