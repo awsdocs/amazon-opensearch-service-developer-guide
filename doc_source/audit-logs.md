@@ -1,11 +1,11 @@
-# Monitoring audit logs in Amazon Elasticsearch Service<a name="audit-logs"></a>
+# Monitoring audit logs in Amazon OpenSearch Service<a name="audit-logs"></a>
 
-If your Amazon Elasticsearch Service \(Amazon ES\) domain uses fine\-grained access control, you can enable audit logs for your data\. Audit logs are highly customizable and let you track user activity on your Elasticsearch clusters, including authentication success and failures, requests to Elasticsearch, index changes, and incoming search queries\. The default configuration tracks a popular set of user actions, but we recommend tailoring the settings to your exact needs\.
+If your Amazon OpenSearch Service domain uses fine\-grained access control, you can enable audit logs for your data\. Audit logs are highly customizable and let you track user activity on your OpenSearch clusters, including authentication success and failures, requests to OpenSearch, index changes, and incoming search queries\. The default configuration tracks a popular set of user actions, but we recommend tailoring the settings to your exact needs\.
 
-Just like [Elasticsearch application logs and slow logs](es-createdomain-configure-slow-logs.md), Amazon ES publishes audit logs to CloudWatch Logs\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
+Just like [OpenSearch application logs and slow logs](createdomain-configure-slow-logs.md), OpenSearch Service publishes audit logs to CloudWatch Logs\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
 
 **Note**  
-To enable audit logs, your user role must be mapped to the `security_manager` role, which gives you access to the `_opendistro/_security` REST API\. To learn more, see [Modifying the master user](fgac.md#fgac-forget)\.
+To enable audit logs, your user role must be mapped to the `security_manager` role, which gives you access to the OpenSearch `plugins/_security` REST API\. To learn more, see [Modifying the master user](fgac.md#fgac-forget)\.
 
 ## Limitations<a name="audit-logs-limitations"></a>
 
@@ -15,16 +15,16 @@ Audit logs have the following limitations:
 
 ## Enabling audit logs<a name="audit-log-enabling"></a>
 
-Enabling audit logs is a two\-step process\. First, you must configure your domain to publish audit logs to CloudWatch Logs using the console, AWS CLI, or configuration API\. Then you can tune audit log settings using Kibana or the fine\-grained access control REST API\.
+Enabling audit logs is a two\-step process\. First, you must configure your domain to publish audit logs to CloudWatch Logs using the console, AWS CLI, or configuration API\. Then you can tune audit log settings using OpenSearch Dashboards or the fine\-grained access control REST API\.
 
 **Important**  
-If you encounter an error while following these steps, see [Can't enable audit logs](aes-handling-errors.md#aes-troubleshooting-audit-logs-error) for troubleshooting information\.
+If you encounter an error while following these steps, see [Can't enable audit logs](handling-errors.md#troubleshooting-audit-logs-error) for troubleshooting information\.
 
-**To enable audit logs for an Amazon ES domain \(console\)**
+**To enable audit logs for an OpenSearch Service domain \(console\)**
 
-1. Choose the domain and then the **Logs** tab\.
+1. Choose the domain and go to the **Logs** tab\.
 
-1. Under **Set up audit logs**, choose **Setup**\.
+1. Select **Audit logs** and then **Setup**\.
 
 1. Create a CloudWatch log group, or choose an existing one\.
 
@@ -56,7 +56,7 @@ If you encounter an error while following these steps, see [Can't enable audit l
 The following AWS CLI command enables audit logs on an existing domain:
 
 ```
-aws es update-elasticsearch-domain-config --domain-name my-domain --log-publishing-options "AUDIT_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-log-group,Enabled=true}"
+aws opensearchservice update-domain-config --domain-name my-domain --log-publishing-options "AUDIT_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-log-group,Enabled=true}"
 ```
 
 You can also enable audit logs when you create a domain\. For detailed information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.
@@ -66,7 +66,7 @@ You can also enable audit logs when you create a domain\. For detailed informati
 The following request to the configuration API enables audit logs on an existing domain:
 
 ```
-POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/my-domain/config
+POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/config
 {
   "LogPublishingOptions": {
     "AUDIT_LOGS": {
@@ -77,26 +77,24 @@ POST https://es.us-east-1.amazonaws.com/2015-01-01/es/domain/my-domain/config
 }
 ```
 
-For detailed information, see [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
+For detailed information, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 
-## Configuring audit logs in Kibana<a name="audit-log-kibana-ui"></a>
+## Configuring audit logs in OpenSearch Dashboards<a name="audit-log-dashboards-ui"></a>
 
 After you enable audit logs, configure them to match your needs\.
 
-1. Open Kibana, and choose **Security**\.
+1. Open OpenSearch Dashboards, and choose **Security**\.
 
 1. Choose **Audit logs**\.
 
 1. Choose **Enable audit logging**\.
 
-![\[Audit logs Kibana UI screenshot\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/audit-logs.png)
-
-The Kibana UI offers full control of audit log settings under **General settings** and **Compliance settings**\. For a description of all configuration options, see [Audit Log Settings](#audit-log-settings)\.
+The Dashboards UI offers full control of audit log settings under **General settings** and **Compliance settings**\. For a description of all configuration options, see [Audit Log Settings](#audit-log-settings)\.
 
 ## Audit log layers and categories<a name="audit-log-layers"></a>
 
 Cluster communication occurs over two separate *layers*: the REST layer and the transport layer\.
-+ The REST layer covers communication with HTTP clients such as curl, Logstash, Kibana, the [Java high\-level REST client](es-request-signing.md#es-request-signing-java), the Python [Requests](https://2.python-requests.org/) library—all HTTP requests that arrive at the cluster\.
++ The REST layer covers communication with HTTP clients such as curl, Logstash, OpenSearch Dashboards, the [Java high\-level REST client](request-signing.md#request-signing-java), the Python [Requests](https://2.python-requests.org/) library—all HTTP requests that arrive at the cluster\.
 + The transport layer covers communication between nodes\. For example, after a search request arrives at the cluster \(over the REST layer\), the coordinating node serving the request sends the query to other nodes, receives their responses, gathers the necessary documents, and collates them into the final response\. Operations such as shard allocation and rebalancing also occur over the transport layer\.
 
 You can enable or disable audit logs for entire layers, as well as individual audit categories for a layer\. The following table contains a summary of audit categories and the layers for which they are available\.
@@ -107,9 +105,9 @@ You can enable or disable audit logs for entire layers, as well as individual au
 |  FAILED\_LOGIN  | A request contained invalid credentials, and authentication failed\. | Yes | Yes | 
 |  MISSING\_PRIVILEGES  | A user did not have the privileges to make the request\. | Yes | Yes | 
 |  GRANTED\_PRIVILEGES  | A user had the privileges to make the request\. | Yes | Yes | 
-|  OPENDISTRO\_SECURITY\_INDEX\_ATTEMPT  | A request tried to modify the \.opendistro\_security index\. | No | Yes | 
+|  OPENSEARCH\_SECURITY\_INDEX\_ATTEMPT  | A request tried to modify the \.opendistro\_security index\. | No | Yes | 
 |  AUTHENTICATED  | A request contained valid credentials, and authentication succeeded\. | Yes | Yes | 
-|  INDEX\_EVENT  | A request performed an administrative operation on an index, such as creating one, setting an alias, or performing a force merge\. The full list of indices:admin/ actions that this category includes are available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/permissions/#indices)\. | No | Yes | 
+|  INDEX\_EVENT  | A request performed an administrative operation on an index, such as creating one, setting an alias, or performing a force merge\. The full list of indices:admin/ actions that this category includes are available in the [OpenSearch documentation](https://opensearch.org/docs/security-plugin/access-control/permissions/)\. | No | Yes | 
 
 In addition to these standard categories, fine\-grained access control offers several additional categories designed to meet data compliance requirements\.
 
@@ -168,6 +166,14 @@ Compliance settings let you tune for index, document, or field\-level access\.
 | --- | --- | --- | 
 |  Compliance logging  |  enable\_compliance  |  Enable or disable compliance logging\.  | 
 
+You can specify the following settings for read and write event logging\.
+
+
+| Name | Backend setting | Description | 
+| --- | --- | --- | 
+|  Internal config logging  |  internal\_config  |  Enable or disable logging of events on the `.opendistro_security` index\.  | 
+|  External config logging  | external\_config | Enable or disable logging of external configuration events\. | 
+
 You can specify the following settings for read events\.
 
 
@@ -193,7 +199,7 @@ This section includes an example configuration, search request, and the resultin
 
 ### Step 1: Configure audit logs<a name="audit-log-example-step1"></a>
 
-After you enable the publishing of audit logs to a CloudWatch Logs group, navigate to the Kibana audit logging page and choose **Enable audit logging**\.
+After you enable the publishing of audit logs to a CloudWatch Logs group, navigate to the OpenSearch Dashboards audit logging page and choose **Enable audit logging**\.
 
 1. In **General Settings**, choose **Configure** and make sure that the **REST layer** is enabled\.
 
@@ -214,7 +220,7 @@ After you enable the publishing of audit logs to a CloudWatch Logs group, naviga
 
 ### Step 2: Perform read and write events<a name="audit-log-example-step2"></a>
 
-1. Navigate to Kibana, choose **Dev Tools** and index a sample document:
+1. Navigate to OpenSearch Dashboards, choose **Dev Tools**, and index a sample document:
 
    ```
    PUT accounts/_doc/0
@@ -241,7 +247,7 @@ After you enable the publishing of audit logs to a CloudWatch Logs group, naviga
 
 1. In the navigation pane, choose **Log groups**\.
 
-1. Choose the log group that you specified while enabling audit logs\. Within the log group, Amazon ES creates a log stream for each node in your domain\.
+1. Choose the log group that you specified while enabling audit logs\. Within the log group, OpenSearch Service creates a log stream for each node in your domain\.
 
 1. In **Log streams**, choose **Search all**\.
 
@@ -297,16 +303,16 @@ After you enable the publishing of audit logs to a CloudWatch Logs group, naviga
    }
    ```
 
-To include the request body, return to **Compliance settings** in Kibana and disable **Write metadata**\. To exclude events by a specific user, add the user to **Ignored Users**\. 
+To include the request body, return to **Compliance settings** in OpenSearch Dashboards and disable **Write metadata**\. To exclude events by a specific user, add the user to **Ignored Users**\. 
 
-For a description of each audit log field, see [Audit log field reference](https://opendistro.github.io/for-elasticsearch-docs/docs/security/audit-logs/field-reference/)\. For information on searching and analyzing your audit log data, see [Analyzing Log Data with CloudWatch Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) in the *Amazon CloudWatch Logs User Guide*\. 
+For a description of each audit log field, see [Audit log field reference](https://opensearch.org/docs/security-plugin/audit-logs/field-reference/)\. For information on searching and analyzing your audit log data, see [Analyzing Log Data with CloudWatch Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) in the *Amazon CloudWatch Logs User Guide*\. 
 
 ## Configuring audit logs using the REST API<a name="audit-log-rest-api"></a>
 
-We recommend using Kibana to configure audit logs, but you can also use the fine\-grained access control REST API\. This section contains a sample request\. Full documentation on the REST API is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/security/access-control/api/)\.
+We recommend using OpenSearch Dashboards to configure audit logs, but you can also use the fine\-grained access control REST API\. This section contains a sample request\. Full documentation on the REST API is available in the [OpenSearch documentation](https://opensearch.org/docs/security-plugin/access-control/api/)\.
 
 ```
-PUT _opendistro/_security/api/audit/config
+PUT _plugins/_security/api/audit/config
 {
   "enabled": true,
   "audit": {

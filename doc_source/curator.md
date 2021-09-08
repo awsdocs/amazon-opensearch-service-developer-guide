@@ -1,10 +1,10 @@
-# Using Curator to rotate data in Amazon Elasticsearch Service<a name="curator"></a>
+# Using Curator to rotate data in Amazon OpenSearch Service<a name="curator"></a>
 
-This section contains sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots in Amazon Elasticsearch Service \(Amazon ES\)\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\. [Index State Management](ism.md) has some similar features and doesn't require Lambda or a separate EC2 instance\. Depending on your use case, it might be a better choice\.
+This section contains sample code for using AWS Lambda and [Curator](http://curator.readthedocs.io/en/latest/index.html) to manage indices and snapshots in Amazon OpenSearch Service\. Curator offers numerous filters to help you identify indices and snapshots that meet certain criteria, such as indices created more than 60 days ago or snapshots that failed to complete\. [Index State Management](ism.md) has some similar features and doesn't require Lambda or a separate EC2 instance\. Depending on your use case, it might be a better choice\.
 
-Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\. For installation instructions, see [Using Curator for snapshots](es-managedomains-snapshots.md#es-managedomains-snapshot-curator)\.
+Although Curator is often used as a command line interface \(CLI\), it also features a Python API, which means that you can use it within Lambda functions\. For installation instructions, see [Using Curator for snapshots](managedomains-snapshots.md#managedomains-snapshot-curator)\.
 
-For information about configuring Lambda functions and creating deployment packages, see [Loading streaming data from Amazon S3](es-aws-integrations.md#es-aws-integrations-s3-lambda-es)\. For even more information, see the [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/)\. This section contains only sample code, basic settings, triggers, and permissions\.
+For information about configuring Lambda functions and creating deployment packages, see [Loading streaming data from Amazon S3](integrations.md#integrations-s3-lambda)\. For even more information, see the [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/)\. This section contains only sample code, basic settings, triggers, and permissions\.
 
 **Topics**
 + [Sample code](#curator-sample)
@@ -14,14 +14,14 @@ For information about configuring Lambda functions and creating deployment packa
 
 ## Sample code<a name="curator-sample"></a>
 
-The following sample code uses Curator and [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/) to delete any index whose name contains a time stamp indicating that the data is more than 30 days old\. For example, if an index name is `my-logs-2014.03.02`, the index is deleted\. Deletion occurs even if you create the index today, because this filter uses the name of the index to determine its age\.
+The following sample code uses Curator and the legacy [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/) client to delete any index whose name contains a time stamp indicating that the data is more than 30 days old\. For example, if an index name is `my-logs-2014.03.02`, the index is deleted\. Deletion occurs even if you create the index today, because this filter uses the name of the index to determine its age\. If you want to try the new OpenSearch client instead of the legacy Elasticsearch one, see [opensearch\-py](https://github.com/opensearch-project/opensearch-py) on GitHub\.
 
-The code also contains some commented\-out examples of other common filters, including one that determines age by creation date\. The AWS SDK for Python \(Boto3\) and [requests\-aws4auth](https://pypi.org/project/requests-aws4auth/) library sign the requests to Amazon ES\.
+The code also contains some commented\-out examples of other common filters, including one that determines age by creation date\. The AWS SDK for Python \(Boto3\) and [requests\-aws4auth](https://pypi.org/project/requests-aws4auth/) library sign the requests to OpenSearch Service\.
 
 **Warning**  
 Both code samples in this section delete data—potentially a lot of data\. Modify and test each sample on a non\-critical domain until you're satisfied with its behavior\.
 
-**Index Deletion**
+**Index deletion**
 
 ```
 import boto3
@@ -31,15 +31,15 @@ import curator
 
 host = '' # For example, search-my-domain.region.es.amazonaws.com
 region = '' # For example, us-west-1
-service = 'es'
+service = 'opensearchservice'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
 # Lambda execution starts here.
 def lambda_handler(event, context):
 
-    # Build the Elasticsearch client.
-    es = Elasticsearch(
+    # Build the OpenSearch client.
+    client = Elasticsearch(
         hosts = [{'host': host, 'port': 443}],
         http_auth = awsauth,
         use_ssl = True,
@@ -56,9 +56,9 @@ def lambda_handler(event, context):
 
     # Index the test document so that we have an index that matches the timestring pattern.
     # You can delete this line and the test document if you already created some test indices.
-    es.index(index="movies-2017.01.31", doc_type="movie", id="1", body=document)
+    client.index(index="movies-2017.01.31", doc_type="movie", id="1", body=document)
 
-    index_list = curator.IndexList(es)
+    index_list = curator.IndexList(client)
 
     # Filters by age, anything with a time stamp older than 30 days in the index name.
     index_list.filter_by_age(source='name', direction='older', timestring='%Y.%m.%d', unit='days', unit_count=30)
@@ -80,7 +80,7 @@ You must update the values for `host` and `region`\.
 
 The next code sample deletes any snapshot that is more than two weeks old\. It also takes a new snapshot\.
 
-**Snapshot Deletion**
+**Snapshot deletion**
 
 ```
 import boto3
@@ -97,7 +97,7 @@ logger.setLevel(logging.INFO)
 
 host = '' # For example, search-my-domain.region.es.amazonaws.com
 region = '' # For example, us-west-1
-service = 'es'
+service = 'opensearchservice'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 repository_name = 'my-repo'
@@ -111,8 +111,8 @@ def lambda_handler(event, context):
     date_string = '-'.join((str(now.year), str(now.month), str(now.day), str(now.hour), str(now.minute)))
     snapshot_name = 'my-snapshot-prefix-' + date_string
 
-    # Build the Elasticsearch client.
-    es = Elasticsearch(
+    # Build the OpenSearch client.
+    client = Elasticsearch(
         hosts = [{'host': host, 'port': 443}],
         http_auth = awsauth,
         use_ssl = True,
@@ -123,7 +123,7 @@ def lambda_handler(event, context):
 
     try:
         # Get all snapshots in the repository.
-        snapshot_list = curator.SnapshotList(es, repository=repository_name)
+        snapshot_list = curator.SnapshotList(client, repository=repository_name)
 
         # Filter by age, any snapshot older than two weeks.
         # snapshot_list.filter_by_age(source='creation_date', direction='older', unit='weeks', unit_count=2)
@@ -137,7 +137,7 @@ def lambda_handler(event, context):
     try:
         # Get the list of indices.
         # You can filter this list if you didn't want to snapshot all indices.
-        index_list = curator.IndexList(es)
+        index_list = curator.IndexList(client)
 
         # Take a new snapshot. This operation can take a while, so we don't want to wait for it to complete.
         curator.Snapshot(index_list, repository=repository_name, name=snapshot_name, wait_for_completion=False).do_action()
@@ -147,7 +147,7 @@ def lambda_handler(event, context):
 
 You must update the values for `host`, `region`, `snapshot_name`, and `repository_name`\. If the output is too verbose for your taste, you can change `logging.INFO` to `logging.WARN`\.
 
-Because taking and deleting snapshots can take a while, this code is more sensitive to connection and Lambda timeouts—hence the extra logging code\. In the Elasticsearch client, you can see that we set the timeout to 120 seconds\. If the `DeleteSnapshots` function takes longer to get a response from the Amazon ES domain, you might need to increase this value\. You must also increase the Lambda function timeout from its default value of three seconds\. For a recommended value, see [Basic settings](#curator-basic)\.
+Because taking and deleting snapshots can take a while, this code is more sensitive to connection and Lambda timeouts—hence the extra logging code\. In the OpenSearch client, you can see that we set the timeout to 120 seconds\. If the `DeleteSnapshots` function takes longer to get a response from the OpenSearch Service domain, you might need to increase this value\. You must also increase the Lambda function timeout from its default value of three seconds\. For a recommended value, see [Basic settings](#curator-basic)\.
 
 ## Basic settings<a name="curator-basic"></a>
 
@@ -156,8 +156,8 @@ We recommend the following settings for these code samples\.
 
 | Sample code | Memory | Timeout | 
 | --- | --- | --- | 
-| Index Deletion | 128 MB | 10 seconds | 
-| Snapshot Deletion | 128 MB | 3 minutes | 
+| Index deletion | 128 MB | 10 seconds | 
+| Snapshot deletion | 128 MB | 3 minutes | 
 
 ## Triggers<a name="curator-trigger"></a>
 
@@ -166,12 +166,12 @@ Rather than reacting to some event \(such as a file upload to Amazon S3\), these
 
 | Sample code | Service | Rule type | Example expression | 
 | --- | --- | --- | --- | 
-| Index Deletion | CloudWatch Events | Schedule expression | rate\(1 day\) | 
-| Snapshot Deletion | CloudWatch Events | Schedule expression | rate\(4 hours\) | 
+| Index deletion | CloudWatch Events | Schedule expression | rate\(1 day\) | 
+| Snapshot deletion | CloudWatch Events | Schedule expression | rate\(4 hours\) | 
 
 ## Permissions<a name="curator-permissions"></a>
 
-Both Lambda functions in this section need the basic logging permissions that all Lambda functions need, plus HTTP method permissions for the Amazon ES domain:
+Both Lambda functions in this section need the basic logging permissions that all Lambda functions need, plus HTTP method permissions for the OpenSearch Service domain:
 
 ```
 {

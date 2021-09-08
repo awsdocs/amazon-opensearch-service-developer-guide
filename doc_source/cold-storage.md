@@ -1,6 +1,6 @@
-# Cold storage for Amazon Elasticsearch Service<a name="cold-storage"></a>
+# Cold storage for Amazon OpenSearch Service<a name="cold-storage"></a>
 
-Cold storage lets you store any amount of infrequently accessed or historical data on your Amazon Elasticsearch Service \(Amazon ES\) domain and analyze it on demand, at a lower cost than other storage tiers\. Cold storage is appropriate if you need to do periodic research or forensic analysis on your older data\. Practical examples of data suitable for cold storage include infrequently accessed logs, data that must be preserved to meet compliance requirements, or logs that have historical value\. 
+Cold storage lets you store any amount of infrequently accessed or historical data on your Amazon OpenSearch Service domain and analyze it on demand, at a lower cost than other storage tiers\. Cold storage is appropriate if you need to do periodic research or forensic analysis on your older data\. Practical examples of data suitable for cold storage include infrequently accessed logs, data that must be preserved to meet compliance requirements, or logs that have historical value\. 
 
 Similar to [UltraWarm](ultrawarm.md) storage, cold storage is backed by Amazon S3\. When you need to query cold data, you can selectively attach it to existing UltraWarm nodes\. You can manage the migration and lifecycle of your cold data manually or with Index State Management policies\.
 
@@ -9,12 +9,13 @@ Similar to [UltraWarm](ultrawarm.md) storage, cold storage is backed by Amazon S
 + [Cold storage requirements and performance considerations](#coldstorage-calc)
 + [Cold storage pricing](#coldstorage-pricing)
 + [Enabling cold storage](#coldstorage-enable)
-+ [Managing cold indices in Kibana](#cold-kibana)
++ [Managing cold indices in OpenSearch Dashboards](#coldstorage-dashboards)
 + [Migrating indices to cold storage](#coldstorage-migrating)
-+ [Automating migrations to cold storage](#coldstorae-ism)
++ [Automating migrations to cold storage](#coldstorage-ism)
 + [Canceling migrations to cold storage](#coldstorage-cancel)
 + [Listing cold indices](#coldstorage-list)
 + [Migrating cold indices to warm storage](#coldstorage-migrating-back)
++ [Restoring cold indices from snapshots](#cold-snapshot)
 + [Canceling migrations from cold to warm storage](#coldtowarm-cancel)
 + [Updating cold index metadata](#cold-update-metadata)
 + [Deleting cold indices](#cold-delete)
@@ -23,23 +24,23 @@ Similar to [UltraWarm](ultrawarm.md) storage, cold storage is backed by Amazon S
 ## Prerequisites<a name="coldstorage-pp"></a>
 
 Cold storage has the following prerequisites:
-+ Cold storage requires Elasticsearch version 7\.9 or later\.
-+ To enable cold storage on an Amazon ES domain, you must also enable UltraWarm on the same domain\.
-+ To use cold storage, domains must have [dedicated master nodes](es-managedomains-dedicatedmasternodes.md)\.
++ Cold storage requires OpenSearch or Elasticsearch version 7\.9 or later\.
++ To enable cold storage on an OpenSearch Service domain, you must also enable UltraWarm on the same domain\.
++ To use cold storage, domains must have [dedicated master nodes](managedomains-dedicatedmasternodes.md)\.
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use cold storage\.
-+ If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be [mapped](fgac.md#fgac-mapping) to the `cold_manager` role in Kibana in order to manage cold indices\.
++ If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be [mapped](fgac.md#fgac-mapping) to the `cold_manager` role in OpenSearch Dashboards in order to manage cold indices\.
 
 **Note**  
-The `cold_manager` role might not exist on some preexisting Amazon ES domains\. If you don't see the role in Kibana, you need to [manually create it](#coldstorage-create-role)\.
+The `cold_manager` role might not exist on some preexisting OpenSearch Service domains\. If you don't see the role in Dashboards, you need to [manually create it](#coldstorage-create-role)\.
 
 ### Configure permissions<a name="coldstorage-create-role"></a>
 
-If you enable cold storage on a preexisting Amazon ES domain, the `cold_manager` role might not be defined on the domain\. If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be mapped to this role in order to manage cold indices\. To manually create the `cold_manager` role, perform the following steps:
+If you enable cold storage on a preexisting OpenSearch Service domain, the `cold_manager` role might not be defined on the domain\. If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be mapped to this role in order to manage cold indices\. To manually create the `cold_manager` role, perform the following steps:
 
-1. In Kibana, go to **Security** and choose **Permissions**\.
+1. In OpenSearch Dashboards, go to **Security** and choose **Permissions**\.
 
 1. Choose **Create action group** and configure the following groups:     
-[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cold-storage.html)
+[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/cold-storage.html)
 
 1. Choose **Roles** and **Create role**\.
 
@@ -63,23 +64,23 @@ Because cold storage uses Amazon S3, it incurs none of the overhead of hot stora
 
 Similar to UltraWarm storage, with cold storage you only pay for data storage\. There's no compute cost for cold data and you wont get billed if theres no data in cold storage\.
 
-You don't incur any transfer charges when moving data between cold and warm storage\. While indices are being migrated between warm and cold storage, you continue to pay for only one copy of the index\. After the migration completes, the index is billed according to the storage tier it was migrated to\. For more information about cold storage pricing, see [Pricing for Amazon Elasticsearch Service](what-is-amazon-elasticsearch-service.md#aes-pricing)\.
+You don't incur any transfer charges when moving data between cold and warm storage\. While indices are being migrated between warm and cold storage, you continue to pay for only one copy of the index\. After the migration completes, the index is billed according to the storage tier it was migrated to\. For more information about cold storage pricing, see [Pricing for Amazon OpenSearch Service](what-is.md#pricing)\.
 
 ## Enabling cold storage<a name="coldstorage-enable"></a>
 
 The console is the simplest way to create a domain that uses cold storage\. While creating the domain, choose **Enable cold storage**\. The same process works on existing domains as long as you meet the [prerequisites](#coldstorage-pp)\. Even after the domain state changes from **Processing** to **Active**, cold storage might not be available for several hours\.
 
-You can also use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](es-configuration-api.md) to enable cold storage\.
+You can also use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](configuration-api.md) to enable cold storage\.
 
 ### Sample CLI command<a name="coldstorage-sample-cli"></a>
 
 The following AWS CLI command creates a domain with three data nodes, three dedicated master nodes, cold storage enabled, and fine\-grained access control enabled:
 
 ```
-aws es create-elasticsearch-domain \
+aws opensearchservice create-domain \
   --domain-name my-domain \
-  --elasticsearch-version 7.10 \
-  --elasticsearch-cluster-config ColdStorageOptions={Enabled=true},WarmEnabled=true,WarmCount=4,WarmType=ultrawarm1.medium.elasticsearch,InstanceType=r6g.large.elasticsearch,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.elasticsearch,DedicatedMasterCount=3,InstanceCount=3 \
+  --engine-version Opensearch_1.0 \
+  --cluster-config ColdStorageOptions={Enabled=true},WarmEnabled=true,WarmCount=4,WarmType=ultrawarm1.medium.search,InstanceType=r6g.large.search,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.search,DedicatedMasterCount=3,InstanceCount=3 \
   --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=11 \
   --node-to-node-encryption-options Enabled=true \
   --encryption-at-rest-options Enabled=true \
@@ -95,13 +96,13 @@ For detailed information, see the [AWS CLI Command Reference](https://docs.aws.a
 The following request to the configuration API creates a domain with three data nodes, three dedicated master nodes, cold storage enabled, and fine\-grained access control enabled:
 
 ```
-POST https://es.us-east-2.amazonaws.com/2015-01-01/es/domain
+POST https://es.us-east-2.amazonaws.com/2021-01-01/opensearch/domain
 {
-  "ElasticsearchClusterConfig": {
+  "ClusterConfig": {
     "InstanceCount": 3,
-    "InstanceType": "r6g.large.elasticsearch",
+    "InstanceType": "r6g.large.search",
     "DedicatedMasterEnabled": true,
-    "DedicatedMasterType": "r6g.large.elasticsearch",
+    "DedicatedMasterType": "r6g.large.search",
     "DedicatedMasterCount": 3,
     "ZoneAwarenessEnabled": true,
     "ZoneAwarenessConfig": {
@@ -109,7 +110,7 @@ POST https://es.us-east-2.amazonaws.com/2015-01-01/es/domain
      },
     "WarmEnabled": true,
     "WarmCount": 4,
-    "WarmType": "ultrawarm1.medium.elasticsearch",
+    "WarmType": "ultrawarm1.medium.search",
     "ColdStorageOptions": {
        "Enabled": true
      }
@@ -137,16 +138,16 @@ POST https://es.us-east-2.amazonaws.com/2015-01-01/es/domain
       "MasterUserPassword": "master-password"
     }
   },
-  "ElasticsearchVersion": "7.10",
+  "EngineVersion": "Opensearch_1.0",
   "DomainName": "my-domain"
 }
 ```
 
-For detailed information, see [Configuration API reference for Amazon Elasticsearch Service](es-configuration-api.md)\.
+For detailed information, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 
-## Managing cold indices in Kibana<a name="cold-kibana"></a>
+## Managing cold indices in OpenSearch Dashboards<a name="coldstorage-dashboards"></a>
 
-You can manage hot, warm and cold indices with the existing Kibana interface in your Amazon ES domain\. Kibana enables you to migrate indices between warm and cold storage, and monitor index migration status, without using the CLI or configuration API\. For more information, see [Managing indices in Kibana](es-kibana.md#kibana-indices)\.
+You can manage hot, warm and cold indices with the existing Dashboards interface in your OpenSearch Service domain\. Dashboards enables you to migrate indices between warm and cold storage, and monitor index migration status, without using the CLI or configuration API\. For more information, see [Managing indices in OpenSearch Dashboards](dashboards.md#dashboards-indices)\.
 
 ## Migrating indices to cold storage<a name="coldstorage-migrating"></a>
 
@@ -156,7 +157,7 @@ When you migrate indices to cold storage, you provide a time range for the data 
 | Parameter | Supported value | Description | 
 | --- | --- | --- | 
 | timestamp\_field | The date/time field from the index mapping\. |  The minimum and maximum values of the provided field are computed and stored as the `start_time` and `end_time` metadata for the cold index\.  | 
-| start\_time and end\_time |  One of the following formats: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/cold-storage.html)  |  The provided values are stored as the `start_time` and `end_time` metadata for the cold index\.   | 
+| start\_time and end\_time |  One of the following formats: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/cold-storage.html)  |  The provided values are stored as the `start_time` and `end_time` metadata for the cold index\.   | 
 
 If you don't want to specify a timestamp, add `?ignore=timestamp` to the request instead\.
 
@@ -187,7 +188,7 @@ RUNNING_INDEX_DETACH - Local warm index state from the cluster is being removed.
 FAILED_INDEX_DETACH - The index detach process failed and all retries are exhausted.
 ```
 
-## Automating migrations to cold storage<a name="coldstorae-ism"></a>
+## Automating migrations to cold storage<a name="coldstorage-ism"></a>
 
 You can use [Index State Management](ism.md) to automate the migration process after an index reaches a certain age or meets other conditions\. See the [sample policy](ism.md#ism-example-cold), which demonstrates how to automatically migrate indices from hot to UltraWarm to cold storage\.
 
@@ -313,6 +314,10 @@ FAILED_COLD_METADATA_CLEANUP - Failed to clean up metadata in the cold tier.
 FAILED_INDEX_CREATION - Failed to create an index in the warm tier.
 ```
 
+## Restoring cold indices from snapshots<a name="cold-snapshot"></a>
+
+Contact [AWS Support](https://console.aws.amazon.com/support/home) if you need to restore cold indices from an automated snapshot, including in situations where an entire domain was accidentally deleted\. OpenSearch Service retains cold indices for 14 days after they've been deleted\.
+
 ## Canceling migrations from cold to warm storage<a name="coldtowarm-cancel"></a>
 
 If an index migration from cold to warm storage is queued or in a failed state, you can cancel it with the following request:
@@ -344,7 +349,7 @@ PATCH _cold/my-index
 You can't update the `timestamp_field` of an index in cold storage\.
 
 **Note**  
-Kibana doesn't support the PATCH method\. Use [curl](https://curl.haxx.se/), [Postman](https://www.getpostman.com/), or some other method to update cold metadata\.
+OpenSearch Dashboards doesn't support the PATCH method\. Use [curl](https://curl.haxx.se/), [Postman](https://www.getpostman.com/), or some other method to update cold metadata\.
 
 ## Deleting cold indices<a name="cold-delete"></a>
 
@@ -356,7 +361,7 @@ DELETE _cold/my-index
 
 ## Disabling cold storage<a name="coldstorage-disable"></a>
 
-The Amazon ES console is the simplest way to disable cold storage\. Select the domain and choose **Edit domain**, then deselect **Enable cold storage**\. 
+The OpenSearch Service console is the simplest way to disable cold storage\. Select the domain and choose **Edit**, then deselect **Enable cold storage**\. 
 
 To use the AWS CLI or configuration API, under `ColdStorageOptions`, set `"Enabled"="false"`\.
 

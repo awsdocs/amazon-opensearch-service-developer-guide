@@ -1,6 +1,6 @@
-# Amazon Elasticsearch Developer Guide
+# Amazon OpenSearch Service Developer Guide
 
-Content for the [Amazon Elasticsearch Service Developer Guide](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/). Issues and pull requests appreciated.
+Content for the [Amazon OpenSearch Service Developer Guide](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/). Issues and pull requests appreciated.
 
 # License Summary
 

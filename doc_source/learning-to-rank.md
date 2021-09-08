@@ -1,27 +1,27 @@
-# Learning to Rank for Amazon Elasticsearch Service<a name="learning-to-rank"></a>
+# Learning to Rank for Amazon OpenSearch Service<a name="learning-to-rank"></a>
 
-Elasticsearch uses a probabilistic ranking framework called BM\-25 to calculate relevance scores\. If a distinctive keyword appears more frequently in a document, BM\-25 assigns a higher relevance score to that document\. This framework, however, doesn’t take into account user behavior like click\-through data, which can further improve relevance\.
+OpenSearch uses a probabilistic ranking framework called BM\-25 to calculate relevance scores\. If a distinctive keyword appears more frequently in a document, BM\-25 assigns a higher relevance score to that document\. This framework, however, doesn’t take into account user behavior like click\-through data, which can further improve relevance\.
 
-Learning to Rank is an open\-source Elasticsearch plugin that lets you use machine learning and behavioral data to tune the relevance of documents\. The plugin uses models from the XGBoost and Ranklib libraries to rescore the search results\. 
+Learning to Rank is an open\-source OpenSearch plugin that lets you use machine learning and behavioral data to tune the relevance of documents\. The plugin uses models from the XGBoost and Ranklib libraries to rescore the search results\. 
 
-Learning to Rank requires Elasticsearch 7\.7 or later\. Full documentation for the feature, including detailed steps and API descriptions, is available in the [Learning to Rank](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html) documentation\.
+Learning to Rank requires OpenSearch or Elasticsearch 7\.7 or later\. Full documentation, including detailed steps and API descriptions, is available in the [Learning to Rank](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html) documentation\.
 
 **Note**  
 To use the Learning to Rank plugin, you must have full admin permissions\. To learn more, see [Modifying the master user](fgac.md#fgac-forget)\.
 
 **Topics**
-+ [Getting started with Learning to Rank](#ltr-gsg-es)
++ [Getting started with Learning to Rank](#ltr-gsg)
 + [Learning to Rank API](#ltr-api)
 
-## Getting started with Learning to Rank<a name="ltr-gsg-es"></a>
+## Getting started with Learning to Rank<a name="ltr-gsg"></a>
 
-You need to provide a judgment list, prepare a training dataset, and train the model outside of Amazon Elasticsearch Service \(Amazon ES\)\. The parts in blue occur outside of Amazon ES:
+You need to provide a judgment list, prepare a training dataset, and train the model outside of Amazon OpenSearch Service\. The parts in blue occur outside of OpenSearch Service:
 
-![\[Sample Learning to Rank plugin process.\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/ltr.png)
+![\[Sample Learning to Rank plugin process.\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/ltr.png)
 
-### Step 1: Initialize the plugin<a name="ltr-example-es1"></a>
+### Step 1: Initialize the plugin<a name="ltr-example-1"></a>
 
-To initialize the Learning to Rank plugin, send the following request to your Amazon Elasticsearch Service domain:
+To initialize the Learning to Rank plugin, send the following request to your OpenSearch Service domain:
 
 ```
 PUT _ltr
@@ -37,10 +37,10 @@ PUT _ltr
 
 This command creates a hidden `.ltrstore` index that stores metadata information such as feature sets and models\.
 
-### Step 2: Create a judgment list<a name="ltr-example-es2"></a>
+### Step 2: Create a judgment list<a name="ltr-example-2"></a>
 
 **Note**  
-You must perform this step outside of Amazon Elasticsearch Service\.
+You must perform this step outside of OpenSearch Service\.
 
 A judgment list is a collection of examples that a machine learning model learns from\. Your judgment list should include keywords that are important to you and a set of graded documents for each keyword\.
 
@@ -71,7 +71,7 @@ For a more complete example of a judgment list, see [movie judgments](https://gi
 
 You can create this judgment list manually with the help of human annotators or infer it programmatically from analytics data\.
 
-### Step 3: Build a feature set<a name="ltr-example-es3"></a>
+### Step 3: Build a feature set<a name="ltr-example-3"></a>
 
 A feature is a field that corresponds to the relevance of a document—for example, `title`, `overview`, `popularity score` \(number of views\), and so on\. 
 
@@ -120,7 +120,7 @@ If you query the original `.ltrstore` index, you get back your feature set:
 GET _ltr/_featureset
 ```
 
-### Step 4: Log the feature values<a name="ltr-example-es4"></a>
+### Step 4: Log the feature values<a name="ltr-example-4"></a>
 
 The feature values are the relevance scores calculated by BM\-25 for each feature\.
 
@@ -314,10 +314,10 @@ A sample response might look like the following:
 
 In the previous example, the first feature doesn’t have a feature value because the keyword “rambo” doesn’t appear in the title field of the document with an ID equal to 1368\. This is a missing feature value in the training data\. 
 
-### Step 5: Create a training dataset<a name="ltr-example-es5"></a>
+### Step 5: Create a training dataset<a name="ltr-example-5"></a>
 
 **Note**  
-You must perform this step outside of Amazon Elasticsearch Service\.
+You must perform this step outside of OpenSearch Service\.
 
 The next step is to combine the judgment list and feature values to create a training dataset\. If your original judgment list looks like this:
 
@@ -339,16 +339,16 @@ Convert it into the final training dataset, which looks like this:
 
 You can perform this step manually or write a program to automate it\.
 
-### Step 6: Choose an algorithm and build the model<a name="ltr-example-es6"></a>
+### Step 6: Choose an algorithm and build the model<a name="ltr-example-6"></a>
 
 **Note**  
-You must perform this step outside of Amazon Elasticsearch Service\.
+You must perform this step outside of OpenSearch Service\.
 
 With the training dataset in place, the next step is to use XGBoost or Ranklib libraries to build a model\. XGBoost and Ranklib libraries let you build popular models such as LambdaMART, Random Forests, and so on\. 
 
 For steps to use XGBoost and Ranklib to build the model, see the [XGBoost](https://xgboost.readthedocs.io/en/latest/index.html) and [RankLib](https://sourceforge.net/p/lemur/wiki/RankLib/) documentation, respectively\. To use Amazon SageMaker to build the XGBoost model, see [XGBoost Algorithm](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html)\. 
 
-### Step 7: Deploy the model<a name="ltr-example-es7"></a>
+### Step 7: Deploy the model<a name="ltr-example-7"></a>
 
 After you have built the model, deploy it into the Learning to Rank plugin\. For more information about deploying a model, see [Uploading A Trained Model](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/training-models.html)\. 
 
@@ -642,7 +642,7 @@ To see the model, send the following request:
 GET _ltr/_model/my_ranklib_model
 ```
 
-### Step 8: Search with learning to rank<a name="ltr-example-es8"></a>
+### Step 8: Search with learning to rank<a name="ltr-example-8"></a>
 
 After you deploy the model, you’re ready to search\. 
 
@@ -769,7 +769,7 @@ With Learning to Rank, you see “Rambo” as the first result because we have a
 }
 ```
 
-If you search without using the Learning to Rank plugin, Elasticsearch returns different results:
+If you search without using the Learning to Rank plugin, OpenSearch returns different results:
 
 ```
 POST tmdb/_search
@@ -920,7 +920,7 @@ Deletes a model\.
 DELETE _ltr/_model/<name_of_model>
 ```
 
-### Get ,odel<a name="ltr-api-getmodel"></a>
+### Get model<a name="ltr-api-getmodel"></a>
 
 Retrieves a model\.
 
@@ -939,7 +939,7 @@ GET _ltr/_model/<name_of_model>
 You can also filter by node and/or cluster:
 
 ```
-GET _opendistro/_ltr/nodeID,nodeID,/stats/stat,stat
+GET _ltr/nodeID,nodeID,/stats/stat,stat
 
 {
   "_nodes" : {
@@ -1024,7 +1024,7 @@ The statistics are provided at two levels, node and cluster, as specified in the
 Returns statistics about the cache and memory usage\.
 
 ```
-GET opendistro/_ltr/_cachestats
+GET _ltr/_cachestats
 
 {
     "_nodes": {
@@ -1032,7 +1032,7 @@ GET opendistro/_ltr/_cachestats
         "successful": 2,
         "failed": 0
     },
-    "cluster_name": "es-cluster",
+    "cluster_name": "opensearch-cluster",
     "all": {
         "total": {
             "ram": 612,
@@ -1073,7 +1073,7 @@ GET opendistro/_ltr/_cachestats
     },
     "nodes": {
         "ejF6uutERF20wOFNOXB61A": {
-            "name": "elasticsearch3",
+            "name": "opensearch1",
             "hostname": "172.18.0.4",
             "stats": {
                 "total": {
@@ -1095,7 +1095,7 @@ GET opendistro/_ltr/_cachestats
             }
         },
         "Z2RZNWRLSveVcz2c6lHf5A": {
-            "name": "elasticsearch1",
+            "name": "opensearch2",
             "hostname": "172.18.0.2",
             "stats": {
                 ...
@@ -1110,5 +1110,5 @@ GET opendistro/_ltr/_cachestats
 Clears the plugin cache\. Use this to refresh the model\.
 
 ```
-POST opendistro/_ltr/_clearcache
+POST _ltr/_clearcache
 ```

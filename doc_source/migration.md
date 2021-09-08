@@ -1,26 +1,26 @@
-# Migrating to Amazon Elasticsearch Service<a name="migration"></a>
+# Migrating to Amazon OpenSearch Service<a name="migration"></a>
 
-Index snapshots are a popular way to migrate from a self\-managed Elasticsearch cluster to Amazon Elasticsearch Service \(Amazon ES\)\. Broadly, the process consists of the following steps:
+Index snapshots are a popular way to migrate from a self\-managed OpenSearch cluster to Amazon OpenSearch Service\. Broadly, the process consists of the following steps:
 
 1. Take a snapshot of the existing cluster, and upload the snapshot to an Amazon S3 bucket\.
 
-1. Create an Amazon ES domain\.
+1. Create an OpenSearch Service domain\.
 
-1. Give Amazon ES permissions to access the bucket, and give your user account permissions to work with snapshots\.
+1. Give OpenSearch Service permissions to access the bucket, and give your user account permissions to work with snapshots\.
 
-1. Restore the snapshot on the Amazon ES domain\.
+1. Restore the snapshot on the OpenSearch Service domain\.
 
 This walkthrough provides more detailed steps and alternate options, where applicable\.
 
 ## Take and upload the snapshot<a name="migration-take-snapshot"></a>
 
-Although you can use the [repository\-s3](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/snapshot-restore/#amazon-s3) plugin to take snapshots directly to S3, you have to install the plugin on every node, tweak `elasticsearch.yml`, restart each node, add your AWS credentials, and finally take the snapshot\. The plugin is a great option for ongoing use or for migrating larger clusters\.
+Although you can use the [repository\-s3](https://opensearch.org/docs/opensearch/snapshot-restore/#amazon-s3) plugin to take snapshots directly to S3, you have to install the plugin on every node, tweak `opensearch.yml`, restart each node, add your AWS credentials, and finally take the snapshot\. The plugin is a great option for ongoing use or for migrating larger clusters\.
 
-For smaller clusters, a one\-time approach is to take a [shared file system snapshot](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/snapshot-restore/#shared-file-system) and then use the AWS CLI to upload it to S3\. If you already have a snapshot, skip to step 4\.
+For smaller clusters, a one\-time approach is to take a [shared file system snapshot](https://opensearch.org/docs/opensearch/snapshot-restore/#shared-file-system) and then use the AWS CLI to upload it to S3\. If you already have a snapshot, skip to step 4\.
 
 ****To take a snapshot and upload it to Amazon S3****
 
-1. Add the `path.repo` setting to `elasticsearch.yml` on all nodes, and then restart each node\.
+1. Add the `path.repo` setting to `opensearch.yml` on all nodes, and then restart each node\.
 
    ```
    path.repo: ["/my/shared/directory/snapshots"]
@@ -64,10 +64,10 @@ For smaller clusters, a one\-time approach is to take a [shared file system snap
 Although the console is the easiest way to create a domain, in this case, you already have the terminal open and the AWS CLI installed\. Modify the following command to create a domain that fits your needs:
 
 ```
-aws es create-elasticsearch-domain \
+aws opensearchservice create-domain \
   --domain-name migration-domain \
-  --elasticsearch-version 7.10 \
-  --elasticsearch-cluster-config InstanceType=c5.large.elasticsearch,InstanceCount=2 \
+  --engine-version OpenSearch_1.0 \
+  --cluster-config InstanceType=c5.large.search,InstanceCount=2 \
   --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 \
   --node-to-node-encryption-options Enabled=true \
   --encryption-at-rest-options Enabled=true \
@@ -77,16 +77,16 @@ aws es create-elasticsearch-domain \
   --region us-west-2
 ```
 
-As is, the command creates an internet\-accessible domain with two data nodes, each with 100 GiB of storage\. It also enables [fine\-grained access control](fgac.md) with HTTP basic authentication and all encryption settings\. Use the Amazon ES console if you need a more advanced security configuration, such as a VPC\.
+As is, the command creates an internet\-accessible domain with two data nodes, each with 100 GiB of storage\. It also enables [fine\-grained access control](fgac.md) with HTTP basic authentication and all encryption settings\. Use the OpenSearch Service console if you need a more advanced security configuration, such as a VPC\.
 
-Before issuing the command, change the domain name, master user credentials, and account number\. Specify the same region that you used for the S3 bucket and an Elasticsearch version that is compatible with your snapshot\.
+Before issuing the command, change the domain name, master user credentials, and account number\. Specify the same region that you used for the S3 bucket and an OpenSearch/Elasticsearch version that is compatible with your snapshot\.
 
 **Important**  
-Snapshots are only forward\-compatible, and only by one major version\. For example, you can't restore a snapshot from a 2\.*x* cluster on a 1\.*x* cluster or a 6\.*x* cluster, only a 2\.*x* or 5\.*x* cluster\. Minor version matters, too\. You can't restore a snapshot from a self\-managed 5\.3\.3 cluster on a 5\.3\.2 Amazon ES domain\. We recommend choosing the most\-recent version of Elasticsearch that your snapshot supports\.
+Snapshots are only forward\-compatible, and only by one major version\. For example, you can't restore a snapshot from a 2\.*x* cluster on a 1\.*x* cluster or a 6\.*x* cluster, only a 2\.*x* or 5\.*x* cluster\. Minor version matters, too\. You can't restore a snapshot from a self\-managed 5\.3\.3 cluster on a 5\.3\.2 OpenSearch Service domain\. We recommend choosing the most recent version of OpenSearch or Elasticsearch that your snapshot supports\. For a table of compatible versions, see [Using a snapshot to migrate data](version-migration.md#snapshot-based-migration)\. 
 
 ## Provide permissions to the S3 bucket<a name="migration-permissions"></a>
 
-In the AWS Identity and Access Management \(IAM\) console, [create a role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) with the following permissions and [trust relationship](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy)\. When creating the role, choose **S3** as the **AWS Service**\. Name the role `AmazonESSnapshotRole` so it's easy to find\. 
+In the AWS Identity and Access Management \(IAM\) console, [create a role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) with the following permissions and [trust relationship](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy)\. When creating the role, choose **S3** as the **AWS Service**\. Name the role `OpenSearchSnapshotRole` so it's easy to find\. 
 
 **Permissions**
 
@@ -133,7 +133,7 @@ In the AWS Identity and Access Management \(IAM\) console, [create a role](https
 }
 ```
 
-Then give your personal IAM user or role—whatever you used to configure the AWS CLI earlier—permissions to assume `AmazonESSnapshotRole`\. Create the following policy and [attach it](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) to your identity:
+Then give your personal IAM user or role—whatever you used to configure the AWS CLI earlier—permissions to assume `OpenSearchSnapshotRole`\. Create the following policy and [attach it](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) to your identity:
 
 **Permissions**
 
@@ -143,19 +143,19 @@ Then give your personal IAM user or role—whatever you used to configure the AW
   "Statement": [{
       "Effect": "Allow",
       "Action": "iam:PassRole",
-      "Resource": "arn:aws:iam::123456789012:role/AmazonESSnapshotRole"
+      "Resource": "arn:aws:iam::123456789012:role/OpenSearchSnapshotRole"
     }
   ]
 }
 ```
 
-### Map the snapshot role in Kibana \(if using fine\-grained access control\)<a name="migration-snapshot-role"></a>
+### Map the snapshot role in OpenSearch Dashboards \(if using fine\-grained access control\)<a name="migration-snapshot-role"></a>
 
 If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM user or role so you can work with snapshots\.
 
 **To give your identity permissions to work with snapshots**
 
-1. Log in to Kibana using the master user credentials you specified when you created the Amazon ES domain\. You can find the Kibana URL in the Amazon ES console\. It takes the form of `https://domain-endpoint/_plugin/kibana/`\.
+1. Log in to Dashboards using the master user credentials you specified when you created the OpenSearch Service domain\. You can find the Dashboards URL in the OpenSearch Service console\. It takes the form of `https://domain-endpoint/_dashboards/`\.
 
 1. From the main menu choose **Security**, **Roles**, and select the **manage\_snapshots** role\.
 
@@ -175,11 +175,11 @@ If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you
 
 ## Restore the snapshot<a name="migration-restore"></a>
 
-At this point, you have two ways to access your Amazon ES domain: HTTP basic authentication with your master user credentials or AWS authentication using your IAM credentials\. Because snapshots use Amazon S3, which has no concept of the master user, you must use your IAM credentials to register the snapshot repository with your Amazon ES domain\.
+At this point, you have two ways to access your OpenSearch Service domain: HTTP basic authentication with your master user credentials or AWS authentication using your IAM credentials\. Because snapshots use Amazon S3, which has no concept of the master user, you must use your IAM credentials to register the snapshot repository with your OpenSearch Service domain\.
 
-Most programming languages have libraries to assist with [signing requests](es-request-signing.md), but the simpler approach is to use a tool like [Postman](https://www.postman.com/downloads/) and put your IAM credentials into the **Authorization** section\.
+Most programming languages have libraries to assist with [signing requests](request-signing.md), but the simpler approach is to use a tool like [Postman](https://www.postman.com/downloads/) and put your IAM credentials into the **Authorization** section\.
 
-![\[Image NOT FOUND\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/migration2.png)
+![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/migration2.png)
 
 **To restore the snapshot**
 
@@ -192,7 +192,7 @@ Most programming languages have libraries to assist with [signing requests](es-r
      "settings": {
        "bucket": "bucket-name",
        "region": "us-west-2",
-       "role_arn": "arn:aws:iam::123456789012:role/AmazonESSnapshotRole"
+       "role_arn": "arn:aws:iam::123456789012:role/OpenSearchSnapshotRole"
      }
    }
    ```
@@ -245,4 +245,4 @@ Most programming languages have libraries to assist with [signing requests](es-r
    curl -XGET -u 'master-user:master-user-password' https://domain-endpoint/_cat/indices?v
    ```
 
-At this point, the migration is complete\. You might configure your clients to use the new Amazon ES endpoint, [resize the domain](sizing-domains.md) to suit your workload, check the shard count for your indices, switch to an [IAM master user](fgac.md#fgac-concepts), or start building Kibana dashboards\.
+At this point, the migration is complete\. You might configure your clients to use the new OpenSearch Service endpoint, [resize the domain](sizing-domains.md) to suit your workload, check the shard count for your indices, switch to an [IAM master user](fgac.md#fgac-concepts), or start building visualizations in OpenSearch Dashboards\.

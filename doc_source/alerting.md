@@ -1,14 +1,14 @@
-# Configuring alerts in Amazon Elasticsearch Service<a name="alerting"></a>
+# Configuring alerts in Amazon OpenSearch Service<a name="alerting"></a>
 
-Configure alerts in Amazon Elasticsearch Service \(Amazon ES\) to get notified when data from one or more indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
+Configure alerts in Amazon OpenSearch Service to get notified when data from one or more indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
 
-Alerting requires Elasticsearch version 6\.2 or later\. For full documentation, including API descriptions, see the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/)\. This topic highlights the differences in alerting in \(Amazon ES\) compared to the open\-source version\.
+Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documentation, including API descriptions, see the [OpenSearch documentation](https://docs-beta.opensearch.org/monitoring-plugins/alerting/index/)\. This topic highlights the differences in alerting in OpenSearch Service compared to the open\-source version\.
 
 ****To get started with alerting****
 
-1. Choose **Alerting** from the Kibana main menu\.
+1. Choose **Alerting** from the OpenSearch Dashboards main menu\.
 
-1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the destination\. For example, your Amazon ES domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\. The Amazon ES domain must have a public IP address to send alerts to a custom webhook\.
+1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the destination\. For example, your OpenSearch Service domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\. The OpenSearch Service domain must have a public IP address to send alerts to a custom webhook\.
 
 1. Create a monitor in one of three ways: visually, using a query, or using an anomaly detector\.
 
@@ -16,21 +16,21 @@ Alerting requires Elasticsearch version 6\.2 or later\. For full documentation, 
 
 1. \(Optional\) Add one or more actions to the monitor\.
 **Tip**  
-After an action successfully sends a message, securing access to that message \(for example, access to a Slack channel\) is your responsibility\. If your domain contains sensitive data, consider using triggers without actions and periodically checking Kibana for alerts\.
+After an action successfully sends a message, securing access to that message \(for example, access to a Slack channel\) is your responsibility\. If your domain contains sensitive data, consider using triggers without actions and periodically checking Dashboards for alerts\.
 
-For detailed steps, see [Monitors](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/monitors/) in the Open Distro for Elasticsearch documentation\.
+For detailed steps, see [Monitors](https://docs-beta.opensearch.org/monitoring-plugins/alerting/monitors/) in the OpenSearch documentation\.
 
 ## Differences<a name="alerting-diff"></a>
 
-Compared to Open Distro for Elasticsearch, alerting in Amazon ES has some notable differences\.
+Compared to OpenSearch, alerting in Amazon OpenSearch Service has some notable differences\.
 
 ### Amazon SNS support<a name="alerting-diff-sns"></a>
 
-Amazon ES supports Amazon Simple Notification Service \([Amazon SNS](https://aws.amazon.com/sns/)\) for notifications\. This integration means that in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), you can also send emails, text messages, and even run AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
+OpenSearch Service supports Amazon Simple Notification Service \([Amazon SNS](https://aws.amazon.com/sns/)\) for notifications\. This integration means that in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), you can also send emails, text messages, and even run AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
 
 **To add Amazon SNS as a destination**
 
-1. Choose **Alerting** from the Kibana main menu\.
+1. Choose **Alerting** from the OpenSearch Dashboards main menu\.
 
 1. Go to the **Destinations** tab and then choose **Add destination**\.
 
@@ -72,14 +72,14 @@ Amazon ES supports Amazon Simple Notification Service \([Amazon SNS](https://aws
 
 ### Alerting settings<a name="alerting-diff-settings"></a>
 
-Amazon ES lets you modify the following [alerting settings](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/settings/#alerting-settings):
-+ `opendistro.scheduled_jobs.enabled`
-+ `opendistro.alerting.alert_history_enabled`
-+ `opendistro.alerting.alert_history_max_age`
-+ `opendistro.alerting.alert_history_max_docs`
-+ `opendistro.alerting.alert_history_retention_period`
-+ `opendistro.alerting.alert_history_rollover_period`
-+ `opendistro.alerting.filter_by_backend_roles`
+OpenSearch Service lets you modify the following [alerting settings](https://docs-beta.opensearch.org/monitoring-plugins/alerting/settings/#alerting-settings):
++ `plugins.scheduled_jobs.enabled`
++ `plugins.alerting.alert_history_enabled`
++ `plugins.alerting.alert_history_max_age`
++ `plugins.alerting.alert_history_max_docs`
++ `plugins.alerting.alert_history_retention_period`
++ `plugins.alerting.alert_history_rollover_period`
++ `plugins.alerting.filter_by_backend_roles`
 
 All other settings use the default values which you can't change\.
 
@@ -89,7 +89,7 @@ To disable alerting, send the following request:
 PUT _cluster/settings
 {
   "persistent" : {
-    "opendistro.scheduled_jobs.enabled" : false
+    "plugins.scheduled_jobs.enabled" : false
   }
 }
 ```
@@ -100,7 +100,7 @@ The following request configures alerting to automatically delete history indice
 PUT _cluster/settings
 {
   "persistent": {
-    "opendistro.alerting.alert_history_retention_period": "7d"
+    "plugins.alerting.alert_history_retention_period": "7d"
   }
 }
 ```
@@ -108,7 +108,7 @@ PUT _cluster/settings
 If you previously created monitors and want to stop the creation of daily alerting indices, delete all alert history indices:
 
 ```
-DELETE .opendistro-alerting-alert-history-*
+DELETE .plugins-alerting-alert-history-*
 ```
 
 To reduce shard count for history indices, create an index template\. The following request sets history indices for both alerting and [Index State Management](ism.md) to one shard and one replica:
@@ -126,8 +126,8 @@ PUT _template/template-name
 }
 ```
 
-Depending on your tolerance for data loss, you might even consider using zero replicas\. For more information about creating and managing index templates, see [Index template](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/index-templates/) in the Open Distro for Elasticsearch documentation\. 
+Depending on your tolerance for data loss, you might even consider using zero replicas\. For more information about creating and managing index templates, see [Index templates](https://docs-beta.opensearch.org/opensearch/index-templates/) in the OpenSearch documentation\. 
 
 ### Alerting permissions<a name="alerting-diff-perms"></a>
 
-Alerting supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/security/) in the Open Distro for Elasticsearch documentation\.
+Alerting supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://docs-beta.opensearch.org/monitoring-plugins/alerting/security/) in the OpenSearch documentation\.

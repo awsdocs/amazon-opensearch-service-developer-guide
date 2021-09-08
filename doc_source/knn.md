@@ -1,9 +1,18 @@
-# k\-Nearest Neighbor \(k\-NN\) search in Amazon Elasticsearch Service<a name="knn"></a>
+# k\-Nearest Neighbor \(k\-NN\) search in Amazon OpenSearch Service<a name="knn"></a>
 
-Short for its associated *k\-nearest neighbors* algorithm, k\-NN for Amazon Elasticsearch Service \(Amazon ES\) lets you search for points in a vector space and find the "nearest neighbors" for those points by Euclidean distance or cosine similarity\. Use cases include recommendations \(for example, an "other songs you might like" feature in a music application\), image recognition, and fraud detection\.
+Short for its associated *k\-nearest neighbors* algorithm, k\-NN for Amazon OpenSearch Service lets you search for points in a vector space and find the "nearest neighbors" for those points by Euclidean distance or cosine similarity\. Use cases include recommendations \(for example, an "other songs you might like" feature in a music application\), image recognition, and fraud detection\.
 
-Use the following table to find the version of the k\-NN plugin running on your Amazon Elasticsearch Service domain\. Each k\-NN plugin version corresponds to an [Open Distro for Elasticsearch version](https://opendistro.github.io/for-elasticsearch-docs/version-history/)\.
+Use the following tables to find the version of the k\-NN plugin running on your Amazon OpenSearch Service domain\. Each k\-NN plugin version corresponds to an [OpenSearch](https://opensearch.org/docs/version-history/) or [Elasticsearch](https://opendistro.github.io/for-elasticsearch-docs/version-history/) version\.
 
+
+**OpenSearch**  
+
+| OpenSearch version | k\-NN plugin version | Notable features | 
+| --- | --- | --- | 
+| 1\.0 |  1\.0\.0\.0  | Renamed REST APIs while supporting backwards compatibility, renamed namespace from opendistro to opensearch | 
+
+
+**Elasticsearch**  
 
 | Elasticsearch version | k\-NN plugin version | Notable features | 
 | --- | --- | --- | 
@@ -12,9 +21,9 @@ Use the following table to find the version of the k\-NN plugin running on your 
 | 7\.7 |  1\.8\.0\.0  | Cosine similarity | 
 | 7\.8 |  1\.9\.0\.0  |  | 
 | 7\.9 |  1\.11\.0\.0  | Warmup API, custom scoring | 
-| 7\.10 | 1\.13\.0\.0 | Hamming distance, L1 Norm distance, Painless scripting | 
+|  7\.10  |  1\.13\.0\.0  |  Hamming distance, L1 Norm distance, Painless scripting  | 
 
-Full documentation for the k\-NN plugin is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
+Full documentation for the k\-NN plugin is available in the [OpenSearch documentation](https://opensearch.org/docs/search-plugins/knn/)\. For background information about the k\-nearest neighbors algorithm, see [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)\.
 
 ## Getting started with k\-NN<a name="knn-gs"></a>
 
@@ -111,6 +120,6 @@ GET my-index/_search
 
 ## k\-NN differences and tuning<a name="knn-settings"></a>
 
-Open Distro for Elasticsearch lets you modify all [k\-NN settings](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/settings/) using the `_cluster/settings` API\. On Amazon ES, you can change all settings except `knn.memory.circuit_breaker.enabled` and `knn.circuit_breaker.triggered`\. k\-NN statistics are included as [Amazon CloudWatch metrics](es-managedomains-cloudwatchmetrics.md)\.
+OpenSearch lets you modify all [k\-NN settings](https://opensearch.org/docs/search-plugins/knn/settings/) using the `_cluster/settings` API\. On OpenSearch Service, you can change all settings except `knn.memory.circuit_breaker.enabled` and `knn.circuit_breaker.triggered`\. k\-NN statistics are included as [Amazon CloudWatch metrics](managedomains-cloudwatchmetrics.md)\.
 
-In particular, check the `KNNGraphMemoryUsage` metric on each data node against the `knn.memory.circuit_breaker.limit` statistic and the available RAM for the instance type\. Amazon ES uses half of an instance's RAM for the Java heap \(up to a heap size of 32 GiB\)\. By default, k\-NN uses up to 50% of the remaining half, so an instance type with 32 GiB of RAM can accommodate 8 GiB of graphs \(32 \* 0\.5 \* 0\.5\)\. Performance can suffer if graph memory usage exceeds this value\.
+In particular, check the `KNNGraphMemoryUsage` metric on each data node against the `knn.memory.circuit_breaker.limit` statistic and the available RAM for the instance type\. OpenSearch Service uses half of an instance's RAM for the Java heap \(up to a heap size of 32 GiB\)\. By default, k\-NN uses up to 50% of the remaining half, so an instance type with 32 GiB of RAM can accommodate 8 GiB of graphs \(32 \* 0\.5 \* 0\.5\)\. Performance can suffer if graph memory usage exceeds this value\.

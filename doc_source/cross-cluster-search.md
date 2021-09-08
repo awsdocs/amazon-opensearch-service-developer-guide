@@ -1,13 +1,13 @@
-# Cross\-cluster search for Amazon Elasticsearch Service<a name="cross-cluster-search"></a>
+# Cross\-cluster search for Amazon OpenSearch Service<a name="cross-cluster-search"></a>
 
-Cross\-cluster search in Amazon Elasticsearch Service \(Amazon ES\) lets you perform queries and aggregations across multiple connected domains\. It often makes more sense to use multiple smaller domains instead of a single large domain, especially when you're running different types of workloads\.
+Cross\-cluster search in Amazon OpenSearch Service lets you perform queries and aggregations across multiple connected domains\. It often makes more sense to use multiple smaller domains instead of a single large domain, especially when you're running different types of workloads\.
 
 Workload\-specific domains enable you to perform the following tasks:
 + Optimize each domain by choosing instance types for specific workloads\.
 + Establish fault\-isolation boundaries across workloads\. This means that if one of your workloads fails, the fault is contained within that specific domain and doesn't impact your other workloads\. 
 + Scale more easily across domains\.
 
-Cross\-cluster search supports Kibana, so you can create visualizations and dashboards across all your domains\.
+Cross\-cluster search supports OpenSearch Dashboards, so you can create visualizations and dashboards across all your domains\.
 
 **Topics**
 + [Limitations](#cross-cluster-search-limitations)
@@ -16,13 +16,13 @@ Cross\-cluster search supports Kibana, so you can create visualizations and dash
 + [Setting up a connection](#cross-cluster-search-set-up-connection)
 + [Removing a connection](#cross-cluster-search-remove-connection)
 + [Setting up security and sample walkthrough](#cross-cluster-search-walkthrough)
-+ [Kibana](#cross-cluster-search-kibana)
++ [OpenSearch Dashboards](#cross-cluster-search-dashboards)
 
 ## Limitations<a name="cross-cluster-search-limitations"></a>
 
 Cross\-cluster search has several important limitations:
 + You can only implement cross\-cluster search on domains created on or after June 3rd, 2020\.
-+ You can't connect to self\-managed Elasticsearch clusters\.
++ You can't connect to self\-managed OpenSearch/Elasticsearch clusters\.
 + You can't connect to domains in different AWS Regions\.
 + A domain can have a maximum of 20 outgoing connections\. Similarly, a domain can have a maximum of 20 incoming connections\. In other words, one domain can connect to a maximum of 20 other domains\.
 + Domains must either share the same major version, or be on the final minor version and the next major version \(for example, 6\.8 and 7\.x are compatible\)\.
@@ -33,7 +33,7 @@ Cross\-cluster search has several important limitations:
 ## Cross\-cluster search prerequisites<a name="cross-cluster-search-pp"></a>
 
 Before you set up cross\-cluster search, make sure that your domains meet the following requirements:
-+ Elasticsearch version 6\.7 or later
++ OpenSearch or Elasticsearch 6\.7 or later
 + Fine\-grained access control enabled
 + Node\-to\-node encryption enabled
 
@@ -49,25 +49,25 @@ The “destination” domain is the domain that the source domain queries\.
 
 A cross\-cluster connection is unidirectional from the source to the destination domain\. This means that the destination domain can’t query the source domain\. However, you can set up another connection in the opposite direction\.
 
-![\[Cross-cluster search authorization flow\]](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/images/ccs.png)
+![\[Cross-cluster search authorization flow\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/ccs.png)
 
 The source domain creates an "outbound" connection to the destination domain\. The destination domain receives an "inbound" connection request from the source domain\. 
 
 **To set up a connection**
 
-1. On your domain dashboard, choose a domain, and choose the **Cross\-cluster search connections** tab\.
+1. On your domain dashboard, choose a domain and go to the **Connections** tab\.
 
-1. In the **Outbound cluster connections** section, choose **Connect**\.
+1. In the **Outbound connections** section, choose **Connect**\.
 
-1. On the **Connect clusters** page, in **Connection alias**, enter a name for your connection\.
+1. For **Connection Alias**, enter a name for your connection\.
 
-1. Choose between connecting a domain in your AWS account or in another account\.
-   + To connect to a domain in your AWS account, from the dropdown list, choose the domain that you want to connect to and choose **Submit**\.
-   + To connect to a domain in another AWS account, specify the ARN of the remote domain and choose **Submit**\.
+1. Choose between connecting a cluster in your AWS account or in another account\.
+   + To connect to a cluster in your AWS account, choose the domain from the dropdown menu and choose **Submit**\.
+   + To connect to a cluster in another AWS account, specify the ARN of the remote domain and choose **Submit**\.
 
-1. Cross\-cluster search first validates the connection request to make sure that the prerequisites are met to ensure compatibility\. If the domains are found to be incompatible, the connection request enters the “Validation failed” state\.
+1. Cross\-cluster search first validates the connection request to make sure the prerequisites are met\. If the domains are found to be incompatible, the connection request enters the `Validation failed` state\.
 
-1. After the connection request is validated successfully, it is sent to the destination domain, where it needs to be approved\. Until this approval happens, the connection remains in a “Pending acceptance” state\. When the connection request is accepted at the destination domain, the state changes to “Active” and the destination domain becomes available for queries\.
+1. After the connection request is validated successfully, it is sent to the destination domain, where it needs to be approved\. Until this approval happens, the connection remains in a `Pending acceptance` state\. When the connection request is accepted at the destination domain, the state changes to `Active` and the destination domain becomes available for queries\.
    + The domain page shows you the overall domain health and instance health details of your destination domain\. Only domain owners have the flexibility to create, view, remove, and monitor connections to or from their domains\.
 
 After the connection is established, any traffic that flows between the nodes of the connected domains is encrypted\. If you connect a VPC domain to a non\-VPC domain and the non\-VPC domain is a public endpoint that can receive traffic from the internet, the cross\-cluster traffic between the domains is still encrypted and secure\. 
@@ -76,15 +76,13 @@ After the connection is established, any traffic that flows between the nodes of
 
 Removing a connection stops any cross\-cluster operation on its indices\.
 
-1. On your domain dashboard, choose the **Cross\-cluster search connections** tab\.
+1. On your domain dashboard, choose the **Connections** tab\.
 
-1. Select the domain connections that you want to remove and choose **Remove**\.
+1. Select the domain connections that you want to remove and choose **Delete**, then confirm deletion\.
 
-1. To confirm deletion, choose **Remove** in the pop\-up box\.
+You can perform these steps on either the source or destination domain to remove the connection\. After the connection is removed, it's still visible with a `Deleted` status for a period of 15 days\. 
 
-You could perform these steps on either the source or destination domain to remove the connection\. After the connection is removed, it's still visible with a "Deleted" status for a period of 15 days\. 
-
-You can't delete a domain with active cross\-cluster connections\. To delete a domain, first remove all incoming and outgoing connections from that domain\. This is to make sure you take into account the cross\-cluster domain users before deleting the domain\.
+You can't delete a domain with active cross\-cluster connections\. To delete a domain, first remove all incoming and outgoing connections from that domain\. This ensures you take into account the cross\-cluster domain users before deleting the domain\.
 
 ## Setting up security and sample walkthrough<a name="cross-cluster-search-walkthrough"></a>
 
@@ -124,7 +122,7 @@ The domain resource policy evaluates the URI literally, so if you include remote
          "Effect": "Allow",
          "Principal": {
            "AWS": [
-             "arn:aws:iam::123456789012:user/test-es-user"
+             "arn:aws:iam::123456789012:user/test-user"
            ]
          },
          "Action": "es:ESHttpGet",
@@ -231,7 +229,7 @@ All cross\-cluster search requests between domains are encrypted in transit by d
      }
      ```
 
-     You can find the connection alias on the **Cross\-cluster search connections** tab on your domain dashboard\.
+     You can find the connection alias on the **Connections** tab on your domain dashboard\.
    + If you set up a connection between `domain-a -> domain-b` with connection alias `cluster_b` and `domain-a -> domain-c` with connection alias `cluster_c`, search `domain-a`, `domain-b`, and `domain-c` as follows:
 
      ```
@@ -306,6 +304,6 @@ All cross\-cluster search requests between domains are encrypted in transit by d
 
      All destination clusters that you search need to be available for your search request to run successfully\. Otherwise, the whole request fails—even if one of the domains is not available, no search results are returned\.
 
-## Kibana<a name="cross-cluster-search-kibana"></a>
+## OpenSearch Dashboards<a name="cross-cluster-search-dashboards"></a>
 
 You can visualize data from multiple connected domains in the same way as from a single domain, except that you must access the remote indices using `connection-alias:index`\. So, your index pattern must match `connection-alias:index`\.

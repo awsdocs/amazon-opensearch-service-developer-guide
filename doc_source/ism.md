@@ -1,15 +1,30 @@
-# Index State Management in Amazon Elasticsearch Service<a name="ism"></a>
+# Index State Management in Amazon OpenSearch Service<a name="ism"></a>
 
-Index State Management \(ISM\) lets you define custom management policies to automate routine tasks and apply them to indices and index patterns in Amazon Elasticsearch Service \(Amazon ES\)\. You no longer need to set up and manage external processes to run your index operations\.
+Index State Management \(ISM\) in Amazon OpenSearch Service lets you define custom management policies to automate routine tasks and apply them to indices and index patterns\. You no longer need to set up and manage external processes to run your index operations\.
 
 A policy contains a default state and a list of states for the index to transition between\. Within each state, you can define a list of actions to perform and conditions that trigger these transitions\. A typical use case is to periodically delete old indices after a certain period of time\. For example, you can define a policy that moves your index into a `read_only` state after 30 days and then ultimately deletes it after 90 days\.
 
 After you attach a policy to an index, ISM creates a job that runs every 30 to 48 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 30 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indices at the same time\.
 
-ISM requires Elasticsearch 6\.8 or later\. Full documentation for the feature is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/)\.
+ISM requires OpenSearch or Elasticsearch 6\.8 or later\. Full documentation is available in the [OpenSearch documentation](https://opensearch.org/docs/im-plugin/ism/index/)\.
 
 **Important**  
-The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indices\. You can continue to automatically manage newly created indices with the [ISM template field](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
+The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indices\. You can continue to automatically manage newly created indices with the [ISM template field](https://opensearch.org/docs/im-plugin/ism/policies/#sample-policy-with-ism-template)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
+
+## Create an ISM policy<a name="ism-start"></a>
+
+To get started with ISM, select **Index Management** from the OpenSearch Dashboards main menu and choose **Create policy**\. 
+
+After you create a policy, the next step is to attach it to an index or indices:
+
+```
+POST _plugins/_ism/add/my-index
+{
+  "policy_id": "my-policy-id"
+}
+```
+
+Alternatively, select the index in OpenSearch Dashboards and choose **Apply policy**\.
 
 ## Sample policies<a name="ism-example"></a>
 
@@ -141,7 +156,7 @@ This sample policy reduces replica count to zero after seven days to conserve di
 
 ### Take an index snapshot<a name="ism-example-snapshot"></a>
 
-This sample policy uses the `[snapshot](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#snapshot)` operation to take a snapshot of an index as soon as it contains at least one document\. `repository` is the name of the manual snapshot repository you registered in Amazon S3\. `snapshot` is the name of the snapshot\. For snapshot prerequisites and steps to register a repository, see [Creating index snapshots in Amazon Elasticsearch Service](es-managedomains-snapshots.md)\.
+This sample policy uses the `[snapshot](https://opensearch.org/docs/im-plugin/ism/policies/#snapshot)` operation to take a snapshot of an index as soon as it contains at least one document\. `repository` is the name of the manual snapshot repository you registered in Amazon S3\. `snapshot` is the name of the snapshot\. For snapshot prerequisites and steps to register a repository, see [Creating index snapshots in Amazon OpenSearch Service](managedomains-snapshots.md)\.
 
 ```
 {
@@ -174,25 +189,12 @@ This sample policy uses the `[snapshot](https://opendistro.github.io/for-elastic
 }
 ```
 
-## Attach a policy to an index<a name="ism-attach"></a>
-
-After you create a policy, the next step is to attach it to an index or indices:
-
-```
-POST _opendistro/_ism/add/my-index
-{
-  "policy_id": "my-policy-id"
-}
-```
-
-Alternatively, select the index in Kibana and choose **Apply policy**\.
-
 ## ISM templates<a name="ism-template"></a>
 
 You can set up an `ism_template` field in a policy so when you create an index that matches the template pattern, the policy is automatically attached to that index\. In this example, any index you create with a name that begins with "log" is automatically matched to the ISM policy `my-policy-id`:
 
 ```
-PUT _opendistro/_ism/policies/my-policy-id
+PUT _plugins/_ism/policies/my-policy-id
 {
   "policy": {
     "description": "Example policy.",
@@ -206,24 +208,37 @@ PUT _opendistro/_ism/policies/my-policy-id
 }
 ```
 
-For a more detailed example, see [Sample policy with ISM template](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#sample-policy-with-ism-template)\.
+For a more detailed example, see [Sample policy with ISM template](https://opensearch.org/docs/im-plugin/ism/policies/#sample-policy-with-ism-template)\.
 
 ## Differences<a name="ism-diff"></a>
 
-Compared to Open Distro for Elasticsearch, ISM for Amazon Elasticsearch Service has several differences\. 
+Compared to OpenSearch and Elasticsearch, ISM for Amazon OpenSearch Service has several differences\. 
 
 ### ISM operations<a name="alerting-diff-op"></a>
-+ Amazon ES supports three unique ISM operations, `warm_migration`, `cold_migration`, and `cold_delete`\.
++ OpenSearch Service supports three unique ISM operations, `warm_migration`, `cold_migration`, and `cold_delete`\.
 
-  If your domain has [UltraWarm](ultrawarm.md) enabled, the `warm_migration` action transitions the index to warm storage\. Even if the `warm_migration` action doesn’t complete within the [set timeout period](https://opendistro.github.io/for-elasticsearch-docs/docs/ism/policies/#actions), the migration to warm indices still continues\.
+  If your domain has [UltraWarm](ultrawarm.md) enabled, the `warm_migration` action transitions the index to warm storage\. Even if the `warm_migration` action doesn’t complete within the [set timeout period](https://opensearch.org/docs/im-plugin/ism/policies/#actions), the migration to warm indices still continues\.
 
   Setting an `error_notifcation` for the `warm_migration` action might notify you that the `warm_migration` action failed if it didn’t complete within the timeout period\. This failed notification is only for your own reference\. The actual warm migration operation has no inherent timeout and continues to run until it eventually succeeds or fails\. 
-+ If your domain runs Elasticsearch 7\.4 or later, Amazon ES supports the ISM `open` and `close` operations\.
-+ If your domain runs Elasticsearch 7\.7 or later, Amazon ES supports the ISM `snapshot` operation\.
++ If your domain runs OpenSearch or Elasticsearch 7\.4 or later, OpenSearch Service supports the ISM `open` and `close` operations\.
++ If your domain runs OpenSearch or Elasticsearch 7\.7 or later, OpenSearch Service supports the ISM `snapshot` operation\.
+
+### Cold storage ISM operations<a name="ism-cold-storage"></a>
+
+For cold indices, you must specify a `?type=_cold` parameter when you use the following ISM APIs:
++ add policy
++ remove policy
++ change policy
++ retry failed managed index
++ explain index
+
+These APIs for cold indices have the following additional differences:
++ Wildcard operators are not supported except when you use it at the end\. For example, `_plugins/_ism/<add, remove, change_policy, retry, explain>/logstash-*` is supported but `_plugins/_ism/<add, remove, change_policy, retry, explain>/iad-*-prod` isn’t supported\.
++ Multiple index names and patterns are not supported\. For example, `_plugins/_ism/<add, remove, change_policy, retry, explain>/app-logs` is supported but `_plugins/_ism/<add, remove, change_policy, retry, explain>/app-logs,sample-data` isn’t supported\.
 
 ### ISM settings<a name="ism-diff-settings"></a>
 
-Open Distro for Elasticsearch lets you change all available ISM settings using the `_cluster/settings` API\. On Amazon ES, you can only change the following settings:
+OpenSearch and Elasticsearch let you change all available ISM settings using the `_cluster/settings` API\. On Amazon OpenSearch Service, you can only change the following settings:
 + **Cluster\-level settings:**
   + `enabled`
   + `history.enabled`

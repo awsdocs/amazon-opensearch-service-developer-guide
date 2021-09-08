@@ -1,15 +1,15 @@
-# Asynchronous search for Amazon Elasticsearch Service<a name="asynchronous-search"></a>
+# Asynchronous search for Amazon OpenSearch Service<a name="asynchronous-search"></a>
 
-With asynchronous search for Amazon Elasticsearch Service \(Amazon ES\), you can submit a search query that gets executed in the background, monitor the progress of the request, and retrieve results at a later stage\. You can retrieve partial results as they become available before the search has completed\. After the search finishes, save the results for later retrieval and analysis\.
+With asynchronous search for Amazon OpenSearch Service you can submit a search query that gets executed in the background, monitor the progress of the request, and retrieve results at a later stage\. You can retrieve partial results as they become available before the search has completed\. After the search finishes, save the results for later retrieval and analysis\.
 
-Asynchronous search requires Elasticsearch 7\.10 or later\. Full documentation for asynchronous search, including detailed steps and API descriptions, is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/async/)\.
+Asynchronous search requires OpenSearch 1\.0 or later, or Elasticsearch 7\.10 or later\. Full documentation for asynchronous search, including detailed steps and API descriptions, is available in the [OpenSearch documentation](https://opensearch.org/docs/search-plugins/async/index/)\.
 
 ## Sample search call<a name="asynchronous-search-sample"></a>
 
-To perform an asynchronous search, send HTTP requests to `_opendistro/_asynchronous_search` using the following format:
+To perform an asynchronous search, send HTTP requests to `_plugins/_asynchronous_search` using the following format:
 
 ```
-POST elasticsearch_domain/_opendistro/_asynchronous_search
+POST opensearch-domain/_plugins/_asynchronous_search
 ```
 
 You can specify the following asynchronous search options:
@@ -24,7 +24,7 @@ You can specify the following asynchronous search options:
 **Sample request**
 
 ```
-POST _opendistro/_asynchronous_search/?pretty&size=10&wait_for_completion_timeout=1ms&keep_on_completion=true&request_cache=false
+POST _plugins/_asynchronous_search/?pretty&size=10&wait_for_completion_timeout=1ms&keep_on_completion=true&request_cache=false
 {
   "aggs": {
     "city": {
@@ -42,36 +42,36 @@ All request parameters that apply to a standard `_search` query are supported\.
 
 ## Asynchronous search permissions<a name="asynchronous-search-permissions"></a>
 
-The asynchronous search feature supports [Fine\-grained access control in Amazon Elasticsearch Service](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Asynchronous search security](https://opendistro.github.io/for-elasticsearch-docs/docs/async/security/)\.
+Asynchronous search supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Asynchronous search security](https://opensearch.org/docs/search-plugins/async/security/)\.
 
 For domains with fine\-grained access control enabled, you need the following minimum permissions for a role: 
 
 ```
-# Allows users to use all asynchronous-search functionality
+# Allows users to use all asynchronous search functionality
 asynchronous_search_full_access:
   reserved: true
   cluster_permissions:
-    - 'cluster:admin/opendistro/asynchronous-search/*'
+    - 'cluster:admin/opensearch/asynchronous-search/*'
   index_permissions:
     - index_patterns:
         - '*'
       allowed_actions:
         - 'indices:data/read/search*'
 
-# Allows users to read stored asynchronous-search results
+# Allows users to read stored asynchronous search results
 asynchronous_search_read_access:
   reserved: true
   cluster_permissions:
-    - 'cluster:admin/opendistro/asynchronous-search/get'
+    - 'cluster:admin/opensearch/asynchronous-search/get'
 ```
 
 For domains with fine\-grained access control disabled, use your IAM access and secret key to sign all requests\. You can access the results with the asynchronous search ID\. 
 
 ## Asynchronous search settings<a name="asynchronous-search-diff"></a>
 
-Open Distro for Elasticsearch lets you change all available [asynchronous search settings](https://opendistro.github.io/for-elasticsearch-docs/docs/async/settings/) using the `_cluster/settings` API\. In Amazon ES, you can only change the following settings: 
-+ `opendistro.asynchronous_search.node_concurrent_running_searches`
-+ `opendistro.asynchronous_search.persist_search_failures`
+OpenSearch lets you change all available [asynchronous search settings](https://opensearch.org/docs/search-plugins/async/settings/) using the `_cluster/settings` API\. In OpenSearch Service, you can only change the following settings: 
++ `opensearch.asynchronous_search.node_concurrent_running_searches`
++ `opensearch.asynchronous_search.persist_search_failures`
 
 ## Cross\-cluster search<a name="asynchronous-search-ccs"></a>
 
@@ -82,7 +82,7 @@ You can perform an asynchronous search across clusters with the following minor 
 If you set up a connection between `domain-a -> domain-b` with connection alias `cluster_b` and `domain-a -> domain-c` with connection alias `cluster_c`, asynchronously search `domain-a`, `domain-b`, and `domain-c` as follows:
 
 ```
-POST https://src-domain.us-east-1.es.amazonaws.com/local_index,cluster_b:b_index,cluster_c:c_index/_opendistro/_asynchronous_search/?pretty&size=10&wait_for_completion_timeout=500ms&keep_on_completion=true&request_cache=false 
+POST https://src-domain.us-east-1.es.amazonaws.com/local_index,cluster_b:b_index,cluster_c:c_index/_plugins/_asynchronous_search/?pretty&size=10&wait_for_completion_timeout=500ms&keep_on_completion=true&request_cache=false 
 {
   "size": 0,
   "_source": {
@@ -145,11 +145,11 @@ POST https://src-domain.us-east-1.es.amazonaws.com/local_index,cluster_b:b_index
 }
 ```
 
-For more information, see [Cross\-cluster search for Amazon Elasticsearch Service](cross-cluster-search.md)\.
+For more information, see [Cross\-cluster search for Amazon OpenSearch Service](cross-cluster-search.md)\.
 
 ## UltraWarm<a name="asynchronous-search-ultrawarm"></a>
 
-Asynchronous searches with UltraWarm indices continue to work\. For more information, see [UltraWarm storage for Amazon Elasticsearch Service](ultrawarm.md)\.
+Asynchronous searches with UltraWarm indices continue to work\. For more information, see [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)\.
 
 **Note**  
-You can monitor asynchronous search statistics in CloudWatch\. For a full list of metrics, see [Asynchronous search metrics](es-managedomains-cloudwatchmetrics.md#es-managedomains-cloudwatchmetrics-asynchronous-search)\.
+You can monitor asynchronous search statistics in CloudWatch\. For a full list of metrics, see [Asynchronous search metrics](managedomains-cloudwatchmetrics.md#managedomains-cloudwatchmetrics-asynchronous-search)\.

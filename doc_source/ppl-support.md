@@ -1,21 +1,21 @@
-# Querying Amazon Elasticsearch Service data using Piped Processing Language<a name="ppl-support"></a>
+# Querying Amazon OpenSearch Service data using Piped Processing Language<a name="ppl-support"></a>
 
-Piped Processing Language \(PPL\) is a query language that lets you use pipe \(`|`\) syntax to query data stored in Amazon Elasticsearch Service \(Amazon ES\)\.
+Piped Processing Language \(PPL\) is a query language that lets you use pipe \(`|`\) syntax to query data stored in Amazon OpenSearch Service\.
 
 The PPL syntax consists of commands delimited by a pipe character \(`|`\) where data flows from left to right through each pipeline\. For example, the PPL syntax to find the number of hosts with HTTP 403 or 503 errors, aggregate them per host, and sort them in the order of impact is as follows:
 
 ```
-source = kibana_sample_data_logs | 
+source = dashboards_sample_data_logs | 
 where response='403' or response='503' | 
 stats count(request) as request_count by host, response | 
 sort -request_count
 ```
 
-PPL requires Elasticsearch 7\.9 or later\. Full documentation for the feature, including detailed steps and command descriptions, is available in the [Open Distro for Elasticsearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/ppl/)\.
+PPL requires either OpenSearch or Elasticsearch 7\.9 or later\. Detailed steps and command descriptions are available in the [OpenSearch documentation](https://opensearch.org/docs/search-plugins/ppl/)\.
 
 ## <a name="ppl-support-gs"></a>
 
-To get started, choose **Query Workbench** in Kibana and select **PPL**\. Use the `bulk` operation to index some sample data: 
+To get started, choose **Query Workbench** in OpenSearch Dashboards and select **PPL**\. Use the `bulk` operation to index some sample data: 
 
 ```
 PUT accounts/_bulk?refresh
@@ -47,6 +47,6 @@ fields firstname, lastname
 | 2 | Nanette | Bates | 
 | 3 | Dale | Adams | 
 
-You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see [Commands](https://opendistro.github.io/for-elasticsearch-docs/docs/ppl/commands/)\.
+You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see [Commands](https://opensearch.org/docs/search-plugins/ppl/commands/)\.
 
-The PPL plugin supports all SQL functions, including mathematical, trigonometric, date\-time, string, aggregate, and advanced operators and expressions\. To learn more, seee [SQL Functions](https://opendistro.github.io/for-elasticsearch-docs/docs/sql/functions/)\.
+The PPL plugin supports all SQL functions, including mathematical, trigonometric, date\-time, string, aggregate, and advanced operators and expressions\. To learn more, see [Functions](https://opensearch.org/docs/search-plugins/sql/functions/)\.
