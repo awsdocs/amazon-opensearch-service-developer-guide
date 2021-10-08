@@ -64,7 +64,7 @@ For smaller clusters, a one\-time approach is to take a [shared file system snap
 Although the console is the easiest way to create a domain, in this case, you already have the terminal open and the AWS CLI installed\. Modify the following command to create a domain that fits your needs:
 
 ```
-aws opensearchservice create-domain \
+aws opensearch create-domain \
   --domain-name migration-domain \
   --engine-version OpenSearch_1.0 \
   --cluster-config InstanceType=c5.large.search,InstanceCount=2 \

@@ -1,6 +1,6 @@
 # Amazon OpenSearch Service \- Summary of changes<a name="rename"></a>
 
-On September 9, 2021, Amazon Elasticsearch Service was renamed to Amazon OpenSearch Service\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the service rename, and what actions you need to take to ensure that your domains continue to function properly\. 
+On September 8, 2021, Amazon Elasticsearch Service was renamed to Amazon OpenSearch Service\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the service rename, and what actions you need to take to ensure that your domains continue to function properly\. 
 
 Some of these changes only apply when you upgrade your domains from Elasticsearch to OpenSearch\. In other cases, such as in the Billing and Cost Management console, the experience changes immediately\.
 
@@ -23,6 +23,8 @@ Note that this list is not exhaustive\. While other parts of the product also ch
 The new version of the OpenSearch Service configuration API \(2021\-01\-01\) works with OpenSearch as well as legacy Elasticsearch OSS\. 21 API operations were replaced with more concise and engine\-agnostic names \(for example, `CreateElasticsearchDomain` changed to `CreateDomain`\), but OpenSearch Service continues to support both API versions\. For a full list of actions that are no longer supported and their replacements, see the [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 
 We recommend that you use the new API operations to create and manage domains going forward\. Note that when you use the new API operations to create a domain, you need to specify the `EngineVersion` parameter in the format `Elasticsearch_X.Y` or `OpenSearch_X.Y`, rather than just the version number\. If you don't specify a version, it defaults to the latest version of OpenSearch\.
+
+Upgrade your AWS CLI to version 1\.20\.40 or later in order to use `aws opensearch ...` to create and manage your domains\. For the new CLI format, see the [OpenSearch CLI reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html)\.
 
 ## Renamed instance types<a name="rename-instances"></a>
 
@@ -72,16 +74,18 @@ OpenSearch Service introduces the following new resource types:
 |  `AWS::OpenSearch::Domain`  | Represents OpenSearch/Elasticsearch software running on a domain\. This resource applies to services like [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/) and [AWS Config](http://aws.amazon.com/config/), which reference the software running on the domain rather than OpenSearch Service as a whole\. These services now contain separate resource types for domains running Elasticsearch \(AWS::Elasticsearch::Domain\) versus domains running OpenSearch \(AWS::OpenSearch::Domain\)\.  | 
 
 Some AWS services haven't yet added support for the new resource types:
-+ In [AWS Config](http://aws.amazon.com/config/), you'll continue to see your data under the existing `AWS:Elasticsearch::Domain` resource type for several weeks, even if you upgrade one or more domains to OpenSearch\.
++ In [AWS Config](http://aws.amazon.com/config/), you'll continue to see your data under the existing `AWS::Elasticsearch::Domain` resource type for several weeks, even if you upgrade one or more domains to OpenSearch\.
 + In [AWS Security Hub](https://aws.amazon.com/security-hub/), the existing controls for domains running Elasticsearch are not yet supported for OpenSearch domains\. If you upgrade a domain to an OpenSearch version or create new OpenSearch domains, there will be a time period in which your AWS Config rules won’t check for compliance\. For more information, see [How Security Hub uses AWS Config rules to run security checks](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards-awsconfigrules.html)\.
 
 ## Kibana renamed to OpenSearch Dashboards<a name="rename-dashboards"></a>
 
-[OpenSearch Dashboards](dashboards.md), the successor to Kibana, is an open\-source visualization tool designed to work with OpenSearch\. After you upgrade a domain from Elasticsearch to OpenSearch, the `_plugin/kibana` endpoint changes to `/_dashboards`\. OpenSearch Service will redirect all requests to the new endpoint, but if you use the Kibana endpoint in any of your IAM policies, update those policies to include the new `/_dashboards` endpoint as well\.
+[OpenSearch Dashboards](dashboards.md), the successor to Kibana, is an open\-source visualization tool designed to work with OpenSearch\. After you upgrade a domain from Elasticsearch to OpenSearch, the `/_plugin/kibana` endpoint changes to `/_dashboards`\. OpenSearch Service will redirect all requests to the new endpoint, but if you use the Kibana endpoint in any of your IAM policies, update those policies to include the new `/_dashboards` endpoint as well\.
+
+If you're using [SAML authentication for OpenSearch Dashboards](saml.md), before you upgrade your domain to OpenSearch, you need to change all Kibana URLs configured in your identity provider \(IdP\) from `/_plugin/kibana` to `/_dashboards`\. The most common URLs are assertion consumer service \(ACS\) URLs and recipient URLs\.
 
 ## Renamed CloudWatch metrics<a name="rename-metrics"></a>
 
-All CloudWatch metrics containing the term "Kibana" changed to "OpenSearchDashboards" for domains running OpenSearch\. When you upgrade a domain to OpenSearch, the metrics change automatically and your current CloudWatch alarms will break\. Before upgrading your cluster from an Elasticsearch version to an OpenSearch version, make sure to update your CloudWatch alarms to use the new metrics\. 
+Several CloudWatch metrics change for domains running OpenSearch\. When you upgrade a domain to OpenSearch, the metrics change automatically and your current CloudWatch alarms will break\. Before upgrading your cluster from an Elasticsearch version to an OpenSearch version, make sure to update your CloudWatch alarms to use the new metrics\. 
 
 The following metrics changed:
 
@@ -96,8 +100,12 @@ The following metrics changed:
 |  `KibanaOS1MinuteLoad`  |  `OpenSearchDashboardsOS1MinuteLoad`  | 
 |  `KibanaRequestTotal`  |  `OpenSearchDashboardsRequestTotal`  | 
 |  `KibanaResponseTimesMaxInMillis`  |  `OpenSearchDashboardsResponseTimesMaxInMillis`  | 
+|  `ESReportingFailedRequestSysErrCount`  |  `KibanaReportingFailedRequestSysErrCount`  | 
+|  `ESReportingRequestCount`  |  `KibanaReportingRequestCount`  | 
+|  `ESReportingFailedRequestUserErrCount`  |  `KibanaReportingFailedRequestUserErrCount`  | 
+|  `ESReportingSuccessCount`  |  `KibanaReportingSuccessCount`  | 
 
-For a full list of metrics that OpenSearch Service sends to Amazon CloudWatch, see [Monitoring OpenSearch Service cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)\.
+For a full list of metrics that OpenSearch Service sends to Amazon CloudWatch, see [Monitoring OpenSearch cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)\.
 
 ## Billing and Cost Management console changes<a name="rename-billing"></a>
 
@@ -122,7 +130,7 @@ The format of events that OpenSearch Service sends to Amazon EventBridge and Ama
 ## What's staying the same?<a name="rename-nochange"></a>
 
 The following features and functionality, among others not listed, will remain the same:
-+ Service principal \(es\.amazon\.com\)
++ Service principal \(`es.amazon.com`\)
 + Vendor code
 + Domain ARNs
 + Domain endpoints
@@ -153,10 +161,10 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain
 To enable or disable compatibility mode on *existing* OpenSearch domains, you need to use the OpenSearch [\_cluster/settings](https://opensearch.org/docs/opensearch/rest-api/cluster-settings/) API operation:
 
 ```
-PUT _cluster/settings
+PUT /_cluster/settings
 {
-  "compatibility": {
-    "override_main_response_version": "true" 
+  "persistent" : {
+    "compatibility.override_main_response_version" : true
   }
 }
 ```

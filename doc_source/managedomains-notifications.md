@@ -8,6 +8,24 @@ You can view notifications in the **Notifications** panel of the OpenSearch Serv
 
 Notifications are enabled automatically when you create a domain\. Go to the **Notifications** panel of the OpenSearch Service console to monitor and acknowledge notifications\. Each notification includes information such as the time it was posted, the domain it relates to, a severity and status level, and a brief explanation\. You can view historical notifications for up to 90 days in the console\.
 
+After accessing the **Notifications** panel or acknowledging a notification, you might receive an error message about not having permissions to perform `es:ListNotifications` or `es:UpdateNotificationStatus`\. To resolve this problem, give your user or role the following permissions in IAM:
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": [
+      "es:UpdateNotificationStatus",
+      "es:ListNotifications"
+    ],
+    "Resource": "arn:aws:es:*:123456789012:domain/*"
+  }]
+}
+```
+
+The IAM console throws an error \("IAM does not recognize one or more actions\."\) that you can safely ignore\. You can also restrict the `es:UpdateNotificationStatus` action to certain domains\. To learn more, see [Policy element reference](ac.md#ac-reference)\.
+
 ## Notification types<a name="managedomains-notifications-types"></a>
 
 At this time, all notifications in OpenSearch Service are *informational*, which relate to any action you've already taken or the operations of your domain\. In the future, OpenSearch Service might also include *actionable* notifications, which will require you to take specific actions such as applying a mandatory security patch\. 

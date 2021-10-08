@@ -32,7 +32,7 @@ Domains only support one Dashboards authentication method at a time\. If you hav
 
 **To enable SAML authentication for Dashboards \(console\)**
 
-1. Choose the domain, **Actions** and **Modify authentication**\.
+1. Choose the domain, **Actions** and **Edit security configuration**\.
 
 1. Select **Enable SAML authentication**\.
 
@@ -113,7 +113,7 @@ These URLs change if you later enable a [custom endpoint](customendpoint.md) for
    </saml2:Assertion>
    ```
 
-1. Expand **Optional SAML settings**\.
+1. \(Optional\) Expand **Additional settings**\.
 
 1. Leave the **Subject key** field empty to use the `NameID` element of the SAML assertion for the username\. If your assertion doesn't use this standard element and instead includes the username as a custom attribute, specify that attribute here\.
 
@@ -121,7 +121,7 @@ These URLs change if you later enable a [custom endpoint](customendpoint.md) for
 
 1. By default, OpenSearch Dashboards logs users out after 60 minutes\. You can increase this value up to 1,440 \(24 hours\) by specifying the **Session time to live**\.
 
-1. Choose **Submit**\. The domain enters a processing state for approximately one minute, during which time Dashboards is unavailable\.
+1. Choose **Save changes**\. The domain enters a processing state for approximately one minute, during which time Dashboards is unavailable\.
 
 1. After the domain finishes processing, open Dashboards\.
    + If you chose the SP\-initiated URL, navigate to `domain-endpoint/_dashboards/`\.
@@ -160,7 +160,7 @@ These URLs change if you later enable a [custom endpoint](customendpoint.md) for
 The following AWS CLI command enables SAML authentication for OpenSearch Dashboards on an existing domain:
 
 ```
-aws opensearchservice update-domain-config \
+aws opensearch update-domain-config \
   --domain-name my-domain \
   --advanced-security-options '{"SAMLOptions":{"Enabled":true,"MasterUserName":"my-idp-user","MasterBackendRole":"my-idp-group-or-role","Idp":{"EntityId":"entity-id","MetadataContent":"metadata-content-with-quotes-escaped"},"RolesKey":"optional-roles-key","SessionTimeoutMinutes":180,"SubjectKey":"optional-subject-key"}}'
 ```
@@ -212,11 +212,11 @@ You must escape all quotes and newline characters in the metadata XML\. For exam
 
 **To disable SAML authentication for OpenSearch Dashboards \(console\)**
 
-1. Choose the domain, **Actions**, and **Modify authentication**\.
+1. Choose the domain, **Actions**, and **Edit security configuration**\.
 
 1. Uncheck **Enable SAML authentication**\.
 
-1. Choose **Submit**\.
+1. Choose **Save changes**\.
 
 1. After the domain finishes processing, verify the fine\-grained access control role mapping with the following request:
 

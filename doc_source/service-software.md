@@ -30,9 +30,9 @@ Your domain is ineligible for a service software update if it's in any of the fo
 
 1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
 
-1. In the navigation pane, under **My domains**, choose the domain you want to update\.
+1. In the navigation pane, under **Domains**, choose the domain you want to update\.
 
-1. For **Service software release** choose **Update**\.
+1. Choose **Actions**, **Update** and confirm the update\.
 
 **To request a service software update \(AWS CLI and AWS SDKs\)**
 
@@ -40,7 +40,7 @@ You can use the following commands to see if an update is available, check upgra
 + `describe-domain` \(`DescribeDomain`\)
 + `start-service-software-update` \(`StartServiceSoftwareUpdate`\)
 
-For more information, see the [AWS CLI command reference](https://docs.aws.amazon.com/cli/latest/reference/opensearchservice/index.html) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+For more information, see the [AWS CLI command reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 
 **Tip**  
 After requesting an update, you might have a narrow window of time in which you can cancel it\. The duration of this `PENDING_UPDATE` state can vary greatly and depends on your AWS region and the number of concurrent updates OpenSearch Service is performing\. To cancel, use the console or `cancel-service-software-update` \(`CancelServiceSoftwareUpdate`\) command\.

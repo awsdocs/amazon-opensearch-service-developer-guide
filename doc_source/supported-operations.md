@@ -148,7 +148,7 @@ For OpenSearch 1\.0, OpenSearch Service supports the following operations\.
 
 ## Elasticsearch version 7\.10<a name="version_7_10"></a>
 
-For OpenSearch 7\.10, OpenSearch Service supports the following operations\.
+For Elasticsearch 7\.10, OpenSearch Service supports the following operations\.
 
 
 |  |  |  | 

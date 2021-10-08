@@ -1,4 +1,4 @@
-# Amazon OpenSearch Service Developer Guide
+# Amazon OpenSearch Service (successor to Amazon Elasticsearch Service) Developer Guide
 
 -----
 *****Copyright &copy; Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
@@ -22,7 +22,7 @@ Amazon's trademarks and trade dress may not be used in
    + [Step 3: Search documents in OpenSearch Service](gsgsearch.md)
    + [Step 4: Delete an OpenSearch Service domain](gsgdeleting.md)
 + [Creating and managing Amazon OpenSearch Service domains](createupdatedomains.md)
-   + [Making configuration changes in OpenSearch Service](managedomains-configuration-changes.md)
+   + [Making configuration changes in Amazon OpenSearch Service](managedomains-configuration-changes.md)
    + [Service software updates in Amazon OpenSearch Service](service-software.md)
    + [Notifications in Amazon OpenSearch Service](managedomains-notifications.md)
    + [Configuring a multi-AZ domain in Amazon OpenSearch Service](managedomains-multiaz.md)
@@ -33,7 +33,7 @@ Amazon's trademarks and trade dress may not be used in
    + [Auto-Tune for Amazon OpenSearch Service](auto-tune.md)
    + [Tagging Amazon OpenSearch Service domains](managedomains-awsresourcetagging.md)
 + [Monitoring Amazon OpenSearch Service](monitoring.md)
-   + [Monitoring OpenSearch Service cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)
+   + [Monitoring OpenSearch cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)
    + [Monitoring OpenSearch logs with Amazon CloudWatch Logs](createdomain-configure-slow-logs.md)
    + [Monitoring audit logs in Amazon OpenSearch Service](audit-logs.md)
    + [Monitoring OpenSearch Service events with Amazon EventBridge](monitoring-events.md)
@@ -74,6 +74,7 @@ Amazon's trademarks and trade dress may not be used in
    + [Index State Management in Amazon OpenSearch Service](ism.md)
    + [Summarizing indices in Amazon OpenSearch Service with index rollups](rollup.md)
    + [Transforming indices in Amazon OpenSearch Service](transforms.md)
+   + [Cross-cluster replication for Amazon OpenSearch Service](replication.md)
    + [Using Curator to rotate data in Amazon OpenSearch Service](curator.md)
    + [Migrating Amazon OpenSearch Service indices using remote reindex](remote-reindex.md)
    + [Managing time-series data in Amazon OpenSearch Service with data streams](data-streams.md)

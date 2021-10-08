@@ -15,7 +15,7 @@ Amazon EventBridge delivers a near real\-time stream of system events that descr
 AWS CloudTrail captures configuration API calls made to OpenSearch Service as events\. It can deliver these events to an Amazon S3 bucket that you specify\. Using this information, you can identify which users and accounts made requests, the source IP address from which the requests were made, and when the requests occurred\. For more information, see the [AWS CloudTrail User Guide](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/)\.
 
 **Topics**
-+ [Monitoring OpenSearch Service cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)
++ [Monitoring OpenSearch cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)
 + [Monitoring OpenSearch logs with Amazon CloudWatch Logs](createdomain-configure-slow-logs.md)
 + [Monitoring audit logs in Amazon OpenSearch Service](audit-logs.md)
 + [Monitoring OpenSearch Service events with Amazon EventBridge](monitoring-events.md)

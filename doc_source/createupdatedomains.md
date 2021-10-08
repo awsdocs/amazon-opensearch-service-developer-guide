@@ -18,7 +18,15 @@ Use the following procedure to create an OpenSearch Service domain by using the 
 
 1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
 
-1. Choose **Create a new domain**\.
+1. Choose **Create domain**\.
+
+1. For **Domain name**, enter a domain name\. The name must meet the following criteria:
+   + Unique to your account and Region
+   + Starts with a lowercase letter
+   + Contains between 3 and 28 characters
+   + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
+
+1. If you want to use a custom endpoint rather than the standard one of `https://search-mydomain-1a2a3a4a5a6a7a8a9a0a9a8a7a.us-east-1.es.amazonaws.com` , choose **Enable custom endpoint** and provide a name and certificate\. For more information, see [Creating a custom endpoint for Amazon OpenSearch Service](customendpoint.md)\.
 
 1. For **Deployment type**, choose the option that best matches the purpose of your domain:
    + **Production** domains use Multi\-AZ and dedicated master nodes for higher availability\.
@@ -30,14 +38,6 @@ Different deployment types present different options on subsequent pages\. These
 1. For **Version**, choose the version of OpenSearch or legacy Elasticsearch OSS to use\. We recommend that you choose the latest version of OpenSearch\. For more information, see [Supported versions of OpenSearch and Elasticsearch](what-is.md#choosing-version)\.
 
    \(Optional\) If you chose an OpenSearch version for your domain, select **Enable compatibility mode** to make OpenSearch report its version as 7\.10, which allows certain Elasticsearch OSS clients and plugins that check the version before connecting to continue working with the service\.
-
-1. For **Domain name**, enter a domain name\. The name must meet the following criteria:
-   + Unique to your account and Region
-   + Starts with a lowercase letter
-   + Contains between 3 and 28 characters
-   + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
-
-1. If you want to use a custom endpoint rather than the standard one of `https://search-mydomain-1a2a3a4a5a6a7a8a9a0a9a8a7a.us-east-1.es.amazonaws.com` , choose **Enable custom endpoint** and provide a name and certificate\. For more information, see [Creating a custom endpoint for Amazon OpenSearch Service](customendpoint.md)\.
 
 1. For **Auto\-Tune**, choose whether to allow OpenSearch Service to suggest memory\-related configuration changes to your domain to improve speed and stability\. For more information, see [Auto\-Tune for Amazon OpenSearch Service](auto-tune.md)\.
 
@@ -53,7 +53,7 @@ Not all Availability Zones support all instance types\. If you choose **3\-AZ**,
 
    For maximum values, see [Cluster and instance limits](limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md) and [Configuring a multi\-AZ domain in Amazon OpenSearch Service](managedomains-multiaz.md)\.
 
-1. For **Data nodes storage type**, choose either **Instance** \(default\) or **EBS**\. For guidance on creating especially large domains, see [Petabyte scale for Amazon OpenSearch Service](petabyte-scale.md)\. If you choose **EBS**, the following options appear:
+1. For **Storage type**, choose either **EBS** \(default\) or **Instance**\. For guidance on creating especially large domains, see [Petabyte scale for Amazon OpenSearch Service](petabyte-scale.md)\. If you choose **EBS**, the following options appear:
 
    1. For **EBS volume type**, choose a volume type\.
 
@@ -73,9 +73,7 @@ You can choose different instance types for your dedicated master nodes and data
 
 1. \(Optional\) For domains running OpenSearch or Elasticsearch 5\.3 and later, the **Snapshot configuration** is irrelevant\. For more information about automated snapshots, see [Creating index snapshots in Amazon OpenSearch Service](managedomains-snapshots.md)\.
 
-1. Choose **Next**\.
-
-1. For **Network configuration**, choose either **VPC access** or **Public access**\. If you choose **Public access**, skip to the next step\. If you choose **VPC access**, make sure you meet the [prerequisites](vpc.md#prerequisites-vpc-endpoints), then do the following:
+1. Under **Network**, choose either **VPC access** or **Public access**\. If you choose **Public access**, skip to the next step\. If you choose **VPC access**, make sure you meet the [prerequisites](vpc.md#prerequisites-vpc-endpoints), then do the following:
 
    1. For **VPC**, choose the ID of the VPC you want to use\.
 **Note**  
@@ -85,13 +83,13 @@ The VPC and domain must be in the same AWS Region, and you must select a VPC wit
 **Note**  
 You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP addresses in a VPC subnet](vpc.md#reserving-ip-vpc-endpoints)\.
 
-   1. For **Security Groups**, choose one or more VPC security groups that allow your required application to reach the OpenSearch Service domain on the ports \(80 or 443\) and protocols \(HTTP or HTTPs\) exposed by the domain\. For more information, see [Launching your Amazon OpenSearch Service domains within a VPC](vpc.md)\.
+   1. For **Security groups**, choose one or more VPC security groups that allow your required application to reach the OpenSearch Service domain on the ports \(80 or 443\) and protocols \(HTTP or HTTPs\) exposed by the domain\. For more information, see [Launching your Amazon OpenSearch Service domains within a VPC](vpc.md)\.
 
    1. For **IAM Role**, keep the default role\. OpenSearch Service uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-linked role for VPC access](vpc.md#enabling-slr)\.
 
 1. Enable or disable fine\-grained access control:
    + If you want to use IAM for user management, choose **Set IAM ARN as master user** and specify the ARN for an IAM role\.
-   + If you want to use the internal user database, choose **Create a master user** and specify a user name and password\.
+   + If you want to use the internal user database, choose **Create master user** and specify a user name and password\.
 
    Whichever option you choose, the master user can access all indices in the cluster and all OpenSearch APIs\. For guidance on which option to choose, see [Key concepts](fgac.md#fgac-concepts)\.
 
@@ -115,19 +113,17 @@ If you enabled VPC access, you can't use IP\-based policies\. Instead, you can u
 
 1. \(Optional\) To enable encryption of data at rest, select **Enable encryption of data at rest**\.
 
-   Select **\(Default \(aws/es\)** to have OpenSearch Service create an AWS KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS key\. For more information, see [Encryption of data at rest for Amazon OpenSearch Service](encryption-at-rest.md)\.
-
-1. \(Optional\) Expand **Advanced cluster parameters**\. For a summary of these options, see [Advanced cluster parameters](#createdomain-configure-advanced-options)\.
-
-1. Choose **Next**\.
+   Select **Use AWS owned key** to have OpenSearch Service create an AWS KMS encryption key on your behalf \(or use the one that it already created\)\. Otherwise, choose your own KMS key\. For more information, see [Encryption of data at rest for Amazon OpenSearch Service](encryption-at-rest.md)\.
 
 1. \(Optional\) Add tags to describe your domain so you can categorize and filter on that information\. For more information, see [Tagging Amazon OpenSearch Service domains](managedomains-awsresourcetagging.md)\.
+
+1. \(Optional\) Expand **Advanced cluster settings**\. For a summary of these options, see [Advanced cluster settings](#createdomain-configure-advanced-options)\.
 
 1. Choose **Create**\.
 
 ### Creating OpenSearch Service domains \(AWS CLI\)<a name="createdomains-cli"></a>
 
-Instead of creating an OpenSearch Service domain by using the console, you can use the AWS CLI\. For syntax, see Amazon OpenSearch Service in the [AWS CLI command reference](https://docs.aws.amazon.com/cli/latest/reference/opensearchservice/index.html)\.
+Instead of creating an OpenSearch Service domain by using the console, you can use the AWS CLI\. For syntax, see Amazon OpenSearch Service in the [AWS CLI command reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html)a\.
 
 #### Example commands<a name="createdomains-cli-examples"></a>
 
@@ -138,7 +134,7 @@ This first example demonstrates the following OpenSearch Service domain configur
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
 ```
-aws opensearchservice create-domain --domain-name mylogs --engine-version OpenSearch_1.0 --cluster-config  InstanceType=r6g.large.search,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
+aws opensearch create-domain --domain-name mylogs --engine-version OpenSearch_1.0 --cluster-config  InstanceType=r6g.large.search,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
 ```
 
 The next example demonstrates the following OpenSearch Service domain configuration:
@@ -149,7 +145,7 @@ The next example demonstrates the following OpenSearch Service domain configurat
 + Distributes instances across three Availability Zones
 
 ```
-aws opensearchservice create-domain --domain-name mylogs --engine-version Elasticsearch_7.10 --cluster-config  InstanceType=r6g.large.search,InstanceCount=6,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3} --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/*" } ] }'
+aws opensearch create-domain --domain-name mylogs --engine-version Elasticsearch_7.10 --cluster-config  InstanceType=r6g.large.search,InstanceCount=6,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3} --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::555555555555:root" }, "Action":"es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/*" } ] }'
 ```
 
 The next example demonstrates the following OpenSearch Service domain configuration:
@@ -160,7 +156,7 @@ The next example demonstrates the following OpenSearch Service domain configurat
 + Restricts access to a single user and to a single subresource, the `_search` API
 
 ```
-aws opensearchservice create-domain --domain-name mylogs --engine-version OpenSearch_1.0 --cluster-config  InstanceType=r6g.xlarge.search,InstanceCount=10,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.search,DedicatedMasterCount=3 --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,Iops=1000 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::555555555555:root" }, "Action": "es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/_search" } ] }'
+aws opensearch create-domain --domain-name mylogs --engine-version OpenSearch_1.0 --cluster-config  InstanceType=r6g.xlarge.search,InstanceCount=10,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.search,DedicatedMasterCount=3 --ebs-options EBSEnabled=true,VolumeType=io1,VolumeSize=100,Iops=1000 --access-policies '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::555555555555:root" }, "Action": "es:*", "Resource": "arn:aws:es:us-east-1:555555555555:domain/mylogs/_search" } ] }'
 ```
 
 **Note**  
@@ -186,15 +182,15 @@ The console provides preconfigured access policies that you can customize for th
 
 1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
 
-1. In the navigation pane, under **My domains**, choose the domain you want to update\.
+1. In the navigation pane, under **Domains**, choose the domain you want to update\.
 
-1. Choose **Actions** and **Modify access policy**\.
+1. Choose **Actions** and **Edit security configuration**\.
 
-1. Edit the access policy JSON, or choose a preconfigured option\.
+1. Edit the access policy JSON, or import a preconfigured option\.
 
-1. Choose **Submit**\.
+1. Choose **Save changes**\.
 
-## Advanced cluster parameters<a name="createdomain-configure-advanced-options"></a>
+## Advanced cluster settings<a name="createdomain-configure-advanced-options"></a>
 
 Use advanced options to configure the following:
 

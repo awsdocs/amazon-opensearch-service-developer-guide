@@ -9,4 +9,4 @@ For more information about setting alarms, see [Creating Amazon CloudWatch Alarm
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/cloudwatch-alarms.html)
 
 **Note**  
-If you just want to *view* metrics, see [Monitoring OpenSearch Service cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)\.
+If you just want to *view* metrics, see [Monitoring OpenSearch cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)\.

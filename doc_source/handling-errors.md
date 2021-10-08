@@ -99,7 +99,7 @@ To determine if a red cluster status is due to a continuous heavy processing loa
 
 | Relevant metric | Description | Recovery | 
 | --- | --- | --- | 
-| JVMMemoryPressure |  Specifies the percentage of the Java heap used for all data nodes in a cluster\. View the **Maximum** statistic for this metric, and look for smaller and smaller drops in memory pressure as the Java garbage collector fails to reclaim sufficient memory\. This pattern likely is due to complex queries or large data fields\. The Concurrent Mark Sweep \(CMS\) garbage collector triggers when 75% of the “old generation” object space is full\. This collector runs alongside other threads to keep pauses to a minimum\. If CMS is unable to reclaim enough memory during these normal collections, OpenSearch triggers a different garbage collection algorithm that halts all threads\. Nodes are unresponsive during these stop\-the\-world collections, which can affect cluster stability\. If memory usage continues to grow, OpenSearch eventually crashes due to an out of memory error\. A good rule of thumb is to keep usage below 80%\. The `_nodes/stats/jvm` API offers a useful summary of JVM statistics, memory pool usage, and garbage collection information: <pre>GET domain-endpoint/_nodes/stats/jvm?pretty</pre>  |  Set memory circuit breakers for the JVM\. For more information, see [JVM OutOfMemoryError](#handling-errors-jvm_out_of_memory_error)\. If the problem persists, delete unnecessary indices, reduce the number or complexity of requests to the domain, add instances, or use larger instance types\.  | 
+| JVMMemoryPressure |  Specifies the percentage of the Java heap used for all data nodes in a cluster\. View the **Maximum** statistic for this metric, and look for smaller and smaller drops in memory pressure as the Java garbage collector fails to reclaim sufficient memory\. This pattern likely is due to complex queries or large data fields\. x86 instance types use the Concurrent Mark Sweep \(CMS\) garbage collector, which runs alongside application threads to keep pauses short\. If CMS is unable to reclaim enough memory during its normal collections, it triggers a full garbage collection, which can lead to long application pauses and impact cluster stability\. ARM\-based Graviton instance types use the Garbage\-First \(G1\) garbage collector, which is similar to CMS, but uses additional short pauses and heap defragmentation to further reduce the need for full garbage collections\. In either case, if memory usage continues to grow beyond what the garbage collector can reclaim during full garbage collections, OpenSearch crashes with an out of memory error\. On all instance types, a good rule of thumb is to keep usage below 80%\. The `_nodes/stats/jvm` API offers a useful summary of JVM statistics, memory pool usage, and garbage collection information: <pre>GET domain-endpoint/_nodes/stats/jvm?pretty</pre>  |  Set memory circuit breakers for the JVM\. For more information, see [JVM OutOfMemoryError](#handling-errors-jvm_out_of_memory_error)\. If the problem persists, delete unnecessary indices, reduce the number or complexity of requests to the domain, add instances, or use larger instance types\.  | 
 | CPUUtilization | Specifies the percentage of CPU resources used for data nodes in a cluster\. View the Maximum statistic for this metric, and look for a continuous pattern of high usage\. | Add data nodes or increase the size of the instance types of existing data nodes\. | 
 | Nodes | Specifies the number of nodes in a cluster\. View the Minimum statistic for this metric\. This value fluctuates when the service deploys a new fleet of instances for a cluster\. | Add data nodes\. | 
 
@@ -142,12 +142,12 @@ A JVM `OutOfMemoryError` typically means that one of the following JVM circuit b
 
 Amazon EC2 instances might experience unexpected terminations and restarts\. Typically, OpenSearch Service restarts the nodes for you\. However, it's possible for one or more nodes in an OpenSearch cluster to remain in a failed condition\.
 
-To check for this condition, open your domain dashboard on the OpenSearch Service console\. Choose the **Cluster health** tab and find the **Total nodes** metric\. See if the reported number of nodes is fewer than the number that you configured for your cluster\. If the metric shows that one or more nodes is down for more than one day, contact [AWS Support](https://aws.amazon.com/premiumsupport/)\.
+To check for this condition, open your domain dashboard on the OpenSearch Service console\. Go to the **Cluster health** tab and find the **Total nodes** metric\. See if the reported number of nodes is fewer than the number that you configured for your cluster\. If the metric shows that one or more nodes is down for more than one day, contact [AWS Support](https://aws.amazon.com/premiumsupport/)\.
 
 You can also [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when this issue occurs\.
 
 **Note**  
-The **Total nodes** metric is not accurate during changes to your cluster configuration and during routine maintenance for the service\. This behavior is expected\. The metric will report the correct number of cluster nodes soon\. To learn more, see [Making configuration changes in OpenSearch Service](managedomains-configuration-changes.md)\.
+The **Total nodes** metric is not accurate during changes to your cluster configuration and during routine maintenance for the service\. This behavior is expected\. The metric will report the correct number of cluster nodes soon\. To learn more, see [Making configuration changes in Amazon OpenSearch Service](managedomains-configuration-changes.md)\.
 
 To protect your clusters from unexpected node terminations and restarts, create at least one replica for each index in your OpenSearch Service domain\.
 
@@ -170,11 +170,11 @@ If you encounter this error, verify that the `resource` element of your policy i
 
 1. Refresh the page in your web browser\.
 
-1. Choose **Use existing log group**\.
+1. Choose **Select existing group**\.
 
 1. For **Existing log group**, choose the log group that you created before receiving the error message\.
 
-1. Choose **Select an existing policy**\.
+1. In the access policy section, choose **Select existing policy**\.
 
 1. For **Existing policy**, choose the policy that you created before receiving the error message\.
 
@@ -200,7 +200,9 @@ If you plan to reindex, shrink, or split an index, you likely want to stop writi
 
 ## Mapper parsing exception while indexing<a name="troubleshooting-dynamic-template"></a>
 
-Elasticsearch 7\.10 deprecated several parameters \(`ignore_malformed`, `coerce`, and others\) for use within dynamic templates\. If you add a document to an index with a dynamic template that contains a deprecated parameter, Elasticsearch and OpenSearch both throw an exception:
+Elasticsearch 7\.10 deprecated the following parameters for use within dynamic templates: `coerce`, `dynamic`, `ignore_above`, `ignore_malformed`, `normalizer`, `null_values`, `omit_norms`, and `properties`\.
+
+If you add a document to an index with a dynamic template that contains a deprecated parameter, Elasticsearch and OpenSearch both throw an exception:
 
 ```
 "error" : {
@@ -271,7 +273,7 @@ The following script uses the Amazon EC2 [describe\-regions](https://docs.aws.am
 for region in `aws ec2 describe-regions --output text | cut -f4`
 do
     echo "\nListing domains in region '$region':"
-    aws opensearchservice list-domain-names --region $region --query 'DomainNames'
+    aws opensearch list-domain-names --region $region --query 'DomainNames'
 done
 ```
 

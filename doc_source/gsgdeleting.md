@@ -6,9 +6,9 @@ Because the *movies* domain from this tutorial is for test purposes, make sure t
 
 1. Sign in to the **Amazon OpenSearch Service** console\.
 
-1. Under **My domains** in the navigation pane, select the **movies** domain\.
+1. Under **Domains**, select the **movies** domain\.
 
-1. Choose **Actions**, **Delete domain**, and confirm deletion\.
+1. Choose **Delete** and confirm deletion\.
 
 ## Next steps<a name="gsgnextsteps-document"></a>
 

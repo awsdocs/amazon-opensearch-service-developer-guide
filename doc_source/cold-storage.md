@@ -70,14 +70,14 @@ You don't incur any transfer charges when moving data between cold and warm stor
 
 The console is the simplest way to create a domain that uses cold storage\. While creating the domain, choose **Enable cold storage**\. The same process works on existing domains as long as you meet the [prerequisites](#coldstorage-pp)\. Even after the domain state changes from **Processing** to **Active**, cold storage might not be available for several hours\.
 
-You can also use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](configuration-api.md) to enable cold storage\.
+You can also use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) or [configuration API](configuration-api.md) to enable cold storage\.
 
 ### Sample CLI command<a name="coldstorage-sample-cli"></a>
 
 The following AWS CLI command creates a domain with three data nodes, three dedicated master nodes, cold storage enabled, and fine\-grained access control enabled:
 
 ```
-aws opensearchservice create-domain \
+aws opensearch create-domain \
   --domain-name my-domain \
   --engine-version Opensearch_1.0 \
   --cluster-config ColdStorageOptions={Enabled=true},WarmEnabled=true,WarmCount=4,WarmType=ultrawarm1.medium.search,InstanceType=r6g.large.search,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.search,DedicatedMasterCount=3,InstanceCount=3 \
@@ -361,7 +361,7 @@ DELETE _cold/my-index
 
 ## Disabling cold storage<a name="coldstorage-disable"></a>
 
-The OpenSearch Service console is the simplest way to disable cold storage\. Select the domain and choose **Edit**, then deselect **Enable cold storage**\. 
+The OpenSearch Service console is the simplest way to disable cold storage\. Select the domain and choose **Actions**, **Edit cluster configuration**, then deselect **Enable cold storage**\. 
 
 To use the AWS CLI or configuration API, under `ColdStorageOptions`, set `"Enabled"="false"`\.
 

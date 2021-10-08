@@ -13,7 +13,6 @@ The following are some of the ways VPC domains differ from public domains\. Each
 + Compared to public domains, VPC domains display less information in the console\. Specifically, the **Cluster health** tab does not include shard information, and the **Indices** tab isn't present\. 
 + The domain endpoints take different forms \(`https://search-domain-name` vs\. `https://vpc-domain-name`\)\.
 + You can't apply IP\-based access policies to domains that reside within a VPC because security groups already enforce IP\-based access policies\.
-+ OpenSearch Service creates a service\-linked role when you create a domain in a VPC, but it doesn't need or create one if you only have public domains\. See [Service\-linked role for VPC access](#enabling-slr)\.
 
 ## Limitations<a name="vpc-limitations"></a>
 
@@ -90,7 +89,7 @@ Before you can enable a connection between a VPC and your new OpenSearch Service
 
 The enhanced security of a VPC can make connecting to your domain and running basic tests a challenge\. If you already have an OpenSearch Service VPC domain and would rather not create a VPN server, try the following process:
 
-1. For your domain's access policy, choose **Allow open access to the domain**\. You can always update this setting after you finish testing\.
+1. For your domain's access policy, choose **Only use fine\-grained access control**\. You can always update this setting after you finish testing\.
 
 1. Create an Amazon Linux Amazon EC2 instance in the same VPC, subnet, and security group as your OpenSearch Service domain\.
 
@@ -127,15 +126,14 @@ If you encounter curl errors due to a certificate mismatch, try the `--insecure`
 
 ### Reserving IP addresses in a VPC subnet<a name="reserving-ip-vpc-endpoints"></a>
 
-OpenSearch Service connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or multiple subnets of the VPC if you enable [multiple Availability Zones](managedomains-multiaz.md)\)\. Each network interface is associated with an IP address\. Before you create your OpenSearch Service domain, you must have a sufficient number of IP addresses available in the VPC subnet to accommodate the network interfaces\.
+OpenSearch Service connects a domain to a VPC by placing network interfaces in a subnet of the VPC \(or multiple subnets of the VPC if you enable [multiple Availability Zones](managedomains-multiaz.md)\)\. Each network interface is associated with an IP address\. Before you create your OpenSearch Service domain, you must have a sufficient number of IP addresses available in each subnet to accommodate the network interfaces\.
 
-The number of IP addresses that OpenSearch Service requires depends on the ratio of data nodes to master nodes\.
-
-Here's the basic formula: The number of IP addresses reserved in each subnet is three times the number of data nodes, plus the number of master nodes\.
+Here's the basic formula: The number of IP addresses that OpenSearch Service reserves in each subnet is three times the number of data nodes, divided by the number of Availability Zones\.
 
 **Examples**
-+ If a domain has 10 data nodes and three master nodes, the IP count is \(10 \* 3\) \+ 3 = 33\.
-+ If a domain has five data nodes and three master nodes, the IP count is \(5 \* 3\) \+ 3 = 18\.
++ If a domain has nine data nodes across three Availability Zones, the IP count per subnet is 9 \* 3 / 3 = 9\.
++ If a domain has eight data nodes across two Availability Zones, the IP count per subnet is 8 \* 3 / 2 = 12\.
++ If a domain has six data nodes in one Availability Zone, the IP count per subnet is 6 \* 3 / 1 = 18\.
 
 When you create the domain, OpenSearch Service reserves the IP addresses, uses some for the domain, and reserves the rest for [blue/green deployments](managedomains-configuration-changes.md)\. You can see the network interfaces and their associated IP addresses in the **Network Interfaces** section of the Amazon EC2 console\. The **Description** column shows which OpenSearch Service domain the network interface is associated with\.
 
@@ -146,11 +144,8 @@ We recommend that you create dedicated subnets for the OpenSearch Service reserv
 
 A [service\-linked role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role) is a unique type of IAM role that delegates permissions to a service so that it can create and manage resources on your behalf\. OpenSearch Service requires a service\-linked role to access your VPC, create the domain endpoint, and place network interfaces in a subnet of your VPC\.
 
-OpenSearch Service automatically creates the role when you use the OpenSearch Service console to create a domain within a VPC\. For this automatic creation to succeed, you must have permissions for the `es:CreateServiceRole` and `iam:CreateServiceLinkedRole` actions\. To learn more, see [Service\-linked role permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#service-linked-role-permissions) in the *IAM User Guide*\.
+OpenSearch Service automatically creates the role when you use the OpenSearch Service console to create a domain within a VPC\. For this automatic creation to succeed, you must have permissions for the `iam:CreateServiceLinkedRole` action\. To learn more, see [Service\-linked role permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#service-linked-role-permissions) in the *IAM User Guide*\.
 
 After OpenSearch Service creates the role, you can view it \(`AWSServiceRoleForAmazonOpenSearchService`\) using the IAM console\.
-
-**Note**  
-If you create a domain that uses a public endpoint, OpenSearch Service doesn’t need the service\-linked role and doesn't create it\.
 
 For full information on this role's permissions and how to delete it, see [Using service\-linked roles to provide Amazon OpenSearch Service access to resources](slr.md)\.

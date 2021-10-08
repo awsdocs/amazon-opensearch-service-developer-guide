@@ -24,7 +24,7 @@ Grant all permission within IAM, not in the domain access policy\. For more info
 
 ## Uploading packages to Amazon S3<a name="custom-packages-gs"></a>
 
-Before you can associate a package with your domain, you must upload it to an Amazon S3 bucket\. For instructions, see [Uploading S3 Objects](https://docs.aws.amazon.com/AmazonS3/latest/gsg/upload-objects.html) in the *Amazon Simple Storage Service Getting Started Guide*\.
+Before you can associate a package with your domain, you must upload it to an Amazon S3 bucket\. For instructions, see [Uploading objects](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/upload-objects.html) in the *Amazon Simple Storage Service User Guide*\.
 
 If your package contains sensitive information, specify [server\-side encryption with S3\-managed keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html) when you upload it\. OpenSearch Service can't access files on S3 that you protect using an AWS KMS key\.
 
@@ -49,17 +49,17 @@ The console is the simplest way to import a package into OpenSearch Service and 
 
 1. In the Amazon OpenSearch Service console, choose **Packages**\.
 
-1. Choose **Import**\.
+1. Choose **Import package**\.
 
 1. Give the package a descriptive name\.
 
-1. Provide the S3 path to the file, and then choose **Import**\.
+1. Provide the S3 path to the file, and then choose **Submit**\.
 
 1. Return to the **Packages** screen\.
 
-1. When the package status is **Available**, select it\. Then choose **Associate**\.
+1. When the package status is **Available**, select it\. Then choose **Associate to a domain**\.
 
-1. Choose a domain, and then choose **Associate**\.
+1. Select a domain, and then choose **Associate**\.
 
 1. In the navigation pane, choose your domain and go to the **Packages** tab\.
 
@@ -179,7 +179,7 @@ To update a custom package, modify the file in Amazon S3 Control, update the pac
 
 1. In the OpenSearch Service console, choose **Packages**\.
 
-1. Choose a package and **Update package**\.
+1. Choose a package and **Update**\.
 
 1. Provide the S3 path to the file, and then choose **Update package**\.
 
@@ -216,7 +216,7 @@ package_id = '' # The unique identifier of the OpenSearch package to update
 domain_name = '' # The domain to associate the package with
 query = '' # A test query to confirm the package has been successfully updated
 
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 

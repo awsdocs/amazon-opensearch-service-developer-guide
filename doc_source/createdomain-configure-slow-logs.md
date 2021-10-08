@@ -38,9 +38,9 @@ The OpenSearch Service console is the simplest way to enable the publishing of l
 
 1. Select the domain you want to update\.
 
-1. On the **Logs** tab, select a log type and choose **Setup**\.
+1. On the **Logs** tab, select a log type and choose **Enable**\.
 
-1. Create a CloudWatch log group, or choose an existing one\.
+1. Create a new CloudWatch log group or choose an existing one\.
 **Note**  
 If you plan to enable multiple logs, we recommend publishing each to its own log group\. This separation makes the logs easier to scan\.
 
@@ -114,7 +114,7 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
 The following example enables the publishing of search and index slow logs for the specified domain:
 
 ```
-aws opensearchservice update-domain-config \
+aws opensearch update-domain-config \
   --domain-name my-domain \
   --log-publishing-options "SEARCH_SLOW_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-log-group,Enabled=true},INDEX_SLOW_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-other-log-group,Enabled=true}"
 ```
@@ -198,7 +198,7 @@ Resources:
             Action: "es:*"
             Resource: "arn:aws:es:us-east-1:123456789012:domain/my-domain/*"
       LogPublishingOptions:
-        APPLICATION_LOGS:
+        ES_APPLICATION_LOGS:
           CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*"
           Enabled: true
         SEARCH_SLOW_LOGS:

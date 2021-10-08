@@ -1,6 +1,6 @@
-# Making configuration changes in OpenSearch Service<a name="managedomains-configuration-changes"></a>
+# Making configuration changes in Amazon OpenSearch Service<a name="managedomains-configuration-changes"></a>
 
-OpenSearch Service uses a *blue/green* deployment process when updating domains\. Blue/green typically refers to the practice of running two production environments, one live and one idle, and switching the two as you make software changes\. In the case of OpenSearch Service, it refers to the practice of creating a new environment for domain updates and routing users to the new environment after those updates are complete\. The practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
+Amazon OpenSearch Service uses a *blue/green* deployment process when updating domains\. Blue/green typically refers to the practice of running two production environments, one live and one idle, and switching the two as you make software changes\. In the case of OpenSearch Service, it refers to the practice of creating a new environment for domain updates and routing users to the new environment after those updates are complete\. The practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
 
 ## Changes that cause blue/green deployments<a name="bg"></a>
 
@@ -40,7 +40,7 @@ When you initiate a configuration change, the domain state changes to **Processi
 
 ![\[Number of nodes doubling from 11 to 22 during a domain configuration change.\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/NodesDoubled.png)
 
-This temporary increase can strain the cluster's [dedicated master nodes](managedomains-dedicatedmasternodes.md), which suddenly might have many more nodes to manage\. It's important to maintain sufficient capacity on dedicated master nodes to handle the overhead that is associated with these blue/green deployments\.
+This temporary increase can strain the cluster's [dedicated master nodes](managedomains-dedicatedmasternodes.md), which suddenly might have many more nodes to manage\. It can also increase search and indexing latencies as OpenSearch Service copies data from the old cluster to the new one\. It's important to maintain sufficient capacity on the cluster to handle the overhead that is associated with these blue/green deployments\.
 
 **Important**  
 You do *not* incur any additional charges during configuration changes and service maintenance\. You are billed only for the number of nodes that you request for your cluster\. For specifics, see [Charges for configuration changes](#managedomains-config-charges)\.
@@ -49,7 +49,7 @@ To prevent overloading dedicated master nodes, you can [monitor usage with the A
 
 ## Charges for configuration changes<a name="managedomains-config-charges"></a>
 
-If you change the configuration for a domain, OpenSearch Service creates a new cluster as described in [Making configuration changes in OpenSearch Service](#managedomains-configuration-changes)\. During the migration of old to new, you incur the following charges:
+If you change the configuration for a domain, OpenSearch Service creates a new cluster as described in [Making configuration changes in Amazon OpenSearch Service](#managedomains-configuration-changes)\. During the migration of old to new, you incur the following charges:
 + If you change the instance type, you're charged for both clusters for the first hour\. After the first hour, you're only charged for the new cluster\. EBS volumes aren't charged twice because they're part of your cluster, so their billing follows instance billing\.
 
   **Example:** You change the configuration from three `m3.xlarge` instances to four `m4.large` instances\. For the first hour, you are charged for both clusters \(3 \* `m3.xlarge` \+ 4 \* `m4.large`\)\. After the first hour, you are charged only for the new cluster \(4 \* `m4.large`\)\.

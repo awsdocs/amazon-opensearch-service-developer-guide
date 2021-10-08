@@ -64,15 +64,15 @@ If the cluster has dedicated master nodes, upgrades complete without downtime\. 
 
 1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
 
-1. In the navigation pane, under **My domains**, choose the domain you want to upgrade\.
+1. In the navigation pane, under **Domains**, choose the domain you want to upgrade\.
 
-1. Choose **Actions** and **Upgrade domain**\.
+1. Choose **Actions** and **Upgrade**\.
 
 1. Choose the version to upgrade to\. If you're upgrading from an Elasticsearch OSS version to an OpenSearch version, the **Enable compatibility mode** option appears\. If you enable this setting, OpenSearch reports its version as 7\.10 to allow Elasticsearch OSS clients and plugins like Logstash to continue working with Amazon OpenSearch Service\.
 
 1. Choose **Upgrade**\.
 
-1. Check the **Domain status** on the domain dashboard to monitor the status of the upgrade\.
+1. Check the **Status** on the domain dashboard to monitor the status of the upgrade\.
 
 **To upgrade a domain to a later version of OpenSearch or Elasticsearch \(AWS CLI and SDK\)**
 
@@ -82,7 +82,7 @@ You can use the following operations to identify the correct version of OpenSear
 + `get-upgrade-status` \(`GetUpgradeStatus`\)
 + `get-upgrade-history` \(`GetUpgradeHistory`\)
 
-For more information, see the [AWS CLI command reference](https://docs.aws.amazon.com/cli/latest/reference/opensearchservice/index.html) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+For more information, see the [AWS CLI command reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 
 ## Using a snapshot to migrate data<a name="snapshot-based-migration"></a>
 

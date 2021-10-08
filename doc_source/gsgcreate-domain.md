@@ -11,34 +11,26 @@ An OpenSearch Service domain is synonymous with an OpenSearch cluster\. Domains 
 
 1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
 
-1. Choose **Create a new domain**\.
-
-1. For the deployment type, choose **Development and testing**\.
-
-1. For **Version**, choose the latest version\.
-
-1. Choose **Next**\.
+1. Choose **Create domain**\.
 
 1. Provide a name for the domain\. The examples in this tutorial use the name *movies*\.
 
 1. Ignore the **Custom endpoint** setting\.
 
+1. For the deployment type, choose **Development and testing**\.
+
+1. For **Version**, choose the latest version\.
+
 1. Under **Data nodes**, change the instance type to `t3.small.search` and keep the default value of three nodes\.
 
-1. Ignore the rest of the settings for now and choose **Next**\. 
-
-1. For simplicity in this tutorial, use a public access domain\. Under **Network configuration**, choose **Public access**\.
+1. For simplicity in this tutorial, use a public access domain\. Under **Network**, choose **Public access**\.
 
 1. In the fine\-grained access control settings, choose **Create master user**\. Provide a user name and password\.
 
 1. For now, ignore the **SAML authentication** and **Amazon Cognito authentication** sections\.
 
-1. For **Access policy**, choose **Allow open access to the domain**\. In this tutorial, fine\-grained access control handles authentication, not the domain access policy\.
+1. For **Access policy**, choose **Only use fine\-grained access control**\. In this tutorial, fine\-grained access control handles authentication, not the domain access policy\.
 
-1. Choose **Next**\.
-
-1. Ignore the tags option and choose **Next**\.
-
-1. Confirm your domain configuration and choose **Confirm**\. New domains typically take 15–30 minutes to initialize, but can take longer depending on the configuration\. After your domain initializes, make note of its endpoint\.
+1. Ignore the rest of the settings and choose **Create**\. New domains typically take 15–30 minutes to initialize, but can take longer depending on the configuration\. After your domain initializes, make note of its endpoint\.
 
 **Next**: [Upload data to an OpenSearch Service domain for indexing](gsgupload-data.md)

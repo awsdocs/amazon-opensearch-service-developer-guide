@@ -1,7 +1,7 @@
 # Configuration API reference for Amazon OpenSearch Service<a name="configuration-api"></a>
 
 This reference describes the actions, data types, and errors in the Amazon OpenSearch Service configuration API\. The configuration API is a REST API that you can use to create and configure OpenSearch Service domains over HTTP\. You also can use the AWS CLI and the console to configure OpenSearch Service domains\. For more information, see [Creating and managing Amazon OpenSearch Service domains](createupdatedomains.md)\.
-+ [Deprecated actions in the new SDK](#configuration-api-deprecated)
++ [New API version and deprecated actions](#configuration-api-deprecated)
 + [Actions](#configuration-api-actions)
 + [Data types](#configuration-api-datatypes)
 + [Errors](#configuration-api-errors)
@@ -19,6 +19,7 @@ The following actions were deprecated in version 2021\-01\-01 of the Amazon Open
 | AcceptInboundCrossClusterSearchConnection | AcceptInboundConnection | 
 | CreateElasticsearchDomain | CreateDomain | 
 | CreateOutboundCrossClusterSearchConnection | CreateOutboundConnection | 
+| CreateElasticsearchServiceRole | No replacement\. Use the [IAM API](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateServiceLinkedRole.html) to create service\-linked roles\.  | 
 | DeleteElasticsearchDomain | DeleteDomain | 
 | DeleteElasticsearchServiceRole | No replacement\. Use the [IAM API](https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceLinkedRole.html) to delete service\-linked roles\.  | 
 | DeleteInboundCrossClusterSearchConnection | DeleteInboundConnection | 
@@ -65,7 +66,7 @@ All configuration service requests must be signed\. For more information, see [S
 | [DescribeDomainAutoTunes](#configuration-api-actions-describeautotune) | GET | 
 | [DescribeDomain](#configuration-api-actions-describedomain) | GET | 
 | [DescribeDomainConfig](#configuration-api-actions-describedomainconfig) | GET | 
-| [DescribeDomains](#configuration-api-actions-describeesdomains) | POST | 
+| [DescribeDomains](#configuration-api-actions-describedomains) | POST | 
 | [DescribeInstanceTypeLimits](#configuration-api-actions-describeinstancetypelimits) | GET | 
 | [DescribeInboundConnections](#configuration-api-actions-describe-inbound-cross-cluster-search-connections) | POST | 
 | [DescribeOutboundConnections](#configuration-api-actions-describe-outbound-cross-cluster-search-connections) | POST | 
@@ -79,7 +80,8 @@ All configuration service requests must be signed\. For more information, see [S
 | [GetUpgradeStatus](#configuration-api-actions-get-upgrade-stat) | GET | 
 | [ListDomainNames](#configuration-api-actions-listdomainnames) | GET | 
 | [ListDomainsForPackage](#configuration-api-actions-listdomainsforpackage) | GET | 
-| [ListEngineVersions](#configuration-api-actions-listversions) | GET | 
+| [ListVersions](#configuration-api-actions-listversions) | GET | 
+| [ListInstanceTypeDetails](#configuration-api-actions-listinstancetypedetails) | GET | 
 | [ListPackagesForDomain](#configuration-api-actions-listpackagesfordomain) | GET | 
 | [ListTags](#configuration-api-actions-listtags) | GET | 
 | [PurchaseReservedInstanceOffering](#configuration-api-actions-purchasereservedinstance) | POST | 
@@ -238,7 +240,7 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain
     "Enabled": true|false,
     "UserPoolId": "us-east-1_121234567",
     "IdentityPoolId": "us-east-1:12345678-1234-1234-1234-123456789012",
-    "RoleArn": "arn:aws:iam::123456789012:role/service-role/CognitoAccessForAmazonES"
+    "RoleArn": "arn:aws:iam::123456789012:role/service-role/CognitoAccessForAmazonOpenSearch"
   },
   "NodeToNodeEncryptionOptions": {
     "Enabled": true|false
@@ -259,7 +261,7 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain
       "CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group2:sample-domain",
       "Enabled":true|false
     },
-    "APPLICATION_LOGS": {
+    "ES_APPLICATION_LOGS": {
       "CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group3:sample-domain",
       "Enabled":true|false
     }
@@ -315,7 +317,7 @@ This operation does not use HTTP request parameters\.
 | CognitoOptions | [CognitoOptions](#configuration-api-datatypes-cognitooptions) | No | Key\-value pairs to configure OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards \. | 
 | AccessPolicies | String | No | IAM policy document specifying the access policies for the new OpenSearch Service domain\. For more information, see [Identity and Access Management in Amazon OpenSearch Service](ac.md)\. | 
 | SnapshotOptions | [SnapshotOptions](#configuration-api-datatypes-snapshotoptions) | No |  **DEPRECATED**\. Container for parameters required to configure automated snapshots of domain indices\.  | 
-| AdvancedOptions | [AdvancedOptions](#configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Advanced cluster parameters](createupdatedomains.md#createdomain-configure-advanced-options)\. | 
+| AdvancedOptions | [AdvancedOptions](#configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Advanced cluster settings](createupdatedomains.md#createdomain-configure-advanced-options)\. | 
 | LogPublishingOptions | [LogPublishingOptions](#configuration-api-datatypes-logpublishingoptions) | No | Key\-value pairs to configure slow log publishing\. | 
 | EncryptionAtRestOptions | [EncryptionAtRestOptions](#configuration-api-datatypes-encryptionatrest) | No | Key\-value pairs to enable encryption at rest\. | 
 | NodeToNodeEncryptionOptions | [NodeToNodeEncryptionOptions](#configuration-api-datatypes-node-to-node) | No | Enables node\-to\-node encryption\. | 
@@ -342,16 +344,20 @@ Creates a new cross\-cluster search connection from a source domain to a destina
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/outboundConnection
 {
-  "ConnectionAlias": "StringValue",
-  "LocalDomainInfo": {
-    "DomainName": "domain-name",
-    "Region": "us-east-1"
-  },
-  "RemoteDomainInfo": {
-    "OwnerId": "account-id",
-    "DomainName": "domain-name",
-    "Region": "us-east-1"
-  }
+   "ConnectionAlias":"connection-name",
+   "LocalDomainInfo":{
+      "AWSDomainInformation":{
+         "DomainName":"domain-name",
+         "Region":"us-east-1"
+      }
+   },
+   "RemoteDomainInfo":{
+      "AWSDomainInformation":{
+         "OwnerId":"account-id",
+         "DomainName":"domain-name",
+         "Region":"us-east-1"
+      }
+   }
 }
 ```
 
@@ -427,6 +433,30 @@ This operation does not use request parameters\.
 | --- | --- | 
 | PackageDetails | [PackageDetails](#configuration-api-datatypes-packagedetails) | 
 
+### CreateElasticsearchServiceRole \(Deprecated\)<a name="configuration-api-actions-createservicerole"></a>
+
+Creates the service\-linked role between OpenSearch Service and Amazon EC2\. This action is deprecated\. OpenSearch Service handles the creation and deletion of service\-linked roles automatically\.
+
+This role gives OpenSearch Service permissions to place VPC endpoints into your VPC\. A service\-linked role must be in place for domains with VPC endpoints to be created or function properly\.
+
+#### Syntax<a name="configuration-api-actions-deleteservicerole-s"></a>
+
+```
+POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/role
+```
+
+#### Request parameters<a name="configuration-api-actions-deleteservicerole-p"></a>
+
+This operation does not use request parameters\.
+
+#### Request body<a name="configuration-api-actions-deleteservicerole-b"></a>
+
+This operation does not use the HTTP request body\.
+
+#### Response elements<a name="configuration-api-actions-deleteservicerole-r"></a>
+
+The `CreateServiceRole` operation does not return a data structure\.
+
 ### DeleteDomain<a name="configuration-api-actions-deletedomain"></a>
 
 Deletes an OpenSearch Service domain and all of its data\. You can't recover a domain after it's deleted\.
@@ -490,21 +520,21 @@ The `DeleteElasticsearchServiceRole` operation does not return a data structure\
 
 Allows the destination domain owner to delete an existing inbound cross\-cluster search connection\.
 
-#### Syntax<a name="w40aac37b9c25b5"></a>
+#### Syntax<a name="w40aac37b9c27b5"></a>
 
 ```
 DELETE https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/inboundConnection/connection-id
 ```
 
-#### Request parameters<a name="w40aac37b9c25b7"></a>
+#### Request parameters<a name="w40aac37b9c27b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c25b9"></a>
+#### Request body<a name="w40aac37b9c27b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c25c11"></a>
+#### Response elements<a name="w40aac37b9c27c11"></a>
 
 
 ****  
@@ -517,21 +547,21 @@ This operation does not use the HTTP request body\.
 
 Allows the source domain owner to delete an existing outbound cross\-cluster search connection\.
 
-#### Syntax<a name="w40aac37b9c27b5"></a>
+#### Syntax<a name="w40aac37b9c29b5"></a>
 
 ```
 DELETE https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/outboundConnection/connection-id
 ```
 
-#### Request parameters<a name="w40aac37b9c27b7"></a>
+#### Request parameters<a name="w40aac37b9c29b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c27b9"></a>
+#### Request body<a name="w40aac37b9c29b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c27c11"></a>
+#### Response elements<a name="w40aac37b9c29c11"></a>
 
 
 ****  
@@ -576,13 +606,13 @@ This operation does not use the HTTP request body\.
 
 Returns the list of optimizations that Auto\-Tune has made to the domain\.
 
-#### Syntax<a name="w40aac37b9c31b5"></a>
+#### Syntax<a name="w40aac37b9c33b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/autoTunes
 ```
 
-#### Request parameters<a name="w40aac37b9c31b7"></a>
+#### Request parameters<a name="w40aac37b9c33b7"></a>
 
 
 ****  
@@ -591,11 +621,11 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/
 | --- | --- | --- | --- | 
 | DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain that you want Auto\-Tune details about\. | 
 
-#### Request body<a name="w40aac37b9c31b9"></a>
+#### Request body<a name="w40aac37b9c33b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c31c11"></a>
+#### Response elements<a name="w40aac37b9c33c11"></a>
 
 
 ****  
@@ -609,42 +639,10 @@ This operation does not use the HTTP request body\.
 
 Describes the domain configuration for the specified OpenSearch Service domain, including the domain ID, domain service endpoint, and domain ARN\.
 
-#### Syntax<a name="w40aac37b9c33b5"></a>
-
-```
-GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name
-```
-
-#### Request parameters<a name="w40aac37b9c33b7"></a>
-
-
-****  
-
-| Parameter | Data type | Required? | Description | 
-| --- | --- | --- | --- | 
-| DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain that you want to describe\. | 
-
-#### Request body<a name="w40aac37b9c33b9"></a>
-
-This operation does not use the HTTP request body\.
-
-#### Response elements<a name="w40aac37b9c33c11"></a>
-
-
-****  
-
-| Field | Data type | 
-| --- | --- | 
-| DomainStatus | [DomainStatus](#configuration-api-datatypes-domainstatus) | 
-
-### DescribeDomainConfig<a name="configuration-api-actions-describedomainconfig"></a>
-
-Displays the configuration of an OpenSearch Service domain\.
-
 #### Syntax<a name="w40aac37b9c35b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/config
+GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name
 ```
 
 #### Request parameters<a name="w40aac37b9c35b7"></a>
@@ -654,7 +652,7 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain configuration that you want to describe\. | 
+| DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain that you want to describe\. | 
 
 #### Request body<a name="w40aac37b9c35b9"></a>
 
@@ -667,13 +665,45 @@ This operation does not use the HTTP request body\.
 
 | Field | Data type | 
 | --- | --- | 
+| DomainStatus | [DomainStatus](#configuration-api-datatypes-domainstatus) | 
+
+### DescribeDomainConfig<a name="configuration-api-actions-describedomainconfig"></a>
+
+Displays the configuration of an OpenSearch Service domain\.
+
+#### Syntax<a name="w40aac37b9c37b5"></a>
+
+```
+GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/config
+```
+
+#### Request parameters<a name="w40aac37b9c37b7"></a>
+
+
+****  
+
+| Parameter | Data type | Required? | Description | 
+| --- | --- | --- | --- | 
+| DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain configuration that you want to describe\. | 
+
+#### Request body<a name="w40aac37b9c37b9"></a>
+
+This operation does not use the HTTP request body\.
+
+#### Response elements<a name="w40aac37b9c37c11"></a>
+
+
+****  
+
+| Field | Data type | 
+| --- | --- | 
 | DomainConfig | [DomainConfig](#configuration-api-datatypes-domainconfig) | 
 
-### DescribeDomains<a name="configuration-api-actions-describeesdomains"></a>
+### DescribeDomains<a name="configuration-api-actions-describedomains"></a>
 
 Describes the domain configuration for up to five specified OpenSearch Service domains\. Information includes the domain ID, domain service endpoint, and domain ARN\.
 
-#### Syntax<a name="w40aac37b9c37b5"></a>
+#### Syntax<a name="w40aac37b9c39b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain-info
@@ -685,11 +715,11 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain-info
 }
 ```
 
-#### Request parameters<a name="w40aac37b9c37b7"></a>
+#### Request parameters<a name="w40aac37b9c39b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c37b9"></a>
+#### Request body<a name="w40aac37b9c39b9"></a>
 
 
 ****  
@@ -698,7 +728,7 @@ This operation does not use HTTP request parameters\.
 | --- | --- | --- | --- | 
 | DomainNames | [DomainNameList](#configuration-api-datatypes-domainnamelist) | Yes | Array of OpenSearch Service domain names\. | 
 
-#### Response elements<a name="w40aac37b9c37c11"></a>
+#### Response elements<a name="w40aac37b9c39c11"></a>
 
 
 ****  
@@ -711,13 +741,13 @@ This operation does not use HTTP request parameters\.
 
 Describes the instance count, storage, and master node limits for a given OpenSearch or Elasticsearch version and instance type\.
 
-#### Syntax<a name="w40aac37b9c39b5"></a>
+#### Syntax<a name="w40aac37b9c41b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/instanceTypeLimits/version/instance-type?domainName=domain-name
+GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/instanceTypeLimits/engine-version/instance-type?domainName=domain-name
 ```
 
-#### Request parameters<a name="w40aac37b9c39b7"></a>
+#### Request parameters<a name="w40aac37b9c41b7"></a>
 
 
 ****  
@@ -730,11 +760,11 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/instanceTypeLimits/
 
 
 
-#### Request body<a name="w40aac37b9c39b9"></a>
+#### Request body<a name="w40aac37b9c41b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c39c11"></a>
+#### Response elements<a name="w40aac37b9c41c11"></a>
 
 
 ****  
@@ -747,7 +777,7 @@ This operation does not use the HTTP request body\.
 
 Lists all the inbound cross\-cluster search connections for a destination domain\.
 
-#### Syntax<a name="w40aac37b9c41b5"></a>
+#### Syntax<a name="w40aac37b9c43b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/inboundConnection/search
@@ -764,22 +794,22 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/inboundConnecti
 }
 ```
 
-#### Request parameters<a name="w40aac37b9c41b7"></a>
+#### Request parameters<a name="w40aac37b9c43b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c41b9"></a>
+#### Request body<a name="w40aac37b9c43b9"></a>
 
 
 ****  
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
-| Filters | Object | Yes | List of filter names and values that you can use for the describe requests\. The following fields are supported: connection\-id, local\-domain\-info\.domain\-name, local\-domain\-info\.owner\-id, local\-domain\-info\.region, and remote\-domain\-info\.domain\-name\. | 
+| Filters | Object | No | List of filter names and values that you can use for the describe requests\. The following fields are supported: connection\-id, local\-domain\-info\.domain\-name, local\-domain\-info\.owner\-id, local\-domain\-info\.region, and remote\-domain\-info\.domain\-name\. | 
 | MaxResults | Integer | No | Limits the number of results\. The default is 100\.  | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Response elements<a name="w40aac37b9c41c11"></a>
+#### Response elements<a name="w40aac37b9c43c11"></a>
 
 
 ****  
@@ -793,7 +823,7 @@ This operation does not use HTTP request parameters\.
 
 Lists all outbound cross\-cluster search connections for a source domain\.
 
-#### Syntax<a name="w40aac37b9c43b5"></a>
+#### Syntax<a name="w40aac37b9c45b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/outboundConnection/search
@@ -810,22 +840,22 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/outboundConnect
 }
 ```
 
-#### Request parameters<a name="w40aac37b9c43b7"></a>
+#### Request parameters<a name="w40aac37b9c45b7"></a>
 
 This operation does not use HTTP Request parameters\.
 
-#### Request body<a name="w40aac37b9c43b9"></a>
+#### Request body<a name="w40aac37b9c45b9"></a>
 
 
 ****  
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
-| Filters | Object | Yes | List of filter names and values that you can use for the describe requests\. The following fields are supported: connection\-id, remote\-domain\-info\.domain\-name, remote\-domain\-info\.owner\-id, remote\-domain\-info\.region, and local\-domain\-info\.domain\-name  | 
+| Filters | Object | No | List of filter names and values that you can use for the describe requests\. The following fields are supported: connection\-id, remote\-domain\-info\.domain\-name, remote\-domain\-info\.owner\-id, remote\-domain\-info\.region, and local\-domain\-info\.domain\-name  | 
 | MaxResults | Integer | No | Limits the number of results\. The default is 100\.  | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Response elements<a name="w40aac37b9c43c11"></a>
+#### Response elements<a name="w40aac37b9c45c11"></a>
 
 
 ****  
@@ -883,13 +913,13 @@ This operation does not use request parameters\.
 
 Describes the available Reserved Instance offerings for a given Region\.
 
-#### Syntax<a name="w40aac37b9c47b5"></a>
+#### Syntax<a name="w40aac37b9c49b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/reservedInstanceOfferings?offeringId=offering-id&maxResults=max-results&nextToken=next-token
 ```
 
-#### Request parameters<a name="w40aac37b9c47b7"></a>
+#### Request parameters<a name="w40aac37b9c49b7"></a>
 
 
 ****  
@@ -902,11 +932,11 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/reservedInstanceOff
 
 
 
-#### Request body<a name="w40aac37b9c47b9"></a>
+#### Request body<a name="w40aac37b9c49b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c47c11"></a>
+#### Response elements<a name="w40aac37b9c49c11"></a>
 
 
 ****  
@@ -919,13 +949,13 @@ This operation does not use the HTTP request body\.
 
 Describes the instance that you have reserved in a given Region\.
 
-#### Syntax<a name="w40aac37b9c49b5"></a>
+#### Syntax<a name="w40aac37b9c51b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/reservedInstances?reservationId=reservation-id&maxResults=max-results&nextToken=next-token
 ```
 
-#### Request parameters<a name="w40aac37b9c49b7"></a>
+#### Request parameters<a name="w40aac37b9c51b7"></a>
 
 
 ****  
@@ -938,11 +968,11 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/reservedInstances?r
 
 
 
-#### Request body<a name="w40aac37b9c49b9"></a>
+#### Request body<a name="w40aac37b9c51b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c49c11"></a>
+#### Response elements<a name="w40aac37b9c51c11"></a>
 
 
 ****  
@@ -988,42 +1018,10 @@ This operation does not use the HTTP request body\.
 
 Returns a map of OpenSearch or Elasticsearch versions and the versions you can upgrade them to\.
 
-#### Syntax<a name="w40aac37b9c53b5"></a>
-
-```
-GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/compatibleVersions?domainName=domain-name
-```
-
-#### Request parameters<a name="w40aac37b9c53b7"></a>
-
-
-****  
-
-| Parameter | Data type | Required? | Description | 
-| --- | --- | --- | --- | 
-| DomainName | [DomainName](#configuration-api-datatypes-domainname) | No | The name of an existing domain\. | 
-
-#### Request body<a name="w40aac37b9c53b9"></a>
-
-This operation does not use the HTTP request body\.
-
-#### Response elements<a name="w40aac37b9c53c11"></a>
-
-
-****  
-
-| Field | Data type | Description | 
-| --- | --- | --- | 
-| CompatibleVersions | Map | A map of OpenSearch or Elasticsearch versions and the versions you can upgrade them to:<pre>{<br />  "CompatibleVersions": [{<br />    "SourceVersion": "Elasticsearch_7.9",<br />    "TargetVersions": ["Elasticsearch_7.10"]<br />  }]<br />}</pre> | 
-
-### GetPackageVersionHistory<a name="configuration-api-actions-get-pac-ver-hist"></a>
-
-Returns a map of OpenSearch versions and the versions you can upgrade them to\.
-
 #### Syntax<a name="w40aac37b9c55b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2021-01-01/packages/package-id/history?maxResults=max-results&amp;nextToken=next-token
+GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/compatibleVersions?domainName=domain-name
 ```
 
 #### Request parameters<a name="w40aac37b9c55b7"></a>
@@ -1033,9 +1031,7 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/packages/package-id/history?ma
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
-| PackageID | String | Yes | The name of an existing domain\. | 
-| MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
-| NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
+| DomainName | [DomainName](#configuration-api-datatypes-domainname) | No | The name of an existing domain\. | 
 
 #### Request body<a name="w40aac37b9c55b9"></a>
 
@@ -1048,16 +1044,16 @@ This operation does not use the HTTP request body\.
 
 | Field | Data type | Description | 
 | --- | --- | --- | 
-| PackageVersionHistoryList | Map | A list of commit messages, updates tmies, and versions for the given package:<pre>"PackageVersionHistoryList": [<br />  {<br />    CommitMessage": "Add new synonyms",<br />    "CreatedAt": 1.605225005466E9,<br />    "PackageVersion": "v4"<br />  }<br />]</pre> | 
+| CompatibleVersions | Map | A map of OpenSearch or Elasticsearch versions and the versions you can upgrade them to:<pre>{<br />  "CompatibleVersions": [{<br />    "SourceVersion": "Elasticsearch_7.10",<br />    "TargetVersions": ["OpenSearch_1.0"]<br />  }]<br />}</pre> | 
 
-### GetUpgradeHistory<a name="configuration-api-actions-get-upgrade-hist"></a>
+### GetPackageVersionHistory<a name="configuration-api-actions-get-pac-ver-hist"></a>
 
-Returns a list of the domain's 10 most\-recent upgrade operations\.
+Returns a map of OpenSearch versions and the versions you can upgrade them to\.
 
 #### Syntax<a name="w40aac37b9c57b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain/domain-name/history?maxResults=max-results&amp;nextToken=next-token
+GET https://es.us-east-1.amazonaws.com/2021-01-01/packages/package-id/history?maxResults=max-results&amp;nextToken=next-token
 ```
 
 #### Request parameters<a name="w40aac37b9c57b7"></a>
@@ -1067,8 +1063,8 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain/domai
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
+| PackageID | String | Yes | The name of an existing domain\. | 
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
-| DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
 #### Request body<a name="w40aac37b9c57b9"></a>
@@ -1082,16 +1078,16 @@ This operation does not use the HTTP request body\.
 
 | Field | Data type | Description | 
 | --- | --- | --- | 
-| UpgradeHistoryList | UpgradeHistoryList | Container for result logs of the past 10 upgrade operations\. | 
+| PackageVersionHistoryList | Map | A list of commit messages, updates tmies, and versions for the given package:<pre>"PackageVersionHistoryList": [<br />  {<br />    CommitMessage": "Add new synonyms",<br />    "CreatedAt": 1.605225005466E9,<br />    "PackageVersion": "v4"<br />  }<br />]</pre> | 
 
-### GetUpgradeStatus<a name="configuration-api-actions-get-upgrade-stat"></a>
+### GetUpgradeHistory<a name="configuration-api-actions-get-upgrade-hist"></a>
 
-Returns the most recent status of a domain's OpenSearch or Elasticsearch version upgrade\.
+Returns a list of the domain's 10 most\-recent upgrade operations\.
 
 #### Syntax<a name="w40aac37b9c59b5"></a>
 
 ```
-GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain/domain-name/status
+GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain/domain-name/history?maxResults=max-results&amp;nextToken=next-token
 ```
 
 #### Request parameters<a name="w40aac37b9c59b7"></a>
@@ -1101,7 +1097,9 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain/domai
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
+| MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
+| NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
 #### Request body<a name="w40aac37b9c59b9"></a>
 
@@ -1114,19 +1112,51 @@ This operation does not use the HTTP request body\.
 
 | Field | Data type | Description | 
 | --- | --- | --- | 
+| UpgradeHistoryList | UpgradeHistoryList | Container for result logs of the past 10 upgrade operations\. | 
+
+### GetUpgradeStatus<a name="configuration-api-actions-get-upgrade-stat"></a>
+
+Returns the most recent status of a domain's OpenSearch or Elasticsearch version upgrade\.
+
+#### Syntax<a name="w40aac37b9c61b5"></a>
+
+```
+GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain/domain-name/status
+```
+
+#### Request parameters<a name="w40aac37b9c61b7"></a>
+
+
+****  
+
+| Parameter | Data type | Required? | Description | 
+| --- | --- | --- | --- | 
+| DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | The name of an existing domain\. | 
+
+#### Request body<a name="w40aac37b9c61b9"></a>
+
+This operation does not use the HTTP request body\.
+
+#### Response elements<a name="w40aac37b9c61c11"></a>
+
+
+****  
+
+| Field | Data type | Description | 
+| --- | --- | --- | 
 | UpgradeStepItem | UpgradeStepItem | Container for the most recent status of a domain's version upgrade\. | 
 
 ### ListDomainNames<a name="configuration-api-actions-listdomainnames"></a>
 
 Displays the names of all OpenSearch Service domains owned by the current user *in the active Region*\.
 
-#### Syntax<a name="w40aac37b9c61b5"></a>
+#### Syntax<a name="w40aac37b9c63b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2021-01-01/domain
 ```
 
-#### Request parameters<a name="w40aac37b9c61b7"></a>
+#### Request parameters<a name="w40aac37b9c63b7"></a>
 
 
 ****  
@@ -1137,11 +1167,11 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/domain
 
 This operation does not use request parameters\.
 
-#### Request body<a name="w40aac37b9c61b9"></a>
+#### Request body<a name="w40aac37b9c63b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c61c11"></a>
+#### Response elements<a name="w40aac37b9c63c11"></a>
 
 
 ****  
@@ -1185,17 +1215,17 @@ This operation does not use the HTTP request body\.
 | DomainPackageDetailsList | List | List of [DomainPackageDetails](#configuration-api-datatypes-domainpackagedetails) objects\. | 
 | NextToken | String | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-### ListEngineVersions<a name="configuration-api-actions-listversions"></a>
+### ListVersions<a name="configuration-api-actions-listversions"></a>
 
 Lists all supported OpenSearch and Elasticsearch versions on OpenSearch Service\.
 
-#### Syntax<a name="w40aac37b9c65b5"></a>
+#### Syntax<a name="w40aac37b9c67b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/versions?maxResults=max-results&nextToken=next-token
 ```
 
-#### Request parameters<a name="w40aac37b9c65b7"></a>
+#### Request parameters<a name="w40aac37b9c67b7"></a>
 
 
 ****  
@@ -1205,18 +1235,44 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/versions?maxResults
 | MaxResults | Integer | No | Limits the number of results\. Must be between 30 and 100\. | 
 | NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
 
-#### Request body<a name="w40aac37b9c65b9"></a>
+#### Request body<a name="w40aac37b9c67b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c65c11"></a>
+### ListInstanceTypeDetails<a name="configuration-api-actions-listinstancetypedetails"></a>
+
+Lists all instance types and available features for a given OpenSearch or Elasticsearch version\.
+
+#### Syntax<a name="w40aac37b9c69b5"></a>
+
+```
+GET https://es.us-east-1.amazonaws.com/2021-01-01/instanceTypeDetails/engine-version?domainName=domain-name?maxResults=max-results&nextToken=next-token
+```
+
+#### Request parameters<a name="w40aac37b9c69b7"></a>
+
+
+****  
+
+| Parameter | Data type | Required? | Description | 
+| --- | --- | --- | --- | 
+| EngineVersion | String | Yes | Version of OpenSearch or Elasticsearch, in the format Elasticsearch\_X\.Y or OpenSearch\_X\.Y\. Defaults to the latest version of OpenSearch\. For the full list of supported versions, see [Supported versions of OpenSearch and Elasticsearch](what-is.md#choosing-version)\. | 
+| DomainName | [DomainName](#configuration-api-datatypes-domainname) | Yes | Name of the domain that you want to list instance type details for\. | 
+|  `MaxResults`  |  Integer  |  No  | Limits the number of results\. Must be between 30 and 100\. | 
+| NextToken | String | No | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\. | 
+
+#### Request body<a name="w40aac37b9c69b9"></a>
+
+This operation does not use the HTTP request body\.
+
+#### Response elements<a name="w40aac37b9c69c11"></a>
 
 
 ****  
 
 | Field | Data type | Description | 
 | --- | --- | --- | 
-| EngineVersions | List | Lists all supported OpenSearch and Elasticsearch versions\. | 
+| InstanceTypeDetails | List | Lists all supported instance types and features for the given OpenSearch or Elasticsearch version\. | 
 | NextToken | String | Used for pagination\. Only necessary if a previous API call produced a result containing NextToken\. Accepts a next\-token input to return results for the next page, and provides a next\-token output in the response, which clients can use to retrieve more results\.  | 
 
 ### ListPackagesForDomain<a name="configuration-api-actions-listpackagesfordomain"></a>
@@ -1258,13 +1314,13 @@ This operation does not use the HTTP request body\.
 
 Displays all resource tags for an OpenSearch Service domain\.
 
-#### Syntax<a name="w40aac37b9c69b5"></a>
+#### Syntax<a name="w40aac37b9c73b5"></a>
 
 ```
 GET https://es.us-east-1.amazonaws.com/2021-01-01/tags?arn=domain-arn
 ```
 
-#### Request parameters<a name="w40aac37b9c69b7"></a>
+#### Request parameters<a name="w40aac37b9c73b7"></a>
 
 
 ****  
@@ -1273,11 +1329,11 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/tags?arn=domain-arn
 | --- | --- | --- | --- | 
 | ARN | [`ARN`](#configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) for the OpenSearch Service domain\. | 
 
-#### Request body<a name="w40aac37b9c69b9"></a>
+#### Request body<a name="w40aac37b9c73b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c69c11"></a>
+#### Response elements<a name="w40aac37b9c73c11"></a>
 
 
 ****  
@@ -1290,7 +1346,7 @@ This operation does not use the HTTP request body\.
 
 Purchases a Reserved Instance\.
 
-#### Syntax<a name="w40aac37b9c71b5"></a>
+#### Syntax<a name="w40aac37b9c75b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/purchaseReservedInstanceOffering
@@ -1301,11 +1357,11 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/purchaseReservedIn
 }
 ```
 
-#### Request parameters<a name="w40aac37b9c71b7"></a>
+#### Request parameters<a name="w40aac37b9c75b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c71b9"></a>
+#### Request body<a name="w40aac37b9c75b9"></a>
 
 
 ****  
@@ -1316,7 +1372,7 @@ This operation does not use HTTP request parameters\.
 |  ReservedInstanceOfferingId  | String | Yes | The offering ID\. | 
 | InstanceCount | Integer | Yes | The number of instances that you want to reserve\. | 
 
-#### Response elements<a name="w40aac37b9c71c11"></a>
+#### Response elements<a name="w40aac37b9c75c11"></a>
 
 
 ****  
@@ -1330,21 +1386,21 @@ This operation does not use HTTP request parameters\.
 
 Allows the destination domain owner to reject an inbound cross\-cluster search connection request\.
 
-#### Syntax<a name="w40aac37b9c73b5"></a>
+#### Syntax<a name="w40aac37b9c77b5"></a>
 
 ```
 PUT https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/cc/inboundConnection/connection-id/reject
 ```
 
-#### Request parameters<a name="w40aac37b9c73b7"></a>
+#### Request parameters<a name="w40aac37b9c77b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c73b9"></a>
+#### Request body<a name="w40aac37b9c77b9"></a>
 
 This operation does not use the HTTP request body\.
 
-#### Response elements<a name="w40aac37b9c73c11"></a>
+#### Response elements<a name="w40aac37b9c77c11"></a>
 
 
 ****  
@@ -1357,7 +1413,7 @@ This operation does not use the HTTP request body\.
 
 Removes the specified resource tags from an OpenSearch Service domain\.
 
-#### Syntax<a name="w40aac37b9c75b5"></a>
+#### Syntax<a name="w40aac37b9c79b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/tags-removal
@@ -1367,72 +1423,6 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/tags-removal
     "tag-key1",
     "tag-key2"
   ]
-}
-```
-
-#### Request parameters<a name="w40aac37b9c75b7"></a>
-
-This operation does not use HTTP request parameters\.
-
-#### Request body<a name="w40aac37b9c75b9"></a>
-
-
-****  
-
-| Parameter | Data type | Required? | Description | 
-| --- | --- | --- | --- | 
-| ARN | [`ARN`](#configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) of an OpenSearch Service domain\. For more information, see [IAM identifiers](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in the AWS Identity and Access Management User Guide\.  | 
-| TagKeys | [`TagKey`](#configuration-api-datatypes-tagkey) | Yes | List of tag keys for resource tags that you want to remove from an OpenSearch Service domain\. | 
-
-#### Response elements<a name="w40aac37b9c75c11"></a>
-
-The `RemoveTags` operation does not return a response element\.
-
-### StartServiceSoftwareUpdate<a name="configuration-api-actions-startupdate"></a>
-
-Schedules a service software update for an OpenSearch Service domain\.
-
-#### Syntax<a name="w40aac37b9c77b5"></a>
-
-```
-POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/serviceSoftwareUpdate/start
-{
-  "DomainName": "domain-name"
-}
-```
-
-#### Request parameters<a name="w40aac37b9c77b7"></a>
-
-This operation does not use HTTP request parameters\.
-
-#### Request body<a name="w40aac37b9c77b9"></a>
-
-
-****  
-
-| Parameter | Data type | Required? | Description | 
-| --- | --- | --- | --- | 
-| DomainName | [`DomainName`](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain that you want to update to the latest service software\. | 
-
-#### Response elements<a name="w40aac37b9c77c11"></a>
-
-
-****  
-
-| Field | Data type | Description | 
-| --- | --- | --- | 
-| ServiceSoftwareOptions | ServiceSoftwareOptions | Container for the state of your domain relative to the latest service software\. | 
-
-### CancelServiceSoftwareUpdate<a name="configuration-api-actions-stopupdate"></a>
-
-Stops a scheduled service software update for an OpenSearch Service domain\. Only works if the domain's `UpdateStatus` is `PENDING_UPDATE`\.
-
-#### Syntax<a name="w40aac37b9c79b5"></a>
-
-```
-POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/serviceSoftwareUpdate/stop
-{
-  "DomainName": "domain-name"
 }
 ```
 
@@ -1447,9 +1437,75 @@ This operation does not use HTTP request parameters\.
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
-| DomainName | [`DomainName`](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain that you want to update to the latest service software\. | 
+| ARN | [`ARN`](#configuration-api-datatypes-arn) | Yes | Amazon Resource Name \(ARN\) of an OpenSearch Service domain\. For more information, see [IAM identifiers](http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in the AWS Identity and Access Management User Guide\.  | 
+| TagKeys | [`TagKey`](#configuration-api-datatypes-tagkey) | Yes | List of tag keys for resource tags that you want to remove from an OpenSearch Service domain\. | 
 
 #### Response elements<a name="w40aac37b9c79c11"></a>
+
+The `RemoveTags` operation does not return a response element\.
+
+### StartServiceSoftwareUpdate<a name="configuration-api-actions-startupdate"></a>
+
+Schedules a service software update for an OpenSearch Service domain\.
+
+#### Syntax<a name="w40aac37b9c81b5"></a>
+
+```
+POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/serviceSoftwareUpdate/start
+{
+  "DomainName": "domain-name"
+}
+```
+
+#### Request parameters<a name="w40aac37b9c81b7"></a>
+
+This operation does not use HTTP request parameters\.
+
+#### Request body<a name="w40aac37b9c81b9"></a>
+
+
+****  
+
+| Parameter | Data type | Required? | Description | 
+| --- | --- | --- | --- | 
+| DomainName | [`DomainName`](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain that you want to update to the latest service software\. | 
+
+#### Response elements<a name="w40aac37b9c81c11"></a>
+
+
+****  
+
+| Field | Data type | Description | 
+| --- | --- | --- | 
+| ServiceSoftwareOptions | ServiceSoftwareOptions | Container for the state of your domain relative to the latest service software\. | 
+
+### CancelServiceSoftwareUpdate<a name="configuration-api-actions-stopupdate"></a>
+
+Stops a scheduled service software update for an OpenSearch Service domain\. Only works if the domain's `UpdateStatus` is `PENDING_UPDATE`\.
+
+#### Syntax<a name="w40aac37b9c83b5"></a>
+
+```
+POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/serviceSoftwareUpdate/stop
+{
+  "DomainName": "domain-name"
+}
+```
+
+#### Request parameters<a name="w40aac37b9c83b7"></a>
+
+This operation does not use HTTP request parameters\.
+
+#### Request body<a name="w40aac37b9c83b9"></a>
+
+
+****  
+
+| Parameter | Data type | Required? | Description | 
+| --- | --- | --- | --- | 
+| DomainName | [`DomainName`](#configuration-api-datatypes-domainname) | Yes | Name of the OpenSearch Service domain that you want to update to the latest service software\. | 
+
+#### Response elements<a name="w40aac37b9c83c11"></a>
 
 
 ****  
@@ -1462,7 +1518,7 @@ This operation does not use HTTP request parameters\.
 
 Modifies the configuration of an OpenSearch Service domain, such as the instance type and the number of instances\. You need to specify only the values that you want to update\.
 
-#### Syntax<a name="w40aac37b9c81b5"></a>
+#### Syntax<a name="w40aac37b9c85b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/config
@@ -1530,7 +1586,7 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name
       "CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group2:sample-domain",
       "Enabled":true|false
     },
-    "APPLICATION_LOGS": {
+    "ES_APPLICATION_LOGS": {
       "CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group3:sample-domain",
       "Enabled":true|false
     }
@@ -1571,11 +1627,11 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name
 }
 ```
 
-#### Request parameters<a name="w40aac37b9c81b7"></a>
+#### Request parameters<a name="w40aac37b9c85b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c81b9"></a>
+#### Request body<a name="w40aac37b9c85b9"></a>
 
 
 ****  
@@ -1587,7 +1643,7 @@ This operation does not use HTTP request parameters\.
 | EBSOptions | [`EBSOptions`](#configuration-api-datatypes-ebsoptions) | No | Type and size of EBS volumes attached to data nodes\.  | 
 | VPCOptions | [`VPCOptions`](#configuration-api-datatypes-vpcoptions) | No | Container for the values required to configure OpenSearch Service to work with a VPC\. To learn more, see [Launching your Amazon OpenSearch Service domains within a VPC](vpc.md)\. | 
 | SnapshotOptions | [`SnapshotOptions`](#configuration-api-datatypes-snapshotoptions) | No | DEPRECATED\. Hour during which the service takes an automated daily snapshot of the indices in the OpenSearch Service domain\. | 
-| AdvancedOptions | [`AdvancedOptions`](#configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Advanced cluster parameters](createupdatedomains.md#createdomain-configure-advanced-options)\. | 
+| AdvancedOptions | [`AdvancedOptions`](#configuration-api-datatypes-advancedoptions) | No | Key\-value pairs to specify advanced configuration options\. For more information, see [Advanced cluster settings](createupdatedomains.md#createdomain-configure-advanced-options)\. | 
 | AccessPolicies | String | No | Specifies the access policies for the OpenSearch Service domain\. For more information, see [Configuring access policies](createupdatedomains.md#createdomain-configure-access-policies)\. | 
 | LogPublishingOptions | [`LogPublishingOptions`](#configuration-api-datatypes-logpublishingoptions) | No | Key\-value string pairs to configure slow log publishing\. | 
 | CognitoOptions | [`CognitoOptions`](#configuration-api-datatypes-cognitooptions) | No | Key\-value pairs to configure OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards\. | 
@@ -1597,7 +1653,7 @@ This operation does not use HTTP request parameters\.
 | NodeToNodeEncryptionOptions | [NodeToNodeEncryptionOptions](#configuration-api-datatypes-node-to-node) | No | Enables node\-to\-node encryption\. | 
 | EncryptionAtRestOptions | [EncryptionAtRestOptions](#configuration-api-datatypes-encryptionatrest) | No | Key\-value pairs to enable encryption at rest\. | 
 
-#### Response elements<a name="w40aac37b9c81c11"></a>
+#### Response elements<a name="w40aac37b9c85c11"></a>
 
 
 ****  
@@ -1654,7 +1710,7 @@ This operation does not use request parameters\.
 
 Upgrades an OpenSearch Service domain to a new version of OpenSearch or Elasticsearch\. Alternately, checks upgrade eligibility\.
 
-#### Syntax<a name="w40aac37b9c85b5"></a>
+#### Syntax<a name="w40aac37b9c89b5"></a>
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain
@@ -1665,11 +1721,11 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain
 }
 ```
 
-#### Request parameters<a name="w40aac37b9c85b7"></a>
+#### Request parameters<a name="w40aac37b9c89b7"></a>
 
 This operation does not use HTTP request parameters\.
 
-#### Request body<a name="w40aac37b9c85b9"></a>
+#### Request body<a name="w40aac37b9c89b9"></a>
 
 
 ****  
@@ -1681,7 +1737,7 @@ This operation does not use HTTP request parameters\.
 | PerformCheckOnly | Boolean | No | Defaults to false\. If true, OpenSearch Service checks the eligibility of the domain, but does not perform the upgrade\. | 
 |  `AdvancedOptions`  | [AdvancedOptions](#configuration-api-datatypes-advancedoptions) | No | Only supports the override\_main\_response\_version parameter and not other advanced options\. You can only include this option when upgrading to an OpenSearch version\. Specifies whether the domain reports its version as 7\.10 so that it continues to work with Elasticsearch OSS clients and plugins\. | 
 
-#### Response elements<a name="w40aac37b9c85c11"></a>
+#### Response elements<a name="w40aac37b9c89c11"></a>
 
 
 ****  
@@ -1750,7 +1806,7 @@ Key\-value pairs to specify advanced OpenSearch configuration options\.
 | Enabled | Boolean | Whether to enable or disable Amazon Cognito authentication for OpenSearch Dashboards\. See [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md)\. | 
 | UserPoolId | String | The Amazon Cognito user pool ID that you want OpenSearch Service to use for OpenSearch Dashboards authentication\. | 
 | IdentityPoolId | String | The Amazon Cognito identity pool ID that you want OpenSearch Service to use for OpenSearch Dashboards authentication\. | 
-| RoleArn | String | The AmazonESCognitoAccess role that allows OpenSearch Service to configure your user pool and identity pool\. | 
+| RoleArn | String | The AmazonOpenSearchServiceCognitoAccess role that allows OpenSearch Service to configure your user pool and identity pool\. | 
 
 ### ColdStorageOptions<a name="configuration-api-datatypes-cs"></a>
 
@@ -1991,7 +2047,7 @@ Specifies whether the OpenSearch Service domain publishes the OpenSearch applica
 | --- | --- | --- | 
 | INDEX\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether the OpenSearch index slow log should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
 | SEARCH\_SLOW\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether the OpenSearch search slow log should be published there: <pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
-| APPLICATION\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether the OpenSearch error logs should be published there:<pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
+| ES\_APPLICATION\_LOGS | Key\-value | Two key\-value pairs that define the CloudWatch log group and whether the OpenSearch error logs should be published there:<pre>"CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:264071961897:log-group:sample-domain",<br />"Enabled":true</pre> | 
 
 ### MasterUserOptions<a name="configuration-api-datatypes-masteruser"></a>
 

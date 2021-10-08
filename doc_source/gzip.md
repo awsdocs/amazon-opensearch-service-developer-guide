@@ -6,7 +6,7 @@ Gzip compression is supported for all domains running OpenSearch or Elasticsearc
 
 ## Enabling gzip compression<a name="gzip-enable"></a>
 
-Not to be confused with similar OpenSearch settings, `http_compression.enabled` is specific to OpenSearch Service and enables or disables gzip compression on a domain\. Domains running OpenSearch or Elasticsearch 7\.*x* have the featured enabled by default, whereas domains running Elasticsearch 6\.*x* have it disabled by default\.
+Not to be confused with similar OpenSearch settings, `http_compression.enabled` is specific to OpenSearch Service and enables or disables gzip compression on a domain\. Domains running OpenSearch or Elasticsearch 7\.*x* have the gzip compression enabled by default, whereas domains running Elasticsearch 6\.*x* have it disabled by default\.
 
 To enable gzip compression, send the following request:
 
@@ -27,24 +27,21 @@ When including a gzip\-compressed request body, keep the standard `Content-Type:
 
 ## Sample code \(Python 3\)<a name="gzip-code"></a>
 
-The following sample uses [elasticsearch\-py](https://elasticsearch-py.readthedocs.io) to perform the compression and send the request\. This code signs the request using your IAM credentials\. 
-
-**Note**  
-The latest versions of the OpenSearch clients might include license or version checks that artificially break compatibility\. For the correct client version to use, see [Elasticsearch client compatibility](samplecode.md#client-compatibility)\.
+The following sample uses [opensearch\-py](https://pypi.org/project/opensearch-py/) to perform the compression and send the request\. This code signs the request using your IAM credentials\. 
 
 ```
-from elasticsearch import Elasticsearch, RequestsHttpConnection
+from opensearchpy import OpenSearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 import boto3
 
 host = '' # e.g. my-test-domain.us-east-1.es.amazonaws.com
 region = '' # e.g. us-west-1
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
 # Create the client.
-search = Elasticsearch(
+search = OpenSearch(
     hosts = [{'host': host, 'port': 443}],
     http_auth = awsauth,
     use_ssl = True,
@@ -62,7 +59,6 @@ document = {
 # Send the request.
 print(search.index(index='movies', id='1', body=document, refresh=True))
 
-# # Older versions of the client might require doc_type.
 # print(search.index(index='movies', doc_type='_doc', id='1', body=document, refresh=True))
 ```
 

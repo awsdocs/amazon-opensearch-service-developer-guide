@@ -31,27 +31,15 @@ The console is the simplest way to tag a domain\.
 
 1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
 
-1. Select the domain you want to add tags to\.
+1. Select the domain you want to add tags to and go to the **Tags** tab\.
 
-1. Choose **Actions** and **Manage tags**\.
+1. Choose **Manage** and **Add new tag**\.
 
 1. Enter a tag key and an optional value\.
 
-1. Choose **Submit**\.
+1. Choose **Save**\.
 
-**To delete a tag \(console\)**
-
-Use the following procedure to delete a resource tag\.
-
-1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
-
-1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
-
-1. In the navigation pane, select your domain\.
-
-1. Choose **Actions** and **Manage tags**\.
-
-1. Remove the tag and choose **Submit**\.
+To delete a tag, follow the same steps and choose **Remove** on the **Manage tags** page\.
 
 For more information about using the console to work with tags, see [Working with Tag Editor](https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/tag-editor.html) in the *AWS Management Console Getting Started Guide*\.
 
@@ -76,7 +64,7 @@ You can create resource tags using the AWS CLI with the \-\-add\-tags command\.
 The following example creates two tags for the *logs* domain:
 
 ```
-aws opensearchservice add-tags --arn arn:aws:es:us-east-1:379931976431:domain/logs --tag-list Key=service,Value=OpenSearch Key=instances,Value=m3.2xlarge
+aws opensearch add-tags --arn arn:aws:es:us-east-1:379931976431:domain/logs --tag-list Key=service,Value=OpenSearch Key=instances,Value=m3.2xlarge
 ```
 
 You can remove tags from an OpenSearch Service domain using the remove\-tags command\. 
@@ -98,7 +86,7 @@ You can remove tags from an OpenSearch Service domain using the remove\-tags com
 The following example removes two tags from the *logs* domain that were created in the preceding example:
 
 ```
-aws opensearchservice remove-tags --arn arn:aws:es:us-east-1:379931976431:domain/logs --tag-keys service instances
+aws opensearch remove-tags --arn arn:aws:es:us-east-1:379931976431:domain/logs --tag-keys service instances
 ```
 
 You can view the existing tags for an OpenSearch Service domain with the list\-tags command:
@@ -119,7 +107,7 @@ You can view the existing tags for an OpenSearch Service domain with the list\-t
 The following example lists all resource tags for the *logs* domain:
 
 ```
-aws opensearchservice list-tags --arn arn:aws:es:us-east-1:379931976431:domain/logs
+aws opensearch list-tags --arn arn:aws:es:us-east-1:379931976431:domain/logs
 ```
 
 ## Working with tags \(AWS SDKs\)<a name="managedomains-awsresourcetagging-sdk"></a>

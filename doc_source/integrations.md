@@ -28,7 +28,7 @@ Before proceeding, you must have the following resources\.
 
 | Prerequisite | Description | 
 | --- | --- | 
-| Amazon S3 bucket | For more information, see [Create your first S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service Getting Started Guide\. The bucket must reside in the same region as your OpenSearch Service domain\. | 
+| Amazon S3 bucket | For more information, see [Create your first S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the Amazon Simple Storage Service User Guide\. The bucket must reside in the same region as your OpenSearch Service domain\. | 
 | OpenSearch Service domain | The destination for data after your Lambda function processes it\. For more information, see [ Creating OpenSearch Service domains](createupdatedomains.md#createdomains)\. | 
 
 ### Create the Lambda deployment package<a name="integrations-s3-lambda-deployment-package"></a>
@@ -46,7 +46,7 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
    from requests_aws4auth import AWS4Auth
    
    region = '' # e.g. us-west-1
-   service = 'opensearchservice'
+   service = 'es'
    credentials = boto3.Session().get_credentials()
    awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
    
@@ -97,7 +97,7 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
    ```
 
    ```
-   cd s3-to-es
+   cd s3-to-opensearch
    
    pip install --target ./package requests
    pip install --target ./package requests_aws4auth
@@ -119,7 +119,7 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
 
 After you create the deployment package, you can create the Lambda function\. When you create a function, choose a name, runtime \(for example, Python 3\.8\), and IAM role\. The IAM role defines the permissions for your function\. For detailed instructions, see [Create a Lambda function with the console](https://docs.aws.amazon.com/lambda/latest/dg/get-started-create-function.html) in the *AWS Lambda Developer Guide*\.
 
-This example assumes you're using the console\. Choose Python 2\.7 and a role that has S3 read permissions and OpenSearch Service write permissions, as shown in the following screenshot:
+This example assumes you're using the console\. Choose Python 3\.9 and a role that has S3 read permissions and OpenSearch Service write permissions, as shown in the following screenshot:
 
 ![\[Sample configuration for a Lambda function\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/lambda-function.png)
 
@@ -154,7 +154,7 @@ After you create the function, you can test it by uploading a file to the Amazon
 12.345.678.91 - [10/Oct/2000:14:56:14 -0700] "GET /some-file.jpg"
 ```
 
-Upload the file to the `logs` folder of your S3 bucket\. For instructions, see [Upload an object to your bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html) in the *Amazon Simple Storage Service Getting Started Guide*\.
+Upload the file to the `logs` folder of your S3 bucket\. For instructions, see [Upload an object to your bucket](https://docs.aws.amazon.com/AmazonS3/latest/gsg/PuttingAnObjectInABucket.html) in the *Amazon Simple Storage Service User Guide*\.
 
 Then use the OpenSearch Service console or OpenSearch Dashboards to verify that the `lambda-s3-index` index contains two documents\. You can also make a standard search request:
 
@@ -221,7 +221,7 @@ import requests
 from requests_aws4auth import AWS4Auth
 
 region = '' # e.g. us-west-1
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
@@ -258,7 +258,7 @@ cd kinesis-to-opensearch
 ```
 
 ```
-cd kinesis-to-es
+cd kinesis-to-opensearch
 
 pip install --target ./package requests
 pip install --target ./package requests_aws4auth
@@ -329,7 +329,7 @@ import requests
 from requests_aws4auth import AWS4Auth
 
 region = '' # e.g. us-east-1
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
@@ -364,7 +364,7 @@ cd ddb-to-opensearch
 ```
 
 ```
-cd ddb-to-es
+cd ddb-to-opensearch
 pip install --target ./package requests
 pip install --target ./package requests_aws4auth
 ```

@@ -1,6 +1,6 @@
 # Signing HTTP requests to Amazon OpenSearch Service<a name="request-signing"></a>
 
-This section includes examples of how to send signed HTTP requests to Amazon OpenSearch Service using Elasticsearch clients and other common libraries\. These code samples are for interacting with the OpenSearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles \(or you use an IAM master user with [fine\-grained access control](fgac.md)\), you must sign requests to the OpenSearch APIs with your IAM credentials\. 
+This section includes examples of how to send signed HTTP requests to Amazon OpenSearch Service using Elasticsearch and OpenSearch clients and other common libraries\. These code samples are for interacting with the OpenSearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles \(or you use an IAM master user with [fine\-grained access control](fgac.md)\), you must sign requests to the OpenSearch APIs with your IAM credentials\. 
 
 For examples of how to interact with the configuration API, including operations like creating, updating, and deleting OpenSearch Service domains, see [Using the AWS SDKs to interact with Amazon OpenSearch Service](configuration-samples.md)\.
 
@@ -37,7 +37,7 @@ import java.io.IOException;
 
 public class AmazonOpenSearchServiceSample {
 
-    private static String serviceName = "opensearchservice";
+    private static String serviceName = "es";
     private static String region = "us-west-1";
     private static String domainEndpoint = "https://domain.us-west-1.es.amazonaws.com";
 
@@ -104,7 +104,7 @@ import java.util.Map;
 
 public class AmazonOpenSearchServiceSample {
 
-    private static String serviceName = "opensearchservice";
+    private static String serviceName = "es";
     private static String region = "us-west-1";
     private static String domainEndpoint = ""; // e.g. https://search-mydomain.us-west-1.es.amazonaws.com
     private static String index = "my-index";
@@ -144,13 +144,13 @@ Both signed samples use the default credential chain\. Run `aws configure` using
 
 ## Python<a name="request-signing-python"></a>
 
-This sample uses the legacy [elasticsearch\-py](https://elasticsearch-py.readthedocs.io/) client for Python, which you can install using [pip](https://pypi.python.org/pypi/pip)\. Note that the latest versions of the client might include license or version checks that artificially break compatibility\. For the correct client version to use, see [Elasticsearch client compatibility](samplecode.md#client-compatibility)\. This example uses the recommended version 7\.13\.4\. If you want to try the new OpenSearch client instead of the legacy Elasticsearch one, see [opensearch\-py](https://github.com/opensearch-project/opensearch-py) on GitHub\.
+This sample uses the [opensearch\-py](https://pypi.org/project/opensearch-py/) client for Python, which you can install using [pip](https://pypi.python.org/pypi/pip)\.
 
 Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
 
 ```
 pip install boto3
-pip install elasticsearch==7.13.4
+pip install opensearch-py
 pip install requests
 pip install requests-aws4auth
 ```
@@ -158,18 +158,18 @@ pip install requests-aws4auth
 The following sample code establishes a secure connection to the specified OpenSearch Service domain and indexes a single document\. You must provide values for `region` and `host`\.
 
 ```
-from elasticsearch import Elasticsearch, RequestsHttpConnection
+from opensearchpy import OpenSearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 import boto3
 
 host = '' # For example, my-test-domain.us-east-1.es.amazonaws.com
 region = '' # e.g. us-west-1
 
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-search = Elasticsearch(
+search = OpenSearch(
     hosts = [{'host': host, 'port': 443}],
     http_auth = awsauth,
     use_ssl = True,
@@ -188,7 +188,7 @@ search.index(index="movies", doc_type="_doc", id="5", body=document)
 print(search.get(index="movies", doc_type="_doc", id="5"))
 ```
 
-If you don't want to use elasticsearch\-py, you can just make standard HTTP requests\. This sample creates a new index with seven shards and two replicas:
+If you don't want to use opensearch\-py, you can just make standard HTTP requests\. This sample creates a new index with seven shards and two replicas:
 
 ```
 from requests_aws4auth import AWS4Auth
@@ -199,7 +199,7 @@ host = '' # The domain with https:// and trailing slash. For example, https://my
 path = 'my-index' # the OpenSearch API endpoint
 region = '' # For example, us-west-1
 
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
@@ -222,7 +222,7 @@ This next example uses the [Beautiful Soup](https://www.crummy.com/software/Beau
 
 ```
 from bs4 import BeautifulSoup
-from elasticsearch import Elasticsearch, RequestsHttpConnection
+from opensearchpy import OpenSearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 import boto3
 import glob
@@ -257,11 +257,11 @@ for html_file in glob.glob('*.htm'):
 host = '' # For example, my-test-domain.us-east-1.es.amazonaws.com
 region = '' # e.g. us-west-1
 
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service)
 
-aos = Elasticsearch(
+search = OpenSearch(
     hosts = [{'host': host, 'port': 443}],
     http_auth = awsauth,
     use_ssl = True,
@@ -269,9 +269,9 @@ aos = Elasticsearch(
     connection_class = RequestsHttpConnection
 )
 
-aos.bulk(bulk_file)
+search.bulk(bulk_file)
 
-print(aos.search(q='some test query'))
+print(search.search(q='some test query'))
 ```
 
 ## Ruby<a name="request-signing-ruby"></a>
@@ -303,7 +303,7 @@ document = {
 }
 
 region = '' # e.g. us-west-1
-service = 'opensearchservice'
+service = 'es'
 
 client = Elasticsearch::Client.new(url: full_url_and_port) do |f|
   f.request :aws_sigv4,
@@ -328,7 +328,7 @@ export AWS_SESSION_TOKEN="your-session-token"
 This next example uses the [AWS SDK for Ruby](https://aws.amazon.com/sdk-for-ruby/) and standard Ruby libraries to send a signed HTTP request\. Like the first example, it indexes a single document\. You must provide values for host and region\.
 
 ```
-require 'aws-sdk-elasticsearchservice'
+require 'aws-sdk-opensearchservice'
 
 host = '' # e.g. https://my-domain.region.es.amazonaws.com
 index = 'ruby-index'
@@ -343,7 +343,7 @@ document = {
   }
 }
 
-service = 'opensearchservice'
+service = 'es'
 region = '' # e.g. us-west-1
 
 signer = Aws::Sigv4::Signer.new(
@@ -414,7 +414,7 @@ function indexDocument(document) {
   request.headers['Content-Length'] = Buffer.byteLength(request.body);
 
   var credentials = new AWS.EnvironmentCredentials('AWS');
-  var signer = new AWS.Signers.V4(request, 'opensearchservice');
+  var signer = new AWS.Signers.V4(request, 'es');
   signer.addAuthorization(credentials, new Date());
 
   var client = new AWS.HttpClient();
@@ -465,7 +465,7 @@ func main() {
   id := "1"
   endpoint := domain + "/" + index + "/" + "_doc" + "/" + id
   region := "" // e.g. us-east-1
-  service := "opensearchservice"
+  service := "es"
 
   // Sample JSON document to be included as the request body
   json := `{ "title": "Thor: Ragnarok", "director": "Taika Waititi", "year": "2017" }`

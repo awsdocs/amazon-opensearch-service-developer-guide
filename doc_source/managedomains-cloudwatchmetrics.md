@@ -1,4 +1,4 @@
-# Monitoring OpenSearch Service cluster metrics with Amazon CloudWatch<a name="managedomains-cloudwatchmetrics"></a>
+# Monitoring OpenSearch cluster metrics with Amazon CloudWatch<a name="managedomains-cloudwatchmetrics"></a>
 
 Amazon OpenSearch Service publishes data from your domains to Amazon CloudWatch\. CloudWatch lets you retrieve statistics about those data points as an ordered set of time\-series data, known as *metrics*\. OpenSearch Service sends metrics to CloudWatch in 60\-second intervals\. If you use General Purpose or Magnetic EBS volumes, the EBS volume metrics update only every five minutes\. For more information about Amazon CloudWatch, see the [Amazon CloudWatch User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/)\.
 
@@ -50,7 +50,7 @@ To view metrics in OpenSearch Service, use the **Cluster health** and **Instance
 + The white line within each box shows the node's current value\.
 + The “whiskers” on either side of each box show the minimum and maximum values for all nodes over the time period\.
 
-If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [Making configuration changes in OpenSearch Service](managedomains-configuration-changes.md)\.
+If you make configuration changes to your domain, the list of individual instances in the **Cluster health** and **Instance health** tabs often double in size for a brief period before returning to the correct number\. For an explanation of this behavior, see [Making configuration changes in Amazon OpenSearch Service](managedomains-configuration-changes.md)\.
 
 ## Cluster metrics<a name="managedomains-cloudwatchmetrics-cluster-metrics"></a>
 
@@ -68,7 +68,7 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | Shards\.activePrimary |  The number of active primary shards\. Relevant statistics: Maximum, Sum  | 
 | Shards\.initializing |  The number of shards that are under initialization\. Relevant statistics: Sum  | 
 | Shards\.relocating |  The number of shards that are under relocation\. Relevant statistics: Sum  | 
-| Nodes |  The number of nodes in the OpenSearch Service cluster, including dedicated master nodes and UltraWarm nodes\. For more information, see [Making configuration changes in OpenSearch Service](managedomains-configuration-changes.md)\. Relevant statistics: Maximum  | 
+| Nodes |  The number of nodes in the OpenSearch Service cluster, including dedicated master nodes and UltraWarm nodes\. For more information, see [Making configuration changes in Amazon OpenSearch Service](managedomains-configuration-changes.md)\. Relevant statistics: Maximum  | 
 | SearchableDocuments |  The total number of searchable documents across all data nodes in the cluster\. Relevant statistics: Minimum, Maximum, Average  | 
 | DeletedDocuments |  The total number of documents marked for deletion across all data nodes in the cluster\. These documents no longer appear in search results, but OpenSearch only removes deleted documents from disk during segment merges\. This metric increases after delete requests and decreases after segment merges\. Relevant statistics: Minimum, Maximum, Average  | 
 | CPUUtilization |  The percentage of CPU usage for data nodes in the cluster\. Maximum shows the node with the highest CPU usage\. Average represents all nodes in the cluster\. This metric is also available for individual nodes\. Relevant statistics: Maximum, Average  | 
@@ -79,10 +79,10 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | AutomatedSnapshotFailure |  The number of failed automated snapshots for the cluster\. A value of `1` indicates that no automated snapshot was taken for the domain in the previous 36 hours\. Relevant statistics: Minimum, Maximum  | 
 | CPUCreditBalance |  The remaining CPU credits available for data nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-credits-baseline-concepts.html) in the *Amazon EC2 Developer Guide*\. This metric is available only for the T2 instance types\. Relevant statistics: Minimum  | 
 | OpenSearchDashboardsHealthyNodes \(previously KibanaHealthyNodes\) |  A health check for OpenSearch Dashboards\. If the minimum, maximum, and average are all equal to 1, Dashboards is behaving normally\. If you have 10 nodes with a maximum of 1, minimum of 0, and average of 0\.7, this means 7 nodes \(70%\) are healthy and 3 nodes \(30%\) are unhealthy\. Relevant statistics: Minimum, Maximum, Average  | 
-| ESReportingFailedRequestSysErrCount |  The number of requests to generate OpenSearch Dashboards reports that failed due to server problems or feature limitations\. Relevant statistics: Sum  | 
-| ESReportingFailedRequestUserErrCount |  The number of requests to generate OpenSearch Dashboards reports that failed due to client issues\. Relevant statistics: Sum  | 
-| ESReportingRequestCount |  The total number of requests to generate OpenSearch Dashboards reports\. Relevant statistics: Sum  | 
-| ESReportingSuccessCount |  The number of successful requests to generate OpenSearch Dashboards reports\. Relevant statistics: Sum  | 
+| KibanaReportingFailedRequestSysErrCount |  The number of requests to generate OpenSearch Dashboards reports that failed due to server problems or feature limitations\. Relevant statistics: Sum  | 
+| KibanaReportingFailedRequestUserErrCount |  The number of requests to generate OpenSearch Dashboards reports that failed due to client issues\. Relevant statistics: Sum  | 
+| KibanaReportingRequestCount |  The total number of requests to generate OpenSearch Dashboards reports\. Relevant statistics: Sum  | 
+| KibanaReportingSuccessCount |  The number of successful requests to generate OpenSearch Dashboards reports\. Relevant statistics: Sum  | 
 | KMSKeyError |  A value of 1 indicates that the AWS KMS key used to encrypt data at rest has been disabled\. To restore the domain to normal operations, re\-enable the key\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum  | 
 | KMSKeyInaccessible |  A value of 1 indicates that the AWS KMS key used to encrypt data at rest has been deleted or revoked its grants to OpenSearch Service\. You can't recover domains that are in this state\. If you have a manual snapshot, though, you can use it to migrate the domain's data to a new domain\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum  | 
 | InvalidHostHeaderRequests |  The number of HTTP requests made to the OpenSearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. OpenSearch Service rejects invalid requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\. If you see large values for this metric, confirm that your OpenSearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum  | 
@@ -340,6 +340,17 @@ Amazon OpenSearch Service provides the following metrics for [cross\-cluster sea
 | CrossClusterInboundRequests |  `ConnectionId`  |  Number of incoming connection requests received from the source domain\.  | 
 
 Add a CloudWatch alarm in the event that you lose a connection unexpectedly\. For steps to create an alarm, see [Create a CloudWatch Alarm Based on a Static Threshold](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html)\.
+
+## Cross\-cluster replication<a name="managedomains-cloudwatchmetrics-replication"></a>
+
+Amazon OpenSearch Service provides the following metrics for [cross\-cluster replication](replication.md)\.
+
+
+| Metric | Description | 
+| --- | --- | 
+| ReplicationRate |  Average rate of replication operations per second\. This metric is similar to the `IndexingRate` metric\.  | 
+| LeaderCheckPoint |  The sum of global checkpoints across all replicating indices on the leader index for a specific connection\. You can use this metric to measure replication latency\.  | 
+| FollowerCheckPoint |  The sum of global checkpoints across all replicating indices on the follower index for a specific connection\. You can use this metric to measure replication latency\.  | 
 
 ## Learning to Rank metrics<a name="managedomains-cloudwatchmetrics-learning-to-rank"></a>
 

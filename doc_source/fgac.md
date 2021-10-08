@@ -353,13 +353,13 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
 
 1. Sign in with `master-user`\.
 
-1. Choose **Try our sample data** and add some sample flight data\.
+1. Choose **Add sample data** and add some sample flight data\.
 
 1. Choose **Security**, **Roles**, **Create role**\.
 
 1. Name the role `new-role`\.
 
-1. For index permissions, specify `dashboards_sample_data_fli*` for the index pattern\.
+1. For index permissions, specify `opensearch_dashboards_sample_data_fli*` for the index pattern \(`kibana_sample_data_fli*` on Elasticsearch domains\)\.
 
 1. For the action group, choose **read**\.
 
@@ -401,7 +401,7 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
 1. Run another search:
 
    ```
-   GET dashboards_sample_data_flights/_search
+   GET opensearch_dashboards_sample_data_flights/_search
    {
      "query": {
        "match_all": {}
@@ -557,14 +557,14 @@ If you forget the details of the master user, you can reconfigure it using the c
 
 1. Choose your domain\.
 
-1. Choose **Actions**, **Modify authentication**\.
+1. Choose **Actions**, **Edit security configuration**\.
 
 1. Choose either **Set IAM ARN as master user** or **Create master user**\.
    + If you previously used an IAM master user, fine\-grained access control re\-maps the `all_access` role to the new IAM ARN that you specify\.
    + If you previously used the internal user database, fine\-grained access control creates a new master user\. You can use the new master user to delete the old one\.
    + Switching from the internal user database to an IAM master user does *not* delete any users from the internal user database\. Instead, it just disables HTTP basic authentication\. Manually delete users from the internal user database, or keep them in case you ever need to reenable HTTP basic authentication\.
 
-1. Choose **Submit**\.
+1. Choose **Save changes**\.
 
 ## Additional master users<a name="fgac-more-masters"></a>
 

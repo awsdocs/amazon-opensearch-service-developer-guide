@@ -9,7 +9,7 @@ The following table shows OpenSearch Service limits for clusters and instances\.
 
 | Clusters and instances | Limit | 
 | --- | --- | 
-| Maximum number of data nodes per cluster |  40 \(except for the T2 and T3 instance types, which have a maximum of 10\) To request an increase up to 200 data nodes, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
+| Maximum number of data nodes per cluster |  80 \(except for the T2 and T3 instance types, which have a maximum of 10\) To request an increase up to 200 data nodes, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
 | Maximum number of [warm](ultrawarm.md) nodes per cluster | 150 | 
 |  Maximum total number of data and warm nodes per cluster  |  200 You might have to request a data node limit increase to reach this total\. For example, your domain might have 80 data nodes and 120 warm nodes\.  | 
 | Maximum number of dedicated master nodes per cluster |  5 You can use the T2 and T3 instance types for dedicated master nodes only if the number of data nodes is 10 or fewer\. We don't recommend T2 or `t3.small` instance types for production domains\.  | 
@@ -215,7 +215,7 @@ The following table shows the maximum size of HTTP request payloads\.
 
 ## Java process limit<a name="java-process-limit"></a>
 
-OpenSearch Service limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Advanced cluster parameters](createupdatedomains.md#createdomain-configure-advanced-options) and [JVM OutOfMemoryError](handling-errors.md#handling-errors-jvm_out_of_memory_error)\.
+OpenSearch Service limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Advanced cluster settings](createupdatedomains.md#createdomain-configure-advanced-options) and [JVM OutOfMemoryError](handling-errors.md#handling-errors-jvm_out_of_memory_error)\.
 
 ## Domain policy limit<a name="domain-policy-limit"></a>
 

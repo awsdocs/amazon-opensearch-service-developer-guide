@@ -8,6 +8,7 @@ After you add data to Amazon OpenSearch Service, you often need to reindex that 
 + [Index State Management in Amazon OpenSearch Service](ism.md)
 + [Summarizing indices in Amazon OpenSearch Service with index rollups](rollup.md)
 + [Transforming indices in Amazon OpenSearch Service](transforms.md)
++ [Cross\-cluster replication for Amazon OpenSearch Service](replication.md)
 + [Using Curator to rotate data in Amazon OpenSearch Service](curator.md)
 + [Migrating Amazon OpenSearch Service indices using remote reindex](remote-reindex.md)
 + [Managing time\-series data in Amazon OpenSearch Service with data streams](data-streams.md)

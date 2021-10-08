@@ -78,7 +78,7 @@ With UltraWarm storage, you pay for what you use\. An `ultrawarm1.large.search` 
 
 The console is the simplest way to create a domain that uses warm storage\. While creating the domain, choose **Enable UltraWarm data nodes** and the number of warm nodes that you want\. The same basic process works on existing domains, provided they meet the [prerequisites](#ultrawarm-pp)\. Even after the domain state changes from **Processing** to **Active**, UltraWarm might not be available to use for several hours\.
 
-You can also use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](configuration-api.md) to enable UltraWarm, specifically the `WarmEnabled`, `WarmCount`, and `WarmType` options in `ClusterConfig`\.
+You can also use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) or [configuration API](configuration-api.md) to enable UltraWarm, specifically the `WarmEnabled`, `WarmCount`, and `WarmType` options in `ClusterConfig`\.
 
 **Note**  
 Domains support a maximum number of warm nodes\. For details, see [Amazon OpenSearch Service limits](limits.md)\.
@@ -88,7 +88,7 @@ Domains support a maximum number of warm nodes\. For details, see [Amazon OpenSe
 The following AWS CLI command creates a domain with three data nodes, three dedicated master nodes, six warm nodes, and fine\-grained access control enabled:
 
 ```
-aws opensearchservice create-domain \
+aws opensearch create-domain \
   --domain-name my-domain \
   --engine-version Opensearch_1.0 \
   --cluster-config InstanceCount=3,InstanceType=r6g.large.search,DedicatedMasterEnabled=true,DedicatedMasterType=r6g.large.search,DedicatedMasterCount=3,ZoneAwarenessEnabled=true,ZoneAwarenessConfig={AvailabilityZoneCount=3},WarmEnabled=true,WarmCount=6,WarmType=ultrawarm1.medium.search \
@@ -429,6 +429,6 @@ If you have data in UltraWarm that you query infrequently, consider migrating it
 
 ## Disabling UltraWarm<a name="ultrawarm-disable"></a>
 
-The console is the simplest way to disable UltraWarm\. Choose the domain, **Edit domain**, deselect **Enable UltraWarm data nodes**, and **Submit**\. You can also use the `WarmEnabled` option in the AWS CLI and configuration API\.
+The console is the simplest way to disable UltraWarm\. Choose the domain, **Actions**, and **Edit cluster configuration**\. Deselect **Enable UltraWarm data nodes** and choose **Save changes**\. You can also use the `WarmEnabled` option in the AWS CLI and configuration API\.
 
 Before you disable UltraWarm, you must either delete all warm indices or migrate them back to hot storage\. After warm storage is empty, wait five minutes before attempting to disable the feature\.

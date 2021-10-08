@@ -23,7 +23,6 @@ Cross\-cluster search supports OpenSearch Dashboards, so you can create visualiz
 Cross\-cluster search has several important limitations:
 + You can only implement cross\-cluster search on domains created on or after June 3rd, 2020\.
 + You can't connect to self\-managed OpenSearch/Elasticsearch clusters\.
-+ You can't connect to domains in different AWS Regions\.
 + A domain can have a maximum of 20 outgoing connections\. Similarly, a domain can have a maximum of 20 incoming connections\. In other words, one domain can connect to a maximum of 20 other domains\.
 + Domains must either share the same major version, or be on the final minor version and the next major version \(for example, 6\.8 and 7\.x are compatible\)\.
 + You can't use custom dictionaries or SQL with cross\-cluster search\.
@@ -57,13 +56,13 @@ The source domain creates an "outbound" connection to the destination domain\. T
 
 1. On your domain dashboard, choose a domain and go to the **Connections** tab\.
 
-1. In the **Outbound connections** section, choose **Connect**\.
+1. In the **Outbound connections** section, choose **Request**\.
 
-1. For **Connection Alias**, enter a name for your connection\.
+1. For **Connection alias**, enter a name for your connection\.
 
-1. Choose between connecting a cluster in your AWS account or in another account\.
-   + To connect to a cluster in your AWS account, choose the domain from the dropdown menu and choose **Submit**\.
-   + To connect to a cluster in another AWS account, specify the ARN of the remote domain and choose **Submit**\.
+1. Choose between connecting a cluster in your AWS account or in another account or Region\.
+   + To connect to a cluster in your AWS account and Region, choose the domain from the dropdown menu and choose **Request**\.
+   + To connect to a cluster in another AWS account or Region, specify the ARN of the remote domain and choose **Request**\.
 
 1. Cross\-cluster search first validates the connection request to make sure the prerequisites are met\. If the domains are found to be incompatible, the connection request enters the `Validation failed` state\.
 
@@ -76,11 +75,11 @@ After the connection is established, any traffic that flows between the nodes of
 
 Removing a connection stops any cross\-cluster operation on its indices\.
 
-1. On your domain dashboard, choose the **Connections** tab\.
+1. On your domain dashboard, go to the **Connections** tab\.
 
 1. Select the domain connections that you want to remove and choose **Delete**, then confirm deletion\.
 
-You can perform these steps on either the source or destination domain to remove the connection\. After the connection is removed, it's still visible with a `Deleted` status for a period of 15 days\. 
+You can perform these steps on either the source or destination domain to remove the connection\. After you remove the connection, it's still visible with a `Deleted` status for a period of 15 days\. 
 
 You can't delete a domain with active cross\-cluster connections\. To delete a domain, first remove all incoming and outgoing connections from that domain\. This ensures you take into account the cross\-cluster domain users before deleting the domain\.
 

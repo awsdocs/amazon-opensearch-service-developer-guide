@@ -27,21 +27,21 @@ The console lets you view your existing Reserved Instances and purchase new ones
 
 1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
 
-1. Choose **Reserved instances**\.
+1. Choose **Reserved Instance Leases** from the navigation pane\.
 
    On this page, you can view your existing reservations\. If you have many reservations, you can filter them to more easily identify and view a particular reservation\.
 **Tip**  
-If you don't see the **Reserved instances** link, [create a domain](createupdatedomains.md) in the region\.
+If you don't see the **Reserved Instance Leases** link, [create a domain](createupdatedomains.md) in the region\.
 
-1. Choose **Order reserved instance**\.
+1. Choose **Order Reserved Instance**\.
 
 1. Provide a unique and descriptive name\.
 
-1. Choose an instance class and size, and the number of instances\. For guidance, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md)\.
+1. Choose an instance type and the number of instances\. For guidance, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md)\.
 
 1. Choose a term length and payment option\. Review the payment details carefully\.
 
-1. Choose **Submit**\.
+1. Choose **Next**\.
 
 1. Review the purchase summary carefully\. Purchases of Reserved Instances are non\-refundable\.
 

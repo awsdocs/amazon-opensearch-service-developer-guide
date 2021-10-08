@@ -8,7 +8,7 @@ If you send data to OpenSearch Service over HTTPS, node\-to\-node encryption hel
 
 ## Enabling node\-to\-node encryption<a name="enabling-ntn"></a>
 
-Node\-to\-node encryption on new domains requires any version of OpenSearch, or Elasticsearch 6\.0 or later\. Enabling node\-to\-node encryption on existing domains requires any version of OpenSearch, or Elasticsearch 6\.7 or later\. Choose the existing domain in the AWS console, **Actions**, and **Modfy encryptions**\.
+Node\-to\-node encryption on new domains requires any version of OpenSearch, or Elasticsearch 6\.0 or later\. Enabling node\-to\-node encryption on existing domains requires any version of OpenSearch, or Elasticsearch 6\.7 or later\. Choose the existing domain in the AWS console, **Actions**, and **Edit security configuration**\.
 
 Alternatively, you can use the AWS CLI or configuration API\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 

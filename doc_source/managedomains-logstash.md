@@ -1,11 +1,11 @@
 # Loading data into Amazon OpenSearch Service with Logstash<a name="managedomains-logstash"></a>
 
-The open source version of Logstash \(Logstash OSS\) provides a convenient way to use the bulk API to upload data into your Amazon OpenSearch Service domain\. The service supports all standard Logstash input plugins, including the Amazon S3 input plugin\. OpenSearch Service currently supports three Logstash output plugins, depending on your Logstash version, authentication method, and whether your domain is running Elasticsearch or OpenSearch:
+The open source version of Logstash \(Logstash OSS\) provides a convenient way to use the bulk API to upload data into your Amazon OpenSearch Service domain\. The service supports all standard Logstash input plugins, including the Amazon S3 input plugin\. OpenSearch Service currently supports the following Logstash output plugins depending on your Logstash version, authentication method, and whether your domain is running Elasticsearch or OpenSearch:
 + Standard Elasticsearch plugin
 + [logstash\-output\-amazon\_es](https://github.com/opensearch-project/logstash-output-opensearch), which uses IAM credentials to sign and export Logstash events to OpenSearch Service
 + [logstash\-output\-opensearch](https://github.com/opensearch-project/logstash-output-opensearch), which currently only supports basic authentication
 
-The following table describes the compatibility between various authentication mechanisms and Logstash output plugins:
+The following tables describe the compatibility between various authentication mechanisms and Logstash output plugins\.
 
 ## <a name="logstash-prereq"></a>
 
@@ -13,15 +13,15 @@ The following table describes the compatibility between various authentication m
 **OpenSearch**  
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-logstash.html)
 
-In order for OpenSearch domains to be compatible with version 7\.12 of Logstash OSS, you need to choose **Enable compatibility mode** in the console when creating or upgrading to an OpenSearch version\. This setting makes the domain artificially report its version as 7\.10\.2 so the plugin continues to work\. To use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](configuration-api.md), set `override_main_response_version` to `true` in the advanced settings\.
+\*In order for OpenSearch domains to use IAM authentication with Logstash OSS, you need to choose **Enable compatibility mode** in the console when creating or upgrading to an OpenSearch version\. This setting makes the domain artificially report its version as 7\.10 so the plugin continues to work\. To use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](configuration-api.md), set `override_main_response_version` to `true` in the advanced settings\.
 
 To enable or disable compatibility mode on *existing* OpenSearch domains, you need to use the OpenSearch `_cluster/settings` API:
 
 ```
-PUT _cluster/settings
+PUT /_cluster/settings
 {
-  "compatibility": {
-    "override_main_response_version": "true" 
+  "persistent" : {
+    "compatibility.override_main_response_version" : true
   }
 }
 ```
@@ -46,11 +46,9 @@ input {
 output {
   opensearch {
     hosts => ["https://domain-endpoint:443"]
-    ssl => true
     index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
     user => "my-username"
     password => "my-password"
-    ilm_enabled => false
   }
 }
 ```

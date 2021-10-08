@@ -7,7 +7,7 @@ For examples of how to interact with the OpenSearch APIs, such as `_index`, `_bu
 
 ## Java<a name="configuration-samples-java"></a>
 
-This example uses the AWS SDK for Java to create a domain, update its configuration, and delete it\. Uncomment the calls to `waitForDomainProcessing` \(and comment the call to `deleteDomain`\) to allow the domain to come online and be useable\.
+This example uses the [AmazonOpenSearchClientBuilder](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/opensearch/AmazonOpenSearchClientBuilder.html) constructor from the AWS SDK for Java to create a domain, update its configuration, and delete it\. Uncomment the calls to `waitForDomainProcessing` \(and comment the call to `deleteDomain`\) to allow the domain to come online and be useable\.
 
 ```
 package com.amazonaws.samples;
@@ -199,4 +199,124 @@ public class OpenSearchSample {
         System.out.println(describeResponse.toString());
     }
 }
+```
+
+## Python<a name="configuration-samples-python"></a>
+
+This example uses the [OpenSearchService](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/opensearch.html) low\-level Python client from the AWS SDK for Python \(Boto\) to create a domain, update its configuration, and delete it\. 
+
+```
+import boto3
+import botocore
+from botocore.config import Config
+import time
+
+# Build the client using the default credential configuration.
+# You can use the CLI and run 'aws configure' to set access key, secret
+# key, and default region.
+
+my_config = Config(
+    # Optionally lets you specify a region other than your default.
+    region_name='us-west-2'
+)
+
+client = boto3.client('opensearch', config=my_config)
+
+domainName = 'my-test-domain'  # The name of the domain
+
+
+def createDomain(client, domainName):
+    """Creates an Amazon OpenSearch Service domain with the specified options."""
+    response = client.create_domain(
+        DomainName=domainName,
+        EngineVersion='OpenSearch_1.0',
+        ClusterConfig={
+            'InstanceType': 't2.small.search',
+            'InstanceCount': 5,
+            'DedicatedMasterEnabled': True,
+            'DedicatedMasterType': 't2.small.search',
+            'DedicatedMasterCount': 3
+        },
+        # Many instance types require EBS storage.
+        EBSOptions={
+            'EBSEnabled': True,
+            'VolumeType': 'gp2',
+            'VolumeSize': 10
+        },
+        AccessPolicies="{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:user/user-name\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:us-west-2:123456789012:domain/my-test-domain/*\"}]}",
+        NodeToNodeEncryptionOptions={
+            'Enabled': True
+        }
+    )
+    print("Creating domain...")
+    print(response)
+
+
+def updateDomain(client, domainName):
+    """Updates the domain to use three data nodes instead of five."""
+    try:
+        response = client.update_domain_config(
+            DomainName=domainName,
+            ClusterConfig={
+                'InstanceCount': 3
+            }
+        )
+        print('Sending domain update request...')
+        print(response)
+
+    except botocore.exceptions.ClientError as error:
+        if error.response['Error']['Code'] == 'ResourceNotFoundException':
+            print('Domain not found. Please check the domain name.')
+        else:
+            raise error
+
+
+def deleteDomain(client, domainName):
+    """Deletes an OpenSearch Service domain. Deleting a domain can take several minutes."""
+    try:
+        response = client.delete_domain(
+            DomainName=domainName
+        )
+        print('Sending domain deletion request...')
+        print(response)
+
+    except botocore.exceptions.ClientError as error:
+        if error.response['Error']['Code'] == 'ResourceNotFoundException':
+            print('Domain not found. Please check the domain name.')
+        else:
+            raise error
+
+
+def waitForDomainProcessing(client, domainName):
+    """Waits for the domain to finish processing changes."""
+    try:
+        response = client.describe_domain(
+            DomainName=domainName
+        )
+        # Every 15 seconds, check whether the domain is processing.
+        while response["DomainStatus"]["Processing"] == True:
+            print('Domain still processing...')
+            time.sleep(15)
+            response = client.describe_domain(
+                DomainName=domainName)
+
+        # Once we exit the loop, the domain is available.
+        print('Amazon OpenSearch Service has finished processing changes for your domain.')
+        print('Domain description:')
+        print(response)
+
+    except botocore.exceptions.ClientError as error:
+        if error.response['Error']['Code'] == 'ResourceNotFoundException':
+            print('Domain not found. Please check the domain name.')
+        else:
+            raise error
+
+
+def main():
+    """Create a new domain, update its configuration, and delete it."""
+    createDomain(client, domainName)
+    waitForDomainProcessing(client, domainName)
+    updateDomain(client, domainName)
+    waitForDomainProcessing(client, domainName)
+    deleteDomain(client, domainName)
 ```

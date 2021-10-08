@@ -18,6 +18,6 @@ The latest versions of the Elasticsearch clients might include license or versio
 | --- | --- | 
 | Java low\-level REST client |  7\.13\.4  | 
 | Java high\-level REST client |  7\.13\.4  | 
-| Python Elasticsearch client |  7\.13\.4  | 
+| Python Elasticsearch client \(OpenSearch client recommended instead\) |  7\.13\.4  | 
 |  Ruby Elasticsearch client  | 7\.13\.4 | 
 | Node\.js Elasticsearch client |  7\.13\.0  | 

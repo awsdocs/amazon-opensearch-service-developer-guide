@@ -56,7 +56,7 @@ If you encounter an error while following these steps, see [Can't enable audit l
 The following AWS CLI command enables audit logs on an existing domain:
 
 ```
-aws opensearchservice update-domain-config --domain-name my-domain --log-publishing-options "AUDIT_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-log-group,Enabled=true}"
+aws opensearch update-domain-config --domain-name my-domain --log-publishing-options "AUDIT_LOGS={CloudWatchLogsLogGroupArn=arn:aws:logs:us-east-1:123456789012:log-group:my-log-group,Enabled=true}"
 ```
 
 You can also enable audit logs when you create a domain\. For detailed information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.

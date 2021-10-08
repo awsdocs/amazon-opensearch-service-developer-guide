@@ -9,7 +9,7 @@ Use the following table to find the version of the SQL plugin that's supported b
 
 | OpenSearch version | SQL plugin version | Notable features | 
 | --- | --- | --- | 
-| 1\.0\.0 |  1\.0\.0\.0  |  | 
+| 1\.0\.0 |  [1\.0\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.0.0.0)  |  Support querying a data stream  | 
 
 
 **Elasticsearch**  

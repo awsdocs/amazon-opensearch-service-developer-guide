@@ -1,8 +1,6 @@
 # What is Amazon OpenSearch Service?<a name="what-is"></a>
 
-**The successor to Amazon Elasticsearch Service**
-
-Amazon OpenSearch Service, the successor to Amazon Elasticsearch Service, is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service supports OpenSearch and legacy Elasticsearch OSS\. When you create a cluster, you have the option of which search engine to use\. OpenSearch Service offers broad compatibility with Elasticsearch OSS 7\.10, the final open source version of the software\. For information about what changed with the recent service renaming, and what actions you need to take, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\.
+Amazon OpenSearch Service \(successor to Amazon Elasticsearch Service\) is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service supports OpenSearch and legacy Elasticsearch OSS\. When you create a cluster, you have the option of which search engine to use\. OpenSearch Service offers broad compatibility with Elasticsearch OSS 7\.10, the final open source version of the software\. For information about what changed with the recent service renaming, and the actions you might need to take, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\.
 
 *OpenSearch* is a fully open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. For more information, see the [OpenSearch documentation](https://opensearch.org/docs/)\.
 
@@ -87,7 +85,7 @@ For information on migrating to OpenSearch Service from a self\-managed OpenSear
 OpenSearch Service commonly is used with the following services:
 
 [Amazon CloudWatch](http://aws.amazon.com/documentation/cloudwatch/)  
-OpenSearch Service domains automatically send metrics to CloudWatch so that you can monitor domain health and performance\. For more information, see [Monitoring OpenSearch Service cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)\.  
+OpenSearch Service domains automatically send metrics to CloudWatch so that you can monitor domain health and performance\. For more information, see [Monitoring OpenSearch cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)\.  
 CloudWatch Logs can also go the other direction\. You might configure CloudWatch Logs to stream data to OpenSearch Service for analysis\. To learn more, see [Loading streaming data from Amazon CloudWatch](integrations.md#integrations-cloudwatch)\.
 
 [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/)  

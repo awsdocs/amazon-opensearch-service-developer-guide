@@ -115,7 +115,7 @@ import requests
 from requests_aws4auth import AWS4Auth
 
 region = '' # For example, us-west-1
-service = 'opensearchservice'
+service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
@@ -173,7 +173,7 @@ Choose **Add trigger** and create the HTTP endpoint that invokes your function\.
 
 ## Step 4: Modify the domain access policy<a name="search-example-perms"></a>
 
-Your OpenSearch Service domain must allow the Lambda function to make `GET` requests to the `movies` index\. The following policy provides `opensearch-lambda-role` \(created through Lambda\) access to the `movies` index:
+Your OpenSearch Service domain must allow the Lambda function to make `GET` requests to the `movies` index\. The following policy provides `opensearch-lambda-role` \(created through Lambda\) access to the `movies` index\. To get the exact name of the role that Lambda automatically creates, go to the AWS Identity and Access Management \(IAM\) console, choose **Roles**, and search for "lambda"\.
 
 ```
 {
@@ -192,7 +192,7 @@ Your OpenSearch Service domain must allow the Lambda function to make `GET` requ
 ```
 
 **Note**  
-To get the exact name of the role that Lambda automatically creates, go to the AWS Identity and Access Management \(IAM\) console, choose **Roles**, and search for "lambda"\.
+If you have fine\-grained access control enabled for the domain, you might also need to [map the role to a user](fgac.md#fgac-mapping) in OpenSearch Dashboards, otherwise you'll see permissions errors\.
 
 For more information about access policies, see [Configuring access policies](createupdatedomains.md#createdomain-configure-access-policies)\.
 

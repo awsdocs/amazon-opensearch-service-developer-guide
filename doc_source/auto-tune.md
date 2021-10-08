@@ -34,10 +34,10 @@ OpenSearch Service enables Auto\-Tune by default on new domains\. To enable or d
 
 **AWS CLI**
 
-To use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/), configure the `auto-tune-options` parameters\. The following sample command enables Auto\-Tune on an existing domain with a maintenance schedule that repeats every day at 12:00pm UTC:
+To use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html), configure the `auto-tune-options` parameters\. The following sample command enables Auto\-Tune on an existing domain with a maintenance schedule that repeats every day at 12:00pm UTC:
 
 ```
-aws opensearchservice update-domain-config \
+aws opensearch update-domain-config \
   --domain-name mylogs \
   --auto-tune-options '{"DesiredState": "ENABLED","MaintenanceSchedules":[{"StartAt":"2021-12-19","Duration":{"Value":2,"Unit":"HOURS"},"CronExpressionForRecurrence": "cron(0 12 * * ? *)"}]}'
 ```

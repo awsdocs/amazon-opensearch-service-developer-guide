@@ -49,6 +49,6 @@ Although dedicated master nodes don't process search and query requests, their s
 |  10–30  |  `c5.xlarge.search` or `c6g.xlarge.search`  | 
 | 30–75 |  `c5.2xlarge.search` or `c6g.2xlarge.search`  | 
 |  75–200  |  `r5.4xlarge.search` or `r6g.4xlarge.search`  | 
-+ For information about how certain configuration changes can affect dedicated master nodes, see [Making configuration changes in OpenSearch Service](managedomains-configuration-changes.md)\.
++ For information about how certain configuration changes can affect dedicated master nodes, see [Making configuration changes in Amazon OpenSearch Service](managedomains-configuration-changes.md)\.
 + For clarification on instance count limits, see [Cluster and instance limits](limits.md#clusterresource)\.
 + For more information about specific instance types, including vCPU, memory, and pricing, see [Amazon OpenSearch Service prices](https://aws.amazon.com/elasticsearch-service/pricing/)\.
