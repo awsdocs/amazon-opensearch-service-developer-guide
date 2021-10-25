@@ -58,7 +58,7 @@ If you enable UltraWarm on a preexisting OpenSearch Service domain, the `ultrawa
 
 ## UltraWarm storage requirements and performance considerations<a name="ultrawarm-calc"></a>
 
-As covered in [Calculating storage requirements](sizing-domains.md#bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and OpenSearch Service reserved space\. For example, a 20 GiB primary shard with one replica shard requires roughly 53 GiB of hot storage\.
+As covered in [Calculating storage requirements](sizing-domains.md#bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and OpenSearch Service reserved space\. For example, a 20 GiB primary shard with one replica shard requires roughly 58 GiB of hot storage\.
 
 Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 20 GiB shard requires 20 GiB of warm storage\. If you provision an `ultrawarm1.large.search` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm storage limits](limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
 
