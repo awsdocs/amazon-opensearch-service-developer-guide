@@ -37,10 +37,10 @@ Your domain is ineligible for a service software update if it's in any of the fo
 **To request a service software update \(AWS CLI and AWS SDKs\)**
 
 You can use the following commands to see if an update is available, check upgrade eligibility, and request an update:
-+ `describe-domain` \(`DescribeDomain`\)
-+ `start-service-software-update` \(`StartServiceSoftwareUpdate`\)
++ `describe-elasticsearch-domain` \(`DescribeElasticsearchDomain`\)
++ `start-elasticsearch-service-software-update` \(`StartElasticsearchServiceSoftwareUpdate`\)
 
 For more information, see the [AWS CLI command reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 
 **Tip**  
-After requesting an update, you might have a narrow window of time in which you can cancel it\. The duration of this `PENDING_UPDATE` state can vary greatly and depends on your AWS region and the number of concurrent updates OpenSearch Service is performing\. To cancel, use the console or `cancel-service-software-update` \(`CancelServiceSoftwareUpdate`\) command\.
+After requesting an update, you might have a narrow window of time in which you can cancel it\. The duration of this `PENDING_UPDATE` state can vary greatly and depends on your AWS region and the number of concurrent updates OpenSearch Service is performing\. To cancel, use the console or `cancel-elasticsearch-service-software-update` \(`CancelElasticsearchServiceSoftwareUpdate`\) command\.
