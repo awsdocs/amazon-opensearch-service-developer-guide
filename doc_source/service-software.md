@@ -8,7 +8,7 @@ Amazon OpenSearch Service regularly releases system software updates that add fe
 Each notification includes details about the service software update\. The notification severity is `Informational` if the update is optional and `High` if it's required\. Consider the following when deciding whether to update your domain:
 + If you take no action on required updates, OpenSearch Service still updates your domain service software automatically after a certain timeframe \(typically two weeks\)\. In this situation, OpenSearch Service sends notifications when it starts the update and when the update is complete\.
 + If you start an update manually, OpenSearch Service doesn't send a notification when it starts the update, only when the update is complete\.
-+ Software updates use [blue/green deployments](managedomains-configuration-changes.md) to minimizes downtime\. Updates can temporarily strain a cluster's dedicated master nodes, so make sure to maintain sufficient capacity to handle the associated overhead\. 
++ Software updates use [blue/green deployments](managedomains-configuration-changes.md) to minimize downtime\. Updates can temporarily strain a cluster's dedicated master nodes, so make sure to maintain sufficient capacity to handle the associated overhead\. 
 
 Manually updating your domain lets you take advantage of new features more quickly\. When you choose **Update**, OpenSearch Service places the request in a queue and begins the update when it has time\. Updates typically complete within minutes, but can also take several hours or even days if your system is experiencing heavy load\. Consider updating your domain at a low traffic time to avoid long update periods\. 
 
