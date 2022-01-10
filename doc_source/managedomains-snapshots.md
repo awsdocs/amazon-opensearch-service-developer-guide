@@ -145,7 +145,7 @@ print(r.text)
 
 # # Take snapshot
 #
-# path = '_snapshot/my-snapshot-repo/my-snapshot'
+# path = '_snapshot/my-snapshot-repo-name/my-snapshot'
 # url = host + path
 #
 # r = requests.put(url, auth=awsauth)
@@ -163,7 +163,7 @@ print(r.text)
 #
 # # Restore snapshot (all indices except Dashboards and fine-grained access control)
 #
-# path = '_snapshot/my-snapshot-repo/my-snapshot/_restore'
+# path = '_snapshot/my-snapshot-repo-name/my-snapshot/_restore'
 # url = host + path
 #
 # payload = {
@@ -179,7 +179,7 @@ print(r.text)
 # 
 # # Restore snapshot (one index)
 #
-# path = '_snapshot/my-snapshot-repo/my-snapshot/_restore'
+# path = '_snapshot/my-snapshot-repo-name/my-snapshot/_restore'
 # url = host + path
 #
 # payload = {"indices": "my-index"}
