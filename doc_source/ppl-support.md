@@ -47,6 +47,6 @@ fields firstname, lastname
 | 2 | Nanette | Bates | 
 | 3 | Dale | Adams | 
 
-You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see [Commands](https://opensearch.org/docs/search-plugins/ppl/commands/)\.
+You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see [Commands](https://opensearch.org/docs/latest/observability-plugin/ppl/commands/)\.
 
 The PPL plugin supports all SQL functions, including mathematical, trigonometric, date\-time, string, aggregate, and advanced operators and expressions\. To learn more, see [Functions](https://opensearch.org/docs/search-plugins/sql/functions/)\.
