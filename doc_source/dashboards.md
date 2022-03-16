@@ -1,6 +1,6 @@
 # Using OpenSearch Dashboards with Amazon OpenSearch Service<a name="dashboards"></a>
 
-OpenSearch Dashboards, the successor to Kibana, is an open\-source visualization tool designed to work with OpenSearch\. Amazon OpenSearch Service provides an installation of OpenSearch Dashboards with every OpenSearch Service domain\. You can find a link to Dashboards on your domain dashboard on the OpenSearch Service console\. The URL is `domain-endpoint/_dashboards/`\. Queries using this default OpenSearch Dashboards installation have a 300\-second timeout\.
+OpenSearch Dashboards is an open\-source visualization tool designed to work with OpenSearch\. Amazon OpenSearch Service provides an installation of OpenSearch Dashboards with every OpenSearch Service domain\. You can find a link to Dashboards on your domain dashboard on the OpenSearch Service console\. The URL is `domain-endpoint/_dashboards/`\. Queries using this default OpenSearch Dashboards installation have a 300\-second timeout\.
 
 The following sections address some common Dashboards use cases:
 + [Controlling access to OpenSearch Dashboards](#dashboards-access)

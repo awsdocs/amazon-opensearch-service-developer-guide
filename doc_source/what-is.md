@@ -1,6 +1,6 @@
 # What is Amazon OpenSearch Service?<a name="what-is"></a>
 
-Amazon OpenSearch Service \(successor to Amazon Elasticsearch Service\) is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service supports OpenSearch and legacy Elasticsearch OSS\. When you create a cluster, you have the option of which search engine to use\. OpenSearch Service offers broad compatibility with Elasticsearch OSS 7\.10, the final open source version of the software\. For information about what changed with the recent service renaming, and the actions you might need to take, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\.
+Amazon OpenSearch Service is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service supports OpenSearch and legacy Elasticsearch OSS\. When you create a cluster, you have the option of which search engine to use\. OpenSearch Service offers broad compatibility with Elasticsearch OSS 7\.10, the final open source version of the software\. For information about what changed with the recent service renaming, and the actions you might need to take, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\.
 
 *OpenSearch* is a fully open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. For more information, see the [OpenSearch documentation](https://opensearch.org/docs/)\.
 
@@ -39,7 +39,7 @@ OpenSearch Service includes the following features:
 + Custom packages to improve search results
 
 **Integration with popular services**
-+ Data visualization using OpenSearch Dashboards \(the successor to Kibana\)
++ Data visualization using OpenSearch Dashboards
 + Integration with Amazon CloudWatch for monitoring OpenSearch Service domain metrics and setting alarms
 + Integration with AWS CloudTrail for auditing configuration API calls to OpenSearch Service domains
 + Integration with Amazon S3, Amazon Kinesis, and Amazon DynamoDB for loading streaming data into OpenSearch Service

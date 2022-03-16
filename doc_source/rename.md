@@ -79,7 +79,7 @@ Some AWS services haven't yet added support for the new resource types:
 
 ## Kibana renamed to OpenSearch Dashboards<a name="rename-dashboards"></a>
 
-[OpenSearch Dashboards](dashboards.md), the successor to Kibana, is an open\-source visualization tool designed to work with OpenSearch\. After you upgrade a domain from Elasticsearch to OpenSearch, the `/_plugin/kibana` endpoint changes to `/_dashboards`\. OpenSearch Service will redirect all requests to the new endpoint, but if you use the Kibana endpoint in any of your IAM policies, update those policies to include the new `/_dashboards` endpoint as well\.
+[OpenSearch Dashboards](dashboards.md) is an open\-source visualization tool designed to work with OpenSearch\. After you upgrade a domain from Elasticsearch to OpenSearch, the `/_plugin/kibana` endpoint changes to `/_dashboards`\. OpenSearch Service will redirect all requests to the new endpoint, but if you use the Kibana endpoint in any of your IAM policies, update those policies to include the new `/_dashboards` endpoint as well\.
 
 If you're using [SAML authentication for OpenSearch Dashboards](saml.md), before you upgrade your domain to OpenSearch, you need to change all Kibana URLs configured in your identity provider \(IdP\) from `/_plugin/kibana` to `/_dashboards`\. The most common URLs are assertion consumer service \(ACS\) URLs and recipient URLs\.
 

@@ -1,4 +1,4 @@
-# Amazon OpenSearch Service (successor to Amazon Elasticsearch Service) Developer Guide
+# Amazon OpenSearch Service Developer Guide
 
 -----
 *****Copyright &copy; Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
