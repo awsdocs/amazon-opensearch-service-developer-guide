@@ -79,7 +79,7 @@ aws opensearch create-domain \
 
 As is, the command creates an internet\-accessible domain with two data nodes, each with 100 GiB of storage\. It also enables [fine\-grained access control](fgac.md) with HTTP basic authentication and all encryption settings\. Use the OpenSearch Service console if you need a more advanced security configuration, such as a VPC\.
 
-Before issuing the command, change the domain name, master user credentials, and account number\. Specify the same region that you used for the S3 bucket and an OpenSearch/Elasticsearch version that is compatible with your snapshot\.
+Before issuing the command, change the domain name, master user credentials, and account number\. Specify the same AWS Region that you used for the S3 bucket and an OpenSearch/Elasticsearch version that is compatible with your snapshot\.
 
 **Important**  
 Snapshots are only forward\-compatible, and only by one major version\. For example, you can't restore a snapshot from a 2\.*x* cluster on a 1\.*x* cluster or a 6\.*x* cluster, only a 2\.*x* or 5\.*x* cluster\. Minor version matters, too\. You can't restore a snapshot from a self\-managed 5\.3\.3 cluster on a 5\.3\.2 OpenSearch Service domain\. We recommend choosing the most recent version of OpenSearch or Elasticsearch that your snapshot supports\. For a table of compatible versions, see [Using a snapshot to migrate data](version-migration.md#snapshot-based-migration)\. 

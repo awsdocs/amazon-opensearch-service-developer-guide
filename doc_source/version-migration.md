@@ -1,4 +1,4 @@
-# Upgrading OpenSearch and Elasticsearch<a name="version-migration"></a>
+# Upgrading Amazon OpenSearch Service domains<a name="version-migration"></a>
 
 **Note**  
 OpenSearch and Elasticsearch version upgrades differ from service software updates\. For information on updating the service software for your OpenSearch Service domain, see [Service software updates in Amazon OpenSearch Service](service-software.md)\.
@@ -10,8 +10,9 @@ Currently, OpenSearch Service supports the following upgrade paths:
 
 | From version | To version | 
 | --- | --- | 
-| Elasticsearch 7\.x |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  Elasticsearch 7\.10 and OpenSearch 1\.0 introduce a breaking change with regard to dynamic templates\. For more information, see [Mapper parsing exception while indexing](handling-errors.md#troubleshooting-dynamic-template)\.   | 
-|  Elasticsearch 6\.8  |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  Elasticsearch 7\.0 and OpenSearch 1\.0 include numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](managedomains-snapshots.md) of the 6\.*x* domain, restoring it on a test 7\.*x* or OpenSearch 1\.*x* domain, and using that test domain to identify potential upgrade issues\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* and OpenSearch 1\.*x* have a default shard count of one\. OpenSearch Service domains on Elasticsearch 7\.*x* and later retain the previous default of five\.   | 
+| OpenSearch 1\.x | OpenSearch 1\.x | 
+| Elasticsearch 7\.x |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  OpenSearch 1\.*x* introduces numerous breaking changes\. For details, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\. Elasticsearch 7\.10 introduces a breaking change with regard to dynamic templates\. For more information, see [Mapper parsing exception while indexing](handling-errors.md#troubleshooting-dynamic-template)\.   | 
+|  Elasticsearch 6\.8  |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  Elasticsearch 7\.0 and OpenSearch 1\.0 include numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](managedomains-snapshots.md) of the 6\.*x* domain, restoring it on a test 7\.*x* or OpenSearch 1\.*x* domain, and using that test domain to identify potential upgrade issues\. For breaking changes in OpenSearch 1\.0, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\. Like Elasticsearch 6\.*x*, indices can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indices, self\-hosted Elasticsearch 7\.*x* and OpenSearch 1\.*x* have a default shard count of one\. OpenSearch Service domains on Elasticsearch 7\.*x* and later retain the previous default of five\.   | 
 | Elasticsearch 6\.*x* | Elasticsearch 6\.*x* | 
 | Elasticsearch 5\.6 |  Elasticsearch 6\.*x*  Indices created in version 6\.*x* no longer support multiple mapping types\. Indices created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. Check that your client code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, OpenSearch Service reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
 | Elasticsearch 5\.x | Elasticsearch 5\.6 | 
@@ -47,7 +48,7 @@ In\-place upgrades require healthy domains\. Your domain might be ineligible for
 | High JVM usage | JVM memory pressure is above 75%\. Reduce traffic to the cluster or scale the domain, and try again\. | 
 | OpenSearch Dashboards alias problem | \.kibana is already configured as an alias and maps to an incompatible index, likely one from an earlier version of OpenSearch Dashboards\. Reindex, and try again\. | 
 | Red Dashboards status | OpenSearch Dashboards status is red\. Try using Dashboards when the upgrade completes\. If the red status persists, resolve it manually, and try again\. | 
-| Cross\-cluster compatibility | You can only upgrade if cross\-cluster compatibility is maintained between the source and destination domains post the upgrade\. During the upgrade process, any incompatible connections are identified\. To proceed with the upgrade, delete the incompatible connections\. | 
+| Cross\-cluster compatibility |  You can only upgrade if cross\-cluster compatibility is maintained between the source and destination domains after the upgrade\. During the upgrade process, any incompatible connections are identified\. To proceed, either upgrade the remote domain or delete the incompatible connections\. Note that if replication is active on the domain, you can't resume it once you delete the connection\.   | 
 | Other OpenSearch Service service issue | Issues with OpenSearch Service itself might cause your domain to display as ineligible for an upgrade\. If none of the preceding conditions apply to your domain and the problem persists for more than a day, contact [AWS Support](https://console.aws.amazon.com/support/home)\. | 
 
 ## Starting an upgrade<a name="starting-upgrades"></a>
@@ -68,7 +69,7 @@ If the cluster has dedicated master nodes, upgrades complete without downtime\. 
 
 1. Choose **Actions** and **Upgrade**\.
 
-1. Choose the version to upgrade to\. If you're upgrading from an Elasticsearch OSS version to an OpenSearch version, the **Enable compatibility mode** option appears\. If you enable this setting, OpenSearch reports its version as 7\.10 to allow Elasticsearch OSS clients and plugins like Logstash to continue working with Amazon OpenSearch Service\.
+1. Choose the version to upgrade to\. If you're upgrading to an OpenSearch version, the **Enable compatibility mode** option appears\. If you enable this setting, OpenSearch reports its version as 7\.10 to allow Elasticsearch OSS clients and plugins like Logstash to continue working with Amazon OpenSearch Service\.
 
 1. Choose **Upgrade**\.
 

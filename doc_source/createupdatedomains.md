@@ -21,7 +21,7 @@ Use the following procedure to create an OpenSearch Service domain by using the 
 1. Choose **Create domain**\.
 
 1. For **Domain name**, enter a domain name\. The name must meet the following criteria:
-   + Unique to your account and Region
+   + Unique to your account and AWS Region
    + Starts with a lowercase letter
    + Contains between 3 and 28 characters
    + Contains only lowercase letters a\-z, the numbers 0\-9, and the hyphen \(\-\)
@@ -91,7 +91,7 @@ You must reserve sufficient IP addresses for the network interfaces in the subne
    + If you want to use IAM for user management, choose **Set IAM ARN as master user** and specify the ARN for an IAM role\.
    + If you want to use the internal user database, choose **Create master user** and specify a user name and password\.
 
-   Whichever option you choose, the master user can access all indices in the cluster and all OpenSearch APIs\. For guidance on which option to choose, see [Key concepts](fgac.md#fgac-concepts)\.
+   Whichever option you choose, the master user can access all indexes in the cluster and all OpenSearch APIs\. For guidance on which option to choose, see [Key concepts](fgac.md#fgac-concepts)\.
 
    If you disable fine\-grained access control, you can still control access to your domain by placing it within a VPC, applying a restrictive access policy, or both\. You must enable node\-to\-node encryption and encryption at rest to use fine\-grained access control\.
 **Note**  
@@ -195,7 +195,7 @@ The console provides preconfigured access policies that you can customize for th
 Use advanced options to configure the following:
 
 **Indices in request bodies**  
-Specifies whether explicit references to indices are allowed inside the body of HTTP requests\. Setting this property to `false` prevents users from bypassing access control for subresources\. By default, the value is `true`\. For more information, see [Advanced options and API considerations](ac.md#ac-advanced)\.
+Specifies whether explicit references to indexes are allowed inside the body of HTTP requests\. Setting this property to `false` prevents users from bypassing access control for subresources\. By default, the value is `true`\. For more information, see [Advanced options and API considerations](ac.md#ac-advanced)\.
 
 **Fielddata cache allocation**  
 Specifies the percentage of Java heap space that is allocated to field data\. By default, this setting is 20% of the JVM heap\.  

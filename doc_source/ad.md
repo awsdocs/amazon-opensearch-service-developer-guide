@@ -4,7 +4,7 @@ Anomaly detection in Amazon OpenSearch Service automatically detects anomalies i
 
 You can pair the anomaly detection plugin with the [Configuring alerts in Amazon OpenSearch Service](alerting.md) plugin to notify you as soon as an anomaly is detected\. 
 
-Anomaly detection is available on domains running any OpenSearch version or Elasticsearch 7\.4 or later\. All instance types support anomaly detection except for `t2.micro` and `t2.small`\. Full documentation for anomaly detection, including detailed steps and API descriptions, is available in the [OpenSearch documentation](https://opendistro.github.io/for-elasticsearch-docs/docs/ad/)\.
+Anomaly detection is available on domains running any OpenSearch version or Elasticsearch 7\.4 or later\. All instance types support anomaly detection except for `t2.micro` and `t2.small`\. Full documentation for anomaly detection, including detailed steps and API descriptions, is available in the [OpenSearch documentation](https://opensearch.org/docs/latest/monitoring-plugins/ad/index/)\.
 
 ## <a name="ad-example"></a>
 

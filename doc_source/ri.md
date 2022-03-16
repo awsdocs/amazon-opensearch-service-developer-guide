@@ -31,7 +31,7 @@ The console lets you view your existing Reserved Instances and purchase new ones
 
    On this page, you can view your existing reservations\. If you have many reservations, you can filter them to more easily identify and view a particular reservation\.
 **Tip**  
-If you don't see the **Reserved Instance Leases** link, [create a domain](createupdatedomains.md) in the region\.
+If you don't see the **Reserved Instance Leases** link, [create a domain](createupdatedomains.md) in the AWS Region\.
 
 1. Choose **Order Reserved Instance**\.
 
@@ -100,7 +100,7 @@ aws opensearchservice purchase-reserved-instance-offering --reserved-instance-of
 }
 ```
 
-Finally, you can list your reservations for a given region using the following example:
+Finally, you can list your reservations for a given Region using the following example:
 
 ```
 aws opensearchservice describe-reserved-instances --region us-east-1

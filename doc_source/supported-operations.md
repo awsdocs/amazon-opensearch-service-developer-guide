@@ -4,7 +4,8 @@ OpenSearch Service supports many versions of OpenSearch and legacy Elasticsearch
 
 **Topics**
 + [Notable API differences](#version_api_notes)
-+ [OpenSearch version 1\.0](#version_7_10)
++ [OpenSearch version 1\.1](#version_opensearch_1.1)
++ [OpenSearch version 1\.0](#version_opensearch_1.0)
 + [Elasticsearch version 7\.10](#version_7_10)
 + [Elasticsearch version 7\.9](#version_7_9)
 + [Elasticsearch version 7\.8](#version_7_8)
@@ -127,9 +128,28 @@ PUT https://domain-name.region.es.amazonaws.com/shrunken-index/_settings
 }
 ```
 
-## OpenSearch version 1\.0<a name="version_7_10"></a>
+## OpenSearch version 1\.1<a name="version_opensearch_1.1"></a>
 
-For OpenSearch 1\.0, OpenSearch Service supports the following operations\.
+For OpenSearch 1\.1, OpenSearch Service supports the following operations\. For information about most of the operations, see the [OpenSearch REST API reference](https://opensearch.org/docs/latest/opensearch/rest-api/index/), or the API reference for the specific plugin\. 
+
+
+|  |  |  | 
+| --- |--- |--- |
+|  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-operations.html)  | 
+
+1. Cluster configuration changes might interrupt these operations before completion\. We recommend that you use the `/_tasks` operation along with these operations to verify that the requests completed successfully\.
+
+1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\. To avoid a problem with `=` characters in `scroll_id` values, use the request body, not the query string, to pass `scroll_id` values to OpenSearch Service\.
+
+1. For considerations about using scripts, see [Other supported resources in Amazon OpenSearch Service](supported-resources.md)\.
+
+1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API differences](#version_api_notes)\. This list only refers to the generic OpenSearch operations that OpenSearch Service supports and does not include plugin\-specific supported operations for anomaly detection, ISM, and so on\.
+
+1. See [Shrink](#version_api_notes-shrink)\.
+
+## OpenSearch version 1\.0<a name="version_opensearch_1.0"></a>
+
+For OpenSearch 1\.0, OpenSearch Service supports the following operations\. For information about most of the operations, see the [OpenSearch REST API reference](https://opensearch.org/docs/latest/opensearch/rest-api/index/), or the API reference for the specific plugin\. 
 
 
 |  |  |  | 
@@ -186,7 +206,7 @@ For Elasticsearch 7\.9, OpenSearch Service supports the following operations\.
 
 1. See [Shrink](#version_api_notes-shrink)\.
 
-1. Legacy index templates \(`_template`\) were replaced by composable templates \(`_index_template`\) starting with OpenSearch 7\.8\. Composable templates take precedence over legacy templates\. If no composable template matches a given index, a legacy template can still match and be applied\. The `_template` operation still works on OpenSearch and later versions of Elasticsearch OSS, but GET calls to the two template types return different results\.
+1. Legacy index templates \(`_template`\) were replaced by composable templates \(`_index_template`\) starting with Elasticsearch 7\.8\. Composable templates take precedence over legacy templates\. If no composable template matches a given index, a legacy template can still match and be applied\. The `_template` operation still works on OpenSearch and later versions of Elasticsearch OSS, but GET calls to the two template types return different results\.
 
 ## Elasticsearch version 7\.8<a name="version_7_8"></a>
 
@@ -207,7 +227,7 @@ For Elasticsearch 7\.8, OpenSearch Service supports the following operations\.
 
 1. See [Shrink](#version_api_notes-shrink)\.
 
-1. Legacy index templates \(`_template`\) were replaced by composable templates \(`_index_template`\) starting with OpenSearch 7\.8\. Composable templates take precedence over legacy templates\. If no composable template matches a given index, a legacy template can still match and be applied\. The `_template` operation still works on OpenSearch and later versions of Elasticsearch OSS, but GET calls to the two template types return different results\.
+1. Legacy index templates \(`_template`\) were replaced by composable templates \(`_index_template`\) starting with Elasticsearch 7\.8\. Composable templates take precedence over legacy templates\. If no composable template matches a given index, a legacy template can still match and be applied\. The `_template` operation still works on OpenSearch and later versions of Elasticsearch OSS, but GET calls to the two template types return different results\.
 
 ## Elasticsearch version 7\.7<a name="version_7_7"></a>
 

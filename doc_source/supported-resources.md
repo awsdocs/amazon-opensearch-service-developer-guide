@@ -11,12 +11,12 @@ OpenSearch Service enables `bootstrap.memory_lock` in `elasticsearch.yml`, which
 + `t3.medium.search`
 
 **Scripting module**  
-OpenSearch Service supports scripting for OpenSearch 5\.*x* and later domains\. It does not support scripting for 1\.5 or 2\.3\.  
+OpenSearch Service supports scripting for Elasticsearch 5\.*x* and later domains\. It does not support scripting for 1\.5 or 2\.3\.  
 Supported scripting options include the following:  
 + Painless
 + Lucene Expressions
 + Mustache
-For OpenSearch 5\.5 and later domains, OpenSearch Service supports stored scripts using the `_scripts` endpoint\. OpenSearch 5\.3 and 5\.1 domains support inline scripts only\.
+For Elasticsearch 5\.5 and later domains, and all OpenSearch domains, OpenSearch Service supports stored scripts using the `_scripts` endpoint\. Elasticsearch 5\.3 and 5\.1 domains support inline scripts only\.
 
 **TCP transport**  
 OpenSearch Service supports HTTP on port 80 and HTTPS over port 443, but does not support TCP transport\.

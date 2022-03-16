@@ -13,6 +13,8 @@ This chapter addresses some best practices for operating Amazon OpenSearch Servi
 + Don't use T2 or `t3.small` instances for production domains; they can become unstable under sustained heavy load\. `t3.medium` instances are an option for small production workloads \(both as data nodes and dedicated master nodes\)\.
 + If appropriate for your network configuration, [create the domain within a VPC](vpc.md)\.
 + If your domain stores sensitive data, enable [encryption of data at rest](encryption-at-rest.md) and [node\-to\-node encryption](ntn.md)\.
++ [Enable search slow logs](createdomain-configure-slow-logs.md#createdomain-configure-slow-logs-console) and [specify logging thresholds](createdomain-configure-slow-logs.md#createdomain-configure-slow-logs-indices) for each OpenSearch index to help find the root cause of slow\-running queries\. The thresholds you set will depend on what you consider a "slow" query based on your use case\.
++ Configure the `timeout` parameter in query payloads to prevent your domains from doing excess work\. The timeout you choose depends on how long you expect your query will take to complete\. Queries have no timeout by default\.
 
 For more information, see the remaining topics in this chapter\.
 

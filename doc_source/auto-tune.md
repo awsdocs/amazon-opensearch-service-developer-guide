@@ -6,7 +6,7 @@ Some changes deploy immediately, while others require you to schedule a maintena
 
 As Auto\-Tune gathers and analyzes performance metrics for your domain, you can view its recommendations in the OpenSearch Service console on the **Notifications** page\.
 
-Auto\-Tune is available in commercial Regions on domains running any OpenSearch version, or Elasticsearch 6\.7 or later, with a [supported instance type](supported-instance-types.md)\.
+Auto\-Tune is available in commercial AWS Regions on domains running any OpenSearch version, or Elasticsearch 6\.7 or later, with a [supported instance type](supported-instance-types.md)\.
 
 ## Types of changes<a name="auto-tune-types"></a>
 
@@ -23,6 +23,7 @@ Based on your domain's performance metrics, Auto\-Tune can suggest adjustments t
 |  JVM young generation settings  |  Blue/green  |  JVM "young generation" settings affect the frequency of minor garbage collections\. More frequent minor collections can decrease the number of major collections and pauses\.  | 
 |  Queue size  |  Nondisruptive  |  By default, the search queue size is `1000` and the write queue size is `10000`\. Auto\-Tune automatically scales the search and write queues if additional heap is available to handle requests\.  | 
 |  Cache size  |  Nondisruptive  |  The *field cache* monitors on\-heap data structures, so it's important to monitor the cache's use\. Auto\-Tune scales the field data cache size to avoid out of memory and circuit breaker issues\.  The *shard request cache* is managed at the node level and has a default maximum size of 1% of the heap\. Auto\-Tune scales the shard request cache size to accept more search and index requests than what the configured cluster can handle\.  | 
+| Request size | Nondisruptive |  By default, when the aggregated size of in\-flight requests surpasses 10% of total JVM \(2% for `t2` instance types and 1% for `t3.small`\), OpenSearch throttles all new `_search` and `_bulk` requests until the existing requests complete\.  Auto\-Tune automatically tunes this threshold, typically between 5\-15%, based on the amount of JVM that is currently occupied on the system\. For example, if JVM memory pressure is high, Auto\-Tune might reduce the threshold to 5%, at which point you might see more rejections until the cluster stabilizes and the threshold increases\.  | 
 
 If you enable Auto\-Tune without setting a maintenance window, Auto\-Tune only applies nondisruptive changes\. The performance benefits over time are generally smaller, but you avoid the overhead associated with blue/green deployments\.
 
@@ -30,7 +31,7 @@ For guidance on configuring maintenance windows, see [Scheduling changes](#auto-
 
 ## Enabling or disabling Auto\-Tune<a name="auto-tune-enable"></a>
 
-OpenSearch Service enables Auto\-Tune by default on new domains\. To enable or disable Auto\-Tune on existing domains, we recommend using the console, which greatly simplifies the process\. In the console, choose your domain and **Edit**, then configure the settings in the **Auto\-Tune** section\. Enabling Auto\-Tune doesn't cause a blue/green deployment\.
+OpenSearch Service enables Auto\-Tune by default on new domains\. To enable or disable Auto\-Tune on existing domains, we recommend using the console, which greatly simplifies the process\. In the console, choose your domain and go to the **Auto\-Tune** tab, then choose **Edit**\. Enabling Auto\-Tune doesn't cause a blue/green deployment\.
 
 **AWS CLI**
 
@@ -62,6 +63,10 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name
   }
 }
 ```
+
+**CloudFormation**
+
+You currently can't enable or disable Auto\-Tune using AWS CloudFormation\.
 
 ## Scheduling changes<a name="auto-tune-schedule"></a>
 

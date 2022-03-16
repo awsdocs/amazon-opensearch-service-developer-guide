@@ -59,9 +59,24 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
            "logs:PutLogEvents",
            "logs:CreateLogStream"
          ],
-         "Resource": "cw_log_group_arn"
+         "Resource": "cw_log_group_arn:*"
        }
      ]
+   }
+   ```
+
+   We recommend that you add the `aws:SourceAccount` and `aws:SourceArn` condition keys to the policy to protect yourself against the [confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html)\. The source account is the owner of the domain and the source ARN is the ARN of the domain\. Your domain must be on service software R20211203 or later in order to add these condition keys\.
+
+   For example, you could add the following condition block to the policy:
+
+   ```
+   "Condition": {
+       "StringEquals": {
+           "aws:SourceAccount": "account-id"
+       },
+       "ArnLike": {
+           "aws:SourceArn": "arn:aws:es:region:account-id:domain/domain-name"
+       }
    }
    ```
 **Important**  
@@ -92,7 +107,7 @@ Now you can give OpenSearch Service permissions to write to the log group\. You 
 ```
 aws logs put-resource-policy \
   --policy-name my-policy \
-  --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:CreateLogStream"],"Resource": "cw_log_group_arn"}]}'
+  --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:CreateLogStream"],"Resource": "cw_log_group_arn:*"}]}'
 ```
 
 **Important**  
@@ -138,36 +153,35 @@ If you enabled one of the slow logs, see [Setting OpenSearch logging thresholds 
 
 ## Enabling log publishing \(CloudFormation\)<a name="createdomain-configure-slow-logs-cfn"></a>
 
-In this example, we create a log group called `opensearch-logs`, assign the appropriate permissions, and then use CloudFormation to create a domain with log publishing enabled for application logs, search slow logs, and index slow logs\.
+In this example, we use CloudFormation to create a log group called `opensearch-logs`, assign the appropriate permissions, and then create a domain with log publishing enabled for application logs, search slow logs, and index slow logs\.
 
-Before you can enable log publishing, you need a CloudWatch log group\. If you don't already have one, you can create one using the following command:
-
-```
-aws logs create-log-group --log-group-name opensearch-logs
-```
-
-Alternatively, use CloudFormation to create the log group:
+Before you can enable log publishing, you need to create a CloudWatch log group:
 
 ```
-Type: AWS::Logs::LogGroup
-Properties: 
-  LogGroupName: opensearch-logs
+Resources:
+  OpenSearchLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: opensearch-logs
+Outputs:
+  Arn:
+    Value:
+      'Fn::GetAtt':
+        - OpenSearchLogGroup
+        - Arn
 ```
 
-Find and note the log group's ARN:
+The template outputs the ARN of the log group\. In this case, the ARN is `arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs`\.
+
+Using the ARN, create a resource policy that gives OpenSearch Service permissions to write to the log group:
 
 ```
-aws logs describe-log-groups --log-group-name opensearch-logs
-```
-
-In this example the ARN is `arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*`\.
-
-Give OpenSearch Service permissions to write to the log group:
-
-```
-aws logs put-resource-policy \
-  --policy-name my-policy \
-  --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:CreateLogStream"],"Resource": "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*"}]}'
+Resources:
+ OpenSearchLogPolicy:
+   Type: AWS::Logs::ResourcePolicy
+   Properties:
+     PolicyName: my-policy
+     PolicyDocument: "{ \"Version\": \"2012-10-17\", \"Statement\": [{ \"Sid\": \"\", \"Effect\": \"Allow\", \"Principal\": { \"Service\": \"es.amazonaws.com\"}, \"Action\":[ \"logs:PutLogEvents\",\"logs:CreateLogStream\"],\"Resource\": \"arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*\"}]}"
 ```
 
 Finally, create the following CloudFormation stack which generates an OpenSearch Service domain with log publishing enabled\. The access policy permits the root user for the AWS account to make all HTTP requests to the domain:
@@ -199,13 +213,13 @@ Resources:
             Resource: "arn:aws:es:us-east-1:123456789012:domain/my-domain/*"
       LogPublishingOptions:
         ES_APPLICATION_LOGS:
-          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*"
+          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs"
           Enabled: true
         SEARCH_SLOW_LOGS:
-          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*"
+          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs"
           Enabled: true
         INDEX_SLOW_LOGS:
-          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*"
+          CloudWatchLogsLogGroupArn: "arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs"
           Enabled: true
 ```
 

@@ -45,7 +45,7 @@ Although dedicated master nodes don't process search and query requests, their s
 
 |  **Instance count**  |  **Recommended minimum dedicated master instance type**  | 
 | --- | --- | 
-|  1–10  | `m5.large.search` or `m6g.large.search` | 
+|  1–10  |  `m5.large.search` or `m6g.large.search`  | 
 |  10–30  |  `c5.xlarge.search` or `c6g.xlarge.search`  | 
 | 30–75 |  `c5.2xlarge.search` or `c6g.2xlarge.search`  | 
 |  75–200  |  `r5.4xlarge.search` or `r6g.4xlarge.search`  | 

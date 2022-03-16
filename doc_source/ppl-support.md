@@ -5,10 +5,7 @@ Piped Processing Language \(PPL\) is a query language that lets you use pipe \(`
 The PPL syntax consists of commands delimited by a pipe character \(`|`\) where data flows from left to right through each pipeline\. For example, the PPL syntax to find the number of hosts with HTTP 403 or 503 errors, aggregate them per host, and sort them in the order of impact is as follows:
 
 ```
-source = dashboards_sample_data_logs | 
-where response='403' or response='503' | 
-stats count(request) as request_count by host, response | 
-sort -request_count
+source = dashboards_sample_data_logs | where response='403' or response='503' | stats count(request) as request_count by host, response | sort -request_count
 ```
 
 PPL requires either OpenSearch or Elasticsearch 7\.9 or later\. Detailed steps and command descriptions are available in the [OpenSearch documentation](https://opensearch.org/docs/search-plugins/ppl/)\.
@@ -32,9 +29,7 @@ PUT accounts/_bulk?refresh
 The following example returns `firstname` and `lastname` fields for documents in an accounts index with `age` greater than 18:
 
 ```
-search source=accounts | 
-where age > 18 | 
-fields firstname, lastname
+search source=accounts | where age > 18 | fields firstname, lastname
 ```
 
 

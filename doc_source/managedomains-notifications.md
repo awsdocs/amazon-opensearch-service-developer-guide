@@ -26,13 +26,9 @@ After accessing the **Notifications** panel or acknowledging a notification, you
 
 The IAM console throws an error \("IAM does not recognize one or more actions\."\) that you can safely ignore\. You can also restrict the `es:UpdateNotificationStatus` action to certain domains\. To learn more, see [Policy element reference](ac.md#ac-reference)\.
 
-## Notification types<a name="managedomains-notifications-types"></a>
-
-At this time, all notifications in OpenSearch Service are *informational*, which relate to any action you've already taken or the operations of your domain\. In the future, OpenSearch Service might also include *actionable* notifications, which will require you to take specific actions such as applying a mandatory security patch\. 
-
 ## Notification severities<a name="managedomains-notifications-severities"></a>
 
-Each notification has a severity associated with it\. Currently, all available notifications have a severity of `Informational`, while future ones might be `Low`, `Medium`, `High`, or `Critical`\. The following table provides a summary of notification severities:
+Notifications in OpenSearch Service can be *informational*, which relate to any action you've already taken or the operations of your domain, or *actionable*, which require you to take specific actions such as applying a mandatory security patch\. Each notification has a severity associated with it, which can be `Informational`, `Low`, `Medium`, `High`, or `Critical`\. The following table summarizes each severity:
 
 
 | Severity | Description | Examples | 
@@ -45,7 +41,7 @@ Each notification has a severity associated with it\. Currently, all available n
 
 ## Sample EventBridge event<a name="managedomains-notifications-cloudwatch"></a>
 
-The following example shows an OpenSearch Service notification event sent to Amazon EventBridge\. The corresponding notification has a severity of `Informational` because the update is optional:
+The following example shows an OpenSearch Service notification event sent to Amazon EventBridge\. The notification has a severity of `Informational` because the update is optional:
 
 ```
 {

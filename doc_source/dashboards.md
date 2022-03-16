@@ -12,14 +12,14 @@ The following sections address some common Dashboards use cases:
 Dashboards does not natively support IAM users and roles, but OpenSearch Service offers several solutions for controlling access to Dashboards:
 + Enable [SAML authentication for Dashboards](saml.md)\.
 + Use [fine\-grained access control](fgac.md#fgac-concepts) with HTTP basic authentication\.
-+ Configure [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md)\.
++ Configure [Cognito authentication for Dashboards](cognito-auth.md)\.
 + For public access domains, configure an [IP\-based access policy](ac.md#ac-types-ip), with or without a [proxy server](#dashboards-proxy)\.
 + For VPC access domains, use an open access policy, with or without a proxy server, and [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control access\. To learn more, see [About access policies on VPC domains](vpc.md#vpc-security)\.
 
 ### Using a proxy to access OpenSearch Service from Dashboards<a name="dashboards-proxy"></a>
 
 **Note**  
-This process is only applicable if your domain uses public access and you don't want to use [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md)\. See [Controlling access to OpenSearch Dashboards](#dashboards-access)\.
+This process is only applicable if your domain uses public access and you don't want to use [Cognito authentication](cognito-auth.md)\. See [Controlling access to OpenSearch Dashboards](#dashboards-access)\.
 
 Because Dashboards is a JavaScript application, requests originate from the user's IP address\. IP\-based access control might be impractical due to the sheer number of IP addresses you would need to allow in order for each user to have access to Dashboards\. One workaround is to place a proxy server between OpenSearch Dashboards and OpenSearch Service\. Then you can add an IP\-based access policy that allows requests from only one IP address, the proxy's\. The following diagram shows this configuration\.
 
@@ -69,13 +69,13 @@ To enable this sort of configuration, you need a resource\-based policy that spe
 
 We recommend that you configure the EC2 instance running the proxy server with an Elastic IP address\. This way, you can replace the instance when necessary and still attach the same public IP address to it\. To learn more, see [Elastic IP Addresses](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) in the *Amazon EC2 User Guide for Linux Instances*\.
 
-If you use a proxy server *and* [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md), you might need to add settings for Dashboards and Amazon Cognito to avoid `redirect_mismatch` errors\. See the following `nginx.conf` example:
+If you use a proxy server *and* [Cognito authentication](cognito-auth.md), you might need to add settings for Dashboards and Amazon Cognito to avoid `redirect_mismatch` errors\. See the following `nginx.conf` example:
 
 ```
 server {
     listen 443;
     server_name $host;
-    rewrite ^/$ https://$host/_plugin/dashboards redirect;
+    rewrite ^/$ https://$host/_plugin/_dashboards redirect;
 
     ssl_certificate           /etc/nginx/cert.crt;
     ssl_certificate_key       /etc/nginx/cert.key;
@@ -86,16 +86,16 @@ server {
     ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
     ssl_prefer_server_ciphers on;
 
-    location /_plugin/dashboards {
+    location /_plugin/_dashboards {
         # Forward requests to Dashboards
-        proxy_pass https://$dashboards_host/_plugin/dashboards;
+        proxy_pass https://$dashboards_host/_plugin/_dashboards;
 
         # Handle redirects to Cognito
         proxy_redirect https://$cognito_host https://$host;
 
         # Update cookie domain and path
         proxy_cookie_domain $dashboards_host $host;
-        proxy_cookie_path / /_plugin/dashboards/;
+        proxy_cookie_path / /_plugin/_dashboardsdashboards/;
 
         # Response buffer settings
         proxy_buffer_size 128k;
@@ -118,9 +118,9 @@ server {
 
 ## Configuring OpenSearch Dashboards to use a WMS map server<a name="dashboards-map-server"></a>
 
-The default installation of OpenSearch Dashboards for OpenSearch Service includes a map service, except for domains in the India and China regions\. The map service supports up to 10 zoom levels\.
+The default installation of OpenSearch Dashboards for OpenSearch Service includes a map service, except for domains in the India and China Regions\. The map service supports up to 10 zoom levels\.
 
-Regardless of your region, you can configure Dashboards to use a different Web Map Service \(WMS\) server for coordinate map visualizations\. Region map visualizations only support the default map service\.
+Regardless of your Region, you can configure Dashboards to use a different Web Map Service \(WMS\) server for coordinate map visualizations\. Region map visualizations only support the default map service\.
 
 **To configure Dashboards to use a WMS map server:**
 
@@ -154,7 +154,7 @@ Map services often have licensing fees or restrictions\. You are responsible for
 
 ## Connecting a local Dashboards server to OpenSearch Service<a name="dashboards-local"></a>
 
-If you already invested significant time into configuring your own OpenSearch Dashboards instance, you can use it instead of \(or in addition to\) the default Dashboards instance that OpenSearch Service provides\. The following procedure works for domains that use [Fine\-grained access control in Amazon OpenSearch Service](fgac.md) with an open access policy\.
+If you already invested significant time into configuring your own OpenSearch Dashboards instance, you can use it instead of \(or in addition to\) the default Dashboards instance that OpenSearch Service provides\. The following procedure works for domains that use [fine\-grained access control](fgac.md) with an open access policy\.
 
 **To connect a local OpenSearch Dashboards server to OpenSearch Service**
 
@@ -198,7 +198,7 @@ If you already invested significant time into configuring your own OpenSearch Da
    opensearch_security.session.ttl: 3600000
    opensearch_security.session.keepalive: false
    opensearch_security.multitenancy.enabled: false
-   opensearch_security.readonly_mode.roles: ['kibana_read_only']
+   opensearch_security.readonly_mode.roles: [opensearch_dashboards_read_only']
    opensearch_security.auth.unauthenticated_routes: []
    opensearch_security.basicauth.login.title: 'Please log in using your user name and password'
    
@@ -226,11 +226,11 @@ The OpenSearch Dashboards installation on your OpenSearch Service domain provide
 
 ## Additional features<a name="dashboards-additions"></a>
 
-The default Dashboards installation on each OpenSearch Service domain has some additional features compared to the open source version of Dashboards:
+The default OpenSearch Dashboards installation on each OpenSearch Service domain has some additional features:
 + User interfaces for the various [OpenSearch plugins](supported-plugins.md)
 + [Tenants](fgac.md#fgac-multitenancy)
-+ Reports
++ [Reports](https://opensearch.org/docs/latest/dashboards/reporting/)
 
-  Use the **Reporting** menu to generate on\-demand CSV reports from the Discover page and PDF or PNG reports of dashboards or visualizations\. CSV reports have a 10,000 row limit, and OpenSearch Service does not support scheduled reports\.
+  Use the **Reporting** menu to generate on\-demand CSV reports from the Discover page and PDF or PNG reports of dashboards or visualizations\. CSV reports have a 10,000 row limit\.
 + [Gantt charts](https://opensearch.org/docs/dashboards/gantt/)
-+ [Notebooks](https://opensearch.org/docs/dashboards/notebooks/)
++ [Notebooks](https://opensearch.org/docs/latest/observability-plugin/notebooks/)

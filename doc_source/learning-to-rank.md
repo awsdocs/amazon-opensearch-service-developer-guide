@@ -2,9 +2,9 @@
 
 OpenSearch uses a probabilistic ranking framework called BM\-25 to calculate relevance scores\. If a distinctive keyword appears more frequently in a document, BM\-25 assigns a higher relevance score to that document\. This framework, however, doesn’t take into account user behavior like click\-through data, which can further improve relevance\.
 
-Learning to Rank is an open\-source OpenSearch plugin that lets you use machine learning and behavioral data to tune the relevance of documents\. The plugin uses models from the XGBoost and Ranklib libraries to rescore the search results\. 
+Learning to Rank is an open\-source plugin that lets you use machine learning and behavioral data to tune the relevance of documents\. It uses models from the XGBoost and Ranklib libraries to rescore the search results\. The [Elasticsearch LTR plugin](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html) was initially developed by [OpenSource Connections](https://opensourceconnections.com/), with significant contributions by Wikimedia Foundation, Snagajob Engineering, Bonsai, and Yelp Engineering\. The OpenSearch version of the plugin is derived from the Elasticsearch LTR plugin\. Full documentation, including detailed steps and API descriptions, is available in the [Learning to Rank](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html) documentation\.
 
-Learning to Rank requires OpenSearch or Elasticsearch 7\.7 or later\. Full documentation, including detailed steps and API descriptions, is available in the [Learning to Rank](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/index.html) documentation\.
+Learning to Rank requires OpenSearch or Elasticsearch 7\.7 or later\.
 
 **Note**  
 To use the Learning to Rank plugin, you must have full admin permissions\. To learn more, see [Modifying the master user](fgac.md#fgac-forget)\.

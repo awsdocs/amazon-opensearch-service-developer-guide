@@ -14,9 +14,9 @@ Trace Analytics requires you to add [instrumentation](https://opentelemetry.io/d
 
 After you add instrumentation to your application, the [OpenTelemetry Collector](https://aws-otel.github.io/docs/getting-started/collector) receives data from the application and formats it into OpenTelemetry data\. See the list of receivers on [GitHub](https://github.com/open-telemetry/opentelemetry-collector/blob/main/receiver/README.md)\. AWS Distro for OpenTelemetry includes a [receiver for AWS X\-Ray](https://aws-otel.github.io/docs/components/x-ray-receiver)\.
 
-Finally, [Data Prepper](https://opensearch.org/docs/monitoring-plugins/trace/data-prepper/), an independent OpenSearch component, formats that OpenTelemetry data for use with OpenSearch\. Data Prepper runs on a machine outside of the OpenSearch Service cluster, similar to Logstash\.
+Finally, [Data Prepper](https://opensearch.org/docs/latest/clients/data-prepper/index/), an independent OpenSearch component, formats that OpenTelemetry data for use with OpenSearch\. Data Prepper runs on a machine outside of the OpenSearch Service cluster, similar to Logstash\.
 
-For a Docker Compose file that demonstrates the end\-to\-end flow of data, see the [OpenSearch documentation](https://opensearch.org/docs/monitoring-plugins/trace/get-started/)\.
+For a Docker Compose file that demonstrates the end\-to\-end flow of data, see the [OpenSearch documentation](https://opensearch.org/docs/latest/clients/data-prepper/get-started/)\.
 
 ## OpenTelemetry Collector sample configuration<a name="trace-otc"></a>
 
@@ -168,7 +168,7 @@ If your domain doesn't use fine\-grained access control, the Data Prepper user o
 
 Data Prepper uses port 21890 to receive data, and it must be able to connect to both the OpenTelemetry Collector and the OpenSearch cluster\. For performance tuning, adjust the worker count and buffer settings in your configuration file, along with the Java virtual machine \(JVM\) heap size for the machine\.
 
-Full documentation for Data Prepper is available in the [OpenSearch documentation](https://opensearch.org/docs/monitoring-plugins/trace/data-prepper/)\. For convenience, we also provide an [AWS CloudFormation template](https://github.com/opensearch-project/data-prepper/blob/main/deployment-template/ec2/data-prepper-ec2-deployment-cfn.yaml)that installs Data Prepper on an Amazon EC2 instance\.
+Full documentation for Data Prepper is available in the [OpenSearch documentation](https://opensearch.org/docs/latest/clients/data-prepper/index/)\. For convenience, we also provide an [AWS CloudFormation template](https://github.com/opensearch-project/data-prepper/blob/main/deployment-template/ec2/data-prepper-ec2-deployment-cfn.yaml) that installs Data Prepper on an Amazon EC2 instance\.
 
 ## Exploring trace data<a name="trace-dashboards"></a>
 

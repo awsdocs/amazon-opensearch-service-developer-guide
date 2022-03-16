@@ -4,9 +4,9 @@ Because Amazon OpenSearch Service uses a REST API, numerous methods exist for in
 
 For an introduction to indexing, see the [OpenSearch documentation](https://opensearch.org/docs/opensearch/index-data/)\.
 
-## Naming restrictions for indices<a name="indexing-naming"></a>
+## Naming restrictions for indexes<a name="indexing-naming"></a>
 
-OpenSearch Service indices have the following naming restrictions:
+OpenSearch Service indexes have the following naming restrictions:
 + All letters must be lowercase\.
 + Index names cannot begin with `_` or `-`\.
 + Index names can't contain spaces, commas, `:`, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`\.
@@ -18,6 +18,14 @@ Don't include sensitive information in index, type, or document ID names\. OpenS
 ```
 
 Even if you don't have [permissions](ac.md) to view the associated JSON document, you could infer from this fake log line that one of Dr\. Doe's patients with a phone number of 202\-555\-0100 had the flu in 2018\.
+
+If OpenSearch Service detects a real or percieved IP address in an index name \(for example, `my-index-12.34.56.78.91`\), it masks the IP address\. A call to `_cat/indices` yields the following response:
+
+```
+green open my-index-x.x.x.x    soY19tBERoKo71WcEScidw 5 1 0 0   2kb  1kb
+```
+
+To prevent unnecessary confusion, avoid including IP addresses in index names\.
 
 ## Reducing response size<a name="indexing-size"></a>
 

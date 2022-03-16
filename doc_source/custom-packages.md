@@ -13,8 +13,8 @@ Amazon OpenSearch Service lets you upload custom dictionary files, such as stop 
 ## Package permissions requirements<a name="custom-packages-iam"></a>
 
 Users without administrator access require certain AWS Identity and Access Management \(IAM\) actions in order to manage packages:
-+ `es:CreatePackage` \- create a package in an OpenSearch Service region
-+ `es:DeletePackage` \- delete a package from an OpenSearch Service region
++ `es:CreatePackage` \- create a package in an OpenSearch Service Region
++ `es:DeletePackage` \- delete a package from an OpenSearch Service Region
 + `es:AssociatePackage` \- associate a package to a domain
 + `es:DissociatePackage` \- dissociate a package from a domain
 
@@ -236,7 +236,7 @@ def upload_to_s3(file_name, bucket_name, s3_key):
 
 def update_package(package_id, bucket_name, s3_key):
 
-  opensearchservice = boto3.client('opensearchservice')
+  opensearch = boto3.client('opensearch')
   print(package_id, bucket_name, s3_key)
   response = opensearchservice.update_package(
       PackageID= package_id,
@@ -250,16 +250,16 @@ def update_package(package_id, bucket_name, s3_key):
 # Associate the package to the domain
 def associate_package(package_id, domain_name):
 
-  opensearchservice = boto3.client('opensearchservice')
-  response = opensearchservice.associate_package(PackageID=package_id, DomainName=domain_name)
+  opensearch = boto3.client('opensearch')
+  response = opensearch.associate_package(PackageID=package_id, DomainName=domain_name)
   print(response)
   print('Associating...')
 
 # Wait for the package to be updated
 def wait_for_update(domain_name, package_id):
 
-  opensearchservice = boto3.client('opensearchservice')
-  response = opensearchservice.list_packages_for_domain(DomainName=domain_name)
+  opensearch = boto3.client('opensearch')
+  response = opensearch.list_packages_for_domain(DomainName=domain_name)
   package_details = response['DomainPackageDetailsList']
   for package in package_details:
     if package['PackageID'] == package_id:
@@ -286,7 +286,7 @@ def sample_search(query):
 ```
 
 **Note**  
-If you receive a "package not found" error when you run the script using the AWS CLI, it likely means Boto3 is using whichever region is specified in \~/\.aws/config, which isn't the region your S3 bucket is in\. Either run `aws configure` and specify the correct region, or explicitly add the region to the client:   
+If you receive a "package not found" error when you run the script using the AWS CLI, it likely means Boto3 is using whichever Region is specified in \~/\.aws/config, which isn't the Region your S3 bucket is in\. Either run `aws configure` and specify the correct Region, or explicitly add the Region to the client:   
 
 ```
 opensearchservice = boto3.client('opensearchservice', region_name='us-east-1')

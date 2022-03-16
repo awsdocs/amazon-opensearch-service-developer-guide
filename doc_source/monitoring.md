@@ -1,4 +1,4 @@
-# Monitoring Amazon OpenSearch Service<a name="monitoring"></a>
+# Monitoring Amazon OpenSearch Service domains<a name="monitoring"></a>
 
 Monitoring is an important part of maintaining the reliability, availability, and performance of Amazon OpenSearch Service and your other AWS solutions\. AWS provides the following tools to monitor your OpenSearch Service resources, report issues, and take automatic actions when appropriate:
 

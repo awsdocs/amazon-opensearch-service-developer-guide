@@ -37,7 +37,10 @@ A sample response might look like the following:
     "failed": 0
   },
   "hits": {
-    "total": 85,
+    "total": {
+      "value": 85,
+      "relation": "eq",
+    },
     "max_score": 6.6137657,
     "hits": [
       {

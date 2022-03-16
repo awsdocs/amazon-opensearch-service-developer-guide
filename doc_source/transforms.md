@@ -1,4 +1,4 @@
-# Transforming indices in Amazon OpenSearch Service<a name="transforms"></a>
+# Transforming indexes in Amazon OpenSearch Service<a name="transforms"></a>
 
 Whereas [index rollup jobs](rollup.md) let you reduce data granularity by rolling up old data into condensed indices, transform jobs let you create a different, summarized view of your data centered around certain fields, so you can visualize or analyze the data in different ways\.
 
@@ -22,7 +22,7 @@ After choosing your indices, choose the fields you want to use in your transform
 
 ### Step 3: Specify a schedule<a name="transforms-example-3"></a>
 
-Transform jobs are enabled by default and run on schedules\. For **transformation execution frequency**, choose **Define by fixed interval** and specify an interval\.
+Transform jobs are enabled by default and run on schedules\. For **transform execution interval**, specify an interval in minutes, hours, or days\.
 
 ### Step 4: Review and monitor<a name="transforms-example-4"></a>
 

@@ -320,3 +320,109 @@ def main():
     waitForDomainProcessing(client, domainName)
     deleteDomain(client, domainName)
 ```
+
+## Node<a name="configuration-samples-node"></a>
+
+This example uses the version 3 of the SDK for JavaScript in Node\.js [OpenSearch client](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-opensearch/) to create a domain, update its configuration, and delete it\. 
+
+```
+var {
+    OpenSearchClient,
+    CreateDomainCommand,
+    DescribeDomainCommand,
+    UpdateDomainConfigCommand,
+    DeleteDomainCommand
+} = require("@aws-sdk/client-opensearch");
+var sleep = require('sleep');
+
+var client = new OpenSearchClient();
+
+var domainName = 'my-test-domain'
+
+// Create a new domain, update its configuration, and delete it.
+createDomain(client, domainName)
+waitForDomainProcessing(client, domainName)
+updateDomain(client, domainName)
+waitForDomainProcessing(client, domainName)
+deleteDomain(client, domainName)
+
+async function createDomain(client, domainName) {
+    // Creates an Amazon OpenSearch Service domain with the specified options.
+    var command = new CreateDomainCommand({
+        DomainName: domainName,
+        EngineVersion: 'OpenSearch_1.0',
+        ClusterConfig: {
+        'InstanceType': 't2.small.search',
+        'InstanceCount': 5,
+        'DedicatedMasterEnabled': 'True',
+        'DedicatedMasterType': 't2.small.search',
+        'DedicatedMasterCount': 3
+        },
+        EBSOptions:{
+            'EBSEnabled': 'True',
+            'VolumeType': 'gp2',
+            'VolumeSize': 10
+        },
+        AccessPolicies: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:user/user-name\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:us-east-1:123456789012:domain/my-test-domain/*\"}]}",
+         NodeToNodeEncryptionOptions:{
+            'Enabled': 'True'
+        }
+    });
+    const response = await client.send(command);
+    console.log("Creating domain...");
+    console.log(response);
+}
+
+async function updateDomain(client, domainName) {
+    // Updates the domain to use three data nodes instead of five.
+    var command = new UpdateDomainConfigCommand({
+        DomainName: domainName,
+        ClusterConfig: {
+        'InstanceCount': 3
+        }
+    });
+    const response = await client.send(command);
+    console.log('Sending domain update request...');
+    console.log(response);
+}
+
+async function deleteDomain(client, domainName) {
+    // Deletes an OpenSearch Service domain. Deleting a domain can take several minutes.
+    var command = new DeleteDomainCommand({
+        DomainName: domainName
+    });
+    const response = await client.send(command);
+    console.log('Sending domain deletion request...');
+    console.log(response);
+}
+
+async function waitForDomainProcessing(client, domainName) {
+    // Waits for the domain to finish processing changes.
+    try {
+        var command = new DescribeDomainCommand({
+            DomainName: domainName
+        });
+        var response = await client.send(command);
+
+        while (response.DomainStatus.Processing == true) {
+            console.log('Domain still processing...')
+            await sleep(15000) // Wait for 15 seconds, then check the status again
+            function sleep(ms) {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, ms);
+                });
+            }
+            var response = await client.send(command);
+        }
+        // Once we exit the loop, the domain is available.
+        console.log('Amazon OpenSearch Service has finished processing changes for your domain.');
+        console.log('Domain description:');
+        console.log(response);
+
+    } catch (error) {
+        if (error.name === 'ResourceNotFoundException') {
+            console.log('Domain not found. Please check the domain name.');
+            }
+    };
+}
+```

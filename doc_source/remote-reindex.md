@@ -1,6 +1,6 @@
-# Migrating Amazon OpenSearch Service indices using remote reindex<a name="remote-reindex"></a>
+# Migrating Amazon OpenSearch Service indexes using remote reindex<a name="remote-reindex"></a>
 
-Remote reindex lets you copy indices from one Amazon OpenSearch Service cluster to another\. You can migrate indices from any OpenSearch Service domains or self\-managed OpenSearch and Elasticsearch clusters\.
+Remote reindex lets you copy indexes from one Amazon OpenSearch Service cluster to another\. You can migrate indexes from any OpenSearch Service domains or self\-managed OpenSearch and Elasticsearch clusters\.
 
 Remote reindexing requires OpenSearch 1\.0 or later, or Elasticsearch 6\.7 or later, on the target domain\. The source domain must be lower or the same major version as the target domain\. Elasticsearch versions are considered to be *lower* than OpenSearch versions, meaning you can reindex data from Elasticsearch domains to OpenSearch domains\. Within the same major version, the source domain can be any minor version\. For example, remote reindexing from Elasticsearch 7\.10\.x to 7\.9 is supported, but OpenSearch 1\.0 to Elasticsearch 7\.10\.x isn't supported\.
 
@@ -23,12 +23,12 @@ Remote reindex has the following requirements:
 
 ## Reindex data between OpenSearch Service domains<a name="remote-reindex-domain"></a>
 
-The most basic scenario is that the source index is in the same Region as your target domain with a publicly accessible endpoint and you have signed IAM credentials\.
+The most basic scenario is that the source index is in the same AWS Region as your target domain with a publicly accessible endpoint and you have signed IAM credentials\.
 
-Specify the source index to reindex from and the target index to reindex to:
+From the target domain, specify the source index to reindex from and the target index to reindex to:
 
 ```
-POST target-domain-endpoint/_reindex
+POST _reindex
 {
   "source": {
     "remote": {
@@ -44,16 +44,16 @@ POST target-domain-endpoint/_reindex
 
 You must add 443 at the end of the source domain endpoint for a validation check\.
 
-To verify that the index is copied over to the target domain:
+To verify that the index is copied over to the target domain, send this request to the target domain:
 
 ```
-GET target-domain-endpoint/target_index/_search
+GET target_index/_search
 ```
 
-If the source index is in a region different from your target domain, pass in its region name, such as in this sample request:
+If the source index is in a Region different from your target domain, pass in its Region name, such as in this sample request:
 
 ```
-POST target-domain-endpoint/_reindex
+POST _reindex
 {
   "source": {
     "remote": {
@@ -68,12 +68,12 @@ POST target-domain-endpoint/_reindex
 }
 ```
 
-In case of isolated regions like AWS GovCloud \(US\) or China regions, the endpoint might not be accessible because your IAM user is not recognized in those regions\.
+In case of isolated Region like AWS GovCloud \(US\) or China Regions, the endpoint might not be accessible because your IAM user is not recognized in those Regions\.
 
 If the source domain is secured with basic authorization, specify the username and password:
 
 ```
-POST target-domain-endpoint/_reindex
+POST _reindex
 {
   "source": {
     "remote": {
@@ -97,12 +97,14 @@ Every OpenSearch Service domain is made up of its own internal VPC infrastructur
 
 A proxy is required in order to use remote reindex between two VPC domains, even if the domains are located within the same VPC\. Create a proxy with a publicly accessible endpoint in front of the source cluster and pass the proxy endpoint in the reindex body\. The proxy domain must have a certificate signed by a public certificate authority \(CA\)\. Self\-signed or private CA\-signed certificates are not supported\.
 
+To use remote reindex between two VPC domains, set the `external` parameter to `true`\.
+
 ## Reindex data between non\-OpenSearch Service domains<a name="remote-reindex-non-aos"></a>
 
 If the source index is hosted outside of OpenSearch Service, like in a self\-managed EC2 instance, set the `external` parameter to `true`:
 
 ```
-POST target-domain-endpoint/_reindex
+POST _reindex
 {
   "source": {
     "remote": {
@@ -131,7 +133,7 @@ Remote reindex sends a scroll request to the source domain with the following de
 We recommend tuning these parameters to accommodate your data\. For large documents, consider a smaller batch size and/or longer timeout\. For more information, see [Scroll search](https://opensearch.org/docs/opensearch/ux/#scroll-search)\.
 
 ```
-POST target-domain-endpoint/_reindex?pretty=true&scroll=10h&wait_for_completion=false
+POST _reindex?pretty=true&scroll=10h&wait_for_completion=false
 {
   "source": {
     "remote": {
@@ -161,10 +163,10 @@ PUT target_index
 
 After the reindex process is complete, you can set your desired replica count and remove the refresh interval setting\.
 
-To reindex only a subset of documents that you select through a query:
+To reindex only a subset of documents that you select through a query, send this request to the target domain:
 
 ```
-POST target-domain-endpoint/_reindex
+POST _reindex
 {
   "source": {
     "remote": {
@@ -192,5 +194,5 @@ In addition to the standard reindexing options, OpenSearch Service supports the 
 
 | Options | Valid values | Description | Required | 
 | --- | --- | --- | --- | 
-| external | Boolean | If the source domain is not an OpenSearch Service domain, specify as true\. | No | 
-| region | String | If the source domain is in a different region, specify the region name\. | No | 
+| external | Boolean | If the source domain is not an OpenSearch Service domain, or if you're reindexing between two VPC domains, specify as true\. | No | 
+| region | String | If the source domain is in a different Region, specify the Region name\. | No | 

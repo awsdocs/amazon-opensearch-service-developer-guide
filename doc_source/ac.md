@@ -14,9 +14,9 @@ OpenSearch Service supports three types of access policies:
 
 ### Resource\-based policies<a name="ac-types-resource"></a>
 
-You add a resource\-based policy, often called the domain access policy, when you create a domain\. These policies specify which actions a principal can perform on the domain's *subresources*\. Subresources include OpenSearch indices and APIs\.
+You add a resource\-based policy, often called the domain access policy, when you create a domain\. These policies specify which actions a principal can perform on the domain's *subresources* \(with the exception of [cross\-cluster search](cross-cluster-search.md#cross-cluster-search-walkthrough)\)\. Subresources include OpenSearch indexes and APIs\. The [Principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) element specifies the accounts, users, or roles that are allowed access\. The [Resource](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html) element specifies which subresources these principals can access\.
 
-The [Principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) element specifies the accounts, users, or roles that are allowed access\. The [Resource](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html) element specifies which subresources these principals can access\. The following resource\-based policy grants `test-user` full access \(`es:*`\) to the subresources on `test-domain`:
+The following resource\-based policy grants `test-user` full access \(`es:*`\) to the subresources on `test-domain`:
 
 ```
 {
@@ -44,6 +44,14 @@ Two important considerations apply to this policy:
 
   For example, `test-user` can make requests against an index \(`GET https://search-test-domain.us-west-1.es.amazonaws.com/test-index`\), but can't update the domain's configuration \(`POST https://es.us-west-1.amazonaws.com/2021-01-01/opensearch/domain/test-domain/config`\)\. Note the difference between the two endpoints\. Accessing the [configuration API](configuration-api.md) requires an [identity\-based policy](#ac-types-identity)\.
 
+You can specify a partial index name by adding a wildcard\. This one identifies any indexes beginning with `commerce`:
+
+```
+arn:aws:es:us-west-1:987654321098:domain/test-domain/commerce*
+```
+
+In this case, specifying using this wildcard means that `test-user` can make requests to indexes in the `test-domain` domain that have names that begin with `commerce`\.
+
 To further restrict `test-user`, you can apply the following policy:
 
 ```
@@ -60,13 +68,13 @@ To further restrict `test-user`, you can apply the following policy:
       "Action": [
         "es:ESHttpGet"
       ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/test-index/_search"
+      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/commerce-data/_search"
     }
   ]
 }
 ```
 
-Now `test-user` can perform only one operation: searches against `test-index`\. All other indices within the domain are inaccessible, and without permissions to use the `es:ESHttpPut` or `es:ESHttpPost` actions, `test-user` can't add or modify documents\.
+Now `test-user` can perform only one operation: searches against the `commerce-data` index\. All other indexes within the domain are inaccessible, and without permissions to use the `es:ESHttpPut` or `es:ESHttpPost` actions, `test-user` can't add or modify documents\.
 
 Next, you might decide to configure a role for power users\. This policy gives `power-user-role` access to the HTTP GET and PUT methods for all URIs in the index:
 
@@ -85,7 +93,7 @@ Next, you might decide to configure a role for power users\. This policy gives `
         "es:ESHttpGet",
         "es:ESHttpPut"
       ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/test-index/*"
+      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/commerce-data/*"
     }
   ]
 }
@@ -99,7 +107,7 @@ For information about all available actions, see [Policy element reference](#ac-
 
 Unlike resource\-based policies, which are a part of each OpenSearch Service domain, you attach identity\-based policies to users or roles using the AWS Identity and Access Management \(IAM\) service\. Just like [resource\-based policies](#ac-types-resource), identity\-based policies specify who can access a service, which actions they can perform, and if applicable, the resources on which they can perform those actions\.
 
-While they certainly don't have to be, identity\-based policies tend to be more generic\. They often govern only the configuration API actions a user can perform\. After you have these policies in place, you can use resource\-based policies \(or [fine\-grained access control](fgac.md)\) in OpenSearch Service to offer users access to OpenSearch indices and APIs\.
+While they certainly don't have to be, identity\-based policies tend to be more generic\. They often govern only the configuration API actions a user can perform\. After you have these policies in place, you can use resource\-based policies \(or [fine\-grained access control](fgac.md)\) in OpenSearch Service to offer users access to OpenSearch indexes and APIs\.
 
 **Note**  
 Users with the AWS managed `AmazonOpenSearchServiceReadOnlyAccess` policy can't see cluster health status on the console\. To allow them to see cluster health status \(and other OpenSearch data\), add the `es:ESHttpGet` action to an access policy and attach it to their accounts or roles\.
@@ -276,7 +284,7 @@ Even if you configure a completely open resource\-based access policy, *all* req
   ```
   import boto3
   
-  client = boto3.client(opensearchservice)
+  client = boto3.client(es)
   response = client.update_domain_config(
     DomainName='movies',
     ClusterConfig={
@@ -337,22 +345,6 @@ OpenSearch Service supports most policy elements in the [IAM Policy Elements Ref
 | Action  |  OpenSearch Service uses the following actions for HTTP methods: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html) OpenSearch Service uses the following actions for the configuration API\. Note that some actions have been deprecated and replaced with [engine\-agnostic names](configuration-api.md#configuration-api-deprecated)\.  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html)  You can use wildcards to specify a subset of actions, such as `"Action":"es:*"` or `"Action":"es:Describe*"`\.  Certain `es:` actions support resource\-level permissions\. For example, you can give a user permissions to delete one particular domain without giving that user permissions to delete *any* domain\. Other actions apply only to the service itself\. For example, `es:ListDomainNames` makes no sense in the context of a single domain and thus requires a wildcard\.  Resource\-based policies differ from resource\-level permissions\. [Resource\-based policies](#ac-types-resource) are full JSON policies that attach to domains\. Resource\-level permissions let you restrict actions to particular domains or subresources\. In practice, you can think of resource\-level permissions as an optional part of a resource\- or identity\-based policy\.  The following [identity\-based policy](#ac-types-identity) lists all `es:` actions and groups them according to whether they apply to the domain subresources \(`test-domain/*`\), to the domain configuration \(`test-domain`\), or only to the service \(`*`\): <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpDelete",<br />        "es:ESHttpGet",<br />        "es:ESHttpHead",<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "es:ESHttpPatch"<br />      ],<br />      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/*"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:AddTags",<br />        "es:AssociatePackage",<br />        "es:CreateDomain",<br />        "es:CreateOutboundConnection",<br />        "es:DeleteDomain",<br />        "es:DescribeDomain",<br />        "es:DescribeDomainAutoTunes",<br />        "es:DescribeDomainConfig",<br />        "es:DescribeDomains",<br />        "es:DissociatePackage",<br />        "es:ESCrossClusterGet",<br />        "es:GetCompatibleVersions",<br />        "es:GetUpgradeHistory",<br />        "es:GetUpgradeStatus",<br />        "es:ListPackagesForDomain",<br />        "es:ListTags",<br />        "es:RemoveTags",<br />        "es:StartServiceSoftwareUpdate",<br />        "es:UpdateDomainConfig",<br />        "es:UpdateNotificationStatus",<br />        "es:UpgradeDomain"<br />      ],<br />      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:AcceptInboundConnection",<br />        "es:CancelServiceSoftwareUpdate",<br />        "es:CreatePackage",<br />        "es:CreateServiceRole",<br />        "es:DeletePackage",<br />        "es:DescribeInboundConnections",<br />        "es:DescribeInstanceTypeLimits",<br />        "es:DescribeOutboundConnections",<br />        "es:DescribePackages",<br />        "es:DescribeReservedInstanceOfferings",<br />        "es:DescribeReservedInstances",<br />        "es:GetPackageVersionHistory",<br />        "es:ListDomainNames",<br />        "es:ListDomainsForPackage",<br />        "es:ListInstanceTypeDetails",<br />        "es:ListInstanceTypes",<br />        "es:ListNotifications",<br />        "es:ListVersions",<br />        "es:PurchaseReservedInstanceOffering",<br />        "es:RejectInboundConnection",<br />        "es:UpdatePackage"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre>  While resource\-level permissions for `es:CreateDomain` might seem unintuitive—after all, why give a user permissions to create a domain that already exists?—the use of a wildcard lets you enforce a simple naming scheme for your domains, such as `"Resource": "arn:aws:es:us-west-1:987654321098:domain/my-team-name-*"`\.  Of course, nothing prevents you from including actions alongside less restrictive resource elements, such as the following: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpGet",<br />        "es:DescribeDomain"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre> To learn more about pairing actions and resources, see the `Resource` element in this table\.  | 
 | Condition |  OpenSearch Service supports most conditions that are described in [AWS global condition context keys](http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#AvailableKeys) in the *IAM User Guide*\. Notable exceptions include the `aws:SecureTransport` and `aws:PrincipalTag` keys, which OpenSearch Service does not support\. When configuring an [IP\-based policy](#ac-types-ip), you specify the IP addresses or CIDR block as a condition, such as the following: <pre>"Condition": {<br />  "IpAddress": {<br />    "aws:SourceIp": [<br />      "192.0.2.0/32"<br />    ]<br />  }<br />}</pre> As noted in [Identity\-based policies](#ac-types-identity), the `aws:ResourceTag`, `aws:RequestTag`, and `aws:TagKeys` condition keys only apply to the configuration API, not the OpenSearch APIs\.  | 
 | Resource |  OpenSearch Service uses `Resource` elements in three basic ways: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html) For details about which actions support resource\-level permissions, see the `Action` element in this table\.  | 
-
-## AWS\-managed policies<a name="ac-mp"></a>
-
-OpenSearch Service has several AWS\-managed, identity\-based IAM policies\. See [Service\-linked role for VPC access](vpc.md#enabling-slr) for a summary of the service\-linked role \(`AWSServiceRoleForAmazonOpenSearchService`\) that OpenSearch Service uses to place domains within VPCs\.
-
-
-****  
-
-| Change | Description | Date | 
-| --- | --- | --- | 
-|  Updated `AmazonOpenSearchServiceRolePolicy`  |  Added support for the `security-group` resource type\. The policy provides the minimum Amazon EC2 and Elastic Load Balancing permissions necessary for [the service\-linked role](slr.md#slr-permissions) to enable [VPC access](cognito-auth.md)\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceRolePolicy)\.  |  9 September 2021  | 
-|  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html)  |  This new policy is meant to replace the old policy\. Both policies provide full access to the OpenSearch Service configuration API and all HTTP methods for the OpenSearch APIs\. [Fine\-grained access control](fgac.md) and [resource\-based policies](#ac-types-resource) can still restrict access\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceFullAccess)\.  |  7 September 2021  | 
-|  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html)  |  This new policy is meant to replace the old policy\. Both policies provide read\-only access to the OpenSearch Service configuration API \(`es:Describe*`, `es:List*`, and `es:Get*`\) and *no* access to the HTTP methods for the OpenSearch APIs\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceReadOnlyAccess)\.  |  7 September 2021  | 
-|  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html)  |  This new policy is meant to replace the old policy\. Both policies provide the minimum Amazon Cognito permissions necessary to enable [Cognito authentication](cognito-auth.md)\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceCognitoAccess)\.  |  7 September 2021  | 
-|  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html)  |  This new policy is meant to replace the old policy\. Both policies provide the minimum Amazon EC2 and Elastic Load Balancing permissions necessary for [the service\-linked role](slr.md#slr-permissions) to enable [VPC access](cognito-auth.md)\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceRolePolicy)\.  |  7 September 2021  | 
-|  Started tracking changes  |  Amazon OpenSearch Service now tracks changes to AWS\-managed policies\.  |  7 September 2021  | 
 
 ## Advanced options and API considerations<a name="ac-advanced"></a>
 
@@ -450,7 +442,7 @@ Similarly, the following resource\-based policy contains two subtle issues:
 + Despite the explicit deny, `test-user` can still make calls such as `GET https://search-test-domain.us-west-1.es.amazonaws.com/_all/_search` and `GET https://search-test-domain.us-west-1.es.amazonaws.com/*/_search` to access the documents in `restricted-index`\.
 + Because the `Resource` element references `restricted-index/*`, `test-user` doesn't have permissions to directly access the index's documents\. The user does, however, have permissions to *delete the entire index*\. To prevent access and deletion, the policy instead must specify `restricted-index*`\.
 
-Rather than mixing broad allows and focused denies, the safest approach is to follow the principle of [least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) and grant only the permissions that are required to perform a task\. For more information about controlling access to individual indices or OpenSearch operations, see [Fine\-grained access control in Amazon OpenSearch Service](fgac.md)\.
+Rather than mixing broad allows and focused denies, the safest approach is to follow the principle of [least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege) and grant only the permissions that are required to perform a task\. For more information about controlling access to individual indexes or OpenSearch operations, see [Fine\-grained access control in Amazon OpenSearch Service](fgac.md)\.
 
 ## Configuring access policies<a name="ac-creating"></a>
 + For instructions on creating or modifying resource\- and IP\-based policies in OpenSearch Service, see [Configuring access policies](createupdatedomains.md#createdomain-configure-access-policies)\.

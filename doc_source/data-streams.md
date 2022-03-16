@@ -12,7 +12,7 @@ A data stream is internally composed of multiple backing indices\. Search reques
 
 ### Step 1: Create an index template<a name="data-streams-example-1"></a>
 
-To create a data stream, you first need to create an index template that configures a set of indices as a data stream\. The `data_stream` object indicates that it’s a data stream and not a regular index template\. The index pattern matches with the name of the data stream:
+To create a data stream, you first need to create an index template that configures a set of indexes as a data stream\. The `data_stream` object indicates that it’s a data stream and not a regular index template\. The index pattern matches with the name of the data stream:
 
 ```
 PUT _index_template/logs-template
@@ -56,7 +56,7 @@ POST logs-redis/_doc
 
 ### Step 4: Searching a data stream<a name="data-streams-example-4"></a>
 
-You can search a data stream just like you search a regular index or an index alias\. The search operation applies to all of the backing indices \(all data present in the stream\)\.
+You can search a data stream just like you search a regular index or an index alias\. The search operation applies to all of the backing indexes \(all data present in the stream\)\.
 
 ```
 GET logs-redis/_search
@@ -71,7 +71,7 @@ GET logs-redis/_search
 
 ### Step 5: Rollover a data stream<a name="data-streams-example-5"></a>
 
-You can set up an [Index State Management \(ISM\)](ism.md) policy to automate the rollover process for the data stream\. The ISM policy is applied to the backing indices at the time of their creation\. When you associate a policy to a data stream, it only affects the future backing indices of that data stream\. You also don’t need to provide the `rollover_alias` setting, because the ISM policy infers this information from the backing index\.
+You can set up an [Index State Management \(ISM\)](ism.md) policy to automate the rollover process for the data stream\. The ISM policy is applied to the backing indexes at the time of their creation\. When you associate a policy to a data stream, it only affects the future backing indexes of that data stream\. You also don’t need to provide the `rollover_alias` setting, because the ISM policy infers this information from the backing index\.
 
 **Note**  
 If you rollover a backing index to [cold storage](cold-storage.md), OpenSearch removes this index from the data stream\. Even if you move the index back to [UltraWarm](ultrawarm.md), the index remains independent and not part of the original data stream\.
@@ -82,7 +82,7 @@ To manage data streams from OpenSearch Dashboards, open **OpenSearch Dashboards*
 
 ### Step 7: Delete a data stream<a name="data-streams-example-7"></a>
 
-The delete operation first deletes the backing indices of a data stream and then deletes the data stream itself\.
+The delete operation first deletes the backing indexes of a data stream and then deletes the data stream itself\.
 
 To delete a data stream and all of its hidden backing indices:
 

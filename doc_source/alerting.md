@@ -8,7 +8,7 @@ Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documenta
 
 1. Choose **Alerting** from the OpenSearch Dashboards main menu\.
 
-1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the destination\. For example, your OpenSearch Service domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\. The OpenSearch Service domain must have a public IP address to send alerts to a custom webhook\.
+1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the destination\. For example, your OpenSearch Service domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\. The custom webhook must have a public IP address in order for an OpenSearch Service domain to send alerts to it\.
 
 1. Create a monitor in one of three ways: visually, using a query, or using an anomaly detector\.
 
@@ -22,7 +22,7 @@ For detailed steps, see [Monitors](https://docs-beta.opensearch.org/monitoring-p
 
 ## Differences<a name="alerting-diff"></a>
 
-Compared to OpenSearch, alerting in Amazon OpenSearch Service has some notable differences\.
+Compared to the open\-source version of OpenSearch, alerting in Amazon OpenSearch Service has some notable differences\.
 
 ### Amazon SNS support<a name="alerting-diff-sns"></a>
 
@@ -42,6 +42,8 @@ OpenSearch Service supports Amazon Simple Notification Service \([Amazon SNS](ht
 
 1. Provide the ARN for an IAM role within your account that has the following trust relationship and permissions \(at minimum\):
 
+   **Trust relationship**
+
    ```
    {
      "Version": "2012-10-17",
@@ -54,6 +56,23 @@ OpenSearch Service supports Amazon Simple Notification Service \([Amazon SNS](ht
      }]
    }
    ```
+
+   We recommend that you use the `aws:SourceAccount` and `aws:SourceArn` condition keys to protect yourself against the [confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html)\. The source account is the owner of the domain and the source ARN is the ARN of the domain\. Your domain must be on service software R20211203 or later in order to add these condition keys\.
+
+   For example, you could add the following condition block to the trust policy:
+
+   ```
+   "Condition": {
+       "StringEquals": {
+           "aws:SourceAccount": "account-id"
+       },
+       "ArnLike": {
+           "aws:SourceArn": "arn:aws:es:region:account-id:domain/domain-name"
+       }
+   }
+   ```
+
+   **Permissions**
 
    ```
    {

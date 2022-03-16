@@ -30,7 +30,7 @@ The certificate must have the custom endpoint name and be in the same account as
 
 ## Custom endpoints for existing domains<a name="enable-disable-custom-endpoint"></a>
 
-To add a custom endpoint to an existing OpenSearch Service domain, choose **Edit** and perform steps 2–4 above\. 
+To add a custom endpoint to an existing OpenSearch Service domain, choose **Edit** and perform steps 2–4 above\. Editing a domain's custom endpoint triggers a [blue/green deployment](managedomains-configuration-changes.md)\.
 
 ## Next steps<a name="customize-endpoint-next-steps"></a>
 

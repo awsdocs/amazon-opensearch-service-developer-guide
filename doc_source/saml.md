@@ -1,6 +1,6 @@
 # SAML authentication for OpenSearch Dashboards<a name="saml"></a>
 
-SAML authentication for OpenSearch Dashboards lets you use your existing identity provider to offer single sign\-on \(SSO\) for Dashboards on Amazon OpenSearch Service domains running OpenSearch or Elasticsearch 6\.7 or later\. To use SAML authentication, you must enable [fine\-grained access control](fgac.md)\. You can't enable fine\-grained access control on existing domains, only new ones\. By extension, this means you can only enable SAML authentication on new domains or existing ones that have fine\-grained access control already enabled\.
+SAML authentication for OpenSearch Dashboards lets you use your existing identity provider to offer single sign\-on \(SSO\) for Dashboards on Amazon OpenSearch Service domains running OpenSearch or Elasticsearch 6\.7 or later\. To use SAML authentication, you must enable [fine\-grained access control](fgac.md)\.
 
 Rather than authenticating through [Amazon Cognito](cognito-auth.md) or the [internal user database](fgac.md#fgac-dashboards), SAML authentication for OpenSearch Dashboards lets you use third\-party identity providers to log in to Dashboards, manage fine\-grained access control, search your data, and build visualizations\. OpenSearch Service supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services \(ADFS\), and Auth0\. 
 
@@ -23,6 +23,10 @@ Regardless of which authentication type you use, the goal is to log in through y
 
 **Note**  
 You can't change the SSO URL from its service\-provided value, so SAML authentication for Dashboards does not support proxy servers\.
+
+## SAML authentication for domains running in a VPC<a name="saml-vpc"></a>
+
+SAML does not require direct communication between your identity provider and your service provider\. Therefore, even if your OpenSearch domain is hosted within a private VPC, you can still use SAML as long as your browser can communicate with both your OpenSearch cluster and your identity provider\. Your browser essentially acts as the intermediary between your identity provider and your service provider\. For a useful diagram that explains the SAML authentication flow, see the [Okta documentation](https://developer.okta.com/docs/concepts/saml/#planning-for-saml)\.
 
 ## Enabling SAML authentication<a name="saml-enable"></a>
 
@@ -119,7 +123,7 @@ These URLs change if you later enable a [custom endpoint](customendpoint.md) for
 
    If you want to use backend roles \(recommended\), specify an attribute from the assertion in the **Role key** field, such as `role` or `group`\. This is another situation in which tools like [SAML\-tracer](https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/) can help\.
 
-1. By default, OpenSearch Dashboards logs users out after 60 minutes\. You can increase this value up to 1,440 \(24 hours\) by specifying the **Session time to live**\.
+1. By default, OpenSearch Dashboards logs users out after 24 hours\. You can configure this value to any number between 60 and 1,440 \(24 hours\) by specifying the **Session time to live**\.
 
 1. Choose **Save changes**\. The domain enters a processing state for approximately one minute, during which time Dashboards is unavailable\.
 

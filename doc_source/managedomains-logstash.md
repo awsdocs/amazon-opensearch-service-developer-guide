@@ -1,54 +1,32 @@
 # Loading data into Amazon OpenSearch Service with Logstash<a name="managedomains-logstash"></a>
 
-The open source version of Logstash \(Logstash OSS\) provides a convenient way to use the bulk API to upload data into your Amazon OpenSearch Service domain\. The service supports all standard Logstash input plugins, including the Amazon S3 input plugin\. OpenSearch Service currently supports the following Logstash output plugins depending on your Logstash version, authentication method, and whether your domain is running Elasticsearch or OpenSearch:
-+ Standard Elasticsearch plugin
-+ [logstash\-output\-amazon\_es](https://github.com/opensearch-project/logstash-output-opensearch), which uses IAM credentials to sign and export Logstash events to OpenSearch Service
-+ [logstash\-output\-opensearch](https://github.com/opensearch-project/logstash-output-opensearch), which currently only supports basic authentication
-
-The following tables describe the compatibility between various authentication mechanisms and Logstash output plugins\.
-
-## <a name="logstash-prereq"></a>
-
-
-**OpenSearch**  
-[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-logstash.html)
-
-\*In order for OpenSearch domains to use IAM authentication with Logstash OSS, you need to choose **Enable compatibility mode** in the console when creating or upgrading to an OpenSearch version\. This setting makes the domain artificially report its version as 7\.10 so the plugin continues to work\. To use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/es/) or [configuration API](configuration-api.md), set `override_main_response_version` to `true` in the advanced settings\.
-
-To enable or disable compatibility mode on *existing* OpenSearch domains, you need to use the OpenSearch `_cluster/settings` API:
-
-```
-PUT /_cluster/settings
-{
-  "persistent" : {
-    "compatibility.override_main_response_version" : true
-  }
-}
-```
-
-For an Elasticsearch OSS domain, you can continue to use the standard Elasticsearch plugin or the [logstash\-output\-amazon\_es](https://github.com/awslabs/logstash-output-amazon_es) plugin based on your authentication mechanism\. 
-
-
-**Elasticsearch**  
-[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-logstash.html)
+The open source version of Logstash \(Logstash OSS\) provides a convenient way to use the bulk API to upload data into your Amazon OpenSearch Service domain\. The service supports all standard Logstash input plugins, including the Amazon S3 input plugin\. OpenSearch Service supports the [logstash\-output\-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) output plugin, which supports both basic authentication and IAM credentials\. The plugin works with version 8\.1 and lower of Logstash OSS\.
 
 ## Configuration<a name="logstash-config"></a>
+
+Logstash configuration varies based on the type of authentication your domain uses\.
+
+No matter which authentication method you use, you must set `ecs_compatibility` to `disabled` in the output section of the configuration file\. Logstash 8\.0 introduced a breaking change where all plugins are run in [ECS compatibility mode by default](https://www.elastic.co/guide/en/logstash/current/ecs-ls.html#_specific_plugin_instance)\. You must override the default value to maintain legacy behavior\.
+
+### Fine\-grained access control configuration<a name="logstash-config-fgac"></a>
 
 If your OpenSearch Service domain uses [fine\-grained access control](fgac.md) with HTTP basic authentication, configuration is similar to any other OpenSearch cluster\. This example configuration file takes its input from the open source version of Filebeat \(Filebeat OSS\):
 
 ```
 input {
-  beats {
+  beats  {
     port => 5044
   }
 }
 
 output {
   opensearch {
-    hosts => ["https://domain-endpoint:443"]
-    index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
-    user => "my-username"
-    password => "my-password"
+    hosts       => "https://domain-endpoint:443"
+    user        => "my-username"
+    password    => "my-password"
+    index       => "logstash-logs-%{+YYYY.MM.dd}"
+    ecs_compatibility => disabled
+    ssl_certificate_verification => false
   }
 }
 ```
@@ -72,23 +50,11 @@ output.logstash:
   hosts: ["logstash-host:5044"]
 ```
 
-If your domain uses an IAM\-based domain access policy or fine\-grained access control with an IAM master user, you must sign all requests to OpenSearch Service using IAM credentials\. In this case, the simplest solution to sign requests from Logstash OSS is to use the [logstash\-output\-amazon\_es](https://github.com/opensearch-project/logstash-output-opensearch) plugin\. 
+### IAM configuration<a name="logstash-config-iam"></a>
 
-First, install the plugin\.
+If your domain uses an IAM\-based domain access policy or fine\-grained access control with an IAM master user, you must sign all requests to OpenSearch Service using IAM credentials\.
 
-```
-bin/logstash-plugin install logstash-output-amazon_es
-```
-
-Then export your IAM credentials \(or run `aws configure`\)\.
-
-```
-export AWS_ACCESS_KEY_ID="your-access-key"
-export AWS_SECRET_ACCESS_KEY="your-secret-key"
-export AWS_SESSION_TOKEN="your-session-token"
-```
-
-Finally, change your configuration file to use the plugin for its output\. This example configuration file takes its input from files in an S3 bucket\.
+Change your configuration file to use the plugin for its output\. This example configuration file takes its input from files in an S3 bucket:
 
 ```
 input {
@@ -98,14 +64,27 @@ input {
   }
 }
 
-output {
-  amazon_es {
-    hosts => ["domain-endpoint"]
-    ssl => true
-    region => "us-east-1"
-    index => "production-logs-%{+YYYY.MM.dd}"
-  }
+output {        
+  opensearch {     
+    hosts => ["domain-endpoint:443"]             
+    auth_type => {    
+      type => 'aws_iam'     
+      aws_access_key_id => 'your-access-key'     
+      aws_secret_access_key => 'your-secret-key'     
+      region => 'us-east-1'         
+      }         
+      index  => "logstash-logs-%{+YYYY.MM.dd}"  
+      ecs_compatibility => disabled    
+  }            
 }
+```
+
+If you don't want to provide your IAM credentials within the configuration file, you can export them \(or run `aws configure`\):
+
+```
+export AWS_ACCESS_KEY_ID="your-access-key"
+export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_SESSION_TOKEN="your-session-token"
 ```
 
 If your OpenSearch Service domain is in a VPC, the Logstash OSS machine must be able to connect to the VPC and have access to the domain through the VPC security groups\. For more information, see [About access policies on VPC domains](vpc.md#vpc-security)\.

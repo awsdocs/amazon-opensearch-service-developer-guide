@@ -11,6 +11,7 @@ This documentation helps you understand how to apply the shared responsibility m
 **Topics**
 + [Data protection in Amazon OpenSearch Service](data-protection.md)
 + [Identity and Access Management in Amazon OpenSearch Service](ac.md)
++ [Cross\-service confused deputy prevention](cross-service-confused-deputy-prevention.md)
 + [Fine\-grained access control in Amazon OpenSearch Service](fgac.md)
 + [Compliance validation for Amazon OpenSearch Service](compliance.md)
 + [Resilience in Amazon OpenSearch Service](disaster-recovery-resiliency.md)

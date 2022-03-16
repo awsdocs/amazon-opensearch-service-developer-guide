@@ -348,3 +348,119 @@ The following is an example event of this type:
   }
 }
 ```
+
+## Cluster health events<a name="monitoring-events-shards"></a>
+
+OpenSearch Service sends events to EventBridge when cluster health is compromised for one of the following reasons\.
+
+### High shard count warning<a name="monitoring-events-shard-warning"></a>
+
+OpenSearch Service sends this event when the average shard count across your hot data nodes has exceeded 90% of the recommended default limit of 1,000\. Although later versions of Elasticsearch and OpenSearch support a configurable max shard count per node limit, we recommend you have no more than 1,000 shards per node\. See [Choosing the number of shards](sizing-domains.md#bp-sharding)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2016-11-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"High Shard Count",
+     "status":"Warning",
+     "severity":"Low",
+     "description":"One or more data nodes have close to 1000 shards. To ensure optimum performance and stability of your cluster, please refer to the best practice guidelines - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html#bp-sharding."
+  }
+}
+```
+
+### Shard count limit exceeded<a name="monitoring-events-shard-exceeded"></a>
+
+OpenSearch Service sends this event when the average shard count across your hot data nodes has exceeded the recommended default limit of 1,000\. Although later versions of Elasticsearch and OpenSearch support a configurable max shard count per node limit, we recommend you have no more than 1,000 shards per node\. See [Choosing the number of shards](sizing-domains.md#bp-sharding)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2016-11-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"High Shard Count",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"One or more data nodes have more than 1000 shards. To ensure optimum performance and stability of your cluster, please refer to the best practice guidelines - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html#bp-sharding."
+  }
+}
+```
+
+### Low disk space<a name="monitoring-events-disk"></a>
+
+OpenSearch Service sends this event when one or more nodes in your cluster has less than 25% of available storage space, or less than 25 GB\. 
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"Low Disk Space",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"One or more data nodes in your cluster has less than 25% of storage space or less than 25GB. Your cluster will be blocked for writes at 20% or 20GB. Please refer to the documentation for more information - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#troubleshooting-cluster-block"
+  }
+}
+```
+
+## Domain error events<a name="monitoring-events-errors"></a>
+
+OpenSearch Service sends events to EventBridge when one of the following domain errors occur\.
+
+### KMS key inaccessible<a name="monitoring-events-kms-inaccessible"></a>
+
+OpenSearch Service sends this event when it [can't access your AWS KMS key](encryption-at-rest.md#disabled-key)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Domain Error Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2016-11-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"KMS Key Inaccessible",
+     "status":"Error",
+     "severity":"High",
+     "description":"The KMS key associated with this domain is inaccessible. You are at risk of losing access to your domain. For more information, please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html#disabled-key."
+  }
+}
+```

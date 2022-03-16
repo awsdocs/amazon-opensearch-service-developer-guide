@@ -2,7 +2,7 @@
 
 Amazon OpenSearch Service publishes data from your domains to Amazon CloudWatch\. CloudWatch lets you retrieve statistics about those data points as an ordered set of time\-series data, known as *metrics*\. OpenSearch Service sends metrics to CloudWatch in 60\-second intervals\. If you use General Purpose or Magnetic EBS volumes, the EBS volume metrics update only every five minutes\. For more information about Amazon CloudWatch, see the [Amazon CloudWatch User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/)\.
 
-The OpenSearch Service console displays a series of charts based on the raw data from CloudWatch\. Depending on your needs, you might prefer to view cluster data in CloudWatch instead of the graphs in the console\. The service archives metrics for two weeks before discarding them\. The metrics are provided at no extra charge\.
+The OpenSearch Service console displays a series of charts based on the raw data from CloudWatch\. Depending on your needs, you might prefer to view cluster data in CloudWatch instead of the graphs in the console\. The service archives metrics for two weeks before discarding them\. The metrics are provided at no extra charge, but CloudWatch still charges for creating dashboards and alarms\. For more information, see [Amazon CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/)\.
 
 OpenSearch Service publishes the following metrics to CloudWatch:
 + [Cluster metrics](#managedomains-cloudwatchmetrics-cluster-metrics)
@@ -60,7 +60,7 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | Metric | Description | 
 | --- | --- | 
 | ClusterStatus\.green |  A value of 1 indicates that all index shards are allocated to nodes in the cluster\. Relevant statistics: Maximum  | 
-| ClusterStatus\.yellow | A value of 1 indicates that the primary shards for all indices are allocated to nodes in the cluster, but replica shards for at least one index are not\. For more information, see [Yellow cluster status](handling-errors.md#handling-errors-yellow-cluster-status)\.Relevant statistics: Maximum | 
+| ClusterStatus\.yellow | A value of 1 indicates that the primary shards for all indexes are allocated to nodes in the cluster, but replica shards for at least one index are not\. For more information, see [Yellow cluster status](handling-errors.md#handling-errors-yellow-cluster-status)\.Relevant statistics: Maximum | 
 | ClusterStatus\.red |  A value of 1 indicates that the primary and replica shards for at least one index are not allocated to nodes in the cluster\. For more information, see [Red cluster status](handling-errors.md#handling-errors-red-cluster-status)\. Relevant statistics: Maximum  | 
 | Shards\.active |  The total number of active primary and replica shards\. Relevant statistics: Maximum, Sum  | 
 | Shards\.unassigned |  The number of shards that are not allocated to nodes in the cluster\. Relevant statistics: Maximum, Sum  | 
@@ -72,7 +72,7 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | SearchableDocuments |  The total number of searchable documents across all data nodes in the cluster\. Relevant statistics: Minimum, Maximum, Average  | 
 | DeletedDocuments |  The total number of documents marked for deletion across all data nodes in the cluster\. These documents no longer appear in search results, but OpenSearch only removes deleted documents from disk during segment merges\. This metric increases after delete requests and decreases after segment merges\. Relevant statistics: Minimum, Maximum, Average  | 
 | CPUUtilization |  The percentage of CPU usage for data nodes in the cluster\. Maximum shows the node with the highest CPU usage\. Average represents all nodes in the cluster\. This metric is also available for individual nodes\. Relevant statistics: Maximum, Average  | 
-| FreeStorageSpace |  The free space for data nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum` and `Maximum` show the nodes with the least and most free space, respectively\. This metric is also available for individual nodes\. OpenSearch Service throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indices, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Lack of available storage space](handling-errors.md#handling-errors-watermark)\. The OpenSearch Service console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\.  `FreeStorageSpace` will always be lower than the values that the OpenSearch `_cluster/stats` and `_cat/allocation` APIs provide\. OpenSearch Service reserves a percentage of the storage space on each instance for internal operations\. For more information, see [Calculating storage requirements](sizing-domains.md#bp-storage)\.  Relevant statistics: Minimum, Maximum, Average, Sum  | 
+| FreeStorageSpace |  The free space for data nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum` and `Maximum` show the nodes with the least and most free space, respectively\. This metric is also available for individual nodes\. OpenSearch Service throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indexes, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Lack of available storage space](handling-errors.md#handling-errors-watermark)\. The OpenSearch Service console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\.  `FreeStorageSpace` will always be lower than the values that the OpenSearch `_cluster/stats` and `_cat/allocation` APIs provide\. OpenSearch Service reserves a percentage of the storage space on each instance for internal operations\. For more information, see [Calculating storage requirements](sizing-domains.md#bp-storage)\.  Relevant statistics: Minimum, Maximum, Average, Sum  | 
 | ClusterUsedSpace |  The total used space for the cluster\. You must leave the period at one minute to get an accurate value\. The OpenSearch Service console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. Relevant statistics: Minimum, Maximum  | 
 | ClusterIndexWritesBlocked |  Indicates whether your cluster is accepting or blocking incoming write requests\. A value of 0 means that the cluster is accepting requests\. A value of 1 means that it is blocking requests\. Some common factors include the following: `FreeStorageSpace` is too low or `JVMMemoryPressure` is too high\. To alleviate this issue, consider adding more disk space or scaling your cluster\. Relevant statistics: Maximum  | 
 | JVMMemoryPressure |  The maximum percentage of the Java heap used for all data nodes in the cluster\. OpenSearch Service uses half of an instance's RAM for the Java heap, up to a heap size of 32 GiB\. You can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\. See [Recommended CloudWatch alarms for Amazon OpenSearch Service](cloudwatch-alarms.md)\. Relevant statistics: Maximum  | 
@@ -123,7 +123,7 @@ Amazon OpenSearch Service provides the following metrics for EBS volumes\.
 Amazon OpenSearch Service provides the following metrics for each instance in a domain\. OpenSearch Service also aggregates these instance metrics to provide insight into overall cluster health\. You can verify this behavior using the **Sample Count** statistic in the console\. Note that each metric in the following table has relevant statistics for the node *and* the cluster\.
 
 **Important**  
-Different versions of OpenSearch use different thread pools to process calls to the `_index` API\. OpenSearch 1\.5 and 2\.3 use the index thread pool\. OpenSearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. 6\.3 and later use the write thread pool\. Currently, the OpenSearch Service console doesn't include a graph for the bulk thread pool\.  
+Different versions of Elasticsearch use different thread pools to process calls to the `_index` API\. Elasticsearch 1\.5 and 2\.3 use the index thread pool\. Elasticsearch 5\.*x*, 6\.0, and 6\.2 use the bulk thread pool\. OpenSearch and Elasticsearch 6\.3 and later use the write thread pool\. Currently, the OpenSearch Service console doesn't include a graph for the bulk thread pool\.  
 Use `GET _cluster/settings?include_defaults=true` to check thread pool and queue sizes for your cluster\.
 
 
@@ -178,14 +178,14 @@ Amazon OpenSearch Service provides the following metrics for [UltraWarm](ultrawa
 | --- | --- | 
 | WarmCPUUtilization |  The percentage of CPU usage for UltraWarm nodes in the cluster\. Maximum shows the node with the highest CPU usage\. Average represents all UltraWarm nodes in the cluster\. This metric is also available for individual UltraWarm nodes\. Relevant statistics: Maximum, Average  | 
 | WarmFreeStorageSpace |  The amount of free warm storage space in MiB\. Because UltraWarm uses Amazon S3 rather than attached disks, `Sum` is the only relevant statistic\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Sum  | 
-| WarmSearchableDocuments |  The total number of searchable documents across all warm indices in the cluster\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Sum  | 
+| WarmSearchableDocuments |  The total number of searchable documents across all warm indexes in the cluster\. You must leave the period at one minute to get an accurate value\. Relevant statistics: Sum  | 
 |  WarmSearchLatency  |  The average time, in milliseconds, that it takes a shard on an UltraWarm node to complete a search operation\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum  | 
 |  WarmSearchRate  |  The total number of search requests per minute for all shards on an UltraWarm node\. A single call to the `_search` API might return results from many different shards\. If five of these shards are on one node, the node would report 5 for this metric, even though the client only made one request\. Relevant node statistics: Average Relevant cluster statistics: Average, Maximum, Sum  | 
 | WarmStorageSpaceUtilization |  The total amount of warm storage space, in MiB, that the cluster is using\.  Relevant statistics: Maximum  | 
 |  HotStorageSpaceUtilization  |  The total amount of hot storage space that the cluster is using\.  Relevant statistics: Maximum  | 
 | WarmSysMemoryUtilization |  The percentage of the warm node's memory that is in use\. Relevant statistics: Maximum  | 
-|  HotToWarmMigrationQueueSize  |  The number of indices currently waiting to migrate from hot to warm storage\. Relevant statistics: Maximum  | 
-|  WarmToHotMigrationQueueSize  |  The number of indices currently waiting to migrate from warm to hot storage\. Relevant statistics: Maximum  | 
+|  HotToWarmMigrationQueueSize  |  The number of indexes currently waiting to migrate from hot to warm storage\. Relevant statistics: Maximum  | 
+|  WarmToHotMigrationQueueSize  |  The number of indexes currently waiting to migrate from warm to hot storage\. Relevant statistics: Maximum  | 
 |  HotToWarmMigrationFailureCount  |  The total number of failed hot to warm migrations\. Relevant statistics: Sum  | 
 |  HotToWarmMigrationForceMergeLatency  |  The average latency of the force merge stage of the migration process\. If this stage consistently takes too long, consider increasing `index.ultrawarm.migration.force_merge.max_num_segments`\. Relevant statistics: Average  | 
 |  HotToWarmMigrationSnapshotLatency  |  The average latency of the snapshot stage of the migration process\. If this stage consistently takes too long, ensure that your shards are appropriately sized and distributed throughout the cluster\. Relevant statistics: Average  | 
@@ -210,11 +210,11 @@ Amazon OpenSearch Service provides the following metrics for [cold storage](cold
 | ColdStorageSpaceUtilization  |  The total amount of cold storage space, in MiB, that the cluster is using\.  Relevant statistics: Max  | 
 | ColdToWarmMigrationFailureCount |  The total number of failed cold to warm migrations\. Relevant statistics: Sum  | 
 | ColdToWarmMigrationLatency |  The amount of time for successful cold to warm migrations to complete\. Relevant statistics: Average  | 
-| ColdToWarmMigrationQueueSize |  The number of indices currently waiting to migrate from cold to warm storage\.  Relevant statistics: Maximum  | 
+| ColdToWarmMigrationQueueSize |  The number of indexes currently waiting to migrate from cold to warm storage\.  Relevant statistics: Maximum  | 
 | ColdToWarmMigrationSuccessCount  |  The total number of successful cold to warm migrations\. Relevant statistics: Sum  | 
 | WarmToColdMigrationFailureCount  |  The total number of failed warm to cold migrations\. Relevant statistics: Sum  | 
 | WarmToColdMigrationLatency |  The amount of time for successful warm to cold migrations to complete\. Relevant statistics: Average  | 
-| WarmToColdMigrationQueueSize |  The number of indices currently waiting to migrate from warm to cold storage\.  Relevant statistics: Maximum  | 
+| WarmToColdMigrationQueueSize |  The number of indexes currently waiting to migrate from warm to cold storage\.  Relevant statistics: Maximum  | 
 | WarmToColdMigrationSuccessCount |  The total number of successful warm to cold migrations\. Relevant statistics: Sum  | 
 
 ## Alerting metrics<a name="managedomains-cloudwatchmetrics-alerting"></a>
@@ -240,7 +240,7 @@ Amazon OpenSearch Service provides the following metrics for [anomaly detection]
 
 | Metric | Description | 
 | --- | --- | 
-| ADPluginUnhealthy |  A value of 1 means that the anomaly detection plugin is not functioning properly, either because of a high number of failures or because one of the indices that it uses is red\. A value of 0 indicates the plugin is working as expected\. Relevant statistics: Maximum  | 
+| ADPluginUnhealthy |  A value of 1 means that the anomaly detection plugin is not functioning properly, either because of a high number of failures or because one of the indexes that it uses is red\. A value of 0 indicates the plugin is working as expected\. Relevant statistics: Maximum  | 
 | ADExecuteRequestCount |  The number of requests to detect anomalies\. Relevant statistics: Sum  | 
 |  ADExecuteFailureCount  |  The number of failed requests to detect anomalies\.  Relevant statistics: Sum  | 
 | ADHCExecuteFailureCount |  The number of failed requests to detect anomalies for high cardinality detectors\. Relevant statistics: Sum  | 
@@ -349,8 +349,8 @@ Amazon OpenSearch Service provides the following metrics for [cross\-cluster rep
 | Metric | Description | 
 | --- | --- | 
 | ReplicationRate |  Average rate of replication operations per second\. This metric is similar to the `IndexingRate` metric\.  | 
-| LeaderCheckPoint |  The sum of global checkpoints across all replicating indices on the leader index for a specific connection\. You can use this metric to measure replication latency\.  | 
-| FollowerCheckPoint |  The sum of global checkpoints across all replicating indices on the follower index for a specific connection\. You can use this metric to measure replication latency\.  | 
+| LeaderCheckPoint |  The sum of global checkpoints across all replicating indexes on the leader index for a specific connection\. You can use this metric to measure replication latency\.  | 
+| FollowerCheckPoint |  The sum of global checkpoints across all replicating indexes on the follower index for a specific connection\. You can use this metric to measure replication latency\.  | 
 
 ## Learning to Rank metrics<a name="managedomains-cloudwatchmetrics-learning-to-rank"></a>
 
@@ -361,7 +361,7 @@ Amazon OpenSearch Service provides the following metrics for [Learning to Rank](
 | --- | --- | 
 | LTRRequestTotalCount |  Total count of ranking requests\.  | 
 | LTRRequestErrorCount |  Total count of unsuccessful requests\.  | 
-| LTRStatus\.red |  Tracks if one of the indices needed to run the plugin is red\.  | 
+| LTRStatus\.red |  Tracks if one of the indexes needed to run the plugin is red\.  | 
 | LTRMemoryUsage |  Total memory used by the plugin\.  | 
 | LTRFeatureMemoryUsageInBytes |  The amount of memory, in bytes, used by Learning to Rank feature fields\.  | 
 | LTRFeaturesetMemoryUsageInBytes |  The amount of memory, in bytes, used by all Learning to Rank feature sets\.  | 

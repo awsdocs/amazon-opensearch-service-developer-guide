@@ -1,6 +1,6 @@
 # Tagging Amazon OpenSearch Service domains<a name="managedomains-awsresourcetagging"></a>
 
-Tags let you assign artibrary information to an Amazon OpenSearch Service domain so you can categorize and filter on that information\. A tag is a key\-value pair that you define and associate with an OpenSearch Service domain\. You can use these tags to track costs by grouping expenses for similarly tagged resources\. AWS doesn't apply any semantic meaning to your tags\. Tags are interpreted strictly as character strings\. All tags have the following elements:
+Tags let you assign arbitrary information to an Amazon OpenSearch Service domain so you can categorize and filter on that information\. A tag is a key\-value pair that you define and associate with an OpenSearch Service domain\. You can use these tags to track costs by grouping expenses for similarly tagged resources\. AWS doesn't apply any semantic meaning to your tags\. Tags are interpreted strictly as character strings\. All tags have the following elements:
 
 
 ****  

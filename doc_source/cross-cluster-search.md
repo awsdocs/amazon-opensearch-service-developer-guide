@@ -22,17 +22,19 @@ Cross\-cluster search supports OpenSearch Dashboards, so you can create visualiz
 
 Cross\-cluster search has several important limitations:
 + You can only implement cross\-cluster search on domains created on or after June 3rd, 2020\.
++ You can't connect an Elasticsearch domain to an OpenSearch domain\.
 + You can't connect to self\-managed OpenSearch/Elasticsearch clusters\.
++ Cross\-cluster search is not supported across Regions\.
 + A domain can have a maximum of 20 outgoing connections\. Similarly, a domain can have a maximum of 20 incoming connections\. In other words, one domain can connect to a maximum of 20 other domains\.
 + Domains must either share the same major version, or be on the final minor version and the next major version \(for example, 6\.8 and 7\.x are compatible\)\.
 + You can't use custom dictionaries or SQL with cross\-cluster search\.
 + You can't use AWS CloudFormation to connect domains\.
-+ You can't use cross\-cluster search on M3 and T2 instances\.
++ You can't use cross\-cluster search on M3 or burstable \(T2 and T3\) instances\.
 
 ## Cross\-cluster search prerequisites<a name="cross-cluster-search-pp"></a>
 
 Before you set up cross\-cluster search, make sure that your domains meet the following requirements:
-+ OpenSearch or Elasticsearch 6\.7 or later
++ Two OpenSearch domains, or Elasticsearch domains on version 6\.7 or later
 + Fine\-grained access control enabled
 + Node\-to\-node encryption enabled
 
@@ -60,9 +62,9 @@ The source domain creates an "outbound" connection to the destination domain\. T
 
 1. For **Connection alias**, enter a name for your connection\.
 
-1. Choose between connecting a cluster in your AWS account or in another account or Region\.
-   + To connect to a cluster in your AWS account and Region, choose the domain from the dropdown menu and choose **Request**\.
-   + To connect to a cluster in another AWS account or Region, specify the ARN of the remote domain and choose **Request**\.
+1. Choose between connecting a cluster in your AWS account or in another account\.
+   + To connect to a cluster in your AWS account, choose the domain from the dropdown menu and choose **Request**\.
+   + To connect to a cluster in another AWS account, specify the ARN of the remote domain and choose **Request**\.
 
 1. Cross\-cluster search first validates the connection request to make sure the prerequisites are met\. If the domains are found to be incompatible, the connection request enters the `Validation failed` state\.
 
@@ -109,7 +111,7 @@ You can't delete a domain with active cross\-cluster connections\. To delete a d
    }
    ```
 **Note**  
-The domain resource policy evaluates the URI literally, so if you include remote indices in the path, use `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst%3Aremote_index` rather than `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst:remote_index`\.
+The domain resource policy evaluates the URI literally, so if you include remote indexes in the path, use `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst%3Aremote_index` rather than `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst:remote_index`\.
 
    If you choose to use a restrictive access policy in addition to fine\-grained access control, your policy must allow access to `es:ESHttpGet` at a minimum\.
 
@@ -305,4 +307,4 @@ All cross\-cluster search requests between domains are encrypted in transit by d
 
 ## OpenSearch Dashboards<a name="cross-cluster-search-dashboards"></a>
 
-You can visualize data from multiple connected domains in the same way as from a single domain, except that you must access the remote indices using `connection-alias:index`\. So, your index pattern must match `connection-alias:index`\.
+You can visualize data from multiple connected domains in the same way as from a single domain, except that you must access the remote indexes using `connection-alias:index`\. So, your index pattern must match `connection-alias:index`\.

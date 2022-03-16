@@ -24,7 +24,7 @@ If you encounter an error while following these steps, see [Can't enable audit l
 
 1. Choose the domain and go to the **Logs** tab\.
 
-1. Select **Audit logs** and then **Setup**\.
+1. Select **Audit logs** and then **Enable**\.
 
 1. Create a CloudWatch log group, or choose an existing one\.
 
@@ -46,6 +46,21 @@ If you encounter an error while following these steps, see [Can't enable audit l
          "Resource": "cw_log_group_arn"
        }
      ]
+   }
+   ```
+
+   We recommend that you add the `aws:SourceAccount` and `aws:SourceArn` condition keys to the policy to protect yourself against the [confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html)\. The source account is the owner of the domain and the source ARN is the ARN of the domain\. Your domain must be on service software R20211203 or later in order to add these condition keys\.
+
+   For example, you could add the following condition block to the policy:
+
+   ```
+   "Condition": {
+       "StringEquals": {
+           "aws:SourceAccount": "account-id"
+       },
+       "ArnLike": {
+           "aws:SourceArn": "arn:aws:es:region:account-id:domain/domain-name"
+       }
    }
    ```
 

@@ -14,5 +14,5 @@ Because the *movies* domain from this tutorial is for test purposes, make sure t
 
 Now that you know how to create a domain and index data, you might want to try some of the following exercises:
 + Learn about more advanced options for creating a domain\. For more information, see [Creating and managing Amazon OpenSearch Service domains](createupdatedomains.md)\.
-+ Discover how to manage the indices in your domain\. For more information, see [Managing indices in Amazon OpenSearch Service](managing-indices.md)\.
++ Discover how to manage the indices in your domain\. For more information, see [Managing indexes in Amazon OpenSearch Service](managing-indices.md)\.
 + Try out one of the tutorials for working with Amazon OpenSearch Service\. For more information, see [Amazon OpenSearch Service tutorials](tutorials.md)\.

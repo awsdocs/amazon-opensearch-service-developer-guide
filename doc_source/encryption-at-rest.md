@@ -15,9 +15,7 @@ OpenSearch Service supports only symmetric KMS keys, not asymmetric ones\. To le
 
 Regardless of whether encryption at rest is enabled, all domains automatically encrypt [custom packages](custom-packages.md) using AES\-256 and OpenSearch Service\-managed keys\.
 
-## Enabling encryption of data at rest<a name="enabling-ear"></a>
-
-Encryption of data at rest on new domains requires either OpenSearch or Elasticsearch 5\.1 or later\. Enabling it on existing domains requires either OpenSearch or Elasticsearch 6\.7 or later\. Choose the existing domain in the AWS console, **Actions**, and **Modify encryption**\.
+## Permissions<a name="permissions-ear"></a>
 
 To use the OpenSearch Service console to configure encryption of data at rest, you must have read permissions to AWS KMS, such as the following identity\-based policy:
 
@@ -54,8 +52,36 @@ If you want to keep your key exclusive to OpenSearch Service, you can add the [k
 
 For more information, see [Using key policies in AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) in the *AWS Key Management Service Developer Guide*\.
 
-**Warning**  
-If you delete the key that you used to encrypt a domain, the domain becomes inaccessible\. The OpenSearch Service team can't help you recover your data\. AWS KMS deletes keys only after a waiting period of at least seven days, so the OpenSearch Service team might contact you if they detect that your domain is at risk\.
+## Enabling encryption of data at rest<a name="enabling-ear"></a>
+
+Encryption of data at rest on new domains requires either OpenSearch or Elasticsearch 5\.1 or later\. Enabling it on existing domains requires either OpenSearch or Elasticsearch 6\.7 or later\.
+
+**To enable encryption of data at rest \(console\)**
+
+1. Open the domain in the AWS console, then choose **Actions** and **Edit security configuration**\.
+
+1. Under **Encryption**, select **Enable encryption of data at rest**\.
+
+1. Choose an AWS KMS key to use, then choose **Save changes**\.
+
+You can also enable encryption through the configuration API\. The following request enables encryption of data at rest on an existing domain:
+
+```
+{
+   "ClusterConfig":{
+      "EncryptionAtRestOptions":{
+         "Enabled": true,
+         "KmsKeyId":"arn:aws:kms:us-east-1:123456789012:alias/my-key"
+      }
+   }
+}
+```
+
+## Disabled or deleted KMS key<a name="disabled-key"></a>
+
+If you disable or delete the key that you used to encrypt a domain, the domain becomes inaccessible\. OpenSearch Service sends you a [notification](managedomains-notifications.md) informing you that it can't access the KMS key\. Re\-enable the key immediately to access your domain\.
+
+The OpenSearch Service team can't help you recover your data if your key is deleted\. AWS KMS deletes keys only after a waiting period of at least seven days\. If your key is pending deletion, either cancel deletion or take a [manual snapshot](managedomains-snapshots.md) of the domain to prevent loss of data\.
 
 ## Disabling encryption of data at rest<a name="disabling-ear"></a>
 

@@ -9,9 +9,13 @@ This chapter presents a solution: use Amazon API Gateway to restrict users to a 
 **Note**  
 Standard API Gateway and Lambda pricing applies, but within the limited usage of this tutorial, costs should be negligible\.
 
+## Prerequisites<a name="search-example-prereq"></a>
+
+A prerequisite for this tutorial is an OpenSearch Service domain\. If you don't already have one, follow the steps in [Create an OpenSearch Service domain](gsgcreate-domain.md) to create one\.
+
 ## Step 1: Index sample data<a name="search-example-index"></a>
 
-A prerequisite for these steps is an OpenSearch Service domain\. Download [sample\-movies\.zip](samples/sample-movies.zip), unzip it, and use the `_bulk` API to add the 5,000 documents to the `movies` index:
+Download [sample\-movies\.zip](samples/sample-movies.zip), unzip it, and use the `_bulk` API to add the 5,000 documents to the `movies` index:
 
 ```
 POST https://search-my-domain.us-west-1.es.amazonaws.com/_bulk
@@ -22,7 +26,7 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/_bulk
 ...
 ```
 
-To learn more, see [Indexing data in Amazon OpenSearch Service](indexing.md)\.
+For instructions, see [Option 2: Upload multiple documents](gsgupload-data.md#gsgmultiple-document)\.
 
 ## Step 2: Create the API in API Gateway<a name="search-example-api"></a>
 
@@ -57,6 +61,9 @@ Using API Gateway lets you create a more limited API and simplifies the process 
 | Lambda region | us\-west\-1 | 
 | Lambda function | opensearch\-lambda \(you'll configure this later in Lambda\) | 
 | Use default timeout | Yes | 
+
+**Note**  
+If you're performing these steps in order, you'll see an error: "Function not found: arn:aws:lambda:us\-west\-1:123456789012:function:opensearch\-lambda"\. You can ignore this error, as you'll configure the Lambda function in step 3\.
 
 ### Configure the method request<a name="method-request"></a>
 
@@ -171,9 +178,27 @@ Choose **Add trigger** and create the HTTP endpoint that invokes your function\.
 | --- | --- | --- | --- | 
 | API Gateway | opensearch\-api | opensearch\-api\-test | Open | 
 
-## Step 4: Modify the domain access policy<a name="search-example-perms"></a>
+## Step 4: \(Optional\) Modify the domain access policy<a name="search-example-perms"></a>
 
-Your OpenSearch Service domain must allow the Lambda function to make `GET` requests to the `movies` index\. The following policy provides `opensearch-lambda-role` \(created through Lambda\) access to the `movies` index\. To get the exact name of the role that Lambda automatically creates, go to the AWS Identity and Access Management \(IAM\) console, choose **Roles**, and search for "lambda"\.
+Your OpenSearch Service domain must allow the Lambda function to make `GET` requests to the `movies` index\. If your domain has an open access policy with fine\-grained access control enabled, you can leave it as\-is: 
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "es:*",
+      "Resource": "arn:aws:es:us-west-1:123456789012:domain/domain-name/*"
+    }
+  ]
+}
+```
+
+Alternatively, you can choose to make your domain access policy more granular\. For example, the following minimum policy provides `opensearch-lambda-role` \(created through Lambda\) read access to the `movies` index\. To get the exact name of the role that Lambda automatically creates, go to the AWS Identity and Access Management \(IAM\) console, choose **Roles**, and search for "lambda"\.
 
 ```
 {
@@ -202,10 +227,26 @@ For more information about access policies, see [Configuring access policies](cr
 
 1. Download [sample\-site\.zip](samples/sample-site.zip), unzip it, and open `scripts/search.js` in your favorite text editor\.
 
-1. Update the `apigatewayendpoint` variable to point to your API Gateway endpoint\. The endpoint takes the form of `https://some-id.execute-api.us-west-1.amazonaws.com/opensearch-api-test`\.
+1. Update the `apigatewayendpoint` variable to point to your API Gateway endpoint\. The endpoint takes the form of `https://some-id.execute-api.us-west-1.amazonaws.com/opensearch-api-test`\. You can quickly find the endpoint in API Gateway by choosing **Stages** and selecting the name of the API\.
 
 1. Open `index.html` and try running searches for *thor*, *house*, and a few other terms\.  
 ![\[A sample search for thor.\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/search-ui.png)
+
+### Troubleshoot CORS errors<a name="search-example-cors"></a>
+
+Even though the Lambda function includes content in the response to support CORS, you still might see the following error: 
+
+```
+Access to XMLHttpRequest at '<api-gateway-endpoint>' from origin 'null' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present in the requested resource.
+```
+
+If this happens, try the following:
+
+1. [Enable CORS](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors-console.html) on the GET resource\. Under **Advanced**, set **Access\-Control\-Allow\-Credentials** to `'true'`\.
+
+1. Redeploy your API in API Gateway \(**Actions**, **Deploy API**\)\.
+
+1. Delete and re\-add your Lambda function trigger\.
 
 ## Next steps<a name="search-example-next"></a>
 

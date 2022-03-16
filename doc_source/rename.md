@@ -1,6 +1,6 @@
 # Amazon OpenSearch Service \- Summary of changes<a name="rename"></a>
 
-On September 8, 2021, Amazon Elasticsearch Service was renamed to Amazon OpenSearch Service\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the service rename, and what actions you need to take to ensure that your domains continue to function properly\. 
+On September 8, 2021, Amazon Elasticsearch Service was renamed to Amazon OpenSearch Service\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the rename, and what actions you need to take to ensure that your domains continue to function properly\. 
 
 Some of these changes only apply when you upgrade your domains from Elasticsearch to OpenSearch\. In other cases, such as in the Billing and Cost Management console, the experience changes immediately\.
 
@@ -16,7 +16,7 @@ Note that this list is not exhaustive\. While other parts of the product also ch
 + [Billing and Cost Management console changes](#rename-billing)
 + [New event format](#rename-events)
 + [What's staying the same?](#rename-nochange)
-+ [Get started: Upgrade your domains to OpenSearch 1\.0](#rename-upgrade)
++ [Get started: Upgrade your domains to OpenSearch 1\.x](#rename-upgrade)
 
 ## New API version<a name="rename-sdk"></a>
 
@@ -70,18 +70,19 @@ OpenSearch Service introduces the following new resource types:
 
 | Resource | Description | 
 | --- | --- | 
-|  `AWS::OpenSearchService::Domain`  |  Represents an Amazon OpenSearch Service domain\. This resource exists at the service level and isn't specific to the software running on the domain\. It applies to services like [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [AWS Resource Groups](https://docs.aws.amazon.com/ARG/latest/userguide/welcome.html), in which you create and manage resources for the service as a whole\.  | 
+|  `AWS::OpenSearchService::Domain`  |  Represents an Amazon OpenSearch Service domain\. This resource exists at the service level and isn't specific to the software running on the domain\. It applies to services like [AWS CloudFormation](https://aws.amazon.com/cloudformation/) and [AWS Resource Groups](https://docs.aws.amazon.com/ARG/latest/userguide/welcome.html), in which you create and manage resources for the service as a whole\. For instructions to upgrade domains defined within CloudFormation from Elasticsearch to OpenSearch, see [Remarks](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html#aws-resource-opensearchservice-domain--remarks) in the CloudFormation User Guide\.  | 
 |  `AWS::OpenSearch::Domain`  | Represents OpenSearch/Elasticsearch software running on a domain\. This resource applies to services like [AWS CloudTrail](http://aws.amazon.com/documentation/cloudtrail/) and [AWS Config](http://aws.amazon.com/config/), which reference the software running on the domain rather than OpenSearch Service as a whole\. These services now contain separate resource types for domains running Elasticsearch \(AWS::Elasticsearch::Domain\) versus domains running OpenSearch \(AWS::OpenSearch::Domain\)\.  | 
 
-Some AWS services haven't yet added support for the new resource types:
-+ In [AWS Config](http://aws.amazon.com/config/), you'll continue to see your data under the existing `AWS::Elasticsearch::Domain` resource type for several weeks, even if you upgrade one or more domains to OpenSearch\.
-+ In [AWS Security Hub](https://aws.amazon.com/security-hub/), the existing controls for domains running Elasticsearch are not yet supported for OpenSearch domains\. If you upgrade a domain to an OpenSearch version or create new OpenSearch domains, there will be a time period in which your AWS Config rules won’t check for compliance\. For more information, see [How Security Hub uses AWS Config rules to run security checks](https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards-awsconfigrules.html)\.
+**Note**  
+In [AWS Config](http://aws.amazon.com/config/), you'll continue to see your data under the existing `AWS::Elasticsearch::Domain` resource type for several weeks, even if you upgrade one or more domains to OpenSearch\.
 
 ## Kibana renamed to OpenSearch Dashboards<a name="rename-dashboards"></a>
 
-[OpenSearch Dashboards](dashboards.md) is an open\-source visualization tool designed to work with OpenSearch\. After you upgrade a domain from Elasticsearch to OpenSearch, the `/_plugin/kibana` endpoint changes to `/_dashboards`\. OpenSearch Service will redirect all requests to the new endpoint, but if you use the Kibana endpoint in any of your IAM policies, update those policies to include the new `/_dashboards` endpoint as well\.
+[OpenSearch Dashboards](dashboards.md), the AWS alternative to Kibana, is an open\-source visualization tool designed to work with OpenSearch\. After you upgrade a domain from Elasticsearch to OpenSearch, the `/_plugin/kibana` endpoint changes to `/_dashboards`\. OpenSearch Service will redirect all requests to the new endpoint, but if you use the Kibana endpoint in any of your IAM policies, update those policies to include the new `/_dashboards` endpoint as well\.
 
 If you're using [SAML authentication for OpenSearch Dashboards](saml.md), before you upgrade your domain to OpenSearch, you need to change all Kibana URLs configured in your identity provider \(IdP\) from `/_plugin/kibana` to `/_dashboards`\. The most common URLs are assertion consumer service \(ACS\) URLs and recipient URLs\.
+
+The default `kibana_read_only` role for OpenSearch Dashboards was renamed to `opensearch_dashboards_read_only`, and the `kibana_user` role was renamed to `opensearch_dashboards_user`\. The change applies to all *newly\-created * OpenSearch 1\.*x* domains running service software R20211203 or later\. If you upgrade an existing domain to service software R20211203, the role names remain the same\.
 
 ## Renamed CloudWatch metrics<a name="rename-metrics"></a>
 
@@ -130,18 +131,16 @@ The format of events that OpenSearch Service sends to Amazon EventBridge and Ama
 ## What's staying the same?<a name="rename-nochange"></a>
 
 The following features and functionality, among others not listed, will remain the same:
-+ Service principal \(`es.amazon.com`\)
++ Service principal \(`es.amazonaws.com`\)
 + Vendor code
 + Domain ARNs
 + Domain endpoints
-+ CloudWatch namespace \(`AWS/ES`\)
-+ `kibana*` roles in OpenSearch Dashboards
 
-## Get started: Upgrade your domains to OpenSearch 1\.0<a name="rename-upgrade"></a>
+## Get started: Upgrade your domains to OpenSearch 1\.x<a name="rename-upgrade"></a>
 
-OpenSearch 1\.0 supports upgrades from Elasticsearch versions 6\.*x* and 7\.*x*\. For instructions to upgrade your domain, see [Starting an upgrade](version-migration.md#starting-upgrades)\. If you're using the AWS CLI or configuration API to upgrade your domain, you need to specify the `TargetVersion` as `OpenSearch_1.0`\.
+OpenSearch 1\.*x* supports upgrades from Elasticsearch versions 6\.8 and 7\.*x*\. For instructions to upgrade your domain, see [Starting an upgrade](version-migration.md#starting-upgrades)\. If you're using the AWS CLI or configuration API to upgrade your domain, you need to specify the `TargetVersion` as `OpenSearch_1.x`\.
 
-OpenSearch 1\.0 introduces an additional domain setting called **Enable compatibility mode**\. Because certain Elasticsearch OSS clients and plugins check the cluster version before connecting, compatibility mode sets OpenSearch to report its version as 7\.10 so these clients continue to work\. 
+OpenSearch 1\.*x* introduces an additional domain setting called **Enable compatibility mode**\. Because certain Elasticsearch OSS clients and plugins check the cluster version before connecting, compatibility mode sets OpenSearch to report its version as 7\.10 so these clients continue to work\. 
 
 You can enable compatibility mode when you create OpenSearch domains for the first time, or when you upgrade to OpenSearch from an Elasticsearch version\. If it's not set, the parameter defaults to `false` when you create a domain, and `true` when you upgrade a domain\.
 

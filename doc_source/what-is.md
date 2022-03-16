@@ -1,6 +1,6 @@
 # What is Amazon OpenSearch Service?<a name="what-is"></a>
 
-Amazon OpenSearch Service is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service supports OpenSearch and legacy Elasticsearch OSS\. When you create a cluster, you have the option of which search engine to use\. OpenSearch Service offers broad compatibility with Elasticsearch OSS 7\.10, the final open source version of the software\. For information about what changed with the recent service renaming, and the actions you might need to take, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\.
+Amazon OpenSearch Service is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service is the successor to Amazon Elasticsearch Service and supports OpenSearch and legacy Elasticsearch OSS \(up to 7\.10, the final open source version of the software\)\. When you create a cluster, you have the option of which search engine to use\. For information about what changed with the recent service rename, and the actions you might need to take, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\.
 
 *OpenSearch* is a fully open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. For more information, see the [OpenSearch documentation](https://opensearch.org/docs/)\.
 
@@ -48,7 +48,7 @@ OpenSearch Service includes the following features:
 ## Supported versions of OpenSearch and Elasticsearch<a name="choosing-version"></a>
 
 OpenSearch Service currently supports the following OpenSearch versions:
-+ 1\.0
++ 1\.1, 1\.0
 
 OpenSearch Service also supports the following legacy Elasticsearch OSS versions:
 + 7\.10, 7\.9, 7\.8, 7\.7, 7\.4, 7\.1
@@ -59,7 +59,7 @@ OpenSearch Service also supports the following legacy Elasticsearch OSS versions
 
 For more information, see [Supported operations](supported-operations.md), [Features by engine version](features-by-version.md), and [Plugins by engine version](supported-plugins.md)\.
 
-If you start a new OpenSearch Service project, we strongly recommend that you choose the latest supported OpenSearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see [Upgrading OpenSearch and Elasticsearch](version-migration.md)\.
+If you start a new OpenSearch Service project, we strongly recommend that you choose the latest supported OpenSearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see [Upgrading Amazon OpenSearch Service domains](version-migration.md)\.
 
 ## Pricing for Amazon OpenSearch Service<a name="pricing"></a>
 

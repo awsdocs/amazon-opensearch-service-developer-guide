@@ -15,8 +15,8 @@ The following table shows OpenSearch Service limits for clusters and instances\.
 | Maximum number of dedicated master nodes per cluster |  5 You can use the T2 and T3 instance types for dedicated master nodes only if the number of data nodes is 10 or fewer\. We don't recommend T2 or `t3.small` instance types for production domains\.  | 
 |  Maximum total storage per cluster  |  3 PiB This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 45 `r6gd.16xlarge.search` instances and 140 `ultrawarm1.large.search` instances for a total of 2\.88 PiB of storage\.  | 
 | Smallest supported instance type per OpenSearch version |  `t2.small.search` | 
-| Maximum number of domains per account \(per Region\) | 100 | 
-|  Maximum number of custom packages per account \(per Region\)  |  25  | 
+| Maximum number of domains per account \(per AWS Region\) | 100 | 
+|  Maximum number of custom packages per account \(per AWS Region\)  |  25  | 
 |  Maximum number of custom packages per domain  |  20  | 
 
 For a list of the instance types that OpenSearch Service supports, see [Supported Instance Types](supported-instance-types.md)\.

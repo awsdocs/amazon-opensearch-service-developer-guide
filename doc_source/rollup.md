@@ -1,4 +1,4 @@
-# Summarizing indices in Amazon OpenSearch Service with index rollups<a name="rollup"></a>
+# Summarizing indexes in Amazon OpenSearch Service with index rollups<a name="rollup"></a>
 
 Index rollups in Amazon OpenSearch Service let you reduce storage costs by periodically rolling up old data into summarized indices\.
 
@@ -22,7 +22,7 @@ Select the attributes with the aggregations \(terms and histograms\) and metrics
 
 ### Step 3: Specify schedules<a name="rollup-example-3"></a>
 
-Specify a schedule to roll up your indices as it’s being ingested\. The index rollup job is enabled by default\.
+Specify a schedule to roll up your indexes as it’s being ingested\. The index rollup job is enabled by default\.
 
 ### Step 4: Review and create<a name="rollup-example-4"></a>
 

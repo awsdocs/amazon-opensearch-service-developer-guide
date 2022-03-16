@@ -56,7 +56,7 @@ aws opensearch create-domain --domain-name my-transcribe-test --engine-version O
 ```
 
 **Note**  
-These commands use the `us-west-2` region, but you can use any region that Amazon Comprehend supports\. To learn more, see the [AWS General Reference](https://docs.aws.amazon.com/general/latest/gr/rande.html#comprehend_region)\.
+These commands use the `us-west-2` Region, but you can use any Region that Amazon Comprehend supports\. To learn more, see the [AWS General Reference](https://docs.aws.amazon.com/general/latest/gr/rande.html#comprehend_region)\.
 
 ## Step 2: Copy sample code<a name="walkthrough-script"></a>
 

@@ -17,6 +17,8 @@ Run the following command to add a single document to the *movies* domain:
 curl -XPUT -u 'master-user:master-user-password' 'domain-endpoint/movies/_doc/1' -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
 ```
 
+In the command, provide the user name and password that you created in [Step 1](gsgcreate-domain.md)\.
+
 For a detailed explanation of this command and how to make signed requests to OpenSearch Service, see [Indexing data in Amazon OpenSearch Service](indexing.md)\.
 
 ## Option 2: Upload multiple documents<a name="gsgmultiple-document"></a>

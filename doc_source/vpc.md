@@ -20,7 +20,7 @@ Operating an OpenSearch Service domain within a VPC has the following limitation
 + If you launch a new domain within a VPC, you can't later switch it to use a public endpoint\. The reverse is also true: If you create a domain with a public endpoint, you can't later place it within a VPC\. Instead, you must create a new domain and migrate your data\.
 + You can either launch your domain within a VPC or use a public endpoint, but you can't do both\. You must choose one or the other when you create your domain\.
 + You can't launch your domain within a VPC that uses dedicated tenancy\. You must use a VPC with tenancy set to **Default**\.
-+ After you place a domain within a VPC, you can't move it to a different VPC\. However, you can change the subnets and security group settings\.
++ After you place a domain within a VPC, you can't move it to a different VPC, but you can change the subnets and security group settings\.
 + To access the default installation of OpenSearch Dashboards for a domain that resides within a VPC, users must have access to the VPC\. This process varies by network configuration, but likely involves connecting to a VPN or managed network or using a proxy server or transit gateway\. To learn more, see [About access policies on VPC domains](#vpc-security), the [Amazon VPC User Guide](https://docs.aws.amazon.com/vpc/latest/userguide/), and [Controlling access to OpenSearch Dashboards](dashboards.md#dashboards-access)\.
 
 ## Architecture<a name="vpc-architecture"></a>
@@ -68,9 +68,7 @@ If you try to access the endpoint in a web browser, however, you might find that
 
 In addition to this connectivity requirement, VPCs let you manage access to the domain through [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)\. For many use cases, this combination of security features is sufficient, and you might feel comfortable applying an open access policy to the domain\.
 
-Operating with an open access policy does *not* mean that anyone on the internet can access the OpenSearch Service domain\. Rather, it means that if a request reaches the OpenSearch Service domain and the associated security groups permit it, the domain accepts the request without further security checks\.
-
-For an additional layer of security, we recommend using fine\-grained access control or an access policy that specifies IAM users or roles\. In these situations, for the domain to accept a request, the security groups must permit it *and* it must be signed with valid credentials\.
+Operating with an open access policy does *not* mean that anyone on the internet can access the OpenSearch Service domain\. Rather, it means that if a request reaches the OpenSearch Service domain and the associated security groups permit it, the domain accepts the request\. The only exception is if you're using fine\-grained access control or an access policy that specifies IAM users or roles\. In these situations, for the domain to accept a request, the security groups must permit it *and* it must be signed with valid credentials\.
 
 **Note**  
 Because security groups already enforce IP\-based access policies, you can't apply IP\-based access policies to OpenSearch Service domains that reside within a VPC\. If you use public access, IP\-based policies are still available\.
