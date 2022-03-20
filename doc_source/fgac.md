@@ -140,7 +140,7 @@ After configuring a role, you *map* it to one or more users\. For example, you m
 + If you choose IAM for your master user, all requests to the cluster must be signed using AWS Signature Version 4\. For sample code, see [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)\.
 
   We recommend IAM if you want to use the same users on multiple clusters, if you want to use Amazon Cognito to access Dashboards, or if you have OpenSearch clients that support Signature Version 4 signing\.
-+ If you choose the internal user database, you can use HTTP basic authentication \(as well as IAM credentials\) to make requests to the cluster\. Most clients support basic authentication, including [curl](https://curl.haxx.se/)\. The internal user database is stored in an OpenSearch index, so you can't share it with other clusters\.
++ If you choose the internal user database, you can use HTTP basic authentication \(as well as IAM credentials\) to make requests to the cluster\. Most clients support basic authentication, including [curl](https://curl.haxx.se/) which also supports AWS Signature Version 4 [with --aws-sigv4 option](https://curl.se/docs/manpage.html)\. The internal user database is stored in an OpenSearch index, so you can't share it with other clusters\.
 
   We recommend the internal user database if you don't need to reuse users across multiple clusters, if you want to use HTTP basic authentication to access Dashboards \(rather than Amazon Cognito\), or if you have clients that only support basic authentication\. The internal user database is the simplest way to get started with OpenSearch Service\.
 
