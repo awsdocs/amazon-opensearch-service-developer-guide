@@ -41,7 +41,6 @@ If you encounter an error while following these steps, see [Can't enable audit l
          },
          "Action": [
            "logs:PutLogEvents",
-           "logs:PutLogEventsBatch",
            "logs:CreateLogStream"
          ],
          "Resource": "cw_log_group_arn"
