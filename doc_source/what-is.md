@@ -109,5 +109,5 @@ Amazon DynamoDB is a fully managed NoSQL database service that provides fast and
 [Amazon QuickSight](http://aws.amazon.com/documentation/quicksight/)  
 You can visualize data from OpenSearch Service using Amazon QuickSight dashboards\. For more information, see [Using Amazon OpenSearch Service with Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/connecting-to-es.html) in the *Amazon QuickSight User Guide*\.
 
-**Note**
+**Note:**
 OpenSearch includes certain Apache-licensed Elasticsearch code from Elasticsearch B\.V\. and other source code\. Elasticsearch B\.V\. is not the source of that other source code\. ELASTICSEARCH is a registered trademark of Elasticsearch B\.V\.
