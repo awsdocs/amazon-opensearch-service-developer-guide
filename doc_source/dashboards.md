@@ -218,11 +218,13 @@ To see your OpenSearch Service indices, start your local Dashboards server, go t
 GET _cat/indices
 ```
 
-## Managing indices in OpenSearch Dashboards<a name="dashboards-indices"></a>
+## Managing indexes in OpenSearch Dashboards<a name="dashboards-indices"></a>
 
-The OpenSearch Dashboards installation on your OpenSearch Service domain provides a useful UI for managing indices in different storage tiers on your domain\. Choose **Index Management** from the Dashboards main menu to view all indices in hot, [UltraWarm](ultrawarm.md), and [cold](cold-storage.md) storage, as well as indices managed by Index State Management \(ISM\) policies\. Use index management to move indices between warm and cold storage, and to monitor migrations between the three tiers\. 
+The OpenSearch Dashboards installation on your OpenSearch Service domain provides a useful UI for managing indexes in different storage tiers on your domain\. Choose **Index Management** from the Dashboards main menu to view all indexes in hot, [UltraWarm](ultrawarm.md), and [cold](cold-storage.md) storage, as well as indexes managed by Index State Management \(ISM\) policies\. Use index management to move indexes between warm and cold storage, and to monitor migrations between the three tiers\. 
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/KibanaIndices.png)
+
+Note that you won't see the hot, warm, and cold index options unless you have UltraWarm and/or cold storage enabled\.
 
 ## Additional features<a name="dashboards-additions"></a>
 

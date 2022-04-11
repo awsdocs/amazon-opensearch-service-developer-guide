@@ -5,4 +5,3 @@ Proactively monitor your data in Amazon OpenSearch Service with alerting and ano
 **Topics**
 + [Configuring alerts in Amazon OpenSearch Service](alerting.md)
 + [Anomaly detection in Amazon OpenSearch Service](ad.md)
-+ [Trace Analytics for Amazon OpenSearch Service](trace-analytics.md)

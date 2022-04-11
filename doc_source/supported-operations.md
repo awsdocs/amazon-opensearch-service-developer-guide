@@ -4,6 +4,7 @@ OpenSearch Service supports many versions of OpenSearch and legacy Elasticsearch
 
 **Topics**
 + [Notable API differences](#version_api_notes)
++ [OpenSearch version 1\.2](#version_opensearch_1.2)
 + [OpenSearch version 1\.1](#version_opensearch_1.1)
 + [OpenSearch version 1\.0](#version_opensearch_1.0)
 + [Elasticsearch version 7\.10](#version_7_10)
@@ -127,6 +128,25 @@ PUT https://domain-name.region.es.amazonaws.com/shrunken-index/_settings
   }
 }
 ```
+
+## OpenSearch version 1\.2<a name="version_opensearch_1.2"></a>
+
+For OpenSearch 1\.2, OpenSearch Service supports the following operations\. For information about most of the operations, see the [OpenSearch REST API reference](https://opensearch.org/docs/latest/opensearch/rest-api/index/), or the API reference for the specific plugin\. 
+
+
+|  |  |  | 
+| --- |--- |--- |
+|  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-operations.html)  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-operations.html)  | 
+
+1. Cluster configuration changes might interrupt these operations before completion\. We recommend that you use the `/_tasks` operation along with these operations to verify that the requests completed successfully\.
+
+1. DELETE requests to `/_search/scroll` with a message body must specify `"Content-Length"` in the HTTP header\. Most clients add this header by default\. To avoid a problem with `=` characters in `scroll_id` values, use the request body, not the query string, to pass `scroll_id` values to OpenSearch Service\.
+
+1. For considerations about using scripts, see [Other supported resources in Amazon OpenSearch Service](supported-resources.md)\.
+
+1. Refers to the `PUT` method\. For information about the `GET` method, see [Notable API differences](#version_api_notes)\. This list only refers to the generic OpenSearch operations that OpenSearch Service supports and does not include plugin\-specific supported operations for anomaly detection, ISM, and so on\.
+
+1. See [Shrink](#version_api_notes-shrink)\.
 
 ## OpenSearch version 1\.1<a name="version_opensearch_1.1"></a>
 

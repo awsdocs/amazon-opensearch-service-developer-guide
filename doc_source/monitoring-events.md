@@ -9,7 +9,7 @@ Amazon OpenSearch Service integrates with Amazon EventBridge to notify you of ce
 
 For more information, see [Get started with Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-get-started.html) in the *Amazon EventBridge User Guide*\.
 
-## Service software update events<a name="monitoring-events-sso-available"></a>
+## Service software update events<a name="monitoring-events-sso"></a>
 
 OpenSearch Service sends events to EventBridge when one of the following [service software update](service-software.md) events occur\.
 
@@ -143,7 +143,8 @@ The following is an example event of this type:
     "event": "Service Software Update",
     "status": "Required",
     "severity": "High",
-    "description": "Service software update [R20200330-p1] available. Update will be automatically installed after [30/04/2020] if no action is taken."
+    "description": "Service software update [R20200330-p1] available. Update will be automatically 
+                    installed after [30/04/2020] if no action is taken."
   }
 }
 ```
@@ -232,7 +233,8 @@ The following is an example event of this type:
     "severity": "Low",
     "status": "Pending",
     "startTime": "{iso8601-timestamp}",
-    "description": "Auto-Tune has identified new settings for your domain that require a blue/green deployment. You can schedule the deployment for your preferred time."
+    "description": "Auto-Tune has identified new settings for your domain that require a blue/green deployment. 
+                    You can schedule the deployment for your preferred time."
   }
 }
 ```
@@ -315,7 +317,8 @@ The following is an example event of this type:
     "event": "Auto-Tune Event",
     "severity": "Informational",
     "status": "Completed",
-    "description": "Auto-Tune is now disabled. All settings have been reverted. Auto-Tune will continue to evaluate cluster performance and provide recommendations.",
+    "description": "Auto-Tune is now disabled. All settings have been reverted. Auto-Tune will continue to evaluate
+                    cluster performance and provide recommendations.",
     "completionTime": "{iso8601-timestamp}"
   }
 }
@@ -343,7 +346,8 @@ The following is an example event of this type:
     "event": "Auto-Tune Event",
     "severity": "Informational",
     "status": "Completed",
-    "description": "Auto-Tune is now disabled. The most-recent settings by Auto-Tune have been retained. Auto-Tune will continue to evaluate cluster performance and provide recommendations.",
+    "description": "Auto-Tune is now disabled. The most-recent settings by Auto-Tune have been retained. 
+                    Auto-Tune will continue to evaluate cluster performance and provide recommendations.",
     "completionTime": "{iso8601-timestamp}"
   }
 }
@@ -351,7 +355,97 @@ The following is an example event of this type:
 
 ## Cluster health events<a name="monitoring-events-shards"></a>
 
-OpenSearch Service sends events to EventBridge when cluster health is compromised for one of the following reasons\.
+OpenSearch Service sends certain events to EventBridge when your cluster's health is compromised\.
+
+### Red cluster recovery started<a name="monitoring-events-red-started"></a>
+
+OpenSearch Service sends this event when it starts to automatically restore one or more red indexes from a snapshot in order to fix a red cluster status\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Cluster Status Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2016-11-01T13:12:22Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "event":"Automatic Snapshot Restore for Red Indices",
+      "status":"Started",
+      "Severity":"High",
+      "description":"Your cluster status is red. We have started automatic snapshot restore for the red indices. 
+                     No action is needed from your side. Red indices [red-index-0, red-index-1]"
+   }
+}
+```
+
+### Red cluster recovery partially completed<a name="monitoring-events-red-partial"></a>
+
+OpenSearch Service sends this event when it was only able to restore a subset of red indexes from a snapshot while attempting to fix a red cluster status\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Cluster Status Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2016-11-01T13:12:22Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "event":"Automatic Snapshot Restore for Red Indices",
+      "status":"Partially Restored",
+      "Severity":"High",
+      "description":"Your cluster status is red. We were able to restore the following Red indices from 
+                    snapshot: [red-index-0]. Indices not restored: [red-index-1]. Please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-red-cluster-status for troubleshooting steps."
+   }
+}
+```
+
+### Red cluster recovery failed<a name="monitoring-events-red-failed"></a>
+
+OpenSearch Service sends this event when it fails to restore any indexes while attempting to fix a red cluster status\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Cluster Status Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2016-11-01T13:12:22Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "event":"Automatic Snapshot Restore for Red Indices",
+      "status":"Failed",
+      "Severity":"High",
+      "description":"Your cluster status is red. We were unable to restore the Red indices automatically. 
+                    Indices not restored: [red-index-0, red-index-1]. Please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-red-cluster-status for troubleshooting steps."
+   }
+}
+```
 
 ### High shard count warning<a name="monitoring-events-shard-warning"></a>
 
@@ -375,7 +469,8 @@ The following is an example event of this type:
      "event":"High Shard Count",
      "status":"Warning",
      "severity":"Low",
-     "description":"One or more data nodes have close to 1000 shards. To ensure optimum performance and stability of your cluster, please refer to the best practice guidelines - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html#bp-sharding."
+     "description":"One or more data nodes have close to 1000 shards. To ensure optimum performance and stability of your 
+                    cluster, please refer to the best practice guidelines - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html#bp-sharding."
   }
 }
 ```
@@ -402,7 +497,8 @@ The following is an example event of this type:
      "event":"High Shard Count",
      "status":"Warning",
      "severity":"Medium",
-     "description":"One or more data nodes have more than 1000 shards. To ensure optimum performance and stability of your cluster, please refer to the best practice guidelines - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html#bp-sharding."
+     "description":"One or more data nodes have more than 1000 shards. To ensure optimum performance and stability of your 
+                    cluster, please refer to the best practice guidelines - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html#bp-sharding."
   }
 }
 ```
@@ -429,7 +525,8 @@ The following is an example event of this type:
      "event":"Low Disk Space",
      "status":"Warning",
      "severity":"Medium",
-     "description":"One or more data nodes in your cluster has less than 25% of storage space or less than 25GB. Your cluster will be blocked for writes at 20% or 20GB. Please refer to the documentation for more information - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#troubleshooting-cluster-block"
+     "description":"One or more data nodes in your cluster has less than 25% of storage space or less than 25GB.
+                   Your cluster will be blocked for writes at 20% or 20GB. Please refer to the documentation for more information - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#troubleshooting-cluster-block"
   }
 }
 ```
@@ -460,7 +557,8 @@ The following is an example event of this type:
      "event":"KMS Key Inaccessible",
      "status":"Error",
      "severity":"High",
-     "description":"The KMS key associated with this domain is inaccessible. You are at risk of losing access to your domain. For more information, please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html#disabled-key."
+     "description":"The KMS key associated with this domain is inaccessible. You are at risk of losing access to your domain. 
+                    For more information, please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html#disabled-key."
   }
 }
 ```

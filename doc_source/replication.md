@@ -7,7 +7,6 @@ Cross\-cluster replication is available on domains running Elasticsearch 7\.10 o
 ## Limitations<a name="replication-limitations"></a>
 
 Cross\-cluster replication has the following limitations:
-+ You can only implement cross\-cluster replication on domains created on or after June 3rd, 2020\.
 + You can't replicate data between Amazon OpenSearch Service domains and self\-managed OpenSearch or Elasticsearch clusters\.
 + A domain can be connected, through a combination of inbound and outbound connections, to a maximum of 20 other domains\.
 + Domains must either share the same major version, or be on the final minor version and the next major version\.

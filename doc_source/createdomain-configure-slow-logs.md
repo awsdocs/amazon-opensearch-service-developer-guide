@@ -108,7 +108,7 @@ Now you can give OpenSearch Service permissions to write to the log group\. You 
 ```
 aws logs put-resource-policy \
   --policy-name my-policy \
-  --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents", "logs:PutLogEventsBatch","logs:CreateLogStream"],"Resource": "cw_log_group_arn:*"}]}'
+  --policy-document '{ "Version": "2012-10-17", "Statement": [{ "Sid": "", "Effect": "Allow", "Principal": { "Service": "es.amazonaws.com"}, "Action":[ "logs:PutLogEvents","logs:PutLogEventsBatch","logs:CreateLogStream"],"Resource": "cw_log_group_arn:*"}]}'
 ```
 
 **Important**  

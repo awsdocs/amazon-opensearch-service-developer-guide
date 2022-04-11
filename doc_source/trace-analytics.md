@@ -1,6 +1,6 @@
 # Trace Analytics for Amazon OpenSearch Service<a name="trace-analytics"></a>
 
-The default installation of OpenSearch Dashboard for Amazon OpenSearch Service includes the Trace Analytics plugin, which you can use to analyze trace data from distributed applications\. The plugin requires OpenSearch or Elasticsearch 7\.9 or later\.
+You can use Trace Analytics, which is part of the OpenSearch Observability plugin, to analyze trace data from distributed applications\. Trace Analytics requires OpenSearch or Elasticsearch 7\.9 or later\.
 
 In a distributed application, a single operation, such as a user clicking a button, can trigger an extended series of events\. For example, the application front end might call a backend service, which calls another service, which queries a database, which processes the query and returns a result\. Then the first backend service sends a confirmation to the front end, which updates the UI\.
 

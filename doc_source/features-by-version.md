@@ -1,6 +1,6 @@
 # Features by engine version<a name="features-by-version"></a>
 
-Many OpenSearch Service features have a minimum OpenSearch version requirement and legacy Elasticsearch OSS version requirement\. If you meet the minimum version for a feature, but the feature isn't available on your domain, update your domain's [service software](service-software.md)\. For a full list of supported versions, see [Supported versions of OpenSearch and Elasticsearch](what-is.md#choosing-version)\.
+Many OpenSearch Service features have a minimum OpenSearch version requirement or legacy Elasticsearch OSS version requirement\. If you meet the minimum version for a feature, but the feature isn't available on your domain, update your domain's [service software](service-software.md)\.
 
 
 ****  

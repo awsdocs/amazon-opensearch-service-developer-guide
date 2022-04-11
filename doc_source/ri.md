@@ -52,7 +52,7 @@ If you don't see the **Reserved Instance Leases** link, [create a domain](create
 The AWS CLI has commands for viewing offerings, purchasing a reservation, and viewing your reservations\. The following command and sample response show the offerings for a given AWS Region:
 
 ```
-aws opensearchservice describe-reserved-instance-offerings --region us-east-1
+aws opensearch describe-reserved-instance-offerings --region us-east-1
 {
   "ReservedInstanceOfferings": [
     {
@@ -93,7 +93,7 @@ For an explanation of each return value, see the following table\.
 This next example purchases a reservation:
 
 ```
-aws opensearchservice purchase-reserved-instance-offering --reserved-instance-offering-id 1a2a3a4a5-1a2a-3a4a-5a6a-1a2a3a4a5a6a --reservation-name my-reservation --instance-count 3 --region us-east-1
+aws opensearch purchase-reserved-instance-offering --reserved-instance-offering-id 1a2a3a4a5-1a2a-3a4a-5a6a-1a2a3a4a5a6a --reservation-name my-reservation --instance-count 3 --region us-east-1
 {
   "ReservationName": "my-reservation",
   "ReservedInstanceId": "9a8a7a6a-5a4a-3a2a-1a0a-9a8a7a6a5a4a"
@@ -103,7 +103,7 @@ aws opensearchservice purchase-reserved-instance-offering --reserved-instance-of
 Finally, you can list your reservations for a given Region using the following example:
 
 ```
-aws opensearchservice describe-reserved-instances --region us-east-1
+aws opensearch describe-reserved-instances --region us-east-1
 {
   "ReservedInstances": [
     {
@@ -146,4 +146,4 @@ For more information about installing and using the AWS SDKs, see [AWS Software 
 
 ## Examining costs<a name="ri-ce"></a>
 
-Cost Explorer is a free tool that you can use to view your spending data for the past 13 months\. Analyzing this data helps you identify trends and understand if RIs fit your use case\. If you already have RIs, you can [group by](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/groupdata.html) **Purchase Option** and [show amortized costs](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/advanced.html) to compare that spending to your spending for On\-Demand Instances\. You can also set [usage budgets](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html) to make sure you are taking full advantage of your reservations\. For more information, see [Analyzing Your Costs with Cost Explorer](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-explorer-what-is.html) in the *AWS Billing and Cost Management User Guide*\.
+Cost Explorer is a free tool that you can use to view your spending data for the past 13 months\. Analyzing this data helps you identify trends and understand if RIs fit your use case\. If you already have RIs, you can [group by](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/groupdata.html) **Purchase Option** and [show amortized costs](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/advanced.html) to compare that spending to your spending for On\-Demand Instances\. You can also set [usage budgets](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html) to make sure you are taking full advantage of your reservations\. For more information, see [Analyzing Your Costs with Cost Explorer](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-explorer-what-is.html) in the *AWS Billing User Guide*\.

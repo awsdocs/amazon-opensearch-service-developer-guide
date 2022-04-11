@@ -21,7 +21,6 @@ Cross\-cluster search supports OpenSearch Dashboards, so you can create visualiz
 ## Limitations<a name="cross-cluster-search-limitations"></a>
 
 Cross\-cluster search has several important limitations:
-+ You can only implement cross\-cluster search on domains created on or after June 3rd, 2020\.
 + You can't connect an Elasticsearch domain to an OpenSearch domain\.
 + You can't connect to self\-managed OpenSearch/Elasticsearch clusters\.
 + Cross\-cluster search is not supported across Regions\.
