@@ -147,7 +147,7 @@ An administrator might have full access to OpenSearch Service and all data store
 }
 ```
 
-Identity\-based policies let you use tags to control access to the configuration API \(*not* the OpenSearch APIs\)\. The following policy, for example, lets attached principals view and update a domain's configuration if the domain has the `team:devops` tag:
+Identity\-based policies let you use tags to control access to the configuration API and OpenSearch HTTP methods\. The following policy, for example, lets attached principals view and update a domain's configuration if the domain has the `team:devops` tag:
 
 ```
 {
@@ -171,7 +171,30 @@ Identity\-based policies let you use tags to control access to the configuration
 }
 ```
 
-Similarly, OpenSearch Service supports the `RequestTag` and `TagKeys` global condition keys for the configuration API\. These conditions only apply to API calls that include tags within the request, such as `CreateDomain`, `AddTags`, and `RemoveTags`\. The following policy lets attached principals create domains, but only if they include the `team:it` tag in the request:
+Tag\-based policies for the OpenSearch API only apply to HTTP methods\. For more granular control of the OpenSearch API, consider using [fine\-grained access control](fgac.md)\. For example, the following policy lets attached principals send GET and PUT requests to the OpenSearch API if the domain has the `environment:production` tag:
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Action": [
+      "es:ESHttpGet",
+      "es:ESHttpPut"
+    ],
+    "Effect": "Allow",
+    "Resource": "*",
+    "Condition": {
+      "ForAnyValue:StringEquals": {
+        "aws:ResourceTag/environment": [
+          "production"
+        ]
+      }
+    }
+  }]
+}
+```
+
+Similarly, OpenSearch Service supports the `RequestTag` and `TagKeys` global condition keys for the configuration API, not the OpenSearch API\. These conditions only apply to API calls that include tags within the request, such as `CreateDomain`, `AddTags`, and `RemoveTags`\. The following policy lets attached principals create domains, but only if they include the `team:it` tag in the request:
 
 ```
 {

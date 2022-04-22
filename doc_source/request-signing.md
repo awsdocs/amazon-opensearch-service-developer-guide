@@ -146,6 +146,45 @@ Both signed samples use the default credential chain\. Run `aws configure` using
 
 This sample uses the [opensearch\-py](https://pypi.org/project/opensearch-py/) client for Python, which you can install using [pip](https://pypi.python.org/pypi/pip)\.
 
+```
+from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
+import boto3
+
+host = '' # cluster endpoint, for example: my-test-domain.us-east-1.es.amazonaws.com
+region = '' # e.g. us-west-1
+
+credentials = boto3.Session().get_credentials()
+auth = AWSV4SignerAuth(credentials, region)
+index_name = 'movies'
+
+client = OpenSearch(
+    hosts = [{'host': host, 'port': 443}],
+    http_auth = auth,
+    use_ssl = True,
+    verify_certs = True,
+    connection_class = RequestsHttpConnection
+)
+
+q = 'miller'
+query = {
+  'size': 5,
+  'query': {
+    'multi_match': {
+      'query': q,
+      'fields': ['title^2', 'director']
+    }
+  }
+}
+
+response = client.search(
+    body = query,
+    index = index_name
+)
+
+print('\nSearch results:')
+print(response)
+```
+
 Instead of the client, you might prefer [requests](http://docs.python-requests.org/)\. The [requests\-aws4auth](https://pypi.python.org/pypi/requests-aws4auth) and [SDK for Python \(Boto3\)](https://aws.amazon.com/sdk-for-python/) packages simplify the authentication process, but are not strictly required\. From the terminal, run the following commands:
 
 ```

@@ -9,7 +9,8 @@ Use the following table to find the version of the SQL plugin that's supported b
 
 | OpenSearch version | SQL plugin version | Notable features | 
 | --- | --- | --- | 
-| 1\.1\.0 | [1\.1\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.1.0.0) |  Support match function as filter in SQL and PPL  | 
+| 1\.2\.0 | [1\.2\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.2.0.0) |  Add new protocol for visualization response format  | 
+|  1\.1\.0  | [1\.1\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.1.0.0) |  Support match function as filter in SQL and PPL  | 
 | 1\.0\.0 | [1\.0\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.0.0.0) | Support querying a data stream | 
 
 
@@ -85,6 +86,7 @@ The Java Database Connectivity \(JDBC\) driver lets you integrate OpenSearch Ser
 
 | OpenSearch version | JDBC driver version | 
 | --- | --- | 
+| 1\.2 | 1\.0\.0\.0 | 
 | 1\.1 | 1\.0\.0\.0 | 
 | 1\.0 | 1\.0\.0\.0 | 
 

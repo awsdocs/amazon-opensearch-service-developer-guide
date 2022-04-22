@@ -10,7 +10,6 @@ The following sample requests work with OpenSearch APIs\. Some requests might no
 + [Request body searches](#searching-dsl)
 + [Custom packages for Amazon OpenSearch Service](custom-packages.md)
 + [Querying your Amazon OpenSearch Service data with SQL](sql-support.md)
-+ [Querying Amazon OpenSearch Service data using Piped Processing Language](ppl-support.md)
 + [k\-Nearest Neighbor \(k\-NN\) search in Amazon OpenSearch Service](knn.md)
 + [Cross\-cluster search for Amazon OpenSearch Service](cross-cluster-search.md)
 + [Learning to Rank for Amazon OpenSearch Service](learning-to-rank.md)

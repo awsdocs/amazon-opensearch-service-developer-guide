@@ -69,7 +69,11 @@ Alternately, use the AWS CLI, SDKs, or configuration API to import and associate
 
 ## Using custom packages with OpenSearch<a name="custom-packages-using"></a>
 
-After you associate a file with a domain, you can use it in parameters such as `synonyms_path`, `stopwords_path`, and `user_dictionary` when you create tokenizers and token filters\. The exact parameter varies by object\. Several objects support `synonyms_path` and `stopwords_path`, but `user_dictionary` is exclusive to the kuromoji plugin\. The following example adds a synonyms file to a new index:
+After you associate a file with a domain, you can use it in parameters such as `synonyms_path`, `stopwords_path`, and `user_dictionary` when you create tokenizers and token filters\. The exact parameter varies by object\. Several objects support `synonyms_path` and `stopwords_path`, but `user_dictionary` is exclusive to the kuromoji plugin\.
+
+For the IK \(Chinese\) Analysis plugin, you can upload a custom dictionary file as a custom package and associate it to a domain, and the plugin automatically picks it up without requiring a `user_dictionary` parameter\. If your file is a synonyms file, use the `synonyms_path` parameter\.
+
+The following example adds a synonyms file to a new index:
 
 ```
 PUT my-index

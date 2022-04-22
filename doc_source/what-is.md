@@ -48,7 +48,7 @@ OpenSearch Service includes the following features:
 ## Supported versions of OpenSearch and Elasticsearch<a name="choosing-version"></a>
 
 OpenSearch Service currently supports the following OpenSearch versions:
-+ 1\.1, 1\.0
++ 1\.2, 1\.1, 1\.0
 
 OpenSearch Service also supports the following legacy Elasticsearch OSS versions:
 + 7\.10, 7\.9, 7\.8, 7\.7, 7\.4, 7\.1
@@ -107,4 +107,7 @@ AWS Lambda is a compute service that lets you run code without provisioning or m
 Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability\. To learn more about streaming data to OpenSearch Service, see [Loading streaming data from Amazon DynamoDB](integrations.md#integrations-dynamodb)\.
 
 [Amazon QuickSight](http://aws.amazon.com/documentation/quicksight/)  
-You can visualize data from OpenSearch Service using Amazon QuickSight dashboards\. For more information, see [Using Amazon OpenSearch Service with Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/connecting-to-es.html) in the *Amazon QuickSight User Guide*\.
+You can visualize data from OpenSearch Service using Amazon QuickSight dashboards\. For more information, see [Using Amazon OpenSearch Service with Amazon QuickSight](https://docs.aws.amazon.com/quicksight/latest/user/connecting-to-es.html) in the *Amazon QuickSight User Guide*\.  
+
+
+**Note**: OpenSearch includes certain Apache\-licensed Elasticsearch code from Elasticsearch B\.V\. and other source code\. Elasticsearch B\.V\. is not the source of that other source code\. ELASTICSEARCH is a registered trademark of Elasticsearch B\.V\.

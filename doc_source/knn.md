@@ -11,6 +11,7 @@ Use the following tables to find the version of the k\-NN plugin running on your
 | --- | --- | --- | 
 | 1\.0 |  1\.0\.0\.0  | Renamed REST APIs while supporting backwards compatibility, renamed namespace from opendistro to opensearch | 
 | 1\.1 | 1\.1\.0\.0 |  | 
+| 1\.2 | 1\.2\.0\.0 | Added support for the [Faiss](https://github.com/facebookresearch/faiss) library | 
 
 
 **Elasticsearch**  

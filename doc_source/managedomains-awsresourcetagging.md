@@ -37,11 +37,11 @@ The console is the simplest way to tag a domain\.
 
 1. Enter a tag key and an optional value\.
 
-1. Choose **Save**\.
+1. Choose **Save**\. The domain status changes to Processing while OpenSearch Service adds the domain tags\. The same behavior occurs when you update or remove tags\. The change should take less than a minute to complete\.
 
 To delete a tag, follow the same steps and choose **Remove** on the **Manage tags** page\.
 
-For more information about using the console to work with tags, see [Working with Tag Editor](https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/tag-editor.html) in the *AWS Management Console Getting Started Guide*\.
+For more information about using the console to work with tags, see [Tag Editor](https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/tag-editor.html) in the *AWS Management Console Getting Started Guide*\.
 
 ## Working with tags \(AWS CLI\)<a name="managedomains-awsresourcetagging-cli"></a>
 

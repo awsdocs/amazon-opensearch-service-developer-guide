@@ -17,6 +17,7 @@ If the legacy Elasticsearch role doesn't exist in your account, OpenSearch Servi
 ## Permissions<a name="slr-permissions"></a>
 
 The `AWSServiceRoleForAmazonOpenSearchService` service\-linked role trusts the following services to assume the role:
++ `opensearchservice.amazonaws.com`
 + `es.amazonaws.com`
 
 The role permissions policy named `AmazonOpenSearchServiceRolePolicy` allows OpenSearch Service to complete the following actions on the specified resources:
