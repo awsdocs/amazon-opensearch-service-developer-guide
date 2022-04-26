@@ -21,6 +21,7 @@ The easiest way of sending a signed request is to use the [Amazon Web Services r
 The following example uses the [opensearch\-java](https://github.com/opensearch-project/opensearch-java) low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
 
 ```
+import com.amazonaws.http.AwsRequestSigningApacheInterceptor;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequestInterceptor;
@@ -29,10 +30,10 @@ import org.apache.http.nio.entity.NStringEntity;
 import org.opensearch.client.Request;
 import org.opensearch.client.Response;
 import org.opensearch.client.RestClient;
-import com.amazonaws.auth.AWS4Signer;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.signer.Aws4Signer;
+
 import java.io.IOException;
 
 public class AmazonOpenSearchServiceSample {
@@ -47,7 +48,7 @@ public class AmazonOpenSearchServiceSample {
     private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
     private static String indexingPath = "/my-index/_doc";
 
-    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
+    static final AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.create();
 
     public static void main(String[] args) throws IOException {
         RestClient searchClient = searchClient(serviceName, region);
@@ -75,10 +76,8 @@ public class AmazonOpenSearchServiceSample {
 
     // Adds the interceptor to the OpenSearch REST client
     public static RestClient searchClient(String serviceName, String region) {
-        AWS4Signer signer = new AWS4Signer();
-        signer.setServiceName(serviceName);
-        signer.setRegionName(region);
-        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
+        Aws4Signer signer = Aws4Signer.create();
+        HttpRequestInterceptor interceptor = new AwsRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider,region);
         return RestClient.builder(HttpHost.create(host)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)).build();
     }
 }
@@ -87,6 +86,7 @@ public class AmazonOpenSearchServiceSample {
 If you prefer the high\-level REST client, which offers most of the same features and simpler code, try the following sample, which also uses the [Amazon Web Services Request Signing Interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor):
 
 ```
+import com.amazonaws.http.AwsRequestSigningApacheInterceptor;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequestInterceptor;
 import org.opensearch.action.index.IndexRequest;
@@ -94,10 +94,10 @@ import org.opensearch.action.index.IndexResponse;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestHighLevelClient;
-import com.amazonaws.auth.AWS4Signer;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.signer.Aws4Signer;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,7 +111,7 @@ public class AmazonOpenSearchServiceSample {
     private static String type = "_doc";
     private static String id = "1";
 
-    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
+    static final AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.create();
 
     public static void main(String[] args) throws IOException {
         RestHighLevelClient searchClient = searchClient(serviceName, region);
@@ -130,13 +130,10 @@ public class AmazonOpenSearchServiceSample {
 
     // Adds the interceptor to the OpenSearch REST client
     public static RestHighLevelClient searchClient(String serviceName, String region) {
-        AWS4Signer signer = new AWS4Signer();
-        signer.setServiceName(serviceName);
-        signer.setRegionName(region);
-        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
+        Aws4Signer signer = Aws4Signer.create();
+        HttpRequestInterceptor interceptor = new AwsRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider,region);
         return new RestHighLevelClient(RestClient.builder(HttpHost.create(host)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)));
     }
-}
 ```
 
 **Tip**  
