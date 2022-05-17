@@ -18,7 +18,7 @@ Consider configuring the following alarms depending on which OpenSearch Service 
 
 | Alarm | Issue | 
 | --- | --- | 
-| WarmFreeStorageSpace minimum is <= 10240 for 1 minute, 1 consecutive time | An UltraWArm node in your cluster is down to 10 GiB of free storage space\. See [Lack of available storage space](handling-errors.md#handling-errors-watermark)\. This value is in MiB, so rather than 10240, we recommend setting it to 10% of the storage space for each UltraWarm node\. | 
+| WarmFreeStorageSpace minimum is <= 10240 for 1 minute, 1 consecutive time | An UltraWarm node in your cluster is down to 10 GiB of free storage space\. See [Lack of available storage space](handling-errors.md#handling-errors-watermark)\. This value is in MiB, so rather than 10240, we recommend setting it to 10% of the storage space for each UltraWarm node\. | 
 | HotToWarmMigrationQueueSize is >= 20 for 1 minute, 3 consecutive times |  A high number of indices are concurrently moving from hot to UltraWarm storage\. Consider scaling your cluster\.   | 
 | HotToWarmMigrationSuccessLatency is >= 1 day, 1 consecutive time |  Configure this alarm so that you're notified if the `HotToWarmMigrationSuccessCount` x latency is greater than 24 hours if you’re trying to roll daily indices\.  | 
 | WarmJVMMemoryPressure maximum is >= 80% for 5 minutes, 3 consecutive times | The cluster could encounter out of memory errors if usage increases\. Consider scaling vertically\. OpenSearch Service uses half of an instance's RAM for the Java heap, up to a heap size of 32 GiB\. You can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\. | 
