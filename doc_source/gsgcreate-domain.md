@@ -1,4 +1,4 @@
-# Step 1: Create an OpenSearch Service domain<a name="gsgcreate-domain"></a>
+# Step 1: Create an Amazon OpenSearch Service domain<a name="gsgcreate-domain"></a>
 
 **Important**  
 This is a concise tutorial for configuring a *test * Amazon OpenSearch Service domain\. Do not use this process to create production domains\. For a comprehensive version of the same process, see [Creating and managing Amazon OpenSearch Service domains](createupdatedomains.md)\.
@@ -31,6 +31,6 @@ An OpenSearch Service domain is synonymous with an OpenSearch cluster\. Domains 
 
 1. For **Access policy**, choose **Only use fine\-grained access control**\. In this tutorial, fine\-grained access control handles authentication, not the domain access policy\.
 
-1. Ignore the rest of the settings and choose **Create**\. New domains typically take 15–30 minutes to initialize, but can take longer depending on the configuration\. After your domain initializes, make note of its endpoint\.
+1. Ignore the rest of the settings and choose **Create**\. New domains typically take 15–30 minutes to initialize, but can take longer depending on the configuration\. After your domain initializes, select it to open its configuration pane\. Note the domain endpoint under **General information** \(for example, `https://search-my-domain.us-east-1.es.amazonaws.com`\), which you'll use in the next step\.
 
 **Next**: [Upload data to an OpenSearch Service domain for indexing](gsgupload-data.md)

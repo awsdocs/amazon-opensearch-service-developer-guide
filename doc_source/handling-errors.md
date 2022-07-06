@@ -62,7 +62,7 @@ The most common causes of a red cluster status are [failed cluster nodes](#handl
 **Note**  
 OpenSearch Service stores automated snapshots for 14 days regardless of the cluster status\. Therefore, if the red cluster status persists for more than two weeks, the last healthy automated snapshot will be deleted and you could permanently lose your cluster's data\. If your OpenSearch Service domain enters a red cluster status, AWS Support might contact you to ask whether you want to address the problem yourself or you want the support team to assist\. You can [set a CloudWatch alarm](cloudwatch-alarms.md) to notify you when a red cluster status occurs\.
 
-Ultimately, red shards cause red clusters, and red indexes cause red shards\. To identity the indexes causing the red cluster status, OpenSearch has some helpful APIs\.
+Ultimately, red shards cause red clusters, and red indexes cause red shards\. To identify the indexes causing the red cluster status, OpenSearch has some helpful APIs\.
 + `GET /_cluster/allocation/explain` chooses the first unassigned shard that it finds and explains why it cannot be allocated to a node:
 
   ```
@@ -90,12 +90,21 @@ Deleting red indexes is the fastest way to fix a red cluster status\. Depending 
 
 If deleting a problematic index isn't feasible, you can [restore a snapshot](managedomains-snapshots.md#managedomains-snapshot-restore), delete documents from the index, change the index settings, reduce the number of replicas, or delete other indexes to free up disk space\. The important step is to resolve the red cluster status *before* reconfiguring your OpenSearch Service domain\. Reconfiguring a domain with a red cluster status can compound the problem and lead to the domain being stuck in a configuration state of **Processing** until you resolve the status\.
 
+### Automatic remediation of red clusters<a name="handling-errors-red-cluster-status-auto-recovery"></a>
+
+If your cluster's status is continuously red for more than an hour, OpenSearch Service attempts to automatically fix it by rerouting unallocated shards or restoring from past snapshots\.
+
+If it fails to fix one or more red indexes and the cluster status remains red for a total of 14 days, OpenSearch Service takes further action only if the cluster meets *at least one* of the following criteria:
++ Has only one availability zone
++ Has no dedicated master nodes
++ Contains burstable instance types \(T2 or T3\)
+
+At this time, if your cluster meets one of these criteria, OpenSearch Service sends you daily [notifications](managedomains-notifications.md) over the next 7 days explaining that if you don't fix these indexes, all unassigned shards will be deleted\. If your cluster status is still red after 21 days, OpenSearch Service deletes the unassigned shards \(storage and compute\) on all red indexes\. You receive notifications in the **Notifications** panel of the OpenSearch Service console for each of these events\. For more information, see [Cluster health events](monitoring-events.md#monitoring-events-shards)\.
+
 ### Recovering from a continuous heavy processing load<a name="handling-errors-red-cluster-status-heavy-processing-load"></a>
 
 To determine if a red cluster status is due to a continuous heavy processing load on a data node, monitor the following cluster metrics\.
 
-
-****  
 
 | Relevant metric | Description | Recovery | 
 | --- | --- | --- | 
@@ -167,6 +176,10 @@ The cluster can get stuck in the "Processing" state if either of these situation
 + Shard migration to the new set of data nodes is unsuccessful\.
 
 For detailed resolution steps in each of these situations, see [Why is my Amazon OpenSearch Service domain stuck in the "Processing" state?](https://aws.amazon.com/premiumsupport/knowledge-center/opensearch-domain-stuck-processing/)\. 
+
+## Low EBS burst balance<a name="handling-errors-low-ebs-burst"></a>
+
+OpenSearch Service sends you a console notification when the EBS burst balance on one of your General Purpose \(SSD\) volumes is below 70%, and a follow\-up notification if the balance falls below 20%\. To fix this issue, first try making a minor change that triggers a [blue\-green deployment](managedomains-configuration-changes.md), which can sometimes resolve the problem\. If the issue persists, you can either scale up your cluster, or reduce the read and write IOPS so that the burst balance can be credited\. You can monitor EBS burst balance with the `BurstBalance` CloudWatch metric\. For more information, see [General Purpose SSD volumes \(gp2\)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html#EBSVolumeTypes_gp2)\.
 
 ## Can't enable audit logs<a name="troubleshooting-audit-logs-error"></a>
 
@@ -320,6 +333,36 @@ Your browser wraps service error messages in HTTP response objects when you use 
 
 1. Choose the **Response** tab to view the service response\.
 
+## Node shard and storage skew<a name="handling-errors-node-skew"></a>
+
+Node *shard skew* is when one or more nodes within a cluster has significantly more shards than the other nodes\. Node *storage skew* is when one or more nodes within a cluster has significantly more storage \(`disk.indices`\) than the other nodes\. While both of these conditions can occur temporarily, like when a domain has replaced a node and is still allocating shards to it, you should address them if they persist\.
+
+To identify both types of skew, run the [\_cat/allocation](https://opensearch.org/docs/latest/opensearch/rest-api/cat/cat-allocation/) API operation and compare the `shards` and `disk.indices` entries in the response:
+
+```
+ shards    | disk.indices  | disk.used  | disk.avail   | disk.total   | disk.percent |  host     | ip       | node
+    264    |      465.3mb  |   229.9mb  |      1.4tb   |      1.5tb   |            0 |  x.x.x.x  | x.x.x.x  | node1
+    115    |        7.9mb  |    83.7mb  |     49.1gb   |     49.2gb   |            0 |  x.x.x.x  | x.x.x.x  | node2
+    264    |      465.3mb  |   235.3mb  |      1.4tb   |      1.5tb   |            0 |  x.x.x.x  | x.x.x.x  | node3
+    116    |        7.9mb  |    82.8mb  |     49.1gb   |     49.2gb   |            0 |  x.x.x.x  | x.x.x.x  | node4
+    115    |        8.4mb  |      85mb  |     49.1gb   |     49.2gb   |            0 |  x.x.x.x  | x.x.x.x  | node5
+```
+
+While some storage skew is normal, anything over 10% from the average is significant\. When shard distribution is skewed, CPU, network, and disk bandwidth usage can also become skewed\. Because more data generally means more indexing and search operations, the heaviest nodes also tend to be the most resource\-strained nodes, while the lighter nodes represent underutilized capacity\.
+
+**Remediation**: Use shard counts that are multiples of the data node count to ensure that each index is distributed evenly across data nodes\.
+
+## Index shard and storage skew<a name="handling-errors-index-skew"></a>
+
+Index *shard skew* is when one or more nodes hold more of an index's shards than the other nodes\. Index *storage skew* is when one or more nodes hold a disproportionately large amount of an index's total storage\.
+
+Index skew is harder to identify than node skew because it requires some manipulation of the [\_cat/shards](https://opensearch.org/docs/latest/opensearch/rest-api/cat/cat-shards/) API output\. Investigate index skew if there's some indication of skew in the cluster or node metrics\. The following are common indications of index skew:
++ HTTP 429 errors occurring on a subset of data nodes
++ Uneven index or search operation queueing across data nodes
++ Uneven JVM heap and/or CPU utilization across data nodes
+
+**Remediation**: Use shard counts that are multiples of the data node count to ensure that each index is distributed evenly across data nodes\. If you still see index storage or shard skew, you might need to force a shard reallocation, which occurs with every [blue/green deployment](managedomains-configuration-changes.md) of your OpenSearch Service domain\.
+
 ## Unauthorized operation after selecting VPC access<a name="vpc-permissions"></a>
 
 When you create a new domain using the OpenSearch Service console, you have the option to select VPC or public access\. If you select **VPC access**, OpenSearch Service queries for VPC information and fails if you don't have the proper permissions:
@@ -335,6 +378,37 @@ To enable this query, you must have access to the `ec2:DescribeVpcs`, `ec2:Descr
 After creating a new domain that uses VPC access, the domain's **Configuration state** might never progress beyond **Loading**\. If this issue occurs, you likely have AWS Security Token Service \(AWS STS\) *disabled* for your Region\.
 
 To add VPC endpoints to your VPC, OpenSearch Service needs to assume the `AWSServiceRoleForAmazonOpenSearchService` role\. Thus, AWS STS must be enabled to create new domains that use VPC access in a given Region\. To learn more about enabling and disabling AWS STS, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html)\.
+
+## Denied requests to the OpenSearch API<a name="troubleshooting-tbac"></a>
+
+With the introduction of tag\-based access control for the OpenSearch API, you might start seeing access denied errors where you didn't before\. This might be because one or more of your access policies contains `Deny` using the `ResourceTag` condition, and those conditions are now being honored\.
+
+For example, the following policy used to only deny access to the `CreateDomain` action from the configuration API, if the domain had the tag `environment=production`\. Even though the action list also includes `ESHttpPut`, the deny statement didn't apply to that action or any other `ESHttp*` actions\.
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Action": [
+      "es:CreateDomain",
+      "es:ESHttpPut"
+    ],
+    "Effect": "Deny",
+    "Resource": "*",
+    "Condition": {
+      "ForAnyValue:StringEquals": {
+        "aws:ResourceTag/environment": [
+          "production"
+        ]
+      }
+    }
+  }]
+}
+```
+
+With the added support of tags for OpenSearch HTTP methods, an IAM identity\-based policy like the above will result in the attached user being denied access to the `ESHttpPut` action\. Previously, in the absence of tags validation, the attached user would have still been able to send PUT requests\.
+
+If you start seeing access denied errors after updating your domains to service software R20220323 or later, check your identity\-based access policies to see if this is the case and update them if necessary to allow access\.
 
 ## Can't connect from Alpine Linux<a name="troubleshooting-alpine"></a>
 

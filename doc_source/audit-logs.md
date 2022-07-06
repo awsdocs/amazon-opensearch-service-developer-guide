@@ -15,14 +15,18 @@ Audit logs have the following limitations:
 
 ## Enabling audit logs<a name="audit-log-enabling"></a>
 
-Enabling audit logs is a two\-step process\. First, you must configure your domain to publish audit logs to CloudWatch Logs using the console, AWS CLI, or configuration API\. Then you can tune audit log settings using OpenSearch Dashboards or the fine\-grained access control REST API\.
+Enabling audit logs is a two\-step process\. First, you configure your domain to publish audit logs to CloudWatch Logs\. Then, you enable audit logs in OpenSearch Dashboards and configure them to meet your needs\.
 
 **Important**  
 If you encounter an error while following these steps, see [Can't enable audit logs](handling-errors.md#troubleshooting-audit-logs-error) for troubleshooting information\.
 
+### Step 1: Enable audit logs and configure an access policy<a name="audit-log-enable"></a>
+
+These steps describe how to enable audit logs using the console\. You can also [enable them using the AWS CLI](#audit-log-enabling-cli), or the [configuration API](#audit-log-enabling-api)\.
+
 **To enable audit logs for an OpenSearch Service domain \(console\)**
 
-1. Choose the domain and go to the **Logs** tab\.
+1. Choose the domain to open its configuration, then go to the **Logs** tab\.
 
 1. Select **Audit logs** and then **Enable**\.
 
@@ -67,7 +71,19 @@ If you encounter an error while following these steps, see [Can't enable audit l
 
 1. Choose **Enable**\.
 
-### Sample CLI command<a name="audit-log-enabling-cli"></a>
+### Step 2: Turn on audit logs in OpenSearch Dashboards<a name="audit-log-dashboards-ui"></a>
+
+After you enable audit logs in the OpenSearch Service console, you *must* also enable them in OpenSearch Dashboards and configure them to match your needs\.
+
+1. Open OpenSearch Dashboards and choose **Security** from the left side menu\.
+
+1. Choose **Audit logs**\.
+
+1. Choose **Enable audit logging**\.
+
+The Dashboards UI offers full control of audit log settings under **General settings** and **Compliance settings**\. For a description of all configuration options, see [Audit log settings](#audit-log-settings)\.
+
+## Enable audit logging using the AWS CLI<a name="audit-log-enabling-cli"></a>
 
 The following AWS CLI command enables audit logs on an existing domain:
 
@@ -77,7 +93,7 @@ aws opensearch update-domain-config --domain-name my-domain --log-publishing-opt
 
 You can also enable audit logs when you create a domain\. For detailed information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.
 
-### Sample configuration API request<a name="audit-log-enabling-api"></a>
+## Enable audit logging using the configuration API<a name="audit-log-enabling-api"></a>
 
 The following request to the configuration API enables audit logs on an existing domain:
 
@@ -94,18 +110,6 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/c
 ```
 
 For detailed information, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
-
-## Configuring audit logs in OpenSearch Dashboards<a name="audit-log-dashboards-ui"></a>
-
-After you enable audit logs, configure them to match your needs\.
-
-1. Open OpenSearch Dashboards, and choose **Security**\.
-
-1. Choose **Audit logs**\.
-
-1. Choose **Enable audit logging**\.
-
-The Dashboards UI offers full control of audit log settings under **General settings** and **Compliance settings**\. For a description of all configuration options, see [Audit Log Settings](#audit-log-settings)\.
 
 ## Audit log layers and categories<a name="audit-log-layers"></a>
 

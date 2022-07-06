@@ -1,46 +1,51 @@
-# Amazon OpenSearch Service limits<a name="limits"></a>
+# Amazon OpenSearch Service quotas<a name="limits"></a>
 
-The following tables show limits for Amazon OpenSearch Service resources, including the number of nodes per cluster, the minimum and maximum sizes for EBS volumes, and network limits\.
+Your AWS account has default quotas, formerly referred to as limits, for each AWS service\. Unless otherwise noted, each quota is Region\-specific\.
 
-## Cluster and instance limits<a name="clusterresource"></a>
+To view the quotas for OpenSearch Service, open the [Service Quotas console](https://console.aws.amazon.com/servicequotas/home)\. In the navigation pane, choose **AWS services** and select **Amazon OpenSearch Service**\. To request a quota increase, see [Requesting a quota increase](https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html) in the *Service Quotas User Guide*\. 
 
-The following table shows OpenSearch Service limits for clusters and instances\.
+## Domain and instance quotas<a name="clusterresource"></a>
+
+Your AWS account has the following quotas related to OpenSearch Service domains\.
 
 
-| Clusters and instances | Limit | 
-| --- | --- | 
-| Maximum number of data nodes per cluster |  80 \(except for the T2 and T3 instance types, which have a maximum of 10\) To request an increase up to 200 data nodes, create a case with the [AWS Support Center](https://console.aws.amazon.com/support/home#/)\. For more information about requesting an increase, see [AWS Service Limits](http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)\.  | 
-| Maximum number of [warm](ultrawarm.md) nodes per cluster | 150 | 
-|  Maximum total number of data and warm nodes per cluster  |  200 You might have to request a data node limit increase to reach this total\. For example, your domain might have 80 data nodes and 120 warm nodes\.  | 
-| Maximum number of dedicated master nodes per cluster |  5 You can use the T2 and T3 instance types for dedicated master nodes only if the number of data nodes is 10 or fewer\. We don't recommend T2 or `t3.small` instance types for production domains\.  | 
-|  Maximum total storage per cluster  |  3 PiB This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 45 `r6gd.16xlarge.search` instances and 140 `ultrawarm1.large.search` instances for a total of 2\.88 PiB of storage\.  | 
-| Smallest supported instance type per OpenSearch version |  `t2.small.search` | 
-| Maximum number of domains per account \(per AWS Region\) | 100 | 
-|  Maximum number of custom packages per account \(per AWS Region\)  |  25  | 
-|  Maximum number of custom packages per domain  |  20  | 
+| Name | Default | Adjustable | Notes | 
+| --- | --- | --- | --- | 
+| Dedicated master instances per domain | 5 | No | You can use the T2 and T3 instance types for dedicated master nodes only if the number of data nodes is 10 or fewer\. | 
+| Domains per Region | 100 | [Yes](https://console.aws.amazon.com/servicequotas/home/services/es/quotas/L-076D529E) |  | 
+| Instances per domain | 80 | [Yes](https://console.aws.amazon.com/servicequotas/home/services/elasticloadbalancing/quotas/LL-6408ABDE) | You can request an increase up to 200 instances\. | 
+| Instances per domain \(T2 instance type\) | 10 | No | We don't recommend T2 or t3\.small instance types for production domains\. | 
+| Warm instances per domain | 150 | No |  | 
 
-For a list of the instance types that OpenSearch Service supports, see [Supported Instance Types](supported-instance-types.md)\.
+Your AWS account has the following additional quotas, which are not listed in the Service Quotas console\.
 
-## UltraWarm storage limits<a name="limits-ultrawarm"></a>
+
+| Name | Default | Adjustable | Notes | 
+| --- | --- | --- | --- | 
+|  Total data and warm nodes per domain  |  200  | No | You might have to request a data node limit increase to reach this total\. For example, your domain might have 80 data nodes and 120 warm nodes\. | 
+|  Total storage per domain  |  3 PiB  | No | This maximum is the sum of all data nodes and warm nodes\. For example, your domain might have 45 r6gd\.16xlarge\.search instances and 140 ultrawarm1\.large\.search instances for a total of 2\.88 PiB of storage\. | 
+|  Smallest supported instance type  |   `t2.small.search`  | No |  | 
+|  Custom packages per Region  |  25  | No |  | 
+|  Custom packages per domain  |  20  | No |  | 
+
+For a list of the instance types that OpenSearch Service supports, see [Supported instance types](supported-instance-types.md)\.
+
+## UltraWarm storage quotas<a name="limits-ultrawarm"></a>
 
 The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)\.
 
-
-****  
 
 | Instance type | Maximum storage | 
 | --- | --- | 
 | ultrawarm1\.medium\.search | 1\.5 TiB | 
 | ultrawarm1\.large\.search | 20 TiB | 
 
-## EBS volume size limits<a name="ebsresource"></a>
+## EBS volume size quotas<a name="ebsresource"></a>
 
 The following table shows the minimum and maximum sizes for EBS volumes for each instance type that OpenSearch Service supports\. For information about which instance types include instance storage and additional hardware details, see [Amazon OpenSearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
-+ If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.small` and `t2.medium`, and all Graviton instances \(M6G, C6G, R6G, and R6GD\), which don't support magnetic storage\. For the maximum sizes listed in the following table, choose one of the SSD options\.
++ If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.small` and `t2.medium`, and all Graviton instances \(M6g, C6g, R6g, and R6gd\), which don't support magnetic storage\. For the maximum sizes listed in the following table, choose one of the SSD options\.
 + Some older\-generation instance types include instance storage, but also support EBS storage\. If you choose EBS storage for one of these instance types, the storage volumes are *not* additive\. You can use either an EBS volume or the instance storage, not both\.
 
-
-****  
 
 | Instance type | Minimum EBS size | Maximum EBS size | 
 | --- | --- | --- | 
@@ -124,7 +129,7 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 | i3\.8xlarge\.search | N/A | N/A | 
 | i3\.16xlarge\.search | N/A | N/A | 
 
-## Network limits<a name="network-limits"></a>
+## Network quotas<a name="network-limits"></a>
 
 The following table shows the maximum size of HTTP request payloads\.
 
@@ -213,10 +218,10 @@ The following table shows the maximum size of HTTP request payloads\.
 | i3\.8xlarge\.search | 100 MiB | 
 | i3\.16xlarge\.search | 100 MiB | 
 
-## Java process limit<a name="java-process-limit"></a>
+## Java process quota<a name="java-process-limit"></a>
 
 OpenSearch Service limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Advanced cluster settings](createupdatedomains.md#createdomain-configure-advanced-options) and [JVM OutOfMemoryError](handling-errors.md#handling-errors-jvm_out_of_memory_error)\.
 
-## Domain policy limit<a name="domain-policy-limit"></a>
+## Domain policy quota<a name="domain-policy-limit"></a>
 
 OpenSearch Service limits [access policies on domains](ac.md#ac-types-resource) to 100 KiB\.

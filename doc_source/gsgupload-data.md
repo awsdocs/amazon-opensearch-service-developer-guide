@@ -1,7 +1,7 @@
-# Step 2: Upload data to OpenSearch Service for indexing<a name="gsgupload-data"></a>
+# Step 2: Upload data to Amazon OpenSearch Service for indexing<a name="gsgupload-data"></a>
 
 **Important**  
-This is a concise tutorial for uploading a small amount of test data to Amazon OpenSearch Service \(OpenSearch Service\)\. For more about uploading data in a production domain, see [Indexing data in Amazon OpenSearch Service](indexing.md)\.
+This is a concise tutorial for uploading a small amount of test data to Amazon OpenSearch Service\. For more about uploading data in a production domain, see [Indexing data in Amazon OpenSearch Service](indexing.md)\.
 
 You can upload data to an OpenSearch Service domain using the command line or most programming languages\.
 

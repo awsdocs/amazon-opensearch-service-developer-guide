@@ -15,10 +15,10 @@ In OpenSearch, warm indexes behave just like any other index\. You can query the
 + [Automating migrations](#ultrawarm-ism)
 + [Migration tuning](#ultrawarm-settings)
 + [Cancelling migrations](#ultrawarm-cancel)
-+ [Listing hot and warm indices](#ultrawarm-api)
++ [Listing hot and warm indexes](#ultrawarm-api)
 + [Returning warm indexes to hot storage](#ultrawarm-migrating-back)
 + [Restoring warm indexes from automated snapshots](#ultrawarm-snapshot)
-+ [Manual snapshots of warm indices](#ultrawarm-manual-snapshot)
++ [Manual snapshots of warm indexes](#ultrawarm-manual-snapshot)
 + [Migrating warm indexes to cold storage](#ultrawarm-cold)
 + [Disabling UltraWarm](#ultrawarm-disable)
 
@@ -27,7 +27,8 @@ In OpenSearch, warm indexes behave just like any other index\. You can query the
 UltraWarm has a few important prerequisites:
 + UltraWarm requires OpenSearch or Elasticsearch 6\.8 or higher\.
 + To use warm storage, domains must have [dedicated master nodes](managedomains-dedicatedmasternodes.md)\.
-+ If your domain uses a T2 or T3 instance type for your data nodes, you can't use warm storage\.
++ If your domain uses a T2 or T3 instance type for your data nodes, you cannot use warm storage\.
++ If your index uses [approximate k\-NN](https://opensearch.org/docs/latest/search-plugins/knn/approximate-knn/) \(`"index.knn": true`\), you can't move it to warm storage\.
 + If the domain uses [fine\-grained access control](fgac.md), users must be mapped to the `ultrawarm_manager` role in OpenSearch Dashboards to make UltraWarm API calls\.
 
 **Note**  
@@ -54,13 +55,13 @@ If you enable UltraWarm on a preexisting OpenSearch Service domain, the `ultrawa
 
 1. Choose **Create**\.
 
-1. After you create the role, [map it](fgac.md#fgac-mapping) to any user or backend role that will manage UltraWarm indices\.
+1. After you create the role, [map it](fgac.md#fgac-mapping) to any user or backend role that will manage UltraWarm indexes\.
 
 ## UltraWarm storage requirements and performance considerations<a name="ultrawarm-calc"></a>
 
 As covered in [Calculating storage requirements](sizing-domains.md#bp-storage), data in hot storage incurs significant overhead: replicas, Linux reserved space, and OpenSearch Service reserved space\. For example, a 20 GiB primary shard with one replica shard requires roughly 58 GiB of hot storage\.
 
-Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 20 GiB shard requires 20 GiB of warm storage\. If you provision an `ultrawarm1.large.search` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm storage limits](limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
+Because it uses Amazon S3, UltraWarm incurs none of this overhead\. When calculating UltraWarm storage requirements, you consider only the size of the primary shards\. The durability of data in S3 removes the need for replicas, and S3 abstracts away any operating system or service considerations\. That same 20 GiB shard requires 20 GiB of warm storage\. If you provision an `ultrawarm1.large.search` instance, you can use all 20 TiB of its maximum storage for primary shards\. See [UltraWarm storage quotas](limits.md#limits-ultrawarm) for a summary of instance types and the maximum amount of storage that each can address\.
 
 With UltraWarm, we still recommend a maximum shard size of 50 GiB\. The [number of CPU cores and amount of RAM allocated to each UltraWarm instance type](#ultrawarm-pricing) gives you an idea of the number of shards they can simultaneously search\. Note that while only primary shards count toward UltraWarm storage in S3, OpenSearch Dashboards and `_cat/indices` still report UltraWarm index size as the *total* of all primary and replica shards\.
 
@@ -81,7 +82,7 @@ The console is the simplest way to create a domain that uses warm storage\. Whil
 You can also use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) or [configuration API](configuration-api.md) to enable UltraWarm, specifically the `WarmEnabled`, `WarmCount`, and `WarmType` options in `ClusterConfig`\.
 
 **Note**  
-Domains support a maximum number of warm nodes\. For details, see [Amazon OpenSearch Service limits](limits.md)\.
+Domains support a maximum number of warm nodes\. For details, see [Amazon OpenSearch Service quotas](limits.md)\.
 
 ### Sample CLI command<a name="ultrawarm-sample-cli"></a>
 
@@ -193,7 +194,7 @@ index    migration_type state
 my-index HOT_TO_WARM    RUNNING_SHARD_RELOCATION
 ```
 
-You can have up to 200 simultaneous migrations from hot to warm storage\. To check the current number of migrations in the queue, monitor the `HotToWarmMigrationQueueSize` [metric](managedomains-cloudwatchmetrics.md#managedomains-cloudwatchmetrics-uw)\. Indexes remain available throughout the migration process—no downtime\.
+OpenSearch Service migrates one index at a time to UltraWarm\. You can have up to 200 migrations in the queue\. Any request that exceeds the limit will be rejected\. To check the current number of migrations in the queue, monitor the `HotToWarmMigrationQueueSize` [metric](managedomains-cloudwatchmetrics.md#managedomains-cloudwatchmetrics-uw)\. Indexes remain available throughout the migration process—no downtime\.
 
 The migration process has the following states:
 
@@ -214,7 +215,7 @@ FINISHED_SHARD_RELOCATION
 
 As these states indicate, migrations might fail during snapshots, shard relocations, or force merges\. Failures during snapshots or shard relocation are typically due to node failures or S3 connectivity issues\. Lack of disk space is usually the underlying cause of force merge failures\.
 
-After a migration finishes, the same `_status` request returns an error\. If you check the index at that time, you can see some settings that are unique to warm indices:
+After a migration finishes, the same `_status` request returns an error\. If you check the index at that time, you can see some settings that are unique to warm indexes:
 
 ```
 GET my-index/_settings
@@ -259,7 +260,7 @@ GET my-index/_settings
 + `routing.allocation.require.box_type` specifies that the index should use warm nodes rather than standard data nodes\.
 + `merge.policy.max_merge_at_once_explicit` specifies the number of segments to simultaneously merge during the migration\.
 
-Indices in warm storage are read\-only unless you [return them to hot storage](#ultrawarm-migrating-back), which makes UltraWarm best\-suited to immutable data, such as logs\. You can query the indexes and delete them, but you can't add, update, or delete individual documents\. If you try, you might encounter the following error:
+Indexes in warm storage are read\-only unless you [return them to hot storage](#ultrawarm-migrating-back), which makes UltraWarm best\-suited to immutable data, such as logs\. You can query the indexes and delete them, but you can't add, update, or delete individual documents\. If you try, you might encounter the following error:
 
 ```
 {
@@ -312,16 +313,16 @@ POST _ultrawarm/migration/_cancel/my-index
 
 If your domain uses fine\-grained access control, you must have the `indices:admin/ultrawarm/migration/cancel` permission to make this request\.
 
-## Listing hot and warm indices<a name="ultrawarm-api"></a>
+## Listing hot and warm indexes<a name="ultrawarm-api"></a>
 
-UltraWarm adds two additional options, similar to `_all`, to help manage hot and warm indices\. For a list of all warm or hot indices, make the following requests:
+UltraWarm adds two additional options, similar to `_all`, to help manage hot and warm indexes\. For a list of all warm or hot indexes, make the following requests:
 
 ```
 GET _warm
 GET _hot
 ```
 
-You can use these options in other requests that specify indices, such as:
+You can use these options in other requests that specify indexes, such as:
 
 ```
 _cat/indices/_warm
@@ -342,7 +343,7 @@ After the migration finishes, check the index settings to make sure they meet yo
 
 ## Restoring warm indexes from automated snapshots<a name="ultrawarm-snapshot"></a>
 
-In addition to the standard repository for automated snapshots, UltraWarm adds a second repository for warm indices, `cs-ultrawarm`\. Each snapshot in this repository contains only one index\. If you delete a warm index, its snapshot remains in the `cs-ultrawarm` repository for 14 days, just like any other automated snapshot\.
+In addition to the standard repository for automated snapshots, UltraWarm adds a second repository for warm indexes, `cs-ultrawarm`\. Each snapshot in this repository contains only one index\. If you delete a warm index, its snapshot remains in the `cs-ultrawarm` repository for 14 days, just like any other automated snapshot\.
 
 When you restore a snapshot from `cs-ultrawarm`, it restores to warm storage, not hot storage\. Snapshots in the `cs-automated` and `cs-automated-enc` repositories restore to hot storage\.
 
@@ -380,18 +381,18 @@ When you restore a snapshot from `cs-ultrawarm`, it restores to warm storage, no
 
    UltraWarm ignores any index settings you specify in this restore request, but you can specify options like `rename_pattern` and `rename_replacement`\. For a summary of OpenSearch snapshot restore options, see the [OpenSearch documentation](https://opensearch.org/docs/opensearch/snapshot-restore/#restore-snapshots)\.
 
-## Manual snapshots of warm indices<a name="ultrawarm-manual-snapshot"></a>
+## Manual snapshots of warm indexes<a name="ultrawarm-manual-snapshot"></a>
 
-You *can* take manual snapshots of warm indices, but we don't recommend it\. The automated `cs-ultrawarm` repository already contains a snapshot for each warm index, taken during the migration, at no additional charge\.
+You *can* take manual snapshots of warm indexes, but we don't recommend it\. The automated `cs-ultrawarm` repository already contains a snapshot for each warm index, taken during the migration, at no additional charge\.
 
-By default, OpenSearch Service does not include warm indexes in manual snapshots\. For example, the following call only includes hot indices:
+By default, OpenSearch Service does not include warm indexes in manual snapshots\. For example, the following call only includes hot indexes:
 
 ```
 PUT _snapshot/my-repository/my-snapshot
 ```
 
-If you choose to take manual snapshots of warm indices, several important considerations apply\.
-+ You can't mix hot and warm indices\. For example, the following request fails:
+If you choose to take manual snapshots of warm indexes, several important considerations apply\.
++ You can't mix hot and warm indexes\. For example, the following request fails:
 
   ```
   PUT _snapshot/my-repository/my-snapshot
@@ -401,7 +402,7 @@ If you choose to take manual snapshots of warm indices, several important consid
   }
   ```
 
-  If they include a mix of hot and warm indices, wildcard \(`*`\) statements fail, as well\.
+  If they include a mix of hot and warm indexes, wildcard \(`*`\) statements fail, as well\.
 + You can only include one warm index per snapshot\. For example, the following request fails:
 
   ```
@@ -425,10 +426,10 @@ If you choose to take manual snapshots of warm indices, several important consid
 
 ## Migrating warm indexes to cold storage<a name="ultrawarm-cold"></a>
 
-If you have data in UltraWarm that you query infrequently, consider migrating it to cold storage\. Cold storage is meant for data you only access occasionally or is no longer in active use\. You can't read from or write to cold indices, but you can migrate them back to warm storage at no cost whenever you need to query them\. For instructions, see [Migrating indexes to cold storage](cold-storage.md#coldstorage-migrating)\.
+If you have data in UltraWarm that you query infrequently, consider migrating it to cold storage\. Cold storage is meant for data you only access occasionally or is no longer in active use\. You can't read from or write to cold indexes, but you can migrate them back to warm storage at no cost whenever you need to query them\. For instructions, see [Migrating indexes to cold storage](cold-storage.md#coldstorage-migrating)\.
 
 ## Disabling UltraWarm<a name="ultrawarm-disable"></a>
 
 The console is the simplest way to disable UltraWarm\. Choose the domain, **Actions**, and **Edit cluster configuration**\. Deselect **Enable UltraWarm data nodes** and choose **Save changes**\. You can also use the `WarmEnabled` option in the AWS CLI and configuration API\.
 
-Before you disable UltraWarm, you must either delete all warm indexes or migrate them back to hot storage\. After warm storage is empty, wait five minutes before attempting to disable the feature\.
+Before you disable UltraWarm, you must either [delete](https://opensearch.org/docs/latest/opensearch/rest-api/index-apis/delete-index/) all warm indexes or [migrate them back to hot storage](#ultrawarm-migrating-back)\. After warm storage is empty, wait five minutes before attempting to disable UltraWarm\.

@@ -1,6 +1,6 @@
 # Signing HTTP requests to Amazon OpenSearch Service<a name="request-signing"></a>
 
-This section includes examples of how to send signed HTTP requests to Amazon OpenSearch Service using Elasticsearch and OpenSearch clients and other common libraries\. These code samples are for interacting with the OpenSearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles \(or you use an IAM master user with [fine\-grained access control](fgac.md)\), you must sign requests to the OpenSearch APIs with your IAM credentials\. 
+This section includes examples of how to send signed HTTP requests to Amazon OpenSearch Service using Elasticsearch and OpenSearch clients and other common libraries\. These code examples are for interacting with the OpenSearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles \(or you use an IAM master user with [fine\-grained access control](fgac.md)\), you must sign requests to the OpenSearch APIs with your IAM credentials\. 
 
 For examples of how to interact with the configuration API, including operations like creating, updating, and deleting OpenSearch Service domains, see [Using the AWS SDKs to interact with Amazon OpenSearch Service](configuration-samples.md)\.
 
@@ -16,7 +16,7 @@ The latest versions of the Elasticsearch clients might include license or versio
 
 ## Java<a name="request-signing-java"></a>
 
-The easiest way of sending a signed request is to use the [Amazon Web Services request signing interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some samples to help you get started, or you can [download a sample project for OpenSearch Service on GitHub](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/blob/master/sample_code/java/amazon-opensearch-docs-sample-client.zip)\.
+The easiest way of sending a signed request is to use the [Amazon Web Services request signing interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some examples to help you get started, or you can [download a sample project for OpenSearch Service on GitHub](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/blob/master/sample_code/java/amazon-opensearch-docs-sample-client.zip)\.
 
 The following example uses the [opensearch\-java](https://github.com/opensearch-project/opensearch-java) low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
 
@@ -140,11 +140,11 @@ public class AmazonOpenSearchServiceSample {
 ```
 
 **Tip**  
-Both signed samples use the default credential chain\. Run `aws configure` using the AWS CLI to set your credentials\.
+Both signed examples use the default credential chain\. Run `aws configure` using the AWS CLI to set your credentials\.
 
 ## Python<a name="request-signing-python"></a>
 
-This sample uses the [opensearch\-py](https://pypi.org/project/opensearch-py/) client for Python, which you can install using [pip](https://pypi.python.org/pypi/pip)\.
+This example uses the [opensearch\-py](https://pypi.org/project/opensearch-py/) client for Python, which you can install using [pip](https://pypi.python.org/pypi/pip)\. You must provide values for `region` and `host`\.
 
 ```
 from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
@@ -194,7 +194,7 @@ pip install requests
 pip install requests-aws4auth
 ```
 
-The following sample code establishes a secure connection to the specified OpenSearch Service domain and indexes a single document\. You must provide values for `region` and `host`\.
+The following example code establishes a secure connection to the specified OpenSearch Service domain and indexes a single document\. You must provide values for `region` and `host`\.
 
 ```
 from opensearchpy import OpenSearch, RequestsHttpConnection
@@ -227,7 +227,7 @@ search.index(index="movies", doc_type="_doc", id="5", body=document)
 print(search.get(index="movies", doc_type="_doc", id="5"))
 ```
 
-If you don't want to use opensearch\-py, you can just make standard HTTP requests\. This sample creates a new index with seven shards and two replicas:
+If you don't want to use opensearch\-py, you can just make standard HTTP requests\. This example creates a new index with seven shards and two replicas:
 
 ```
 from requests_aws4auth import AWS4Auth
@@ -255,6 +255,18 @@ payload = {
 r = requests.put(url, auth=awsauth, json=payload) # requests.get, post, and delete have similar syntax
 
 print(r.text)
+```
+
+Rather than static credentials, you can construct an AWS4Auth instance with automatically refreshing credentials, which is suitable for long\-running applications using [AssumeRole](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html)\. The refreshable credentials instance is used to generate valid static credentials for each request, eliminating the need to recreate the AWS4Auth instance when temporary credentials expire:
+
+```
+from requests_aws4auth import AWS4Auth
+from botocore.session import Session
+
+credentials = Session().get_credentials()
+
+auth = AWS4Auth(region=us-west-1', service='es',
+                    refreshable_credentials=credentials)
 ```
 
 This next example uses the [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) library to help build a bulk file from a local directory of HTML files\. Using the same client as the first example, you can send the file to the `_bulk` API for indexing\. You could use this code as the basis for adding search functionality to a website:
@@ -324,7 +336,7 @@ gem install elasticsearch -v 7.13.3
 gem install faraday_middleware-aws-sigv4
 ```
 
-This sample code creates a new client, configures Faraday middleware to sign requests, and indexes a single document\. You must provide values for `full_url_and_port` and `region`\.
+This example code creates a new client, configures Faraday middleware to sign requests, and indexes a single document\. You must provide values for `full_url_and_port` and `region`\.
 
 ```
 require 'elasticsearch'
@@ -419,7 +431,130 @@ end
 
 ## Node<a name="request-signing-node"></a>
 
-This section includes examples for versions 2 and 3 of the SDK for JavaScript in Node\.js\. While version 2 is published as a single package, version 3 has a modular architecture with a separate package for each service\.
+This example uses the [opensearch\-js](https://www.npmjs.com/package/@opensearch-project/opensearch) client for JavaScript to create an index and add a single document\. To sign the request, it first locates credentials using the [credential\-provider\-node](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_credential_provider_node.html) module from version 3 of the SDK for JavaScript in Node\.js\. It then calls [aws4](https://www.npmjs.com/package/aws4) to sign the request using [Signature Version 4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)\. You must provide a value for `host`\.
+
+```
+const { Client, Connection } = require("@opensearch-project/opensearch");
+const { defaultProvider } = require("@aws-sdk/credential-provider-node");
+const aws4 = require("aws4");
+
+var host = '' // e.g. https://my-domain.region.es.amazonaws.com
+
+const createAwsConnector = (credentials, region) => {
+  class AmazonConnection extends Connection {
+      buildRequestObject(params) {
+          const request = super.buildRequestObject(params);
+          request.service = 'es';
+          request.region = region;
+          request.headers = request.headers || {};
+          request.headers['host'] = request.hostname;
+
+          return aws4.sign(request, credentials);
+      }
+  }
+  return {
+      Connection: AmazonConnection
+  };
+};
+
+const getClient = async () => {
+  const credentials = await defaultProvider()();
+  return new Client({
+      ...createAwsConnector(credentials, 'us-east-1'),
+      node: host,
+  });
+}
+
+async function search() {
+
+  // Initialize the client.
+  var client = await getClient();
+
+  // Create an index.
+  var index_name = "test-index";
+
+  var response = await client.indices.create({
+      index: index_name,
+  });
+
+  console.log("Creating index:");
+  console.log(response.body);
+
+  // Add a document to the index.
+  var document = {
+      "title": "Moneyball",
+      "director": "Bennett Miller",
+      "year": "2011"
+  };
+
+  var response = await client.index({
+      index: index_name,
+      body: document
+  });
+
+  console.log(response.body);
+}
+
+search().catch(console.log);
+```
+
+This similar example uses [aws\-opensearch\-connector](https://www.npmjs.com/package/aws-opensearch-connector) rather than aws4\. You must provide a value for `host`\.
+
+```
+const { Client } = require("@opensearch-project/opensearch");
+const { defaultProvider } = require("@aws-sdk/credential-provider-node");
+const createAwsOpensearchConnector = require("aws-opensearch-connector");
+
+var host = '' // e.g. https://my-domain.region.es.amazonaws.com
+
+const getClient = async () => {
+    const awsCredentials = await defaultProvider()();
+    const connector = createAwsOpensearchConnector({
+        credentials: awsCredentials,
+        region: process.env.AWS_REGION ?? 'us-east-1',
+        getCredentials: function(cb) {
+            return cb();
+        }
+    });
+    return new Client({
+        ...connector,
+        node: host,
+    });
+}
+
+async function search() {
+
+    // Initialize the client.
+    var client = await getClient();
+
+    // Create an index.
+    var index_name = "test-index";
+    var response = await client.indices.create({
+        index: index_name,
+    });
+
+    console.log("Creating index:");
+    console.log(response.body);
+
+    // Add a document to the index.
+    var document = {
+        "title": "Moneyball",
+        "director": "Bennett Miller",
+        "year": "2011"
+    };
+
+    var response = await client.index({
+        index: index_name,
+        body: document
+    });
+
+    console.log(response.body);
+}
+
+search().catch(console.log);
+```
+
+If you don't want to use opensearch\-js, you can just make standard HTTP requests\. This section includes examples for versions 2 and 3 of the SDK for JavaScript in Node\.js\. While version 2 is published as a single package, version 3 has a modular architecture with a separate package for each service\.
 
 ------
 #### [ Version 3 ]
@@ -434,7 +569,7 @@ npm i @aws-sdk/node-http-handler
 npm i @aws-crypto/sha256-browser
 ```
 
-This sample code indexes a single document\. You must provide values for `region` and `domain`\.
+This example code indexes a single document\. You must provide values for `region` and `domain`\.
 
 ```
 const { HttpRequest} = require("@aws-sdk/protocol-http");
@@ -507,7 +642,7 @@ This example uses [version 2](https://docs.aws.amazon.com/AWSJavaScriptSDK/lates
 npm install aws-sdk
 ```
 
-This sample code indexes a single document\. You must provide values for `region` and `domain`\.
+This example code indexes a single document\. You must provide values for `region` and `domain`\.
 
 ```
 var AWS = require('aws-sdk');

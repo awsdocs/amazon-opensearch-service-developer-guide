@@ -38,21 +38,20 @@ Next, register an event rule that captures only service software update events\.
 
 1. Name the rule **softwareupdate\-rule**\.
 
-1. For **Define pattern**, choose **Event pattern**, then choose **Custom pattern**\.
+1. Choose **Next**\.
 
-1. Paste the following event pattern into the text area:
+1. For the event pattern, select **AWS services**, **Amazon OpenSearch Service**, and **Amazon OpenSearch Service Software Update Notification**\. This pattern matches any service software update event from OpenSearch Service\. For more information about event patterns, see [Amazon EventBridge event patterns](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-patterns.html) in the *Amazon EventBridge User Guide*\.
 
-   ```
-   {
-     "source": ["aws.es"],
-     "detail-type": ["Amazon OpenSearch Service Software Update Notification"]
-   }
-   ```
+1. Optionally, you can filter to only specific severities\. For the severities of each event, see [Service software update events](monitoring-events.md#monitoring-events-sso)\.
 
-   Press **Save** after adding the pattern\. This pattern matches any service software update event from OpenSearch Service\. For more information about event patterns, see [Amazon EventBridge event patterns](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-patterns.html) in the *Amazon EventBridge User Guide*\.
+1. Choose **Next**\.
 
-1. For **Target**, choose **SNS topic** and select **software\-update**\.
+1. For the target, choose **SNS topic** and select **software\-update**\.
 
-1. Choose **Create**\.
+1. Choose **Next**\.
+
+1. Skip the tags and choose **Next**\.
+
+1. Review the rule configuration and choose **Create rule**\.
 
 The next time you receive a notification from OpenSearch Service about an available service software update, if everything is configured properly, Amazon SNS should send you an email alert about the update\.

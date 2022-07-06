@@ -50,21 +50,19 @@ In this step, you create an EventBridge rule that captures events from your Open
 
 1. Name the rule **event\-rule**\.
 
-1. For **Define pattern**, choose **Event pattern**, then choose **Custom pattern**\.
+1. Choose **Next**\.
 
-1. Paste the following event pattern into the text area:
+1. For the event pattern, select **AWS services**, **Amazon OpenSearch Service**, and **All Events**\. This pattern applies across all of your OpenSearch Service domains and to every OpenSearch Service event\. Alternatively, you can create a more specific pattern to filter out some results\.
 
-   ```
-   {
-     "source": ["aws.es"]
-   }
-   ```
+1. Press **Next**\.
 
-   Press **Save** after adding the pattern\. This pattern applies across all of your OpenSearch Service domains and to every OpenSearch Service event\. Alternatively, you can create a more specific pattern to filter out some results\.
+1. For the target, choose **Lambda function**\. In the function dropdown, choose **event\-handler**\.
 
-1. Leave the target as **Lambda function** and choose **event\-handler** from the dropdown\.
+1. Press **Next**\.
 
-1. Choose **Create**\.
+1. Skip the tags and press **Next** again\.
+
+1. Review the configuration and choose **Create rule**\.
 
 ## Step 3: Test your configuration<a name="listening-test"></a>
 

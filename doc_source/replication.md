@@ -204,7 +204,9 @@ POST _plugins/_replication/follower-01/_stop
 
 ## Auto\-follow<a name="replication-autofollow"></a>
 
-You can define a set of replication rules against a single leader domain that automatically replicate indexes that match a specified pattern\. When you create an index on the leader domain that matches one of the patterns \(for example, `books*`\), a matching follower index is created on the follower domain\. OpenSearch Service replicates any *new* indices that match the pattern, but does not replicate indices that you previously created\.
+You can define a set of replication rules against a single leader domain that automatically replicate indexes that match a specified pattern\. When an index on the leader domain matches one of the patterns \(for example, `books*`\), a matching follower index is created on the follower domain\. OpenSearch Service replicates any existing indexes that match the pattern, as well as new indexes that you create\. It does not replicate indexes that already exist on the follower domain\.
+
+To replicate all indexes \(with the exception of system\-created indexes, and those that already exist on the follower domain\), use a wildcard \(`*`\) pattern\. 
 
 ### Create a replication rule<a name="replication-rule-create"></a>
 

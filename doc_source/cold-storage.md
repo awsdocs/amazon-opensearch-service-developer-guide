@@ -28,6 +28,7 @@ Cold storage has the following prerequisites:
 + To enable cold storage on an OpenSearch Service domain, you must also enable UltraWarm on the same domain\.
 + To use cold storage, domains must have [dedicated master nodes](managedomains-dedicatedmasternodes.md)\.
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use cold storage\.
++ If your index uses [approximate k\-NN](https://opensearch.org/docs/latest/search-plugins/knn/approximate-knn/) \(`"index.knn": true`\), you can't move it to cold storage\.
 + If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be [mapped](fgac.md#fgac-mapping) to the `cold_manager` role in OpenSearch Dashboards in order to manage cold indices\.
 
 **Note**  
@@ -185,7 +186,7 @@ GET _ultrawarm/migration/my-index/_status
 }
 ```
 
-You can have up to 100 simultaneous migrations from warm to cold storage\. Any request that exceeds the limit will be rejected\. To check the current number of migrations in the queue, monitor the `WarmToColdMigrationQueueSize` [metric](managedomains-cloudwatchmetrics.md#managedomains-cloudwatchmetrics-coldstorage)\. The migration process has the following states:
+OpenSearch Service migrates one index at a time to cold storage\. You can have up to 100 migrations in the queue\. Any request that exceeds the limit will be rejected\. To check the current number of migrations in the queue, monitor the `WarmToColdMigrationQueueSize` [metric](managedomains-cloudwatchmetrics.md#managedomains-cloudwatchmetrics-coldstorage)\. The migration process has the following states:
 
 ```
 ACCEPTED_COLD_MIGRATION - Migration request is accepted and queued.

@@ -94,10 +94,6 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
 
    ```
    cd s3-to-opensearch
-   ```
-
-   ```
-   cd s3-to-opensearch
    
    pip install --target ./package requests
    pip install --target ./package requests_aws4auth
@@ -255,10 +251,6 @@ Edit the variables for `region` and `host`\.
 
 ```
 cd kinesis-to-opensearch
-```
-
-```
-cd kinesis-to-opensearch
 
 pip install --target ./package requests
 pip install --target ./package requests_aws4auth
@@ -361,10 +353,7 @@ Edit the variables for `region` and `host`\.
 
 ```
 cd ddb-to-opensearch
-```
 
-```
-cd ddb-to-opensearch
 pip install --target ./package requests
 pip install --target ./package requests_aws4auth
 ```

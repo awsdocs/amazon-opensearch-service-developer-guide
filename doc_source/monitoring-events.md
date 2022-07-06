@@ -359,7 +359,7 @@ OpenSearch Service sends certain events to EventBridge when your cluster's healt
 
 ### Red cluster recovery started<a name="monitoring-events-red-started"></a>
 
-OpenSearch Service sends this event when it starts to automatically restore one or more red indexes from a snapshot in order to fix a red cluster status\.
+OpenSearch Service sends this event after your cluster status has been continuously red for more than an hour\. It attempts to automatically restore one or more red indexes from a snapshot in order to fix the cluster status\.
 
 **Example**
 
@@ -369,7 +369,7 @@ The following is an example event of this type:
 {
    "version":"0",
    "id":"01234567-0123-0123-0123-012345678901",
-   "detail-type":"Cluster Status Notification",
+   "detail-type":"Amazon OpenSearch Service Cluster Status Notification",
    "source":"aws.es",
    "account":"123456789012",
    "time":"2016-11-01T13:12:22Z",
@@ -399,7 +399,7 @@ The following is an example event of this type:
 {
    "version":"0",
    "id":"01234567-0123-0123-0123-012345678901",
-   "detail-type":"Cluster Status Notification",
+   "detail-type":"Amazon OpenSearch Service Cluster Status Notification",
    "source":"aws.es",
    "account":"123456789012",
    "time":"2016-11-01T13:12:22Z",
@@ -429,7 +429,7 @@ The following is an example event of this type:
 {
    "version":"0",
    "id":"01234567-0123-0123-0123-012345678901",
-   "detail-type":"Cluster Status Notification",
+   "detail-type":"Amazon OpenSearch Service Cluster Status Notification",
    "source":"aws.es",
    "account":"123456789012",
    "time":"2016-11-01T13:12:22Z",
@@ -443,6 +443,71 @@ The following is an example event of this type:
       "Severity":"High",
       "description":"Your cluster status is red. We were unable to restore the Red indices automatically. 
                     Indices not restored: [red-index-0, red-index-1]. Please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-red-cluster-status for troubleshooting steps."
+   }
+}
+```
+
+### Shards to be deleted<a name="monitoring-events-red-to-delete"></a>
+
+OpenSearch Service sends this event when it has attempted to automatically fix your red cluster status after it was continuously red for 14 days, but one or more indexes remains red\. After 7 more days \(21 total days of being continuously red\), OpenSearch Service proceeds to [delete unassigned shards](#monitoring-events-red-deleted) on all red indexes\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Amazon OpenSearch Service Cluster Status Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2022-04-09T10:36:48Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "severity":"Medium",
+      "description":"Your cluster status is red. Please fix the red indices as soon as possible. 
+                     If not fixed by 2022-04-12 01:51:47+00:00, we will delete all unassigned shards,
+                     the unit of storage and compute, for these red indices to recover your domain and make it green.
+                     Please refer to https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-red-cluster-status for troubleshooting steps.
+                     test_data, test_data1",
+      "event":"Automatic Snapshot Restore for Red Indices",
+      "status":"Shard(s) to be deleted"
+   }
+}
+```
+
+### Shards deleted<a name="monitoring-events-red-deleted"></a>
+
+OpenSearch Service sends this event after your cluster status has been continuously red for 21 days\. It proceeds to delete the unassigned shards \(storage and compute\) on all red indexes\. For details, see [Automatic remediation of red clusters](handling-errors.md#handling-errors-red-cluster-status-auto-recovery)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Amazon OpenSearch Service Cluster Status Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2022-04-09T10:54:48Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "severity":"High",
+      "description":"We have deleted unassinged shards, the unit of storage and compute, in 
+                     red indices: index-1, index-2 because these indices were red for more than
+                     21 days and could not be restored with the automated restore process.
+                     Please refer to https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-red-cluster-status for troubleshooting steps.",
+      "event":"Automatic Snapshot Restore for Red Indices",
+      "status":"Shard(s) deleted"
    }
 }
 ```
@@ -527,6 +592,90 @@ The following is an example event of this type:
      "severity":"Medium",
      "description":"One or more data nodes in your cluster has less than 25% of storage space or less than 25GB.
                    Your cluster will be blocked for writes at 20% or 20GB. Please refer to the documentation for more information - https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#troubleshooting-cluster-block"
+  }
+}
+```
+
+### EBS burst balance below 70%<a name="monitoring-events-ebs-burst-70"></a>
+
+OpenSearch Service sends this event when the EBS burst balance on one or more data nodes falls below 70%\. EBS burst balance depletion can cause widespread cluster unavailability and throttling of I/O requests, which can lead to high latencies and timeouts on indexing and search requests\. If the balance falls to 20%, OpenSearch Service applies read and write blocks to the indexes on the corresponding nodes\. For steps to fix this issue, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"EBS Burst Balance",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"EBS burst balance on one or more data nodes is below 70%. When it reduces to 20%, we
+                    will apply read and write blocks on the indices in the corresponding nodes to prevent degradation of your cluster."
+  }
+}
+```
+
+### EBS burst balance below 20%<a name="monitoring-events-ebs-burst-20"></a>
+
+OpenSearch Service sends this event when the EBS burst balance on one or more data nodes falls below 20%\. EBS burst balance depletion can cause widespread cluster unavailability and throttling of I/O requests, which can lead to high latencies and timeouts on indexing and search requests\. For steps to fix this issue, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"EBS Burst Balance",
+     "status":"Warning",
+     "severity":"High",
+     "description":"EBS burst balance on one or more data nodes is below 20%. We have applied 
+                    read and write blocks on the indices in the corresponding nodes to prevent degradation of your cluster."
+  }
+}
+```
+
+### Throughput throttled<a name="monitoring-events-throughput-throttle"></a>
+
+OpenSearch Service sends this event when read and write requests to your domain are being throttled due to the throughput limitations of your EBS volumes\. If you receive this notification, consider first scaling your instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"Disk Throughput Throttle",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"Your domain is experiencing throttling as you have hit disk throughout limits. 
+                    Please consider scaling your domain to suit your throughput needs. Please refer to the documentation for more information."
   }
 }
 ```

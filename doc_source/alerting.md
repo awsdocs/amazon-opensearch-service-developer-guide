@@ -130,12 +130,12 @@ If you previously created monitors and want to stop the creation of daily alerti
 DELETE .plugins-alerting-alert-history-*
 ```
 
-To reduce shard count for history indices, create an index template\. The following request sets history indices for both alerting and [Index State Management](ism.md) to one shard and one replica:
+To reduce shard count for history indices, create an index template\. The following request sets history indexes for alerting to one shard and one replica:
 
 ```
-PUT _template/template-name
+PUT _index_template/template-name
 {
-  "index_patterns": [".opendistro-alerting-alert-history-*", ".opendistro-ism-managed-index-history-*"],
+  "index_patterns": [".opendistro-alerting-alert-history-*"],
   "template": {
     "settings": {
       "number_of_shards": 1,

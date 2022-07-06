@@ -11,7 +11,7 @@ This tutorial assumes you have two existing IAM roles, one for the master user a
    + OpenSearch 1\.0 or later, or Elasticsearch 7\.8 or later
    + Public access
    + Fine\-grained access control enabled with an IAM role as the master user \(`IAMMasterUserRole` for the rest of this tutorial\)
-   + [Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md) enabled
+   + Amazon Cognito authentication enabled for OpenSearch Dashboards\. For instructions to enable Cognito authentication and select a user and identity pool, see [Configuring a domain to use Amazon Cognito](cognito-auth.md#cognito-auth-config)\.
    + The following access policy:
 
      ```

@@ -10,7 +10,7 @@ Everyone's process for exploring data is different\. If you’re new to explorin
 
   With event analytics, you can use [Piped Processing Language](https://opensearch.org/docs/latest/observability-plugin/ppl/index) \(PPL\) to build and view different visualizations of your data\. PPL is a query language that lets you use pipe \(`|`\) syntax to explore, discover, and query data stored in OpenSearch\. The PPL editor includes auto\-complete functionality that suggests possible commands and fields for your query\.  
 
-To start, let's say that you're collecting flight data in your OpenSearch Service domain and you want to find out which airline had the most flights departing from Pittsburgh International Airport last month\. You write the following PPL query:
+To start, let's say that you're collecting flight data in your OpenSearch Service domain and you want to find out which airline had the most flights arriving in Pittsburgh International Airport last month\. You write the following PPL query:
 
 ```
 source=opensearch_dashboards_sample_data_flights |

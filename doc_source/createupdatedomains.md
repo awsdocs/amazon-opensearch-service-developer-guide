@@ -44,6 +44,8 @@ Different deployment types present different options on subsequent pages\. These
    \(Optional\) Select **Add maintenance window** to schedule a recurring window during which which Auto\-Tune updates the domain\.
 
 1. Under **Data nodes**, choose the number of availability zones\. For more information, see [Configuring a multi\-AZ domain in Amazon OpenSearch Service](managedomains-multiaz.md)\.
+**Note**  
+The OpenSearch Service console doesn't support moving from multiple availability zones to a single availability zone after the domain is created\. If you choose 2 or 3 availability zones and later want to move to 1, you must disable the `ZoneAwarenessEnabled` parameter using the AWS CLI or configuration API\.
 
 1. For **Instance type**, choose an instance type for your data nodes\. For more information, see [Supported instance types in Amazon OpenSearch Service](supported-instance-types.md)\.
 **Note**  
@@ -51,17 +53,12 @@ Not all Availability Zones support all instance types\. If you choose **3\-AZ**,
 
 1. For **Number of nodes**, choose the number of data nodes\.
 
-   For maximum values, see [Cluster and instance limits](limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md) and [Configuring a multi\-AZ domain in Amazon OpenSearch Service](managedomains-multiaz.md)\.
+   For maximum values, see [Domain and instance quotas](limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md) and [Configuring a multi\-AZ domain in Amazon OpenSearch Service](managedomains-multiaz.md)\.
 
-1. For **Storage type**, choose either **EBS** \(default\) or **Instance**\. For guidance on creating especially large domains, see [Petabyte scale for Amazon OpenSearch Service](petabyte-scale.md)\. If you choose **EBS**, the following options appear:
+1. For **Storage type**, choose either **EBS** \(default\) or **Instance**\. For guidance on creating especially large domains, see [Petabyte scale in Amazon OpenSearch Service](petabyte-scale.md)\.
 
-   1. For **EBS volume type**, choose a volume type\.
-
-      If you choose **Provisioned IOPS \(SSD\)**, then under **Provisioned IOPS**, enter the baseline IOPS performance that you want\. For more information, see [Amazon EBS volumes](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/EBSVolumes.html) in the Amazon EC2 documentation\.
-
-   1.  For **EBS storage size per node**, enter the size of the EBS volume that you want to attach to each data node\.
-
-      EBS volume size is per node\. You can calculate the total cluster size for the OpenSearch Service domain by multiplying the number of data nodes by the EBS volume size\. The minimum and maximum size of an EBS volume depends on both the specified EBS volume type and the instance type that it's attached to\. To learn more, see [EBS Volume Size Limits](limits.md#ebsresource)\.
+1. If you choose **EBS** as the volume type, configure the following additional settings\. Some settings might not appear depending on the type of volume you choose\.    
+[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/createupdatedomains.html)
 
 1. Choose the type and number of [dedicated master nodes](managedomains-dedicatedmasternodes.md)\. Dedicated master nodes increase cluster stability and are required for domains that have instance counts greater than 10\. We recommend three dedicated master nodes for production domains\.
 **Note**  
@@ -73,19 +70,8 @@ You can choose different instance types for your dedicated master nodes and data
 
 1. \(Optional\) For domains running OpenSearch or Elasticsearch 5\.3 and later, the **Snapshot configuration** is irrelevant\. For more information about automated snapshots, see [Creating index snapshots in Amazon OpenSearch Service](managedomains-snapshots.md)\.
 
-1. Under **Network**, choose either **VPC access** or **Public access**\. If you choose **Public access**, skip to the next step\. If you choose **VPC access**, make sure you meet the [prerequisites](vpc.md#prerequisites-vpc-endpoints), then do the following:
-
-   1. For **VPC**, choose the ID of the VPC you want to use\.
-**Note**  
-The VPC and domain must be in the same AWS Region, and you must select a VPC with tenancy set to **Default**\. OpenSearch Service does not yet support VPCs that use dedicated tenancy\.
-
-   1. For **Subnet**, choose a subnet\. If you enabled Multi\-AZ, you must choose two or three subnets\. OpenSearch Service will place a VPC endpoint and *elastic network interfaces* in the subnets\.
-**Note**  
-You must reserve sufficient IP addresses for the network interfaces in the subnet \(or subnets\)\. For more information, see [Reserving IP addresses in a VPC subnet](vpc.md#reserving-ip-vpc-endpoints)\.
-
-   1. For **Security groups**, choose one or more VPC security groups that allow your required application to reach the OpenSearch Service domain on the ports \(80 or 443\) and protocols \(HTTP or HTTPs\) exposed by the domain\. For more information, see [Launching your Amazon OpenSearch Service domains within a VPC](vpc.md)\.
-
-   1. For **IAM Role**, keep the default role\. OpenSearch Service uses this predefined role \(also known as a *service\-linked role*\) to access your VPC and to place a VPC endpoint and network interfaces in the subnet of the VPC\. For more information, see [Service\-linked role for VPC access](vpc.md#enabling-slr)\.
+1. Under **Network**, choose either **VPC access** or **Public access**\. If you choose **Public access**, skip to the next step\. If you choose **VPC access**, make sure you meet the [prerequisites](vpc.md#prerequisites-vpc-endpoints), then configure the following settings:    
+[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/createupdatedomains.html)
 
 1. Enable or disable fine\-grained access control:
    + If you want to use IAM for user management, choose **Set IAM ARN as master user** and specify the ARN for an IAM role\.
@@ -99,9 +85,7 @@ We *strongly* recommend enabling fine\-grained access control to protect the dat
 
 1. \(Optional\) If you want to use SAML authentication for OpenSearch Dashboards, choose **Prepare SAML authentication**\. After the domain is available, see [SAML authentication for OpenSearch Dashboards](saml.md) for additional steps\.
 
-1. \(Optional\) If you want to use Amazon Cognito authentication for OpenSearch Dashboards, choose **Enable Amazon Cognito authentication**\.
-
-   1. Choose the Amazon Cognito user pool and identity pool that you want to use for OpenSearch Dashboards authentication\. For guidance on creating these resources, see [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md)\.
+1. \(Optional\) If you want to use Amazon Cognito authentication for OpenSearch Dashboards, choose **Enable Amazon Cognito authentication**\. Then choose the Amazon Cognito user pool and identity pool that you want to use for OpenSearch Dashboards authentication\. For guidance on creating these resources, see [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md)\.
 
 1. For **Domain access policy**, choose an access policy or configure one of your own\. If you choose to create a custom policy, you can configure it yourself or import one from another domain\. For more information, see [Identity and Access Management in Amazon OpenSearch Service](ac.md)\.
 **Note**  
@@ -117,7 +101,7 @@ If you enabled VPC access, you can't use IP\-based policies\. Instead, you can u
 
 1. \(Optional\) Add tags to describe your domain so you can categorize and filter on that information\. For more information, see [Tagging Amazon OpenSearch Service domains](managedomains-awsresourcetagging.md)\.
 
-1. \(Optional\) Expand **Advanced cluster settings**\. For a summary of these options, see [Advanced cluster settings](#createdomain-configure-advanced-options)\.
+1. \(Optional\) Expand and configure **Advanced cluster settings**\. For a summary of these options, see [Advanced cluster settings](#createdomain-configure-advanced-options)\.
 
 1. Choose **Create**\.
 

@@ -12,6 +12,9 @@ To perform an asynchronous search, send HTTP requests to `_plugins/_asynchronous
 POST opensearch-domain/_plugins/_asynchronous_search
 ```
 
+**Note**  
+If you're using Elasticsearch 7\.10 instead of an OpenSearch version, replace `_plugins` with `_opendistro` in all asynchronous search requests\.
+
 You can specify the following asynchronous search options:
 
 
@@ -38,7 +41,7 @@ POST _plugins/_asynchronous_search/?pretty&size=10&wait_for_completion_timeout=1
 ```
 
 **Note**  
-All request parameters that apply to a standard `_search` query are supported\.
+All request parameters that apply to a standard `_search` query are supported\. If you're using Elasticsearch 7\.10 instead of an OpenSearch version, replace `_plugins` with `_opendistro`\.
 
 ## Asynchronous search permissions<a name="asynchronous-search-permissions"></a>
 
