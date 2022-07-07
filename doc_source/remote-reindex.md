@@ -97,7 +97,34 @@ Every OpenSearch Service domain is made up of its own internal VPC infrastructur
 
 A proxy is required in order to use remote reindex between two VPC domains, even if the domains are located within the same VPC\. Create a proxy with a publicly accessible endpoint in front of the source cluster and pass the proxy endpoint in the reindex body\. The proxy domain must have a certificate signed by a public certificate authority \(CA\)\. Self\-signed or private CA\-signed certificates are not supported\.
 
-To use remote reindex between two VPC domains, set the `external` parameter to `true`\.
+**To reindex data between OpenSearch Service domains in a VPC**
+
+1. Create an IAM user that has been granted access to both the local and remote OpenSearch Service domain\. The following is an example access policy:
+
+   ```
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Principal": {
+           "AWS": "arn:aws:iam::123456789012:user/test-user"
+         },
+         "Action": "es:*",
+         "Resource": "arn:aws:es:us-east-1:123456789012:domain/test-domain/my-index/*"
+       }
+     ]
+   }
+   ```
+
+1. Set up an EC2 instance with a NGINX reverse proxy for the remote OpenSearch Service VPC endpoint\. The EC2 instance must be within the same VPC as the OpenSearch Service domain\. Because you’re signing your requests, make sure that the NGINX configuration contains the following parameters:
+
+   ```
+   proxy_set_header Host $host;
+   proxy_set_header X-Real-IP $remote_addr;
+   ```
+
+1. Send the `_reindex` request and sign it with IAM credentials using [Signature Version 4](https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html)\. Send the request from a machine in the same VPC as the OpenSearch Service domain \(either a running EC2 instance or a local machine connected through a VPN\)\. Set the `external` parameter to `true`\. For the source domain, specify the externally accessible URL for the NGINX reverse proxy\.
 
 ## Reindex data between non\-OpenSearch Service domains<a name="remote-reindex-non-aos"></a>
 

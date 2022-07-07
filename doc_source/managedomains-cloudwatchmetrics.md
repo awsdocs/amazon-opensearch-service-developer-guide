@@ -86,8 +86,9 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | KMSKeyError |  A value of 1 indicates that the AWS KMS key used to encrypt data at rest has been disabled\. To restore the domain to normal operations, re\-enable the key\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum  | 
 | KMSKeyInaccessible |  A value of 1 indicates that the AWS KMS key used to encrypt data at rest has been deleted or revoked its grants to OpenSearch Service\. You can't recover domains that are in this state\. If you have a manual snapshot, though, you can use it to migrate the domain's data to a new domain\. The console displays this metric only for domains that encrypt data at rest\. Relevant statistics: Minimum, Maximum  | 
 | InvalidHostHeaderRequests |  The number of HTTP requests made to the OpenSearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. OpenSearch Service rejects invalid requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\. If you see large values for this metric, confirm that your OpenSearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum  | 
-| OpenSearchRequests |  The number of requests made to the OpenSearch cluster\. Relevant statistics: Sum  | 
+| OpenSearchRequests\(previously ElasticsearchRequests\) |  The number of requests made to the OpenSearch cluster\. Relevant statistics: Sum  | 
 | 2xx, 3xx, 4xx, 5xx |  The number of requests to the domain that resulted in the given HTTP response code \(2*xx*, 3*xx*, 4*xx*, 5*xx*\)\. Relevant statistics: Sum  | 
+| ThroughputThrottle | Indicates whether requests are being throttled due to the throughput limitations of your EBS volumes\. A value of 1 indicates that some requests were throttled within the selected timeframe\. A value of 0 indicates normal behavior\.If you conistently see a value of 1 for this metric, you can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\.Relevant statistics: Minimum, Maximum | 
 
 ## Dedicated master node metrics<a name="managedomains-cloudwatchmetrics-master-node-metrics"></a>
 
@@ -117,6 +118,7 @@ Amazon OpenSearch Service provides the following metrics for EBS volumes\.
 | DiskQueueDepth |  The number of pending input and output \(I/O\) requests for an EBS volume\. Relevant statistics: Minimum, Maximum, Average  | 
 | ReadIOPS |  The number of input and output \(I/O\) operations per second for read operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
 | WriteIOPS |  The number of input and output \(I/O\) operations per second for write operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
+| BurstBalance |  The percentage of input and output \(I/O\) credits remaining in the burst bucket for an EBS volume\. A value of 100 means that the volume has accumulated the maximum number of credits\. If this percentage falls below 70%, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\. Relevant statistics: Minimum, Maximum, Average  | 
 
 ## Instance metrics<a name="managedomains-cloudwatchmetrics-instance-metrics"></a>
 
@@ -192,7 +194,7 @@ Amazon OpenSearch Service provides the following metrics for [UltraWarm](ultrawa
 |  HotToWarmMigrationProcessingLatency  |  The average latency of successful hot to warm migrations, *not* including time spent in the queue\. This value is the sum of the amount of time it takes to complete the force merge, snapshot, and shard relocation stages of the migration process\. Relevant statistics: Average  | 
 | HotToWarmMigrationSuccessCount  |  The total number of successful hot to warm migrations\. Relevant statistics: Sum  | 
 | HotToWarmMigrationSuccessLatency  |  The average latency of successful hot to warm migrations, including time spent in the queue\. Relevant statistics: Average  | 
-| WarmThreadpoolSearchThreads | The size of the UltraWarm search thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum | 
+| WarmThreadpoolSearchThreads |  The size of the UltraWarm search thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
 | WarmThreadpoolSearchRejected |  The number of rejected tasks in the UltraWarm search thread pool\. If this number continually grows, consider adding more UltraWarm nodes\. Relevant node statistics: Maximum Relevant cluster statistics: Sum  | 
 | WarmThreadpoolSearchQueue | The number of queued tasks in the UltraWarm search thread pool\. If the queue size is consistently high, consider adding more UltraWarm nodes\.Relevant node statistics: MaximumRelevant cluster statistics: Sum, Maximum, Average | 
 | WarmJVMMemoryPressure |  The maximum percentage of the Java heap used for the UltraWarm nodes\. Relevant statistics: Maximum  The logic for this metric changed in a recent service software update\. For more information, see the [release notes](release-notes.md)\.   | 
@@ -225,13 +227,13 @@ Amazon OpenSearch Service provides the following metrics for [alerting](alerting
 | Metric | Description | 
 | --- | --- | 
 | AlertingDegraded |  A value of 1 means that either the alerting index is red or one or more nodes is not on schedule\. A value of 0 indicates normal behavior\. Relevant statistics: Maximum  | 
-| AlertingIndexExists |  A value of 1 means the `.opendistro-alerting-config` index exists\. A value of 0 means it does not\. Until you use the alerting feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| AlertingIndexExists |  A value of 1 means the `.opensearch-alerting-config` index exists\. A value of 0 means it does not\. Until you use the alerting feature for the first time, this value remains 0\. Relevant statistics: Maximum  | 
 | AlertingIndexStatus\.green |  The health of the index\. A value of 1 means green\. A value of 0 means that the index either doesn't exist or isn't green\. Relevant statistics: Maximum  | 
 | AlertingIndexStatus\.red |  The health of the index\. A value of 1 means red\. A value of 0 means that the index either doesn't exist or isn't red\. Relevant statistics: Maximum  | 
 | AlertingIndexStatus\.yellow |  The health of the index\. A value of 1 means yellow\. A value of 0 means that the index either doesn't exist or isn't yellow\. Relevant statistics: Maximum  | 
 | AlertingNodesNotOnSchedule |  A value of 1 means some jobs are not running on schedule\. A value of 0 means that all alerting jobs are running on schedule \(or that no alerting jobs exist\)\. Check the OpenSearch Service console or make a `_nodes/stats` request to see if any nodes show high resource usage\. Relevant statistics: Maximum  | 
 | AlertingNodesOnSchedule |  A value of 1 means that all alerting jobs are running on schedule \(or that no alerting jobs exist\)\. A value of 0 means some jobs are not running on schedule\. Relevant statistics: Maximum  | 
-| AlertingScheduledJobEnabled |  A value of 1 means that the `opendistro.scheduled_jobs.enabled` cluster setting is true\. A value of 0 means it is false, and scheduled jobs are disabled\. Relevant statistics: Maximum  | 
+| AlertingScheduledJobEnabled |  A value of 1 means that the `opensearch.scheduled_jobs.enabled` cluster setting is true\. A value of 0 means it is false, and scheduled jobs are disabled\. Relevant statistics: Maximum  | 
 
 ## Anomaly detection metrics<a name="managedomains-cloudwatchmetrics-anomaly-detection"></a>
 
@@ -245,12 +247,12 @@ Amazon OpenSearch Service provides the following metrics for [anomaly detection]
 |  ADExecuteFailureCount  |  The number of failed requests to detect anomalies\.  Relevant statistics: Sum  | 
 | ADHCExecuteFailureCount |  The number of failed requests to detect anomalies for high cardinality detectors\. Relevant statistics: Sum  | 
 | ADHCExecuteRequestCount |  The number of requests to detect anomalies for high cardinality detectors\. Relevant statistics: Sum  | 
-| ADAnomalyResultsIndexStatusIndexExists |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to exists\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| ADAnomalyResultsIndexStatus\.red |  A value of 1 means the index that the `.opendistro-anomaly-results` alias points to is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| ADAnomalyDetectorsIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-detectors` index exists\. A value of 0 means it does not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| ADAnomalyDetectorsIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-detectors` index is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| ADModelsCheckpointIndexStatusIndexExists |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index exists\. A value of 0 means it does not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
-| ADModelsCheckpointIndexStatus\.red |  A value of 1 means that the `.opendistro-anomaly-checkpoints` index is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADAnomalyResultsIndexStatusIndexExists |  A value of 1 means the index that the `.opensearch-anomaly-results` alias points to exists\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADAnomalyResultsIndexStatus\.red |  A value of 1 means the index that the `.opensearch-anomaly-results` alias points to is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADAnomalyDetectorsIndexStatusIndexExists |  A value of 1 means that the `.opensearch-anomaly-detectors` index exists\. A value of 0 means it does not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADAnomalyDetectorsIndexStatus\.red |  A value of 1 means that the `.opensearch-anomaly-detectors` index is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADModelsCheckpointIndexStatusIndexExists |  A value of 1 means that the `.opensearch-anomaly-checkpoints` index exists\. A value of 0 means it does not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
+| ADModelsCheckpointIndexStatus\.red |  A value of 1 means that the `.opensearch-anomaly-checkpoints` index is red\. A value of 0 means it is not\. Until you use anomaly detection for the first time, this value remains 0\. Relevant statistics: Maximum  | 
 
 ## Asynchronous search metrics<a name="managedomains-cloudwatchmetrics-asynchronous-search"></a>
 

@@ -23,7 +23,7 @@ Cross\-cluster search supports OpenSearch Dashboards, so you can create visualiz
 Cross\-cluster search has several important limitations:
 + You can't connect an Elasticsearch domain to an OpenSearch domain\.
 + You can't connect to self\-managed OpenSearch/Elasticsearch clusters\.
-+ Cross\-cluster search is not supported across Regions\.
++ To connect domains across Regions, both domains must be on Elasticsearch 7\.10 or later or OpenSearch\.
 + A domain can have a maximum of 20 outgoing connections\. Similarly, a domain can have a maximum of 20 incoming connections\. In other words, one domain can connect to a maximum of 20 other domains\.
 + Domains must either share the same major version, or be on the final minor version and the next major version \(for example, 6\.8 and 7\.x are compatible\)\.
 + You can't use custom dictionaries or SQL with cross\-cluster search\.
@@ -61,9 +61,9 @@ The source domain creates an "outbound" connection to the destination domain\. T
 
 1. For **Connection alias**, enter a name for your connection\.
 
-1. Choose between connecting a cluster in your AWS account or in another account\.
-   + To connect to a cluster in your AWS account, choose the domain from the dropdown menu and choose **Request**\.
-   + To connect to a cluster in another AWS account, specify the ARN of the remote domain and choose **Request**\.
+1. Choose between connecting to a domain in your AWS account and Region or in another account or Region\.
+   + To connect to a cluster in your AWS account and Region, select the domain from the dropdown menu and choose **Request**\.
+   + To connect to a cluster in another AWS account or Region, select the ARN of the remote domain and choose **Request**\. To connect domains across Regions, both domains must be running Elasticsearch version 7\.10 or later or OpenSearch\.
 
 1. Cross\-cluster search first validates the connection request to make sure the prerequisites are met\. If the domains are found to be incompatible, the connection request enters the `Validation failed` state\.
 
@@ -110,7 +110,7 @@ You can't delete a domain with active cross\-cluster connections\. To delete a d
    }
    ```
 **Note**  
-The domain resource policy evaluates the URI literally, so if you include remote indexes in the path, use `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst%3Aremote_index` rather than `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst:remote_index`\.
+If you include remote indexes in the path, you must URL\-encode the URI in the domain ARN\. For example, use `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst%3Aremote_index` rather than `arn:aws:es:us-east-1:123456789012:domain/my-domain/local_index,dst:remote_index`\.
 
    If you choose to use a restrictive access policy in addition to fine\-grained access control, your policy must allow access to `es:ESHttpGet` at a minimum\.
 

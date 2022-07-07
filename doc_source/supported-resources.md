@@ -3,7 +3,7 @@
 This topic describes additional resources that Amazon OpenSearch Service supports\.
 
 **bootstrap\.memory\_lock**  
-OpenSearch Service enables `bootstrap.memory_lock` in `elasticsearch.yml`, which locks JVM memory and prevents the operating system from swapping it to disk\. This applies to all supported instance types except for the following:  
+OpenSearch Service enables `bootstrap.memory_lock` in `opensearch.yml`, which locks JVM memory and prevents the operating system from swapping it to disk\. This applies to all supported instance types except for the following:  
 + `t2.micro.search`
 + `t2.small.search`
 + `t2.medium.search`
@@ -18,5 +18,5 @@ Supported scripting options include the following:
 + Mustache
 For Elasticsearch 5\.5 and later domains, and all OpenSearch domains, OpenSearch Service supports stored scripts using the `_scripts` endpoint\. Elasticsearch 5\.3 and 5\.1 domains support inline scripts only\.
 
-**TCP transport**  
-OpenSearch Service supports HTTP on port 80 and HTTPS over port 443, but does not support TCP transport\.
+**TLS transport**  
+OpenSearch Service supports HTTP on port 80 and HTTPS over port 443, but does not support TLS transport\.

@@ -120,8 +120,10 @@ GET my-index/_search
 }
 ```
 
-## k\-NN differences and tuning<a name="knn-settings"></a>
+## k\-NN differences, tuning, and limitations<a name="knn-settings"></a>
 
 OpenSearch lets you modify all [k\-NN settings](https://opensearch.org/docs/search-plugins/knn/settings/) using the `_cluster/settings` API\. On OpenSearch Service, you can change all settings except `knn.memory.circuit_breaker.enabled` and `knn.circuit_breaker.triggered`\. k\-NN statistics are included as [Amazon CloudWatch metrics](managedomains-cloudwatchmetrics.md)\.
 
 In particular, check the `KNNGraphMemoryUsage` metric on each data node against the `knn.memory.circuit_breaker.limit` statistic and the available RAM for the instance type\. OpenSearch Service uses half of an instance's RAM for the Java heap \(up to a heap size of 32 GiB\)\. By default, k\-NN uses up to 50% of the remaining half, so an instance type with 32 GiB of RAM can accommodate 8 GiB of graphs \(32 \* 0\.5 \* 0\.5\)\. Performance can suffer if graph memory usage exceeds this value\.
+
+You can't migrate a k\-NN index to [UltraWarm](ultrawarm.md) or [cold storage](cold-storage.md) if the index uses [approximate k\-NN](https://opensearch.org/docs/latest/search-plugins/knn/approximate-knn/) \(`"index.knn": true`\)\. If `index.knn` is set to `false` \([exact k\-NN](https://opensearch.org/docs/latest/search-plugins/knn/knn-score-script/)\), you can still move the index to other storage tiers\.

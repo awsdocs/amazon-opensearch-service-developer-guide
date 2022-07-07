@@ -105,6 +105,7 @@ The following metrics changed:
 |  `ESReportingRequestCount`  |  `KibanaReportingRequestCount`  | 
 |  `ESReportingFailedRequestUserErrCount`  |  `KibanaReportingFailedRequestUserErrCount`  | 
 |  `ESReportingSuccessCount`  |  `KibanaReportingSuccessCount`  | 
+|  `ElasticsearchRequests`  |  `OpenSearchRequests`  | 
 
 For a full list of metrics that OpenSearch Service sends to Amazon CloudWatch, see [Monitoring OpenSearch cluster metrics with Amazon CloudWatch](managedomains-cloudwatchmetrics.md)\.
 

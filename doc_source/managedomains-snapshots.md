@@ -78,6 +78,9 @@ PUT domain-endpoint/_snapshot/my-snapshot-repo-name
 }
 ```
 
+**Note**  
+Repository names cannot start with "cs\-"\.
+
 If your domain resides within a virtual private cloud \(VPC\), your computer must be connected to the VPC for the request to successfully register the snapshot repository\. Accessing a VPC varies by network configuration, but likely involves connecting to a VPN or corporate network\. To check that you can reach the OpenSearch Service domain, navigate to `https://your-vpc-domain.region.es.amazonaws.com` in a web browser and verify that you receive the default JSON response\.
 
 #### Encrypting snapshot repositories<a name="managedomains-snapshot-encryption"></a>

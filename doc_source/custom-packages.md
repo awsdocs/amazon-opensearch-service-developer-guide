@@ -7,7 +7,9 @@ Amazon OpenSearch Service lets you upload custom dictionary files, such as stop 
 + [Uploading packages to Amazon S3](#custom-packages-gs)
 + [Importing and associating packages](#custom-packages-assoc)
 + [Using custom packages with OpenSearch](#custom-packages-using)
-+ [Updating custom packages](#custom-packages-updating)
++ [Updating custom packages \(console\)](#custom-packages-updating)
++ [Updating custom packages \(AWS SDK\)](#custom-packages-update-python)
++ [Manual index updates](#custom-packages-updating-index-analyzers)
 + [Dissociating and removing packages](#custom-packages-dissoc)
 
 ## Package permissions requirements<a name="custom-packages-iam"></a>
@@ -171,15 +173,11 @@ In this case, OpenSearch returns the following response:
 **Tip**  
 Dictionary files use Java heap space proportional to their size\. For example, a 2 GiB dictionary file might consume 2 GiB of heap space on a node\. If you use large files, ensure that your nodes have enough heap space to accommodate them\. [Monitor](managedomains-cloudwatchmetrics.md#managedomains-cloudwatchmetrics-cluster-metrics) the `JVMMemoryPressure` metric, and scale your cluster as necessary\.
 
-## Updating custom packages<a name="custom-packages-updating"></a>
+## Updating custom packages \(console\)<a name="custom-packages-updating"></a>
 
 Uploading a new version of a package to Amazon S3 does *not* automatically update the package on Amazon OpenSearch Service\. OpenSearch Service stores its own copy of the file, so if you upload a new version to S3, you must manually update it\.
 
-Each of your associated domains stores *its* own copy of the file, as well\. To keep search behavior predictable, domains continue to use their current package version until you explicitly update them\.
-
-### Update a custom package \(console\)<a name="custom-packages-update-console"></a>
-
-To update a custom package, modify the file in Amazon S3 Control, update the package in OpenSearch Service, and then apply the update\.
+Each of your associated domains stores *its* own copy of the file, as well\. To keep search behavior predictable, domains continue to use their current package version until you explicitly update them\. To update a custom package, modify the file in Amazon S3 Control, update the package in OpenSearch Service, and then apply the update\.
 
 1. In the OpenSearch Service console, choose **Packages**\.
 
@@ -197,7 +195,7 @@ To update a custom package, modify the file in Amazon S3 Control, update the pac
 
 Although the console is the simplest method, you can also use the AWS CLI, SDKs, or configuration API to update OpenSearch Service packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
 
-### Automate package updates \(Python\)<a name="custom-packages-update-python"></a>
+## Updating custom packages \(AWS SDK\)<a name="custom-packages-update-python"></a>
 
 Instead of manually updating a package in the console, you can use the SDKs to automate the update process\. The following sample Python script uploads a new package file to Amazon S3, updates the package in OpenSearch Service, and applies the new package to the specified domain\. After confirming the update was successful, it makes a sample call to OpenSearch demonstrating the new synonyms have been applied\.
 
@@ -211,106 +209,103 @@ import time
 import json
 import sys
 
-host = '' # The OpenSearch domain endpoint with https:// and a trailing slash. For example, https://my-test-domain.us-east-1.es.amazonaws.com/
-region = '' # For example, us-east-1
-file_name = '' # The path to the file to upload
-bucket_name = '' # The name of the S3 bucket to upload to
-s3_key = '' # The name of the S3 key (file name) to upload to
-package_id = '' # The unique identifier of the OpenSearch package to update
-domain_name = '' # The domain to associate the package with
-query = '' # A test query to confirm the package has been successfully updated
+host = ''  # The OpenSearch domain endpoint with https:// and a trailing slash. For example, https://my-test-domain.us-east-1.es.amazonaws.com/
+region = ''  # For example, us-east-1
+file_name = ''  # The path to the file to upload
+bucket_name = ''  # The name of the S3 bucket to upload to
+s3_key = ''  # The name of the S3 key (file name) to upload to
+package_id = ''  # The unique identifier of the OpenSearch package to update
+domain_name = ''  # The domain to associate the package with
+query = ''  # A test query to confirm the package has been successfully updated
 
 service = 'es'
 credentials = boto3.Session().get_credentials()
-awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
+client = boto3.client('opensearch')
+awsauth = AWS4Auth(credentials.access_key, credentials.secret_key,
+                   region, service, session_token=credentials.token)
 
-# ****** Upload file to S3 ******
 
 def upload_to_s3(file_name, bucket_name, s3_key):
+    """Uploads file to S3"""
+    s3 = boto3.client('s3')
+    try:
+        s3.upload_file(file_name, bucket_name, s3_key)
+        print('Upload successful')
+        return True
+    except FileNotFoundError:
+        sys.exit('File not found. Make sure you specified the correct file path.')
 
-  s3 = boto3.client('s3')
-  try:
-    s3.upload_file(file_name, bucket_name, s3_key)
-    print('Upload successful')
-    return True
-  except FileNotFoundError:
-    sys.exit('File not found. Make sure you specified the correct file path.')
-
-# ****** Update the package in OpenSearch Service *******
 
 def update_package(package_id, bucket_name, s3_key):
+    """Updates the package in OpenSearch Service"""
+    print(package_id, bucket_name, s3_key)
+    response = client.update_package(
+        PackageID=package_id,
+        PackageSource={
+            'S3BucketName': bucket_name,
+            'S3Key': s3_key
+        }
+    )
+    print(response)
 
-  opensearch = boto3.client('opensearch')
-  print(package_id, bucket_name, s3_key)
-  response = opensearchservice.update_package(
-      PackageID= package_id,
-      PackageSource={
-          'S3BucketName': bucket_name,
-          'S3Key': s3_key
-      }
-  )
-  print(response)
 
-# Associate the package to the domain
 def associate_package(package_id, domain_name):
+    """Associates the package to the domain"""
+    response = client.associate_package(
+        PackageID=package_id, DomainName=domain_name)
+    print(response)
+    print('Associating...')
 
-  opensearch = boto3.client('opensearch')
-  response = opensearch.associate_package(PackageID=package_id, DomainName=domain_name)
-  print(response)
-  print('Associating...')
 
-# Wait for the package to be updated
 def wait_for_update(domain_name, package_id):
+    """Waits for the package to be updated"""
+    response = client.list_packages_for_domain(DomainName=domain_name)
+    package_details = response['DomainPackageDetailsList']
+    for package in package_details:
+        if package['PackageID'] == package_id:
+            status = package['DomainPackageStatus']
+            if status == 'ACTIVE':
+                print('Association successful.')
+                return
+            elif status == 'ASSOCIATION_FAILED':
+                sys.exit('Association failed. Please try again.')
+            else:
+                time.sleep(10)  # Wait 10 seconds before rechecking the status
+                wait_for_update(domain_name, package_id)
 
-  opensearch = boto3.client('opensearch')
-  response = opensearch.list_packages_for_domain(DomainName=domain_name)
-  package_details = response['DomainPackageDetailsList']
-  for package in package_details:
-    if package['PackageID'] == package_id:
-      status = package['DomainPackageStatus']
-      if status == 'ACTIVE':
-        print('Association successful.')
-        return
-      elif status == 'ASSOCIATION_FAILED':
-        sys.exit('Association failed. Please try again.')
-      else:
-        time.sleep(10) # Wait 10 seconds before rechecking the status
-        wait_for_update(domain_name, package_id)
-
-# ****** Make sample search call to OpenSearch ******
 
 def sample_search(query):
-
-  path = '_search'
-  params = {'q': query}
-  url = host + path
-  response = requests.get(url, params=params, auth=awsauth)
-  print('Searching for ' + '"' + query + '"')
-  print(response.text)
+    """Makes a sample search call to OpenSearch"""
+    path = '_search'
+    params = {'q': query}
+    url = host + path
+    response = requests.get(url, params=params, auth=awsauth)
+    print('Searching for ' + '"' + query + '"')
+    print(response.text)
 ```
 
 **Note**  
 If you receive a "package not found" error when you run the script using the AWS CLI, it likely means Boto3 is using whichever Region is specified in \~/\.aws/config, which isn't the Region your S3 bucket is in\. Either run `aws configure` and specify the correct Region, or explicitly add the Region to the client:   
 
 ```
-opensearchservice = boto3.client('opensearchservice', region_name='us-east-1')
+client = boto3.client('opensearch', region_name='us-east-1')
 ```
 
-### Manual index updates<a name="custom-packages-updating-index-analyzers"></a>
+## Manual index updates<a name="custom-packages-updating-index-analyzers"></a>
 
-To use an updated package, you must manually update your indices if you meet any of the following conditions:
+To use an updated package, you must manually update your indexes if you meet any of the following conditions:
 + Your domain runs Elasticsearch 7\.7 or earlier\.
 + You use custom packages as index analyzers\.
 + You use custom packages as search analyzers, but don't include the [updateable](#custom-packages-using) field\.
 
 To update analyzers with the new package files, you have two options:
-+ Close and open any indices that you want to update:
++ Close and open any indexes that you want to update:
 
   ```
   POST my-index/_close
   POST my-index/_open
   ```
-+ Reindex the indices\. First, create an index that uses the updated synonyms file \(or an entirely new file\):
++ Reindex the indexes\. First, create an index that uses the updated synonyms file \(or an entirely new file\):
 
   ```
   PUT my-new-index
@@ -389,7 +384,7 @@ To update analyzers with the new package files, you have two options:
 
 ## Dissociating and removing packages<a name="custom-packages-dissoc"></a>
 
-Dissociating a package from a domain means that you can no longer use that file when you create new indices\. Any indices that already use the file can continue using it\.
+Dissociating a package from a domain means that you can no longer use that file when you create new indexes\. Any indexes that already use the file can continue using it\.
 
 The console is the simplest way to dissociate a package from a domain and remove it from OpenSearch Service\. Removing a package from OpenSearch Service does *not* remove it from its original location on Amazon S3\.
 

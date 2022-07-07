@@ -10,12 +10,12 @@ No surefire method of sizing Amazon OpenSearch Service domains exists, but by st
 ## Calculating storage requirements<a name="bp-storage"></a>
 
 Most OpenSearch workloads fall into one of two broad categories:
-+ **Long\-lived index**: You write code that processes data into one or more OpenSearch indices and then updates those indices periodically as the source data changes\. Some common examples are website, document, and ecommerce search\.
-+ **Rolling indices**: Data continuously flows into a set of temporary indices, with an indexing period and retention window, such as a set of daily indices that is retained for two weeks\. Some common examples are log analytics, time\-series processing, and clickstream analytics\.
++ **Long\-lived index**: You write code that processes data into one or more OpenSearch indexes and then updates those indexes periodically as the source data changes\. Some common examples are website, document, and ecommerce search\.
++ **Rolling indexes**: Data continuously flows into a set of temporary indexes, with an indexing period and retention window, such as a set of daily indexes that is retained for two weeks\. Some common examples are log analytics, time\-series processing, and clickstream analytics\.
 
 For long\-lived index workloads, you can examine the source data on disk and easily determine how much storage space it consumes\. If the data comes from multiple sources, just add those sources together\.
 
-For rolling indices, you can multiply the amount of data generated during a representative time period by the retention period\. For example, if you generate 200 MiB of log data per hour, that's 4\.7 GiB per day, which is 66 GiB of data at any given time if you have a two\-week retention period\.
+For rolling indexes, you can multiply the amount of data generated during a representative time period by the retention period\. For example, if you generate 200 MiB of log data per hour, that's 4\.7 GiB per day, which is 66 GiB of data at any given time if you have a two\-week retention period\.
 
 The size of your source data, however, is just one aspect of your storage requirements\. You also have to consider the following:
 
@@ -42,14 +42,14 @@ Or you can use this simplified version:
 Insufficient storage space is one of the most common causes of cluster instability, so you should cross\-check the numbers when you [choose instance types, instance counts, and storage volumes](#bp-instances)\.
 
 Other storage considerations exist:
-+ If your minimum storage requirement exceeds 1 PB, see [Petabyte scale for Amazon OpenSearch Service](petabyte-scale.md)\.
-+ If you have rolling indices and want to use a hot\-warm architecture, see [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)\.
++ If your minimum storage requirement exceeds 1 PB, see [Petabyte scale in Amazon OpenSearch Service](petabyte-scale.md)\.
++ If you have rolling indexes and want to use a hot\-warm architecture, see [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)\.
 
 ## Choosing the number of shards<a name="bp-sharding"></a>
 
 After you understand your storage requirements, you can investigate your indexing strategy\. By default in OpenSearch Service, each index is divided into five primary shards and one replica \(total of 10 shards\)\. Because you can't easily change the number of primary shards for an existing index, you should decide about shard count *before* indexing your first document\.
 
-The overarching goal of choosing a number of shards is to distribute an index evenly across all data nodes in the cluster\. However, these shards shouldn't be too large or too numerous\. A good rule of thumb is to try to keep shard size between 10–50 GiB\. Large shards can make it difficult for OpenSearch to recover from failure, but because each shard uses some amount of CPU and memory, having too many small shards can cause performance issues and out of memory errors\. In other words, shards should be small enough that the underlying OpenSearch Service instance can handle them, but not so small that they place needless strain on the hardware\.
+The overarching goal of choosing a number of shards is to distribute an index evenly across all data nodes in the cluster\. However, these shards shouldn't be too large or too numerous\. A good rule of thumb is to try to keep shard size between 10–30 GiB for workloads where search latency is a key performance objective, and and 30–50 GiB for write\-heavy workloads such as log analytics\. Large shards can make it difficult for OpenSearch to recover from failure, but because each shard uses some amount of CPU and memory, having too many small shards can cause performance issues and out of memory errors\. In other words, shards should be small enough that the underlying OpenSearch Service instance can handle them, but not so small that they place needless strain on the hardware\.
 
 For example, suppose you have 66 GiB of data\. You don't expect that number to increase over time, and you want to keep your shards around 30 GiB each\. Your number of shards therefore should be approximately 66 \* 1\.1 / 30 = 3\. You can generalize this calculation as follows:
 
@@ -82,11 +82,11 @@ If you have a 184 GiB storage requirement and the recommended minimum number of 
 
 For a more substantial example, consider a 14 TiB \(14,336 GiB\) storage requirement and a heavy workload\. In this case, you might choose to begin testing with 2 \* 144 = 288 vCPU cores and 8 \* 144 = 1152 GiB of memory\. These numbers work out to approximately 18 `i3.4xlarge.search` instances\. If you don't need the fast, local storage, you could also test 18 `r6g.4xlarge.search` instances, each using a 1 TiB EBS storage volume\.
 
-If your cluster includes hundreds of terabytes of data, see [Petabyte scale for Amazon OpenSearch Service](petabyte-scale.md)\.
+If your cluster includes hundreds of terabytes of data, see [Petabyte scale in Amazon OpenSearch Service](petabyte-scale.md)\.
 
 ### Step 3: Perform representative testing<a name="test-sizing"></a>
 
-After configuring the cluster, you can [add your indices](indexing.md) using the number of shards you calculated earlier, perform some representative client testing using a realistic dataset, and [monitor CloudWatch metrics](managedomains-cloudwatchmetrics.md) to see how the cluster handles the workload\.
+After configuring the cluster, you can [add your indexes](indexing.md) using the number of shards you calculated earlier, perform some representative client testing using a realistic dataset, and [monitor CloudWatch metrics](managedomains-cloudwatchmetrics.md) to see how the cluster handles the workload\.
 
 ### Step 4: Succeed or iterate<a name="test-iterate"></a>
 

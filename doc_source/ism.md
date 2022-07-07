@@ -9,24 +9,38 @@ After you attach a policy to an index, ISM creates a job that runs every 30 to 4
 ISM requires OpenSearch or Elasticsearch 6\.8 or later\. Full documentation is available in the [OpenSearch documentation](https://opensearch.org/docs/im-plugin/ism/index/)\.
 
 **Important**  
-The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indices\. You can continue to automatically manage newly created indexes with the [ISM template field](https://opensearch.org/docs/im-plugin/ism/policies/#sample-policy-with-ism-template)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
+The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indices\. You can continue to automatically manage newly created indexes with the [ISM template field](https://opensearch.org/docs/latest/im-plugin/ism/policies/#sample-policy-with-ism-template-for-auto-rollover)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
 
 ## Create an ISM policy<a name="ism-start"></a>
 
-To get started with ISM, select **Index Management** from the OpenSearch Dashboards main menu and choose **Create policy**\. You can use the [visual editor](https://opensearch.org/docs/latest/im-plugin/ism/index/#visual-editor) or [JSON editor](https://opensearch.org/docs/latest/im-plugin/ism/index/#json-editor) to create policies\. We recommend using the visual editor as it offers a more structured way of defining policies\. 
+**To get started with Index State Management**
 
-After you create a policy, the next step is to attach it to an index or indices:
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
 
-```
-POST _plugins/_ism/add/my-index
-{
-  "policy_id": "my-policy-id"
-}
-```
+1. Select the domain that you want to create an ISM policy for\.
 
+1. From the domain's dashboard, navigate to the OpenSearch Dashboards URL and sign in with your master user name and password\. The URL follows this format:
+
+   ```
+   domain-endpoint/_dashboards/
+   ```
+
+1. Open the left navigation panel within OpenSearch Dashboards and choose **Index Management**, then **Create policy**\. 
+
+1. Use the [visual editor](https://opensearch.org/docs/latest/im-plugin/ism/index/#visual-editor) or [JSON editor](https://opensearch.org/docs/latest/im-plugin/ism/index/#json-editor) to create policies\. We recommend using the visual editor as it offers a more structured way of defining policies\. For help creating policies, see the [sample policies](#ism-example) below\.
+
+1. After you create a policy, attach it to one or more indexes:
+
+   ```
+   POST _plugins/_ism/add/my-index
+   {
+     "policy_id": "my-policy-id"
+   }
+   ```
+**Note**  
 If your domain is running a legacy Elasticsearch version, use `_opendistro` instead of `_plugins`\.
 
-Alternatively, select the index in OpenSearch Dashboards and choose **Apply policy**\.
+   Alternatively, select the index in OpenSearch Dashboards and choose **Apply policy**\.
 
 ## Sample policies<a name="ism-example"></a>
 
@@ -210,7 +224,7 @@ PUT _plugins/_ism/policies/my-policy-id
 }
 ```
 
-For a more detailed example, see [Sample policy with ISM template](https://opensearch.org/docs/im-plugin/ism/policies/#sample-policy-with-ism-template)\.
+For a more detailed example, see [Sample policy with ISM template for auto rollover](https://opensearch.org/docs/latest/im-plugin/ism/policies/#sample-policy-with-ism-template-for-auto-rollover)\.
 
 ## Differences<a name="ism-diff"></a>
 

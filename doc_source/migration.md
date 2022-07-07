@@ -26,10 +26,10 @@ For smaller clusters, a one\-time approach is to take a [shared file system snap
    path.repo: ["/my/shared/directory/snapshots"]
    ```
 
-1. Register the snapshot repository:
+1. Register a [snapshot repository](https://opensearch.org/docs/latest/opensearch/snapshot-restore/#register-repository), which is required before you take a snapshot\. A repository is just a storage location: a shared file system, Amazon S3, Hadoop Distributed File System \(HDFS\), etc\. In this case, we'll use a shared file system \("fs"\):
 
    ```
-   PUT _snapshot/migration-repository
+   PUT _snapshot/my-snapshot-repo-name
    {
      "type": "fs",
      "settings": {
@@ -41,7 +41,7 @@ For smaller clusters, a one\-time approach is to take a [shared file system snap
 1. Take the snapshot:
 
    ```
-   PUT _snapshot/migration-repository/migration-snapshot
+   PUT _snapshot/my-snapshot-repo-name/my-snapshot-name
    {
      "indices": "migration-index1,migration-index2,other-indices-*",
      "include_global_state": false
@@ -186,7 +186,7 @@ Most programming languages have libraries to assist with [signing requests](requ
 1. Regardless of how you choose to sign your requests, the first step is to register the repository:
 
    ```
-   PUT _snapshot/migration-repository
+   PUT _snapshot/my-snapshot-repo-name
    {
      "type": "s3",
      "settings": {
@@ -202,13 +202,13 @@ Most programming languages have libraries to assist with [signing requests](requ
    **Shorthand**
 
    ```
-   GET _snapshot/migration-repository/_all
+   GET _snapshot/my-snapshot-repo-name/_all
    ```
 
    **curl**
 
    ```
-   curl -XGET -u 'master-user:master-user-password' https://domain-endpoint/_snapshot/migration-repository/_all
+   curl -XGET -u 'master-user:master-user-password' https://domain-endpoint/_snapshot/my-snapshot-repo-name/_all
    ```
 
 1. Restore the snapshot\.
@@ -216,7 +216,7 @@ Most programming languages have libraries to assist with [signing requests](requ
    **Shorthand**
 
    ```
-   POST _snapshot/migration-repository/migration-snapshot/_restore
+   POST _snapshot/my-snapshot-repo-name/my-snapshot-name/_restore
    {
      "indices": "migration-index1,migration-index2,other-indices-*",
      "include_global_state": false
@@ -226,7 +226,7 @@ Most programming languages have libraries to assist with [signing requests](requ
    **curl**
 
    ```
-   curl -XPOST -u 'master-user:master-user-password' https://domain-endpoint/_snapshot/migration-repository/migration-snapshot/_restore \
+   curl -XPOST -u 'master-user:master-user-password' https://domain-endpoint/_snapshot/my-snapshot-repo-name/my-snapshot-name/_restore \
      -H 'Content-Type: application/json' \
      -d '{"indices":"migration-index1,migration-index2,other-indices-*","include_global_state":false}'
    ```

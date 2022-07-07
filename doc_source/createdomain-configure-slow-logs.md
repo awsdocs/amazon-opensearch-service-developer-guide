@@ -87,7 +87,7 @@ CloudWatch Logs supports [10 resource policies per Region](https://docs.aws.amaz
 
    The status of your domain changes from **Active** to **Processing**\. The status must return to **Active** before log publishing is enabled\. This change typically takes 30 minutes, but can take longer depending on your domain configuration\.
 
-If you enabled one of the slow logs, see [Setting OpenSearch logging thresholds for slow logs](#createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Configuring audit logs in OpenSearch Dashboards](audit-logs.md#audit-log-dashboards-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\. 
+If you enabled one of the slow logs, see [Setting OpenSearch logging thresholds for slow logs](#createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Step 2: Turn on audit logs in OpenSearch Dashboards](audit-logs.md#audit-log-dashboards-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\. 
 
 ## Enabling log publishing \(AWS CLI\)<a name="createdomain-configure-slow-logs-cli"></a>
 
@@ -137,7 +137,7 @@ aws opensearch update-domain-config \
 
 To disable publishing to CloudWatch, run the same command with `Enabled=false`\.
 
-If you enabled one of the slow logs, see [Setting OpenSearch logging thresholds for slow logs](#createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Configuring audit logs in OpenSearch Dashboards](audit-logs.md#audit-log-dashboards-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
+If you enabled one of the slow logs, see [Setting OpenSearch logging thresholds for slow logs](#createdomain-configure-slow-logs-indices)\. If you enabled audit logs, see [Step 2: Turn on audit logs in OpenSearch Dashboards](audit-logs.md#audit-log-dashboards-ui)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
 
 ## Enabling log publishing \(AWS SDKs\)<a name="createdomain-configure-slow-logs-sdk"></a>
 

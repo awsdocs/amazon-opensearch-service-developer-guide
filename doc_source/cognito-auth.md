@@ -9,7 +9,7 @@ The first time you configure a domain to use Amazon Cognito authentication for D
 
 **Topics**
 + [Prerequisites](#cognito-auth-prereq)
-+ [Configuring an OpenSearch Service domain](#cognito-auth-config)
++ [Configuring a domain to use Amazon Cognito](#cognito-auth-config)
 + [Allowing the authenticated role](#cognito-auth-config-ac)
 + [Configuring identity providers](#cognito-auth-identity-providers)
 + [\(Optional\) Configuring granular access](#cognito-auth-granular)
@@ -79,7 +79,7 @@ If you use the AWS CLI or one of the AWS SDKs, you must create your own role, at
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "es.amazonaws.com"
+        "Service": "opensearchservice.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
@@ -89,7 +89,7 @@ If you use the AWS CLI or one of the AWS SDKs, you must create your own role, at
 
 For instructions, see [Creating a Role to Delegate Permissions to an AWS Service](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html) and [Attaching and Detaching IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) in the *IAM User Guide*\.
 
-## Configuring an OpenSearch Service domain<a name="cognito-auth-config"></a>
+## Configuring a domain to use Amazon Cognito<a name="cognito-auth-config"></a>
 
 After you complete the prerequisites, you can configure an OpenSearch Service domain to use Amazon Cognito for Dashboards\.
 
