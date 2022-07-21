@@ -45,7 +45,6 @@ These steps describe how to enable audit logs using the console\. You can also [
          },
          "Action": [
            "logs:PutLogEvents",
-           "logs:PutLogEventsBatch",
            "logs:CreateLogStream"
          ],
          "Resource": "cw_log_group_arn"
