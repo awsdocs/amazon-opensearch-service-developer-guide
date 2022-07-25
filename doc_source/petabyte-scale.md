@@ -11,7 +11,7 @@ Domains of this size exceed the default limit of 40 instances per domain\. To re
 Before creating a domain of this size, check the [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/) page to ensure that the associated costs match your expectations\. Examine [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md) to see if a hot\-warm architecture fits your use case\.
 
 **Storage**  
-The `i3` instance types are designed to provide fast, local non\-volatile memory express \(NVMe\) storage\. Because this local storage tends to offer performance benefits when compared to Amazon Elastic Block Store, EBS volumes are not an option when you select these instance types in OpenSearch Service\. If you prefer EBS storage, use another instance type, such as `r5.12xlarge.search`\.
+The `i3` instance types are designed to provide fast, local non\-volatile memory express \(NVMe\) storage\. Because this local storage tends to offer performance benefits when compared to Amazon Elastic Block Store, EBS volumes are not an option when you select these instance types in OpenSearch Service\. If you prefer EBS storage, use another instance type, such as `r6.12xlarge.search`\.
 
 **Shard size and count**  
 A common OpenSearch guideline is not to exceed 50 GB per shard\. Given the number of shards necessary to accommodate large domains and the resources available to `i3.16xlarge.search` instances, we recommend a shard size of 100 GB\.  
