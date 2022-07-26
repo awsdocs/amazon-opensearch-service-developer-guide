@@ -16,7 +16,7 @@ The latest versions of the Elasticsearch clients might include license or versio
 
 ## Java<a name="request-signing-java"></a>
 
-The easiest way of sending a signed request is to use the [Amazon Web Services request signing interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some examples to help you get started, or you can [download a sample project for OpenSearch Service on GitHub](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/blob/master/sample_code/java/amazon-opensearch-docs-sample-client.zip)\.
+The easiest way of sending a signed request is to use the [Amazon Web Services request signing interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some examples to help you get started, or you can [refer a sample project for OpenSearch Service on GitHub](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java)\.
 
 The following example uses the [opensearch\-java](https://github.com/opensearch-project/opensearch-java) low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
 
@@ -83,7 +83,7 @@ public class AmazonOpenSearchServiceSample {
 }
 ```
 
-If you prefer the high\-level REST client, which offers most of the same features and simpler code, try the following sample, which also uses the [Amazon Web Services Request Signing Interceptor](https://github.com/awsdocs/aws-request-signing-apache-interceptor):
+If you prefer the high\-level REST client, which offers most of the same features and simpler code, try the following sample, which also uses the [Amazon Web Services Request Signing Interceptor](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java):
 
 ```
 import com.amazonaws.http.AwsRequestSigningApacheInterceptor;
