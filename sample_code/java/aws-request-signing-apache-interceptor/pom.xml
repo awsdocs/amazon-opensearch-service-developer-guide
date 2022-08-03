@@ -2,14 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.amazonaws</groupId>
-  <artifactId>amazon-es-docs-sample-client</artifactId>
+  <artifactId>amazon-opensearch-docs-sample</artifactId>
   <packaging>jar</packaging>
   <version>0.1.0</version>
-  <name>amazon-os-sample-client</name>
+  <name>amazon-opensearch-sample</name>
   <url>http://maven.apache.org</url>
 
   <scm>
-    <url>https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java</url>
+    <url>https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java/aws-request-signing-apache-interceptor</url>
   </scm>
 
   <licenses>

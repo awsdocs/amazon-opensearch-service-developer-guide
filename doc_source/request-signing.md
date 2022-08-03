@@ -16,125 +16,71 @@ The latest versions of the Elasticsearch clients might include license or versio
 
 ## Java<a name="request-signing-java"></a>
 
-The easiest way of sending a signed request is to use the [Amazon Web Services request signing interceptor](https://github.com/awslabs/aws-request-signing-apache-interceptor)\. The repository contains some examples to help you get started, or you can [refer a sample project for OpenSearch Service on GitHub](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java)\.
-
-The following example uses the [opensearch\-java](https://github.com/opensearch-project/opensearch-java) low\-level Java REST client to perform two unrelated actions: registering a snapshot repository and indexing a document\. You must provide values for `region` and `host`\.
+The easiest way of sending a signed request is to use the `AwsSdk2Transport`, introduced in [opensearch-java 2.1.0](https://github.com/opensearch-project/opensearch-java)\. The following [example](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java/opensearch-java-aws-sdk2-transport) creates an index, writes a document, and deletes the index\. You must provide values for `region` and `host`\. 
 
 ```
-import com.amazonaws.http.AwsRequestSigningApacheInterceptor;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.entity.ContentType;
-import org.apache.http.nio.entity.NStringEntity;
-import org.opensearch.client.Request;
-import org.opensearch.client.Response;
-import org.opensearch.client.RestClient;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
-import software.amazon.awssdk.auth.signer.Aws4Signer;
-
-import java.io.IOException;
-
-public class AmazonOpenSearchServiceSample {
-
-    private static String serviceName = "es";
-    private static String region = "";
-    private static String host = ""; // e.g. https://search-mydomain.us-west-1.es.amazonaws.com
-
-    private static String payload = "{ \"type\": \"s3\", \"settings\": { \"bucket\": \"your-bucket\", \"region\": \"us-west-1\", \"role_arn\": \"arn:aws:iam::123456789012:role/TheServiceRole\" } }";
-    private static String snapshotPath = "/_snapshot/my-snapshot-repo";
-
-    private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
-    private static String indexingPath = "/my-index/_doc";
-
-    static final AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.create();
-
-    public static void main(String[] args) throws IOException {
-        RestClient searchClient = searchClient(serviceName, region);
-
-        // Register a snapshot repository
-        HttpEntity entity = new NStringEntity(payload, ContentType.APPLICATION_JSON);
-        Request request = new Request("PUT", snapshotPath);
-        request.setEntity(entity);
-        // request.addParameter(name, value); // optional parameters
-        Response response = searchClient.performRequest(request);
-        System.out.println(response.toString());
-
-        // Index a document
-        entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
-        String id = "1";
-        request = new Request("PUT", indexingPath + "/" + id);
-        request.setEntity(entity);
-
-        // Using a String instead of an HttpEntity sets Content-Type to application/json automatically.
-        // request.setJsonEntity(sampleDocument);
-
-        response = searchClient.performRequest(request);
-        System.out.println(response.toString());
-    }
-
-    // Adds the interceptor to the OpenSearch REST client
-    public static RestClient searchClient(String serviceName, String region) {
-        Aws4Signer signer = Aws4Signer.create();
-        HttpRequestInterceptor interceptor = new AwsRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider,region);
-        return RestClient.builder(HttpHost.create(host)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)).build();
-    }
-}
-```
-
-If you prefer the high\-level REST client, which offers most of the same features and simpler code, try the following sample, which also uses the [Amazon Web Services Request Signing Interceptor](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java):
-
-```
-import com.amazonaws.http.AwsRequestSigningApacheInterceptor;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequestInterceptor;
-import org.opensearch.action.index.IndexRequest;
-import org.opensearch.action.index.IndexResponse;
-import org.opensearch.client.RequestOptions;
-import org.opensearch.client.RestClient;
-import org.opensearch.client.RestHighLevelClient;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
-import software.amazon.awssdk.auth.signer.Aws4Signer;
+package com.amazonaws.samples;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AmazonOpenSearchServiceSample {
+import org.opensearch.client.opensearch.OpenSearchClient;
+import org.opensearch.client.opensearch.core.IndexRequest;
+import org.opensearch.client.opensearch.indices.CreateIndexRequest;
+import org.opensearch.client.opensearch.indices.DeleteIndexRequest;
+import org.opensearch.client.transport.aws.AwsSdk2Transport;
+import org.opensearch.client.transport.aws.AwsSdk2TransportOptions;
 
-    private static String serviceName = "es";
-    private static String region = ""; // e.g. us-east-1
-    private static String host = ""; // e.g. https://search-mydomain.us-west-1.es.amazonaws.com
-    private static String index = "my-index";
-    private static String type = "_doc";
-    private static String id = "1";
+import software.amazon.awssdk.http.SdkHttpClient;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.regions.Region;
 
-    static final AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.create();
+public class IndexDocument {
 
-    public static void main(String[] args) throws IOException {
-        RestHighLevelClient searchClient = searchClient(serviceName, region);
+    private static final String host = "search-....us-west-2.es.amazonaws.com";
+    private static Region region = Region.US_WEST_2;
 
-        // Create the document as a hash map
-        Map<String, Object> document = new HashMap<>();
-        document.put("title", "Walk the Line");
-        document.put("director", "James Mangold");
-        document.put("year", "2005");
+    public static void main(String[] args) throws IOException, InterruptedException {
+        SdkHttpClient httpClient = ApacheHttpClient.builder().build();
+        try {
 
-        // Form the indexing request, send it, and print the response
-        IndexRequest request = new IndexRequest(index, type, id).source(document);
-        IndexResponse response = searchClient.index(request, RequestOptions.DEFAULT);
-        System.out.println(response.toString());
+            OpenSearchClient client = new OpenSearchClient(
+                    new AwsSdk2Transport(
+                            httpClient,
+                            host,
+                            region,
+                            AwsSdk2TransportOptions.builder().build()));
+
+            // create the index
+            String index = "sample-index";
+            
+            CreateIndexRequest createIndexRequest = new CreateIndexRequest.Builder().index(index).build();
+            client.indices().create(createIndexRequest);
+
+            // index data
+            Map<String, Object> document = new HashMap<>();
+            document.put("firstName", "Michael");
+            document.put("lastName", "Douglas");
+            IndexRequest documentIndexRequest = new IndexRequest.Builder()
+                    .index(index)
+                    .id("2")
+                    .document(document)
+                    .build();
+            client.index(documentIndexRequest);
+
+            // delete the index
+            DeleteIndexRequest deleteRequest = new DeleteIndexRequest.Builder().index(index).build();
+            client.indices().delete(deleteRequest);
+            
+        } finally {
+            httpClient.close();
+        }
     }
-
-    // Adds the interceptor to the OpenSearch REST client
-    public static RestHighLevelClient searchClient(String serviceName, String region) {
-        Aws4Signer signer = Aws4Signer.create();
-        HttpRequestInterceptor interceptor = new AwsRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider,region);
-        return new RestHighLevelClient(RestClient.builder(HttpHost.create(host)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)));
-    }
+}
 ```
+
+Other alternatives include using an AWS Request Signing Interceptor and/or the high-level REST client\. See [this sample](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java/aws-request-signing-apache-interceptor).
 
 **Tip**  
 Both signed examples use the default credential chain\. Run `aws configure` using the AWS CLI to set your credentials\.
