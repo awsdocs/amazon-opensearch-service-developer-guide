@@ -8,7 +8,7 @@ The PPL syntax consists of commands delimited by a pipe character \(`|`\) where 
 source = dashboards_sample_data_logs | where response='403' or response='503' | stats count(request) as request_count by host, response | sort -request_count
 ```
 
-PPL requires either OpenSearch or Elasticsearch 7\.9 or later\. Detailed steps and command descriptions are available in the [OpenSearch documentation](https://opensearch.org/docs/search-plugins/ppl/)\.
+PPL requires either OpenSearch or Elasticsearch 7\.9 or later\. Detailed steps and command descriptions are available in the [OpenSearch PPL reference manual](https://github.com/opensearch-project/sql/blob/2.x/docs/user/ppl/index.rst)\.
 
 ## <a name="ppl-support-gs"></a>
 
@@ -42,6 +42,6 @@ search source=accounts | where age > 18 | fields firstname, lastname
 | 2 | Nanette | Bates | 
 | 3 | Dale | Adams | 
 
-You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see [Commands](https://opensearch.org/docs/latest/observability-plugin/ppl/commands/)\.
+You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see [the PPL reference manual](https://github.com/opensearch-project/sql/blob/2.x/docs/user/ppl/index.rst)\.
 
-The PPL plugin supports all SQL functions, including mathematical, trigonometric, date\-time, string, aggregate, and advanced operators and expressions\. To learn more, see [Functions](https://opensearch.org/docs/search-plugins/sql/functions/)\.
+The PPL plugin supports all SQL functions, including mathematical, trigonometric, date\-time, string, aggregate, and advanced operators and expressions\. To learn more, see [the PPL reference manual](https://github.com/opensearch-project/sql/blob/2.x/docs/user/ppl/index.rst)\.
