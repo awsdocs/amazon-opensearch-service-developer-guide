@@ -41,7 +41,7 @@ Different deployment types present different options on subsequent pages\. These
 
 1. For **Auto\-Tune**, choose whether to allow OpenSearch Service to suggest memory\-related configuration changes to your domain to improve speed and stability\. For more information, see [Auto\-Tune for Amazon OpenSearch Service](auto-tune.md)\.
 
-   \(Optional\) Select **Add maintenance window** to schedule a recurring window during which which Auto\-Tune updates the domain\.
+   \(Optional\) Select **Add maintenance window** to schedule a recurring window during which Auto\-Tune updates the domain\.
 
 1. Under **Data nodes**, choose the number of availability zones\. For more information, see [Configuring a multi\-AZ domain in Amazon OpenSearch Service](managedomains-multiaz.md)\.
 **Note**  
