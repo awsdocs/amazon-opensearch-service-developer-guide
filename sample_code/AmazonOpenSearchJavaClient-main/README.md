@@ -1,11 +1,14 @@
-# AmazonOpenSearchJavaClient
+# Configure the client
 
-### Instructions:
-##### 1.) Download/Clone the repository
-##### 2.) Make following changes as required to AmazonOpenSearchServiceSample.java file and run it.
-#####   ---> region
-#####   ---> host
-#####   ---> Index name
-#####   ---> Document Mapping
-#####   ---> Document
-#####   ---> Search request
+Intro
+
+1. Clone the repository.
+2. Configure the following parameters in the AmazonOpenSearchServiceSample.java file:
+
+- `region` - The AWS Region that your collection is in. For example, `us-east-1`.
+- `host` - The collection endpoint with https://. For example, `https://07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com`.
+- `index_name` - The name of the OpenSearch index to create. The example uses `my-index`.
+
+  You can also optionally modify the index mapping, the sample document, and the search request.
+
+3. Save and run the file.
