@@ -1,4 +1,4 @@
-# Amazon OpenSearch Service \- Summary of changes<a name="rename"></a>
+# Amazon OpenSearch Service rename \- Summary of changes<a name="rename"></a>
 
 On September 8, 2021, Amazon Elasticsearch Service was renamed to Amazon OpenSearch Service\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the rename, and what actions you need to take to ensure that your domains continue to function properly\. 
 
@@ -20,7 +20,7 @@ Note that this list is not exhaustive\. While other parts of the product also ch
 
 ## New API version<a name="rename-sdk"></a>
 
-The new version of the OpenSearch Service configuration API \(2021\-01\-01\) works with OpenSearch as well as legacy Elasticsearch OSS\. 21 API operations were replaced with more concise and engine\-agnostic names \(for example, `CreateElasticsearchDomain` changed to `CreateDomain`\), but OpenSearch Service continues to support both API versions\. For a full list of actions that are no longer supported and their replacements, see the [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+The new version of the OpenSearch Service configuration API \(2021\-01\-01\) works with OpenSearch as well as legacy Elasticsearch OSS\. 21 API operations were replaced with more concise and engine\-agnostic names \(for example, `CreateElasticsearchDomain` changed to `CreateDomain`\), but OpenSearch Service continues to support both API versions\.
 
 We recommend that you use the new API operations to create and manage domains going forward\. Note that when you use the new API operations to create a domain, you need to specify the `EngineVersion` parameter in the format `Elasticsearch_X.Y` or `OpenSearch_X.Y`, rather than just the version number\. If you don't specify a version, it defaults to the latest version of OpenSearch\.
 
@@ -139,13 +139,13 @@ The following features and functionality, among others not listed, will remain t
 
 ## Get started: Upgrade your domains to OpenSearch 1\.x<a name="rename-upgrade"></a>
 
-OpenSearch 1\.*x* supports upgrades from Elasticsearch versions 6\.8 and 7\.*x*\. For instructions to upgrade your domain, see [Starting an upgrade](version-migration.md#starting-upgrades)\. If you're using the AWS CLI or configuration API to upgrade your domain, you need to specify the `TargetVersion` as `OpenSearch_1.x`\.
+OpenSearch 1\.*x* supports upgrades from Elasticsearch versions 6\.8 and 7\.*x*\. For instructions to upgrade your domain, see [Starting an upgrade \(console\)](version-migration.md#starting-upgrades)\. If you're using the AWS CLI or configuration API to upgrade your domain, you need to specify the `TargetVersion` as `OpenSearch_1.x`\.
 
 OpenSearch 1\.*x* introduces an additional domain setting called **Enable compatibility mode**\. Because certain Elasticsearch OSS clients and plugins check the cluster version before connecting, compatibility mode sets OpenSearch to report its version as 7\.10 so these clients continue to work\. 
 
 You can enable compatibility mode when you create OpenSearch domains for the first time, or when you upgrade to OpenSearch from an Elasticsearch version\. If it's not set, the parameter defaults to `false` when you create a domain, and `true` when you upgrade a domain\.
 
-To enable compatibility mode using the [configuration API](configuration-api.md), set `override_main_response_version` to `true`:
+To enable compatibility mode using the [configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpgradeDomain.html), set `override_main_response_version` to `true`:
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/upgradeDomain

@@ -285,7 +285,7 @@ Action groups are sets of permissions that you can reuse across different resour
 
 ### OpenSearch Dashboards multi\-tenancy<a name="fgac-multitenancy"></a>
 
-Tenants are spaces for saving index patterns, visualizations, dashboards, and other Dashboards objects\. Dashboards multi\-tenancy lets you safely share your work with other Dashboards users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. To learn more, see [OpenSearch Dashboards multi\-tenancy](https://opensearch.org/docs/security-plugin/access-control/multi-tenancy/)\.
+Tenants are spaces for saving index patterns, visualizations, dashboards, and other Dashboards objects\. Dashboards multi\-tenancy lets you safely share your work with other Dashboards users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. The Global tenant is the default\. To learn more, see [OpenSearch Dashboards multi\-tenancy](https://opensearch.org/docs/security-plugin/access-control/multi-tenancy/)\.
 
 **To view your current tenant or change tenants**
 

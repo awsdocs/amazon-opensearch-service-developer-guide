@@ -26,7 +26,7 @@ The certificate must have the custom endpoint name and be in the same account as
    + Follow the rest of the steps to create your domain and choose **Create**\.
    + Select the domain when it's finished processing to view your custom endpoint\.
 
-   To use the CLI or configuration API, use the `CreateDomain` and `UpdateDomainConfig` operations\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+   To use the CLI or configuration API, use the `CreateDomain` and `UpdateDomainConfig` operations\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.
 
 ## Custom endpoints for existing domains<a name="enable-disable-custom-endpoint"></a>
 

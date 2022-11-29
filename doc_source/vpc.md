@@ -146,4 +146,4 @@ OpenSearch Service automatically creates the role when you use the OpenSearch Se
 
 After OpenSearch Service creates the role, you can view it \(`AWSServiceRoleForAmazonOpenSearchService`\) using the IAM console\.
 
-For full information on this role's permissions and how to delete it, see [Using service\-linked roles to provide Amazon OpenSearch Service access to resources](slr.md)\.
+For full information on this role's permissions and how to delete it, see [Using service\-linked roles for Amazon OpenSearch Service](slr.md)\.

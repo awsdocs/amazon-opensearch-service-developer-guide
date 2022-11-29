@@ -1,4 +1,4 @@
-# Visualizing customer support calls with OpenSearch Service and OpenSearch Dashboards<a name="walkthrough"></a>
+# Tutorial: Visualizing customer support calls with OpenSearch Service and OpenSearch Dashboards<a name="walkthrough"></a>
 
 This chapter is a full walkthrough of the following situation: a business receives some number of customer support calls and wants to analyze them\. What is the subject of each call? How many were positive? How many were negative? How can managers search or review the the transcripts of these calls?
 
@@ -241,20 +241,20 @@ If you don't have a bunch of call recordings handy—and who does?—you can [in
 
    ```
    import boto3
-   from elasticsearch import Elasticsearch, RequestsHttpConnection
+   from opensearchpy import OpenSearch, RequestsHttpConnection
    import json
    from requests_aws4auth import AWS4Auth
    
    host = '' # For example, my-test-domain.us-west-2.es.amazonaws.com
    region = '' # For example, us-west-2
-   service = 'opensearchservice'
+   service = 'es'
    
    bulk_file = open('sample-calls.bulk', 'r').read()
    
    credentials = boto3.Session().get_credentials()
    awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
    
-   es = Elasticsearch(
+   search = OpenSearch(
        hosts = [{'host': host, 'port': 443}],
        http_auth = awsauth,
        use_ssl = True,
@@ -262,7 +262,7 @@ If you don't have a bunch of call recordings handy—and who does?—you can [in
        connection_class = RequestsHttpConnection
    )
    
-   response = es.bulk(bulk_file)
+   response = search.bulk(bulk_file)
    print(json.dumps(response, indent=2, sort_keys=True))
    ```
 
@@ -271,7 +271,7 @@ If you don't have a bunch of call recordings handy—and who does?—you can [in
 1. Install the required package using the following command:
 
    ```
-   pip install elasticsearch
+   pip install opensearch-py
    ```
 
 1. Download and unzip [sample\-calls\.zip](samples/sample-calls.zip)\.

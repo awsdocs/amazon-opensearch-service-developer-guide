@@ -4,9 +4,6 @@ SAML authentication for OpenSearch Dashboards lets you use your existing identit
 
 Rather than authenticating through [Amazon Cognito](cognito-auth.md) or the [internal user database](fgac.md#fgac-dashboards), SAML authentication for OpenSearch Dashboards lets you use third\-party identity providers to log in to Dashboards, manage fine\-grained access control, search your data, and build visualizations\. OpenSearch Service supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services \(ADFS\), and Auth0\. 
 
-**Note**  
-Requests from OpenSearch Service to third\-party providers aren't explicitly encrypted with a service provider certificate\.
-
 SAML authentication for Dashboards is only for accessing OpenSearch Dashboards through a web browser\. Your SAML credentials do *not* let you make direct HTTP requests to the OpenSearch or Dashboards APIs\. 
 
 ## SAML configuration overview<a name="saml-overview"></a>
@@ -15,28 +12,32 @@ This documentation assumes you have an existing identity provider and some famil
 
 The Dashboards login flow can take one of two forms:
 + **Service provider \(SP\) initiated**: You navigate to Dashboards \(for example, `https://my-domain.us-east-1.es.amazonaws.com/_dashboards`\), which redirects you to the login screen\. After you log in, the identity provider redirects you to Dashboards\.
-+ **Identity provider \(IdP\) initiated**: You navigate to your identity provider, log in, and choose Dashboards from an application directory\. 
++ **Identity provider \(IdP\) initiated**: You navigate to your identity provider, log in, and choose OpenSearch Dashboards from an application directory\. 
 
-OpenSearch Service provides two single sign\-on URLs, SP\-initiated and IdP\-initiated, but you only need the one that matches your desired Dashboards login flow\. If you want to configure both SP\- and IdP\-initiated authentication, you must do so through your identity provider\. For example, in Okta you can enable **Allow this app to request other SSO URLs** and add one or more IdP\-initiated SSO URLs\.
+OpenSearch Service provides two single sign\-on URLs, SP\-initiated and IdP\-initiated, but you only need the one that matches your desired OpenSearch Dashboards login flow\.
 
-Regardless of which authentication type you use, the goal is to log in through your identity provider and receive a SAML assertion that contains your username \(required\) and any [backend roles](fgac.md#fgac-concepts) \(optional, but recommended\)\. This information allows [fine\-grained access control](fgac.md) to assign permissions to SAML users\. In external identity providers, backend roles are typically called "roles" or "groups\."
+Regardless of which authentication type you use, the goal is to log in through your identity provider and receive a SAML assertion that contains your user name \(required\) and any [backend roles](fgac.md#fgac-concepts) \(optional, but recommended\)\. This information allows [fine\-grained access control](fgac.md) to assign permissions to SAML users\. In external identity providers, backend roles are typically called "roles" or "groups\."
 
 **Note**  
-You can't change the SSO URL from its service\-provided value, so SAML authentication for Dashboards does not support proxy servers\.
+You can't change the SSO URL from its service\-provided value, so SAML authentication for OpenSearch Dashboards does not support proxy servers\.
 
 ## SAML authentication for domains running in a VPC<a name="saml-vpc"></a>
 
 SAML does not require direct communication between your identity provider and your service provider\. Therefore, even if your OpenSearch domain is hosted within a private VPC, you can still use SAML as long as your browser can communicate with both your OpenSearch cluster and your identity provider\. Your browser essentially acts as the intermediary between your identity provider and your service provider\. For a useful diagram that explains the SAML authentication flow, see the [Okta documentation](https://developer.okta.com/docs/concepts/saml/#planning-for-saml)\.
 
-## Enabling SAML authentication<a name="saml-enable"></a>
+## Enabling SAML authentication<a name="saml-enable-sp-or-idp"></a>
 
 You can only enable SAML authentication for OpenSearch Dashboards on existing domains, not during the creation of new ones\. Due to the size of the IdP metadata file, we highly recommend using the AWS console\.
 
 Domains only support one Dashboards authentication method at a time\. If you have [Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md) enabled, you must disable it before you can enable SAML\.
 
-**To enable SAML authentication for Dashboards \(console\)**
+### Enable either SP\-initiated or IdP\-initiated authentication<a name="saml-enable"></a>
 
-1. Choose the domain, **Actions** and **Edit security configuration**\.
+These steps explain how to enable SAML authentication with SP\-initiated *or* IdP\-initiated authentication for OpenSearch Dashboards\. For the extra step required to enable both, see [Enable both SP\- and IdP\-initiated authentication](#saml-idp-with-sp)\.
+
+**To enable SAML authentication for Dashboards**
+
+1. In the OpenSearch Service console, select the domain, then choose **Actions** and **Edit security configuration**\.
 
 1. Select **Enable SAML authentication**\.
 
@@ -93,7 +94,7 @@ These URLs change if you later enable a [custom endpoint](customendpoint.md) for
      <saml2:Subject>
        <saml2:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">username</saml2:NameID>
        <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-         <saml2:SubjectConfirmationData NotOnOrAfter="2020-09-22T22:08:08.816Z" Recipient="domain-endpoint/_dashboards/_plugins/_security/saml/acs"/>
+         <saml2:SubjectConfirmationData NotOnOrAfter="2020-09-22T22:08:08.816Z" Recipient="domain-endpoint/_dashboards/_opendistro/_security/saml/acs"/>
        </saml2:SubjectConfirmation>
      </saml2:Subject>
      <saml2:Conditions NotBefore="2020-09-22T21:58:08.816Z" NotOnOrAfter="2020-09-22T22:08:08.816Z">
@@ -127,8 +128,8 @@ These URLs change if you later enable a [custom endpoint](customendpoint.md) for
 
 1. Choose **Save changes**\. The domain enters a processing state for approximately one minute, during which time Dashboards is unavailable\.
 
-1. After the domain finishes processing, open Dashboards\.
-   + If you chose the SP\-initiated URL, navigate to `domain-endpoint/_dashboards/`\.
+1. After the domain finishes processing, open OpenSearch Dashboards\.
+   + If you chose the SP\-initiated URL, navigate to `domain-endpoint/_dashboards`\. To log in to a specific tenant directly, append `?security_tenant=tenant-name` to the URL\.
    + If you chose the IdP\-initiated URL, navigate to your identity provider's application directory\.
 
    In both cases, log in as either the SAML master user or a user who belongs to the SAML master backend role\. To continue the example from step 7, log in as either `jdoe` or a member of the `admins` group\.
@@ -159,7 +160,19 @@ These URLs change if you later enable a [custom endpoint](customendpoint.md) for
    ]
    ```
 
-### Sample CLI command<a name="saml-enable-cli"></a>
+### Enable both SP\- and IdP\-initiated authentication<a name="saml-idp-with-sp"></a>
+
+If you want to configure both SP\- and IdP\-initiated authentication, you must do so through your identity provider\. For example, in Okta, you can perform the following steps:
+
+1. Within your SAML application, go to **General**, **SAML settings**\.
+
+1. For the **Single sign on URL**, provide your *IdP*\-initiated SSO URL\. For example, `https://search-domain-hash/_dashboards/_opendistro/_security/saml/idpinitiated`\.
+
+1. Enable **Allow this app to request other SSO URLs**\.
+
+1. Under **Requestable SSO URLs**, add one or more *SP*\-initiated SSO URLs\. For example, `https://search-domain-hash/_dashboards/_opendistro/_security/saml/acs`\.
+
+### Enable SAML authentication \(AWS CLI\)<a name="saml-enable-cli"></a>
 
 The following AWS CLI command enables SAML authentication for OpenSearch Dashboards on an existing domain:
 
@@ -171,7 +184,7 @@ aws opensearch update-domain-config \
 
 You must escape all quotes and newline characters in the metadata XML\. For example, use `<KeyDescriptor use=\"signing\">\n` instead of `<KeyDescriptor use="signing">` and a line break\. For detailed information about using the AWS CLI, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/)\.
 
-### Sample configuration API request<a name="saml-enable-api"></a>
+### Enable SAML authentication \(configuration API\)<a name="saml-enable-api"></a>
 
 The following request to the configuration API enables SAML authentication for OpenSearch Dashboards on an existing domain:
 
@@ -195,12 +208,10 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/c
 }
 ```
 
-You must escape all quotes and newline characters in the metadata XML\. For example, use `<KeyDescriptor use=\"signing\">\n` instead of `<KeyDescriptor use="signing">` and a line break\. For detailed information about using the configuration API, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+You must escape all quotes and newline characters in the metadata XML\. For example, use `<KeyDescriptor use=\"signing\">\n` instead of `<KeyDescriptor use="signing">` and a line break\. For detailed information about using the configuration API, see the [OpenSearch Service API reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_Welcome.html)\.
 
 ## SAML troubleshooting<a name="saml-troubleshoot"></a>
 
-
-****  
 
 | Error | Details | 
 | --- | --- | 

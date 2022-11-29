@@ -1,6 +1,6 @@
-# Migrating to Amazon OpenSearch Service<a name="migration"></a>
+# Tutorial: Migrating to Amazon OpenSearch Service<a name="migration"></a>
 
-Index snapshots are a popular way to migrate from a self\-managed OpenSearch cluster to Amazon OpenSearch Service\. Broadly, the process consists of the following steps:
+Index snapshots are a popular way to migrate from a self\-managed OpenSearch or legacy Elasticsearch cluster to Amazon OpenSearch Service\. Broadly, the process consists of the following steps:
 
 1. Take a snapshot of the existing cluster, and upload the snapshot to an Amazon S3 bucket\.
 
@@ -14,13 +14,13 @@ This walkthrough provides more detailed steps and alternate options, where appli
 
 ## Take and upload the snapshot<a name="migration-take-snapshot"></a>
 
-Although you can use the [repository\-s3](https://opensearch.org/docs/opensearch/snapshot-restore/#amazon-s3) plugin to take snapshots directly to S3, you have to install the plugin on every node, tweak `opensearch.yml`, restart each node, add your AWS credentials, and finally take the snapshot\. The plugin is a great option for ongoing use or for migrating larger clusters\.
+Although you can use the [repository\-s3](https://opensearch.org/docs/opensearch/snapshot-restore/#amazon-s3) plugin to take snapshots directly to S3, you have to install the plugin on every node, tweak `opensearch.yml` \(or `elasticsearch.yml` if using an Elasticsearch cluster\), restart each node, add your AWS credentials, and finally take the snapshot\. The plugin is a great option for ongoing use or for migrating larger clusters\.
 
 For smaller clusters, a one\-time approach is to take a [shared file system snapshot](https://opensearch.org/docs/opensearch/snapshot-restore/#shared-file-system) and then use the AWS CLI to upload it to S3\. If you already have a snapshot, skip to step 4\.
 
 ****To take a snapshot and upload it to Amazon S3****
 
-1. Add the `path.repo` setting to `opensearch.yml` on all nodes, and then restart each node\.
+1. Add the `path.repo` setting to `opensearch.yml` \(or `Elasticsearch.yml`\) on all nodes, and then restart each node\.
 
    ```
    path.repo: ["/my/shared/directory/snapshots"]
@@ -231,7 +231,7 @@ Most programming languages have libraries to assist with [signing requests](requ
      -d '{"indices":"migration-index1,migration-index2,other-indices-*","include_global_state":false}'
    ```
 
-1. Finally, verify that your indices restored as expected\.
+1. Finally, verify that your indexes restored as expected\.
 
    **Shorthand**
 
@@ -245,4 +245,4 @@ Most programming languages have libraries to assist with [signing requests](requ
    curl -XGET -u 'master-user:master-user-password' https://domain-endpoint/_cat/indices?v
    ```
 
-At this point, the migration is complete\. You might configure your clients to use the new OpenSearch Service endpoint, [resize the domain](sizing-domains.md) to suit your workload, check the shard count for your indices, switch to an [IAM master user](fgac.md#fgac-concepts), or start building visualizations in OpenSearch Dashboards\.
+At this point, the migration is complete\. You might configure your clients to use the new OpenSearch Service endpoint, [resize the domain](sizing-domains.md) to suit your workload, check the shard count for your indexes, switch to an [IAM master user](fgac.md#fgac-concepts), or start building visualizations in OpenSearch Dashboards\.

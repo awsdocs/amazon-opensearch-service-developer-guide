@@ -1,12 +1,12 @@
 # What is Amazon OpenSearch Service?<a name="what-is"></a>
 
-Amazon OpenSearch Service is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service is the successor to Amazon Elasticsearch Service and supports OpenSearch and legacy Elasticsearch OSS \(up to 7\.10, the final open source version of the software\)\. When you create a cluster, you have the option of which search engine to use\. For information about what changed with the recent service rename, and the actions you might need to take, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\.
+Amazon OpenSearch Service is a managed service that makes it easy to deploy, operate, and scale OpenSearch clusters in the AWS Cloud\. Amazon OpenSearch Service supports OpenSearch and legacy Elasticsearch OSS \(up to 7\.10, the final open source version of the software\)\. When you create a cluster, you have the option of which search engine to use\.
 
-*OpenSearch* is a fully open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. For more information, see the [OpenSearch documentation](https://opensearch.org/docs/)\.
+***OpenSearch*** is a fully open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. For more information, see the [OpenSearch documentation](https://opensearch.org/docs/)\.
 
-*OpenSearch Service* provisions all the resources for your cluster and launches it\. It also automatically detects and replaces failed OpenSearch Service nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
+***Amazon OpenSearch Service*** provisions all the resources for your cluster and launches it\. It also automatically detects and replaces failed OpenSearch Service nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
 
-To get started using OpenSearch Service, you create an OpenSearch Service *cluster*\. Each EC2 instance in the cluster acts as one OpenSearch Service node\.
+To get started using OpenSearch Service, you create an OpenSearch Service *domain*, which is equivalent to an OpenSearch *cluster*\. Each EC2 instance in the cluster acts as one OpenSearch Service node\.
 
 You can use the OpenSearch Service console to set up and configure a domain in minutes\. If you prefer programmatic access, you can use the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/) or the [AWS SDKs](http://aws.amazon.com/code)\.
 
@@ -48,7 +48,7 @@ OpenSearch Service includes the following features:
 ## Supported versions of OpenSearch and Elasticsearch<a name="choosing-version"></a>
 
 OpenSearch Service currently supports the following OpenSearch versions:
-+ 1\.2, 1\.1, 1\.0
++ 2\.3, 1\.3, 1\.2, 1\.1, 1\.0
 
 OpenSearch Service also supports the following legacy Elasticsearch OSS versions:
 + 7\.10, 7\.9, 7\.8, 7\.7, 7\.4, 7\.1
@@ -57,7 +57,7 @@ OpenSearch Service also supports the following legacy Elasticsearch OSS versions
 + 2\.3
 + 1\.5
 
-For more information, see [Supported operations](supported-operations.md), [Features by engine version](features-by-version.md), and [Plugins by engine version](supported-plugins.md)\.
+For more information, see [Supported operations in Amazon OpenSearch Service](supported-operations.md), [Features by engine version in Amazon OpenSearch Service](features-by-version.md), and [Plugins by engine version in Amazon OpenSearch Service](supported-plugins.md)\.
 
 If you start a new OpenSearch Service project, we strongly recommend that you choose the latest supported OpenSearch version\. If you have an existing domain that uses an older Elasticsearch version, you can choose to keep the domain or migrate your data\. For more information, see [Upgrading Amazon OpenSearch Service domains](version-migration.md)\.
 
@@ -69,6 +69,10 @@ However, some notable data transfer exceptions exist\. If a domain uses [multipl
 
 For full pricing details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for configuration changes](managedomains-configuration-changes.md#managedomains-config-charges)\.
 
+## Amazon OpenSearch Serverless<a name="whatis-serverless"></a>
+
+Amazon OpenSearch Serverless is an on\-demand, auto scaling, serverless configuration for Amazon OpenSearch Service\. Serverless removes the operational complexities of provisioning, configuring, and tuning your OpenSearch clusters\. For more information, see [Amazon OpenSearch Serverless \(preview\)](serverless.md)\.
+
 ## Getting started with Amazon OpenSearch Service<a name="get-started"></a>
 
 To get started, [sign up for an AWS account](https://aws.amazon.com/) if you don't already have one\. After you are set up with an account, complete the [getting started](gsg.md) tutorial for Amazon OpenSearch Service\. Consult the following introductory topics if you need more information while learning about the service:
@@ -78,7 +82,7 @@ To get started, [sign up for an AWS account](https://aws.amazon.com/) if you don
 + Index data [manually](indexing.md) or from [other AWS services](integrations.md)
 + Use [OpenSearch Dashboards](dashboards.md) to search your data and create visualizations
 
-For information on migrating to OpenSearch Service from a self\-managed OpenSearch cluster, see [Migrating to Amazon OpenSearch Service](migration.md)\.
+For information on migrating to OpenSearch Service from a self\-managed OpenSearch cluster, see [Tutorial: Migrating to Amazon OpenSearch Service](migration.md)\.
 
 ## Related services<a name="related-services"></a>
 

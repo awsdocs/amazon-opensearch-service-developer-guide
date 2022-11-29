@@ -1,21 +1,41 @@
-# Amazon OpenSearch Service  Developer Guide
+# Amazon OpenSearch Service Developer Guide
 
 -----
 *****Copyright &copy; Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
 
 -----
-Amazon's trademarks and trade dress may not be used in 
-     connection with any product or service that is not Amazon's, 
-     in any manner that is likely to cause confusion among customers, 
-     or in any manner that disparages or discredits Amazon. All other 
-     trademarks not owned by Amazon are the property of their respective
-     owners, who may or may not be affiliated with, connected to, or 
-     sponsored by Amazon.
+Amazon's trademarks and trade dress may not be used in
+connection with any product or service that is not Amazon's,
+in any manner that is likely to cause confusion among customers,
+or in any manner that disparages or discredits Amazon. All other
+trademarks not owned by Amazon are the property of their respective
+owners, who may or may not be affiliated with, connected to, or
+sponsored by Amazon.
 
 -----
 ## Contents
 + [What is Amazon OpenSearch Service?](what-is.md)
-+ [Amazon OpenSearch Service - Summary of changes](rename.md)
++ [Amazon OpenSearch Serverless (preview)](serverless.md)
+   + [What is Amazon OpenSearch Serverless?](serverless-overview.md)
+   + [Getting started with Amazon OpenSearch Serverless](serverless-getting-started.md)
+   + [Creating and managing Amazon OpenSearch Serverless collections](serverless-manage.md)
+   + [Manging capacity limits for Amazon OpenSearch Serverless](serverless-scaling.md)
+   + [Ingesting data into Amazon OpenSearch Serverless collections](serverless-clients.md)
+   + [Overview of security in Amazon OpenSearch Serverless](serverless-security.md)
+      + [Getting started with security in Amazon OpenSearch Serverless](serverless-tutorials.md)
+         + [Tutorial: Getting started with security in Amazon OpenSearch Serverless (console)](gsg-serverless.md)
+         + [Tutorial: Getting started with security in Amazon OpenSearch Serverless (CLI)](gsg-serverless-cli.md)
+      + [Identity and Access Management for Amazon OpenSearch Serverless](security-iam-serverless.md)
+      + [Encryption at rest for Amazon OpenSearch Serverless](serverless-encryption.md)
+      + [Network access for Amazon OpenSearch Serverless](serverless-network.md)
+      + [Data access control for Amazon OpenSearch Serverless](serverless-data-access.md)
+      + [Access Amazon OpenSearch Serverless using an interface endpoint (AWS PrivateLink)](serverless-vpc.md)
+      + [SAML authentication for Amazon OpenSearch Serverless](serverless-saml.md)
+   + [Tagging Amazon OpenSearch Serverless collections](tag-collection.md)
+   + [Supported operations and plugins in Amazon OpenSearch Serverless](serverless-genref.md)
+   + [Monitoring Amazon OpenSearch Serverless](serverless-monitoring.md)
+      + [Monitoring OpenSearch Serverless with Amazon CloudWatch](monitoring-cloudwatch.md)
+      + [Logging OpenSearch Serverless API calls using AWS CloudTrail](logging-using-cloudtrail.md)
 + [Getting started with Amazon OpenSearch Service](gsg.md)
    + [Step 1: Create an Amazon OpenSearch Service domain](gsgcreate-domain.md)
    + [Step 2: Upload data to Amazon OpenSearch Service for indexing](gsgupload-data.md)
@@ -53,9 +73,12 @@ Amazon's trademarks and trade dress may not be used in
    + [Compliance validation for Amazon OpenSearch Service](compliance.md)
    + [Resilience in Amazon OpenSearch Service](disaster-recovery-resiliency.md)
    + [Infrastructure security in Amazon OpenSearch Service](infrastructure-security.md)
+      + [Access Amazon OpenSearch Service using an OpenSearch Service-managed VPC endpoint (AWS PrivateLink)](vpc-interface-endpoints.md)
    + [SAML authentication for OpenSearch Dashboards](saml.md)
    + [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md)
-   + [Using service-linked roles to provide Amazon OpenSearch Service access to resources](slr.md)
+   + [Using service-linked roles for Amazon OpenSearch Service](slr.md)
+      + [Using service-linked roles to create VPC domains](slr-aos.md)
+      + [Using service-linked roles to create OpenSearch Serverless collections](serverless-service-linked-roles.md)
 + [Sample code for Amazon OpenSearch Service](samplecode.md)
    + [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)
    + [Compressing HTTP requests in Amazon OpenSearch Service](gzip.md)
@@ -75,6 +98,7 @@ Amazon's trademarks and trade dress may not be used in
    + [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)
    + [Cold storage for Amazon OpenSearch Service](cold-storage.md)
    + [Index State Management in Amazon OpenSearch Service](ism.md)
+      + [Tutorial: Automating Index State Management processes](ism-tutorial.md)
    + [Summarizing indexes in Amazon OpenSearch Service with index rollups](rollup.md)
    + [Transforming indexes in Amazon OpenSearch Service](transforms.md)
    + [Cross-cluster replication for Amazon OpenSearch Service](replication.md)
@@ -83,6 +107,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Monitoring data in Amazon OpenSearch Service](monitoring-data.md)
    + [Configuring alerts in Amazon OpenSearch Service](alerting.md)
    + [Anomaly detection in Amazon OpenSearch Service](ad.md)
+      + [Tutorial: Detect high CPU usage with anomaly detection](createanomalydetector-tutorial.md)
 + [Observability in Amazon OpenSearch Service](observability.md)
    + [Trace Analytics for Amazon OpenSearch Service](trace-analytics.md)
    + [Querying Amazon OpenSearch Service data using Piped Processing Language](ppl-support.md)
@@ -93,17 +118,18 @@ Amazon's trademarks and trade dress may not be used in
    + [Recommended CloudWatch alarms for Amazon OpenSearch Service](cloudwatch-alarms.md)
 + [General reference for Amazon OpenSearch Service](genref.md)
    + [Supported instance types in Amazon OpenSearch Service](supported-instance-types.md)
-   + [Features by engine version](features-by-version.md)
-   + [Plugins by engine version](supported-plugins.md)
-   + [Supported operations](supported-operations.md)
+   + [Features by engine version in Amazon OpenSearch Service](features-by-version.md)
+   + [Plugins by engine version in Amazon OpenSearch Service](supported-plugins.md)
+   + [Supported operations in Amazon OpenSearch Service](supported-operations.md)
    + [Amazon OpenSearch Service quotas](limits.md)
    + [Reserved Instances in Amazon OpenSearch Service](ri.md)
    + [Other supported resources in Amazon OpenSearch Service](supported-resources.md)
 + [Amazon OpenSearch Service tutorials](tutorials.md)
-   + [Migrating to Amazon OpenSearch Service](migration.md)
-   + [Creating a search application with Amazon OpenSearch Service](search-example.md)
-   + [Visualizing customer support calls with OpenSearch Service and OpenSearch Dashboards](walkthrough.md)
+   + [Tutorial: Creating and searching for documents in Amazon OpenSearch Service](quick-start.md)
+   + [Tutorial: Migrating to Amazon OpenSearch Service](migration.md)
+   + [Tutorial: Creating a search application with Amazon OpenSearch Service](search-example.md)
+   + [Tutorial: Visualizing customer support calls with OpenSearch Service and OpenSearch Dashboards](walkthrough.md)
++ [Amazon OpenSearch Service rename - Summary of changes](rename.md)
 + [Troubleshooting Amazon OpenSearch Service](handling-errors.md)
-+ [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)
 + [Document history for Amazon OpenSearch Service](release-notes.md)
 + [AWS glossary](glossary.md)

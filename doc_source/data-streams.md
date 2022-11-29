@@ -26,7 +26,19 @@ PUT _index_template/logs-template
 }
 ```
 
-In this case, each ingested document must have an `@timestamp` field\. You can also define your own custom timestamp field as a property in the `data_stream` object\. 
+In this case, each ingested document must have an `@timestamp` field\. You can also define your own custom timestamp field as a property in the `data_stream` object:
+
+```
+PUT _index_template/logs-template
+{
+  "index_patterns": "my-data-stream",
+  "data_stream": {
+    "timestamp_field": {
+      "name": "request_time"
+    }
+  }
+}
+```
 
 ### Step 2: Create a data stream<a name="data-streams-example-2"></a>
 

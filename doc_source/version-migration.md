@@ -12,28 +12,29 @@ Currently, OpenSearch Service supports the following upgrade paths:
 
 | From version | To version | 
 | --- | --- | 
+| OpenSearch 1\.3 |  OpenSearch 2\.3  If your domain contains UltraWarm or cold indexes that were originally created in Elasticsearch 6\.8, those indexes are not compatible with OpenSearch 2\.3\. Before you upgrade to version 2\.3, you must migrate incompatible indexes to hot storage, reindex the data, and then migrate them back to warm or cold storage\. Alternately, you can delete the indexes if you no longer need them\. If you accidentally upgrade your domain to version 2\.3 without performing these steps first, you won't be able to migrate the incompatible indexes out of their current storage tier\. Your only option is to delete them\.   | 
 | OpenSearch 1\.x | OpenSearch 1\.x | 
-| Elasticsearch 7\.x |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  OpenSearch 1\.*x* introduces numerous breaking changes\. For details, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\. Elasticsearch 7\.10 introduces a breaking change with regard to dynamic templates\. For more information, see [Mapper parsing exception while indexing](handling-errors.md#troubleshooting-dynamic-template)\.   | 
-|  Elasticsearch 6\.8  |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  Elasticsearch 7\.0 and OpenSearch 1\.0 include numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](managedomains-snapshots.md) of the 6\.*x* domain, restoring it on a test 7\.*x* or OpenSearch 1\.*x* domain, and using that test domain to identify potential upgrade issues\. For breaking changes in OpenSearch 1\.0, see [Amazon OpenSearch Service \- Summary of changes](rename.md)\. Like Elasticsearch 6\.*x*, indexes can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indexes, self\-hosted Elasticsearch 7\.*x* and OpenSearch 1\.*x* have a default shard count of one\. OpenSearch Service domains on Elasticsearch 7\.*x* and later retain the previous default of five\.   | 
+| Elasticsearch 7\.x |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  OpenSearch 1\.*x* introduces numerous breaking changes\. For details, see [Amazon OpenSearch Service rename \- Summary of changes](rename.md)\.   | 
+|  Elasticsearch 6\.8  |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  Elasticsearch 7\.0 and OpenSearch 1\.0 include numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](managedomains-snapshots.md) of the 6\.*x* domain, restoring it on a test 7\.*x* or OpenSearch 1\.*x* domain, and using that test domain to identify potential upgrade issues\. For breaking changes in OpenSearch 1\.0, see [Amazon OpenSearch Service rename \- Summary of changes](rename.md)\. Like Elasticsearch 6\.*x*, indexes can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indexes, self\-hosted Elasticsearch 7\.*x* and OpenSearch 1\.*x* have a default shard count of one\. OpenSearch Service domains on Elasticsearch 7\.*x* and later retain the previous default of five\.   | 
 | Elasticsearch 6\.*x* | Elasticsearch 6\.*x* | 
 | Elasticsearch 5\.6 |  Elasticsearch 6\.*x*  Indexes created in version 6\.*x* no longer support multiple mapping types\. Indexes created in version 5\.*x* still support multiple mapping types when restored into a 6\.*x* cluster\. Check that your client code creates only a single mapping type per index\. To minimize downtime during the upgrade from Elasticsearch 5\.6 to 6\.*x*, OpenSearch Service reindexes the `.kibana` index to `.kibana-6`, deletes `.kibana`, creates an alias named `.kibana`, and maps the new index to the new alias\.   | 
-| Elasticsearch 5\.x | Elasticsearch 5\.6 | 
+| Elasticsearch 5\.x | Elasticsearch 5\.x | 
 
 The upgrade process consists of three steps:
 
-1. **Pre\-upgrade checks** – OpenSearch Service performs a series of checks for issues that can block an upgrade and doesn't proceed to the next step unless these checks succeed\.
+1. **Pre\-upgrade checks** – OpenSearch Service checks for issues that can block an upgrade and doesn't proceed to the next step unless these checks succeed\.
 
-1. **Snapshot** – OpenSearch Service takes a snapshot of the OpenSearch or Elasticsearch cluster and doesn't proceed to the next step unless the snapshot succeeds\. If the upgrade fails, OpenSearch Service uses this snapshot to restore the cluster to its original state\. For more information about this snapshot, see [Can't downgrade after upgrade](handling-errors.md#troubleshooting-upgrade-snapshot)\.
+1. **Snapshot** – OpenSearch Service takes a snapshot of the OpenSearch or Elasticsearch cluster and doesn't proceed to the next step unless the snapshot succeeds\. If the upgrade fails, OpenSearch Service uses this snapshot to restore the cluster to its original state\. For more information see [Can't downgrade after upgrade](handling-errors.md#troubleshooting-upgrade-snapshot)\.
 
 1. **Upgrade** – OpenSearch Service starts the upgrade, which can take from 15 minutes to several hours to complete\. OpenSearch Dashboards might be unavailable during some or all of the upgrade\.
 
-## Starting an upgrade<a name="starting-upgrades"></a>
+## Starting an upgrade \(console\)<a name="starting-upgrades"></a>
 
 The upgrade process is irreversible and can't be paused or cancelled\. During an upgrade, you can't make configuration changes to the domain\. Before starting an upgrade, double\-check that you want to proceed\. You can use these same steps to perform the pre\-upgrade check without actually starting an upgrade\.
 
 If the cluster has dedicated master nodes, OpenSearch upgrades complete without downtime\. Otherwise, the cluster might be unresponsive for several seconds post\-upgrade while it elects a master node\.
 
-**To upgrade a domain to a later version of OpenSearch or Elasticsearch \(console\)**
+**To upgrade a domain to a later version of OpenSearch or Elasticsearch**
 
 1. [Take a manual snapshot](managedomains-snapshots.md) of your domain\. This snapshot serves as a backup that you can [restore on a new domain](managedomains-snapshots.md#managedomains-snapshot-restore) if you want to return to using the prior OpenSearch version\.
 
@@ -51,7 +52,7 @@ If the cluster has dedicated master nodes, OpenSearch upgrades complete without 
 
 1. Check the **Status** on the domain dashboard to monitor the status of the upgrade\.
 
-**To upgrade a domain to a later version of OpenSearch or Elasticsearch \(AWS CLI and SDK\)**
+## Starting an upgrade \(CLI\)<a name="starting-upgrades-cli"></a>
 
 You can use the following operations to identify the correct version of OpenSearch or Elasticsearch for your domain, start an in\-place upgrade, perform the pre\-upgrade check, and view progress:
 + `get-compatible-versions` \(`GetCompatibleVersions`\)
@@ -59,7 +60,84 @@ You can use the following operations to identify the correct version of OpenSear
 + `get-upgrade-status` \(`GetUpgradeStatus`\)
 + `get-upgrade-history` \(`GetUpgradeHistory`\)
 
-For more information, see the [AWS CLI command reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+For more information, see the [AWS CLI command reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) and [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.
+
+## Starting an upgrade \(SDK\)<a name="starting-upgrades-sdk"></a>
+
+This sample uses the [OpenSearchService](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/opensearch.html) low\-level Python client from the AWS SDK for Python \(Boto\) to check if a domain is eligible for upgrade to a specific version, upgrades it, and continuously checks the upgrade status\.
+
+```
+import boto3
+from botocore.config import Config
+import time
+
+# Build the client using the default credential configuration.
+# You can use the CLI and run 'aws configure' to set access key, secret
+# key, and default Region.
+
+DOMAIN_NAME = ''  # The name of the domain to upgrade
+TARGET_VERSION = ''  # The version you want to upgrade the domain to. For example, OpenSearch_1.1
+
+my_config = Config(
+    # Optionally lets you specify a Region other than your default.
+    region_name='us-east-1'
+)
+client = boto3.client('opensearch', config=my_config)
+
+
+def check_versions():
+    """Determine whether domain is eligible for upgrade"""
+    response = client.get_compatible_versions(
+        DomainName=DOMAIN_NAME
+    )
+    compatible_versions = response['CompatibleVersions']
+    for i in range(len(compatible_versions)):
+        if TARGET_VERSION in compatible_versions[i]["TargetVersions"]:
+            print('Domain is eligible for upgrade to ' + TARGET_VERSION)
+            upgrade_domain()
+            print(response)
+        else:
+            print('Domain not eligible for upgrade to ' + TARGET_VERSION)
+
+
+def upgrade_domain():
+    """Upgrades the domain"""
+    response = client.upgrade_domain(
+        DomainName=DOMAIN_NAME,
+        TargetVersion=TARGET_VERSION
+    )
+    print('Upgrading domain to ' + TARGET_VERSION + '...' + response)
+    time.sleep(5)
+    wait_for_upgrade()
+
+
+def wait_for_upgrade():
+    """Get the status of the upgrade"""
+    response = client.get_upgrade_status(
+        DomainName=DOMAIN_NAME
+    )
+    if (response['UpgradeStep']) == 'UPGRADE' and (response['StepStatus']) == 'SUCCEEDED':
+        print('Domain successfully upgraded to ' + TARGET_VERSION)
+    elif (response['StepStatus']) == 'FAILED':
+        print('Upgrade failed. Please try again.')
+    elif (response['StepStatus']) == 'SUCCEEDED_WITH_ISSUES':
+        print('Upgrade succeeded with issues')
+    elif (response['StepStatus']) == 'IN_PROGRESS':
+        time.sleep(30)
+        wait_for_upgrade()
+
+
+def main():
+    check_versions()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Troubleshooting validation failures<a name="upgrade-validation"></a>
+
+When you initiate an OpenSearch or Elasticsearch version upgrade, OpenSearch Service first performs a series of validation checks to ensure that your domain is eligible for an upgrade\. If any of these checks fail, you receive a notification containing the specific issues that you must fix before upgrading your domain\. For a list of potential issues and steps to resolve them, see [Troubleshooting validation errors](managedomains-configuration-changes.md#validation)\.
 
 ## Troubleshooting an upgrade<a name="upgrade-failures"></a>
 
@@ -93,8 +171,6 @@ In\-place upgrades are the easier, faster, and more reliable way to upgrade a do
 
 The following table shows how to use snapshots to migrate data to a domain that uses a different OpenSearch or Elasticsearch version\. For more information about taking and restoring snapshots, see [Creating index snapshots in Amazon OpenSearch Service](managedomains-snapshots.md)\.
 
-
-****  
 
 | From version | To version | Migration process | 
 | --- | --- | --- | 

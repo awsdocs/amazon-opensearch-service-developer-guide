@@ -79,7 +79,7 @@ With UltraWarm storage, you pay for what you use\. An `ultrawarm1.large.search` 
 
 The console is the simplest way to create a domain that uses warm storage\. While creating the domain, choose **Enable UltraWarm data nodes** and the number of warm nodes that you want\. The same basic process works on existing domains, provided they meet the [prerequisites](#ultrawarm-pp)\. Even after the domain state changes from **Processing** to **Active**, UltraWarm might not be available to use for several hours\.
 
-You can also use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) or [configuration API](configuration-api.md) to enable UltraWarm, specifically the `WarmEnabled`, `WarmCount`, and `WarmType` options in `ClusterConfig`\.
+You can also use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) or [configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html) to enable UltraWarm, specifically the `WarmEnabled`, `WarmCount`, and `WarmType` options in `ClusterConfig`\.
 
 **Note**  
 Domains support a maximum number of warm nodes\. For details, see [Amazon OpenSearch Service quotas](limits.md)\.
@@ -154,11 +154,11 @@ POST https://es.us-east-2.amazonaws.com/2021-01-01/opensearch/domain
 }
 ```
 
-For detailed information, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+For detailed information, see the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.
 
 ## Migrating indexes to UltraWarm storage<a name="ultrawarm-migrating"></a>
 
-If you finished writing to an index and no longer need the fastest possible search performance, migrate it from hot to warm:
+If you finished writing to an index and no longer need the fastest possible search performance, migrate it from hot to UltraWarm:
 
 ```
 POST _ultrawarm/migration/my-index/_warm

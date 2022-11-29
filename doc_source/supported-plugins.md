@@ -1,4 +1,4 @@
-# Plugins by engine version<a name="supported-plugins"></a>
+# Plugins by engine version in Amazon OpenSearch Service<a name="supported-plugins"></a>
 
 Amazon OpenSearch Service domains come prepackaged with plugins from the OpenSearch community\. The service automatically deploys and manages plugins for you, but it deploys different plugins depending on the version of OpenSearch or legacy Elasticsearch OSS you choose for your domain\.
 

@@ -200,7 +200,7 @@ After your domain finishes processing, see [Allowing the authenticated role](#co
 
 ### Configuring Amazon Cognito Authentication \(AWS SDKs\)<a name="cognito-auth-config-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in the [Configuration API reference for Amazon OpenSearch Service](configuration-api.md), including the `CognitoOptions` parameter for the `CreateDomain` and `UpdateDomainConfig` operations\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html), including the `CognitoOptions` parameter for the `CreateDomain` and `UpdateDomainConfig` operations\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
 After your domain finishes processing, see [Allowing the authenticated role](#cognito-auth-config-ac) and [Configuring identity providers](#cognito-auth-identity-providers) for additional configuration steps\.
 
@@ -293,7 +293,7 @@ After you're satisfied with your configuration, verify that the user experience 
 
 **To access OpenSearch Dashboards**
 
-1. Navigate to `https://opensearch-domain/_dashboards/` in a web browser\.
+1. Navigate to `https://opensearch-domain/_dashboards` in a web browser\. To log in to a specific tenant directly, append `?security_tenant=tenant-name` to the URL\.
 
 1. Sign in using your preferred credentials\.
 

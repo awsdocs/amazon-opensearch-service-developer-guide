@@ -31,7 +31,7 @@ To create snapshots manually, you need to work with IAM and Amazon S3\. Make sur
 | Prerequisite  | Description | 
 | --- | --- | 
 | S3 bucket | Create an S3 bucket to store manual snapshots for your OpenSearch Service domain\. For instructions, see [Create a Bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in the *Amazon Simple Storage Service User Guide*\. Remember the name of the bucket to use it in the following places:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-snapshots.html) Do not apply an S3 Glacier lifecycle rule to this bucket\. Manual snapshots don't support the S3 Glacier storage class\. | 
-| IAM role | Create an IAM role to delegate permissions to OpenSearch Service\. For instructions, see [Creating an IAM role \(console\)](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) in the *IAM User Guide*\. The rest of this chapter refers to this role as `TheSnapshotRole`\. **Attach an IAM policy** Attach the following policy to `TheSnapshotRole` to allow access to the S3 bucket: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For instructions to attach a policy to a role, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\. **Edit the trust relationship** Edit the trust relationship of `TheSnapshotRole` to specify OpenSearch Service in the `Principal` statement as shown in the following example: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "opensearchservice.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />  <br />}</pre> We recommend that you use the `aws:SourceAccount` and `aws:SourceArn` condition keys to protect yourself against the [confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html)\. The source account is the owner of the domain and the source ARN is the ARN of the domain\. Your domain must be on service software R20211203 or later in order to add these condition keys\. For example, you could add the following condition block to the trust policy: <pre>"Condition": {<br />    "StringEquals": {<br />        "aws:SourceAccount": "account-id"<br />    },<br />    "ArnLike": {<br />        "aws:SourceArn": "arn:aws:es:region:account-id:domain/domain-name"<br />    }<br />}</pre> For instructions to edit the trust relationship, see [Modifying a role trust policy](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy) in the *IAM User Guide*\. | 
+| IAM role | Create an IAM role to delegate permissions to OpenSearch Service\. For instructions, see [Creating an IAM role \(console\)](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) in the *IAM User Guide*\. The rest of this chapter refers to this role as `TheSnapshotRole`\. **Attach an IAM policy** Attach the following policy to `TheSnapshotRole` to allow access to the S3 bucket: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />      "Action": [<br />        "s3:ListBucket"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name"<br />      ]<br />    },<br />    {<br />      "Action": [<br />        "s3:GetObject",<br />        "s3:PutObject",<br />        "s3:DeleteObject"<br />      ],<br />      "Effect": "Allow",<br />      "Resource": [<br />        "arn:aws:s3:::s3-bucket-name/*"<br />      ]<br />    }<br />  ]<br />}</pre> For instructions to attach a policy to a role, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\. **Edit the trust relationship** Edit the trust relationship of `TheSnapshotRole` to specify OpenSearch Service in the `Principal` statement as shown in the following example: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Sid": "",<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Service": "es.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRole"<br />  }]<br />  <br />}</pre> We recommend that you use the `aws:SourceAccount` and `aws:SourceArn` condition keys to protect yourself against the [confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html)\. The source account is the owner of the domain and the source ARN is the ARN of the domain\. Your domain must be on service software R20211203 or later in order to add these condition keys\. For example, you could add the following condition block to the trust policy: <pre>"Condition": {<br />    "StringEquals": {<br />        "aws:SourceAccount": "account-id"<br />    },<br />    "ArnLike": {<br />        "aws:SourceArn": "arn:aws:es:region:account-id:domain/domain-name"<br />    }<br />}</pre> For instructions to edit the trust relationship, see [Modifying a role trust policy](https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-managingrole-editing-console.html#roles-managingrole_edit-trust-policy) in the *IAM User Guide*\. | 
 | Permissions |  In order to register the snapshot repository, you need to be able to pass `TheSnapshotRole` to OpenSearch Service\. You also need access to the `es:ESHttpPut` action\. To grant both of these permissions, attach the following policy to the IAM user or role whose credentials are being used to sign the request: <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": "iam:PassRole",<br />      "Resource": "arn:aws:iam::123456789012:role/TheSnapshotRole"<br />    },<br />    {<br />      "Effect": "Allow",<br />      "Action": "es:ESHttpPut",<br />      "Resource": "arn:aws:es:region:123456789012:domain/domain-name/*"<br />    }<br />  ]<br />}</pre> If your user or role doesn't have `iam:PassRole` permissions to pass `TheSnapshotRole` you might encounter the following common error when you try to register a repository in the next step: <pre>$ python register-repo.py<br />{"Message":"User: arn:aws:iam::123456789012:user/MyUserAccount<br />is not authorized to perform: iam:PassRole on resource:<br />arn:aws:iam::123456789012:role/TheSnapshotRole"}</pre>  | 
 
 ## Registering a manual snapshot repository<a name="managedomains-snapshot-registerdirectory"></a>
@@ -48,7 +48,7 @@ Fine\-grained access control introduces an additional step when registering a re
 
 1. Choose **Mapped users**, **Manage mapping**\. 
 
-1. Add the domain ARN of the user or role that has permissions to pass `TheSnapshotRole`\. Put user ARNs under **Users** and role ARNs under **Backend roles**\.
+1. Add the ARN of the user or role that has permissions to pass `TheSnapshotRole`\. Put user ARNs under **Users** and role ARNs under **Backend roles**\.
 
    ```
    arn:aws:iam::123456789123:user/user-name
@@ -202,7 +202,7 @@ Snapshots are not instantaneous\. They take time to complete and don't represent
 
 OpenSearch snapshots are incremental, meaning they only store data that changed since the last successful snapshot\. This incremental nature means the difference in disk usage between frequent and infrequent snapshots is often minimal\. In other words, taking hourly snapshots for a week \(for a total of 168 snapshots\) might not use much more disk space than taking a single snapshot at the end of the week\. Also, the more frequently you take snapshots, the less time they take to complete\. For example, daily snapshots can take 20\-30 minutes to complete, whereas hourly snapshots might complete within a few minutes\. Some OpenSearch users take snapshots as often as every half hour\.
 
-### Create a snapshot<a name="managedomains-snapshot-take"></a>
+### Take a snapshot<a name="managedomains-snapshot-take"></a>
 
 You specify the following information when you create a snapshot:
 + The name of your snapshot repository
@@ -223,6 +223,8 @@ To take a manual snapshot, perform the following steps:
    ```
    curl -XPUT 'domain-endpoint/_snapshot/repository-name/snapshot-name'
    ```
+
+   To include or exclude certain indexes and specify other settings, add a request body\. For the request structure, see [Take snapshots](https://opensearch.org/docs/1.1/opensearch/snapshot-restore/#take-snapshots) in the OpenSearch documentation\.
 
 **Note**  
 The time required to take a snapshot increases with the size of the OpenSearch Service domain\. Long\-running snapshot operations sometimes encounter the following error: `504 GATEWAY_TIMEOUT`\. You can typically ignore these errors and wait for the operation to complete successfully\. Run the following command to verify the state of all snapshots of your domain:  
@@ -269,7 +271,7 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
    curl -XDELETE 'domain-endpoint/_all'
    ```
 
-   However, if you don't plan to restore all indices, you can just delete one:
+   However, if you don't plan to restore all indexes, you can just delete one:
 
    ```
    curl -XDELETE 'domain-endpoint/index-name'
@@ -281,20 +283,20 @@ Most automated snapshots are stored in the `cs-automated` repository\. If your d
    curl -XPOST 'domain-endpoint/_snapshot/repository-name/snapshot-name/_restore'
    ```
 
-   Due to special permissions on the OpenSearch Dashboards and fine\-grained access control indices, attempts to restore all indexes might fail, especially if you try to restore from an automated snapshot\. The following example restores just one index, `my-index`, from `2020-snapshot` in the `cs-automated` snapshot repository:
+   Due to special permissions on the OpenSearch Dashboards and fine\-grained access control indexes, attempts to restore all indexes might fail, especially if you try to restore from an automated snapshot\. The following example restores just one index, `my-index`, from `2020-snapshot` in the `cs-automated` snapshot repository:
 
    ```
    curl -XPOST 'domain-endpoint/_snapshot/cs-automated/2020-snapshot/_restore' -d '{"indices": "my-index"}' -H 'Content-Type: application/json'
    ```
 
-   Alternately, you might want to restore all indexes *except* the Dashboards and fine\-grained access control indices:
+   Alternately, you might want to restore all indexes *except* the Dashboards and fine\-grained access control indexes:
 
    ```
    curl -XPOST 'domain-endpoint/_snapshot/cs-automated/2020-snapshot/_restore' -d '{"indices": "-.kibana*,-.opendistro*"}' -H 'Content-Type: application/json'
    ```
 
 **Note**  
-If not all primary shards were available for the indexes involved, a snapshot might have a `state` of `PARTIAL`\. This value indicates that data from at least one shard wasn't stored successfully\. You can still restore from a partial snapshot, but you might need to use older snapshots to restore any missing indices\.
+If not all primary shards were available for the indexes involved, a snapshot might have a `state` of `PARTIAL`\. This value indicates that data from at least one shard wasn't stored successfully\. You can still restore from a partial snapshot, but you might need to use older snapshots to restore any missing indexes\.
 
 ## Deleting manual snapshots<a name="managedomains-snapshot-delete"></a>
 
@@ -306,7 +308,7 @@ DELETE _snapshot/repository-name/snapshot-name
 
 ## Automating snapshots with Index State Management<a name="managedomains-snapshot-ism"></a>
 
-You can use the Index State Management \(ISM\) `[snapshot](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#snapshot)` operation to automatically trigger snapshots of indices based on changes in their age, size, or number of documents\. For an example ISM policy using the `snapshot` operation, see [Sample Policies](ism.md#ism-example)\.
+You can use the Index State Management \(ISM\) `[snapshot](https://opendistro.github.io/for-elasticsearch-docs/docs/im/ism/policies/#snapshot)` operation to automatically trigger snapshots of indexes based on changes in their age, size, or number of documents\. For an example ISM policy using the `snapshot` operation, see [Sample Policies](ism.md#ism-example)\.
 
 ## Using Curator for snapshots<a name="managedomains-snapshot-curator"></a>
 

@@ -2,9 +2,9 @@
 
 Configure alerts in Amazon OpenSearch Service to get notified when data from one or more indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
 
-Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documentation, including API descriptions, see the [OpenSearch documentation](https://docs-beta.opensearch.org/monitoring-plugins/alerting/index/)\. This topic highlights the differences in alerting in OpenSearch Service compared to the open\-source version\.
+Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documentation, including API descriptions, see the [OpenSearch documentation](https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/)\. This topic highlights the differences in alerting in OpenSearch Service compared to the open\-source version\.
 
-****To get started with alerting****
+**To get started with alerting**
 
 1. Choose **Alerting** from the OpenSearch Dashboards main menu\.
 
@@ -18,7 +18,7 @@ Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documenta
 **Tip**  
 After an action successfully sends a message, securing access to that message \(for example, access to a Slack channel\) is your responsibility\. If your domain contains sensitive data, consider using triggers without actions and periodically checking Dashboards for alerts\.
 
-For detailed steps, see [Monitors](https://docs-beta.opensearch.org/monitoring-plugins/alerting/monitors/) in the OpenSearch documentation\.
+For detailed steps, see [Monitors](https://opensearch.org/docs/latest/monitoring-plugins/alerting/monitors/) in the OpenSearch documentation\.
 
 ## Differences<a name="alerting-diff"></a>
 
@@ -91,7 +91,7 @@ OpenSearch Service supports Amazon Simple Notification Service \([Amazon SNS](ht
 
 ### Alerting settings<a name="alerting-diff-settings"></a>
 
-OpenSearch Service lets you modify the following [alerting settings](https://docs-beta.opensearch.org/monitoring-plugins/alerting/settings/#alerting-settings):
+OpenSearch Service lets you modify the following [alerting settings](https://opensearch.org/docs/latest/monitoring-plugins/alerting/settings/):
 + `plugins.scheduled_jobs.enabled`
 + `plugins.alerting.alert_history_enabled`
 + `plugins.alerting.alert_history_max_age`
@@ -145,8 +145,8 @@ PUT _index_template/template-name
 }
 ```
 
-Depending on your tolerance for data loss, you might even consider using zero replicas\. For more information about creating and managing index templates, see [Index templates](https://docs-beta.opensearch.org/opensearch/index-templates/) in the OpenSearch documentation\. 
+Depending on your tolerance for data loss, you might even consider using zero replicas\. For more information about creating and managing index templates, see [Index templates](https://opensearch.org/docs/latest/opensearch/index-templates/) in the OpenSearch documentation\. 
 
 ### Alerting permissions<a name="alerting-diff-perms"></a>
 
-Alerting supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://docs-beta.opensearch.org/monitoring-plugins/alerting/security/) in the OpenSearch documentation\.
+Alerting supports [fine\-grained access control](fgac.md)\. For details on mixing and matching permissions to fit your use case, see [Alerting security](https://opensearch.org/docs/latest/monitoring-plugins/alerting/security/) in the OpenSearch documentation\.

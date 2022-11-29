@@ -42,6 +42,6 @@ search source=accounts | where age > 18 | fields firstname, lastname
 | 2 | Nanette | Bates | 
 | 3 | Dale | Adams | 
 
-You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see [the PPL reference manual](https://github.com/opensearch-project/sql/blob/2.x/docs/user/ppl/index.rst)\.
+You can use a complete set of read\-only commands like `search`, `where`, `fields`, `rename`, `dedup`, `stats`, `sort`, `eval`, `head`, `top`, and `rare`\. For descriptions and examples of each command, see the [OpenSearch PPL reference manual](https://github.com/opensearch-project/sql/blob/2.x/docs/user/ppl/index.rst)\.
 
-The PPL plugin supports all SQL functions, including mathematical, trigonometric, date\-time, string, aggregate, and advanced operators and expressions\. To learn more, see [the PPL reference manual](https://github.com/opensearch-project/sql/blob/2.x/docs/user/ppl/index.rst)\.
+The PPL plugin supports all SQL functions, including mathematical, trigonometric, date\-time, string, aggregate, and advanced operators and expressions\. To learn more, see the [OpenSearch PPL reference manual](https://github.com/opensearch-project/sql/blob/2.x/docs/user/ppl/index.rst)\.

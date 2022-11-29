@@ -1,6 +1,6 @@
 # Cross\-cluster replication for Amazon OpenSearch Service<a name="replication"></a>
 
-With cross\-cluster replication in Amazon OpenSearch Service, you can replicate indexes, mappings, and metadata from one OpenSearch Service domain to another\. It follows an active\-passive replication model where the follower index \(where the data is replicated\) pulls data from the leader index\. Using cross\-cluster replication helps to ensure disaster recovery if there is an outage, and allows you to replicate data across geographically distant data centers to reduce latency\.
+With cross\-cluster replication in Amazon OpenSearch Service, you can replicate indexes, mappings, and metadata from one OpenSearch Service domain to another\. It follows an active\-passive replication model where the follower index \(where the data is replicated\) pulls data from the leader index\. Using cross\-cluster replication helps to ensure disaster recovery if there is an outage, and allows you to replicate data across geographically distant data centers to reduce latency\. You pay [standard AWS data transfer charges](https://aws.amazon.com/opensearch-service/pricing/) for the data transferred between domains\. 
 
 Cross\-cluster replication is available on domains running Elasticsearch 7\.10 or OpenSearch 1\.1 or later\. Full documentation for cross\-cluster replication is available in the [OpenSearch documentation](https://opensearch.org/docs/replication-plugin/index/)\.
 
@@ -12,6 +12,7 @@ Cross\-cluster replication has the following limitations:
 + Domains must either share the same major version, or be on the final minor version and the next major version\.
 + You can't use AWS CloudFormation to connect domains\.
 + You can't use cross\-cluster replication on M3 or burstable \(T2 and T3\) instances\.
++ You can't replicate data between UltraWarm or cold indexes\. Both indexes must be in hot storage\.
 
 ## Prerequisites<a name="replication-prereqs"></a>
 
@@ -61,7 +62,7 @@ The commands to start replication and create a replication rule are special case
 
 ## Set up a cross\-cluster connection<a name="replication-connect"></a>
 
-To replicate indexes from one domain to another, you need to set up a cross\-cluster connection between the domains\. The easiest way to connect domains is through the **Connections** tab of the domain dashboard\. You can also use the [configuration API](configuration-api.md) or the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/opensearch/create-outbound-connection.html)\. Because cross\-cluster replication follows a "pull" model, you initate connections from the follower domain\.
+To replicate indexes from one domain to another, you need to set up a cross\-cluster connection between the domains\. The easiest way to connect domains is through the **Connections** tab of the domain dashboard\. You can also use the [configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html) or the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/opensearch/create-outbound-connection.html)\. Because cross\-cluster replication follows a "pull" model, you initate connections from the follower domain\.
 
 **Note**  
 If you previously connected two domains to perform [cross\-cluster searches](cross-cluster-search.md), you can't use that same connection for replication\. The connection is marked as `SEARCH_ONLY` in the console\. In order to perform replication between two previously connected domains, you must delete the connection and recreate it\. When you've done this, the connection is available for both cross\-cluster search and cross\-cluster replication\.

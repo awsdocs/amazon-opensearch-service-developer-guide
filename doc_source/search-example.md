@@ -1,4 +1,4 @@
-# Creating a search application with Amazon OpenSearch Service<a name="search-example"></a>
+# Tutorial: Creating a search application with Amazon OpenSearch Service<a name="search-example"></a>
 
 A common way to create a search application with Amazon OpenSearch Service is to use web forms to send user queries to a server\. Then you can authorize the server to call the OpenSearch APIs directly and have the server send requests to OpenSearch Service\. However, if you want to write client\-side code that doesn't rely on a server, you should compensate for the security and performance risks\. Allowing unsigned, public access to the OpenSearch APIs is inadvisable\. Users might access unsecured endpoints or impact cluster performance through overly broad queries \(or too many queries\)\.
 
@@ -124,7 +124,7 @@ service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-host = '' # The OpenSearch domain endpoint with https://
+host = '' # The OpenSearch domain endpoint with https:// and without a trailing slash
 index = 'movies'
 url = host + '/' + index + '/_search'
 
@@ -215,9 +215,27 @@ Alternatively, you can choose to make your domain access policy more granular\. 
 ```
 
 **Note**  
-If you have fine\-grained access control enabled for the domain, you might also need to [map the role to a user](fgac.md#fgac-mapping) in OpenSearch Dashboards, otherwise you'll see permissions errors\.
+If you have fine\-grained access control enabled for the domain, you also need to [map the role to a user](fgac.md#fgac-mapping) in OpenSearch Dashboards, otherwise you'll see permissions errors\.
 
 For more information about access policies, see [Configuring access policies](createupdatedomains.md#createdomain-configure-access-policies)\.
+
+## Map the Lambda role \(if using fine\-grained access control\)<a name="search-example-perms-fgac"></a>
+
+Fine\-grained access control introduces an additional step before you can test the application\. Even if you use HTTP basic authentication for all other purposes, you need to map the Lambda role to a user, otherwise you'll see permissions errors\.
+
+1. Navigate to the OpenSearch Dashboards endpoint for the domain\.
+
+1. From the main menu, choose **Security**, **Roles**, and select user or role to map the Lambda role to\.
+
+1. Choose **Mapped users**, **Manage mapping**\. 
+
+1. Under **Backend roles**, add the Amazon Resource Name \(ARN\) of the Lambda role\. 
+
+   ```
+   arn:aws:iam::123456789123:role/opensearch-lambda-role-1abcdefg
+   ```
+
+1. Select **Map** and confirm the user or role shows up under **Mapped users**\.
 
 ## Step 5: Test the web application<a name="search-example-webpage"></a>
 

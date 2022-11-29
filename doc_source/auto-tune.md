@@ -45,7 +45,7 @@ aws opensearch update-domain-config \
 
 **Configuration API**
 
-To use the [configuration API](configuration-api.md), configure the `AutoTuneOptions` settings: 
+To use the [configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html), configure the `AutoTuneOptions` settings: 
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/config

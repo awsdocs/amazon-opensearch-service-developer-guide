@@ -3,7 +3,7 @@
 Amazon OpenSearch Service integrates with AWS CloudTrail, a service that provides a record of actions taken by a user, role, or an AWS service in OpenSearch Service\. CloudTrail captures all configuration API calls for OpenSearch Service as events\.
 
 **Note**  
-CloudTrail only captures calls to the [configuration API](configuration-api.md), such as `CreateDomain` and `GetUpgradeStatus`\. CloudTrail doesn't capture calls to the [OpenSearch APIs](supported-operations.md), such as `_search` and `_bulk`\. For these calls, see [Monitoring audit logs in Amazon OpenSearch Service](audit-logs.md)\.
+CloudTrail only captures calls to the [Configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html), such as `CreateDomain` and `GetUpgradeStatus`\. CloudTrail doesn't capture calls to the [OpenSearch APIs](supported-operations.md), such as `_search` and `_bulk`\. For these calls, see [Monitoring audit logs in Amazon OpenSearch Service](audit-logs.md)\.
 
 The captured calls include calls from the OpenSearch Service console, AWS CLI, or an AWS SDK\. If you create a trail, you can enable continuous delivery of CloudTrail events to an Amazon S3 bucket, including events for OpenSearch Service\. If you don't configure a trail, you can still view the most recent events on the CloudTrail console in **Event history**\. Using the information collected by CloudTrail, you can determine the request that was made to OpenSearch Service, the IP address from which the request was made, who made the request, when it was made, and additional details\.
 
@@ -19,7 +19,7 @@ For an ongoing record of events in your AWS account account, including events fo
 + [Configuring Amazon SNS notifications for CloudTrail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/getting_notifications_top_level.html)
 + [Receiving CloudTrail log files from multiple Regions](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/receive-cloudtrail-log-files-from-multiple-regions.html) and [Receiving CloudTrail log files from multiple accounts](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-receive-logs-from-multiple-accounts.html)
 
-All OpenSearch Service configuration API actions are logged by CloudTrail and are documented in [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\. 
+All OpenSearch Service configuration API actions are logged by CloudTrail and are documented in the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\. 
 
 Every event or log entry contains information about who generated the request\. The identity information helps you determine the following: 
 + Whether the request was made with root or AWS Identity and Access Management \(IAM\) user credentials

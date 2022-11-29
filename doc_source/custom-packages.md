@@ -67,7 +67,7 @@ The console is the simplest way to import a package into OpenSearch Service and 
 
 1. When the package status is **Available**, note its ID\. Use `analyzers/id` as the file path in [requests to OpenSearch](#custom-packages-using)\.
 
-Alternately, use the AWS CLI, SDKs, or configuration API to import and associate packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+Alternately, use the AWS CLI, SDKs, or configuration API to import and associate packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.
 
 ## Using custom packages with OpenSearch<a name="custom-packages-using"></a>
 
@@ -193,7 +193,7 @@ Each of your associated domains stores *its* own copy of the file, as well\. To 
    + If your domains runs OpenSearch or Elasticsearch 7\.8 or later and only uses search analyzers with the [updateable](#custom-packages-using) field set to true, you don't need to take any further action\. OpenSearch Service automatically updates your indices using the [\_plugins/\_refresh\_search\_analyzers API](https://opensearch.org/docs/im-plugin/refresh-analyzer/index/)\.
    + If your domain runs Elasticsearch 7\.7 or earlier, uses index analyzers, or doesn't use the `updateable` field, see [Manual index updates](#custom-packages-updating-index-analyzers)\.
 
-Although the console is the simplest method, you can also use the AWS CLI, SDKs, or configuration API to update OpenSearch Service packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+Although the console is the simplest method, you can also use the AWS CLI, SDKs, or configuration API to update OpenSearch Service packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.
 
 ## Updating custom packages \(AWS SDK\)<a name="custom-packages-update-python"></a>
 
@@ -404,4 +404,4 @@ The console is the simplest way to dissociate a package from a domain and remove
 
 1. Select the package and choose **Delete**\.
 
-Alternately, use the AWS CLI, SDKs, or configuration API to dissociate and remove packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+Alternately, use the AWS CLI, SDKs, or configuration API to dissociate and remove packages\. For more information, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/) and [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.

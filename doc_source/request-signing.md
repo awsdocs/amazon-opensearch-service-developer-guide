@@ -16,7 +16,7 @@ The latest versions of the Elasticsearch clients might include license or versio
 
 ## Java<a name="request-signing-java"></a>
 
-The easiest way of sending a signed request is to use the `AwsSdk2Transport`, introduced in [opensearch-java 2.1.0](https://github.com/opensearch-project/opensearch-java)\. The following [example](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java/opensearch-java-aws-sdk2-transport) creates an index, writes a document, and deletes the index\. You must provide values for `region` and `host`\. 
+The easiest way to send a signed request with Java is to use `AwsSdk2Transport`, introduced in [opensearch\-java](https://github.com/opensearch-project/opensearch-java) version 2\.1\.0\. The following [example](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java/opensearch-java-aws-sdk2-transport) creates an index, writes a document, and deletes the index\. You must provide values for `region` and `host`\.
 
 ```
 package com.amazonaws.samples;
@@ -80,10 +80,10 @@ public class IndexDocument {
 }
 ```
 
-Other alternatives include using an AWS Request Signing Interceptor and/or the high-level REST client\. See [this sample](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java/aws-request-signing-apache-interceptor).
+Other alternatives include using an AWS Request Signing Interceptor and/or the high\-level REST client\. See [this sample](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/java/aws-request-signing-apache-interceptor)
 
 **Tip**  
-Both signed examples use the default credential chain\. Run `aws configure` using the AWS CLI to set your credentials\.
+This sample uses the default credential chain\. Run `aws configure` using the AWS CLI to set your credentials\.
 
 ## Python<a name="request-signing-python"></a>
 
@@ -569,6 +569,7 @@ async function indexDocument(document) {
       });
       response.body.on('end', () => {
         console.log('Response body: ' + responseBody);
+        resolve(responseBody);
       });
     }).catch((error) => {
         console.log('Error: ' + error);

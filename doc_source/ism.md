@@ -1,15 +1,15 @@
 # Index State Management in Amazon OpenSearch Service<a name="ism"></a>
 
-Index State Management \(ISM\) in Amazon OpenSearch Service lets you define custom management policies to automate routine tasks and apply them to indexes and index patterns\. You no longer need to set up and manage external processes to run your index operations\.
+Index State Management \(ISM\) in Amazon OpenSearch Service lets you define custom management policies that automate routine tasks, and apply them to indexes and index patterns\. You no longer need to set up and manage external processes to run your index operations\.
 
 A policy contains a default state and a list of states for the index to transition between\. Within each state, you can define a list of actions to perform and conditions that trigger these transitions\. A typical use case is to periodically delete old indexes after a certain period of time\. For example, you can define a policy that moves your index into a `read_only` state after 30 days and then ultimately deletes it after 90 days\.
 
-After you attach a policy to an index, ISM creates a job that runs every 30 to 48 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 30 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indexes at the same time\. ISM doesn't run jobs if the cluster state is red\.
+After you attach a policy to an index, ISM creates a job that runs every 5 to 8 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 5 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indexes at the same time\. ISM doesn't run jobs if the cluster state is red\.
 
 ISM requires OpenSearch or Elasticsearch 6\.8 or later\. Full documentation is available in the [OpenSearch documentation](https://opensearch.org/docs/im-plugin/ism/index/)\.
 
 **Important**  
-The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indices\. You can continue to automatically manage newly created indexes with the [ISM template field](https://opensearch.org/docs/latest/im-plugin/ism/policies/#sample-policy-with-ism-template-for-auto-rollover)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
+The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indexes\. You can continue to automatically manage newly created indexes with the [ISM template field](https://opensearch.org/docs/latest/im-plugin/ism/policies/#sample-policy-with-ism-template-for-auto-rollover)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
 
 ## Create an ISM policy<a name="ism-start"></a>
 
@@ -235,18 +235,18 @@ Compared to OpenSearch and Elasticsearch, ISM for Amazon OpenSearch Service has 
   + If your domain has [UltraWarm](ultrawarm.md) enabled, the `warm_migration` action transitions the index to warm storage\.
   + If your domain has [cold storage](cold-storage.md) enabled, the `cold_migration` action transitions the index to cold storage, and the `cold_delete` action deletes the index from cold storage\.
 
-  Even if one of these actions doesn’t complete within the [set timeout period](https://opensearch.org/docs/im-plugin/ism/policies/#actions), the migration or deletion of indexes still continues\. Setting an `error_notification` for one of the above actions might notify you that the action failed if it didn’t complete within the timeout period\. This failed notification is only for your own reference\. The actual operation has no inherent timeout and continues to run until it eventually succeeds or fails\. 
+  Even if one of these actions doesn’t complete within the [set timeout period](https://opensearch.org/docs/im-plugin/ism/policies/#actions), the migration or deletion of indexes still continues\. Setting an [error\_notification](https://opensearch.org/docs/latest/im-plugin/ism/policies/#error-notifications) for one of the above actions will notify you that the action failed if it didn’t complete within the timeout period, but the notification is only for your own reference\. The actual operation has no inherent timeout and continues to run until it eventually succeeds or fails\. 
 + If your domain runs OpenSearch or Elasticsearch 7\.4 or later, OpenSearch Service supports the ISM `open` and `close` operations\.
 + If your domain runs OpenSearch or Elasticsearch 7\.7 or later, OpenSearch Service supports the ISM `snapshot` operation\.
 
 ### Cold storage ISM operations<a name="ism-cold-storage"></a>
 
-For cold indices, you must specify a `?type=_cold` parameter when you use the following ISM APIs:
-+ add policy
-+ remove policy
-+ change policy
-+ retry failed managed index
-+ explain index
+For cold indexes, you must specify a `?type=_cold` parameter when you use the following ISM APIs:
++ [Add policy](https://opensearch.org/docs/latest/im-plugin/ism/api/#add-policy)
++ [Remove policy](https://opensearch.org/docs/latest/im-plugin/ism/api/#remove-policy-from-index)
++ [Update policy](https://opensearch.org/docs/latest/im-plugin/ism/api/#update-policy)
++ [Retry failed index](https://opensearch.org/docs/latest/im-plugin/ism/api/#retry-failed-index)
++ [Explain index](https://opensearch.org/docs/latest/im-plugin/ism/api/#explain-index)
 
 These APIs for cold indexes have the following additional differences:
 + Wildcard operators are not supported except when you use it at the end\. For example, `_plugins/_ism/<add, remove, change_policy, retry, explain>/logstash-*` is supported but `_plugins/_ism/<add, remove, change_policy, retry, explain>/iad-*-prod` isn’t supported\.

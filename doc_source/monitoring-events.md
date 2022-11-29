@@ -353,7 +353,7 @@ The following is an example event of this type:
 }
 ```
 
-## Cluster health events<a name="monitoring-events-shards"></a>
+## Cluster health events<a name="monitoring-events-cluster-health"></a>
 
 OpenSearch Service sends certain events to EventBridge when your cluster's health is compromised\.
 
@@ -380,7 +380,7 @@ The following is an example event of this type:
    "detail":{
       "event":"Automatic Snapshot Restore for Red Indices",
       "status":"Started",
-      "Severity":"High",
+      "severity":"High",
       "description":"Your cluster status is red. We have started automatic snapshot restore for the red indices. 
                      No action is needed from your side. Red indices [red-index-0, red-index-1]"
    }
@@ -410,7 +410,7 @@ The following is an example event of this type:
    "detail":{
       "event":"Automatic Snapshot Restore for Red Indices",
       "status":"Partially Restored",
-      "Severity":"High",
+      "severity":"High",
       "description":"Your cluster status is red. We were able to restore the following Red indices from 
                     snapshot: [red-index-0]. Indices not restored: [red-index-1]. Please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-red-cluster-status for troubleshooting steps."
    }
@@ -440,7 +440,7 @@ The following is an example event of this type:
    "detail":{
       "event":"Automatic Snapshot Restore for Red Indices",
       "status":"Failed",
-      "Severity":"High",
+      "severity":"High",
       "description":"Your cluster status is red. We were unable to restore the Red indices automatically. 
                     Indices not restored: [red-index-0, red-index-1]. Please refer https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-red-cluster-status for troubleshooting steps."
    }
@@ -598,7 +598,7 @@ The following is an example event of this type:
 
 ### EBS burst balance below 70%<a name="monitoring-events-ebs-burst-70"></a>
 
-OpenSearch Service sends this event when the EBS burst balance on one or more data nodes falls below 70%\. EBS burst balance depletion can cause widespread cluster unavailability and throttling of I/O requests, which can lead to high latencies and timeouts on indexing and search requests\. If the balance falls to 20%, OpenSearch Service applies read and write blocks to the indexes on the corresponding nodes\. For steps to fix this issue, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\.
+OpenSearch Service sends this event when the EBS burst balance on one or more data nodes falls below 70%\. EBS burst balance depletion can cause widespread cluster unavailability and throttling of I/O requests, which can lead to high latencies and timeouts on indexing and search requests\. For steps to fix this issue, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\.
 
 **Example**
 
@@ -618,8 +618,9 @@ The following is an example event of this type:
      "event":"EBS Burst Balance",
      "status":"Warning",
      "severity":"Medium",
-     "description":"EBS burst balance on one or more data nodes is below 70%. When it reduces to 20%, we
-                    will apply read and write blocks on the indices in the corresponding nodes to prevent degradation of your cluster."
+     "description":"EBS burst balance on one or more data nodes is below 70%. 
+                    Follow https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-low-ebs-burst
+                    to fix this issue."
   }
 }
 ```
@@ -646,15 +647,16 @@ The following is an example event of this type:
      "event":"EBS Burst Balance",
      "status":"Warning",
      "severity":"High",
-     "description":"EBS burst balance on one or more data nodes is below 20%. We have applied 
-                    read and write blocks on the indices in the corresponding nodes to prevent degradation of your cluster."
+     "description":"EBS burst balance on one or more data nodes is below 20%.
+                    Follow https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#handling-errors-low-ebs-burst
+                    to fix this issue.
   }
 }
 ```
 
-### Throughput throttled<a name="monitoring-events-throughput-throttle"></a>
+### Disk throughput throttle<a name="monitoring-events-throughput-throttle"></a>
 
-OpenSearch Service sends this event when read and write requests to your domain are being throttled due to the throughput limitations of your EBS volumes\. If you receive this notification, consider first scaling your instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\.
+OpenSearch Service sends this event when read and write requests to your domain are being throttled due to the throughput limitations of your EBS volumes\. If you receive this notification, consider scaling up your instances following AWS recommended best practices\.
 
 **Example**
 
@@ -680,9 +682,134 @@ The following is an example event of this type:
 }
 ```
 
+## VPC endpoint events<a name="monitoring-events-vpc"></a>
+
+OpenSearch Service sends certain events to EventBridge related to [AWS PrivateLink interface endpoints](vpc-interface-endpoints.md)\.
+
+### VPC endpoint creation failed<a name="monitoring-events-vpc-create-fail"></a>
+
+OpenSearch Service sends this event when it's unable to create a requested VPC endpoint\. This error might occur because you've reached the limit on the number of VPC endoints allowed within a Region\. You will also see this error if a specified subnet or security group doesn't exist\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Amazon OpenSearch Service VPC Endpoint Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2016-11-01T13:12:22Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "event":"VPC Endpoint Create Validation",
+      "status":"Failed",
+      "severity":"High",
+      "description":"Unable to create VPC endpoint aos-0d4c74c0342343 for domain 
+                    arn:aws:es:eu-south-1:123456789012:domain/my-domain due to the following validation failures: You've reached the limit on the
+                    number of VPC endpoints that you can create in the AWS Region."
+   }
+}
+```
+
+### VPC endpoint update failed<a name="monitoring-events-vpc-update-fail"></a>
+
+OpenSearch Service sends this event when it's unable to delete a requested VPC endpoint\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Amazon OpenSearch Service VPC Endpoint Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2016-11-01T13:12:22Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "event":"VPC Endpoint Update Validation",
+      "status":"Failed",
+      "severity":"High",
+      "description":"Unable to update VPC endpoint aos-0d4c74c0342343 for domain 
+                    arn:aws:es:eu-south-1:123456789012:domain/my-domain due to the following validation failures: <failure message>."
+   }
+}
+```
+
+### VPC endpoint deletion failed<a name="monitoring-events-vpc-delete-fail"></a>
+
+OpenSearch Service sends this event when it's unable to delete a requested VPC endpoint\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Amazon OpenSearch Service VPC Endpoint Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2016-11-01T13:12:22Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "event":"VPC Endpoint Delete Validation",
+      "status":"Failed",
+      "severity":"High",
+      "description":"Unable to delete VPC endpoint aos-0d4c74c0342343 for domain 
+                    arn:aws:es:eu-south-1:123456789012:domain/my-domain due to the following validation failures: Specified subnet doesn't exist."
+   }
+}
+```
+
 ## Domain error events<a name="monitoring-events-errors"></a>
 
 OpenSearch Service sends events to EventBridge when one of the following domain errors occur\.
+
+### Domain update validation failure<a name="monitoring-events-validation"></a>
+
+OpenSearch Service sends this event if it encounters one or more validation failures when attempting to update or perform a configuration change on a domain\. For steps to resolve these failures, see [Troubleshooting validation errors](managedomains-configuration-changes.md#validation)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+   "version":"0",
+   "id":"01234567-0123-0123-0123-012345678901",
+   "detail-type":"Amazon OpenSearch Service Domain Update Notification",
+   "source":"aws.es",
+   "account":"123456789012",
+   "time":"2016-11-01T13:12:22Z",
+   "region":"us-east-1",
+   "resources":[
+      "arn:aws:es:us-east-1:123456789012:domain/test-domain"
+   ],
+   "detail":{
+      "event":"Domain Update Validation",
+      "status":"Failed",
+      "severity":"High",
+      "description":"Unable to perform updates to your domain due to the following validation failures: <failures>
+                    Please see the documentation for more information https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-configuration-changes.html#validation"
+   }
+}
+```
 
 ### KMS key inaccessible<a name="monitoring-events-kms-inaccessible"></a>
 

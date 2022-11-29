@@ -108,7 +108,7 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/c
 }
 ```
 
-For detailed information, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+For more information, see the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_LogPublishingOption.html)\.
 
 ## Audit log layers and categories<a name="audit-log-layers"></a>
 

@@ -1,7 +1,7 @@
 # Encryption of data at rest for Amazon OpenSearch Service<a name="encryption-at-rest"></a>
 
 OpenSearch Service domains offer encryption of data at rest, a security feature that helps prevent unauthorized access to your data\. The feature uses AWS Key Management Service \(AWS KMS\) to store and manage your encryption keys and the Advanced Encryption Standard algorithm with 256\-bit keys \(AES\-256\) to perform the encryption\. If enabled, the feature encrypts the following aspects of a domain:
-+ All indices \(including those in UltraWarm storage\)
++ All indexes \(including those in UltraWarm storage\)
 + OpenSearch logs
 + Swap files
 + All other data in the application directory
@@ -10,6 +10,9 @@ OpenSearch Service domains offer encryption of data at rest, a security feature 
 The following are *not* encrypted when you enable encryption of data at rest, but you can take additional steps to protect them:
 + Manual snapshots: You currently can't use AWS KMS keys to encrypt manual snapshots\. You can, however, use server\-side encryption with S3\-managed keys or KMS keys to encrypt the bucket you use as a snapshot repository\. For instructions, see [Registering a manual snapshot repository](managedomains-snapshots.md#managedomains-snapshot-registerdirectory)\.
 + Slow logs and error logs: If you [publish logs](createdomain-configure-slow-logs.md) and want to encrypt them, you can encrypt their CloudWatch Logs log group using the same AWS KMS key as the OpenSearch Service domain\. For more information, see [Encrypt log data in CloudWatch Logs using AWS KMS](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html) in the *Amazon CloudWatch Logs User Guide*\.
+
+**Note**  
+You can't enable encryption at rest on an existing domain if UltraWarm is enabled on the domain\. You must first disable UltraWarm storage, enable encryption at rest, and then re\-enable UltraWarm\.
 
 OpenSearch Service supports only symmetric encryption KMS keys, not asymmetric ones\. To learn how to create symmetric keys, see [Creating keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\.
 

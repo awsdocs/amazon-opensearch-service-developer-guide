@@ -55,10 +55,12 @@ Not all Availability Zones support all instance types\. If you choose **3\-AZ**,
 
    For maximum values, see [Domain and instance quotas](limits.md#clusterresource)\. Single\-node clusters are fine for development and testing, but should not be used for production workloads\. For more guidance, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md) and [Configuring a multi\-AZ domain in Amazon OpenSearch Service](managedomains-multiaz.md)\.
 
-1. For **Storage type**, choose either **EBS** \(default\) or **Instance**\. For guidance on creating especially large domains, see [Petabyte scale in Amazon OpenSearch Service](petabyte-scale.md)\.
+1. For **Storage type**, select Amazon EBS or instance store volumes to associate with your instance\. The volume types available in the list depend on the instance type that you've chosen\. For guidance on creating especially large domains, see [Petabyte scale in Amazon OpenSearch Service](petabyte-scale.md)\.
 
-1. If you choose **EBS** as the volume type, configure the following additional settings\. Some settings might not appear depending on the type of volume you choose\.    
+1. If you chose **EBS** as the storage type, configure the following additional settings\. Some settings might not appear depending on the type of volume you choose\.    
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/createupdatedomains.html)
+
+1. \(Optional\) If you selected a `gp3` volume type, expand **Advanced settings** and specify additional IOPS \(up to 1,000 MiB/s\) and throughput \(up to 16,000\) to provision for each node, beyond what is included with the price of storage, for an additional cost\. For more information, see the [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/)\.
 
 1. Choose the type and number of [dedicated master nodes](managedomains-dedicatedmasternodes.md)\. Dedicated master nodes increase cluster stability and are required for domains that have instance counts greater than 10\. We recommend three dedicated master nodes for production domains\.
 **Note**  
@@ -112,19 +114,19 @@ Instead of creating an OpenSearch Service domain by using the console, you can u
 #### Example commands<a name="createdomains-cli-examples"></a>
 
 This first example demonstrates the following OpenSearch Service domain configuration:
-+ Creates an OpenSearch Service domain named *mylogs* with OpenSearch version 1\.0
++ Creates an OpenSearch Service domain named *mylogs* with OpenSearch version 1\.2
 + Populates the domain with two instances of the `r6g.large.search` instance type
-+ Uses a 100 GiB General Purpose \(SSD\) EBS volume for storage for each data node
++ Uses a 100 GiB General Purpose \(SSD\) `gp3` EBS volume for storage for each data node
 + Allows anonymous access, but only from a single IP address: 192\.0\.2\.0/32
 
 ```
-aws opensearch create-domain --domain-name mylogs --engine-version OpenSearch_1.0 --cluster-config  InstanceType=r6g.large.search,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=100 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
+aws opensearch create-domain --domain-name mylogs --engine-version OpenSearch_1.2 --cluster-config  InstanceType=r6g.large.search,InstanceCount=2 --ebs-options EBSEnabled=true,VolumeType=gp3,VolumeSize=100,Iops=3500,Throughput=125 --access-policies '{"Version": "2012-10-17", "Statement": [{"Action": "es:*", "Principal":"*","Effect": "Allow", "Condition": {"IpAddress":{"aws:SourceIp":["192.0.2.0/32"]}}}]}'
 ```
 
 The next example demonstrates the following OpenSearch Service domain configuration:
 + Creates an OpenSearch Service domain named *mylogs* with Elasticsearch version 7\.10
 + Populates the domain with six instances of the `r6g.large.search` instance type
-+ Uses a 100 GiB General Purpose \(SSD\) EBS volume for storage for each data node
++ Uses a 100 GiB General Purpose \(SSD\) `gp2` EBS volume for storage for each data node
 + Restricts access to the service to a single user, identified by the user's AWS account ID: 555555555555 
 + Distributes instances across three Availability Zones
 
@@ -148,7 +150,7 @@ If you attempt to create an OpenSearch Service domain and a domain with the same
 
 ### Creating OpenSearch Service domains \(AWS SDKs\)<a name="createdomains-sdk"></a>
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [OpenSearch Service configuration API reference](configuration-api.md), including `CreateDomain`\. For sample code, see [Using the AWS SDKs to interact with Amazon OpenSearch Service](configuration-samples.md)\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the actions defined in the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html), including `CreateDomain`\. For sample code, see [Using the AWS SDKs to interact with Amazon OpenSearch Service](configuration-samples.md)\. For more information about installing and using the AWS SDKs, see [AWS Software Development Kits](http://aws.amazon.com/code)\.
 
 ### Creating OpenSearch Service domains \(AWS CloudFormation\)<a name="createdomains-cfn"></a>
 

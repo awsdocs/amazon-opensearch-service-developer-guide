@@ -8,6 +8,7 @@ The following sample requests work with OpenSearch APIs\. Some requests might no
 **Topics**
 + [URI searches](#searching-uri)
 + [Request body searches](#searching-dsl)
++ [Dashboards Query Language](#DashboardsQueryLanguages)
 + [Custom packages for Amazon OpenSearch Service](custom-packages.md)
 + [Querying your Amazon OpenSearch Service data with SQL](sql-support.md)
 + [k\-Nearest Neighbor \(k\-NN\) search in Amazon OpenSearch Service](knn.md)
@@ -91,7 +92,12 @@ GET https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search?q=title:h
 
 ## Request body searches<a name="searching-dsl"></a>
 
-To perform more complex searches, use the HTTP request body and the OpenSearch domain\-specific language \(DSL\) for queries\. The query DSL lets you specify the full range of OpenSearch search options\. The following `match` query is similar to the final [URI search](#searching-uri) example:
+To perform more complex searches, use the HTTP request body and the OpenSearch domain\-specific language \(DSL\) for queries\. The query DSL lets you specify the full range of OpenSearch search options\.
+
+**Note**  
+You can't include Unicode special characters in a text field value, or the value will be parsed as multiple values separated by the special character\. This incorrect parsing can lead to unintentional filtering of documents and potentially compromise control over their access\. For more information, see [A note on Unicode special characters in text fields](https://opensearch.org/docs/latest/opensearch/query-dsl/index/#a-note-on-unicode-special-characters-in-text-fields) in the OpenSearch documentation\.
+
+The following `match` query is similar to the final [URI search](#searching-uri) example:
 
 ```
 POST https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search
@@ -277,4 +283,86 @@ A sample response might look like the following:
     "failed": 0
   }
 }
+```
+
+## Dashboards Query Language<a name="DashboardsQueryLanguages"></a>
+
+You can use the [Dashboards Query Language \(DQL\)](https://opensearch.org/docs/latest/dashboards/dql/#terms-query) to search for data and visualizations in OpenSearch Dashboards\. DQL uses four primary query types: *terms*, *Boolean*, *date and range*, and *nested field*\.
+
+**Terms query**
+
+A terms query requires you to specify the term that you're searching for\. 
+
+To perform a terms query, enter the following:
+
+```
+host:www.example.com
+```
+
+**Boolean query**
+
+You can use the Boolean operators `AND`, `or`, and `not` to combine multiple queries\.
+
+To perform a Boolean query, paste the following:
+
+```
+host.keyword:www.example.com and response.keyword:200
+```
+
+**Date and range query**
+
+You can use a date and range query to find a date before or after your query\.
++ `>` indicates a search for a date after your specified date\.
++ `<` indicates a search for a date before your specified date\.
+
+`@timestamp > "2020-12-14T09:35:33"`
+
+**Nested field query**
+
+If you have a document with nested fields, you have to specify which parts of the document that you want to retrieve\. The following is a sample document that contains nested fields:
+
+```
+{"NBA players":[
+    {"player-name": "Lebron James",
+      "player-position": "Power forward",
+      "points-per-game": "30.3"
+    },
+    {"player-name": "Kevin Durant",
+      "player-position": "Power forward",
+      "points-per-game": "27.1"
+    },
+    {"player-name": "Anthony Davis",
+      "player-position": "Power forward",
+      "points-per-game": "23.2"
+    },
+    {"player-name": "Giannis Antetokounmpo",
+      "player-position": "Power forward",
+      "points-per-game":"29.9"
+    }
+  ]
+}
+```
+
+To retrieve a specific field using DQL, paste the following:
+
+```
+NBA players: {player-name: Lebron James}
+```
+
+To retrieve multiple objects from the nested document, paste the following:
+
+```
+NBA players: {player-name: Lebron James} and NBA players: {player-name: Giannis Antetokounmpo}
+```
+
+To search within a range, paste the following:
+
+```
+NBA players: {player-name: Lebron James} and NBA players: {player-name: Giannis Antetokounmpo and < 30}
+```
+
+If your document has an object nested within another object, you can still retrieve data by specifying all of the levels\. To do this, paste the following:
+
+```
+Top-Power-forwards.NBA players: {player-name:Lebron James}
 ```

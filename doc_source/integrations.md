@@ -50,7 +50,7 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
    credentials = boto3.Session().get_credentials()
    awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
    
-   host = '' # the OpenSearch Service domain, including https://
+   host = '' # the OpenSearch Service domain, e.g. https://search-mydomain.us-west-1.es.amazonaws.com
    index = 'lambda-s3-index'
    type = '_doc'
    url = host + '/' + index + '/' + type
@@ -221,7 +221,7 @@ service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-host = '' # the OpenSearch Service domain, including https://
+host = '' # the OpenSearch Service domain, e.g. https://search-mydomain.us-west-1.es.amazonaws.com
 index = 'lambda-kine-index'
 type = '_doc'
 url = host + '/' + index + '/' + type + '/'
@@ -325,7 +325,7 @@ service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-host = '' # the OpenSearch Service domain, with https://
+host = '' # the OpenSearch Service domain, e.g. https://search-mydomain.us-west-1.es.amazonaws.com
 index = 'lambda-index'
 type = '_doc'
 url = host + '/' + index + '/' + type + '/'

@@ -1,18 +1,18 @@
 # Service software updates in Amazon OpenSearch Service<a name="service-software"></a>
 
 **Note**  
-See the [release notes](release-notes.md) for descriptions of the changes and additions made in each major service software release\.
+For descriptions of the changes and additions made in each major service software release, see the [release notes](release-notes.md)\.
 
-Amazon OpenSearch Service regularly releases system software updates that add features or otherwise improve your domains\. The **Notifications** panel in the console is the easiest way to see if an update is available or check the status of an update\. Each notification includes details about the service software update\. The notification severity is `Informational` if the update is optional and `High` if it's required\.
+Amazon OpenSearch Service regularly releases service software updates that add features or otherwise improve your domains\. The **Notifications** panel in the console is the easiest way to see if an update is available or to check the status of an update\. Each notification includes details about the service software update\. The notification severity is `Informational` if the update is optional and `High` if it's required\.
 
 Service software updates differ from OpenSearch version upgrades\. For information about upgrading to a later version of OpenSearch, see [Upgrading Amazon OpenSearch Service domains](version-migration.md)\.
 
 ## Domain update considerations<a name="service-software-considerations"></a>
 
 Consider the following when deciding whether to update your domain:
-+ If you take no action on available updates, OpenSearch Service updates your domain service software automatically after a certain timeframe \(typically two weeks\)\. OpenSearch Service sends notifications when it starts the update and when the update is complete\.
++ If you take no action on available updates, OpenSearch Service eventually updates your domain for you\. If an update is *optional*, OpenSearch Service updates your domain the next time you make a change that causes a [blue/green deployment](managedomains-configuration-changes.md)\. If the update is *required*, OpenSearch Service initiates a blue/green deployment after a certain timeframe \(typically two weeks\) if the domain hasn't already been updated\. You receive notifications when the update starts and when it's complete\.
 + If you start an update manually, OpenSearch Service doesn't send a notification when it starts the update, only when the update is complete\.
-+ Software updates use [blue/green deployments](managedomains-configuration-changes.md) to minimizes downtime\. Updates can temporarily strain a cluster's dedicated master nodes, so make sure to maintain sufficient capacity to handle the associated overhead\. 
++ Software updates use blue/green deployments to minimizes downtime\. Updates can temporarily strain a cluster's dedicated master nodes, so make sure to maintain sufficient capacity to handle the associated overhead\. 
 
 Manually updating your domain lets you take advantage of new features more quickly\. When you choose **Update**, OpenSearch Service places the request in a queue and begins the update when it has time\. Updates typically complete within minutes, but can also take several hours or even days if your system is experiencing heavy load\. Consider updating your domain at a low traffic time to avoid long update periods\. 
 
@@ -40,7 +40,7 @@ Send the following AWS CLI command to request a service software update:
 aws opensearch start-service-software-update --domain-name my-domain
 ```
 
-For more information, see [start\-service\-software\-update](https://docs.aws.amazon.com/cli/latest/reference/opensearch/start-service-software-update.html) in the AWS CLI command reference and [StartServiceSoftwareUpdate](configuration-api.md#configuration-api-actions-startupdate) in the configuration API reference\.
+For more information, see [start\-service\-software\-update](https://docs.aws.amazon.com/cli/latest/reference/opensearch/start-service-software-update.html) in the AWS CLI command reference and [StartServiceSoftwareUpdate](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_StartServiceSoftwareUpdate.html) in the configuration API reference\.
 
 **Tip**  
 After requesting an update, you might have a narrow window of time in which you can cancel it\. The duration of this `PENDING_UPDATE` state can vary greatly and depends on your AWS Region and the number of concurrent updates OpenSearch Service is performing\. To cancel, use the console or `cancel-service-software-update` \(`CancelServiceSoftwareUpdate`\) command\.
@@ -113,9 +113,9 @@ def main():
 
 ## Monitoring service software update events<a name="service-software-monitor"></a>
 
-OpenSearch Service sends a [notification](managedomains-notifications.md) when a service software update is available, required, started, completed, or failed\. You can view these notifications on the **Notifications** panel of the OpenSearch Service console\. It also sends these notifications as events to Amazon EventBridge, where you can configure rules that send an email or perform a specific action when an event is received\. For an example walkthrough, see [Tutorial: Sending Amazon SNS alerts for available software updates](sns-events.md)\.
+OpenSearch Service sends a [notification](managedomains-notifications.md) when a service software update is available, required, started, completed, or failed\. You can view these notifications on the **Notifications** panel of the OpenSearch Service console\. It also sends these notifications to Amazon EventBridge\. You can use EventBridge to configure rules that send an email or perform a specific action when an event is received\. For an example walkthrough, see [Tutorial: Sending Amazon SNS alerts for available software updates](sns-events.md)\.
 
-For the format of each service software event sent to Amazon EventBridge, see [Service software update events](monitoring-events.md#monitoring-events-sso)\.
+To see the format of each service software event sent to Amazon EventBridge, see [Service software update events](monitoring-events.md#monitoring-events-sso)\.
 
 ## When domains are ineligible for an update<a name="service-software-ineligible"></a>
 

@@ -99,7 +99,7 @@ If it fails to fix one or more red indexes and the cluster status remains red fo
 + Has no dedicated master nodes
 + Contains burstable instance types \(T2 or T3\)
 
-At this time, if your cluster meets one of these criteria, OpenSearch Service sends you daily [notifications](managedomains-notifications.md) over the next 7 days explaining that if you don't fix these indexes, all unassigned shards will be deleted\. If your cluster status is still red after 21 days, OpenSearch Service deletes the unassigned shards \(storage and compute\) on all red indexes\. You receive notifications in the **Notifications** panel of the OpenSearch Service console for each of these events\. For more information, see [Cluster health events](monitoring-events.md#monitoring-events-shards)\.
+At this time, if your cluster meets one of these criteria, OpenSearch Service sends you daily [notifications](managedomains-notifications.md) over the next 7 days explaining that if you don't fix these indexes, all unassigned shards will be deleted\. If your cluster status is still red after 21 days, OpenSearch Service deletes the unassigned shards \(storage and compute\) on all red indexes\. You receive notifications in the **Notifications** panel of the OpenSearch Service console for each of these events\. For more information, see [Cluster health events](monitoring-events.md#monitoring-events-cluster-health)\.
 
 ### Recovering from a continuous heavy processing load<a name="handling-errors-red-cluster-status-heavy-processing-load"></a>
 
@@ -128,18 +128,28 @@ If one or more nodes in your cluster has less than 20% of available storage spac
 
 To avoid issues, monitor the `FreeStorageSpace` metric in the OpenSearch Service console and [create CloudWatch alarms](cloudwatch-alarms.md) to trigger when `FreeStorageSpace` drops below a certain threshold\. `GET /_cat/allocation?v` also provides a useful summary of shard allocation and disk usage\. To resolve issues associated with a lack of storage space, scale your OpenSearch Service domain to use larger instance types, more instances, or more EBS\-based storage\.
 
-### Blocked disks due to low memory<a name="handling-errors-block-disks"></a>
+### High JVM memory pressure<a name="handling-errors-block-disks"></a>
 
 When the **JVMMemoryPressure** metric exceeds 92% for 30 minutes, OpenSearch Service triggers a protection mechanism and blocks all write operations to prevent the cluster from reaching red status\. When the protection is on, write operations fail with a `ClusterBlockException` error, new indexes can't be created, and the `IndexCreateBlockException` error is thrown\.
 
 When the **JVMMemoryPressure** metric returns to 88% or lower for five minutes, the protection is disabled, and write operations to the cluster are unblocked\.
 
+High JVM memory pressure can be caused by spikes in the number of requests to the cluster, unbalanced shard allocations across nodes, too many shards in a cluster, field data or index mapping explosions, or instance types that can't handle incoming loads\. It can also be caused by using aggregations, wildcards, or wide time ranges in queries\.
+
+To reduce traffic to the cluster and resolve high JVM memory pressure issues, try one or more of the following:
++ Scale the domain so that the maximum heap size per node is 32 GB\.
++ Reduce the number of shards by deleting old or unused indexes\.
++ Clear the data cache with the `POST index-name/_cache/clear?fielddata=true` API operation\. Note that clearing the cache can disrupt in\-progress queries\.
+
+In general, to avoid high JVM memory pressure in the future, follow these best practices:
++ Avoid aggregating on text fields, or change the [mapping type](https://opensearch.org/docs/latest/opensearch/mappings/#dynamic-mapping) for your indexes to `keyword`\.
++ Optimize search and indexing requests by [choosing the correct number of shards](sizing-domains.md#bp-sharding)\.
++ Set up Index State Management \(ISM\) policies to regularly [remove unused indexes](bp.md#bp-stability-remove)\.
+
 ## JVM OutOfMemoryError<a name="handling-errors-jvm_out_of_memory_error"></a>
 
 A JVM `OutOfMemoryError` typically means that one of the following JVM circuit breakers was reached\.
 
-
-****  
 
 | Circuit breaker | Description | Cluster setting property | 
 | --- | --- | --- | 
@@ -174,12 +184,13 @@ Your OpenSearch Service domain enters the "Processing" state when it's in the mi
 The cluster can get stuck in the "Processing" state if either of these situations occurs:
 + A new set of data nodes fails to launch\.
 + Shard migration to the new set of data nodes is unsuccessful\.
++ Validation check has failed with errors\.
 
 For detailed resolution steps in each of these situations, see [Why is my Amazon OpenSearch Service domain stuck in the "Processing" state?](https://aws.amazon.com/premiumsupport/knowledge-center/opensearch-domain-stuck-processing/)\. 
 
 ## Low EBS burst balance<a name="handling-errors-low-ebs-burst"></a>
 
-OpenSearch Service sends you a console notification when the EBS burst balance on one of your General Purpose \(SSD\) volumes is below 70%, and a follow\-up notification if the balance falls below 20%\. To fix this issue, first try making a minor change that triggers a [blue\-green deployment](managedomains-configuration-changes.md), which can sometimes resolve the problem\. If the issue persists, you can either scale up your cluster, or reduce the read and write IOPS so that the burst balance can be credited\. You can monitor EBS burst balance with the `BurstBalance` CloudWatch metric\. For more information, see [General Purpose SSD volumes \(gp2\)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html#EBSVolumeTypes_gp2)\.
+OpenSearch Service sends you a console notification when the EBS burst balance on one of your General Purpose \(SSD\) volumes is below 70%, and a follow\-up notification if the balance falls below 20%\. To fix this issue, you can either scale up your cluster, or reduce the read and write IOPS so that the burst balance can be credited\. For more information, see [General Purpose SSD volumes \(gp2\)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html#EBSVolumeTypes_gp2)\. You can monitor EBS burst balance with the `BurstBalance` CloudWatch metric\.
 
 ## Can't enable audit logs<a name="troubleshooting-audit-logs-error"></a>
 
@@ -221,25 +232,6 @@ POST /_snapshot/my-repository/my-snapshot/_restore
 
 If you plan to reindex, shrink, or split an index, you likely want to stop writing to it before performing the operation\.
 
-## Mapper parsing exception while indexing<a name="troubleshooting-dynamic-template"></a>
-
-Elasticsearch 7\.10 deprecated the following parameters for use within dynamic templates: `coerce`, `dynamic`, `ignore_malformed`, `normalizer`, `null_values`, `omit_norms`, and `properties`\.
-
-If you add a document to an index with a dynamic template that contains a deprecated parameter, you get the following error:
-
-```
-"error" : {
-    "root_cause" : [
-      {
-        "type" : "mapper_parsing_exception",
-        "reason" : "unknown parameter [ignore_malformed] on mapper [mykeyword] of type [text]"
-      }
-    ]
-  }
-```
-
-If you encounter this error, remove the deprecated parameter from your template and retry the request\. 
-
 ## Client license checks<a name="troubleshooting-license"></a>
 
 The default distributions of Logstash and Beats include a proprietary license check and fail to connect to the open source version of OpenSearch\. Make sure you use the Apache 2\.0 \(OSS\) distributions of these clients with OpenSearch Service\.
@@ -250,7 +242,7 @@ If you receive persistent `403 Request throttled due to too many requests` or `4
 
 ## Can't SSH into node<a name="troubleshooting-ssh"></a>
 
-You can't use SSH to access any of the nodes in your OpenSearch cluster, and you can't directly modify `opensearch.yml`\. Instead, use the console, AWS CLI, or SDKs to configure your domain\. You can specify a few cluster\-level settings using the OpenSearch REST APIs, as well\. To learn more, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md) and [Supported operations](supported-operations.md)\.
+You can't use SSH to access any of the nodes in your OpenSearch cluster, and you can't directly modify `opensearch.yml`\. Instead, use the console, AWS CLI, or SDKs to configure your domain\. You can specify a few cluster\-level settings using the OpenSearch REST APIs, as well\. To learn more, see the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html) and [Supported operations in Amazon OpenSearch Service](supported-operations.md)\.
 
 If you need more insight into the performance of the cluster, you can [publish error logs and slow logs to CloudWatch](createdomain-configure-slow-logs.md)\.
 

@@ -95,7 +95,7 @@ server {
 
         # Update cookie domain and path
         proxy_cookie_domain $dashboards_host $host;
-        proxy_cookie_path / /_plugin/_dashboardsdashboards/;
+        proxy_cookie_path / /_plugin/_dashboards/;
 
         # Response buffer settings
         proxy_buffer_size 128k;

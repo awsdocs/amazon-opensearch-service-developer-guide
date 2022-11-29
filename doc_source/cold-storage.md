@@ -71,7 +71,7 @@ You don't incur any transfer charges when moving data between cold and warm stor
 
 The console is the simplest way to create a domain that uses cold storage\. While creating the domain, choose **Enable cold storage**\. The same process works on existing domains as long as you meet the [prerequisites](#coldstorage-pp)\. Even after the domain state changes from **Processing** to **Active**, cold storage might not be available for several hours\.
 
-You can also use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) or [configuration API](configuration-api.md) to enable cold storage\.
+You can also use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html) or [configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html) to enable cold storage\.
 
 ### Sample CLI command<a name="coldstorage-sample-cli"></a>
 
@@ -144,7 +144,7 @@ POST https://es.us-east-2.amazonaws.com/2021-01-01/opensearch/domain
 }
 ```
 
-For detailed information, see [Configuration API reference for Amazon OpenSearch Service](configuration-api.md)\.
+For detailed information, see the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.
 
 ## Managing cold indexes in OpenSearch Dashboards<a name="coldstorage-dashboards"></a>
 

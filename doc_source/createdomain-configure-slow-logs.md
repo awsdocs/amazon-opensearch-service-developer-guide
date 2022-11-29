@@ -2,11 +2,11 @@
 
 Amazon OpenSearch Service exposes the following OpenSearch logs through Amazon CloudWatch Logs: 
 + Error logs
-+ Search slow logs
-+ Index slow logs
++ [Search slow logs](https://opensearch.org/docs/latest/opensearch/logs/#slow-logs)
++ [Indexing slow logs](https://opensearch.org/docs/latest/opensearch/logs/#slow-logs)
 + [Audit logs](audit-logs.md)
 
-Search slow logs, index slow logs, and error logs are useful for troubleshooting performance and stability issues\. Audit logs track user activity for compliance purposes\. All the logs are *disabled* by default\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
+Search slow logs, indexing slow logs, and error logs are useful for troubleshooting performance and stability issues\. Audit logs track user activity for compliance purposes\. All the logs are *disabled* by default\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.
 
 **Note**  
 Error logs are available only for OpenSearch and Elasticsearch versions 5\.1 and later\. Slow logs are available for all OpenSearch and Elasticsearch versions\.
@@ -25,6 +25,15 @@ Error logs can help with troubleshooting in many situations, including the follo
 + Invalid queries
 + Indexing issues
 + Snapshot failures
++ Index State Management migration failures
+
+**Topics**
++ [Enabling log publishing \(console\)](#createdomain-configure-slow-logs-console)
++ [Enabling log publishing \(AWS CLI\)](#createdomain-configure-slow-logs-cli)
++ [Enabling log publishing \(AWS SDKs\)](#createdomain-configure-slow-logs-sdk)
++ [Enabling log publishing \(CloudFormation\)](#createdomain-configure-slow-logs-cfn)
++ [Setting OpenSearch logging thresholds for slow logs](#createdomain-configure-slow-logs-indices)
++ [Viewing logs](#createdomain-configure-slow-logs-viewing)
 
 ## Enabling log publishing \(console\)<a name="createdomain-configure-slow-logs-console"></a>
 
@@ -117,8 +126,6 @@ If you need to review this policy at a later time, use the `aws logs describe-re
 
 Finally, you can use the `--log-publishing-options` option to enable publishing\. The syntax for the option is the same for both the `create-domain` and `update-domain-config` commands\.
 
-
-****  
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/createdomain-configure-slow-logs.html)
 
 **Note**  
@@ -126,7 +133,7 @@ If you plan to enable multiple logs, we recommend publishing each to its own log
 
 **Example**
 
-The following example enables the publishing of search and index slow logs for the specified domain:
+The following example enables the publishing of search and indexing slow logs for the specified domain:
 
 ```
 aws opensearch update-domain-config \
@@ -147,13 +154,13 @@ Before you can enable log publishing, you must first create a CloudWatch log gro
 
 You can access these operations using the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\.
 
-The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in [Configuration API reference for Amazon OpenSearch Service](configuration-api.md), including the `--log-publishing-options` option for `CreateDomain` and `UpdateDomainConfig`\.
+The AWS SDKs \(except the Android and iOS SDKs\) support all the operations that are defined in the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html), including the `--log-publishing-options` option for `CreateDomain` and `UpdateDomainConfig`\.
 
 If you enabled one of the slow logs, see [Setting OpenSearch logging thresholds for slow logs](#createdomain-configure-slow-logs-indices)\. If you enabled only error logs, you don't need to perform any additional configuration steps\.
 
 ## Enabling log publishing \(CloudFormation\)<a name="createdomain-configure-slow-logs-cfn"></a>
 
-In this example, we use CloudFormation to create a log group called `opensearch-logs`, assign the appropriate permissions, and then create a domain with log publishing enabled for application logs, search slow logs, and index slow logs\.
+In this example, we use CloudFormation to create a log group called `opensearch-logs`, assign the appropriate permissions, and then create a domain with log publishing enabled for application logs, search slow logs, and indexing slow logs\.
 
 Before you can enable log publishing, you need to create a CloudWatch log group:
 

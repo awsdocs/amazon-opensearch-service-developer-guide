@@ -17,6 +17,7 @@ OpenSearch Service publishes the following metrics to CloudWatch:
 + [SQL metrics](#managedomains-cloudwatchmetrics-sql)
 + [k\-NN metrics](#managedomains-cloudwatchmetrics-knn)
 + [Cross\-cluster search metrics](#managedomains-cloudwatchmetrics-cross-cluster-search)
++ [Cross\-cluster replication metrics](#managedomains-cloudwatchmetrics-replication)
 + [Learning to Rank metrics](#managedomains-cloudwatchmetrics-learning-to-rank)
 + [Piped Processing Language metrics](#managedomains-cloudwatchmetrics-ppl)
 
@@ -75,7 +76,8 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | FreeStorageSpace |  The free space for data nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum` and `Maximum` show the nodes with the least and most free space, respectively\. This metric is also available for individual nodes\. OpenSearch Service throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indexes, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Lack of available storage space](handling-errors.md#handling-errors-watermark)\. The OpenSearch Service console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\.  `FreeStorageSpace` will always be lower than the values that the OpenSearch `_cluster/stats` and `_cat/allocation` APIs provide\. OpenSearch Service reserves a percentage of the storage space on each instance for internal operations\. For more information, see [Calculating storage requirements](sizing-domains.md#bp-storage)\.  Relevant statistics: Minimum, Maximum, Average, Sum  | 
 | ClusterUsedSpace |  The total used space for the cluster\. You must leave the period at one minute to get an accurate value\. The OpenSearch Service console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\. Relevant statistics: Minimum, Maximum  | 
 | ClusterIndexWritesBlocked |  Indicates whether your cluster is accepting or blocking incoming write requests\. A value of 0 means that the cluster is accepting requests\. A value of 1 means that it is blocking requests\. Some common factors include the following: `FreeStorageSpace` is too low or `JVMMemoryPressure` is too high\. To alleviate this issue, consider adding more disk space or scaling your cluster\. Relevant statistics: Maximum  | 
-| JVMMemoryPressure |  The maximum percentage of the Java heap used for all data nodes in the cluster\. OpenSearch Service uses half of an instance's RAM for the Java heap, up to a heap size of 32 GiB\. You can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\. See [Recommended CloudWatch alarms for Amazon OpenSearch Service](cloudwatch-alarms.md)\. Relevant statistics: Maximum  The logic for this metric changed in a recent service software update\. For more information, see the [release notes](release-notes.md)\.   | 
+| JVMMemoryPressure |  The maximum percentage of the Java heap used for all data nodes in the cluster\. OpenSearch Service uses half of an instance's RAM for the Java heap, up to a heap size of 32 GiB\. You can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\. See [Recommended CloudWatch alarms for Amazon OpenSearch Service](cloudwatch-alarms.md)\. Relevant statistics: Maximum  The logic for this metric changed in service software R20220323\. For more information, see the [release notes](release-notes.md)\.   | 
+| OldGenJVMMemoryPressure |  The maximum percentage of the Java heap used for the "old generation" on all data nodes in the cluster\. This metric is also available at the node level\. Relevant statistics: Maximum  | 
 | AutomatedSnapshotFailure |  The number of failed automated snapshots for the cluster\. A value of `1` indicates that no automated snapshot was taken for the domain in the previous 36 hours\. Relevant statistics: Minimum, Maximum  | 
 | CPUCreditBalance |  The remaining CPU credits available for data nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-credits-baseline-concepts.html) in the *Amazon EC2 Developer Guide*\. This metric is available only for the T2 instance types\. Relevant statistics: Minimum  | 
 | OpenSearchDashboardsHealthyNodes \(previously KibanaHealthyNodes\) |  A health check for OpenSearch Dashboards\. If the minimum, maximum, and average are all equal to 1, Dashboards is behaving normally\. If you have 10 nodes with a maximum of 1, minimum of 0, and average of 0\.7, this means 7 nodes \(70%\) are healthy and 3 nodes \(30%\) are unhealthy\. Relevant statistics: Minimum, Maximum, Average  | 
@@ -88,7 +90,7 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | InvalidHostHeaderRequests |  The number of HTTP requests made to the OpenSearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. OpenSearch Service rejects invalid requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\. If you see large values for this metric, confirm that your OpenSearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum  | 
 | OpenSearchRequests\(previously ElasticsearchRequests\) |  The number of requests made to the OpenSearch cluster\. Relevant statistics: Sum  | 
 | 2xx, 3xx, 4xx, 5xx |  The number of requests to the domain that resulted in the given HTTP response code \(2*xx*, 3*xx*, 4*xx*, 5*xx*\)\. Relevant statistics: Sum  | 
-| ThroughputThrottle | Indicates whether requests are being throttled due to the throughput limitations of your EBS volumes\. A value of 1 indicates that some requests were throttled within the selected timeframe\. A value of 0 indicates normal behavior\.If you conistently see a value of 1 for this metric, you can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\.Relevant statistics: Minimum, Maximum | 
+| ThroughputThrottle | Indicates whether requests are being throttled due to the throughput limitations of your EBS volumes\. A value of 1 indicates that some requests were throttled within the selected timeframe\. A value of 0 indicates normal behavior\.If you conistently see a value of 1 for this metric, you can scale up your instances by following AWS recommended best practices\.Relevant statistics: Minimum, Maximum | 
 
 ## Dedicated master node metrics<a name="managedomains-cloudwatchmetrics-master-node-metrics"></a>
 
@@ -99,7 +101,8 @@ Amazon OpenSearch Service provides the following metrics for [dedicated master n
 | --- | --- | 
 | MasterCPUUtilization |  The maximum percentage of CPU resources used by the dedicated master nodes\. We recommend increasing the size of the instance type when this metric reaches 60 percent\. Relevant statistics: Maximum  | 
 | MasterFreeStorageSpace |  This metric is not relevant and can be ignored\. The service does not use master nodes as data nodes\.  | 
-| MasterJVMMemoryPressure |  The maximum percentage of the Java heap used for all dedicated master nodes in the cluster\. We recommend moving to a larger instance type when this metric reaches 85 percent\. Relevant statistics: Maximum  The logic for this metric changed in a recent service software update\. For more information, see the [release notes](release-notes.md)\.   | 
+| MasterJVMMemoryPressure |  The maximum percentage of the Java heap used for all dedicated master nodes in the cluster\. We recommend moving to a larger instance type when this metric reaches 85 percent\. Relevant statistics: Maximum  The logic for this metric changed in service software R20220323\. For more information, see the [release notes](release-notes.md)\.   | 
+| MasterOldGenJVMMemoryPressure |  The maximum percentage of the Java heap used for the "old generation" per master node\. Relevant statistics: Maximum  | 
 | MasterCPUCreditBalance |  The remaining CPU credits available for dedicated master nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-credits-baseline-concepts.html) in the *Amazon EC2 Developer Guide*\. This metric is available only for the T2 instance types\. Relevant statistics: Minimum  | 
 | MasterReachableFromNode |  A health check for `MasterNotDiscovered` exceptions\. A value of 1 indicates normal behavior\. A value of 0 indicates that `/_cluster/health/` is failing\. Failures mean that the master node stopped or is not reachable\. They are usually the result of a network connectivity issue or AWS dependency problem\. Relevant statistics: Minimum  | 
 | MasterSysMemoryUtilization |  The percentage of the master node's memory that is in use\. Relevant statistics: Maximum  | 
@@ -111,13 +114,13 @@ Amazon OpenSearch Service provides the following metrics for EBS volumes\.
 
 | Metric | Description | 
 | --- | --- | 
-| ReadLatency |  The latency, in seconds, for read operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
-| WriteLatency |  The latency, in seconds, for write operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
-| ReadThroughput |  The throughput, in bytes per second, for read operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
-| WriteThroughput |  The throughput, in bytes per second, for write operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
+| ReadLatency |  The latency, in seconds, for read operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
+| WriteLatency |  The latency, in seconds, for write operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
+| ReadThroughput |  The throughput, in bytes per second, for read operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
+| WriteThroughput |  The throughput, in bytes per second, for write operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
 | DiskQueueDepth |  The number of pending input and output \(I/O\) requests for an EBS volume\. Relevant statistics: Minimum, Maximum, Average  | 
-| ReadIOPS |  The number of input and output \(I/O\) operations per second for read operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
-| WriteIOPS |  The number of input and output \(I/O\) operations per second for write operations on EBS volumes\. Relevant statistics: Minimum, Maximum, Average  | 
+| ReadIOPS |  The number of input and output \(I/O\) operations per second for read operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
+| WriteIOPS |  The number of input and output \(I/O\) operations per second for write operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
 | BurstBalance |  The percentage of input and output \(I/O\) credits remaining in the burst bucket for an EBS volume\. A value of 100 means that the volume has accumulated the maximum number of credits\. If this percentage falls below 70%, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\. Relevant statistics: Minimum, Maximum, Average  | 
 
 ## Instance metrics<a name="managedomains-cloudwatchmetrics-instance-metrics"></a>
@@ -166,10 +169,10 @@ Use `GET _cluster/settings?include_defaults=true` to check thread pool and queue
 | ThreadpoolBulkThreads |  The size of the bulk thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
 | ThreadpoolWriteThreads |  The size of the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
 | ThreadpoolWriteQueue |  The number of queued tasks in the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
-| ThreadpoolWriteRejected |  The number of rejected tasks in the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  Because the default write queue size was increased from 200 to 10000 in version 7\.9, this metric is no longer the only indicator of rejections from OpenSearch Service\. Use the `CoordinatingWriteRejected`, `PrimaryWriteRejected`, and `ReplicaWriteRejected` metrics to monitor rejections in versions 7\.9 and later\.   | 
-| CoordinatingWriteRejected |  The total number of rejections happened on the coordinating node due to indexing pressure since the last OpenSearch Service process startup\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum This metric is available in version 7\.9 and above\.  | 
-| PrimaryWriteRejected |  The total number of rejections happened on the primary shards due to indexing pressure since the last OpenSearch Service process startup\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum This metric is available in version 7\.9 and above\.  | 
-| ReplicaWriteRejected |  The total number of rejections happened on the replica shards due to indexing pressure since the last OpenSearch Service process startup\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum This metric is available in version 7\.9 and above\.  | 
+| ThreadpoolWriteRejected |  The number of rejected tasks in the write thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  Because the default write queue size was increased from 200 to 10000 in version 7\.1, this metric is no longer the only indicator of rejections from OpenSearch Service\. Use the `CoordinatingWriteRejected`, `PrimaryWriteRejected`, and `ReplicaWriteRejected` metrics to monitor rejections in versions 7\.1 and later\.   | 
+| CoordinatingWriteRejected |  The total number of rejections happened on the coordinating node due to indexing pressure since the last OpenSearch Service process startup\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum This metric is available in version 7\.1 and above\.  | 
+| PrimaryWriteRejected |  The total number of rejections happened on the primary shards due to indexing pressure since the last OpenSearch Service process startup\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum This metric is available in version 7\.1 and above\.  | 
+| ReplicaWriteRejected |  The total number of rejections happened on the replica shards due to indexing pressure since the last OpenSearch Service process startup\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum This metric is available in version 7\.1 and above\.  | 
 
 ## UltraWarm metrics<a name="managedomains-cloudwatchmetrics-uw"></a>
 
@@ -197,7 +200,8 @@ Amazon OpenSearch Service provides the following metrics for [UltraWarm](ultrawa
 | WarmThreadpoolSearchThreads |  The size of the UltraWarm search thread pool\. Relevant node statistics: Maximum Relevant cluster statistics: Average, Sum  | 
 | WarmThreadpoolSearchRejected |  The number of rejected tasks in the UltraWarm search thread pool\. If this number continually grows, consider adding more UltraWarm nodes\. Relevant node statistics: Maximum Relevant cluster statistics: Sum  | 
 | WarmThreadpoolSearchQueue | The number of queued tasks in the UltraWarm search thread pool\. If the queue size is consistently high, consider adding more UltraWarm nodes\.Relevant node statistics: MaximumRelevant cluster statistics: Sum, Maximum, Average | 
-| WarmJVMMemoryPressure |  The maximum percentage of the Java heap used for the UltraWarm nodes\. Relevant statistics: Maximum  The logic for this metric changed in a recent service software update\. For more information, see the [release notes](release-notes.md)\.   | 
+| WarmJVMMemoryPressure |  The maximum percentage of the Java heap used for the UltraWarm nodes\. Relevant statistics: Maximum  The logic for this metric changed in service software R20220323\. For more information, see the [release notes](release-notes.md)\.   | 
+| WarmOldGenJVMMemoryPressure |  The maximum percentage of the Java heap used for the "old generation" per UltraWarm node\. Relevant statistics: Maximum  | 
 | WarmJVMGCYoungCollectionCount |  The number of times that "young generation" garbage collection has run on UltraWarm nodes\. A large, ever\-growing number of runs is a normal part of cluster operations\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
 | WarmJVMGCYoungCollectionTime |  The amount of time, in milliseconds, that the cluster has spent performing "young generation" garbage collection on UltraWarm nodes\. Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
 | WarmJVMGCOldCollectionCount |  The number of times that "old generation" garbage collection has run on UltraWarm nodes\. In a cluster with sufficient resources, this number should remain small and grow infrequently\.  Relevant node statistics: Maximum Relevant cluster statistics: Sum, Maximum, Average  | 
@@ -343,16 +347,23 @@ Amazon OpenSearch Service provides the following metrics for [cross\-cluster sea
 
 Add a CloudWatch alarm in the event that you lose a connection unexpectedly\. For steps to create an alarm, see [Create a CloudWatch Alarm Based on a Static Threshold](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html)\.
 
-## Cross\-cluster replication<a name="managedomains-cloudwatchmetrics-replication"></a>
+## Cross\-cluster replication metrics<a name="managedomains-cloudwatchmetrics-replication"></a>
 
 Amazon OpenSearch Service provides the following metrics for [cross\-cluster replication](replication.md)\.
 
 
 | Metric | Description | 
 | --- | --- | 
-| ReplicationRate |  Average rate of replication operations per second\. This metric is similar to the `IndexingRate` metric\.  | 
-| LeaderCheckPoint |  The sum of global checkpoints across all replicating indexes on the leader index for a specific connection\. You can use this metric to measure replication latency\.  | 
-| FollowerCheckPoint |  The sum of global checkpoints across all replicating indexes on the follower index for a specific connection\. You can use this metric to measure replication latency\.  | 
+| ReplicationRate |  The average rate of replication operations per second\. This metric is similar to the `IndexingRate` metric\.  | 
+| LeaderCheckPoint |  For a specific connection, the sum of leader checkpoint values across all replicating indexes\. You can use this metric to measure replication latency\.  | 
+| FollowerCheckPoint |  For a specific connection, the sum of follower checkpoint values across all replicating indexes\. You can use this metric to measure replication latency\.  | 
+| ReplicationNumSyncingIndices |  The number of indexes that have a replication status of `SYNCING`\.  | 
+| ReplicationNumBootstrappingIndices |  The number of indexes that have a replication status of `BOOTSTRAPPING`\.  | 
+| ReplicationNumPausedIndices |  The number of indexes that have a replication status of `PAUSED`\.  | 
+| ReplicationNumFailedIndices |  The number of indexes that have a replication status of `FAILED`\.  | 
+| AutoFollowNumSuccessStartReplication |  The number of follower indexes that have been successfully created by a replication rule for a specific connection\.   | 
+| AutoFollowNumFailedStartReplication |  The number of follower indexes that failed to be created by a replication rule when there was a matching pattern\. This problem might arise due to a network issue on the remote cluster, or a security issue \(i\.e\. the associated role doesn't have permission to start replication\)\.  | 
+| AutoFollowLeaderCallFailure |  Whether there have been any failed queries from the follower index to the leader index to pull new data\. A value of `1` means that there have been 1 or more failed calls in the last minute\.  | 
 
 ## Learning to Rank metrics<a name="managedomains-cloudwatchmetrics-learning-to-rank"></a>
 
