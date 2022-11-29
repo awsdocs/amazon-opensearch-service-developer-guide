@@ -1,6 +1,8 @@
-# Configure the client
+# Example code for accessing the Amazon OpenSearch Service
 
-Intro
+This sample code shows how to set up an authenticated connection to the service and how to access its key APIs.  
+
+# Instructions
 
 1. Clone the repository.
 2. Configure the following parameters in the AmazonOpenSearchServiceSample.java file:
