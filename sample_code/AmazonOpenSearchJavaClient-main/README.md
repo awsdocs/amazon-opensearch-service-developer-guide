@@ -1,4 +1,4 @@
-# Example code for accessing the Amazon OpenSearch Serverless
+# Example code for accessing Amazon OpenSearch Serverless
 
 This sample code shows how to set up an authenticated connection to the serverless service and how to access its key APIs.  
 
