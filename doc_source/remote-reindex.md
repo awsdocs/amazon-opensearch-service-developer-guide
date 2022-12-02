@@ -148,7 +148,7 @@ POST _reindex
 }
 ```
 
-In this case, only basic authorization with a username and password is supported\. The source domain must have a certificate signed by a public CA\. Self\-signed or private CA\-signed certificates are not supported\.
+In this case, only basic authorization with a username and password is supported\. The source domain must have a publicly accessible endpoint (even if it is in the same VPC as the target OpenSearch Service domain) and a certificate signed by a public CA\. Self\-signed or private CA\-signed certificates are not supported\.
 
 ## Reindex large datasets<a name="remote-reindex-largedatasets"></a>
 
