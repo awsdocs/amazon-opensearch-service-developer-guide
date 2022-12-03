@@ -4,7 +4,7 @@ Index State Management \(ISM\) in Amazon OpenSearch Service lets you define cust
 
 A policy contains a default state and a list of states for the index to transition between\. Within each state, you can define a list of actions to perform and conditions that trigger these transitions\. A typical use case is to periodically delete old indexes after a certain period of time\. For example, you can define a policy that moves your index into a `read_only` state after 30 days and then ultimately deletes it after 90 days\.
 
-After you attach a policy to an index, ISM creates a job that runs every 5 to 8 minutes to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 5 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indexes at the same time\. ISM doesn't run jobs if the cluster state is red\.
+After you attach a policy to an index, ISM creates a job that runs every 5 to 8 minutes \(or 30 to 48 minutes for pre\-1\.3 clusters\) to perform policy actions, check conditions, and transition the index into different states\. The base time for this job to run is every 5 minutes, plus a random 0\-60% jitter is added to it to make sure you do not see a surge of activity from all your indexes at the same time\. ISM doesn't run jobs if the cluster state is red\.
 
 ISM requires OpenSearch or Elasticsearch 6\.8 or later\. Full documentation is available in the [OpenSearch documentation](https://opensearch.org/docs/im-plugin/ism/index/)\.
 

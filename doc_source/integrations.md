@@ -52,8 +52,8 @@ Deployment packages are ZIP or JAR files that contain your code and its dependen
    
    host = '' # the OpenSearch Service domain, e.g. https://search-mydomain.us-west-1.es.amazonaws.com
    index = 'lambda-s3-index'
-   type = '_doc'
-   url = host + '/' + index + '/' + type
+   datatype = '_doc'
+   url = host + '/' + index + '/' + datatype
    
    headers = { "Content-Type": "application/json" }
    
@@ -197,8 +197,6 @@ You can load streaming data from Kinesis Data Streams to OpenSearch Service\. Ne
 Before proceeding, you must have the following resources\.
 
 
-****  
-
 | Prerequisite | Description | 
 | --- | --- | 
 | Amazon Kinesis Data Stream | The event source for your Lambda function\. To learn more, see [Kinesis Data Streams](https://docs.aws.amazon.com/kinesis/latest/dev/amazon-kinesis-streams.html)\. | 
@@ -223,8 +221,8 @@ awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, servi
 
 host = '' # the OpenSearch Service domain, e.g. https://search-mydomain.us-west-1.es.amazonaws.com
 index = 'lambda-kine-index'
-type = '_doc'
-url = host + '/' + index + '/' + type + '/'
+datatype = '_doc'
+url = host + '/' + index + '/' + datatype + '/'
 
 headers = { "Content-Type": "application/json" }
 
@@ -303,13 +301,11 @@ You can use AWS Lambda to send data to your OpenSearch Service domain from Amazo
 Before proceeding, you must have the following resources\.
 
 
-****  
-
 | Prerequisite | Description | 
 | --- | --- | 
-| DynamoDB Table | The table contains your source data\. For more information, see [Basic Operations on DynamoDB Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html) in the *Amazon DynamoDB Developer Guide*\.The table must reside in the same Region as your OpenSearch Service domain and have a stream set to **New image**\. To learn more, see [Enabling a Stream](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html#Streams.Enabling)\. | 
-| OpenSearch Service Domain | The destination for data after your Lambda function processes it\. For more information, see [ Creating OpenSearch Service domains](createupdatedomains.md#createdomains)\. | 
-| IAM Role | This role must have basic OpenSearch Service, DynamoDB, and Lambda execution permissions, such as the following:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "dynamodb:DescribeStream",<br />        "dynamodb:GetRecords",<br />        "dynamodb:GetShardIterator",<br />        "dynamodb:ListStreams",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre>The role must have the following trust relationship:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre>To learn more, see [Creating IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\. | 
+| DynamoDB table | The table contains your source data\. For more information, see [Basic Operations on DynamoDB Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html) in the *Amazon DynamoDB Developer Guide*\.The table must reside in the same Region as your OpenSearch Service domain and have a stream set to **New image**\. To learn more, see [Enabling a Stream](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html#Streams.Enabling)\. | 
+| OpenSearch Service domain | The destination for data after your Lambda function processes it\. For more information, see [ Creating OpenSearch Service domains](createupdatedomains.md#createdomains)\. | 
+| IAM role | This role must have basic OpenSearch Service, DynamoDB, and Lambda execution permissions, such as the following:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Action": [<br />        "es:ESHttpPost",<br />        "es:ESHttpPut",<br />        "dynamodb:DescribeStream",<br />        "dynamodb:GetRecords",<br />        "dynamodb:GetShardIterator",<br />        "dynamodb:ListStreams",<br />        "logs:CreateLogGroup",<br />        "logs:CreateLogStream",<br />        "logs:PutLogEvents"<br />      ],<br />      "Resource": "*"<br />    }<br />  ]<br />}</pre>The role must have the following trust relationship:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "Service": "lambda.amazonaws.com"<br />      },<br />      "Action": "sts:AssumeRole"<br />    }<br />  ]<br />}</pre>To learn more, see [Creating IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html) in the *IAM User Guide*\. | 
 
 ### Create the Lambda function<a name="integrations-dynamodb-lambda"></a>
 
@@ -327,8 +323,8 @@ awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, servi
 
 host = '' # the OpenSearch Service domain, e.g. https://search-mydomain.us-west-1.es.amazonaws.com
 index = 'lambda-index'
-type = '_doc'
-url = host + '/' + index + '/' + type + '/'
+datatype = '_doc'
+url = host + '/' + index + '/' + datatype + '/'
 
 headers = { "Content-Type": "application/json" }
 

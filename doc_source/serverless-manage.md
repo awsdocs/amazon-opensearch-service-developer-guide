@@ -93,7 +93,7 @@ After you create a collection, you won't be able to access it unless it matches 
 Before you create a collection using the AWS CLI, you must have an [encryption policy](serverless-encryption.md) with a resource pattern that matches the intended name of the collection\. For example, if you plan to name your collection *logs\-application*, you might create an encryption policy like this:
 
 ```
-aws aoss create-security-policy \
+aws opensearchserverless create-security-policy \
   --name logs-policy \
   --type encryption --policy "{\"Rules\":[{\"ResourceType\":\"collection\",\"Resource\":[\"collection\/logs-application\"]}],\"AWSOwnedKey\":true}"
 ```
@@ -103,7 +103,7 @@ If you plan to use the policy for additional collections, you can make the rule 
 You also need to configure network settings for the collection in the form of a [network policy](serverless-network.md)\. Using the previous *logs\-application* example, you might create the following network policy:
 
 ```
-aws aoss create-security-policy \
+aws opensearchserverless create-security-policy \
   --name logs-policy \ 
   --type network \
   --policy "[{\"Description\":\"Public access for logs collection\",\"Rules\":[{\"ResourceType\":\"dashboard\",\"Resource\":[\"collection\/logs-application\"]},{\"ResourceType\":\"collection\",\"Resource\":[\"collection\/logs-application\"]}],\"AllowFromPublic\":true}]"
@@ -115,7 +115,7 @@ You can create network policies after you create a collection, but we recommend 
 To create a collection, send a [CreateCollection](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_CreateCollection.html) request:
 
 ```
-aws aoss create-collection --name "logs-collection" --type SEARCH --description "A collection for storing log data"
+aws opensearchserverless create-collection --name "logs-collection" --type SEARCH --description "A collection for storing log data"
 ```
 
 For `type`, specify either `SEARCH` or `TIMESERIES`\. For more information, see [Choosing a collection type](serverless-overview.md#serverless-usecase)\.
@@ -159,7 +159,7 @@ You can view the existing collections in your AWS account on the **Collections**
 To list collections along with their IDs, send a [ListCollections](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_ListCollections.html) request\.
 
 ```
-aws aoss list-collections
+aws opensearchserverless list-collections
 ```
 
 **Sample response**
@@ -180,13 +180,13 @@ aws aoss list-collections
 To limit the search results, use collection filters\. This request filters the response to collections in the `ACTIVE` state: 
 
 ```
-aws aoss list-collections --collection-filters '{ "status": "ACTIVE" }'
+aws opensearchserverless list-collections --collection-filters '{ "status": "ACTIVE" }'
 ```
 
 To get more detailed information about one or more collections, including the OpenSearch endpoint and the OpenSearch Dashboards endpoint, send a [BatchGetCollection](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_BatchGetCollection.html) request:
 
 ```
-aws aoss batch-get-collection --ids ["07tjusf2h91cunochc", "1iu5usc4rame"]
+aws opensearchserverless batch-get-collection --ids ["07tjusf2h91cunochc", "1iu5usc4rame"]
 ```
 
 **Note**  
@@ -241,7 +241,7 @@ Deleting a collection deletes all data and indexes in the collection\. You can't
 To delete a collection using the AWS CLI, send a [DeleteCollection](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteCollection.html) request:
 
 ```
-aws aoss delete-collection --id 07tjusf2h91cunochc
+aws opensearchserverless delete-collection --id 07tjusf2h91cunochc
 ```
 
 **Sample response**

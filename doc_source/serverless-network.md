@@ -227,7 +227,7 @@ The following policy provides public access to the OpenSearch endpoint *and* Ope
 The following request creates the above network policy:
 
 ```
-aws aoss create-security-policy \
+aws opensearchserverless create-security-policy \
     --name sales-inventory \
     --type network \
     --policy "[{\"Description\":\"Public access for finance collection\",\"Rules\":[{\"ResourceType\":\"dashboard\",\"Resource\":[\"collection\/finance\"]},{\"ResourceType\":\"collection\",\"Resource\":[\"collection\/finance\"]}],\"AllowFromPublic\":true}]"
@@ -240,7 +240,7 @@ To provide the policy in a JSON file, use the format `--policy file://my-policy.
 Before you create a collection, you might want to preview the existing network policies in your account to see which one has a resource pattern that matches your collection's name\. The following [ListSecurityPolicies](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_ListSecurityPolicies.html) request lists all network policies in your account:
 
 ```
-aws aoss list-security-policies --type network
+aws opensearchserverless list-security-policies --type network
 ```
 
 The request returns information about all configured network policies\. To view the pattern rules defined in the policy, use the contents of the `policy` element:
@@ -271,7 +271,7 @@ To update a network policy using the OpenSearch Serverless API, use the [UpdateS
 The following request updates a network policy with a new policy JSON document:
 
 ```
-aws aoss update-security-policy \
+aws opensearchserverless update-security-policy \
     --name sales-inventory \
     --type network \
     --policy-version MTY2MzY5MTY1MDA3Ml8x \
@@ -285,5 +285,5 @@ Before you can delete a network policy, you must detach it from all collections\
 You can also use the [DeleteSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteSecurityPolicy.html) command:
 
 ```
-aws aoss delete-security-policy --name my-policy --type network
+aws opensearchserverless delete-security-policy --name my-policy --type network
 ```

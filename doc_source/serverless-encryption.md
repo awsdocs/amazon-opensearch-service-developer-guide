@@ -235,7 +235,7 @@ To use a service\-owned key, set `AWSOwnedKey` to `true`:
 The following request creates the encryption policy:
 
 ```
-aws aoss create-security-policy \
+aws opensearchserverless create-security-policy \
     --name sales-inventory \
     --type encryption \
     --policy file://my-policy.json
@@ -248,7 +248,7 @@ Then, use the [CreateCollection](https://docs.aws.amazon.com/opensearch-service/
 Before you create a collection, you might want to preview the existing encryption policies in your account to see which one has a resource pattern that matches your collection's name\. The following [ListSecurityPolicies](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_ListSecurityPolicies.html) request lists all encryption policies in your account:
 
 ```
-aws aoss list-security-policies --type encryption
+aws opensearchserverless list-security-policies --type encryption
 ```
 
 The request returns information about all configured encryption policies\. Use the contents of the `policy` element to view the pattern rules that are defined in the policy:
@@ -282,7 +282,7 @@ To update an encryption policy in the OpenSearch Serverless console, choose **En
 To update an encryption policy using the OpenSearch Serverless API, use the [UpdateSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_UpdateSecurityPolicy.html) command\. The following request updates an encryption policy with a new policy JSON document:
 
 ```
-aws aoss update-security-policy \
+aws opensearchserverless update-security-policy \
     --name sales-inventory \
     --type encryption \
     --policy-version 2 \
@@ -296,5 +296,5 @@ When you delete an encryption policy, any collections that are currently using t
 You can also use the [DeleteSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteSecurityPolicy.html) command:
 
 ```
-aws aoss delete-security-policy --name my-policy --type encryption
+aws opensearchserverless delete-security-policy --name my-policy --type encryption
 ```

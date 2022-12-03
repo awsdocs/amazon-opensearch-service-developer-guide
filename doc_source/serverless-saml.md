@@ -161,7 +161,7 @@ You can grant access to collections, indexes, or both\. If you want different us
 To create a SAML provider using the OpenSearch Serverless API, send a [CreateSecurityConfig](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_CreateSecurityConfig.html) request:
 
 ```
-aws aoss create-security-config \
+aws opensearchserverless create-security-config \
     --name myprovider \
     --type saml \
     --saml-options file://saml-auth0.json
@@ -183,7 +183,7 @@ Specify `saml-options`, including the metadata XML, as a key\-value map within a
 The following [ListSecurityConfigs](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_ListSecurityConfigs.html) request lists all SAML providers in your account:
 
 ```
-aws aoss list-security-configs --type saml
+aws opensearchserverless list-security-configs --type saml
 ```
 
 The request returns information about all existing SAML providers, including the full IdP metadata that your identity provider generates:
@@ -219,7 +219,7 @@ To update a provider through the OpenSearch Serverless API, send an [UpdateSecur
 The following request updates the SAML options for a provider:
 
 ```
-aws aoss update-security-config \
+aws opensearchserverless update-security-config \
     --id saml/123456789012/myprovider \
     --type saml \
     --saml-options file://saml-auth0.json \
@@ -240,5 +240,5 @@ To delete a SAML provider using the OpenSearch Serverless console, choose **Auth
 To delete a provider through the OpenSearch Serverless API, send a [DeleteSecurityConfig](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteSecurityConfig.html) request:
 
 ```
-aws aoss delete-security-config --id saml/123456789012/myprovider
+aws opensearchserverless delete-security-config --id saml/123456789012/myprovider
 ```

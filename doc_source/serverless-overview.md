@@ -17,9 +17,9 @@ Serverless collections currently run OpenSearch version 2\.3\. As new versions a
 + [How it works](#serverless-process)
 + [Choosing a collection type](#serverless-usecase)
 + [Pricing for OpenSearch Serverless](#serverless-pricing)
++ [Supported AWS Regions](#serverless-regions)
 + [Limitations](#serverless-limitations)
 + [Comparing OpenSearch Service and OpenSearch Serverless](#serverless-comparison)
-+ [Supported AWS Regions](#serverless-regions)
 
 ## Use cases for OpenSearch Serverless<a name="serverless-use-cases"></a>
 
@@ -51,7 +51,7 @@ OpenSearch Serverless compute capacity for data ingestion, searching, and queryi
 
 When you create your first collection, OpenSearch Serverless instantiates two OCUs—one for ingest and one for search\. To ensure high availability, it also launches a standby set of nodes in another Availability Zone\. This means that a total of four OCUs are instantiated for the first collection in an account\.
 
-These OCUs exist even when there's no activity on any collection endpoints\. All subsequent collections share these OCUs\. When you create additional collections in the same account, OpenSearch Serverless only adds additional OCUs for search and ingest as needed to support the collections, according to the [capacity limits](serverless-scaling.md#serverless-scaling-configure) that you specify\.
+These OCUs exist even when there's no activity on any collection endpoints\. All subsequent collections share these OCUs\. When you create additional collections in the same account, OpenSearch Serverless only adds additional OCUs for search and ingest as needed to support the collections, according to the [capacity limits](serverless-scaling.md#serverless-scaling-configure) that you specify\. Currently, capacity doesn't scale back down as your compute usage decreases\.
 
 For information about how you're billed for these OCUs, see [Pricing for OpenSearch Serverless](#serverless-pricing)\.
 
@@ -80,7 +80,7 @@ In OpenSearch Serverless, you're charged for the following components:
 + Search and query compute
 + Storage retained in Amazon S3
 
-The cost per hour of using an OpenSearch Compute Unit \(OCU\) is $0\.24\. OCUs are billed on an hourly basis at the collection level, with per\-second granularity\. In your account statements, you see an entry for compute in OCU\-hours with a label for data ingestion and a label for search\. The cost per month of data stored in Amazon S3 is $0\.24 per GiB\. You aren't charged for using OpenSearch Dashboards\.
+The cost per hour of using an OpenSearch Compute Unit \(OCU\) is $0\.24\. OCUs are billed on an hourly basis at the collection level, with per\-second granularity\. In your account statements, you see an entry for compute in OCU\-hours with a label for data ingestion and a label for search\. The cost per month of data stored in Amazon S3 is $0\.024 per GiB\. You aren't charged for using OpenSearch Dashboards\.
 
 You're billed for a minimum of 4 OCUs for the first collection in your account \(2 x ingest includes primary and standby, and 2 x search includes one replica for high availability\)\. All subsequent collections can share those OCUs\. OpenSearch Serverless adds additional OCUs based on the compute needed to support your collections\.
 
@@ -91,11 +91,16 @@ You can configure a maximum number of OCUs for your account in order to control 
 
 For full pricing details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/)\.
 
+## Supported AWS Regions<a name="serverless-regions"></a>
+
+OpenSearch Serverless is available in a subset of AWS Regions that OpenSearch Service is available in\. For a list of supported Regions, see [Amazon OpenSearch Serverless endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/opensearch-service.html) in the *AWS General Reference*\.
+
 ## Limitations<a name="serverless-limitations"></a>
 
 OpenSearch Serverless has the following limitations:
 + Some OpenSearch API operations aren't supported\. See [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
 + Some OpenSearch plugins aren't supported\. See [Supported OpenSearch plugins](serverless-genref.md#serverless-plugins)\.
++ OpenSearch Serverless currently can't scale down as search and index queries decrease\.
 + There's currently no way to automatically migrate your data from a managed OpenSearch Service domain to a serverless collection\. You must reindex your data from a domain to a collection\.
 + Cross\-account access to collections isn't supported\. You can't include collections from other accounts in your encryption or data access policies\.
 + Custom OpenSearch plugins aren't supported\.
@@ -114,7 +119,7 @@ The following table describes how important features and concepts in OpenSearch 
 | Feature | OpenSearch Service | OpenSearch Serverless | 
 | --- | --- | --- | 
 |  **Domains versus collections**  |  Indexes are held in *domains*, which are pre\-provisioned OpenSearch clusters\. For more information, see [Creating and managing Amazon OpenSearch Service domains](createupdatedomains.md)\.  |  Indexes are held in *collections*, which are logical groupings of indexes that represent a specific workload or use case\. For more information, see [Creating and managing Amazon OpenSearch Serverless collections](serverless-manage.md)\.  | 
-|  **Node types and capacity management**  |  You build a cluster with node types that meet your cost and performance specifications\. You must calculate your own storage requirements and choose an instance type for your domain\. For more information, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md)\.  |  OpenSearch Serverless automatically scales and provisions additional compute units for your account based on your capacity usage\. For more information, see [Manging capacity limits for Amazon OpenSearch Serverless](serverless-scaling.md)\.  | 
+|  **Node types and capacity management**  |  You build a cluster with node types that meet your cost and performance specifications\. You must calculate your own storage requirements and choose an instance type for your domain\. For more information, see [Sizing Amazon OpenSearch Service domains](sizing-domains.md)\.  |  OpenSearch Serverless automatically scales and provisions additional compute units for your account based on your capacity usage\. For more information, see [Managing capacity limits for Amazon OpenSearch Serverless](serverless-scaling.md)\.  | 
 |  **Billing**  |  You pay for each hour of use of an EC2 instance and for the cumulative size of any EBS storage volumes attached to your instances\. For more information, see [Pricing for Amazon OpenSearch Service](what-is.md#pricing)\.  |  You're charged in OCU\-hours for compute for data ingestion, compute for search and query, and storage retained in S3\. For more information, see [Pricing for OpenSearch Serverless](#serverless-pricing)\.  | 
 |  **Encryption**  |  Encryption at rest is *optional* for domains\. For more information, see [Encryption of data at rest for Amazon OpenSearch Service](encryption-at-rest.md)\.  |  Encryption at rest is *required* for collections\. For more information, see [Encryption at rest for Amazon OpenSearch Serverless](serverless-encryption.md)\.  | 
 |  **Data access control**  |  Access to the data within domains is determined by IAM policies and [fine\-grained access control](fgac.md)\.  |  Access to data within collections is determined by [data access policies](serverless-data-access.md)\.  | 
@@ -124,19 +129,6 @@ The following table describes how important features and concepts in OpenSearch 
 | Network access |  Network settings for a domain apply to the domain endpoint as well as the OpenSearch Dashboards endpoint\. Network access for both is tightly coupled\.  |  Network settings for the domain endpoint and the OpenSearch Dashboards endpoint are decoupled\. You can choose to not configure network access for OpenSearch Dashboards\. For more information, see [Network access for Amazon OpenSearch Serverless](serverless-network.md)\.  | 
 | Signing requests |  Use the OpenSearch high and low\-level REST clients to sign requests\. Specify the service name as `es`\. For more information, see [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)\.  |  At this time, OpenSearch Serverless supports a subset of clients that OpenSearch Service supports\. We will continue to add support for additional clients during the public preview\. When you sign requests, specify the service name as `aoss`\. The `x-amz-content-sha256` header is required\. For more information, see [Signing requests to OpenSearch Serverless](serverless-clients.md#serverless-signing)\.  | 
 | OpenSearch version upgrades |  You manually upgrade your domains as new versions of OpenSearch become available\. You're responsible for ensuring that your domain meets the upgrade requirements, and that you've addressed any breaking changes\.  |  OpenSearch Serverless automatically upgrades your collections to new OpenSearch versions\. Upgrades don't necessarily happen as soon as a new version is available\.  | 
-| Service software updates |  You manually apply service software updates to your domain as they become available\.  |  OpenSearch Serverless automatically updates your domain to consume the latest bug fixes, features, and performance improvements\.  | 
+| Service software updates |  You manually apply service software updates to your domain as they become available\.  |  OpenSearch Serverless automatically updates your collections to consume the latest bug fixes, features, and performance improvements\.  | 
 | VPC access |  You can [provision your domain within a VPC](vpc.md)\. You can also create additional [OpenSearch Service\-managed VPC endpoints](vpc-interface-endpoints.md) to access the domain\.  |  You create one or more [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md) for your account\. Then, you include these endpoints within [network policies](serverless-network.md)\.  | 
 | SAML authentication |  You enable SAML authentication on a per\-domain basis\. For more information, see [SAML authentication for OpenSearch Dashboards](saml.md)\.  |  You configure one or more SAML providers at the account level, then you include the associated user and group IDs within data access policies\. For more information, see [SAML authentication for Amazon OpenSearch Serverless](serverless-saml.md)\.  | 
-
-## Supported AWS Regions<a name="serverless-regions"></a>
-
-OpenSearch Serverless is available in the following AWS Regions\.
-
-
-| Region name | Region identity | 
-| --- | --- | 
-| US East \(N\. Virginia\) | us\-east\-1 | 
-| US East \(Ohio\) | us\-east\-2 | 
-| US West \(Oregon\) | us\-west\-2 | 
-| Asia Pacific \(Tokyo\) | ap\-northeast\-1 | 
-| Europe \(Ireland\) | eu\-west\-1 | 

@@ -194,7 +194,7 @@ To create a data access policy using the OpenSearch Serverless API, use the `Cre
 The following request creates a data access policy:
 
 ```
-aws aoss create-access-policy \
+aws opensearchserverless create-access-policy \
     --name marketing \
     --type data \
     --policy "[{\"Rules\":[{\"ResourceType\":\"collection\",\"Resource\":[\"collection/autopartsinventory\",\"collection/sales*\"],\"Permission\":[\"aoss:UpdateCollectionItems\"]},{\"ResourceType\":\"index\",\"Resource\":[\"index/autopartsinventory/*\",\"index/salesorders/orders*\"],\"Permission\":[\"aoss:ReadDocument\",\"aoss:DescribeIndex\"]}],\"Principal\":[\"arn:aws:iam::123456789012:user/Shaheen\"]}]"
@@ -209,7 +209,7 @@ The principals included in the policy can now use the [OpenSearch operations](#s
 Before you create a collection, you might want to preview the existing data access policies in your account to see which one has a resource pattern that matches your collection's name\. The following [ListAccessPolicies](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_ListAccessPolicies.html) request lists all data access policies in your account:
 
 ```
-aws aoss list-access-policies --type data
+aws opensearchserverless list-access-policies --type data
 ```
 
 The request returns information about all configured data access policies\. Use the contents of the `policy` element to view the collection\-matching rules that are defined in the policy:
@@ -233,7 +233,7 @@ The request returns information about all configured data access policies\. Use 
 You can include resource filters to limit the results to policies that contain specific collections or indexes:
 
 ```
-aws aoss list-access-policies --type data --resource "index/autopartsinventory/*"
+aws opensearchserverless list-access-policies --type data --resource "index/autopartsinventory/*"
 ```
 
 To view details about a specific policy, use the [GetAccessPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_GetAccessPolicy.html) command\.
@@ -247,7 +247,7 @@ To update a data access policy using the OpenSearch Serverless API, send an `Upd
 The following [UpdateAccessPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_UpdateAccessPolicy.html) request updates a data access policy with a new policy JSON document:
 
 ```
-aws aoss update-access-policy \
+aws opensearchserverless update-access-policy \
     --name sales-inventory \
     --type data \
     --policy-version MTY2NDA1NDE4MDg1OF8x \
@@ -263,5 +263,5 @@ When you delete a data access policy, all associated collections lose the access
 You can also use the [DeleteAccessPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteAccessPolicy.html) command:
 
 ```
-aws aoss delete-access-policy --name my-policy --type data
+aws opensearchserverless delete-access-policy --name my-policy --type data
 ```

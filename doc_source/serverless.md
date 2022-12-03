@@ -16,11 +16,12 @@ OpenSearch Serverless collections are always encrypted\. You can choose the encr
 + [What is Amazon OpenSearch Serverless?](serverless-overview.md)
 + [Getting started with Amazon OpenSearch Serverless](serverless-getting-started.md)
 + [Creating and managing Amazon OpenSearch Serverless collections](serverless-manage.md)
-+ [Manging capacity limits for Amazon OpenSearch Serverless](serverless-scaling.md)
++ [Managing capacity limits for Amazon OpenSearch Serverless](serverless-scaling.md)
 + [Ingesting data into Amazon OpenSearch Serverless collections](serverless-clients.md)
 + [Overview of security in Amazon OpenSearch Serverless](serverless-security.md)
 + [Tagging Amazon OpenSearch Serverless collections](tag-collection.md)
 + [Supported operations and plugins in Amazon OpenSearch Serverless](serverless-genref.md)
++ [Using the AWS SDKs to interact with Amazon OpenSearch Serverless](serverless-sdk.md)
 + [Monitoring Amazon OpenSearch Serverless](serverless-monitoring.md)
 
 ## Benefits<a name="serverless-benefits"></a>

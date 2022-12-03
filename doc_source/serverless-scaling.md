@@ -1,11 +1,11 @@
-# Manging capacity limits for Amazon OpenSearch Serverless<a name="serverless-scaling"></a>
+# Managing capacity limits for Amazon OpenSearch Serverless<a name="serverless-scaling"></a>
 
 ****  
 ***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
 
 With Amazon OpenSearch Serverless, you don't have to manage capacity yourself\. OpenSearch Serverless automatically scales compute capacity for your account based on the current workload\. Serverless compute capacity is measured in *OpenSearch Compute Units* \(OCUs\)\. Each OCU is a combination of 6 GiB of memory and corresponding virtual CPU \(vCPU\), as well as data transfer to Amazon S3\. For more information about the decoupled architecture in OpenSearch Serverless, see [How it works](serverless-overview.md#serverless-process)\.
 
-When you create your first collection, OpenSearch Serverless instantiates a total of four OCUs \(two for indexing and two for search\)\. These OCUs always exist, even when there's no indexing or search activity\. All subsequent collections can share these OCUs \(except for collections with unique AWS KMS keys, which instantiate their own set of four OCUs\)\. If needed, OpenSearch Serverless automatically scales and adds additional OCUs as your indexing and search usage grows\.
+When you create your first collection, OpenSearch Serverless instantiates a total of four OCUs \(two for indexing and two for search\)\. These OCUs always exist, even when there's no indexing or search activity\. All subsequent collections can share these OCUs \(except for collections with unique AWS KMS keys, which instantiate their own set of four OCUs\)\. If needed, OpenSearch Serverless automatically scales and adds additional OCUs as your indexing and search usage grows\. Capacity currently doesn't scale back down and remove OCUs as usage decreases\.
 
 For *search* collections, most data is stored in hot storage to ensure fast query response times\. Some data is stored in S3 and is pulled to hot disks when it's queried\. For *time series* collections, we use a combination of hot and warm storage, keeping the most recent data in hot storage to optimize query response times for more frequently accessed data\. For more information, see [Choosing a collection type](serverless-overview.md#serverless-usecase)\.
 
@@ -34,7 +34,7 @@ To configure capacity settings in the OpenSearch Serverless console, expand **Se
 To configure capacity using the AWS CLI, send an [UpdateAccountSettings](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_UpdateAccountSettings.html) request:
 
 ```
-aws aoss update-account-settings \
+aws opensearchserverless update-account-settings \
     --capacity-limits '{ "maxIndexingCapacityInOCU": 8,"maxSearchCapacityInOCU": 9 }'
 ```
 

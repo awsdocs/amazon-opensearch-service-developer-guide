@@ -71,7 +71,7 @@ You can skip this step if you're already using a more broad identity\-based poli
    Send the following request to create an encryption policy for the *books* collection:
 
    ```
-   aws aoss create-security-policy \
+   aws opensearchserverless create-security-policy \
      --name books-policy \
      --type encryption --policy "{\"Rules\":[{\"ResourceType\":\"collection\",\"Resource\":[\"collection\/books\"]}],\"AWSOwnedKey\":true}"
    ```
@@ -104,7 +104,7 @@ You can skip this step if you're already using a more broad identity\-based poli
 1. Create a [network policy](serverless-network.md) that provides public access to the *books* collection:
 
    ```
-   aws aoss create-security-policy --name books-policy --type network \
+   aws opensearchserverless create-security-policy --name books-policy --type network \
      --policy "[{\"Description\":\"Public access for books collection\",\"Rules\":[{\"ResourceType\":\"dashboard\",\"Resource\":[\"collection\/books\"]},{\"ResourceType\":\"collection\",\"Resource\":[\"collection\/books\"]}],\"AllowFromPublic\":true}]"
    ```
 
@@ -145,7 +145,7 @@ You can skip this step if you're already using a more broad identity\-based poli
 1. Create the *books* collection:
 
    ```
-   aws aoss create-collection --name books --type SEARCH
+   aws opensearchserverless create-collection --name books --type SEARCH
    ```
 
    **Sample response**
@@ -168,10 +168,10 @@ You can skip this step if you're already using a more broad identity\-based poli
 1. Create a [data access policy](serverless-data-access.md) that provides the minimum permissions to index and search data in the *books* collection\. Replace the principal ARN with the ARN of `TutorialUser` from step 1:
 
    ```
-   aws aoss create-access-policy \
+   aws opensearchserverless create-access-policy \
      --name books-policy \
      --type data \
-     --policy "[{\"Rules\":[{\"ResourceType\":\"index\",\"Resource\":[\"index\/books\/books-index\"],\"Permission\":[\"aoss:CreateIndex\",\"aoss:DescribeIndex\",\"aoss:ReadDocument\",\"aoss:WriteDocument\",\"aoss:UpdateDocument\",\"aoss:DeleteDocument\"]}],\"Principal\":[\"arn:aws:iam::123456789012:user\/TutorialUser\"]}]"
+     --policy "[{\"Rules\":[{\"ResourceType\":\"index\",\"Resource\":[\"index\/books\/books-index\"],\"Permission\":[\"aoss:CreateIndex\",\"aoss:DescribeIndex\",\"aoss:ReadDocument\",\"aoss:WriteDocument\",\"aoss:UpdateIndex\",\"aoss:DeleteIndex\"]}],\"Principal\":[\"arn:aws:iam::123456789012:user\/TutorialUser\"]}]"
    ```
 
    **Sample response**
@@ -216,7 +216,7 @@ You can skip this step if you're already using a more broad identity\-based poli
 1. To make calls to the OpenSearch API, you need the collection endpoint\. Send the following request to retrieve the `collectionEndpoint` parameter:
 
    ```
-   aws aoss batch-get-collection --names books  
+   aws opensearchserverless batch-get-collection --names books  
    ```
 
    **Sample response**

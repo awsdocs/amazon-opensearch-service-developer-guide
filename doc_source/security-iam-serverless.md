@@ -130,6 +130,8 @@ In this example, the condition applies to policies that contain *rules* that mat
 **Note**  
 *Collection* condition keys don't apply at the index level\. For example, in the policy above, the condition wouldn't apply to an access or security policy containing the resource string `index/logs-application/*`\.
 
+To see a list of OpenSearch Serverless condition keys, see [Condition keys for Amazon OpenSearch Serverless](https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonopensearchserverless.html#amazonopensearchserverless-policy-keys) in the *Service Authorization Reference*\. To learn with which actions and resources you can use a condition key, see [Actions defined by Amazon OpenSearch Serverless](https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonopensearchserverless.html#amazonopensearchserverless-actions-as-permissions)\.
+
 ## ABAC with OpenSearch Serverless<a name="security_iam_serverless-with-iam-tags"></a>
 
 
@@ -179,7 +181,7 @@ By default, users and roles don't have permission to create or modify OpenSearch
 
 To learn how to create an IAM identity\-based policy by using these example JSON policy documents, see [Creating IAM policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create-console.html) in the *IAM User Guide*\.
 
-For details about actions and resource types defined by Amazon OpenSearch Serverless, including the format of the ARNs for each of the resource types, see [Actions, resources, and condition keys for Amazon OpenSearch Serverless](https://docs.aws.amazon.com/service-authorization/latest/reference/list_your_service.html) in the *Service Authorization Reference*\.
+For details about actions and resource types defined by Amazon OpenSearch Serverless, including the format of the ARNs for each of the resource types, see [Actions, resources, and condition keys for Amazon OpenSearch Serverless](https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonopensearchserverless.html) in the *Service Authorization Reference*\.
 
 **Topics**
 + [Policy best practices](#security_iam_serverless-policy-best-practices)
