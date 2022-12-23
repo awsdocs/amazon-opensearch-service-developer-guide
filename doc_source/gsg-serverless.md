@@ -184,7 +184,7 @@ You can upload data to an OpenSearch Serverless collection using Postman or curl
 1. To index a single document into *books\-index*, run the following command:
 
    ```
-   PUT books-index/_doc/1
+   POST books-index/_doc/1
    { 
      "title": "The Shining",
      "author": "Stephen King",
