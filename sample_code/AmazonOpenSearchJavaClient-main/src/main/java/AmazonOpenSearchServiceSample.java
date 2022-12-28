@@ -43,7 +43,7 @@ public class AmazonOpenSearchServiceSample {
         // Index a document
         entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
         String id = "1";
-        request = new Request("POST", indexingPath);
+        request = new Request("PUT", indexingPath);
         request.setEntity(entity);
 
         // Using a String instead of an HttpEntity sets Content-Type to application/json automatically.
