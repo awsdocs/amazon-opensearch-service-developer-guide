@@ -10,9 +10,9 @@ Service software updates differ from OpenSearch version upgrades\. For informati
 ## Domain update considerations<a name="service-software-considerations"></a>
 
 Consider the following when deciding whether to update your domain:
-+ If you take no action on available updates, OpenSearch Service eventually updates your domain for you\. If an update is *optional*, OpenSearch Service updates your domain the next time you make a change that causes a [blue/green deployment](managedomains-configuration-changes.md)\. If the update is *required*, OpenSearch Service initiates a blue/green deployment after a certain timeframe \(typically two weeks\) if the domain hasn't already been updated\. You receive notifications when the update starts and when it's complete\.
-+ If you start an update manually, OpenSearch Service doesn't send a notification when it starts the update, only when the update is complete\.
-+ Software updates use blue/green deployments to minimizes downtime\. Updates can temporarily strain a cluster's dedicated master nodes, so make sure to maintain sufficient capacity to handle the associated overhead\. 
++ When you initiate a service software update, OpenSearch Service sends a notification when the update starts and when it completes\.
++ If you take no action on available updates, OpenSearch Service eventually updates your domain for you\. If an update is *optional*, OpenSearch Service updates your domain the next time you make a change that causes a [blue/green deployment](managedomains-configuration-changes.md)\. If the update is *required*, OpenSearch Service initiates a blue/green deployment after a certain timeframe \(typically two weeks\) if the domain hasn't already been updated\. You receive notifications when the update starts and when it completes\.
++ Software updates use blue/green deployments to minimize downtime\. Updates can temporarily strain a cluster's dedicated master nodes, so make sure to maintain sufficient capacity to handle the associated overhead\. 
 
 Manually updating your domain lets you take advantage of new features more quickly\. When you choose **Update**, OpenSearch Service places the request in a queue and begins the update when it has time\. Updates typically complete within minutes, but can also take several hours or even days if your system is experiencing heavy load\. Consider updating your domain at a low traffic time to avoid long update periods\. 
 

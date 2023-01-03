@@ -21,7 +21,7 @@ These sections provide details about the supported ingest pipelines for data ing
 The following requirements apply when [signing requests](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html) to OpenSearch Serverless collections:
 + You must specify the service name as `aoss`\.
 + You can't include `Content-Length` as a signed header, otherwise you'll get an invalid signature error\.
-+ The `x-amz-content-sha256` header is required for all AWS Signature Version 4 requests\. It provides a hash of the request payload\. For OpenSearch Serverless, include it with one of these values when you build the canonical request for signing:
++ The `x-amz-content-sha256` header is required for all AWS Signature Version 4 requests\. It provides a hash of the request payload\. For OpenSearch Serverless, include it with one of the following \+ "/" \+ id values when you build the canonical request for signing:
   + If there's a request payload, set the value to its Secure Hash Algorithm \(SHA\) cryptographic hash \(SHA256\)\.
   + If there's no request payload, set the value to `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, which is the hash of an empty string\.
   + In either of the above two cases, you can also use the literal string `UNSIGNED-PAYLOAD` as the value of the `x-amz-content-sha256` header\.
@@ -40,7 +40,7 @@ In order to ingest data into an OpenSearch Serverless collection, the principal 
                "index/target-collection/*"
             ],
             "Permission":[
-               "aoss:CreateIndex"
+               "aoss:CreateIndex",
                "aoss:WriteDocument",
                "aoss:UpdateIndex"
             ]
@@ -266,84 +266,7 @@ index_document().catch(console.log);
 
 ## Java<a name="serverless-java"></a>
 
-The following sample code uses [AmazonOpenSearchJavaClient](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/AmazonOpenSearchJavaClient-main), which is similar to the existing OpenSearch low\-level Java REST client, to establish a secure connection to the specified OpenSearch Serverless collection, create an index, and index a single document\. You must provide values for `region` and `host`\.
-
-The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\)\.
-
-```
-import com.amazonaws.auth.*;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.entity.ContentType;
-import org.apache.http.nio.entity.NStringEntity;
-import org.opensearch.client.Request;
-import org.opensearch.client.Response;
-import org.opensearch.client.RestClient;
-import com.amazonaws.http.AWSRequestSigningApacheInterceptor;
-
-import java.io.IOException;
-
-public class AmazonOpenSearchServiceSample {
-
-    private static String serviceName = "aoss";
-    private static String region = "";
-    private static String host = ""; // The collection endpoint. For example, https://07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com
-    private static String index_name = "my-index";
-
-    private static String mapping = "{ \"settings\": { \"number_of_shards\": 1, \"number_of_replicas\": 0 }, \"mappings\": { \"properties\": { \"title\": {\"type\": \"text\"}, \"director\": {\"type\": \"text\"}, \"year\": {\"type\": \"text\"} } } }";
-    private static String createIndexPath = "/" + index_name;
-
-    private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
-    private static String indexingPath = "/" + index_name + "/_doc";
-
-    private static String sampleSearch = "{ \"query\": { \"match_all\": {}}}";
-    private static String searchPath = "/" + index_name + "/_search";
-
-    static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
-
-    public static void main(String[] args) throws IOException {
-        RestClient searchClient = searchClient(serviceName, region);
-
-        // Create an index
-        HttpEntity entity = new NStringEntity(mapping, ContentType.APPLICATION_JSON);
-        Request request = new Request("PUT", createIndexPath);
-        request.setEntity(entity);
-        // request.addParameter(name, value); // optional parameters
-        Response response = searchClient.performRequest(request);
-        System.out.println("Create Index Response : " + response.toString());
-
-        // Index a document
-        entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
-        String id = "1";
-        request = new Request("POST", indexingPath + "/" + id);
-        request.setEntity(entity);
-
-        // Using a string instead of an HttpEntity sets Content-Type to application/json automatically.
-        // request.setJsonEntity(sampleDocument);
-
-        response = searchClient.performRequest(request);
-        System.out.println("Indexing Document Response : " + response.toString());
-
-        // Match All Search
-        entity = new NStringEntity(sampleSearch, ContentType.APPLICATION_JSON);
-        request = new Request("GET", searchPath);
-        request.setEntity(entity);
-
-        response = searchClient.performRequest(request);
-        System.out.println("Match All Search Response : " + response.toString());
-    }
-
-    // Adds the interceptor to the OpenSearch REST client
-    public static RestClient searchClient(String serviceName, String region) {
-        AWS4UnsignedPayloadSigner signer = new AWS4UnsignedPayloadSigner();
-        signer.setServiceName(serviceName);
-        signer.setRegionName(region);
-        HttpRequestInterceptor interceptor = new AWSRequestSigningApacheInterceptor(serviceName, signer, credentialsProvider);
-        return RestClient.builder(HttpHost.create(host)).setHttpClientConfigCallback(hacb -> hacb.addInterceptorLast(interceptor)).build();
-    }
-}
-```
+To ingest data into an OpenSearch Serverless with Java, use [AmazonOpenSearchJavaClient](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/AmazonOpenSearchJavaClient-main), which is similar to the existing OpenSearch low\-level Java REST client\. The sample code in the repository establishes a secure connection to the specified collection, creates an index, and indexes a single document\. You must provide values for `region` and `host`\.
 
 ## Python<a name="serverless-python"></a>
 

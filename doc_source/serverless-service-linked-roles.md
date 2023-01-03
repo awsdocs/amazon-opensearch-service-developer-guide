@@ -56,13 +56,4 @@ Use the IAM console, the AWS CLI, or the AWS API to delete the AmazonOpenSearchS
 
 ## Supported Regions for OpenSearch Serverless service\-linked roles<a name="serverless-slr-regions"></a>
 
-OpenSearch Serverless does not support using service\-linked roles in every Region where OpenSearch Service is available\. You can use the AmazonOpenSearchServerlessServiceRole role in the following Regions\.
-
-
-| Region name | Region identity | Support in OpenSearch Serverless | 
-| --- | --- | --- | 
-| US East \(N\. Virginia\) | us\-east\-1 | Yes | 
-| US East \(Ohio\) | us\-east\-2 | Yes | 
-| US West \(Oregon\) | us\-west\-2 | Yes | 
-| Asia Pacific \(Tokyo\) | ap\-northeast\-1 | Yes | 
-| Europe \(Ireland\) | eu\-west\-1 | Yes | 
+OpenSearch Serverless supports using the AmazonOpenSearchServerlessServiceRole service\-linked role in every Region where OpenSearch Serverless is available\. For a list of supported Regions, see [Amazon OpenSearch Serverless endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/opensearch-service.html) in the *AWS General Reference*\.

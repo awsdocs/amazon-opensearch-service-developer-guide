@@ -1,6 +1,6 @@
 # Amazon OpenSearch Service rename \- Summary of changes<a name="rename"></a>
 
-On September 8, 2021, Amazon Elasticsearch Service was renamed to Amazon OpenSearch Service\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the rename, and what actions you need to take to ensure that your domains continue to function properly\. 
+On September 8, 2021, Amazon OpenSearch Service was renamed to replace "Elasticsearch" with "OpenSearch"\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the rename, and what actions you need to take to ensure that your domains continue to function properly\. 
 
 Some of these changes only apply when you upgrade your domains from Elasticsearch to OpenSearch\. In other cases, such as in the Billing and Cost Management console, the experience changes immediately\.
 
@@ -111,18 +111,16 @@ For a full list of metrics that OpenSearch Service sends to Amazon CloudWatch, s
 
 ## Billing and Cost Management console changes<a name="rename-billing"></a>
 
-Historic data in the [Billing and Cost Management](https://console.aws.amazon.com/billing/home) console and in [Cost and Usage Reports](https://aws.amazon.com/aws-cost-management/aws-cost-and-usage-reporting/) will continue to use the old service name, so you need to start using filters for both **Amazon Elasticsearch Service** and **Amazon OpenSearch Service** when searching for data\. If you have existing saved reports, update the filters to make sure they also include OpenSearch Service\. You might initially receive an alert when your usage decreases for Elasticsearch and increases for OpenSearch, but it disappears within several days\. 
+Historic data in the [Billing and Cost Management](https://console.aws.amazon.com/billing/home) console and in [Cost and Usage Reports](https://aws.amazon.com/aws-cost-management/aws-cost-and-usage-reporting/) will continue to use the old service name, so you need to start using filters for both **Amazon OpenSearch Service** and the legacy Elasticsearch name when searching for data\. If you have existing saved reports, update the filters to make sure they also include OpenSearch Service\. You might initially receive an alert when your usage decreases for Elasticsearch and increases for OpenSearch, but it disappears within several days\. 
 
-The following fields will change for all reports, bills, and price list API operations:
+In addition to the service name, the following fields will change for all reports, bills, and price list API operations:
 
 
 | Field | Old format | New format | 
 | --- | --- | --- | 
 | Instance type |  `m5.large.elasticsearch`  |  `m5.large.search`  | 
-|  Product name  |  Amazon Elasticsearch Service  | Amazon OpenSearch Service | 
 | Product family |  Elasticsearch Instance Elasticsearch Volume  |  Amazon OpenSearch Service Instance Amazon OpenSearch Service Volume  | 
 | Pricing description |  $5\.098 per c5\.18xlarge\.elasticsearch instance hour \(or partial hour\) \- EU  |  $5\.098 per c5\.18xlarge\.search instance hour \(or partial hour\) \- EU  | 
-| Service name |  Amazon Elasticsearch Service  |  Amazon OpenSearch Service  | 
 |  Instance family  |  `ultrawarm.elasticsearch`  |  `ultrawarm.search`  | 
 
 ## New event format<a name="rename-events"></a>

@@ -13,18 +13,21 @@ A prerequisite for this tutorial is an OpenSearch Service domain\. If you don't 
 
 ## Step 1: Index sample data<a name="search-example-index"></a>
 
-Download [sample\-movies\.zip](samples/sample-movies.zip), unzip it, and use the `_bulk` API to add the 5,000 documents to the `movies` index:
+Download [sample\-movies\.zip](samples/sample-movies.zip), unzip it, and then use the [\_bulk](https://opensearch.org/docs/latest/api-reference/document-apis/bulk/) API operation to add the 5,000 documents to the `movies` index:
 
 ```
 POST https://search-my-domain.us-west-1.es.amazonaws.com/_bulk
-{ "index": { "_index": "movies", "_type": "movie", "_id": "tt1979320" } }
+{ "index": { "_index": "movies", "_id": "tt1979320" } }
 {"directors":["Ron Howard"],"release_date":"2013-09-02T00:00:00Z","rating":8.3,"genres":["Action","Biography","Drama","Sport"],"image_url":"http://ia.media-imdb.com/images/M/MV5BMTQyMDE0MTY0OV5BMl5BanBnXkFtZTcwMjI2OTI0OQ@@._V1_SX400_.jpg","plot":"A re-creation of the merciless 1970s rivalry between Formula One rivals James Hunt and Niki Lauda.","title":"Rush","rank":2,"running_time_secs":7380,"actors":["Daniel Brühl","Chris Hemsworth","Olivia Wilde"],"year":2013,"id":"tt1979320","type":"add"}
-{ "index": { "_index": "movies", "_type": "movie", "_id": "tt1951264" } }
+{ "index": { "_index": "movies", "_id": "tt1951264" } }
 {"directors":["Francis Lawrence"],"release_date":"2013-11-11T00:00:00Z","genres":["Action","Adventure","Sci-Fi","Thriller"],"image_url":"http://ia.media-imdb.com/images/M/MV5BMTAyMjQ3OTAxMzNeQTJeQWpwZ15BbWU4MDU0NzA1MzAx._V1_SX400_.jpg","plot":"Katniss Everdeen and Peeta Mellark become targets of the Capitol after their victory in the 74th Hunger Games sparks a rebellion in the Districts of Panem.","title":"The Hunger Games: Catching Fire","rank":4,"running_time_secs":8760,"actors":["Jennifer Lawrence","Josh Hutcherson","Liam Hemsworth"],"year":2013,"id":"tt1951264","type":"add"}
 ...
 ```
 
 For instructions, see [Option 2: Upload multiple documents](gsgupload-data.md#gsgmultiple-document)\.
+
+**Note**  
+The above is an example command\. Don't copy and paste it directly when performing the `_bulk` operation\.
 
 ## Step 2: Create the API in API Gateway<a name="search-example-api"></a>
 
@@ -214,7 +217,7 @@ Alternatively, you can choose to make your domain access policy more granular\. 
 }
 ```
 
-**Note**  
+**Important**  
 If you have fine\-grained access control enabled for the domain, you also need to [map the role to a user](fgac.md#fgac-mapping) in OpenSearch Dashboards, otherwise you'll see permissions errors\.
 
 For more information about access policies, see [Configuring access policies](createupdatedomains.md#createdomain-configure-access-policies)\.

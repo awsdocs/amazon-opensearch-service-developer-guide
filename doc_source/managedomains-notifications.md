@@ -1,8 +1,8 @@
 # Notifications in Amazon OpenSearch Service<a name="managedomains-notifications"></a>
 
-Notifications in Amazon OpenSearch Service currently contain information about available software updates and Auto\-Tune events for your domains\. In the future, they might also include performance optimization recommendations such as moving to the correct instance type for a domain or rebalancing shards to reduce performance bottlenecks\. 
+Notifications in Amazon OpenSearch Service contain important information about the performance and health of your domains\. OpenSearch Service notifies you about service software updates, Auto\-Tune enhancements, cluster health events, and domain errors\. Notifications are available for all versions of OpenSearch and Elasticsearch OSS\.
 
-You can view notifications in the **Notifications** panel of the OpenSearch Service console or in [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/create-eventbridge-rule.html)\. Some notifications are also available in the AWS [Personal Health Dashboard](https://docs.aws.amazon.com/health/latest/ug/getting-started-phd.html)\. They're available for all versions of OpenSearch and Elasticsearch OSS, with some minor exceptions\. For the format of each event sent to EventBridge, see [Monitoring OpenSearch Service events with Amazon EventBridge](monitoring-events.md)\.
+You can view notifications in the **Notifications** panel of the OpenSearch Service console\. All notifications for OpenSearch Service are also surfaced in [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html)\. For a full list of notifications and sample events, see [Monitoring OpenSearch Service events with Amazon EventBridge](monitoring-events.md)\.
 
 ## Getting started with notifications<a name="managedomains-notifications-start"></a>
 

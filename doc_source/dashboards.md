@@ -16,7 +16,7 @@ Dashboards does not natively support IAM users and roles, but OpenSearch Service
 + For public access domains, configure an [IP\-based access policy](ac.md#ac-types-ip) that either uses or does not use a [proxy server](#dashboards-proxy)\.
 + For VPC access domains, use an open access policy that either uses or does not use a proxy server, and [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control access\. To learn more, see [About access policies on VPC domains](vpc.md#vpc-security)\.
 
-### Using a proxy to access OpenSearch Service from Dashboards<a name="dashboards-proxy"></a>
+### Using a proxy to access OpenSearch Service from OpenSearch Dashboards<a name="dashboards-proxy"></a>
 
 **Note**  
 This process is only applicable if your domain uses public access and you don't want to use [Cognito authentication](cognito-auth.md)\. See [Controlling access to OpenSearch Dashboards](#dashboards-access)\.

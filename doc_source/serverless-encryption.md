@@ -279,7 +279,7 @@ The same applies to policy matching rules\. If you add, modify, or delete a rule
 
 To update an encryption policy in the OpenSearch Serverless console, choose **Encryption policies**, select the policy to modify, and choose **Edit**\. Make your changes and choose **Save**\.
 
-To update an encryption policy using the OpenSearch Serverless API, use the [UpdateSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_UpdateSecurityPolicy.html) command\. The following request updates an encryption policy with a new policy JSON document:
+To update an encryption policy using the OpenSearch Serverless API, use the [UpdateSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_UpdateSecurityPolicy.html) operation\. The following request updates an encryption policy with a new policy JSON document:
 
 ```
 aws opensearchserverless update-security-policy \
@@ -293,7 +293,7 @@ aws opensearchserverless update-security-policy \
 
 When you delete an encryption policy, any collections that are currently using the AWS KMS key defined in the policy are not affected\. To delete a policy in the OpenSearch Serverless console, select the policy and choose **Delete**\.
 
-You can also use the [DeleteSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteSecurityPolicy.html) command:
+You can also use the [DeleteSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteSecurityPolicy.html) operation:
 
 ```
 aws opensearchserverless delete-security-policy --name my-policy --type encryption

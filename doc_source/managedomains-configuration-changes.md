@@ -69,10 +69,10 @@ The request returns the type of deployment the change will cause but doesn't act
 ```
 
 Possible deployment types are:
-+ `Blue/Green` \- The change will cause a blue/green deployment\.
-+ `DynamicUpdate` \- The change won't cause a blue/green deployment\.
-+ `Undetermined` \- The domain is still in a processing state, so the deployment type can't be determined\.
-+ `None` \- No configuration change\.
++ `Blue/Green` – The change will cause a blue/green deployment\.
++ `DynamicUpdate` – The change won't cause a blue/green deployment\.
++ `Undetermined` – The domain is still in a processing state, so the deployment type can't be determined\.
++ `None` – No configuration change\.
 
 ## Initiating a configuration change<a name="initiate"></a>
 
@@ -141,7 +141,7 @@ When you initiate a configuration change or perform an OpenSearch or Elasticsear
 If you change the configuration for a domain, OpenSearch Service creates a new cluster as described in [Making configuration changes in Amazon OpenSearch Service](#managedomains-configuration-changes)\. During the migration of old to new, you incur the following charges:
 + If you change the instance type, you're charged for both clusters for the first hour\. After the first hour, you're only charged for the new cluster\. EBS volumes aren't charged twice because they're part of your cluster, so their billing follows instance billing\.
 
-  **Example:** You change the configuration from three `m3.xlarge` instances to four `m4.large` instances\. For the first hour, you're charged for both clusters \(3 \* `m3.xlarge` \+ 4 \* `m4.large`\)\. After the first hour, you're charged only for the new cluster \(4 \* `m4.large`\)\.
+  **Example**: You change the configuration from three `m3.xlarge` instances to four `m4.large` instances\. For the first hour, you're charged for both clusters \(3 \* `m3.xlarge` \+ 4 \* `m4.large`\)\. After the first hour, you're charged only for the new cluster \(4 \* `m4.large`\)\.
 + If you don't change the instance type, you're charged only for the largest cluster for the first hour\. After the first hour, you're charged only for the new cluster\.
 
-  **Example:** You change the configuration from six `m3.xlarge` instances to three `m3.xlarge` instances\. For the first hour, you're charged for the largest cluster \(6 \* `m3.xlarge`\)\. After the first hour, you're charged only for the new cluster \(3 \* `m3.xlarge`\)\.
+  **Example**: You change the configuration from six `m3.xlarge` instances to three `m3.xlarge` instances\. For the first hour, you're charged for the largest cluster \(6 \* `m3.xlarge`\)\. After the first hour, you're charged only for the new cluster \(3 \* `m3.xlarge`\)\.

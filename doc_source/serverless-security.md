@@ -89,16 +89,3 @@ Before you create a data access policy, you must have one or more IAM users or r
 ```
 
 You configure SAML authentication directly within OpenSearch Serverless\. For more information, see [SAML authentication for Amazon OpenSearch Serverless](serverless-saml.md)\. 
-
-**Topics**
-+ [Encryption policies](#serverless-security-encryption)
-+ [Network policies](#serverless-security-network)
-+ [Data access policies](#serverless-security-data-access)
-+ [IAM and SAML authentication](#serverless-security-authentication)
-+ [Getting started with security in Amazon OpenSearch Serverless](serverless-tutorials.md)
-+ [Identity and Access Management for Amazon OpenSearch Serverless](security-iam-serverless.md)
-+ [Encryption at rest for Amazon OpenSearch Serverless](serverless-encryption.md)
-+ [Network access for Amazon OpenSearch Serverless](serverless-network.md)
-+ [Data access control for Amazon OpenSearch Serverless](serverless-data-access.md)
-+ [Access Amazon OpenSearch Serverless using an interface endpoint \(AWS PrivateLink\)](serverless-vpc.md)
-+ [SAML authentication for Amazon OpenSearch Serverless](serverless-saml.md)

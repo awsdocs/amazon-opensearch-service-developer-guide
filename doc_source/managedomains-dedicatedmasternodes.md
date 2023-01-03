@@ -44,7 +44,7 @@ These recommendations are based on typical workloads and can vary based on your 
 | --- | --- | --- | --- | 
 |  1–10  | 8 GiB | 10K |  `m5.large.search` or `m6g.large.search`  | 
 |  11–30  | 16 GiB | 30K |  `c5.2xlarge.search` or `c6g.2xlarge.search`  | 
-| 31–75 | 32 GiB | 75K |  `c5.4xlarge.search` or `c6g.4xlarge.search`  | 
+| 31–75 | 32 GiB | 40K |  `c5.4xlarge.search` or `c6g.4xlarge.search`  | 
 | 76 – 125 | 64 GiB | 75K |  `r5.2xlarge.search` or `r6g.2xlarge.search`  | 
 |  126 – 200  | 128 GiB | 75K |  `r5.4xlarge.search` or `r6g.4xlarge.search`  | 
 + For information about how certain configuration changes can affect dedicated master nodes, see [Making configuration changes in Amazon OpenSearch Service](managedomains-configuration-changes.md)\.

@@ -16,7 +16,7 @@ OpenSearch Service supports three types of access policies:
 
 You add a resource\-based policy, often called the domain access policy, when you create a domain\. These policies specify which actions a principal can perform on the domain's *subresources* \(with the exception of [cross\-cluster search](cross-cluster-search.md#cross-cluster-search-walkthrough)\)\. Subresources include OpenSearch indexes and APIs\. The [Principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) element specifies the accounts, users, or roles that are allowed access\. The [Resource](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_resource.html) element specifies which subresources these principals can access\.
 
-The following resource\-based policy grants `test-user` full access \(`es:*`\) to the subresources on `test-domain`:
+For example, the following resource\-based policy grants `test-user` full access \(`es:*`\) to the subresources on `test-domain`:
 
 ```
 {
@@ -44,13 +44,13 @@ Two important considerations apply to this policy:
 
   For example, `test-user` can make requests against an index \(`GET https://search-test-domain.us-west-1.es.amazonaws.com/test-index`\), but can't update the domain's configuration \(`POST https://es.us-west-1.amazonaws.com/2021-01-01/opensearch/domain/test-domain/config`\)\. Note the difference between the two endpoints\. Accessing the [configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html) requires an [identity\-based policy](#ac-types-identity)\.
 
-You can specify a partial index name by adding a wildcard\. This one identifies any indexes beginning with `commerce`:
+You can specify a partial index name by adding a wildcard\. This example identifies any indexes beginning with `commerce`:
 
 ```
 arn:aws:es:us-west-1:987654321098:domain/test-domain/commerce*
 ```
 
-In this case, specifying using this wildcard means that `test-user` can make requests to indexes in the `test-domain` domain that have names that begin with `commerce`\.
+In this case, the wildcard means that `test-user` can make requests to indexes within `test-domain` that have names that begin with `commerce`\.
 
 To further restrict `test-user`, you can apply the following policy:
 
@@ -228,7 +228,7 @@ For more details on using tags for access control and the differences between re
 
 IP\-based policies restrict access to a domain to one or more IP addresses or CIDR blocks\. Technically, IP\-based policies are not a distinct type of policy\. Instead, they are just resource\-based policies that specify an anonymous principal and include a special [Condition](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) element\.
 
-The primary appeal of IP\-based policies is that they allow unsigned requests to an OpenSearch Service domain, which lets you use clients like [curl](https://curl.haxx.se/) and [OpenSearch Dashboards](dashboards.md) or access the domain through a proxy server\. To learn more, see [Using a proxy to access OpenSearch Service from Dashboards](dashboards.md#dashboards-proxy)\.
+The primary appeal of IP\-based policies is that they allow unsigned requests to an OpenSearch Service domain, which lets you use clients like [curl](https://curl.haxx.se/) and [OpenSearch Dashboards](dashboards.md) or access the domain through a proxy server\. To learn more, see [Using a proxy to access OpenSearch Service from OpenSearch Dashboards](dashboards.md#dashboards-proxy)\.
 
 **Note**  
 If you enabled VPC access for your domain, you can't configure an IP\-based policy\. Instead, you can use [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) to control which IP addresses can access the domain\. For more information, see [About access policies on VPC domains](vpc.md#vpc-security)\.

@@ -9,7 +9,7 @@ An OpenSearch Serverless *collection* is a group of OpenSearch indexes that work
 
 Collections have the same kind of high\-capacity, distributed, and highly available storage volume that's used by provisioned OpenSearch Service domains, but they remove more complexity because they don't require manual configuration and tuning\. OpenSearch Serverless also supports OpenSearch Dashboards, which provides an intuitive interface for analyzing data\.
 
-Serverless collections currently run OpenSearch version 2\.3\. As new versions are released, OpenSearch Serverless will automatically upgrade your collections to consume new features, bug fixes, and performance improvements\.
+Serverless collections currently run OpenSearch version 2\.0\.x\. As new versions are released, OpenSearch Serverless will automatically upgrade your collections to consume new features, bug fixes, and performance improvements\.
 
 **Topics**
 + [Use cases for OpenSearch Serverless](#serverless-use-cases)
@@ -41,15 +41,15 @@ Traditional OpenSearch clusters have a single set of instances that perform both
 
 This decoupled architecture lets you scale search and indexing functions independently of each other, and independently of the indexed data in S3\. The architecture also provides isolation for ingest and query operations so that they can run concurrently without resource contention\. 
 
-When you write data to a collection, OpenSearch Serverless distributes it to the *ingest* compute units\. The ingest compute units index the incoming data and move the indexes to S3\. When you perform a search on the collection data, OpenSearch Serverless routes requests to the *search* compute units that hold the data being queried\. The search compute units download the indexed data directly from S3 \(if it's not already cached locally\), run search operations, and perform aggregations\. 
+When you write data to a collection, OpenSearch Serverless distributes it to the *indexing* compute units\. The indexing compute units ingest the incoming data and move the indexes to S3\. When you perform a search on the collection data, OpenSearch Serverless routes requests to the *search* compute units that hold the data being queried\. The search compute units download the indexed data directly from S3 \(if it's not already cached locally\), run search operations, and perform aggregations\. 
 
-The following image illustrates this architecture:
+The following image illustrates this decoupled architecture:
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/Serverless.png)
 
 OpenSearch Serverless compute capacity for data ingestion, searching, and querying are measured in OpenSearch Compute Units \(OCUs\)\. Each OCU is a combination of 6 GiB of memory and corresponding virtual CPU \(vCPU\), as well as data transfer to Amazon S3\. A single OCU can hold approximately 180 GiB of data\.
 
-When you create your first collection, OpenSearch Serverless instantiates two OCUs—one for ingest and one for search\. To ensure high availability, it also launches a standby set of nodes in another Availability Zone\. This means that a total of four OCUs are instantiated for the first collection in an account\.
+When you create your first collection, OpenSearch Serverless instantiates two OCUs—one for indexing and one for search\. To ensure high availability, it also launches a standby set of nodes in another Availability Zone\. This means that a total of four OCUs are instantiated for the first collection in an account\.
 
 These OCUs exist even when there's no activity on any collection endpoints\. All subsequent collections share these OCUs\. When you create additional collections in the same account, OpenSearch Serverless only adds additional OCUs for search and ingest as needed to support the collections, according to the [capacity limits](serverless-scaling.md#serverless-scaling-configure) that you specify\. Currently, capacity doesn't scale back down as your compute usage decreases\.
 
@@ -71,7 +71,7 @@ The collection type that you choose depends on the kind of data that you plan to
 
 The collection types have the following notable **differences**:
 + For *search* collections, all data is stored in hot storage to ensure fast query response times\. *Time series* collections use a combination of hot and warm storage, where the most recent data is kept in hot storage to optimize query response times for more frequently accessed data\.
-+ You can't index or search by document ID in *time series* collections\. This operation is reserved for search use cases\. For more information, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
++ For *time series* collections, you can't index by document ID\. This operation is reserved for search use cases\. For more information, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
 
 ## Pricing for OpenSearch Serverless<a name="serverless-pricing"></a>
 
@@ -80,7 +80,7 @@ In OpenSearch Serverless, you're charged for the following components:
 + Search and query compute
 + Storage retained in Amazon S3
 
-The cost per hour of using an OpenSearch Compute Unit \(OCU\) is $0\.24\. OCUs are billed on an hourly basis at the collection level, with per\-second granularity\. In your account statements, you see an entry for compute in OCU\-hours with a label for data ingestion and a label for search\. The cost per month of data stored in Amazon S3 is $0\.024 per GiB\. You aren't charged for using OpenSearch Dashboards\.
+OCUs are billed on an hourly basis, with per\-second granularity\. In your account statement, you see an entry for compute in OCU\-hours with a label for data ingestion and a label for search\. You're also billed on a monthly basis for data stored in Amazon S3\. You aren't charged for using OpenSearch Dashboards\.
 
 You're billed for a minimum of 4 OCUs for the first collection in your account \(2 x ingest includes primary and standby, and 2 x search includes one replica for high availability\)\. All subsequent collections can share those OCUs\. OpenSearch Serverless adds additional OCUs based on the compute needed to support your collections\.
 

@@ -50,5 +50,6 @@ GET target_index/_search
   }
 }
 ```
+
 **Note**  
-OpenSearch versions 2.2 and later support searching multiple rollup indexes in one request. OpenSearch versions prior to 2.2 and legacy Elasticsearch OSS versions only support one rollup index per search.
+OpenSearch versions 2\.2 and later support searching multiple rollup indexes in one request\. OpenSearch versions prior to 2\.2 and legacy Elasticsearch OSS versions only support one rollup index per search\.

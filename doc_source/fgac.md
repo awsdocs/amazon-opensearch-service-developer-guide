@@ -1,6 +1,8 @@
 # Fine\-grained access control in Amazon OpenSearch Service<a name="fgac"></a>
 
-Fine\-grained access control offers additional ways of controlling access to your data on Amazon OpenSearch Service\. For example, depending on who makes the request, you might want a search to return results from only one index\. You might want to hide certain fields in your documents or exclude certain documents altogether\. Fine\-grained access control offers the following benefits:
+Fine\-grained access control offers additional ways of controlling access to your data on Amazon OpenSearch Service\. For example, depending on who makes the request, you might want a search to return results from only one index\. You might want to hide certain fields in your documents or exclude certain documents altogether\.
+
+Fine\-grained access control offers the following benefits:
 + Role\-based access control
 + Security at the index, document, and field level
 + OpenSearch Dashboards multi\-tenancy
@@ -19,8 +21,9 @@ Fine\-grained access control offers additional ways of controlling access to you
 + [Manual snapshots](#fgac-snapshots)
 + [Integrations](#fgac-integrations)
 + [REST API differences](#fgac-rest-api)
-+ [Tutorial: IAM master user and Amazon Cognito](fgac-walkthrough-iam.md)
-+ [Tutorial: Internal user database and HTTP basic authentication](fgac-walkthrough-basic.md)
++ [Tutorial: Configure a domain with an IAM master user and Amazon Cognito authentication](fgac-walkthrough-iam.md)
++ [Step 5: Test the permissions](#fgac-walkthrough-test)
++ [Tutorial: Configure a domain with the internal user database and HTTP basic authentication](fgac-walkthrough-basic.md)
 
 ## The bigger picture: fine\-grained access control and OpenSearch Service security<a name="fgac-access-policies"></a>
 
@@ -48,7 +51,7 @@ The following diagram illustrates another common configuration: a public access 
 
 ### Example<a name="fgac-example"></a>
 
-Consider a `GET` request to `movies/_search?q=thor`\. Does the user have permissions to search the `movies` index? If so, does the user have permissions to see all documents within it? Should the response omit or anonymize any fields? For the master user, the response might look like this:
+Consider a `GET` request to `movies/_search?q=thor`\. Does the user have permissions to search the `movies` index? If so, does the user have permissions to see *all* documents within it? Should the response omit or anonymize any fields? For the master user, the response might look like this:
 
 ```
 {
@@ -198,20 +201,20 @@ The following table describes the behavior for each authentication method before
 
 | Authentication method | Before enabling fine\-grained access control | After enabling fine\-grained access control | Administrator tasks | 
 | --- | --- | --- | --- | 
-| Identity\-based policies |  All IAM users satisfying the IAM policy can access the domain\.  |  You don't need to enable the migration period\. OpenSearch Service automatically maps all IAM users satisying the IAM policy to the **[default\_role](#fgac-enabling-defaultrole)** so they can continue to access the domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
+| Identity\-based policies |  All IAM users satisfying the IAM policy can access the domain\.  |  You don't need to enable the migration period\. OpenSearch Service automatically maps all IAM users that satisfy the IAM policy to the **[default\_role](#fgac-enabling-defaultrole)** so that they can continue to access the domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
 | IP\-based policies |  All users from the allowed IP addresses or CIDR blocks can access the domain\.  |  During the 30\-day migration period, all users from the allowed IP addresses or CIDR blocks can continue to access the domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
-| Open access policies |  All users over internet can access the domain\.  |  During the 30\-day migration period, all users over the internet can continue to access to domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
+| Open access policies |  All users over the internet can access the domain\.  |  During the 30\-day migration period, all users over the internet can continue to access to domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
 
 ## Accessing OpenSearch Dashboards as the master user<a name="fgac-dashboards"></a>
 
 Fine\-grained access control has an OpenSearch Dashboards plugin that simplifies management tasks\. You can use Dashboards to manage users, roles, mappings, action groups, and tenants\. The OpenSearch Dashboards sign\-in page and underlying authentication method differs, however, depending on how you manage users and configured your domain\.
 + If you want to use IAM for user management, use [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md) to access Dashboards\. Otherwise, Dashboards shows a nonfunctional sign\-in page\. See [Limitations](#fgac-limitations)\.
 
-  With Amazon Cognito authentication, one of the assumed roles from the identity pool must match the IAM role that you specified for the master user\. For more information about this configuration, see [\(Optional\) Configuring granular access](cognito-auth.md#cognito-auth-granular) and [Tutorial: IAM master user and Amazon Cognito](fgac-walkthrough-iam.md)\.  
+  With Amazon Cognito authentication, one of the assumed roles from the identity pool must match the IAM role that you specified for the master user\. For more information about this configuration, see [\(Optional\) Configuring granular access](cognito-auth.md#cognito-auth-granular) and [Tutorial: Configure a domain with an IAM master user and Amazon Cognito authentication](fgac-walkthrough-iam.md)\.  
 ![\[Cognito sign-in page\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/cognito-auth.png)
 + If you choose to use the internal user database, you can sign in to Dashboards with your master user name and password\. You must access Dashboards over HTTPS\. Amazon Cognito and SAML authentication for Dashboards both replace this login screen\.
 
-  For more information about this configuration, see [Tutorial: Internal user database and HTTP basic authentication](fgac-walkthrough-basic.md)\.  
+  For more information about this configuration, see [Tutorial: Configure a domain with the internal user database and HTTP basic authentication](fgac-walkthrough-basic.md)\.  
 ![\[Basic authentication sign-in page\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/basic-auth-dashboards.png)
 + If you choose to use SAML authentication, you can sign in using credentials from an external identity provider\. For more information, see [SAML authentication for OpenSearch Dashboards](saml.md)\.
 
@@ -341,13 +344,9 @@ If you forget the details of the master user, you can reconfigure it using the c
 
 **To modify the master user \(console\)**
 
-1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
+1. Navigate to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
 
-1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
-
-1. Choose your domain\.
-
-1. Choose **Actions**, **Edit security configuration**\.
+1. Choose your domain and choose **Actions**, **Edit security configuration**\.
 
 1. Choose either **Set IAM ARN as master user** or **Create master user**\.
    + If you previously used an IAM master user, fine\-grained access control re\-maps the `all_access` role to the new IAM ARN that you specify\.
@@ -495,3 +494,37 @@ If you use the internal user database, you can use [curl](https://curl.haxx.se/)
 curl -XGET -u 'master-user:master-user-password' 'domain-endpoint/_search'
 curl -XGET -u 'master-user:master-user-password' 'domain-endpoint/_plugins/_security/api/user'
 ```
+
+## Step 5: Test the permissions<a name="fgac-walkthrough-test"></a>
+
+Now that your roles are mapped correctly, you can sign in as the limited user and test the permissions\.
+
+1. In a new, private browser window, navigate to the OpenSearch Dashboards URL for the domain, sign in using the `limited-user` credentials, and choose **Explore on my own**\.
+
+1. Go to **Dev Tools** and run the default search:
+
+   ```
+   GET _search
+   {
+     "query": {
+       "match_all": {}
+     }
+   }
+   ```
+
+   Note the permissions error\. `limited-user` doesn't have permissions to run cluster\-wide searches\.
+
+1. Run another search:
+
+   ```
+   GET opensearch_dashboards_sample_data_flights/_search
+   {
+     "query": {
+       "match_all": {}
+     }
+   }
+   ```
+
+   Note that all matching documents have a `FlightDelay` field of `true`, an anonymized `Dest` field, and no `FlightNum` field\.
+
+1. In your original browser window, signed in as `master-user`, choose **Dev Tools**, and then perform the same searches\. Note the difference in permissions, number of hits, matching documents, and included fields\.

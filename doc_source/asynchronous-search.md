@@ -152,7 +152,7 @@ For more information, see [Cross\-cluster search for Amazon OpenSearch Service](
 
 ## UltraWarm<a name="asynchronous-search-ultrawarm"></a>
 
-Asynchronous searches with UltraWarm indices continue to work\. For more information, see [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)\.
+Asynchronous searches with UltraWarm indexes continue to work\. For more information, see [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)\.
 
 **Note**  
 You can monitor asynchronous search statistics in CloudWatch\. For a full list of metrics, see [Asynchronous search metrics](managedomains-cloudwatchmetrics.md#managedomains-cloudwatchmetrics-asynchronous-search)\.

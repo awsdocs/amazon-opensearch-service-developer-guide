@@ -22,7 +22,7 @@ If you encounter an error while following these steps, see [Can't enable audit l
 
 ### Step 1: Enable audit logs and configure an access policy<a name="audit-log-enable"></a>
 
-These steps describe how to enable audit logs using the console\. You can also [enable them using the AWS CLI](#audit-log-enabling-cli), or the [configuration API](#audit-log-enabling-api)\.
+These steps describe how to enable audit logs using the console\. You can also [enable them using the AWS CLI](#audit-log-enabling-cli), or the [OpenSearch Service API](#audit-log-enabling-api)\.
 
 **To enable audit logs for an OpenSearch Service domain \(console\)**
 
@@ -102,13 +102,13 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/c
   "LogPublishingOptions": {
     "AUDIT_LOGS": {
       "CloudWatchLogsLogGroupArn":"arn:aws:logs:us-east-1:123456789012:log-group1:sample-domain",
-      "Enabled":true|false
+      "Enabled":true
     }
   }
 }
 ```
 
-For more information, see the [Amazon OpenSearch Service API Reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_LogPublishingOption.html)\.
+For more information, see the [Amazon OpenSearch Service API reference](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_LogPublishingOption.html)\.
 
 ## Audit log layers and categories<a name="audit-log-layers"></a>
 
@@ -191,7 +191,6 @@ You can specify the following settings for read and write event logging\.
 | Name | Backend setting | Description | 
 | --- | --- | --- | 
 |  Internal config logging  |  internal\_config  |  Enable or disable logging of events on the `.opendistro_security` index\.  | 
-|  External config logging  | external\_config | Enable or disable logging of external configuration events\. | 
 
 You can specify the following settings for read events\.
 

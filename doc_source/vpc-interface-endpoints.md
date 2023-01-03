@@ -10,17 +10,18 @@ You establish this private connection by creating an OpenSearch Service\-managed
 
 You can create VPC endpoints for domains running all versions of OpenSearch and legacy Elasticsearch\. For more information, see [Access AWS services through AWS PrivateLink](https://docs.aws.amazon.com/vpc/latest/privatelink/privatelink-access-aws-services.html) in the *AWS PrivateLink Guide*\.
 
-## Considerations for OpenSearch Service<a name="vpc-endpoint-considerations"></a>
+## Considerations and limitations for OpenSearch Service<a name="vpc-endpoint-considerations"></a>
 
 Before you set up an interface VPC endpoint for OpenSearch Service, review [Considerations](https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html#considerations-interface-endpoints) in the *AWS PrivateLink Guide*\. 
 
 When using OpenSearch Service\-managed VPC endpoints, consider the following:
 + You can only use interface VPC endpoints to connect to [VPC domains](vpc.md)\. Public domains aren't supported\.
++ VPC endpoints can only connect to domains within the same AWS Region\.
 + HTTPS is the only supported protocol for VPC endpoints\. HTTP is not allowed\.
 + OpenSearch Service supports making calls to all of the [supported OpenSearch API operations](supported-operations.md) through an interface VPC endpoint\.
 + You can configure a maximum of 50 endpoints per account, and a maximum of 10 endpoints per domain\. A single domain can have a maximum of 10 [authorized principals](#vpc-endpoint-access)\.
 + You currently can't use AWS CloudFormation to create interface VPC endpoints\.
-+ You can only create interface VPC endpoints through the OpenSearch Service console or using the [OpenSearch Service configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\. You can't create interface VPC endpoints for OpenSearch Service using the Amazon VPC console\.
++ You can only create interface VPC endpoints through the OpenSearch Service console or using the [OpenSearch Service API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\. You can't create interface VPC endpoints for OpenSearch Service using the Amazon VPC console\.
 + OpenSearch Service\-managed VPC endpoints aren't accessible from the internet\. An OpenSearch Service\-managed VPC endpoint is accessible only within the VPC where the endpoint is provisioned or any VPCs peered with the VPC where the endpoint is provisioned, as permitted by the route tables and security groups\.
 + VPC endpoint policies are not supported for OpenSearch Service\. You can associate a security group with the endpoint network interfaces to control traffic to OpenSearch Service through the interface VPC endpoint\.
 

@@ -2,92 +2,44 @@
 
 Configure alerts in Amazon OpenSearch Service to get notified when data from one or more indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
 
-Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documentation, including API descriptions, see the [OpenSearch documentation](https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/)\. This topic highlights the differences in alerting in OpenSearch Service compared to the open\-source version\.
+Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documentation, including API descriptions, see the [Alerting](https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/) in the OpenSearch documentation\. This topic highlights the differences in alerting in OpenSearch Service compared to the open\-source version\.
+
+## Getting started with alerting<a name="alerting-getstarted"></a>
+
+To create an alert, you configure a *monitor*, which is a job that runs on a defined schedule and queries OpenSearch indexes\. You also configure one or more *triggers*, which define the conditions that generate events\. Finally, you configure *actions*, which is what happens after an alert is triggered\. 
 
 **To get started with alerting**
 
-1. Choose **Alerting** from the OpenSearch Dashboards main menu\.
+1. Choose **Alerting** from the OpenSearch Dashboards main menu and choose **Create monitor**\.
 
-1. Set up a destination for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the destination\. For example, your OpenSearch Service domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\. The custom webhook must have a public IP address in order for an OpenSearch Service domain to send alerts to it\.
+1. Create a per\-query, per\-bucket, per\-cluster metrics, or per\-document monitor\. For instructions, see [Create a monitor](https://opensearch.org/docs/latest/monitoring-plugins/alerting/monitors/#create-a-monitor)\.
 
-1. Create a monitor in one of three ways: visually, using a query, or using an anomaly detector\.
+1. For **Triggers**, create one or more triggers\. For instructions, see [Create triggers](https://opensearch.org/docs/latest/monitoring-plugins/alerting/monitors/#create-triggers)\.
 
-1. Define a condition to trigger the monitor\.
-
-1. \(Optional\) Add one or more actions to the monitor\.
+1. For **Actions**, set up a [notification channel](#alerting-notifications) for the alert\. Choose between Slack, Amazon Chime, a custom webhook, or Amazon SNS\. As you might imagine, notifications require connectivity to the channel\. For example, your OpenSearch Service domain must be able to connect to the internet to notify a Slack channel or send a custom webhook to a third\-party server\. The custom webhook must have a public IP address in order for an OpenSearch Service domain to send alerts to it\.
 **Tip**  
 After an action successfully sends a message, securing access to that message \(for example, access to a Slack channel\) is your responsibility\. If your domain contains sensitive data, consider using triggers without actions and periodically checking Dashboards for alerts\.
 
-For detailed steps, see [Monitors](https://opensearch.org/docs/latest/monitoring-plugins/alerting/monitors/) in the OpenSearch documentation\.
+## Notifications<a name="alerting-notifications"></a>
+
+Alerting integrates with Notifications, which is a unified system for OpenSearch notifications\. Notifications let you configure which communication service you want to use and see relevant statistics and troubleshooting information\. For comprehensive documentation, see [Notifications](https://opensearch.org/docs/latest/notifications-plugin/index/) in the OpenSearch documentation\.
+
+Your domain must be running OpenSearch version 2\.3 or later to use notifications\.
+
+**Note**  
+OpenSearch notifications are separate from OpenSearch Service [notifications](managedomains-notifications.md) , which provide details about service software updates, Auto\-Tune enhancements, and other important domain\-level information\. OpenSearch notifications are plugin\-specific\.
+
+Notification channels replaced alerting destinations starting with OpenSearch version 2\.0\. Destinations were officially deprecated, and all alerting notification will be managed through channels going forward\.
+
+When you upgrade your domains to version 2\.3 or later \(since OpenSearch Service support for 2\.x starts with 2\.3\), your existing destinations are automatically migrated to notification channels\. If a destination fails to migrate, the monitor will continue to use it until the monitor is migrated to a notification channel\. For more inforation, see [Questions about destinations](https://opensearch.org/docs/latest/monitoring-plugins/alerting/monitors/#questions-about-destinations) in the OpenSearch documentation\.
+
+To get started with notifications, sign in to OpenSearch Dashboards and choose **Notifications**, **Channels**, and **Create channel**\.
+
+Amazon Simple Notification Service \(Amazon SNS\) is a supported channel type for notifications\. In order to authenticate users, you either need to provide the user with full access to Amazon SNS, or let them assume an IAM role that has permissions to access Amazon SNS\. For instructions, see [Amazon SNS as a channel type](https://opensearch.org/docs/2.0/notifications-plugin/index/#amazon-sns-as-a-channel-type)\.
 
 ## Differences<a name="alerting-diff"></a>
 
 Compared to the open\-source version of OpenSearch, alerting in Amazon OpenSearch Service has some notable differences\.
-
-### Amazon SNS support<a name="alerting-diff-sns"></a>
-
-OpenSearch Service supports Amazon Simple Notification Service \([Amazon SNS](https://aws.amazon.com/sns/)\) for notifications\. This integration means that in addition to standard destinations \(Slack, custom webhooks, and Amazon Chime\), you can also send emails, text messages, and even run AWS Lambda functions using SNS topics\. For more information about Amazon SNS, see the [Amazon Simple Notification Service Developer Guide](https://docs.aws.amazon.com/sns/latest/dg/)\.
-
-**To add Amazon SNS as a destination**
-
-1. Choose **Alerting** from the OpenSearch Dashboards main menu\.
-
-1. Go to the **Destinations** tab and then choose **Add destination**\.
-
-1. Provide a unique name for the destination\.
-
-1. For **Type**, choose **Amazon SNS**\.
-
-1. Provide the SNS topic ARN\.
-
-1. Provide the ARN for an IAM role within your account that has the following trust relationship and permissions \(at minimum\):
-
-   **Trust relationship**
-
-   ```
-   {
-     "Version": "2012-10-17",
-     "Statement": [{
-       "Effect": "Allow",
-       "Principal": {
-         "Service": "es.amazonaws.com"
-       },
-       "Action": "sts:AssumeRole"
-     }]
-   }
-   ```
-
-   We recommend that you use the `aws:SourceAccount` and `aws:SourceArn` condition keys to protect yourself against the [confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html)\. The source account is the owner of the domain and the source ARN is the ARN of the domain\. Your domain must be on service software R20211203 or later in order to add these condition keys\.
-
-   For example, you could add the following condition block to the trust policy:
-
-   ```
-   "Condition": {
-       "StringEquals": {
-           "aws:SourceAccount": "account-id"
-       },
-       "ArnLike": {
-           "aws:SourceArn": "arn:aws:es:region:account-id:domain/domain-name"
-       }
-   }
-   ```
-
-   **Permissions**
-
-   ```
-   {
-     "Version": "2012-10-17",
-     "Statement": [{
-       "Effect": "Allow",
-       "Action": "sns:Publish",
-       "Resource": "sns-topic-arn"
-     }]
-   }
-   ```
-
-   For more information, see [Adding IAM Identity Permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console) in the *IAM User Guide*\.
-
-1. Choose **Create**\.
 
 ### Alerting settings<a name="alerting-diff-settings"></a>
 

@@ -1,4 +1,4 @@
-# Tutorial: Internal user database and HTTP basic authentication<a name="fgac-walkthrough-basic"></a>
+# Tutorial: Configure a domain with the internal user database and HTTP basic authentication<a name="fgac-walkthrough-basic"></a>
 
 This tutorial covers another popular [fine\-grained access control](fgac.md) use case: a master user in the internal user database and HTTP basic authentication for OpenSearch Dashboards\.
 

@@ -5,18 +5,18 @@ You can authenticate and protect your Amazon OpenSearch Service default installa
 Much of the authentication process occurs in Amazon Cognito, but this section offers guidelines and requirements for configuring Amazon Cognito resources to work with OpenSearch Service domains\. [Standard pricing](https://aws.amazon.com/cognito/pricing/) applies to all Amazon Cognito resources\.
 
 **Tip**  
-The first time you configure a domain to use Amazon Cognito authentication for Dashboards, we recommend using the console\. Amazon Cognito resources are extremely customizable, and the console can help you identify and understand the features that matter to you\.
+The first time you configure a domain to use Amazon Cognito authentication for OpenSearch Dashboards, we recommend using the console\. Amazon Cognito resources are extremely customizable, and the console can help you identify and understand the features that matter to you\.
 
 **Topics**
 + [Prerequisites](#cognito-auth-prereq)
-+ [Configuring a domain to use Amazon Cognito](#cognito-auth-config)
++ [Configuring a domain to use Amazon Cognito authentication](#cognito-auth-config)
 + [Allowing the authenticated role](#cognito-auth-config-ac)
 + [Configuring identity providers](#cognito-auth-identity-providers)
 + [\(Optional\) Configuring granular access](#cognito-auth-granular)
 + [\(Optional\) Customizing the sign\-in page](#cognito-auth-customize)
 + [\(Optional\) Configuring advanced security](#cognito-auth-advanced)
 + [Testing](#cognito-auth-testing)
-+ [Limits](#cognito-auth-limits)
++ [Quotas](#cognito-auth-limits)
 + [Common configuration issues](#cognito-auth-troubleshooting)
 + [Disabling Amazon Cognito authentication for OpenSearch Dashboards](#cognito-auth-disable)
 + [Deleting domains that use Amazon Cognito authentication for OpenSearch Dashboards](#cognito-auth-delete)
@@ -29,7 +29,7 @@ Before you can configure Amazon Cognito authentication for OpenSearch Dashboards
 + IAM role that has the `AmazonOpenSearchServiceCognitoAccess` policy attached \(`CognitoAccessForAmazonOpenSearch`\)
 
 **Note**  
-The user pool and identity pool must be in the same AWS Region\. You can use the same user pool, identity pool, and IAM role to add Amazon Cognito authentication for Dashboards to multiple OpenSearch Service domains\. To learn more, see [Limits](#cognito-auth-limits)\.
+The user pool and identity pool must be in the same AWS Region\. You can use the same user pool, identity pool, and IAM role to add Amazon Cognito authentication for Dashboards to multiple OpenSearch Service domains\. To learn more, see [Quotas](#cognito-auth-limits)\.
 
 ### About the user pool<a name="cognito-auth-prereq-up"></a>
 
@@ -47,13 +47,13 @@ User pool IDs take the form of `region_ID`\. If you plan to use the AWS CLI or a
 Identity pools let you assign temporary, limited\-privilege roles to users after they log in\. For instructions about creating an identity pool, see [Identity Pools](https://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html) in the *Amazon Cognito Developer Guide*\. When you create an identity pool to use with OpenSearch Service, consider the following: 
 + If you use the Amazon Cognito console, you must select the **Enable access to unauthenticated identities** check box to create the identity pool\. After you create the identity pool and [configure the OpenSearch Service domain](#cognito-auth-config), Amazon Cognito disables this setting\.
 + You don't need to add [external identity providers](https://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html) to the identity pool\. When you configure OpenSearch Service to use Amazon Cognito authentication, it configures the identity pool to use the user pool that you just created\.
-+ After you create the identity pool, you must choose unauthenticated and authenticated IAM roles\. These roles specify the access policies that users have before and after they log in\. If you use the Amazon Cognito console, it can create these roles for you\. After you create the authenticated role, make note of the ARN, which takes the form of `arn:aws:iam::123456789012:role/Cognito_identitypoolAuth_Role`\.
++ After you create the identity pool, you must choose unauthenticated and authenticated IAM roles\. These roles specify the access policies that users have before and after they log in\. If you use the Amazon Cognito console, it can create these roles for you\. After you create the authenticated role, make note of the ARN, which takes the form of `arn:aws:iam::123456789012:role/Cognito_identitypoolnameAuth_Role`\.
 
 Identity pool IDs take the form of `region:ID-ID-ID-ID-ID`\. If you plan to use the AWS CLI or an AWS SDK to configure OpenSearch Service, make note of the ID\.
 
 ### About the CognitoAccessForAmazonOpenSearch role<a name="cognito-auth-role"></a>
 
-OpenSearch Service needs permissions to configure the Amazon Cognito user and identity pools and use them for authentication\. You can use `AmazonOpenSearchServiceCognitoAccess`, which is an AWS\-managed policy, for this purpose\. `AmazonESCognitoAccess` is a legacy policy that was replaced by `AmazonOpenSearchServiceCognitoAccess` when Amazon Elasticsearch Service was renamed to Amazon OpenSearch Service\. Both policies provide the minimum Amazon Cognito permissions necessary to enable [Cognito authentication](#cognito-auth)\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceCognitoAccess)\. 
+OpenSearch Service needs permissions to configure the Amazon Cognito user and identity pools and use them for authentication\. You can use `AmazonOpenSearchServiceCognitoAccess`, which is an AWS\-managed policy, for this purpose\. `AmazonESCognitoAccess` is a legacy policy that was replaced by `AmazonOpenSearchServiceCognitoAccess` when the service was renamed to Amazon OpenSearch Service\. Both policies provide the minimum Amazon Cognito permissions necessary to enable [Cognito authentication](#cognito-auth)\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceCognitoAccess)\. 
 
 If you use the console to create or configure your OpenSearch Service domain, it creates an IAM role for you and attaches the `AmazonOpenSearchServiceCognitoAccess` policy \(or the `AmazonESCognitoAccess` policy if it's an Elasticsearch domain\) to the role\. The default name for this role is `CognitoAccessForAmazonOpenSearch`\.
 
@@ -79,7 +79,7 @@ If you use the AWS CLI or one of the AWS SDKs, you must create your own role, at
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "opensearchservice.amazonaws.com"
+        "Service": "es.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
@@ -89,7 +89,7 @@ If you use the AWS CLI or one of the AWS SDKs, you must create your own role, at
 
 For instructions, see [Creating a Role to Delegate Permissions to an AWS Service](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html) and [Attaching and Detaching IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) in the *IAM User Guide*\.
 
-## Configuring a domain to use Amazon Cognito<a name="cognito-auth-config"></a>
+## Configuring a domain to use Amazon Cognito authentication<a name="cognito-auth-config"></a>
 
 After you complete the prerequisites, you can configure an OpenSearch Service domain to use Amazon Cognito for Dashboards\.
 
@@ -128,7 +128,7 @@ Because it creates the [CognitoAccessForAmazonOpenSearch](#cognito-auth-role) ro
 
 For instructions to add permissions to an identity \(user, user group, or role\), see [Adding IAM identity permissions \(console\)](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html#add-policies-console)\.
 
-If [CognitoAccessForAmazonOpenSearch](#cognito-auth-role) already exists, you need fewer permissions:
+If `CognitoAccessForAmazonOpenSearch` already exists, you need fewer permissions:
 
 ```
 {
@@ -156,9 +156,7 @@ If [CognitoAccessForAmazonOpenSearch](#cognito-auth-role) already exists, you ne
 
 **To configure Amazon Cognito authentication for Dashboards \(console\)**
 
-1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
-
-1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
 
 1. Under **Domains**, select the domain you want to configure\.
 
@@ -166,7 +164,7 @@ If [CognitoAccessForAmazonOpenSearch](#cognito-auth-role) already exists, you ne
 
 1. Select **Enable Amazon Cognito authentication**\.
 
-1. For **Region**, select the Region that contains your Amazon Cognito user pool and identity pool\.
+1. For **Region**, select the AWS Region that contains your Amazon Cognito user pool and identity pool\.
 
 1. For **Cognito user pool**, select a user pool or create one\. For guidance, see [About the user pool](#cognito-auth-prereq-up)\.
 
@@ -211,7 +209,9 @@ By default, the authenticated IAM role that you configured by following the guid
 **Important**  
 If you configured [fine\-grained access control](fgac.md) and use an "open" or IP\-based access policy, you can skip this step\.
 
-You can include these permissions in an [identity\-based](ac.md#ac-types-identity) policy, but unless you want authenticated users to have access to all OpenSearch Service domains, a [resource\-based](ac.md#ac-types-resource) policy attached to a single domain is the better approach:
+You can include these permissions in an [identity\-based](ac.md#ac-types-identity) policy, but unless you want authenticated users to have access to all OpenSearch Service domains, a [resource\-based](ac.md#ac-types-resource) policy attached to a single domain is the better approach\.
+
+For the `Principal`, specify the ARN of the Cognito authenticated role that you configured with the guidelines in [About the identity pool](#cognito-auth-prereq-ip)\.
 
 ```
 {
@@ -221,7 +221,7 @@ You can include these permissions in an [identity\-based](ac.md#ac-types-identit
       "Effect": "Allow",
       "Principal": {
         "AWS": [
-          "arn:aws:iam::123456789012:role/Cognito_identitypoolAuth_Role"
+          "arn:aws:iam::123456789012:role/Cognito_identitypoolnameAuth_Role"
         ]
       },
       "Action": [
@@ -260,7 +260,7 @@ You might have noticed that the default identity pool settings assign every user
 + Create user groups and configure your identity provider to choose the IAM role based on the user's authentication token \(recommended\)\.
 + Configure your identity provider to choose the IAM role based on one or more rules\.
 
-You configure these options using the **Edit identity pool** page of the Amazon Cognito console, as shown in the following screenshot\. For a walkthrough that includes fine\-grained access control, see [Tutorial: IAM master user and Amazon Cognito](fgac-walkthrough-iam.md)\.
+You configure these options using the **Edit identity pool** page of the Amazon Cognito console, as shown in the following screenshot\. For a walkthrough that includes fine\-grained access control, see [Tutorial: Configure a domain with an IAM master user and Amazon Cognito authentication](fgac-walkthrough-iam.md)\.
 
 ![\[Role options for an authentication provider\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/cognito-roles.png)
 
@@ -303,9 +303,9 @@ After you're satisfied with your configuration, verify that the user experience 
 
 If any step of this process fails, see [Common configuration issues](#cognito-auth-troubleshooting) for troubleshooting information\.
 
-## Limits<a name="cognito-auth-limits"></a>
+## Quotas<a name="cognito-auth-limits"></a>
 
-Amazon Cognito has soft limits on many of its resources\. If you want to enable Dashboards authentication for a large number of OpenSearch Service domains, review [Limits in Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html) and [request limit increases](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) as necessary\.
+Amazon Cognito has soft limits on many of its resources\. If you want to enable Dashboards authentication for a large number of OpenSearch Service domains, review [Quotas in Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html) and [request limit increases](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) as necessary\.
 
 Each OpenSearch Service domain adds an [app client](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-client-apps.html) to the user pool, which adds an [authentication provider](https://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html) to the identity pool\. If you enable OpenSearch Dashboards authentication for more than 10 domains, you might encounter the "maximum Amazon Cognito user pool providers per identity pool" limit\. If you exceed a limit, any OpenSearch Service domains that you try to configure to use Amazon Cognito authentication for Dashboards can get stuck in a configuration state of **Processing**\.
 
@@ -336,6 +336,7 @@ The following tables list common configuration issues and solutions\.
 |  The login page doesn't look as if it's associated with my organization\.  |  See [\(Optional\) Customizing the sign\-in page](#cognito-auth-customize)\.  | 
 | My login credentials don't work\. |  Check that you have configured the identity provider as specified in [Configuring identity providers](#cognito-auth-identity-providers)\. If you use the user pool as your identity provider, check that the account exists and is confirmed on the **User and groups** page of the Amazon Cognito console\.  | 
 |  OpenSearch Dashboards either doesn't load at all or doesn't work properly\.  |  The Amazon Cognito authenticated role needs `es:ESHttp*` permissions for the domain \(`/*`\) to access and use Dashboards\. Check that you added an access policy as specified in [Allowing the authenticated role](#cognito-auth-config-ac)\.  | 
+|  When I sign out of OpenSearch Dashboards from one tab, the remaining tabs display a message stating that the refresh token has been revoked\.  |  When you sign out of an OpenSearch Dashboards session while using Amazon Cognito authentication, OpenSearch Service runs an [AdminUserGlobalSignOut](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminUserGlobalSignOut.html) operation, which signs you out of *all* active OpenSearch Dashboards sessions\.   | 
 | Invalid identity pool configuration\. Check assigned IAM roles for this pool\. | Amazon Cognito doesn't have permissions to assume the IAM role on behalf of the authenticated user\. Modify the trust relationship for the role to include:<pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [{<br />    "Effect": "Allow",<br />    "Principal": {<br />      "Federated": "cognito-identity.amazonaws.com"<br />    },<br />    "Action": "sts:AssumeRoleWithWebIdentity",<br />    "Condition": {<br />      "StringEquals": {<br />        "cognito-identity.amazonaws.com:aud": "identity-pool-id"<br />      },<br />      "ForAnyValue:StringLike": {<br />        "cognito-identity.amazonaws.com:amr": "authenticated"<br />      }<br />    }<br />  }]<br />}</pre> | 
 | Token is not from a supported provider of this identity pool\. | This uncommon error can occur when you remove the app client from the user pool\. Try opening Dashboards in a new browser session\. | 
 
@@ -345,11 +346,9 @@ Use the following procedure to disable Amazon Cognito authentication for Dashboa
 
 **To disable Amazon Cognito authentication for Dashboards \(console\)**
 
-1. Go to [https://aws\.amazon\.com](https://aws.amazon.com), and then choose **Sign In to the Console**\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
 
-1. Under **Analytics**, choose **Amazon OpenSearch Service**\.
-
-1. In the navigation pane, under **Domains**, choose the domain you want to configure\.
+1. Under **Domains**, choose the domain you want to configure\.
 
 1. Choose **Actions**, **Edit security configuration**\.
 
@@ -358,8 +357,8 @@ Use the following procedure to disable Amazon Cognito authentication for Dashboa
 1. Choose **Save changes**\.
 
 **Important**  
-If you no longer need the Amazon Cognito user pool and identity pool, delete them\. Otherwise, you can continue to incur charges\.
+If you no longer need the Amazon Cognito user pool and identity pool, delete them\. Otherwise, you continue to incur charges\.
 
 ## Deleting domains that use Amazon Cognito authentication for OpenSearch Dashboards<a name="cognito-auth-delete"></a>
 
-To prevent domains that use Amazon Cognito authentication for Dashboards from becoming stuck in a configuration state of **Processing**, delete OpenSearch Service domains *before* deleting their associated Amazon Cognito user pools and identity pools\.
+To prevent domains that use Amazon Cognito authentication for Dashboards from becoming stuck in a configuration state of **Processing**, delete OpenSearch Service domains *before* deleting their associated Amazon Cognito user and identity pools\.

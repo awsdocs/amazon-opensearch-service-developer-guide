@@ -9,7 +9,7 @@ After you attach a policy to an index, ISM creates a job that runs every 5 to 8 
 ISM requires OpenSearch or Elasticsearch 6\.8 or later\. Full documentation is available in the [OpenSearch documentation](https://opensearch.org/docs/im-plugin/ism/index/)\.
 
 **Important**  
-The `policy_id` setting for index templates is deprecated\. You can no longer use index templates to apply ISM policies to newly created indexes\. You can continue to automatically manage newly created indexes with the [ISM template field](https://opensearch.org/docs/latest/im-plugin/ism/policies/#sample-policy-with-ism-template-for-auto-rollover)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
+You can no longer use index templates to apply ISM policies to newly created indexes\. You can continue to automatically manage newly created indexes with the [ISM template field](https://opensearch.org/docs/latest/im-plugin/ism/policies/#sample-policy-with-ism-template-for-auto-rollover)\. This update introduces a breaking change that affects existing CloudFormation templates using this setting\. 
 
 ## Create an ISM policy<a name="ism-start"></a>
 
@@ -254,11 +254,11 @@ These APIs for cold indexes have the following additional differences:
 
 ### ISM settings<a name="ism-diff-settings"></a>
 
-OpenSearch and Elasticsearch let you change all available ISM settings using the `_cluster/settings` API\. On Amazon OpenSearch Service, you can only change the following settings:
+OpenSearch and Elasticsearch let you change all available ISM settings using the `_cluster/settings` API\. On Amazon OpenSearch Service, you can only change the following [ISM settings](https://opensearch.org/docs/latest/im-plugin/ism/settings/):
 + **Cluster\-level settings:**
-  + `enabled`
-  + `history.enabled`
+  + `plugins.index_state_management.enabled`
+  + `plugins.index_state_management.history.enabled`
 + **Index\-level settings:**
-  + `rollover_alias`
+  + `plugins.index_state_management.rollover_alias`
 
    

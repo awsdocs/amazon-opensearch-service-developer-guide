@@ -6,6 +6,8 @@ Each OpenSearch Service domain—regardless of whether the domain uses VPC acces
 
 If you send data to OpenSearch Service over HTTPS, node\-to\-node encryption helps ensure that your data remains encrypted as OpenSearch distributes \(and redistributes\) it throughout the cluster\. If data arrives unencrypted over HTTP, OpenSearch Service encrypts it after it reaches the cluster\. You can require that all traffic to the domain arrive over HTTPS using the console, AWS CLI, or configuration API\.
 
+Node\-to\-node encryption is *required* if you enable [fine\-grained access control](fgac.md)\.
+
 ## Enabling node\-to\-node encryption<a name="enabling-ntn"></a>
 
 Node\-to\-node encryption on new domains requires any version of OpenSearch, or Elasticsearch 6\.0 or later\. Enabling node\-to\-node encryption on existing domains requires any version of OpenSearch, or Elasticsearch 6\.7 or later\. Choose the existing domain in the AWS console, **Actions**, and **Edit security configuration**\.

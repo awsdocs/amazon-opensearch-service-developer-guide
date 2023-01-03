@@ -19,7 +19,7 @@ For rolling indexes, you can multiply the amount of data generated during a repr
 
 The size of your source data, however, is just one aspect of your storage requirements\. You also have to consider the following:
 + **Number of replicas**: Each replica is a full copy of an index and needs the same amount of disk space\. By default, each OpenSearch index has one replica\. We recommend at least one to prevent data loss\. Replicas also improve search performance, so you might want more if you have a read\-heavy workload\. Use `PUT /my-index/_settings` to update the `number_of_replicas` setting for your index\.
-+ **OpenSearch indexing overhead**: The on\-disk size of an index varies, but is often 10% larger than the source data\. After indexing your data, you can use the `_cat/indices?v` API and `pri.store.size` value to calculate the exact overhead\. `_cat/allocation?v` also provides a useful summary\.
++ **OpenSearch indexing overhead**: The on\-disk size of an index varies\. The total size of the source data plus the index is often 110% of the source, with the index up to 10% of the source data\. After you index your data, you can use the `_cat/indices?v` API and `pri.store.size` value to calculate the exact overhead\. `_cat/allocation?v` also provides a useful summary\.
 + **Operating system reserved space**: By default, Linux reserves 5% of the file system for the `root` user for critical processes, system recovery, and to safeguard against disk fragmentation problems\.
 + **OpenSearch Service overhead**: OpenSearch Service reserves 20% of the storage space of each instance \(up to 20 GiB\) for segment merges, logs, and other internal operations\.
 
@@ -29,11 +29,11 @@ The size of your source data, however, is just one aspect of your storage requir
 
 In summary, if you have 66 GiB of data at any given time and want one replica, your *minimum* storage requirement is closer to 66 \* 2 \* 1\.1 / 0\.95 / 0\.8 = 191 GiB\. You can generalize this calculation as follows:
 
- **Source Data \* \(1 \+ Number of Replicas\) \* \(1 \+ Indexing Overhead\) / \(1 \- Linux Reserved Space\) / \(1 \- OpenSearch Service Overhead\) = Minimum Storage Requirement**
+ **Source data \* \(1 \+ number of replicas\) \* \(1 \+ indexing overhead\) / \(1 \- Linux reserved space\) / \(1 \- OpenSearch Service overhead\) = minimum storage requirement**
 
 Or you can use this simplified version:
 
- **Source Data \* \(1 \+ Number of Replicas\) \* 1\.45 = Minimum Storage Requirement**
+ **Source data \* \(1 \+ number of replicas\) \* 1\.45 = minimum storage requirement**
 
 Insufficient storage space is one of the most common causes of cluster instability\. So you should cross\-check the numbers when you [choose instance types, instance counts, and storage volumes](#bp-instances)\.
 
@@ -57,7 +57,7 @@ This equation helps compensate for data growth over time\. If you expect those s
 
 A far less common issue involves limiting the number of shards per node\. If you size your shards appropriately, you typically run out of disk space long before encountering this limit\. For example, an `m6g.large.search` instance has a maximum disk size of 512 GiB\. If you stay below 80% disk usage and size your shards at 20 GiB, it can accommodate approximately 20 shards\. Elasticsearch 7\.*x* and later, and all versions of OpenSearch, have a limit of *1,000* shards per node\. To adjust the maximum shards per node, configure the `cluster.max_shards_per_node` setting\. For an example, see [Cluster settings](https://opensearch.org/docs/latest/opensearch/rest-api/cluster-settings/#request-body)\. 
 
-Sizing shards appropriately almost always keeps you below this limit, but you can also consider the number of shards for each GiB of Java heap\. On a given node, have no more than 25 shards per GiB of Java heap\. For example, an `m5.large.search` instance has a 4\-GiB heap, so each node should have no more than 80 shards\. At that shard count, each shard is roughly 5 GiB in size, which is well below our recommendation\.
+Sizing shards appropriately almost always keeps you below this limit, but you can also consider the number of shards for each GiB of Java heap\. On a given node, have no more than 25 shards per GiB of Java heap\. For example, an `m5.large.search` instance has a 4\-GiB heap, so each node should have no more than 100 shards\. At that shard count, each shard is roughly 5 GiB in size, which is well below our recommendation\.
 
 ## Choosing instance types and testing<a name="bp-instances"></a>
 

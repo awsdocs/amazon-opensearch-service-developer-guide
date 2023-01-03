@@ -90,6 +90,7 @@ The following tables summarize version compatibility for the driver\.
 
 | OpenSearch version | JDBC driver version | 
 | --- | --- | 
+| 2\.3 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 1\.3 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 1\.2 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 1\.1 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 

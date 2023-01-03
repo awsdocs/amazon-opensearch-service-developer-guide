@@ -4,7 +4,7 @@ Amazon OpenSearch Service is a managed service that makes it easy to deploy, ope
 
 ***OpenSearch*** is a fully open\-source search and analytics engine for use cases such as log analytics, real\-time application monitoring, and clickstream analysis\. For more information, see the [OpenSearch documentation](https://opensearch.org/docs/)\.
 
-***Amazon OpenSearch Service*** provisions all the resources for your cluster and launches it\. It also automatically detects and replaces failed OpenSearch Service nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
+***Amazon OpenSearch Service*** provisions all the resources for your OpenSearch cluster and launches it\. It also automatically detects and replaces failed OpenSearch Service nodes, reducing the overhead associated with self\-managed infrastructures\. You can scale your cluster with a single API call or a few clicks in the console\.
 
 To get started using OpenSearch Service, you create an OpenSearch Service *domain*, which is equivalent to an OpenSearch *cluster*\. Each EC2 instance in the cluster acts as one OpenSearch Service node\.
 

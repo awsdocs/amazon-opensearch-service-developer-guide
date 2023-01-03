@@ -87,7 +87,7 @@ minute hour day-of-month month day-of-week year
 For example, the following expression translates to "every Tuesday and Friday at 1:15 AM from 2021 through 2024":
 
 ```
-15 1 ? * 2,5 2021-2024
+15 1 ? * 3,6 2021-2024
 ```
 
 The following table includes valid values for each field\.

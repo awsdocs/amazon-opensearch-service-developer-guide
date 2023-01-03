@@ -64,13 +64,19 @@ These steps explain how to create SAML providers\. This enables SAML authenticat
 
 1. Provide a name and description for the provider\.
 **Note**  
-The name that you specify is publicly accessible and will appear in a dropdown menu when users sign in to OpenSearch Dashboards\. Make sure that he name is easily recognizable and doesn't reveal sensitive information about your identity provider\.
+The name that you specify is publicly accessible and will appear in a dropdown menu when users sign in to OpenSearch Dashboards\. Make sure that the name is easily recognizable and doesn't reveal sensitive information about your identity provider\.
 
 1. Under **Configure your IdP**, copy the assertion consumer service \(ACS\) URL\.
 
 1. Use the ACS URL that you just copied to configure your identity provider\. Terminology and steps vary by provider\. Consult your provider's documentation\.
 
    In Okta, for example, you create a "SAML 2\.0 web application" and specify the ACS URL as the **Single Sign On URL**, **Recipient URL**, **Destination URL**, and **Audience Restriction**\. For Auth0, you specify it in **Allowed Callback URLs**\.
+
+1. Provide the audience restriction if your IdP has a field for it\. The audience restriction is a value within the SAML assertion that specifies who the assertion is intended for\. For OpenSearch Serverless, specify `aws:opensearch:<aws account id>`\. For example, `aws:opensearch:123456789012`\.
+
+   The name of the audience restriction field varies by provider\. For Okta it's **Audience URI \(SP Entity ID\)**\. For IAM Identity Center it's **Application SAML audience**\.
+
+1. If you're using IAM Identity Center, you also need to specify the following [attribute mapping](https://docs.aws.amazon.com/singlesignon/latest/userguide/attributemappingsconcept.html): `Subject=${user:name}`, with a format of `unspecified`\.
 
 1. After you configure your identity provider, it generates an IdP metadata file\. This XML file contains information about the provider, such as a TLS certificate, single sign\-on endpoints, and the identity provider's entity ID\.
 

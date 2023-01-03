@@ -124,7 +124,7 @@ You might receive a `ClusterBlockException` error for the following reasons\.
 
 ### Lack of available storage space<a name="handling-errors-watermark"></a>
 
-If one or more nodes in your cluster has less than 20% of available storage space, or less than 20 GB of storage space, basic write operations like adding documents and creating indexes can start to fail\. [Calculating storage requirements](sizing-domains.md#bp-storage) provides a summary of how OpenSearch Service uses disk space\.
+If one or more nodes in your cluster has storage space less than the minimum value of 1\) 20% of available storage space, or 2\) 20 GB of storage space, basic write operations like adding documents and creating indexes can start to fail\.[Calculating storage requirements](sizing-domains.md#bp-storage) provides a summary of how OpenSearch Service uses disk space\.
 
 To avoid issues, monitor the `FreeStorageSpace` metric in the OpenSearch Service console and [create CloudWatch alarms](cloudwatch-alarms.md) to trigger when `FreeStorageSpace` drops below a certain threshold\. `GET /_cat/allocation?v` also provides a useful summary of shard allocation and disk usage\. To resolve issues associated with a lack of storage space, scale your OpenSearch Service domain to use larger instance types, more instances, or more EBS\-based storage\.
 
@@ -218,19 +218,7 @@ If the error persists after repeating the process several times, contact [AWS Su
 
 ## Can't close index<a name="troubleshooting-close-api"></a>
 
-OpenSearch Service supports the `_close` API only for OpenSearch and Elasticsearch versions 7\.4 and later\. If you're using an older version and are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\. The other option is to use the `rename_pattern` and `rename_replacement` fields to rename the index as you restore it:
-
-```
-POST /_snapshot/my-repository/my-snapshot/_restore
-{
-  "indices": "my-index-1,myindex-2",
-  "include_global_state": true,
-  "rename_pattern": "my-index-(\\d)",
-  "rename_replacement": "restored-my-index-$1"
-}
-```
-
-If you plan to reindex, shrink, or split an index, you likely want to stop writing to it before performing the operation\.
+OpenSearch Service supports the [https://opensearch.org/docs/latest/api-reference/index-apis/close-index/](https://opensearch.org/docs/latest/api-reference/index-apis/close-index/) API only for OpenSearch and Elasticsearch versions 7\.4 and later\. If you're using an older version and are restoring an index from a snapshot, you can delete the existing index \(before or after reindexing it\)\.
 
 ## Client license checks<a name="troubleshooting-license"></a>
 

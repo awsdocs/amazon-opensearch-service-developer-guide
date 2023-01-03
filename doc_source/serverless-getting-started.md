@@ -83,7 +83,7 @@ In this tutorial, we'll provide a single user the permissions required to index 
 
 1. For **Rule 1**, we'll create a single rule that provides access to the *movies* collection\. Name the rule **Movies collection access**\.
 
-1. Choose **Add principals**, **IAM users and roles** and select the IAM user or role that you'll use to sign in to OpenSearch Dashboards and index data\. Choose **Save**\.
+1. Choose **Add principals**, **IAM users and roles** and select the IAM user that you'll use to sign in to OpenSearch Dashboards and index data\. Choose **Save**\.
 
 1. Choose **Grant**\.
 
@@ -108,7 +108,7 @@ You can upload data to an OpenSearch Serverless collection using Postman or curl
 
 1. Choose the OpenSearch Dashboards URL for the collection\. The URL takes the format `https://collection-id.us-east-1.aoss.amazonaws.com/_dashboards`\. 
 
-1. Sign in using the [AWS access and secret keys](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html) for the user or role that you specified in your data access policy\.
+1. Sign in using the [AWS access and secret keys](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html) for the user that you specified in your data access policy\.
 
 1. Within OpenSearch Dashboards, open the left navigation pane and choose **Dev Tools**\.
 

@@ -13,6 +13,7 @@ Cross\-cluster replication has the following limitations:
 + You can't use AWS CloudFormation to connect domains\.
 + You can't use cross\-cluster replication on M3 or burstable \(T2 and T3\) instances\.
 + You can't replicate data between UltraWarm or cold indexes\. Both indexes must be in hot storage\.
++ Cross\-cluster replication doesn't work with [data streams](https://opensearch.org/docs/latest/opensearch/data-streams/) or the [k\-NN plugin](knn.md)\.
 
 ## Prerequisites<a name="replication-prereqs"></a>
 

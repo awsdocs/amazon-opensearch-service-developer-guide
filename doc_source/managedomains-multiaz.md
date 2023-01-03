@@ -3,7 +3,6 @@
 To prevent data loss and minimize Amazon OpenSearch Service cluster downtime in the event of a service disruption, you can distribute nodes across two or three *Availability Zones* in the same Region, a configuration known as Multi\-AZ\. Availability Zones are isolated locations within each AWS Region\.
 
 For domains that run production workloads, we recommend the following configuration:
-+ Choose a Region that supports three Availability Zones with OpenSearch Service\.
 + Deploy the domain across three zones\.
 + Choose current\-generation instance types for dedicated master nodes and data nodes\.
 + Use three dedicated master nodes and at least three data nodes\.

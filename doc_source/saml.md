@@ -25,9 +25,31 @@ You can't change the SSO URL from its service\-provided value, so SAML authentic
 
 SAML does not require direct communication between your identity provider and your service provider\. Therefore, even if your OpenSearch domain is hosted within a private VPC, you can still use SAML as long as your browser can communicate with both your OpenSearch cluster and your identity provider\. Your browser essentially acts as the intermediary between your identity provider and your service provider\. For a useful diagram that explains the SAML authentication flow, see the [Okta documentation](https://developer.okta.com/docs/concepts/saml/#planning-for-saml)\.
 
+## Configure the domain access policy<a name="saml-domain-access"></a>
+
+Before you configure SAML authentication, you must update the domain access policy to allow SAML users access to the domain\. Otherwise, you'll see access denied errors even after you successfully configure SAML authentication\.
+
+We recommend the following [domain access policy](ac.md#ac-types-resource), which provides full access to the subresources \(`/*`\) on the domain:
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "es:ESHttp*",
+      "Resource": "domain-arn/*"
+    }
+  ]
+}
+```
+
 ## Enabling SAML authentication<a name="saml-enable-sp-or-idp"></a>
 
-You can only enable SAML authentication for OpenSearch Dashboards on existing domains, not during the creation of new ones\. Due to the size of the IdP metadata file, we highly recommend using the AWS console\.
+You can only enable SAML authentication on existing domains, not during the creation of new ones\. Due to the size of the IdP metadata file, we highly recommend using the AWS console\.
 
 Domains only support one Dashboards authentication method at a time\. If you have [Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md) enabled, you must disable it before you can enable SAML\.
 
@@ -35,7 +57,7 @@ Domains only support one Dashboards authentication method at a time\. If you hav
 
 These steps explain how to enable SAML authentication with SP\-initiated *or* IdP\-initiated authentication for OpenSearch Dashboards\. For the extra step required to enable both, see [Enable both SP\- and IdP\-initiated authentication](#saml-idp-with-sp)\.
 
-**To enable SAML authentication for Dashboards**
+**To enable SAML authentication for OpenSearch Dashboards**
 
 1. In the OpenSearch Service console, select the domain, then choose **Actions** and **Edit security configuration**\.
 

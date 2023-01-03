@@ -2,7 +2,13 @@
 
 As a managed service, Amazon OpenSearch Service is protected by the AWS global network security procedures that are described in [Amazon Web Services: Overview of Security Processes](https://d0.awsstatic.com/whitepapers/Security/AWS_Security_Whitepaper.pdf)
 
-You use AWS published API calls to access the OpenSearch Service configuration API through the network\. Clients must support Transport Layer Security \(TLS\) 1\.0 or later\. We recommend TLS 1\.2 or later\. To configure the minimum required TLS version to accept, specify the `TLSSecurityPolicy` value in the domain endpoint options\. For details, see the [AWS CLI Command Reference](https://docs.aws.amazon.com/cli/latest/reference/opensearch/create-domain.html)\.
+You use AWS published API calls to access the OpenSearch Service configuration API through the network\. Clients must support Transport Layer Security \(TLS\) 1\.0 or later\. We recommend TLS 1\.2 or later\. To configure the minimum required TLS version to accept, specify the `TLSSecurityPolicy` value in the domain endpoint options:
+
+```
+aws opensearch update-domain-config --domain-name my-domain --domain-endpoint-options '{"TLSSecurityPolicy": "Policy-Min-TLS-1-2-2019-07"}'
+```
+
+For details, see the [AWS CLI command reference](https://docs.aws.amazon.com/cli/latest/reference/opensearch/update-domain-config.html)\.
 
 Clients must also support cipher suites with perfect forward secrecy \(PFS\) such as Ephemeral Diffie\-Hellman \(DHE\) or Elliptic Curve Ephemeral Diffie\-Hellman \(ECDHE\)\. Most modern systems such as Java 7 and later support these modes\.
 
