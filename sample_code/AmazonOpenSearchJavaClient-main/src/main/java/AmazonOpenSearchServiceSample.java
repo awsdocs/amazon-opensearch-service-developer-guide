@@ -19,13 +19,13 @@ public class AmazonOpenSearchServiceSample {
     private static String index_name = "my-index";
 
     private static String mapping = "{ \"settings\": { \"number_of_shards\": 1, \"number_of_replicas\": 0 }, \"mappings\": { \"properties\": { \"title\": {\"type\": \"text\"}, \"director\": {\"type\": \"text\"}, \"year\": {\"type\": \"text\"} } } }";
-    private static String createIndexPath = "/" + index_name;
+    private static String createIndexPath = host + "/" + index_name;
 
     private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
-    private static String indexingPath = "/" + index_name + "/_doc";
+    private static String indexingPath = host + "/" + index_name + "/_doc";
 
     private static String sampleSearch = "{ \"query\": { \"match_all\": {}}}";
-    private static String searchPath = "/" + index_name + "/_search";
+    private static String searchPath = host + "/" + index_name + "/_search";
 
     static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
 
@@ -43,7 +43,7 @@ public class AmazonOpenSearchServiceSample {
         // Index a document
         entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
         String id = "1";
-        request = new Request("POST", indexingPath + "/" + id);
+        request = new Request("PUT", indexingPath);
         request.setEntity(entity);
 
         // Using a String instead of an HttpEntity sets Content-Type to application/json automatically.

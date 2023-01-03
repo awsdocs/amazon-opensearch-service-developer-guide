@@ -266,6 +266,7 @@ index_document().catch(console.log);
 
 ## Java<a name="serverless-java"></a>
 
+<<<<<<< HEAD
 To ingest data into an OpenSearch Serverless with Java, use [AmazonOpenSearchJavaClient](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/AmazonOpenSearchJavaClient-main), which is similar to the existing OpenSearch low\-level Java REST client\. The sample code in the repository establishes a secure connection to the specified collection, creates an index, and indexes a single document\. You must provide values for `region` and `host`\.
 
 ## Python<a name="serverless-python"></a>
