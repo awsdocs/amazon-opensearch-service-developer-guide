@@ -36,9 +36,9 @@ When you send data to OpenSearch Service, you send that data to an index\. An in
 
 OpenSearch Service maps the shards for each index across the data nodes in your cluster\. It ensures that the primary and replica shards for the index reside on different data nodes\. The first replica ensures that you have two copies of the data in the index\. You should always use at least one replica\. Additional replicas provide additional redundancy and read capacity\.
 
-OpenSearch sends index and search requests to all of the data nodes that contain shards that belong to the index in the request\. It sends indexing requests first to data nodes that contain primary shards, and then to data nodes that contain replica shards\. 
+OpenSearch sends indexing requests to all of the data nodes that contain shards that belong to the index\. It sends indexing requests first to data nodes that contain primary shards, and then to data nodes that contain replica shards\. Search requests are routed by the coordinator node to either a primary or replica shard for all shards belonging to the index.
 
-For example, for an index with five primary shards and one replica, each indexing request uses 10 shards\. In contrast, search queries are sent to *n* shards, where *n * is the number of primary shards\. For an index with five primary shards and one replica, each search query uses five shards \(primary or replica\) from that index\.
+For example, for an index with five primary shards and one replica, each indexing request touches 10 shards\. In contrast, search requests are sent to *n* shards, where *n * is the number of primary shards\. For an index with five primary shards and one replica, each search query touches five shards \(primary or replica\) from that index\.
 
 ### Determine shard and data node counts<a name="bp-shard-count"></a>
 
