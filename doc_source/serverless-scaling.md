@@ -11,7 +11,7 @@ For *search* collections, most data is stored in hot storage to ensure fast quer
 
 To manage capacity for your collections and to control costs, you can specify the overall maximum indexing and search capacity for the current account and Region, and OpenSearch Serverless scales your collection resources automatically based on these specifications\.
 
-Because storage and compute capacity scale separately, you specify account\-level limits for each:
+Because indexing and search capacity scale separately, you specify account\-level limits for each:
 + **Maximum indexing capacity** – OpenSearch Serverless can increase indexing capacity up to this number of OCUs\. 
 + **Maximum search capacity** – OpenSearch Serverless can increase search capacity up to this number of OCUs\.
 
