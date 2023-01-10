@@ -3,7 +3,7 @@
 ****  
 ***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
 
-This tutorial walks you through the basic steps to get an Amazon OpenSearch Serverless collection up and running quickly\. For more detailed information, see [Creating and managing Amazon OpenSearch Serverless collections](serverless-manage.md) and the other topics within this guide\.
+This tutorial walks you through the basic steps to get an Amazon OpenSearch Serverless collection up and running quickly\. For more detailed information, see [Creating, listing, and deleting Amazon OpenSearch Serverless collections](serverless-manage.md) and the other topics within this guide\.
 
 You'll complete the following steps in this tutorial:
 
@@ -151,6 +151,6 @@ Because the *movies* collection is for test purposes, make sure to delete it whe
 ## Next steps<a name="serverless-gsg-next"></a>
 
 Now that you know how to create a collection and index data, you might want to try some of the following exercises:
-+ See more advanced options for creating a collection\. For more information, see [Creating and managing Amazon OpenSearch Serverless collections](serverless-manage.md)\.
++ See more advanced options for creating a collection\. For more information, see [Creating, listing, and deleting Amazon OpenSearch Serverless collections](serverless-manage.md)\.
 + Learn how to configure security policies to manage collection security at scale\. For more information, see [Overview of security in Amazon OpenSearch Serverless](serverless-security.md)\.
 + Discover other ways to index data into collections\. For more information, see [Ingesting data into Amazon OpenSearch Serverless collections](serverless-clients.md)\.

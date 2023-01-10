@@ -43,7 +43,7 @@ Other storage considerations exist:
 
 ## Choosing the number of shards<a name="bp-sharding"></a>
 
-After you understand your storage requirements, you can investigate your indexing strategy\. By default in OpenSearch Service, each index is divided into five primary shards and one replica \(total of 10 shards\)\. Because you can't easily change the number of primary shards for an existing index, you should decide about shard count *before* indexing your first document\.
+After you understand your storage requirements, you can investigate your indexing strategy\. By default in OpenSearch Service, each index is divided into five primary shards and one replica \(total of 10 shards\)\. This behavior differs from open source OpenSearch, which defaults to one primary and one replica shard\. Because you can't easily change the number of primary shards for an existing index, you should decide about shard count *before* indexing your first document\.
 
 The overall goal of choosing a number of shards is to distribute an index evenly across all data nodes in the cluster\. However, these shards shouldn't be too large or too numerous\. A general guideline is to try to keep shard size between 10–30 GiB for workloads where search latency is a key performance objective, and 30–50 GiB for write\-heavy workloads such as log analytics\. 
 
@@ -51,7 +51,7 @@ Large shards can make it difficult for OpenSearch to recover from failure, but b
 
 For example, suppose you have 66 GiB of data\. You don't expect that number to increase over time, and you want to keep your shards around 30 GiB each\. Your number of shards therefore should be approximately 66 \* 1\.1 / 30 = 3\. You can generalize this calculation as follows:
 
- **\(Source Data \+ Room to Grow\) \* \(1 \+ Indexing Overhead\) / Desired Shard Size = Approximate Number of Primary Shards**
+ **\(Source data \+ room to grow\) \* \(1 \+ indexing overhead\) / desired shard size = approximate number of primary shards**
 
 This equation helps compensate for data growth over time\. If you expect those same 66 GiB of data to quadruple over the next year, the approximate number of shards is \(66 \+ 198\) \* 1\.1 / 30 = 10\. Remember, though, you don't have those extra 198 GiB of data *yet*\. Check to make sure that this preparation for the future doesn't create unnecessarily tiny shards that consume huge amounts of CPU and memory in the present\. In this case, 66 \* 1\.1 / 10 shards = 7\.26 GiB per shard, which will consume extra resources and is below the recommended size range\. You might consider the more middle\-of\-the\-road approach of six shards, which leaves you with 12\-GiB shards today and 48\-GiB shards in the future\. Then again, you might prefer to start with three shards and reindex your data when the shards exceed 50 GiB\.
 

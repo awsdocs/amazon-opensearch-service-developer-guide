@@ -37,7 +37,7 @@ Your AWS account has the following quotas related to OpenSearch Serverless objec
 | --- | --- | --- | --- | 
 |  Collection tags per account per Region  |  50  | No |  | 
 | Collections with unique KMS keys per account per Region | 10 | No |  | 
-|  VPC endpoints per account per Region  |  50  | No |  This limit only applies to [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md)\. It does not include OpenSearch Ingestion VPC endpoints or OpenSearch Service\-managed VPC endpoints\.  | 
+|  VPC endpoints per account per Region  |  50  | No |  This limit only applies to [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md)\. It doesn't include OpenSearch Service\-managed VPC endpoints\.  | 
 | Data access policies per account per Region | 500 | No |  | 
 | Encryption policies per account per Region | 50 | No |  | 
 | Network policies per account per Region | 500 | No |  | 

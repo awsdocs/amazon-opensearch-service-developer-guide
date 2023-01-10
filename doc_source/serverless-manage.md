@@ -1,9 +1,16 @@
-# Creating and managing Amazon OpenSearch Serverless collections<a name="serverless-manage"></a>
+# Creating, listing, and deleting Amazon OpenSearch Serverless collections<a name="serverless-manage"></a>
 
 ****  
 ***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
 
 A *collection* in Amazon OpenSearch Serverless is a logical grouping of one or more indexes that represent an analytics workload\. OpenSearch Service automatically manages and tunes the collection, requiring minimal manual input\.
+
+**Topics**
++ [Permissions required](#serverless-collection-permissions)
++ [Creating collections](#serverless-create)
++ [Accessing OpenSearch Dashboards](#serverless-dashboards)
++ [Viewing collections](#serverless-list)
++ [Deleting collections](#serverless-delete)
 
 ## Permissions required<a name="serverless-collection-permissions"></a>
 
@@ -104,9 +111,8 @@ You also need to configure network settings for the collection in the form of a 
 
 ```
 aws opensearchserverless create-security-policy \
-  --name logs-policy \ 
-  --type network \
-  --policy "[{\"Description\":\"Public access for logs collection\",\"Rules\":[{\"ResourceType\":\"dashboard\",\"Resource\":[\"collection\/logs-application\"]},{\"ResourceType\":\"collection\",\"Resource\":[\"collection\/logs-application\"]}],\"AllowFromPublic\":true}]"
+  --name logs-policy \
+  --type network --policy "[{\"Description\":\"Public access for logs collection\",\"Rules\":[{\"ResourceType\":\"dashboard\",\"Resource\":[\"collection\/logs-application\"]},{\"ResourceType\":\"collection\",\"Resource\":[\"collection\/logs-application\"]}],\"AllowFromPublic\":true}]"
 ```
 
 **Note**  
@@ -115,7 +121,7 @@ You can create network policies after you create a collection, but we recommend 
 To create a collection, send a [CreateCollection](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_CreateCollection.html) request:
 
 ```
-aws opensearchserverless create-collection --name "logs-collection" --type SEARCH --description "A collection for storing log data"
+aws opensearchserverless create-collection --name "logs-application" --type SEARCH --description "A collection for storing log data"
 ```
 
 For `type`, specify either `SEARCH` or `TIMESERIES`\. For more information, see [Choosing a collection type](serverless-overview.md#serverless-usecase)\.

@@ -14,6 +14,17 @@ To set up SAML authentication, you first configure a SAML identity provider \(Id
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/serverless-saml-flow.png)
 
+**Topics**
++ [Considerations](#serverless-saml-considerations)
++ [Permissions required](#serverless-saml-permissions)
++ [Creating SAML providers \(console\)](#serverless-saml-creating)
++ [Accessing OpenSearch Dashboards](#serverless-saml-dashboards)
++ [Granting SAML identities access to collection data](#serverless-saml-policies)
++ [Creating SAML providers \(AWS CLI\)](#serverless-saml-creating-api)
++ [Viewing SAML providers](#serverless-saml-viewing)
++ [Updating SAML providers](#serverless-saml-updating)
++ [Deleting SAML providers](#serverless-saml-deleting)
+
 ## Considerations<a name="serverless-saml-considerations"></a>
 
 Consider the following when configuring SAML authentication:
@@ -70,7 +81,7 @@ The name that you specify is publicly accessible and will appear in a dropdown m
 
 1. Use the ACS URL that you just copied to configure your identity provider\. Terminology and steps vary by provider\. Consult your provider's documentation\.
 
-   In Okta, for example, you create a "SAML 2\.0 web application" and specify the ACS URL as the **Single Sign On URL**, **Recipient URL**, **Destination URL**, and **Audience Restriction**\. For Auth0, you specify it in **Allowed Callback URLs**\.
+   In Okta, for example, you create a "SAML 2\.0 web application" and specify the ACS URL as the **Single Sign On URL**, **Recipient URL**, and **Destination URL**\. For Auth0, you specify it in **Allowed Callback URLs**\.
 
 1. Provide the audience restriction if your IdP has a field for it\. The audience restriction is a value within the SAML assertion that specifies who the assertion is intended for\. For OpenSearch Serverless, specify `aws:opensearch:<aws account id>`\. For example, `aws:opensearch:123456789012`\.
 

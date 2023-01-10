@@ -2,7 +2,7 @@
 
 Configure alerts in Amazon OpenSearch Service to get notified when data from one or more indices meets certain conditions\. For example, you might want to receive an email if your application logs more than five HTTP 503 errors in one hour, or you might want to page a developer if no new documents have been indexed in the last 20 minutes\. 
 
-Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documentation, including API descriptions, see the [Alerting](https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/) in the OpenSearch documentation\. This topic highlights the differences in alerting in OpenSearch Service compared to the open\-source version\.
+Alerting requires OpenSearch or Elasticsearch 6\.2 or later\. For full documentation, including API descriptions, see [Alerting](https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/) in the OpenSearch documentation\. This topic highlights the differences in alerting in OpenSearch Service compared to the open\-source version\.
 
 ## Getting started with alerting<a name="alerting-getstarted"></a>
 
@@ -27,7 +27,7 @@ Alerting integrates with Notifications, which is a unified system for OpenSearch
 Your domain must be running OpenSearch version 2\.3 or later to use notifications\.
 
 **Note**  
-OpenSearch notifications are separate from OpenSearch Service [notifications](managedomains-notifications.md) , which provide details about service software updates, Auto\-Tune enhancements, and other important domain\-level information\. OpenSearch notifications are plugin\-specific\.
+OpenSearch notifications are separate from OpenSearch Service [notifications](managedomains-notifications.md), which provide details about service software updates, Auto\-Tune enhancements, and other important domain\-level information\. OpenSearch notifications are plugin\-specific\.
 
 Notification channels replaced alerting destinations starting with OpenSearch version 2\.0\. Destinations were officially deprecated, and all alerting notification will be managed through channels going forward\.
 

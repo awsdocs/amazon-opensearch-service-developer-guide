@@ -29,7 +29,7 @@ CloudWatch metrics are grouped first by the service namespace, and then by the v
 
 1. Open the CloudWatch console at [https://console\.aws\.amazon\.com/cloudwatch/](https://console.aws.amazon.com/cloudwatch/)\.
 
-1. In the navigation pane, choose **All metrics** and select the **AWS/ES** namespace\.
+1. In the left navigation pane, find **Metrics** and choose **All metrics**\. Select the **ES/OpenSearchService** namespace\.
 
 1. Choose a dimension to view the corresponding metrics\. Metrics for individual nodes are in the `ClientId, DomainName, NodeId` dimension\. Cluster metrics are in the `Per-Domain, Per-Client Metrics` dimension\. Some node metrics are aggregated at the cluster level and thus included in both dimensions\. Shard metrics are in the `ClientId, DomainName, NodeId, ShardRole` dimension\.
 
@@ -38,7 +38,7 @@ CloudWatch metrics are grouped first by the service namespace, and then by the v
 Run the following command:
 
 ```
-aws cloudwatch list-metrics --namespace "AWS/ES"
+aws cloudwatch list-metrics --namespace "ES/OpenSearchService"
 ```
 
 ## Interpreting health charts in OpenSearch Service<a name="managedomains-cloudwatchmetrics-box-charts"></a>

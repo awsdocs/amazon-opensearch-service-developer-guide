@@ -5,13 +5,26 @@
 
 The network settings for an Amazon OpenSearch Serverless collection determine whether the collection is accessible over the internet from public networks, or whether it must be accessed through OpenSearch Serverless–managed VPC endpoints\. You can configure network access separately for a collection's *OpenSearch* endpoint and its corresponding *OpenSearch Dashboards* endpoint\.
 
+Network access is the isolation mechanism for allowing access from different source networks\. For example, if a collection's OpenSearch Dashboards endpoint is publically accessible but theOpenSearch API endpoint isn't, then a user can access the collection data only through Dashboards when connecting from a public network\. If they try to call the OpenSearch APIs directly from a public network, it would be blocked\. Network settings can be used for such permutations of source to resource\-type\.
+
+**Topics**
++ [Network policies](#serverless-network-policies)
++ [Considerations](#serverless-network-considerations)
++ [Permissions required](#serverless-network-permissions)
++ [Policy precedence](#serverless-network-precedence)
++ [Creating network policies \(console\)](#serverless-network-console)
++ [Creating network policies \(AWS CLI\)](#serverless-network-cli)
++ [Viewing network policies](#serverless-network-list)
++ [Updating network policies](#serverless-network-update)
++ [Deleting network policies](#serverless-network-delete)
+
 ## Network policies<a name="serverless-network-policies"></a>
 
 Network policies let you manage many collections at scale by automatically assigning network access settings to collections that match the rules defined in the policy\.
 
 In a network policy, you specify a series of *rules*\. These rule define access permissions to collection endpoints and OpenSearch Dashboards endpoints\. Each rule consists of an access type \(public or VPC\) and a resource type \(collection and/or OpenSearch Dashboards endpoint\)\. For each resource type \(`collection` and `dashboard`\), you specify a series of rules that define which collection\(s\) the policy will apply to\.
 
-In this sample policy, the first rule specifies VPC access to both the collection endpoint and the Dashboards endpoint for all collections beginning with the term `marketing*`\. The second rule specifies public access to the `finance` collection, but only for the collection endpoint \(no Dashboards access\)\. 
+In this sample policy, the first rule specifies VPC access to both the collection endpoint and the Dashboards endpoint for all collections beginning with the term `marketing*`\. The second rule specifies public access to the `finance` collection, but only for the collection endpoint \(no Dashboards access\)\.
 
 ```
 [
@@ -51,8 +64,24 @@ In this sample policy, the first rule specifies VPC access to both the collectio
 ]
 ```
 
-**Important**  
-If you specify an access type for a collection's OpenSearch Dashboards endpoint, you must specify the same access type for the corresponding collection endpoint, otherwise Dashboards won't be accessible\.
+This policy provides public access only to OpenSearch Dashboards for collections beginning with "finance"\. Programmatic access is not provided, so any attempts to directly access the OpenSearch API will fail\.
+
+```
+[
+  {
+    "Description": "Dashboards access",
+    "Rules": [
+      {
+        "ResourceType": "dashboard",
+        "Resource": [
+          "collection/finance*"
+        ]
+      }
+    ],
+    "AllowFromPublic": true
+  }
+]
+```
 
 Network policies can apply to existing collections as well as future collections\. For example, you can create a collection and then create a network policy with a rule that matches the collection name\. You don't need to create network policies before you create collections\.
 

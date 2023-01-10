@@ -9,6 +9,12 @@ You establish this private connection by creating an *interface endpoint*, power
 
 For more information, see [Access AWS services through AWS PrivateLink](https://docs.aws.amazon.com/vpc/latest/privatelink/privatelink-access-aws-services.html) in the *AWS PrivateLink Guide*\.
 
+**Topics**
++ [Considerations](#vpc-endpoint-considerations)
++ [Permissions required](#serverless-vpc-permissions)
++ [Create an interface endpoint for OpenSearch Serverless](#serverless-vpc-create)
++ [Next step: Grant the endpoint access to a collection](#serverless-vpc-access)
+
 ## Considerations<a name="vpc-endpoint-considerations"></a>
 
 Before you set up an interface endpoint for OpenSearch Serverless, consider the following:

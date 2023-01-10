@@ -5,6 +5,18 @@
 
 Each Amazon OpenSearch Serverless collection that you create is protected with encryption of data at rest, a security feature that helps prevent unauthorized access to your data\. Encryption at rest uses AWS Key Management Service \(AWS KMS\) to store and manage your encryption keys\. It uses the Advanced Encryption Standard algorithm with 256\-bit keys \(AES\-256\) to perform the encryption\.
 
+**Topics**
++ [Encryption policies](#serverless-encryption-policies)
++ [Considerations](#serverless-encryption-considerations)
++ [Permissions required](#serverless-encryption-permissions)
++ [Key policy for a customer managed key](#serverless-customer-cmk-policy)
++ [How OpenSearch Serverless uses grants in AWS KMS](#serverless-encryption-grants)
++ [Creating encryption policies \(console\)](#serverless-encryption-console)
++ [Creating encryption policies \(AWS CLI\)](#serverless-encryption-cli)
++ [Viewing encryption policies](#serverless-encryption-list)
++ [Updating encryption policies](#serverless-encryption-update)
++ [Deleting encryption policies](#serverless-encryption-delete)
+
 ## Encryption policies<a name="serverless-encryption-policies"></a>
 
 With encryption policies, you can manage many collections at scale by automatically assigning an encryption key to newly created collections that match a specific name or pattern\.

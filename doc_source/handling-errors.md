@@ -124,7 +124,7 @@ You might receive a `ClusterBlockException` error for the following reasons\.
 
 ### Lack of available storage space<a name="handling-errors-watermark"></a>
 
-If one or more nodes in your cluster has storage space less than the minimum value of 1\) 20% of available storage space, or 2\) 20 GB of storage space, basic write operations like adding documents and creating indexes can start to fail\.[Calculating storage requirements](sizing-domains.md#bp-storage) provides a summary of how OpenSearch Service uses disk space\.
+If one or more nodes in your cluster has storage space less than the minimum value of 1\) 20% of available storage space, or 2\) 20 GB of storage space, basic write operations like adding documents and creating indexes can start to fail\. [Calculating storage requirements](sizing-domains.md#bp-storage) provides a summary of how OpenSearch Service uses disk space\.
 
 To avoid issues, monitor the `FreeStorageSpace` metric in the OpenSearch Service console and [create CloudWatch alarms](cloudwatch-alarms.md) to trigger when `FreeStorageSpace` drops below a certain threshold\. `GET /_cat/allocation?v` also provides a useful summary of shard allocation and disk usage\. To resolve issues associated with a lack of storage space, scale your OpenSearch Service domain to use larger instance types, more instances, or more EBS\-based storage\.
 

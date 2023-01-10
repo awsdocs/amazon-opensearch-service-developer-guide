@@ -7,6 +7,17 @@ With data access control in Amazon OpenSearch Serverless, you can allow users to
 
 You manage access permissions through *data access policies*, which apply to collections and index resources\. Data access policies help you manage collections at scale by automatically assigning access permissions to collections and indexes that match a specific pattern\. Multiple data access policies can apply to a single resource\.
 
+**Topics**
++ [Data access policies versus IAM policies](#serverless-data-access-vs-iam)
++ [IAM permissions required](#serverless-data-access-permissions)
++ [Policy syntax](#serverless-data-access-syntax)
++ [Supported policy permissions](#serverless-data-supported-permissions)
++ [Creating data access policies \(console\)](#serverless-data-access-console)
++ [Creating data access policies \(AWS CLI\)](#serverless-data-access-cli)
++ [Viewing data access policies](#serverless-data-access-list)
++ [Updating data access policies](#serverless-data-access-update)
++ [Deleting data access policies](#serverless-data-access-delete)
+
 ## Data access policies versus IAM policies<a name="serverless-data-access-vs-iam"></a>
 
 Data access policies are logically separate from AWS Identity and Access Management \(IAM\) policies\. IAM permissions control access to the [serverless API operations](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/Welcome.html), such as `CreateCollection` and `ListAccessPolicies`\. Data access policies control access to the [OpenSearch operations](#serverless-data-supported-permissions) that OpenSearch Serverless supports, such as `PUT <index>` or `GET _cat/indices`\.
