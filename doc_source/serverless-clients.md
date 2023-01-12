@@ -221,15 +221,20 @@ var client = new Client({
       request.service = 'aoss';
       request.region = ''; // e.g. us-east-1
 
-      var contentLength = '0';
+      // You can't include Content-Length as a signed header, otherwise you'll get an invalid signature error.
+      // The body and content-length should be removed before signing to avoid the header being included
+      // and the signature being incorrectly calculated including the body.
+      var body = request.body;
+      request.body = undefined;
+      delete request.headers['content-length'];
 
-      if (request.headers['content-length']) {
-        contentLength = request.headers['content-length'];
-        request.headers['content-length'] = '0';
-      }
+      // Serverless collections expect this header in all requests with an HTTP body. The payload doesn't need to be signed; any value is fine.
       request.headers['x-amz-content-sha256'] = 'UNSIGNED-PAYLOAD';
+
       request = aws4.sign(request, AWS.config.credentials);
-      request.headers['content-length'] = contentLength;
+
+      // Add the body back into the request now the signature has been calculated without it
+      signedRequest.body = body;
 
       return request
     }
