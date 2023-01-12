@@ -14,23 +14,25 @@ import java.io.IOException;
 public class AmazonOpenSearchServiceSample {
 
     private static String serviceName = "aoss";
-    private static String region = "";
-    private static String domainEndpoint = ""; // The collection endpoint. For example, my-test-collection.us-east-1.aoss.amazonaws.com
+    private static String domainEndpoint = ""; // the collection endpoint. For example, my-test-collection.us-east-1.aoss.amazonaws.com
+    private static String region = ""; // the signing region, e.g. us-west-2
     private static String index_name = "my-index";
 
     private static String mapping = "{ \"settings\": { \"number_of_shards\": 1, \"number_of_replicas\": 0 }, \"mappings\": { \"properties\": { \"title\": {\"type\": \"text\"}, \"director\": {\"type\": \"text\"}, \"year\": {\"type\": \"text\"} } } }";
-    private static String createIndexPath = host + "/" + index_name;
 
     private static String sampleDocument = "{" + "\"title\":\"Walk the Line\"," + "\"director\":\"James Mangold\"," + "\"year\":\"2005\"}";
-    private static String indexingPath = host + "/" + index_name + "/_doc";
 
     private static String sampleSearch = "{ \"query\": { \"match_all\": {}}}";
-    private static String searchPath = host + "/" + index_name + "/_search";
 
     static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
 
     public static void main(String[] args) throws IOException {
-        RestClient searchClient = searchClient(serviceName, region);
+
+        String createIndexPath = domainEndpoint + "/" + index_name;
+        String indexingPath = domainEndpoint + "/" + index_name + "/_doc/1";
+        String searchPath = domainEndpoint + "/" + index_name + "/_search";
+    
+        RestClient searchClient = searchClient(serviceName, domainEndpoint, region);
 
         // Create Index
         HttpEntity entity = new NStringEntity(mapping, ContentType.APPLICATION_JSON);
@@ -42,7 +44,6 @@ public class AmazonOpenSearchServiceSample {
 
         // Index a document
         entity = new NStringEntity(sampleDocument, ContentType.APPLICATION_JSON);
-        String id = "1";
         request = new Request("PUT", indexingPath);
         request.setEntity(entity);
 
@@ -59,10 +60,16 @@ public class AmazonOpenSearchServiceSample {
 
         response = searchClient.performRequest(request);
         System.out.println("Match All Search Response : " + response.toString());
+
+        request = new Request("DELETE", createIndexPath);
+        response = searchClient.performRequest(request);
+        System.out.println("Delete Index Response : " + response.toString());
+
+        searchClient.close();
     }
 
     // Adds the interceptor to the OpenSearch REST client
-    public static RestClient searchClient(String serviceName, String region) {
+    public static RestClient searchClient(String serviceName, String domainEndpoint, String region) {
         AWS4UnsignedPayloadSigner signer = new AWS4UnsignedPayloadSigner();
         signer.setServiceName(serviceName);
         signer.setRegionName(region);
