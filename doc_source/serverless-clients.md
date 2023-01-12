@@ -234,7 +234,7 @@ var client = new Client({
       request = aws4.sign(request, AWS.config.credentials);
 
       // Add the body back into the request now the signature has been calculated without it
-      signedRequest.body = body;
+      request.body = body;
 
       return request
     }
