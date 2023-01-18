@@ -15,6 +15,7 @@ These sections provide details about the supported ingest pipelines for data ing
 + [Java](#serverless-java)
 + [Python](#serverless-python)
 + [Go](#serverless-go)
++ [Ruby](#serverless-ruby)
 
 ## Signing requests to OpenSearch Serverless<a name="serverless-signing"></a>
 
@@ -383,4 +384,35 @@ func main() {
 
   fmt.Print(resp.Status + "\n")
 }
+```
+## Ruby<a name="serverless-ruby"></a>
+The `opensearch-aws-sigv4` gem provides access to AOSS, along with AWS Managed OpenSearch, out of the box. It has all features of `opensearch-ruby` client since it is a dependency of this gem.
+
+```shell
+gem install opensearch-aws-sigv4
+```
+
+When instantiating the Sigv4 Signer, simply use `aoss` as the service:
+```ruby
+require 'opensearch-aws-sigv4'
+require 'aws-sigv4'
+
+signer = Aws::Sigv4::Signer.new(service: 'aoss',
+                                region: 'us-west-2',
+                                access_key_id: 'key_id',
+                                secret_access_key: 'secret')
+
+client = OpenSearch::Aws::Sigv4Client.new(
+  { host: 'https://your.amz-opensearch-serverless.endpoint',
+    log: true },
+  signer)
+
+index = 'prime'
+client.indices.create(index: index)
+client.index(index: index, id: '1', body: { name: 'Amazon Echo', 
+                                            msrp: '5999', 
+                                            year: 2011 })
+client.search(body: { query: { match: { name: 'Echo' } } })
+client.delete(index: index, id: '1')
+client.indices.delete(index: index)
 ```
