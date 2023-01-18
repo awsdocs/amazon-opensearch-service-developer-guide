@@ -6,16 +6,22 @@
 These sections provide details about the supported ingest pipelines for data ingestion into Amazon OpenSearch Serverless collections\. They also cover some of the clients that you can use to interact with the OpenSearch API operations\. Your clients should be compatible with OpenSearch 2\.x in order to integrate with OpenSearch Serverless\.
 
 **Topics**
-+ [Signing requests to OpenSearch Serverless](#serverless-signing)
-+ [Minimum required permissions](#serverless-ingestion-permissions)
-+ [Logstash](#serverless-logstash)
-+ [Fluentd](#serverless-fluentd)
-+ [Amazon Kinesis Data Firehose](#serverless-kdf)
-+ [JavaScript](#serverless-javascript)
-+ [Java](#serverless-java)
-+ [Python](#serverless-python)
-+ [Go](#serverless-go)
-+ [Ruby](#serverless-ruby)
+- [Ingesting data into Amazon OpenSearch Serverless collections](#ingesting-data-into-amazon-opensearch-serverless-collections)
+  - [Signing requests to OpenSearch Serverless](#signing-requests-to-opensearch-serverless)
+  - [Minimum required permissions](#minimum-required-permissions)
+  - [Logstash](#logstash)
+    - [Docker installation](#docker-installation)
+    - [Linux installation](#linux-installation)
+    - [Configuring the OpenSearch output plugin](#configuring-the-opensearch-output-plugin)
+  - [Fluentd](#fluentd)
+  - [Amazon Kinesis Data Firehose](#amazon-kinesis-data-firehose)
+  - [JavaScript](#javascript)
+      - [Using AWS V2 SDK](#using-aws-v2-sdk)
+      - [Using AWS V3 SDK](#using-aws-v3-sdk)
+  - [Java](#java)
+  - [Python](#python)
+  - [Go](#go)
+  - [Ruby](#ruby)
 
 ## Signing requests to OpenSearch Serverless<a name="serverless-signing"></a>
 
@@ -209,65 +215,61 @@ The following sample code uses the [opensearch\-js](https://www.npmjs.com/packag
 
 The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\)\.
 
-```
-var AWS = require('aws-sdk');
-var aws4  = require('aws4');
-var { Client, Connection } = require("@opensearch-project/opensearch");
+#### Using AWS V2 SDK
 
-var client = new Client({
-  node: '', // The collection endpoint. For example, https://07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com
-  Connection: class extends Connection {
-    buildRequestObject (params) {
-      var request = super.buildRequestObject(params)
-      request.service = 'aoss';
-      request.region = ''; // e.g. us-east-1
+```javascript
+const AWS = require('aws-sdk');
+const { Client } = require('@opensearch-project/opensearch');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 
-      // You can't include Content-Length as a signed header, otherwise you'll get an invalid signature error.
-      // The body and content-length should be removed before signing to avoid the header being included
-      // and the signature being incorrectly calculated including the body.
-      var body = request.body;
-      request.body = undefined;
-      delete request.headers['content-length'];
-
-      // Serverless collections expect this header in all requests with an HTTP body. The payload doesn't need to be signed; any value is fine.
-      request.headers['x-amz-content-sha256'] = 'UNSIGNED-PAYLOAD';
-
-      request = aws4.sign(request, AWS.config.credentials);
-
-      // Add the body back into the request now the signature has been calculated without it
-      request.body = body;
-
-      return request
-    }
-  }
+const client = new Client({
+  ...AwsSigv4Signer({
+    region: 'us-west-2',
+    service: 'aoss',
+    getCredentials: () =>
+      new Promise((resolve, reject) => {
+        AWS.config.getCredentials((err, credentials) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(credentials);
+          }
+        });
+      }),
+  }),
+  node: "https://xxx.region.aoss.amazonaws.com"
 });
 
-async function index_document() {
-  // Create an index with non-default settings.
-  var index_name = "my-index";
-  var settings = "{ \"settings\": { \"number_of_shards\": 1, \"number_of_replicas\": 0 }, \"mappings\": { \"properties\": { \"title\": {\"type\": \"text\"}, \"director\": {\"type\": \"text\"}, \"year\": {\"type\": \"text\"} } } }";
+var info = client.info();
+var version = info.body.version
+console.log(version.distribution + ": " + version.number);
+```
 
-  var response = await client.indices.create({
-    index: index_name,
-    body: settings
+#### Using AWS V3 SDK
+
+```javascript
+const { defaultProvider } = require("@aws-sdk/credential-provider-node");
+const { Client } = require('@opensearch-project/opensearch');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+
+async function main() {
+  const client = new Client({
+    ...AwsSigv4Signer({
+      region: "us-east-1",
+      getCredentials: () => {
+        const credentialsProvider = defaultProvider();
+        return credentialsProvider();
+      },
+    }),
+    node: "https://xxx.region.aoss.amazonaws.com"
   });
 
-  console.log("Creating index:");
-  console.log(response.body);
-
-  // Add a document to the index
-  var document = "{ \"title\": \"Avatar\", \"director\": \"James Cameron\", \"year\": \"2003\" }\n";
-
-  var response = await client.index({
-    index: index_name,
-    body: document
-  });
-
-  console.log("Adding document:");
-  console.log(response.body);
+  var info = await client.info();
+  var version = info.body.version
+  console.log(version.distribution + ": " + version.number);
 }
 
-index_document().catch(console.log);
+main();
 ```
 
 ## Java<a name="serverless-java"></a>
@@ -280,40 +282,43 @@ The following sample code uses the [opensearch\-py](https://pypi.org/project/ope
 
 The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\)\.
 
-```
-from opensearchpy import OpenSearch, RequestsHttpConnection
-from requests_aws4auth import AWS4Auth
+```python
+from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 import boto3
 
-host = '' # The collection endpoint without https://. For example, 07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com
-region = '' # e.g. us-east-1
-
+host = '' # cluster endpoint, for example: my-test-domain.us-east-1.es.amazonaws.com
+region = 'us-west-2'
 service = 'aoss'
 credentials = boto3.Session().get_credentials()
-awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
+auth = AWSV4SignerAuth(credentials, region, service)
+index_name = 'python-test-index'
 
-# Build the OpenSearch client
 client = OpenSearch(
     hosts = [{'host': host, 'port': 443}],
-    http_auth = awsauth,
+    http_auth = auth,
     use_ssl = True,
     verify_certs = True,
-    connection_class = RequestsHttpConnection
+    connection_class = RequestsHttpConnection,
+    pool_maxsize = 20
 )
 
-# Create an index
-index_name = 'my-index'
-index_body = {
-    "mappings": {
-        "properties": {
-            "title": {"type": "text"},
-            "director": {"type": "text"},
-            "year": {"type": "integer"}
-        }
+q = 'miller'
+query = {
+  'size': 5,
+  'query': {
+    'multi_match': {
+      'query': q,
+      'fields': ['title^2', 'director']
     }
+  }
 }
-response = client.indices.create(index_name, body=index_body)
-print('\nCreating index:')
+
+response = client.search(
+    body = query,
+    index = index_name
+)
+
+print('\nSearch results:')
 print(response)
 ```
 
@@ -323,7 +328,7 @@ The following sample code uses the [AWS SDK for Go](https://aws.amazon.com/sdk-f
 
 The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\), as well as the additional request header `X-Amz-Content-Sha256`\.
 
-```
+```go
 package main
 
 import (
