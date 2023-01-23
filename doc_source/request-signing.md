@@ -270,30 +270,106 @@ print(search.search(q='some test query'))
 
 ## Ruby<a name="request-signing-ruby"></a>
 
-The `opensearch-aws-sigv4` gem provides access to AWS Managed OpenSearch domains, out of the box. It has all features of `opensearch-ruby` client since it is a dependency of this gem. 
+This first example uses the Elasticsearch Ruby client and [Faraday middleware](https://github.com/winebarrel/faraday_middleware-aws-sigv4) to perform the request signing\. Note that the latest versions of the client might include license or version checks that artificially break compatibility\. For the correct client version to use, see [Elasticsearch client compatibility](samplecode.md#client-compatibility)\. This example uses the recommended version 7\.13\.3\. 
 
-```shell
-gem install opensearch-aws-sigv4
+From the terminal, run the following commands:
+
+```
+gem install elasticsearch -v 7.13.3
+gem install faraday_middleware-aws-sigv4
 ```
 
-Via the Sigv4 Client, you can interact with an Amazon Managed OpenSearch cluster just like would with a self-managed cluster:
-```ruby
-require 'opensearch-aws-sigv4'
-require 'aws-sigv4'
+This example code creates a new client, configures Faraday middleware to sign requests, and indexes a single document\. You must provide values for `full_url_and_port` and `region`\.
 
-signer = Aws::Sigv4::Signer.new(service: 'es',
-                                region: 'us-west-2',
-                                access_key_id: 'key_id',
-                                secret_access_key: 'secret')
+```
+require 'elasticsearch'
+require 'faraday_middleware/aws_sigv4'
 
-client = OpenSearch::Aws::Sigv4Client.new(
-  { host: 'https://your.amz-managed-opensearch.domain',
-    log: true }, 
-  signer)
+full_url_and_port = '' # e.g. https://my-domain.region.es.amazonaws.com:443
+index = 'ruby-index'
+type = '_doc'
+id = '1'
+document = {
+  year: 2007,
+  title: '5 Centimeters per Second',
+  info: {
+    plot: 'Told in three interconnected segments, we follow a young man named Takaki through his life.',
+    rating: 7.7
+  }
+}
 
-client.cluster.health
-client.transport.reload_connections!
-client.search q: 'test'
+region = '' # e.g. us-west-1
+service = 'es'
+
+client = Elasticsearch::Client.new(url: full_url_and_port) do |f|
+  f.request :aws_sigv4,
+    service: service,
+    region: region,
+    access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+    secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+    session_token: ENV['AWS_SESSION_TOKEN'] # optional
+end
+
+puts client.index index: index, type: type, id: id, body: document
+```
+
+If your credentials don't work, export them at the terminal using the following commands:
+
+```
+export AWS_ACCESS_KEY_ID="your-access-key"
+export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_SESSION_TOKEN="your-session-token"
+```
+
+This next example uses the [AWS SDK for Ruby](https://aws.amazon.com/sdk-for-ruby/) and standard Ruby libraries to send a signed HTTP request\. Like the first example, it indexes a single document\. You must provide values for host and region\.
+
+```
+require 'aws-sdk-opensearchservice'
+
+host = '' # e.g. https://my-domain.region.es.amazonaws.com
+index = 'ruby-index'
+type = '_doc'
+id = '2'
+document = {
+  year: 2007,
+  title: '5 Centimeters per Second',
+  info: {
+    plot: 'Told in three interconnected segments, we follow a young man named Takaki through his life.',
+    rating: 7.7
+  }
+}
+
+service = 'es'
+region = '' # e.g. us-west-1
+
+signer = Aws::Sigv4::Signer.new(
+  service: service,
+  region: region,
+  access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+  secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+  session_token: ENV['AWS_SESSION_TOKEN']
+)
+
+signature = signer.sign_request(
+  http_method: 'PUT',
+  url: host + '/' + index + '/' + type + '/' + id,
+  body: document.to_json
+)
+
+uri = URI(host + '/' + index + '/' + type + '/' + id)
+
+Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+  request = Net::HTTP::Put.new uri
+  request.body = document.to_json
+  request['Host'] = signature.headers['host']
+  request['X-Amz-Date'] = signature.headers['x-amz-date']
+  request['X-Amz-Security-Token'] = signature.headers['x-amz-security-token']
+  request['X-Amz-Content-Sha256']= signature.headers['x-amz-content-sha256']
+  request['Authorization'] = signature.headers['authorization']
+  request['Content-Type'] = 'application/json'
+  response = http.request request
+  puts response.body
+end
 ```
 
 ## Node<a name="request-signing-node"></a>
