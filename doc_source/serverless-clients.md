@@ -222,27 +222,41 @@ const AWS = require('aws-sdk');
 const { Client } = require('@opensearch-project/opensearch');
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 
-const client = new Client({
-  ...AwsSigv4Signer({
-    region: 'us-west-2',
-    service: 'aoss',
-    getCredentials: () =>
-      new Promise((resolve, reject) => {
-        AWS.config.getCredentials((err, credentials) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(credentials);
-          }
-        });
-      }),
-  }),
-  node: "https://xxx.region.aoss.amazonaws.com"
-});
+async function main() {
+    const client = new Client({
+        ...AwsSigv4Signer({
+            region: 'us-west-2',
+            service: 'aoss',
+            getCredentials: () =>
+                new Promise((resolve, reject) => {
+                    AWS.config.getCredentials((err, credentials) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(credentials);
+                        }
+                    });
+                }),
+        }),
+        node: "https://xxx.region.aoss.amazonaws.com"
+    });
 
-var info = client.info();
-var version = info.body.version
-console.log(version.distribution + ": " + version.number);
+    const index = 'movies';
+    if (!(await client.indices.exists({ index })).body) {
+        console.log((await client.indices.create({ index })).body);
+    }
+
+    const document = { foo: 'bar' };
+    const response = await client.index({
+        id: '1',
+        index: index,
+        body: document,
+    });
+    console.log(response.body);
+    console.log((await client.indices.delete({ index })).body);
+}
+
+main();
 ```
 
 #### Using AWS V3 SDK
@@ -253,20 +267,31 @@ const { Client } = require('@opensearch-project/opensearch');
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 
 async function main() {
-  const client = new Client({
-    ...AwsSigv4Signer({
-      region: "us-east-1",
-      getCredentials: () => {
-        const credentialsProvider = defaultProvider();
-        return credentialsProvider();
-      },
-    }),
-    node: "https://xxx.region.aoss.amazonaws.com"
-  });
+    const client = new Client({
+        ...AwsSigv4Signer({
+          region: "us-east-1",
+          service: "aoss",
+          getCredentials: () => {
+            const credentialsProvider = defaultProvider();
+            return credentialsProvider();
+          },
+        }),
+        node: "https://xxx.region.aoss.amazonaws.com"
+    });
 
-  var info = await client.info();
-  var version = info.body.version
-  console.log(version.distribution + ": " + version.number);
+    const index = 'movies';
+    if (!(await client.indices.exists({ index })).body) {
+        console.log((await client.indices.create({ index })).body);
+    }
+    
+    const document = { foo: 'bar' };
+    const response = await client.index({
+        id: '1',
+        index: index,
+        body: document,
+    });
+    console.log(response.body);
+    console.log((await client.indices.delete({ index })).body);
 }
 
 main();
