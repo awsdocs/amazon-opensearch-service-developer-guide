@@ -6,15 +6,22 @@
 These sections provide details about the supported ingest pipelines for data ingestion into Amazon OpenSearch Serverless collections\. They also cover some of the clients that you can use to interact with the OpenSearch API operations\. Your clients should be compatible with OpenSearch 2\.x in order to integrate with OpenSearch Serverless\.
 
 **Topics**
-+ [Signing requests to OpenSearch Serverless](#serverless-signing)
-+ [Minimum required permissions](#serverless-ingestion-permissions)
-+ [Logstash](#serverless-logstash)
-+ [Fluentd](#serverless-fluentd)
-+ [Amazon Kinesis Data Firehose](#serverless-kdf)
-+ [JavaScript](#serverless-javascript)
-+ [Java](#serverless-java)
-+ [Python](#serverless-python)
-+ [Go](#serverless-go)
+- [Ingesting data into Amazon OpenSearch Serverless collections](#ingesting-data-into-amazon-opensearch-serverless-collections)
+  - [Signing requests to OpenSearch Serverless](#signing-requests-to-opensearch-serverless)
+  - [Minimum required permissions](#minimum-required-permissions)
+  - [Logstash](#logstash)
+    - [Docker installation](#docker-installation)
+    - [Linux installation](#linux-installation)
+    - [Configuring the OpenSearch output plugin](#configuring-the-opensearch-output-plugin)
+  - [Fluentd](#fluentd)
+  - [Amazon Kinesis Data Firehose](#amazon-kinesis-data-firehose)
+  - [JavaScript](#javascript)
+      - [Using AWS V2 SDK](#using-aws-v2-sdk)
+      - [Using AWS V3 SDK](#using-aws-v3-sdk)
+  - [Java](#java)
+  - [Python](#python)
+  - [Go](#go)
+  - [Ruby](#ruby)
 
 ## Signing requests to OpenSearch Serverless<a name="serverless-signing"></a>
 
@@ -208,70 +215,118 @@ The following sample code uses the [opensearch\-js](https://www.npmjs.com/packag
 
 The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\)\.
 
-```
-var AWS = require('aws-sdk');
-var aws4  = require('aws4');
-var { Client, Connection } = require("@opensearch-project/opensearch");
+#### Using AWS V2 SDK
 
-var client = new Client({
-  node: '', // The collection endpoint. For example, https://07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com
-  Connection: class extends Connection {
-    buildRequestObject (params) {
-      var request = super.buildRequestObject(params)
-      request.service = 'aoss';
-      request.region = ''; // e.g. us-east-1
+```javascript
+const AWS = require('aws-sdk');
+const { Client } = require('@opensearch-project/opensearch');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 
-      // You can't include Content-Length as a signed header, otherwise you'll get an invalid signature error.
-      // The body and content-length should be removed before signing to avoid the header being included
-      // and the signature being incorrectly calculated including the body.
-      var body = request.body;
-      request.body = undefined;
-      delete request.headers['content-length'];
+async function main() {
+    const client = new Client({
+        ...AwsSigv4Signer({
+            region: 'us-west-2',
+            service: 'aoss',
+            getCredentials: () =>
+                new Promise((resolve, reject) => {
+                    AWS.config.getCredentials((err, credentials) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(credentials);
+                        }
+                    });
+                }),
+        }),
+        node: "https://xxx.region.aoss.amazonaws.com"
+    });
 
-      // Serverless collections expect this header in all requests with an HTTP body. The payload doesn't need to be signed; any value is fine.
-      request.headers['x-amz-content-sha256'] = 'UNSIGNED-PAYLOAD';
-
-      request = aws4.sign(request, AWS.config.credentials);
-
-      // Add the body back into the request now the signature has been calculated without it
-      request.body = body;
-
-      return request
+    const index = 'movies';
+    if (!(await client.indices.exists({ index })).body) {
+        console.log((await client.indices.create({ index })).body);
     }
-  }
-});
 
-async function index_document() {
-  // Create an index with non-default settings.
-  var index_name = "my-index";
-  var settings = "{ \"settings\": { \"number_of_shards\": 1, \"number_of_replicas\": 0 }, \"mappings\": { \"properties\": { \"title\": {\"type\": \"text\"}, \"director\": {\"type\": \"text\"}, \"year\": {\"type\": \"text\"} } } }";
-
-  var response = await client.indices.create({
-    index: index_name,
-    body: settings
-  });
-
-  console.log("Creating index:");
-  console.log(response.body);
-
-  // Add a document to the index
-  var document = "{ \"title\": \"Avatar\", \"director\": \"James Cameron\", \"year\": \"2003\" }\n";
-
-  var response = await client.index({
-    index: index_name,
-    body: document
-  });
-
-  console.log("Adding document:");
-  console.log(response.body);
+    const document = { foo: 'bar' };
+    const response = await client.index({
+        id: '1',
+        index: index,
+        body: document,
+    });
+    console.log(response.body);
+    console.log((await client.indices.delete({ index })).body);
 }
 
-index_document().catch(console.log);
+main();
+```
+
+#### Using AWS V3 SDK
+
+```javascript
+const { defaultProvider } = require("@aws-sdk/credential-provider-node");
+const { Client } = require('@opensearch-project/opensearch');
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+
+async function main() {
+    const client = new Client({
+        ...AwsSigv4Signer({
+          region: "us-east-1",
+          service: "aoss",
+          getCredentials: () => {
+            const credentialsProvider = defaultProvider();
+            return credentialsProvider();
+          },
+        }),
+        node: "https://xxx.region.aoss.amazonaws.com"
+    });
+
+    const index = 'movies';
+    if (!(await client.indices.exists({ index })).body) {
+        console.log((await client.indices.create({ index })).body);
+    }
+    
+    const document = { foo: 'bar' };
+    const response = await client.index({
+        id: '1',
+        index: index,
+        body: document,
+    });
+    console.log(response.body);
+    console.log((await client.indices.delete({ index })).body);
+}
+
+main();
 ```
 
 ## Java<a name="serverless-java"></a>
 
-To ingest data into an OpenSearch Serverless with Java, use [AmazonOpenSearchJavaClient](https://github.com/awsdocs/amazon-opensearch-service-developer-guide/tree/master/sample_code/AmazonOpenSearchJavaClient-main), which is similar to the existing OpenSearch low\-level Java REST client\. The sample code in the repository establishes a secure connection to the specified collection, creates an index, and indexes a single document\. You must provide values for `region` and `host`\.
+The following sample code uses the [opensearch\-java](https://search.maven.org/artifact/org.opensearch.client/opensearch-java) client for Java to establish a secure connection to the specified OpenSearch Serverless collection and create a single index\. You must provide values for `region` and `host`\.
+
+The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\)\.
+
+```java
+SdkHttpClient httpClient = ApacheHttpClient.builder().build();
+
+OpenSearchClient client = new OpenSearchClient(
+    new AwsSdk2Transport(
+        httpClient,
+        "search-...us-west-2.es.amazonaws.com", // OpenSearch Serverless collection endpoint, without https://
+        "aoss" // signing service name
+        Region.US_WEST_2, // signing service region
+        AwsSdk2TransportOptions.builder().build()
+    )
+);
+
+String index = "sample-index";
+CreateIndexRequest createIndexRequest = new CreateIndexRequest.Builder().index(index).build();
+CreateIndexResponse createIndexResponse = client.indices().create(createIndexRequest);
+System.out.println("Create index reponse: " + createIndexResponse);
+
+DeleteIndexRequest deleteIndexRequest = new DeleteRequest.Builder().index(index).build();
+DeleteIndexResponse deleteIndexResponse = client.indices().delete(deleteIndexRequest);
+System.out.println("Delete index reponse: " + deleteIndexResponse);
+
+httpClient.close();
+```
 
 ## Python<a name="serverless-python"></a>
 
@@ -279,108 +334,173 @@ The following sample code uses the [opensearch\-py](https://pypi.org/project/ope
 
 The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\)\.
 
-```
-from opensearchpy import OpenSearch, RequestsHttpConnection
-from requests_aws4auth import AWS4Auth
+```python
+from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 import boto3
 
-host = '' # The collection endpoint without https://. For example, 07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com
-region = '' # e.g. us-east-1
-
+host = '' # cluster endpoint, for example: my-test-domain.us-east-1.es.amazonaws.com
+region = 'us-west-2'
 service = 'aoss'
 credentials = boto3.Session().get_credentials()
-awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
+auth = AWSV4SignerAuth(credentials, region, service)
+index_name = 'python-test-index'
 
-# Build the OpenSearch client
 client = OpenSearch(
     hosts = [{'host': host, 'port': 443}],
-    http_auth = awsauth,
+    http_auth = auth,
     use_ssl = True,
     verify_certs = True,
-    connection_class = RequestsHttpConnection
+    connection_class = RequestsHttpConnection,
+    pool_maxsize = 20
 )
 
-# Create an index
-index_name = 'my-index'
-index_body = {
-    "mappings": {
-        "properties": {
-            "title": {"type": "text"},
-            "director": {"type": "text"},
-            "year": {"type": "integer"}
-        }
+q = 'miller'
+query = {
+  'size': 5,
+  'query': {
+    'multi_match': {
+      'query': q,
+      'fields': ['title^2', 'director']
     }
+  }
 }
-response = client.indices.create(index_name, body=index_body)
-print('\nCreating index:')
+
+response = client.search(
+    body = query,
+    index = index_name
+)
+
+print('\nSearch results:')
 print(response)
 ```
 
 ## Go<a name="serverless-go"></a>
 
-The following sample code uses the [AWS SDK for Go](https://aws.amazon.com/sdk-for-go/) to establish a secure connection to the specified OpenSearch Serverless collection and create a single index\. You must provide values for `region` and `host`\.
+The following sample code uses the [opensearch\-go](https://github.com/opensearch-project/opensearch-go) for Go to establish a secure connection to the specified OpenSearch Serverless collection and create a single index\. You must provide values for `region` and `host`\.
 
-The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\), as well as the additional request header `X-Amz-Content-Sha256`\.
+The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\).
 
-```
+```go
 package main
 
 import (
-  "fmt"
-  "net/http"
+	"context"
+	"log"
   "strings"
-  "time"
-  "github.com/aws/aws-sdk-go/aws/credentials"
-  "github.com/aws/aws-sdk-go/aws/signer/v4"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	opensearch "github.com/opensearch-project/opensearch-go/v2"
+	opensearchapi "github.com/opensearch-project/opensearch-go/v2/opensearchapi"
+	requestsigner "github.com/opensearch-project/opensearch-go/v2/signer/awsv2"
 )
 
+const endpoint = "" // serverless collection endpoint
+
 func main() {
+	ctx := context.Background()
 
-  // Basic information for the serverless collection
-  host := "" // The collection endpoint without https://. For example, 07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com
-  index := "my-index"
-  endpoint := host + "/" + index 
-  region := "" // e.g. us-east-1
-  service := "aoss"
+	awsCfg, err := config.LoadDefaultConfig(ctx,
+		config.WithRegion("<AWS_REGION>"),
+		config.WithCredentialsProvider(
+			getCredentialProvider("<AWS_ACCESS_KEY>", "<AWS_SECRET_ACCESS_KEY>", "<AWS_SESSION_TOKEN>"),
+		),
+	)
+	if err != nil {
+		log.Fatal(err) // Do not log.fatal in a production ready app.
+	}
 
-  // Sample index mapping
-  json := `{
-        "mappings": {
-            "properties": {
-                "title": {"type": "text"},
-                "director": {"type": "text"},
-                "year": {"type": "integer"}
-            }
-        }
-}`
-  body := strings.NewReader(json)
+	// Create an AWS request Signer and load AWS configuration using default config folder or env vars.
+	signer, err := requestsigner.NewSignerWithService(awsCfg, "aoss") // "aoss" for Amazon OpenSearch Serverless
+	if err != nil {
+		log.Fatal(err) // Do not log.fatal in a production ready app.
+	}
 
-  // Get credentials from environment variables and create the Signature Version 4 signer
-  //export AWS_ACCESS_KEY_ID="your-access-key"
-  //export AWS_SECRET_ACCESS_KEY="your-secret-key"
-  
-  credentials := credentials.NewEnvCredentials()
-  signer := v4.NewSigner(credentials)
+	// Create an opensearch client and use the request-signer
+	client, err := opensearch.NewClient(opensearch.Config{
+		Addresses: []string{endpoint},
+		Signer:    signer,
+	})
+	if err != nil {
+		log.Fatal("client creation err", err)
+	}
 
-  // An HTTP client for sending the request
-  client := &http.Client{}
+	indexName = "go-test-index"
 
-  // Form the HTTP request
-  req, err := http.NewRequest(http.MethodPut, endpoint, body)
-  if err != nil {
-    fmt.Print(err)
-  }
+  // Define index mapping.
+	mapping := strings.NewReader(`{
+	 "settings": {
+	   "index": {
+	        "number_of_shards": 4
+	        }
+	      }
+	 }`)
 
-  req.Header.Add("Content-Type", "application/json")
-  req.Header.Add("X-Amz-Content-Sha256", "UNSIGNED-PAYLOAD") // Serverless collections expect this header in all requests with an HTTP body. The payload doesn't need to be signed; any value is fine.
+	// Create an index with non-default settings.
+	createIndex := opensearchapi.IndicesCreateRequest{
+		Index: indexName,
+    Body: mapping,
+	}
+	createIndexResponse, err := createIndex.Do(context.Background(), client)
+	if err != nil {
+		log.Println("Error ", err.Error())
+		log.Println("failed to create index ", err)
+		log.Fatal("create response body read err", err)
+	}
+	log.Println(createIndexResponse)
 
-  // Sign the request, send it, and print the response
-  signer.Sign(req, body, service, region, time.Now())
-  resp, err := client.Do(req)
-  if err != nil {
-    fmt.Print(err)
-  }
+	// Delete previously created index.
+	deleteIndex := opensearchapi.IndicesDeleteRequest{
+		Index: []string{indexName},
+	}
 
-  fmt.Print(resp.Status + "\n")
+	deleteIndexResponse, err := deleteIndex.Do(context.Background(), client)
+	if err != nil {
+		log.Println("failed to delete index ", err)
+		log.Fatal("delete index response body read err", err)
+	}
+	log.Println("deleting index", deleteIndexResponse)
 }
+
+func getCredentialProvider(accessKey, secretAccessKey, token string) aws.CredentialsProviderFunc {
+	return func(ctx context.Context) (aws.Credentials, error) {
+		c := &aws.Credentials{
+			AccessKeyID:     accessKey,
+			SecretAccessKey: secretAccessKey,
+			SessionToken:    token,
+		}
+		return *c, nil
+	}
+}
+```
+## Ruby<a name="serverless-ruby"></a>
+The `opensearch-aws-sigv4` gem provides access to AOSS, along with AWS Managed OpenSearch, out of the box. It has all features of `opensearch-ruby` client since it is a dependency of this gem.
+
+```shell
+gem install opensearch-aws-sigv4
+```
+
+When instantiating the Sigv4 Signer, simply use `aoss` as the service:
+```ruby
+require 'opensearch-aws-sigv4'
+require 'aws-sigv4'
+
+signer = Aws::Sigv4::Signer.new(service: 'aoss',
+                                region: 'us-west-2',
+                                access_key_id: 'key_id',
+                                secret_access_key: 'secret')
+
+client = OpenSearch::Aws::Sigv4Client.new(
+  { host: 'https://your.amz-opensearch-serverless.endpoint',
+    log: true },
+  signer)
+
+index = 'prime'
+client.indices.create(index: index)
+client.index(index: index, id: '1', body: { name: 'Amazon Echo', 
+                                            msrp: '5999', 
+                                            year: 2011 })
+client.search(body: { query: { match: { name: 'Echo' } } })
+client.delete(index: index, id: '1')
+client.indices.delete(index: index)
 ```
