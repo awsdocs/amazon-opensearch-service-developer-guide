@@ -1,8 +1,5 @@
 # Encryption at rest for Amazon OpenSearch Serverless<a name="serverless-encryption"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 Each Amazon OpenSearch Serverless collection that you create is protected with encryption of data at rest, a security feature that helps prevent unauthorized access to your data\. Encryption at rest uses AWS Key Management Service \(AWS KMS\) to store and manage your encryption keys\. It uses the Advanced Encryption Standard algorithm with 256\-bit keys \(AES\-256\) to perform the encryption\.
 
 **Topics**
@@ -183,7 +180,7 @@ In an encryption policy, you specify an AWS KMS key and a series of collection p
 
 **To create an OpenSearch Serverless encryption policy**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/)\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home)\.
 
 1. On the left navigation panel, expand **Serverless** and choose **Encryption policies**\.
 

@@ -15,7 +15,7 @@ sponsored by Amazon.
 -----
 ## Contents
 + [What is Amazon OpenSearch Service?](what-is.md)
-+ [Amazon OpenSearch Serverless (preview)](serverless.md)
++ [Amazon OpenSearch Serverless](serverless.md)
    + [What is Amazon OpenSearch Serverless?](serverless-overview.md)
    + [Getting started with Amazon OpenSearch Serverless](serverless-getting-started.md)
    + [Creating and managing Amazon OpenSearch Serverless collections](serverless-collections.md)

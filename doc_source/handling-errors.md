@@ -190,7 +190,7 @@ For detailed resolution steps in each of these situations, see [Why is my Amazon
 
 ## Low EBS burst balance<a name="handling-errors-low-ebs-burst"></a>
 
-OpenSearch Service sends you a console notification when the EBS burst balance on one of your General Purpose \(SSD\) volumes is below 70%, and a follow\-up notification if the balance falls below 20%\. To fix this issue, you can either scale up your cluster, or reduce the read and write IOPS so that the burst balance can be credited\. For more information, see [General Purpose SSD volumes \(gp2\)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html#EBSVolumeTypes_gp2)\. You can monitor EBS burst balance with the `BurstBalance` CloudWatch metric\.
+OpenSearch Service sends you a console notification when the EBS burst balance on one of your General Purpose \(SSD\) volumes is below 70%, and a follow\-up notification if the balance falls below 20%\. To fix this issue, you can either scale up your cluster, or reduce the read and write IOPS so that the burst balance can be credited\. The burst balance stays at 0 for domains with gp3 volumes types, and domains with gp2 volumes that have a volume size above 1000 GiB\. For more information, see [General Purpose SSD volumes \(gp2\)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html#EBSVolumeTypes_gp2)\. You can monitor EBS burst balance with the `BurstBalance` CloudWatch metric\.
 
 ## Can't enable audit logs<a name="troubleshooting-audit-logs-error"></a>
 

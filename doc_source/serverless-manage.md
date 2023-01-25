@@ -1,8 +1,5 @@
 # Creating, listing, and deleting Amazon OpenSearch Serverless collections<a name="serverless-manage"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 A *collection* in Amazon OpenSearch Serverless is a logical grouping of one or more indexes that represent an analytics workload\. OpenSearch Service automatically manages and tunes the collection, requiring minimal manual input\.
 
 **Topics**
@@ -88,12 +85,21 @@ You can use the console or the AWS CLI to create a serverless collection\.
 
 1. \(Optional\) Add one or more tags to the collection\. For more information, see [Tagging Amazon OpenSearch Serverless collections](tag-collection.md)\.
 
-1. Choose **Create**\.
+1. Choose **Next**\.
 
-The collection status changes to **Creating** as OpenSearch Serverless creates the collection\.
+1. Configure data access rules for the collection, which define who can access the data within the collection\. For each rule that you create, perform the following steps:
+   + Choose **Add principals** and select one or more IAM users and roles or [SAML users and groups](serverless-saml.md) to provide data access to\.
+   + Under **Grant permissions**, select the alias, template, and index permissions to grant the associated principals\. For a full list of permissions and the access they allow, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
 
-**Important**  
-After you create a collection, you won't be able to access it unless it matches a data access policy\. For instructions to create data access policies, see [Data access control for Amazon OpenSearch Serverless](serverless-data-access.md)\.
+    For more information about creating data access policies, see [Data access control for Amazon OpenSearch Serverless](serverless-data-access.md)\.
+
+1. Choose **Next**\.
+
+1. Under **Data access policy settings**, choose what to do with the rules you just created\. You can either use them to create a new data access policy, or add them to an existing policy\.
+
+1. Review your collection configuration and choose **Submit**\.
+
+The collection status changes to `Creating` as OpenSearch Serverless creates the collection\.
 
 ### Create a collection \(CLI\)<a name="serverless-create-cli"></a>
 
@@ -150,7 +156,7 @@ After you create a collection, you won't be able to access it unless it matches 
 
 ## Accessing OpenSearch Dashboards<a name="serverless-dashboards"></a>
 
-After you create a collection and [configure data access,](serverless-data-access.md), you can navigate to the collection's OpenSearch Dashboards URL\. You can find the URL by choosing **Collections** in the left navigation pane and selecting the collection to open its details page\.
+After you create a collection, you can navigate to the collection's OpenSearch Dashboards URL\. You can find the URL by choosing **Collections** in the left navigation pane and selecting the collection to open its details page\.
 
 The URL takes the following format:
 

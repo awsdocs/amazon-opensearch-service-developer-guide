@@ -30,21 +30,24 @@ For a list of the instance types that OpenSearch Service supports, see [Supporte
 
 ## OpenSearch Serverless quotas<a name="limits-serverless"></a>
 
-Your AWS account has the following quotas related to OpenSearch Serverless objects\. If you want to increase maximum capacity limits for your account, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
+Your AWS account has the following quotas related to OpenSearch Serverless objects\. If you want to increase quotas for your account, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
 
 
 | Name | Default | Adjustable | Notes | 
 | --- | --- | --- | --- | 
 |  Collection tags per account per Region  |  50  | No |  | 
-| Collections with unique KMS keys per account per Region | 10 | No |  | 
+| Collections with unique KMS keys per account per Region | 25 | No |  | 
 |  VPC endpoints per account per Region  |  50  | No |  This limit only applies to [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md)\. It doesn't include OpenSearch Service\-managed VPC endpoints\.  | 
 | Data access policies per account per Region | 500 | No |  | 
 | Encryption policies per account per Region | 50 | No |  | 
 | Network policies per account per Region | 500 | No |  | 
 | SAML providers per account per Region | 50 | No |  | 
-| On\-disk storage per collection | 1 TiB | No | A single OpenSearch Compute Unit \(OCU\) can hold approximately 180 GiB of data\. Collections can share OCUs, with the exception of collections with unique KMS keys\. | 
+| Index data per collection | 1 TiB | No | Each OCU includes enough hot ephemeral storage for 120 GiB of index data\. Collections can share OCUs, with the exception of collections with unique KMS keys\. | 
+| Index data per account | 6 TiB |  |  | 
 | Indexes within search collections per account | 20 | No |  | 
 | Indexes within time series collections per account | 120 | No |  | 
+| Search OCUs per account per Region | 50 | No |  | 
+| Indexing OCUs per account per Region | 50 | No |  | 
 
 ## UltraWarm storage quotas<a name="limits-ultrawarm"></a>
 

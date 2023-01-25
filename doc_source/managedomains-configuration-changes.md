@@ -36,11 +36,38 @@ In *most* cases, the following operations do not cause blue/green deployments:
 
 There are some exceptions depending on your service software version\. If you want to be absolutely sure that a change will not cause a blue/green deployment, [perform a dry run](#dryrun) before updating your domain\.
 
-## Determine whether a change will cause a blue/green deployment<a name="dryrun"></a>
+## Determining whether a change will cause a blue/green deployment<a name="dryrun"></a>
 
-You can conduct a dry run of a planned configuration change to determine whether it will cause a blue/green deployment\. When making a change in the console, you're prompted to choose **Run analysis**, and OpenSearch Service calculates the type of deployment the change will cause\.
+You can test planned domain configuration changes to determine whether they will cause a blue/green deployment without having to commit to those changes\. Before you initiate a configuration change, use the console or an API to run a validation check to ensure that your domain is eligible for an update\. 
 
-You can also perform a dry run analysis through the configuration API\. For example, this [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html) request tests the deployment type caused by enabling UltraWarm:
+### <a name="validation-check"></a>
+
+------
+#### [ Console ]
+
+To validate a cluster configuration change, complete the following steps\.
+
+1. Navigate to the Amazon OpenSearch Service console at [https://console.aws.amazon.com/aos/](https://console.aws.amazon.com/aos/)\.
+
+1. In the left navigation pane, choose **Domains**\. 
+
+1. Select the domain you want to make a configuration change for\. This opens the domain details page\. Select the **Actions** dropdown menu and then choose **Edit cluster configuration**\.
+
+1. On the **Edit cluster configuration** page, you can make changes to the instance type, the number of nodes, and any other configurations\. After you've confirmed your changes in the summary panel, choose **Run**\.
+
+1. Once your dry run is complete, the results automatically display at the bottom of the page, along with a dry run ID\. These results notify you which category your change falls into: 
+   + Initiates a blue/green deployment
+   + Doesn't require a blue/green deployment
+   + Contains validation errors that you need to address before you can save your changes
+
+   Note that each dry run overwrites the one before it\. To look up the details of each dry run later on, make sure you save your dry run ID\. Each dry run is available for 90 days, or until you make a configuration update\.
+
+1. To proceed with your configuration update, choose **Save changes**\. Otherwise, choose **Cancel**\. Either option takes you back to the **Cluster configuration** tab\. On this tab, you can choose **Dry run details** to see the details of your latest dry run\. This page also includes a side\-by\-side comparison between the configuration before the dry run and the dry run configuration\.
+
+------
+#### [ API ]
+
+You can perform a dry run validation through the configuration API\. To test your changes with the API, set `DryRun` to `true`, and `DryRunMode` to `Verbose`\. Verbose mode runs a validation check in addition to determining whether the change will initiate a blue/green deployment\. For example, this [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html) request tests the deployment type tha resulrs from enabling UltraWarm:
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/config
@@ -50,11 +77,12 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/c
     "WarmEnabled": true,
     "WarmType": "ultrawarm1.large.search"
    },
-   "DryRun": true
+   "DryRun": true,
+   "DryRunMode": "Verbose"
 }
 ```
 
-The request returns the type of deployment the change will cause but doesn't actually perform the update:
+The request runs a validation check and returns the type of deployment the change will cause but doesn't actually perform the update:
 
 ```
 {
@@ -73,6 +101,52 @@ Possible deployment types are:
 + `DynamicUpdate` – The change won't cause a blue/green deployment\.
 + `Undetermined` – The domain is still in a processing state, so the deployment type can't be determined\.
 + `None` – No configuration change\.
+
+If the validation fails, it returns a list of [validation failures](#validation)\.
+
+```
+{
+   "ClusterConfig":{
+      "..."
+   },
+   "DryRunProgressStatus":{
+      "CreationDate":"2023-01-12T01:14:33.847Z",
+      "DryRunId":"db00ca39-48b2-4774-bbd3-252cf094d205",
+      "DryRunStatus":"failed",
+      "UpdateDate":"2023-01-12T01:14:33.847Z",
+      "ValidationFailures":[
+         {
+            "Code":"Cluster.Index.WriteBlock",
+            "Message":"Cluster has index write blocks."
+         }
+      ]
+   }
+}
+```
+
+If the status is still `pending`, you can use the dry run ID in your UpdateDomainConfig response in subsequent [DescribeDryRunProgress](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_DescribeDryRunProgress.html) calls to check the status of the validation\.
+
+```
+POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/dryRun?dryRunId=my-dry-run-id
+{
+    "DryRunConfig": null,
+    "DryRunProgressStatus": {
+        "CreationDate": "2023-01-12T01:14:42.998Z",
+        "DryRunId": "db00ca39-48b2-4774-bbd3-252cf094d205",
+        "DryRunStatus": "succeeded",
+        "UpdateDate": "2023-01-12T01:14:49.334Z",
+        "ValidationFailures": null
+    },
+    "DryRunResults": {
+        "DeploymentType": "Blue/Green",
+        "Message": "This change will require a blue/green deployment."
+    }
+}
+```
+
+To run a dry run analysis without a validation check, set `DryRunMode` to `Basic` when you use the configuration API\.
+
+------
 
 ## Initiating a configuration change<a name="initiate"></a>
 

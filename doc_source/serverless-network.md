@@ -1,11 +1,8 @@
 # Network access for Amazon OpenSearch Serverless<a name="serverless-network"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 The network settings for an Amazon OpenSearch Serverless collection determine whether the collection is accessible over the internet from public networks, or whether it must be accessed through OpenSearch Serverless–managed VPC endpoints\. You can configure network access separately for a collection's *OpenSearch* endpoint and its corresponding *OpenSearch Dashboards* endpoint\.
 
-Network access is the isolation mechanism for allowing access from different source networks\. For example, if a collection's OpenSearch Dashboards endpoint is publically accessible but theOpenSearch API endpoint isn't, then a user can access the collection data only through Dashboards when connecting from a public network\. If they try to call the OpenSearch APIs directly from a public network, it would be blocked\. Network settings can be used for such permutations of source to resource\-type\.
+Network access is the isolation mechanism for allowing access from different source networks\. For example, if a collection's OpenSearch Dashboards endpoint is publically accessible but the OpenSearch API endpoint isn't, a user can access the collection data only through Dashboards when connecting from a public network\. If they try to call the OpenSearch APIs directly from a public network, they'll be blocked\. Network settings can be used for such permutations of source to resource type\.
 
 **Topics**
 + [Network policies](#serverless-network-policies)
@@ -178,7 +175,7 @@ Network policies can apply to existing policies as well as future policies\. We 
 
 **To create an OpenSearch Serverless network policy**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home )\.
 
 1. On the left navigation panel, expand **Serverless** and choose **Network policies**\.
 

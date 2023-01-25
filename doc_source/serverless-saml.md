@@ -1,8 +1,5 @@
 # SAML authentication for Amazon OpenSearch Serverless<a name="serverless-saml"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 With SAML authentication for Amazon OpenSearch Serverless, you can use your existing identity provider to offer single sign\-on \(SSO\) for the OpenSearch Dashboards endpoints of serverless collections\.
 
 SAML authentication lets you use third\-party identity providers to sign in to OpenSearch Dashboards to index and search data\. OpenSearch Serverless supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services \(AD FS\), and Auth0\. 
@@ -67,7 +64,7 @@ These steps explain how to create SAML providers\. This enables SAML authenticat
 
 **To enable SAML authentication for OpenSearch Dashboards**
 
-1. Sign in to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Sign in to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home )\.
 
 1. On the left navigation panel, expand **Serverless** and choose **SAML authentication**\.
 
@@ -136,7 +133,7 @@ The name that you specify is publicly accessible and will appear in a dropdown m
    </saml2:Attribute>
    ```
 
-1. By default, OpenSearch Dashboards signs users out after 24 hours\. You can configure this value to any number between 1 and 1,440 \(24 hours\) by specifying the **Session time to live**\.
+1. By default, OpenSearch Dashboards signs users out after 24 hours\. You can configure this value to any number between 1 and 12 hours \(5 and 720 minutes\) by specifying the **Session time to live**\.
 
 1. Choose **Create SAML provider**\.
 

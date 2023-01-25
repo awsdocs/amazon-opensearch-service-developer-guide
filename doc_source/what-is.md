@@ -73,7 +73,7 @@ For full pricing details, see [Amazon OpenSearch Service pricing](https://aws.am
 
 ## Amazon OpenSearch Serverless<a name="whatis-serverless"></a>
 
-Amazon OpenSearch Serverless is an on\-demand, auto scaling, serverless configuration for Amazon OpenSearch Service\. Serverless removes the operational complexities of provisioning, configuring, and tuning your OpenSearch clusters\. For more information, see [Amazon OpenSearch Serverless \(preview\)](serverless.md)\.
+Amazon OpenSearch Serverless is an on\-demand, auto scaling, serverless configuration for Amazon OpenSearch Service\. Serverless removes the operational complexities of provisioning, configuring, and tuning your OpenSearch clusters\. For more information, see [Amazon OpenSearch Serverless](serverless.md)\.
 
 ## Getting started with Amazon OpenSearch Service<a name="get-started"></a>
 

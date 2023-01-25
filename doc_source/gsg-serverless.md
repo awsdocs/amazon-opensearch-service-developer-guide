@@ -1,8 +1,5 @@
 # Tutorial: Getting started with security in Amazon OpenSearch Serverless \(console\)<a name="gsg-serverless"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 This tutorial walks you through the basic steps to create and manage security policies using the Amazon OpenSearch Serverless console\.
 
 You will complete the following steps in this tutorial:
@@ -11,11 +8,11 @@ You will complete the following steps in this tutorial:
 
 1. [Create an encryption policy](#gsg-encryption)
 
+1. [Create a network policy](#gsg-network)
+
+1. [Configure a data access policy](#gsg-data-access)
+
 1. [Create a collection](#gsgcreate-collection)
-
-1. [Configure network settings](#gsg-network)
-
-1. [Configure data access](#gsg-data-access)
 
 1. [Upload and search data](#gsgindex-collection)
 
@@ -59,7 +56,7 @@ For a full list of OpenSearch Serverless permissions, see [Identity and Access M
 
 **To create an encryption policy**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home )\.
 
 1. Expand **Serverless** in the left navigation pane and choose **Encryption policies**\.
 
@@ -96,25 +93,7 @@ For a full list of OpenSearch Serverless permissions, see [Identity and Access M
 
 1. Choose **Create**\.
 
-## Step 3: Create a collection<a name="gsgcreate-collection"></a>
-
-Now that you configured encryption and network policies, you can create a matching collection and the security settings will be automatically applied to it\.
-
-**To create an OpenSearch Serverless collection**
-
-1. Choose **Collections** in the left navigation pane and choose **Create collection**\.
-
-1. Name the collection **books**\.
-
-1. For collection type, choose **Search**\.
-
-1. Under **Encryption**, OpenSearch Serverless informs you that the collection name matches the `books-policy` encryption policy\.
-
-1. Under **Network access settings**, OpenSearch Serverless informs you that the collection name matches the `books-policy` network policy\.
-
-1. Choose **Create**\. Collections typically take less than a minute to initialize\.
-
-## Step 5: Configure a data access policy<a name="gsg-data-access"></a>
+## Step 5: Create a data access policy<a name="gsg-data-access"></a>
 
 Your collection data won't be accessible until you configure data access\. [Data access policies](serverless-data-access.md) are separate from the IAM identity\-based policy that you configured in step 1\. They allow users to access the actual data within a collection\.
 
@@ -159,6 +138,24 @@ In this tutorial, we'll provide a single user the permissions required to index 
    This policy provides a single user the minimum permissions required to create an index in the *books* collection, index some data, and search for it\.
 
 1. Choose **Create**\.
+
+## Step 3: Create a collection<a name="gsgcreate-collection"></a>
+
+Now that you configured encryption and network policies, you can create a matching collection and the security settings will be automatically applied to it\.
+
+**To create an OpenSearch Serverless collection**
+
+1. Choose **Collections** in the left navigation pane and choose **Create collection**\.
+
+1. Name the collection **books**\.
+
+1. For collection type, choose **Search**\.
+
+1. Under **Encryption**, OpenSearch Serverless informs you that the collection name matches the `books-policy` encryption policy\.
+
+1. Under **Network access settings**, OpenSearch Serverless informs you that the collection name matches the `books-policy` network policy\.
+
+1. Choose **Create**\. Collections typically take less than a minute to initialize\.
 
 ## Step 6: Upload and search data<a name="gsgindex-collection"></a>
 

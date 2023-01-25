@@ -1,8 +1,5 @@
 # Tutorial: Getting started with security in Amazon OpenSearch Serverless \(CLI\)<a name="gsg-serverless-cli"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 This tutorial walks you through the steps described in the [console getting started tutorial](gsg-serverless.md) for security, but uses the AWS CLI rather than the OpenSearch Service console\. 
 
 You'll complete the following steps in this tutorial:

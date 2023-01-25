@@ -1,7 +1,4 @@
-# Amazon OpenSearch Serverless \(preview\)<a name="serverless"></a>
-
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
+# Amazon OpenSearch Serverless<a name="serverless"></a>
 
 Amazon OpenSearch Serverless is an on\-demand auto scaling configuration for Amazon OpenSearch Service\. An OpenSearch Serverless *collection* is an OpenSearch cluster that scales compute capacity based on your application's needs\. This contrasts with OpenSearch Service *provisioned OpenSearch domains*, which you manually manage capacity for\. 
 

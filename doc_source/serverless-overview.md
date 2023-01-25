@@ -1,8 +1,5 @@
 # What is Amazon OpenSearch Serverless?<a name="serverless-overview"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 Amazon OpenSearch Serverless is an on\-demand serverless configuration for Amazon OpenSearch Service\. Serverless removes the operational complexities of provisioning, configuring, and tuning your OpenSearch clusters\. It's a good option for organizations that don't want to self\-manage their OpenSearch clusters, or organizations that don't have the dedicated resources or expertise to operate large clusters\. With OpenSearch Serverless, you can easily search and analyze petabytes of data without having to worry about the underlying infrastructure and data management\.
 
 An OpenSearch Serverless *collection* is a group of OpenSearch indexes that work together to support a specific workload or use case\. Collections are easier to use than self\-managed OpenSearch *clusters,* which require manual provisioning\.
@@ -47,11 +44,11 @@ The following image illustrates this decoupled architecture:
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/Serverless.png)
 
-OpenSearch Serverless compute capacity for data ingestion, searching, and querying are measured in OpenSearch Compute Units \(OCUs\)\. Each OCU is a combination of 6 GiB of memory and corresponding virtual CPU \(vCPU\), as well as data transfer to Amazon S3\. A single OCU can hold approximately 180 GiB of data\.
+OpenSearch Serverless compute capacity for data ingestion, searching, and querying are measured in OpenSearch Compute Units \(OCUs\)\. Each OCU is a combination of 6 GiB of memory and corresponding virtual CPU \(vCPU\), as well as data transfer to Amazon S3\. Each OCU includes enough hot ephemeral storage for 120 GiB of index data\.
 
 When you create your first collection, OpenSearch Serverless instantiates two OCUs—one for indexing and one for search\. To ensure high availability, it also launches a standby set of nodes in another Availability Zone\. This means that a total of four OCUs are instantiated for the first collection in an account\.
 
-These OCUs exist even when there's no activity on any collection endpoints\. All subsequent collections share these OCUs\. When you create additional collections in the same account, OpenSearch Serverless only adds additional OCUs for search and ingest as needed to support the collections, according to the [capacity limits](serverless-scaling.md#serverless-scaling-configure) that you specify\. Currently, capacity doesn't scale back down as your compute usage decreases\.
+These OCUs exist even when there's no activity on any collection endpoints\. All subsequent collections share these OCUs\. When you create additional collections in the same account, OpenSearch Serverless only adds additional OCUs for search and ingest as needed to support the collections, according to the [capacity limits](serverless-scaling.md#serverless-scaling-configure) that you specify\. Capacity does scale back down as your compute usage decreases\.
 
 For information about how you're billed for these OCUs, see [Pricing for OpenSearch Serverless](#serverless-pricing)\.
 
@@ -70,8 +67,8 @@ You choose a collection type when you first create a collection:
 The collection type that you choose depends on the kind of data that you plan to ingest into the collection, and how you plan to query it\. You can't change the collection type after you create it\.
 
 The collection types have the following notable **differences**:
-+ For *search* collections, all data is stored in hot storage to ensure fast query response times\. *Time series* collections use a combination of hot and warm storage, where the most recent data is kept in hot storage to optimize query response times for more frequently accessed data\.
-+ For *time series* collections, you can't index by document ID\. This operation is reserved for search use cases\. For more information, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
++ For *search* collections, all data is stored in hot storage to ensure fast query response times\. *Time series* collections use a combination of hot and warm caches, where the most recent data is kept in the hot cache to optimize query response times for more frequently accessed data\.
++ For *time series* collections, you can't index by custom document ID\. This operation is reserved for search use cases\. For more information, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
 
 ## Pricing for OpenSearch Serverless<a name="serverless-pricing"></a>
 
@@ -82,7 +79,7 @@ In OpenSearch Serverless, you're charged for the following components:
 
 OCUs are billed on an hourly basis, with per\-second granularity\. In your account statement, you see an entry for compute in OCU\-hours with a label for data ingestion and a label for search\. You're also billed on a monthly basis for data stored in Amazon S3\. You aren't charged for using OpenSearch Dashboards\.
 
-You're billed for a minimum of 4 OCUs for the first collection in your account \(2 x ingest includes primary and standby, and 2 x search includes one replica for high availability\)\. All subsequent collections can share those OCUs\. OpenSearch Serverless adds additional OCUs based on the compute needed to support your collections\.
+You're billed for a minimum of 4 OCUs for the first collection in your account \(2 x ingest includes primary and standby, and 2 x search includes one active replica for high availability\)\. All subsequent collections can share those OCUs\. OpenSearch Serverless adds additional OCUs based on the compute needed to support your collections\.
 
 **Note**  
 Collections with unique AWS KMS keys can't share OCUs with other collections\.

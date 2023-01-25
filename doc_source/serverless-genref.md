@@ -1,8 +1,5 @@
 # Supported operations and plugins in Amazon OpenSearch Serverless<a name="serverless-genref"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 Amazon OpenSearch Serverless supports a variety of OpenSearch plugins, as well as a subset of the indexing, search, and metadata [API operations](https://opensearch.org/docs/latest/opensearch/rest-api/index/) available in OpenSearch\. You can include the permissions in the left column of the table within [data access policies](serverless-data-access.md) in order to limit access to certain operations\.
 
 **Topics**

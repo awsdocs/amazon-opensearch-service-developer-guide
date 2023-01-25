@@ -1,8 +1,5 @@
 # Access Amazon OpenSearch Serverless using an interface endpoint \(AWS PrivateLink\)<a name="serverless-vpc"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 You can use AWS PrivateLink to create a private connection between your VPC and Amazon OpenSearch Serverless\. You can access OpenSearch Serverless as if it were in your VPC, without the use of an internet gateway, NAT device, VPN connection, or AWS Direct Connect connection\. Instances in your VPC don't need public IP addresses to access OpenSearch Serverless\.
 
 You establish this private connection by creating an *interface endpoint*, powered by AWS PrivateLink\. We create an endpoint network interface in each subnet that you specify for the interface endpoint\. These are requester\-managed network interfaces that serve as the entry point for traffic destined for OpenSearch Serverless\.
@@ -39,7 +36,7 @@ You can create an interface endpoint for OpenSearch Serverless using either the 
 
 **To create an interface endpoint for an OpenSearch Serverless collection**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home)\.
 
 1. In the left navigation pane, expand **Serverless** and choose **VPC endpoints**\.
 

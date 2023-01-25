@@ -15,7 +15,7 @@ You can no longer use index templates to apply ISM policies to newly created ind
 
 **To get started with Index State Management**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/](https://console.aws.amazon.com/aos/ )\.
 
 1. Select the domain that you want to create an ISM policy for\.
 

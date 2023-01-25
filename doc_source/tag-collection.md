@@ -1,8 +1,5 @@
 # Tagging Amazon OpenSearch Serverless collections<a name="tag-collection"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 Tags let you assign arbitrary information to an Amazon OpenSearch Serverless collection so you can categorize and filter on that information\. A *tag* is a metadata label that you assign or that AWS assigns to an AWS resource\. 
 
 Each tag consists of a *key* and a *value*\. For tags that you assign, you define the key and value\. For example, you might define the key as `stage` and the value for one resource as `test`\.
@@ -26,7 +23,7 @@ The console is the simplest way to tag a collection\.
 
 ****To create a tag \(console\)****
 
-1. Sign in to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Sign in to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home )\.
 
 1. Expand **Serverless** in the left navigation pane and choose **Collections**\.
 

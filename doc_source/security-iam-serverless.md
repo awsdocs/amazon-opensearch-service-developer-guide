@@ -1,8 +1,5 @@
 # Identity and Access Management for Amazon OpenSearch Serverless<a name="security-iam-serverless"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 AWS Identity and Access Management \(IAM\) is an AWS service that helps an administrator securely control access to AWS resources\. IAM administrators control who can be *authenticated* \(signed in\) and *authorized* \(have permissions\) to use OpenSearch Serverless resources\. IAM is an AWS service that you can use with no additional charge\.
 
 **Topics**

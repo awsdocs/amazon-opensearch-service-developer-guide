@@ -121,7 +121,7 @@ Amazon OpenSearch Service provides the following metrics for EBS volumes\.
 | DiskQueueDepth |  The number of pending input and output \(I/O\) requests for an EBS volume\. Relevant statistics: Minimum, Maximum, Average  | 
 | ReadIOPS |  The number of input and output \(I/O\) operations per second for read operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
 | WriteIOPS |  The number of input and output \(I/O\) operations per second for write operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
-| BurstBalance |  The percentage of input and output \(I/O\) credits remaining in the burst bucket for an EBS volume\. A value of 100 means that the volume has accumulated the maximum number of credits\. If this percentage falls below 70%, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\. Relevant statistics: Minimum, Maximum, Average  | 
+| BurstBalance |  The percentage of input and output \(I/O\) credits remaining in the burst bucket for an EBS volume\. A value of 100 means that the volume has accumulated the maximum number of credits\. If this percentage falls below 70%, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\. The burst balance stays at 0 for domains with gp3 volumes types, and domains with gp2 volumes that have a volume size above 1000 GiB\.  Relevant statistics: Minimum, Maximum, Average  | 
 
 ## Instance metrics<a name="managedomains-cloudwatchmetrics-instance-metrics"></a>
 

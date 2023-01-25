@@ -4,6 +4,8 @@ A common way to create a search application with Amazon OpenSearch Service is to
 
 This chapter presents a solution: use Amazon API Gateway to restrict users to a subset of the OpenSearch APIs and AWS Lambda to sign requests from API Gateway to OpenSearch Service\.
 
+![\[Search application flow diagram.\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/search-application-diagram.png)
+
 **Note**  
 Standard API Gateway and Lambda pricing applies, but within the limited usage of this tutorial, costs should be negligible\.
 

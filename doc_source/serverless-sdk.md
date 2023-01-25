@@ -1,8 +1,5 @@
 # Using the AWS SDKs to interact with Amazon OpenSearch Serverless<a name="serverless-sdk"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 This section includes examples of how to use the AWS SDKs to interact with Amazon OpenSearch Serverless\. These code samples show how to create security policies and collections, and how to query collections\.
 
 **Note**  
@@ -85,7 +82,7 @@ def createNetworkPolicy(client):
             name='tv-policy',
             policy="""
                 [{
-                    \"Description\":\"Public access for television collection\",
+                    \"Description\":\"Public access for TV collection\",
                     \"Rules\":[
                         {
                             \"ResourceType\":\"dashboard\",
@@ -242,7 +239,7 @@ if __name__ == "__main__":
 
 ## JavaScript<a name="serverless-sdk-javascript"></a>
 
-The following sample script uses the [SDK for JavaScript in Node\.js](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-opensearchserverless/), as well as the [opensearch\-js](https://www.npmjs.com/package/@opensearch-project/opensearch) client for JavaScript, to create encryption, network, and data access policies, create a matching collection, and create an index\.
+The following sample script uses the [SDK for JavaScript in Node\.js](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-opensearchserverless/), as well as the [opensearch\-js](https://www.npmjs.com/package/@opensearch-project/opensearch) client for JavaScript, to create encryption, network, and data access policies, create a matching collection, create an index, and index some sample data\.
 
 To install the required dependencies, run the following commands:
 
@@ -257,7 +254,10 @@ Within the script, replace the `Principal` element with the Amazon Resource Name
 ```
 var AWS = require('aws-sdk');
 var aws4 = require('aws4');
-var { Client, Connection } = require("@opensearch-project/opensearch");
+var {
+    Client,
+    Connection
+} = require("@opensearch-project/opensearch");
 var {
     OpenSearchServerlessClient,
     CreateSecurityPolicyCommand,
@@ -444,16 +444,12 @@ async function indexDocument(host) {
                 var request = super.buildRequestObject(params)
                 request.service = 'aoss';
                 request.region = 'us-east-1'; // e.g. us-east-1
-
-                var contentLength = '0';
-
-                if (request.headers['content-length']) {
-                    contentLength = request.headers['content-length'];
-                    request.headers['content-length'] = '0';
-                }
+                var body = request.body;
+                request.body = undefined;
+                delete request.headers['content-length'];
                 request.headers['x-amz-content-sha256'] = 'UNSIGNED-PAYLOAD';
                 request = aws4.sign(request, AWS.config.credentials);
-                request.headers['content-length'] = contentLength;
+                request.body = body;
 
                 return request
             }
@@ -465,10 +461,21 @@ async function indexDocument(host) {
         var index_name = "sitcoms-eighties";
 
         var response = await client.indices.create({
-            index: index_name,
+            index: index_name
         });
 
         console.log("Creating index:");
+        console.log(response.body);
+
+        // Add a document to the index
+        var document = "{ \"title\": \"Seinfeld\", \"creator\": \"Larry David\", \"year\": \"1989\" }\n";
+
+        var response = await client.index({
+            index: index_name,
+            body: document
+        });
+
+        console.log("Adding document:");
         console.log(response.body);
     } catch (error) {
         console.error(error);

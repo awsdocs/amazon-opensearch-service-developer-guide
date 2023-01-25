@@ -1,8 +1,5 @@
 # Data access control for Amazon OpenSearch Serverless<a name="serverless-data-access"></a>
 
-****  
-***This is prerelease documentation for Amazon OpenSearch Serverless, which is in preview release\. The documentation and the feature are both subject to change\. We recommend that you use this feature only in test environments, and not in production environments\. For preview terms and conditions, see *Beta Service Participation* in [AWS Service Terms](https://aws.amazon.com/service-terms/)\. *** 
-
 With data access control in Amazon OpenSearch Serverless, you can allow users to access collections and indexes, regardless of their access mechanism or network source\. You can provide access to IAM users and [SAML identities](serverless-saml.md)\.
 
 You manage access permissions through *data access policies*, which apply to collections and index resources\. Data access policies help you manage collections at scale by automatically assigning access permissions to collections and indexes that match a specific pattern\. Multiple data access policies can apply to a single resource\.
@@ -113,6 +110,7 @@ The following example policy grants alias and template permissions to the collec
 ```
 [
    {
+      "Description": "Rule 1",
       "Rules":[
          {
             "ResourceType":"collection",
@@ -175,7 +173,7 @@ You can create a data access policy using the visual editor, or in JSON format\.
 
 **To create an OpenSearch Serverless data access policy**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home )\.
 
 1. In the left navigation pane, expand **Serverless** and choose **Data access control**\.
 
@@ -193,10 +191,10 @@ In order to select principals from the dropdown menus, you must have the `iam:Li
 
 1. \(Optional\) Configure additional rules for the policy\.
 
-1. Choose **Create**\.
+1. Choose **Create**\. There might be about a minute of lag time between when you create the policy and when the permissions are enforced\. If it takes more than 5 minutes, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
 
-**Note**  
-There might be about a minute of lag time between when you create the policy and when the permissions are enforced\. If it takes more than 5 minutes, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
+**Important**  
+If your policy only includes index permissions \(and no collection permissions\), you might still see a message for matching collections stating `Collection cannot be accessed yet. Configure data access policies so that users can access the data within this collection`\. You can ignore this warning\. Allowed principals can still perform their assigned index\-related operations on the collection\.
 
 ## Creating data access policies \(AWS CLI\)<a name="serverless-data-access-cli"></a>
 
