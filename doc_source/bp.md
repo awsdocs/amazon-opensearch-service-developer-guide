@@ -267,6 +267,10 @@ OpenSearch Service is always adopting new Amazon EC2 [instances types](supported
 
 Avoid using T2 or `t3.small` instances for production domains because they can become unstable under sustained heavy load\. `t3.medium` instances are an option for small production workloads \(both as data nodes and as dedicated master nodes\)\.
 
+### Use the latest EBS gp3 volumes
+
+Amazon OpenSearch Service data nodes require low latency and high throughput storage to provide fast indexing and query. By using gp3 EBS volumes, you get higher baseline performance (IOPS and throughput) at a 9.6% lower cost than with the previously-offered gp2 EBS volume type. You can provision additional IOPS and throughput independent of volume size using gp3. These volumes are also more stable than previous generation volumes as they do not use burst credits. The gp3 volume type also  doubles the per-data-node volume size limits of the gp2 volume type. With these larger volumes, you can reduce the cost of passive data by increasing the amount of storage per data node.
+
 ### Use UltraWarm and cold storage for time\-series log data<a name="bp-cost-optimization-uw-cold"></a>
 
 If you're using OpenSearch for log analytics, move your data to UltraWarm or cold storage to reduce costs\. Use Index State Management \(ISM\) to migrate data between storage tiers and manage data retention\.
