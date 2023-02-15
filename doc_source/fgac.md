@@ -249,7 +249,7 @@ Rather than individual permissions, you can often achieve your desired security 
 
 Document\-level security lets you restrict which documents in an index a user can see\. When creating a role, specify an index pattern and an OpenSearch query\. Any users that you map to that role can see only the documents that match the query\. Document\-level security affects [the number of hits that you receive when you search](#fgac-example)\.
 
-For more information, see [Document\-level security](https://opensearch.org/docs/security-plugin/access-control/document-level-security/)\.
+For more information, see [Document\-level security](https://opensearch.org/docs/latest/security/access-control/document-level-security/)\.
 
 #### Field\-level security<a name="fgac-field-level"></a>
 
