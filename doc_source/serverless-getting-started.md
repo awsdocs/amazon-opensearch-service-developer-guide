@@ -84,7 +84,7 @@ A collection is a group of OpenSearch indexes that work together to support a sp
 
 ## Step 3: Upload and search data<a name="serverless-gsg-index"></a>
 
-You can upload data to an OpenSearch Serverless collection using Postman or curl\. For brevity, these examples use **Dev Tools** within the OpenSearch Dashboards console\.
+You can upload data to an OpenSearch Serverless collection using [Postman](https://www.postman.com/downloads/) or curl\. For brevity, these examples use **Dev Tools** within the OpenSearch Dashboards console\.
 
 **To index and search data in the movies collection**
 
