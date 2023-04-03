@@ -38,3 +38,6 @@ OpenSearch Service offers previous generation instance types for users who have 
 
 **Tip**  
 We often recommend different instance types for [dedicated master nodes](managedomains-dedicatedmasternodes.md) and data nodes\.
+
+**Notes**
+If you are using [OpenSearch in a Amplify Project](https://docs.amplify.aws/cli/graphql/search-and-result-aggregations/#set-up-opensearch-for-production-environments) you should replace `.search` to `.elasticsearch`
