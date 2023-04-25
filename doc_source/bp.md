@@ -277,7 +277,7 @@ If you're using OpenSearch for log analytics, move your data to UltraWarm or col
 
 [UltraWarm](ultrawarm.md) provides a cost\-effective way to store large amounts of read\-only data in OpenSearch Service\. UltraWarm uses Amazon S3 for storage, which means that the data is immutable and only one copy is needed\. You only pay for storage that's equivalent to the size of the primary shards in your indexes\. Latencies for UltraWarm queries grow with the amount of S3 data that's needed to service the query\. After the data has been cached on the nodes, queries to UltraWarm indexes perform similar to queries to hot indexes\.
 
-[Cold storage](cold-storage.md) is also backed by S3\. When you need to query cold data, you can selectively attach it to existing UltraWarm nodes\. Cold data incurs the same managed storage cost as UltraWarm, but objects in cold storage don't consume UltraWarm node resources\. Therefore, cold storage provides a significant amount amount of storage capacity without impacting UltraWarm node size or count\.
+[Cold storage](cold-storage.md) is also backed by S3\. When you need to query cold data, you can selectively attach it to existing UltraWarm nodes\. Cold data incurs the same managed storage cost as UltraWarm, but objects in cold storage don't consume UltraWarm node resources\. Therefore, cold storage provides a significant amount of storage capacity without impacting UltraWarm node size or count\.
 
 UltraWarm becomes cost\-effective when you have roughly 2\.5 TiB of data in hot storage\. Monitor your fill rate and plan to move indexes to UltraWarm before you reach that volume of data\.
 
