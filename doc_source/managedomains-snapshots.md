@@ -172,7 +172,7 @@ print(r.text)
 # url = host + path
 #
 # payload = {
-#   "indices": "-.kibana*,-.opendistro_security",
+#   "indices": "-.kibana*,-.opendistro_security,-.opendistro-*",
 #   "include_global_state": False
 # }
 #
