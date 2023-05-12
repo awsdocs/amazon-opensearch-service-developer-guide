@@ -1,4 +1,6 @@
-# Encryption at rest for Amazon OpenSearch Serverless<a name="serverless-encryption"></a>
+# Encryption in Amazon OpenSearch Serverless<a name="serverless-encryption"></a>
+
+## Encryption at rest<a name="serverless-encryption-at-rest"></a>
 
 Each Amazon OpenSearch Serverless collection that you create is protected with encryption of data at rest, a security feature that helps prevent unauthorized access to your data\. Encryption at rest uses AWS Key Management Service \(AWS KMS\) to store and manage your encryption keys\. It uses the Advanced Encryption Standard algorithm with 256\-bit keys \(AES\-256\) to perform the encryption\.
 
@@ -14,7 +16,7 @@ Each Amazon OpenSearch Serverless collection that you create is protected with e
 + [Updating encryption policies](#serverless-encryption-update)
 + [Deleting encryption policies](#serverless-encryption-delete)
 
-## Encryption policies<a name="serverless-encryption-policies"></a>
+### Encryption policies<a name="serverless-encryption-policies"></a>
 
 With encryption policies, you can manage many collections at scale by automatically assigning an encryption key to newly created collections that match a specific name or pattern\.
 
@@ -55,19 +57,18 @@ If rules from multiple policies match a collection, the more specific rule is us
 
 You can't use a name or a prefix in a policy if it already exists in another policy\. OpenSearch Serverless displays an error if you try to configure identical resource patterns in different encryption policies\.
 
-## Considerations<a name="serverless-encryption-considerations"></a>
+### Considerations<a name="serverless-encryption-considerations"></a>
 
 Consider the following when you configure encryption for your collections:
 + Encryption at rest is *required* for all serverless collections\.
-+ You have the option to use a customer managed key or an AWS owned key\. All AWS owned keys are unique for each collection\. If you choose a customer managed key, we recommend that you enable [automatic key rotation](https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html)\.
++ You have the option to use a customer managed key or an AWS owned key\. If you choose a customer managed key, we recommend that you enable [automatic key rotation](https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html)\.
 + You can't change the encryption key for a collection after the collection is created\. Carefully choose which AWS KMS to use the first time you set up a collection\.
 + A collection can only match a single encryption policy\.
 + Collections with unique KMS keys can't share OpenSearch Compute Units \(OCUs\) with other collections\. Each collection with a unique key requires its own 4 OCUs\.
-+ The KMS key key that you specify must be within the current AWS account\. Cross\-account access isn't supported\.
-+ If you update the AWS KMS key in an encryption policy, the change doesn't affect existing matching collections with KMS keys already assigned\.
++ If you update the KMS key in an encryption policy, the change doesn't affect existing matching collections with KMS keys already assigned\.
 + OpenSearch Serverless doesn't explicitly check user permissions on customer managed keys\. If a user has permissions to access a collection through a data access policy, they will be able to ingest and query the data that is encrypted with the associated key\.
 
-## Permissions required<a name="serverless-encryption-permissions"></a>
+### Permissions required<a name="serverless-encryption-permissions"></a>
 
 Encryption at rest for OpenSearch Serverless uses the following AWS Identity and Access Management \(IAM\) permissions\. You can specify IAM conditions to restrict users to specific collections\.
 + `aoss:CreateSecurityPolicy` – Create an encryption policy\.
@@ -108,7 +109,7 @@ The following sample identity\-based access policy provides the minimum permissi
 }
 ```
 
-## Key policy for a customer managed key<a name="serverless-customer-cmk-policy"></a>
+### Key policy for a customer managed key<a name="serverless-customer-cmk-policy"></a>
 
 If you select a [customer managed key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk) to protect a collection, OpenSearch Serverless gets permission to use the KMS key on behalf of the principal who makes the selection\. That principal, a user or role, must have the permissions on the KMS key that OpenSearch Serverless requires\. You can provide these permissions in a [key policy](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) or an [IAM policy](https://docs.aws.amazon.com/kms/latest/developerguide/iam-policies.html)\.
 
@@ -159,7 +160,7 @@ If you want to keep your key exclusive to OpenSearch Serverless, you can add the
 
 For more information, see [Using key policies in AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) in the *AWS Key Management Service Developer Guide*\.
 
-## How OpenSearch Serverless uses grants in AWS KMS<a name="serverless-encryption-grants"></a>
+### How OpenSearch Serverless uses grants in AWS KMS<a name="serverless-encryption-grants"></a>
 
 OpenSearch Serverless requires a [grant](https://docs.aws.amazon.com/kms/latest/developerguide/grants.html) in order to use a customer managed key\.
 
@@ -174,9 +175,9 @@ You can revoke access to the grant, or remove the service's access to the custom
 
 OpenSearch Serverless retires grants in an asynchronous workflow when a given customer managed key isn't associated with any security policies or collections\.
 
-## Creating encryption policies \(console\)<a name="serverless-encryption-console"></a>
+### Creating encryption policies \(console\)<a name="serverless-encryption-console"></a>
 
-In an encryption policy, you specify an AWS KMS key and a series of collection patterns that the policy will apply to\. Any new collections that match one of the patterns defined in the policy will be assigned the corresponding KMS key when you create the collection\. We recommend that you create encryption policies *before* you start creating collections\.
+In an encryption policy, you specify an KMS key and a series of collection patterns that the policy will apply to\. Any new collections that match one of the patterns defined in the policy will be assigned the corresponding KMS key when you create the collection\. We recommend that you create encryption policies *before* you start creating collections\.
 
 **To create an OpenSearch Serverless encryption policy**
 
@@ -192,17 +193,17 @@ In an encryption policy, you specify an AWS KMS key and a series of collection p
 
    You can also provide a prefix such as `Logs*`, which assigns the policy to any new collections with names beginning with `Logs`\. By using wildcards, you can manage encryption settings for multiple collections at scale\.
 
-1. Under **Encryption**, choose an AWS KMS key to use\.
+1. Under **Encryption**, choose an KMS key to use\.
 
 1. Choose **Create**\.
 
-### Next step: Create collections<a name="serverless-encryption-next"></a>
+#### Next step: Create collections<a name="serverless-encryption-next"></a>
 
 After you configure one or more encryption policies, you can start creating collections that match the rules defined in those policies\. For instructions, see [Creating collections](serverless-manage.md#serverless-create)\.
 
 In the **Encryptions** step of collection creation, OpenSearch Serverless informs you that the name that you entered matches the pattern defined in an encryption policy, and automatically assigns the corresponding KMS key to the collection\. If the resource pattern contains a wildcard \(\*\), you can choose to override the match and select your own key\.
 
-## Creating encryption policies \(AWS CLI\)<a name="serverless-encryption-cli"></a>
+### Creating encryption policies \(AWS CLI\)<a name="serverless-encryption-cli"></a>
 
 To create an encryption policy using the OpenSearch Serverless API operations, you specify resource patterns and an encryption key in JSON format\. The [CreateSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_CreateSecurityPolicy.html) request accepts both inline policies and \.json files\.
 
@@ -252,7 +253,7 @@ aws opensearchserverless create-security-policy \
 
 Then, use the [CreateCollection](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_CreateCollection.html) API operation to create one or more collections that match one of the resource patterns\.
 
-## Viewing encryption policies<a name="serverless-encryption-list"></a>
+### Viewing encryption policies<a name="serverless-encryption-list"></a>
 
 Before you create a collection, you might want to preview the existing encryption policies in your account to see which one has a resource pattern that matches your collection's name\. The following [ListSecurityPolicies](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_ListSecurityPolicies.html) request lists all encryption policies in your account:
 
@@ -280,9 +281,9 @@ The request returns information about all configured encryption policies\. Use t
 
 To view detailed information about a specific policy, including the KMS key, use the [GetSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_GetSecurityPolicy.html) command\.
 
-## Updating encryption policies<a name="serverless-encryption-update"></a>
+### Updating encryption policies<a name="serverless-encryption-update"></a>
 
-If you update the AWS KMS key in an encryption policy, the change only applies to the newly created collections that match the configured name or pattern\. It doesn't affect existing collections that have KMS keys already assigned\. 
+If you update the KMS key in an encryption policy, the change only applies to the newly created collections that match the configured name or pattern\. It doesn't affect existing collections that have KMS keys already assigned\. 
 
 The same applies to policy matching rules\. If you add, modify, or delete a rule, the change only applies to newly created collections\. Existing collections don't lose their assigned KMS key if you modify a policy's rules so that it no longer matches a collection's name\.
 
@@ -298,12 +299,16 @@ aws opensearchserverless update-security-policy \
     --policy file://my-new-policy.json
 ```
 
-## Deleting encryption policies<a name="serverless-encryption-delete"></a>
+### Deleting encryption policies<a name="serverless-encryption-delete"></a>
 
-When you delete an encryption policy, any collections that are currently using the AWS KMS key defined in the policy are not affected\. To delete a policy in the OpenSearch Serverless console, select the policy and choose **Delete**\.
+When you delete an encryption policy, any collections that are currently using the KMS key defined in the policy are not affected\. To delete a policy in the OpenSearch Serverless console, select the policy and choose **Delete**\.
 
 You can also use the [DeleteSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_DeleteSecurityPolicy.html) operation:
 
 ```
 aws opensearchserverless delete-security-policy --name my-policy --type encryption
 ```
+
+## Encryption in transit<a name="serverless-encryption-in-transit"></a>
+
+Within OpenSearch Serverless, all paths in a collection are encrypted in transit using Transport Layer Security 1\.2 \(TLS\) with an industry\-standard AES\-256 cipher\. Access to all APIs and Dashboards for Opensearch is also through TLS 1\.2 \. TLS is a set of industry\-standard cryptographic protocols used for encrypting information that is exchanged over the network\.

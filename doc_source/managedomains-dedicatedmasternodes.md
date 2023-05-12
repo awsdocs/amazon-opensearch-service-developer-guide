@@ -17,7 +17,7 @@ The following illustration shows an OpenSearch Service domain with 10 instances\
 
 ## Choosing the number of dedicated master nodes<a name="dedicatedmasternodes-number"></a>
 
-We recommend that you add **three** dedicated master nodes to each production OpenSearch Service domain\. Never choose an even number of dedicated master nodes\. Consider the following when choosing the number of dedicated master nodes:
+We recommend that you use Multi\-AZ with Standby, which adds **three** dedicated master nodes to each production OpenSearch Service domain\. If you deploy with Multi\-AZ without Standby or single\-AZ, we still recommend three dedicated master nodes\. Never choose an even number of dedicated master nodes\. Consider the following when choosing the number of dedicated master nodes:
 + One dedicated master node is explicitly prohibited by OpenSearch Service because you have no backup in the event of a failure\. You receive a validation exception if you try to create a domain with only one dedicated master node\.
 + If you have two dedicated master nodes, your cluster doesn't have the necessary quorum of nodes to elect a new master node in the event of a failure\.
 
@@ -35,7 +35,7 @@ If your cluster doesn't have the necessary quorum to elect a new master node, wr
 
 ## Choosing instance types for dedicated master nodes<a name="dedicatedmasternodes-instance"></a>
 
-Although dedicated master nodes don't process search and query requests, their size is highly correlated with the number of instances, indexes, and shards that they can manage\. For production clusters, we recommend the following instance types for dedicated master nodes\. 
+Although dedicated master nodes don't process search and query requests, their size is highly correlated with the instance size and number of instances, indexes, and shards that they can manage\. For production clusters, we recommend, at a minimum, the following instance types for dedicated master nodes\. 
 
 These recommendations are based on typical workloads and can vary based on your needs\. Clusters with many shards or field mappings can benefit from larger instance types\. Monitor the [dedicated master node metrics](cloudwatch-alarms.md) to see if you need to use a larger instance type\.
 
@@ -44,7 +44,7 @@ These recommendations are based on typical workloads and can vary based on your 
 | --- | --- | --- | --- | 
 |  1–10  | 8 GiB | 10K |  `m5.large.search` or `m6g.large.search`  | 
 |  11–30  | 16 GiB | 30K |  `c5.2xlarge.search` or `c6g.2xlarge.search`  | 
-| 31–75 | 32 GiB | 40K |  `c5.4xlarge.search` or `c6g.4xlarge.search`  | 
+| 31–75 | 32 GiB | 40K |  `r5.2xlarge.search` or `r6g.2xlarge.search`  | 
 | 76 – 125 | 64 GiB | 75K |  `r5.2xlarge.search` or `r6g.2xlarge.search`  | 
 |  126 – 200  | 128 GiB | 75K |  `r5.4xlarge.search` or `r6g.4xlarge.search`  | 
 + For information about how certain configuration changes can affect dedicated master nodes, see [Making configuration changes in Amazon OpenSearch Service](managedomains-configuration-changes.md)\.

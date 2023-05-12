@@ -9,6 +9,7 @@ Use the following table to find the version of the SQL plugin that's supported b
 
 | OpenSearch version | SQL plugin version | Notable features | 
 | --- | --- | --- | 
+| 2\.5\.0 | [2\.5\.0\.0](https://github.com/opensearch-project/sql/releases/tag/2.5.0.0) |    | 
 | 2\.3\.0 | [2\.3\.0\.0](https://github.com/opensearch-project/sql/releases/tag/2.3.0.0) |  Add `maketime` and `makedate` datetime functions  | 
 | 1\.3\.0 | [1\.3\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.3.0.0) |  Support default query limit size, and IN clause to select from within a value list  | 
 | 1\.2\.0 | [1\.2\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.2.0.0) |  Add new protocol for visualization response format  | 
@@ -81,7 +82,7 @@ The SQL CLI is a standalone Python application that you can launch with the `ope
 
 ## JDBC driver<a name="jdbc-driver"></a>
 
-The Java Database Connectivity \(JDBC\) driver lets you integrate OpenSearch Service domains with your favorite business intelligence \(BI\) applications\. To download the driver, click [here](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar)\. For more information, see the [GitHub repository](https://github.com/opensearch-project/sql/tree/main/sql-jdbc)\.
+The Java Database Connectivity \(JDBC\) driver lets you integrate OpenSearch Service domains with your favorite business intelligence \(BI\) applications\. To download the driver, click [here](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar)\. For more information, see the [GitHub repository](https://github.com/opensearch-project/sql-jdbc)\.
 
 The following tables summarize version compatibility for the driver\.
 
@@ -90,6 +91,7 @@ The following tables summarize version compatibility for the driver\.
 
 | OpenSearch version | JDBC driver version | 
 | --- | --- | 
+| 2\.5 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 2\.3 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 1\.3 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 1\.2 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
@@ -113,6 +115,6 @@ The following tables summarize version compatibility for the driver\.
 
 ## ODBC driver<a name="odbc"></a>
 
-The Open Database Connectivity \(ODBC\) driver is a read\-only ODBC driver for Windows and macOS that lets you connect business intelligence and data visualization applications like [Tableau](https://github.com/opensearch-project/sql/blob/main/sql-odbc/docs/user/tableau_support.md), [Microsoft Excel](https://github.com/opensearch-project/sql/blob/main/sql-odbc/docs/user/microsoft_excel_support.md), and [Power BI](https://github.com/opensearch-project/sql/blob/main/sql-odbc/docs/user/power_bi_support.md) to the SQL plugin\.
+The Open Database Connectivity \(ODBC\) driver is a read\-only ODBC driver for Windows and macOS that lets you connect business intelligence and data visualization applications like [Microsoft Excel](https://github.com/opensearch-project/sql-odbc/blob/main/docs/user/microsoft_excel_support.md) to the SQL plugin\.
 
-The drivers are available for download on the OpenSearch [artifacts page](https://github.com/opensearch-project/sql/blob/main/sql-odbc/docs/user/tableau_support.md)\. For information about installing the driver, see the [SQL repository on GitHub](https://github.com/opensearch-project/sql/tree/main/sql-odbc)\.
+The drivers are available for download on the OpenSearch [artifacts page](https://opensearch.org/artifacts/)\. For information about installing the driver, see the [SQL repository on GitHub](https://github.com/opensearch-project/sql-odbc)\.

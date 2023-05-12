@@ -4,19 +4,23 @@ This tutorial walks you through the steps described in the [console getting star
 
 You'll complete the following steps in this tutorial:
 
-1. Configure permissions
+1. Create an IAM permissions policy
+
+1. Attatch the IAM policy to an IAM role
 
 1. Create an encryption policy
 
-1. Configure network settings
+1. Create a network policy
 
 1. Create a collection
 
-1. Configure data access
+1. Configure a data access policy
 
-1. Upload and search data
+1. Retrieve the collection endpoint
 
-1. Delete the collection
+1. Upload data to your connection
+
+1. Search data in your collection
 
 The goal of this tutorial is to set up a single OpenSearch Serverless collection with fairly simple encryption, network, and data access settings\. For example, we'll configure public network access, an AWS managed key for encryption, and a simplified data access policy that grants minimal permissions to a single user\. 
 
@@ -55,11 +59,11 @@ You can skip this step if you're already using a more broad identity\-based poli
    }
    ```
 
-1. Attach `TutorialPolicy` to the IAM user who will index and search data in the collection\. We'll name the user `TutorialUser`:
+1. Attach `TutorialPolicy` to the IAM role who will index and search data in the collection\. We'll name the user `TutorialRole`:
 
    ```
-   aws iam attach-user-policy \
-     --user-name TutorialUser \
+   aws iam attach-role-policy \
+     --role-name TutorialRole \
      --policy-arn arn:aws:iam::123456789012:policy/TutorialPolicy
    ```
 
@@ -162,13 +166,13 @@ You can skip this step if you're already using a more broad identity\-based poli
    }
    ```
 
-1. Create a [data access policy](serverless-data-access.md) that provides the minimum permissions to index and search data in the *books* collection\. Replace the principal ARN with the ARN of `TutorialUser` from step 1:
+1. Create a [data access policy](serverless-data-access.md) that provides the minimum permissions to index and search data in the *books* collection\. Replace the principal ARN with the ARN of `TutorialRole` from step 1:
 
    ```
    aws opensearchserverless create-access-policy \
      --name books-policy \
      --type data \
-     --policy "[{\"Rules\":[{\"ResourceType\":\"index\",\"Resource\":[\"index\/books\/books-index\"],\"Permission\":[\"aoss:CreateIndex\",\"aoss:DescribeIndex\",\"aoss:ReadDocument\",\"aoss:WriteDocument\",\"aoss:UpdateIndex\",\"aoss:DeleteIndex\"]}],\"Principal\":[\"arn:aws:iam::123456789012:user\/TutorialUser\"]}]"
+     --policy "[{\"Rules\":[{\"ResourceType\":\"index\",\"Resource\":[\"index\/books\/books-index\"],\"Permission\":[\"aoss:CreateIndex\",\"aoss:DescribeIndex\",\"aoss:ReadDocument\",\"aoss:WriteDocument\",\"aoss:UpdateIndex\",\"aoss:DeleteIndex\"]}],\"Principal\":[\"arn:aws:iam::123456789012:role\/TutorialRole\"]}]"
    ```
 
    **Sample response**
@@ -198,7 +202,7 @@ You can skip this step if you're already using a more broad identity\-based poli
                        }
                    ],
                    "Principal": [
-                       "arn:aws:iam::123456789012:user/TutorialUser"
+                       "arn:aws:iam::123456789012:role/TutorialRole"
                    ]
                }
            ],
@@ -208,7 +212,7 @@ You can skip this step if you're already using a more broad identity\-based poli
    }
    ```
 
-   `TutorialUser` should now be able to index and search documents in the *books* collection\. 
+   `TutorialRole` should now be able to index and search documents in the *books* collection\. 
 
 1. To make calls to the OpenSearch API, you need the collection endpoint\. Send the following request to retrieve the `collectionEndpoint` parameter:
 
@@ -241,7 +245,7 @@ You won't be able to see the collection endpoint until the collection status cha
 
 1. Use an HTTP tool such as [Postman](https://www.getpostman.com/) or curl to index data into the *books* collection\. We'll create an index called *books\-index* and add a single document\.
 
-   Send the following request to the collection endpoint that you retrieved in the previous step, using the credentials for `TutorialUser`\.
+   Send the following request to the collection endpoint that you retrieved in the previous step, using the credentials for `TutorialRole`\.
 
    ```
    PUT https://8kw362bpwg4gx9b2f6e0.us-east-1.aoss.amazonaws.com/books-index/_doc/1

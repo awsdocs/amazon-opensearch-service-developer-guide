@@ -19,3 +19,4 @@ This documentation helps you understand how to apply the shared responsibility m
 + [SAML authentication for OpenSearch Dashboards](saml.md)
 + [Configuring Amazon Cognito authentication for OpenSearch Dashboards](cognito-auth.md)
 + [Using service\-linked roles for Amazon OpenSearch Service](slr.md)
++ [Security Analytics for Amazon OpenSearch Service](security-analytics.md)

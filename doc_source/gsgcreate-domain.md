@@ -15,17 +15,21 @@ An OpenSearch Service domain is synonymous with an OpenSearch cluster\. Domains 
 
 1. Provide a name for the domain\. The examples in this tutorial use the name *movies*\.
 
-1. Ignore the **Custom endpoint** setting\.
+1. For the domain creation method, choose **Standard create**\.
+**Note**  
+To quickly configure a production domain with best practices, you can choose **Easy create**\. For the development and testing purposes of this tutorial, we'll use **Standard create**\.
 
-1. For the deployment type, choose **Development and testing**\.
+1. For templates, choose **Dev/test**\.
+
+1. For the deployment option, choose **Domain with standby**\.
 
 1. For **Version**, choose the latest version\.
 
-1. Under **Data nodes**, change the instance type to `t3.small.search` and keep the default value of three nodes\.
+1. For now, ignore the **Data nodes**, **Warm and cold data storage**, **Dedicated master nodes**, **Snapshot configuration**, and **Custom endpoint** sections\.
 
 1. For simplicity in this tutorial, use a public access domain\. Under **Network**, choose **Public access**\.
 
-1. In the fine\-grained access control settings, choose **Create master user**\. Provide a user name and password\.
+1. In the fine\-grained access control settings, keep the **Enable fine\-grained access control** check box selected\. Select **Create master user** and provide a username and password\.
 
 1. For now, ignore the **SAML authentication** and **Amazon Cognito authentication** sections\.
 

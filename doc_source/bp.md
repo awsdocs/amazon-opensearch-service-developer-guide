@@ -24,7 +24,7 @@ OpenSearch Service emits performance metrics to Amazon CloudWatch\. Regularly re
 
 ### Enable log publishing<a name="bp-monitoring-logs"></a>
 
-OpenSearch Service exposes OpenSearch error logs, search slow logs, indexing slow logs, and audit logs in Amazon CloudWatch Logs\. Search slow logs, indexing slow logs, and error logs are useful for troubleshooting performance and stability issues\. Audit logs, which are only available if you enable [fine\-grained access control](fgac.md) to track user activity\. For more information, see [Logs](https://opensearch.org/docs/latest/opensearch/logs/) in the OpenSearch documentation\.
+OpenSearch Service exposes OpenSearch error logs, search slow logs, indexing slow logs, and audit logs in Amazon CloudWatch Logs\. Search slow logs, indexing slow logs, and error logs are useful for troubleshooting performance and stability issues\. Audit logs, which are only available if you enable [fine\-grained access control](fgac.md) to track user activity\. For more information, see [Logs](https://opensearch.org/docs/latest/monitoring-your-cluster/logs/) in the OpenSearch documentation\.
 
 Search slow logs and indexing slow logs are an important tool for understanding and troubleshooting the performance of your search and indexing operations\. [Enable search and index slow log delivery](createdomain-configure-slow-logs.md#createdomain-configure-slow-logs-console) for all production domains\. You must also [configure logging thresholds](createdomain-configure-slow-logs.md#createdomain-configure-slow-logs-indices)—otherwise, CloudWatch won't capture the logs\.
 
@@ -92,13 +92,13 @@ You can take manual snapshots for cluster recovery, or to move data from one clu
 
 [Dedicated master nodes](managedomains-dedicatedmasternodes.md) improve cluster stability\. A dedicated master node performs cluster management tasks, but doesn't hold index data or respond to client requests\. This offloading of cluster management tasks increases the stability of your domain and makes it possible for some [configuration changes](managedomains-configuration-changes.md) to happen without downtime\.
 
-Enable and use three dedicated master nodes for optimal domain stability across three Availability Zones\. For instance type recommendations, see [Choosing instance types for dedicated master nodes](managedomains-dedicatedmasternodes.md#dedicatedmasternodes-instance)\.
+Enable and use three dedicated master nodes for optimal domain stability across three Availability Zones\. Deploying with [Multi\-AZ with Standby](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html#managedomains-za-standby) configures three dedicated master nodes for you\. For instance type recommendations, see [Choosing instance types for dedicated master nodes](managedomains-dedicatedmasternodes.md#dedicatedmasternodes-instance)\.
 
 ### Deploy across multiple Availability Zones<a name="bp-stability-az"></a>
 
-To prevent data loss and minimize cluster downtime in the event of a service disruption, you can distribute nodes across two or three [Availability Zones](managedomains-multiaz.md) in the same AWS Region\. Availability Zones are isolated locations within each Region\. With a two\-AZ configuration, losing one Availability Zone means that you lose half of all domain capacity\. Moving to three Availability Zones further reduces the impact of losing a single Availability Zone\.
+To prevent data loss and minimize cluster downtime in the event of a service disruption, you can distribute nodes across two or three [Availability Zones](managedomains-multiaz.md) in the same AWS Region\. Best practice is to deploy using [Multi\-AZ with Standby](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html#managedomains-za-standby), which configures three Availability Zones, with two zones active and one acting as a standby, and with and two replica shards per index\. This configuration lets OpenSearch Service distribute replica shards to different AZs than their corresponding primary shards\. There are no cross\-AZ data transfer charges for cluster communications between Availability Zones\.
 
-Deploy mission\-critical domains across three Availability Zones and two replica shards per index\. This configuration lets OpenSearch Service distribute replica shards to different AZs than their corresponding primary shards\. There are no cross\-AZ data transfer charges for cluster communications between Availability Zones\.
+Availability Zones are isolated locations within each Region\. With a two\-AZ configuration, losing one Availability Zone means that you lose half of all domain capacity\. Moving to three Availability Zones further reduces the impact of losing a single Availability Zone\.
 
 ### Control ingest flow and buffering<a name="bp-stability-ingest"></a>
 
@@ -257,6 +257,10 @@ Node\-to\-node encryption provides an additional layer of security on top of the
 
 If your domain stores sensitive data, [enable node\-to\-node encryption](ntn.md)\.
 
+### Monitor with AWS Security Hub<a name="bp-security-hub"></a>
+
+Monitor your usage of OpenSearch Service as it relates to security best practices by using [AWS Security Hub](https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html)\. Security Hub uses security controls to evaluate resource configurations and security standards to help you comply with various compliance frameworks\. For more information about using Security Hub to evaluate OpenSearch Service resources, see [Amazon OpenSearch Service controls](https://docs.aws.amazon.com/securityhub/latest/userguide/opensearch-controls.html) in the *AWS Security Hub User Guide*\. 
+
 ## Cost optimization<a name="bp-cost-optimization"></a>
 
 The following best practices apply to optimizing and saving on your OpenSearch Service costs\.
@@ -267,9 +271,9 @@ OpenSearch Service is always adopting new Amazon EC2 [instances types](supported
 
 Avoid using T2 or `t3.small` instances for production domains because they can become unstable under sustained heavy load\. `t3.medium` instances are an option for small production workloads \(both as data nodes and as dedicated master nodes\)\.
 
-### Use the latest EBS gp3 volumes
+### Use the latest Amazon EBS gp3 volumes<a name="bp-cost-optimization-gp3"></a>
 
-Amazon OpenSearch Service data nodes require low latency and high throughput storage to provide fast indexing and query. By using gp3 EBS volumes, you get higher baseline performance (IOPS and throughput) at a 9.6% lower cost than with the previously-offered gp2 EBS volume type. You can provision additional IOPS and throughput independent of volume size using gp3. These volumes are also more stable than previous generation volumes as they do not use burst credits. The gp3 volume type also  doubles the per-data-node volume size limits of the gp2 volume type. With these larger volumes, you can reduce the cost of passive data by increasing the amount of storage per data node.
+OpenSearch data nodes require low latency and high throughput storage to provide fast indexing and query\. By using Amazon EBS gp3 volumes, you get higher baseline performance \(IOPS and throughput\) at a 9\.6% lower cost than with the previously\-offered Amazon EBS gp2 volume type\. You can provision additional IOPS and throughput independent of volume size using gp3\. These volumes are also more stable than previous generation volumes as they do not use burst credits\. The gp3 volume type also doubles the per\-data\-node volume size limits of the gp2 volume type\. With these larger volumes, you can reduce the cost of passive data by increasing the amount of storage per data node\.
 
 ### Use UltraWarm and cold storage for time\-series log data<a name="bp-cost-optimization-uw-cold"></a>
 

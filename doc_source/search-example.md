@@ -26,22 +26,142 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/_bulk
 ...
 ```
 
-For instructions, see [Option 2: Upload multiple documents](gsgupload-data.md#gsgmultiple-document)\.
+Note that the above is an example command with a small subset of the available data\. To perform the `_bulk` operation, you need to copy and paste the entire contents of the `sample-movies` file\. For futher instructions, see [Option 2: Upload multiple documents](gsgupload-data.md#gsgmultiple-document)\.
 
-**Note**  
-The above is an example command\. Don't copy and paste it directly when performing the `_bulk` operation\.
+You can also use the following curl command to achieve the same result: 
 
-## Step 2: Create the API in API Gateway<a name="search-example-api"></a>
+```
+curl -XPOST -u 'master-user:master-user-password' 'domain-endpoint/_bulk' —data-binary @bulk_movies.json -H 'Content-Type: application/json'
+```
+
+## Step 2: Create and deploy the Lambda function<a name="search-example-lambda"></a>
+
+Before you create your API in API Gateway, create the Lambda function that it passes requests to\.
+
+### Create the Lambda function<a name="sample-lamdba-python"></a>
+
+In this solution, API Gateway passes requests to a Lambda function, which queries OpenSearch Service and returns results\. Because this sample function uses external libraries, you need to create a deployment package and upload it to Lambda\.
+
+**To create the deployment package**
+
+1. Open a command prompt and create a `my-openseach-function` project directory\. For example, on macOS:
+
+   ```
+   mkdir my-opensearch-function
+   ```
+
+1. Navigate to the `my-sourcecode-function` project directory\.
+
+   ```
+   cd my-opensearch-function
+   ```
+
+1. Copy the contents of the following sample Python code and save it in a new file named `opensearch-lambda.py`\. Add your Region and host endpoint to the file\.
+
+   ```
+   import boto3
+   import json
+   import requests
+   from requests_aws4auth import AWS4Auth
+   
+   region = '' # For example, us-west-1
+   service = 'es'
+   credentials = boto3.Session().get_credentials()
+   awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
+   
+   host = '' # The OpenSearch domain endpoint with https:// and without a trailing slash
+   index = 'movies'
+   url = host + '/' + index + '/_search'
+   
+   # Lambda execution starts here
+   def lambda_handler(event, context):
+   
+       # Put the user query into the query DSL for more accurate search results.
+       # Note that certain fields are boosted (^).
+       query = {
+           "size": 25,
+           "query": {
+               "multi_match": {
+                   "query": event['queryStringParameters']['q'],
+                   "fields": ["title^4", "plot^2", "actors", "directors"]
+               }
+           }
+       }
+   
+       # Elasticsearch 6.x requires an explicit Content-Type header
+       headers = { "Content-Type": "application/json" }
+   
+       # Make the signed HTTP request
+       r = requests.get(url, auth=awsauth, headers=headers, data=json.dumps(query))
+   
+       # Create the response and add some extra content to support CORS
+       response = {
+           "statusCode": 200,
+           "headers": {
+               "Access-Control-Allow-Origin": '*'
+           },
+           "isBase64Encoded": False
+       }
+   
+       # Add the search results to the response
+       response['body'] = r.text
+       return response
+   ```
+
+1. Install the external libraries to a new `package` directory\.
+
+   ```
+   pip3 install --target ./package boto3
+   pip3 install --target ./package requests
+   pip3 install --target ./package requests_aws4auth
+   ```
+
+1. Create a deployment package with the installed library at the root\. The following command generates a `my-deployment-package.zip` file in your project directory\. 
+
+   ```
+   cd package
+   zip -r ../my-deployment-package.zip .
+   ```
+
+1. Add the `opensearch-lambda.py` file to the root of the zip file\.
+
+   ```
+   cd ..
+   zip my-deployment-package.zip opensearch-lambda.py
+   ```
+
+For more information about creating Lambda functions and deployment packages, see [Deploy Python Lambda functions with \.zip file archives](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Create the Lambda deployment package](integrations.md#integrations-s3-lambda-deployment-package) in this guide\.
+
+To create your function using the Lambda console
+
+1. Navigate to the Lambda console at [https://console\.aws\.amazon\.com/lambda/home](https://console.aws.amazon.com/lambda/home )\. On the left navigation pane, choose **Functions**\.
+
+1. Select **Create function**\.
+
+1. Configure the following fields:
+   + Function name: opensearch\-function
+   + Runtime: Python 3\.9
+   + Architecture: x86\_64
+
+   Keep all other default options and choose **Create function**\. 
+
+1. In the **Code source** section of the function summary page, choose the **Upload from** dropdown and select **\.zip file**\. Locate the `my-deployment-package.zip` file that you created and choose **Save**\.
+
+1. The *handler* is the method in your function code that processes events\. Under **Runtime settings**, choose **Edit** and change the handler name according to the name of the file in your deployment package where the Lambda function is located\. Since your file is named `opensearch-lambda.py`, rename the handler to `opensearch-lambda.lambda_handler`\. For more information, see [Lambda function handler in Python](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html)\.
+
+## Step 3: Create the API in API Gateway<a name="search-example-api"></a>
 
 Using API Gateway lets you create a more limited API and simplifies the process of interacting with the OpenSearch `_search` API\. API Gateway lets you enable security features like Amazon Cognito authentication and request throttling\. Perform the following steps to create and deploy an API:
 
 ### Create and configure the API<a name="create-api"></a>
 
-**To create your API using the API Gateway console**
+To create your API using the API Gateway console
 
-1. Within API Gateway, choose **Create API**\.
+1. Navigate to the API Gateway console at [https://console\.aws\.amazon\.com/apigateway/home](https://console.aws.amazon.com/apigateway/home )\. On the left navigation pane, choose **APIs**\.
 
 1. Locate **REST API** \(not private\) and choose **Build**\.
+
+1. On the following page, locate the **Create new API** section and make sure **New API** is selected\.
 
 1. Configure the following fields:
    + API name: **opensearch\-api**
@@ -62,11 +182,8 @@ Using API Gateway lets you create a more limited API and simplifies the process 
 | Integration type | Lambda function | 
 | Use Lambda proxy integration | Yes | 
 | Lambda region | us\-west\-1 | 
-| Lambda function | opensearch\-lambda \(you'll configure this later in Lambda\) | 
+| Lambda function | opensearch\-lambda | 
 | Use default timeout | Yes | 
-
-**Note**  
-If you're performing these steps in order, you'll see an error: "Function not found: arn:aws:lambda:us\-west\-1:123456789012:function:opensearch\-lambda"\. You can ignore this error, as you'll configure the Lambda function in step 3\.
 
 ### Configure the method request<a name="method-request"></a>
 
@@ -79,7 +196,7 @@ Choose **Method Request** and configure the following settings:
 | Request Validator |  Validate query string parameters and headers   | 
 | API Key Required | false | 
 
-**URL Query String Parameters**
+Under **URL Query String Parameters**, choose **Add query string** and configure the following parameter:
 
 
 | Setting | Value | 
@@ -107,79 +224,6 @@ Choose **Method Request** and configure the following settings:
 | Burst | 500 | 
 
 These settings configure an API that has only one method: a `GET` request to the endpoint root \(`https://some-id.execute-api.us-west-1.amazonaws.com/search-es-api-test`\)\. The request requires a single parameter \(`q`\), the query string to search for\. When called, the method passes the request to Lambda, which runs the `opensearch-lambda` function\. For more information, see [Creating an API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html) and [Deploying a REST API in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html)\.
-
-## Step 3: Create and deploy the Lambda function<a name="search-example-lambda"></a>
-
-After you create your API in API Gateway, create the Lambda function that it passes requests to\.
-
-### Create the Lambda function<a name="sample-lamdba-python"></a>
-
-In this solution, API Gateway passes requests to the following Python 3\.8 Lambda function, which queries OpenSearch Service and returns results\. Name the function `opensearch-lambda`\.
-
-Because this sample function uses external libraries, you need to create a deployment package and upload it to Lambda for the code to work\. For more information about creating Lambda functions and deployment packages, see [Deploy Python Lambda functions with \.zip file archives](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) in the *AWS Lambda Developer Guide* and [Create the Lambda deployment package](integrations.md#integrations-s3-lambda-deployment-package) in this guide\.
-
-```
-import boto3
-import json
-import requests
-from requests_aws4auth import AWS4Auth
-
-region = '' # For example, us-west-1
-service = 'es'
-credentials = boto3.Session().get_credentials()
-awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
-
-host = '' # The OpenSearch domain endpoint with https:// and without a trailing slash
-index = 'movies'
-url = host + '/' + index + '/_search'
-
-# Lambda execution starts here
-def lambda_handler(event, context):
-
-    # Put the user query into the query DSL for more accurate search results.
-    # Note that certain fields are boosted (^).
-    query = {
-        "size": 25,
-        "query": {
-            "multi_match": {
-                "query": event['queryStringParameters']['q'],
-                "fields": ["title^4", "plot^2", "actors", "directors"]
-            }
-        }
-    }
-
-    # Elasticsearch 6.x requires an explicit Content-Type header
-    headers = { "Content-Type": "application/json" }
-
-    # Make the signed HTTP request
-    r = requests.get(url, auth=awsauth, headers=headers, data=json.dumps(query))
-
-    # Create the response and add some extra content to support CORS
-    response = {
-        "statusCode": 200,
-        "headers": {
-            "Access-Control-Allow-Origin": '*'
-        },
-        "isBase64Encoded": False
-    }
-
-    # Add the search results to the response
-    response['body'] = r.text
-    return response
-```
-
-#### Modify the handler<a name="sample-lamdba-handler"></a>
-
-The *handler* is the method in your function code that processes events\. You need to change the handler name according to the name of the file in your deployment package where the Lambda function is located\. For example, if your file is named `function.py`, rename the handler to `function.lambda_handler`\. For more information, see [Lambda function handler in Python](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html)\.
-
-#### Configure a trigger<a name="sample-lamdba-trigger"></a>
-
-Choose **Add trigger** and create the HTTP endpoint that invokes your function\. The trigger must have the following configuration:
-
-
-| Trigger | API | Deployment Stage | Security | 
-| --- | --- | --- | --- | 
-| API Gateway | opensearch\-api | opensearch\-api\-test | Open | 
 
 ## Step 4: \(Optional\) Modify the domain access policy<a name="search-example-perms"></a>
 
@@ -228,17 +272,13 @@ For more information about access policies, see [Configuring access policies](cr
 
 Fine\-grained access control introduces an additional step before you can test the application\. Even if you use HTTP basic authentication for all other purposes, you need to map the Lambda role to a user, otherwise you'll see permissions errors\.
 
-1. Navigate to the OpenSearch Dashboards endpoint for the domain\.
+1. Navigate to the OpenSearch Dashboards URL for the domain\.
 
-1. From the main menu, choose **Security**, **Roles**, and select user or role to map the Lambda role to\.
+1. From the main menu, choose **Security**, **Roles**, and select the link to `all_access`, the role you need to map the Lambda role to\.
 
 1. Choose **Mapped users**, **Manage mapping**\. 
 
-1. Under **Backend roles**, add the Amazon Resource Name \(ARN\) of the Lambda role\. 
-
-   ```
-   arn:aws:iam::123456789123:role/opensearch-lambda-role-1abcdefg
-   ```
+1. Under **Backend roles**, add the Amazon Resource Name \(ARN\) of the Lambda role\. The ARN should take the form of `arn:aws:iam::123456789123:role/service-role/opensearch-lambda-role-1abcdefg`\.
 
 1. Select **Map** and confirm the user or role shows up under **Mapped users**\.
 
@@ -248,7 +288,7 @@ Fine\-grained access control introduces an additional step before you can test t
 
 1. Download [sample\-site\.zip](samples/sample-site.zip), unzip it, and open `scripts/search.js` in your favorite text editor\.
 
-1. Update the `apigatewayendpoint` variable to point to your API Gateway endpoint\. The endpoint takes the form of `https://some-id.execute-api.us-west-1.amazonaws.com/opensearch-api-test`\. You can quickly find the endpoint in API Gateway by choosing **Stages** and selecting the name of the API\.
+1. Update the `apigatewayendpoint` variable to point to your API Gateway endpoint and add a backslash to the end of the given path\. You can quickly find the endpoint in API Gateway by choosing **Stages** and selecting the name of the API\. The `apigatewayendpoint` variable should take the form of `https://some-id.execute-api.us-west-1.amazonaws.com/opensearch-api-test`/\.
 
 1. Open `index.html` and try running searches for *thor*, *house*, and a few other terms\.  
 ![\[A sample search for thor.\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/search-ui.png)
@@ -267,7 +307,8 @@ If this happens, try the following:
 
 1. Redeploy your API in API Gateway \(**Actions**, **Deploy API**\)\.
 
-1. Delete and re\-add your Lambda function trigger\.
+1. Delete and re\-add your Lambda function trigger\. Add re\-add it, choose **Add trigger** and create the HTTP endpoint that invokes your function\. The trigger must have the following configuration:    
+[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/search-example.html)
 
 ## Next steps<a name="search-example-next"></a>
 

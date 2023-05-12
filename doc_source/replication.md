@@ -104,7 +104,7 @@ PUT _plugins/_replication/follower-01/_start
 
 You can find the connection alias on the **Connections** tab on your domain dashboard\.
 
-This example assumes that an admin is issuing the request and uses `all_access` for the `leader_cluster_role` and `follower_cluster_role` for simplicity\. In production environments, however, we recommend that you create replication users on both the leader and follower indexes, and map them accordingly\. The user names must be identical\. For information about these roles and how to map them, see [Map the leader and follower cluster roles](https://opensearch.org/docs/replication-plugin/permissions/#map-the-leader-and-follower-cluster-roles) in the OpenSearch documentation\.
+This example assumes that an admin is issuing the request and uses `all_access` for the `leader_cluster_role` and `follower_cluster_role` for simplicity\. In production environments, however, we recommend that you create replication users on both the leader and follower indexes, and map them accordingly\. The usernames must be identical\. For information about these roles and how to map them, see [Map the leader and follower cluster roles](https://opensearch.org/docs/replication-plugin/permissions/#map-the-leader-and-follower-cluster-roles) in the OpenSearch documentation\.
 
 ## Confirm replication<a name="replication-confirm"></a>
 
@@ -229,7 +229,7 @@ POST _plugins/_replication/_autofollow
 
 You can find the connection alias on the **Connections** tab on your domain dashboard\.
 
-This example assumes that an admin is issuing the request, and it uses `all_access` as the leader and follower domain roles for simplicity\. In production environments, however, we recommend that you create replication users on both the leader and follower indexes and map them accordingly\. The user names must be identical\. For information about these roles and how to map them, see [Map the leader and follower cluster roles](https://opensearch.org/docs/replication-plugin/permissions/#map-the-leader-and-follower-cluster-roles) in the OpenSearch documentation\.
+This example assumes that an admin is issuing the request, and it uses `all_access` as the leader and follower domain roles for simplicity\. In production environments, however, we recommend that you create replication users on both the leader and follower indexes and map them accordingly\. The usernames must be identical\. For information about these roles and how to map them, see [Map the leader and follower cluster roles](https://opensearch.org/docs/replication-plugin/permissions/#map-the-leader-and-follower-cluster-roles) in the OpenSearch documentation\.
 
 To retrieve a list of existing replication rules on a domain, use the [auto\-follow stats API operation](https://opensearch.org/docs/replication-plugin/api/#get-auto-follow-stats)\.
 

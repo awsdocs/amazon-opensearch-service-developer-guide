@@ -109,7 +109,7 @@ public class OpenSearchSample {
                     .clusterConfig(clusterConfig)
                     .ebsOptions(ebsOptions)
                     .nodeToNodeEncryptionOptions(encryptionOptions)
-                    // You can uncomment this line and add your account ID, a user name, and the
+                    // You can uncomment this line and add your account ID, a username, and the
                     // domain name to add an access policy.
                     // .accessPolicies("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:user/user-name\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:region:123456789012:domain/domain-name/*\"}]}")
                     .build();
@@ -327,7 +327,7 @@ public class OpenSearchSample {
                         .withEBSEnabled(true)
                         .withVolumeSize(10)
                         .withVolumeType(VolumeType.Gp2));
-                // You can uncomment this line and add your account ID, a user name, and the
+                // You can uncomment this line and add your account ID, a username, and the
                 // domain name to add an access policy.
                 // .withAccessPolicies("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"arn:aws:iam::123456789012:user/user-name\"]},\"Action\":[\"es:*\"],\"Resource\":\"arn:aws:es:region:123456789012:domain/domain-name/*\"}]}")
                 

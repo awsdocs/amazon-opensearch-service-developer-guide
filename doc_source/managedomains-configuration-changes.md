@@ -10,21 +10,24 @@ The following operations cause blue/green deployments:
 + Performing service software updates
 + If your domain *doesn't* have dedicated master nodes, changing data instance count
 + Enabling or disabling dedicated master nodes
-+ Changing dedicated master node count or instance type
-+ Enabling or disabling Multi\-AZ
++ Changing to Multi\-AZ with Standby only accepts one change request at a time
++ Enabling or disabling Multi\-AZ without Standby
 + Changing storage type, volume type, or volume size
 + Choosing different VPC subnets
 + Adding or removing VPC security groups
 + Enabling or disabling Amazon Cognito authentication for OpenSearch Dashboards
 + Choosing a different Amazon Cognito user pool or identity pool
 + Modifying advanced settings
-+ Enabling or disabling the publication of error logs, audit logs, or slow logs to CloudWatch
 + Upgrading to a new OpenSearch version
 + Enabling or disabling **Require HTTPS**
 + Enabling encryption of data at rest or node\-to\-node encryption
 + Enabling or disabling UltraWarm or cold storage
 + Disabling Auto\-Tune and rolling back its changes
 + Modifying the custom endpoint
+
+For Multi\-AZ with Standby domains, you can only make one change request at a time\. If a change is already in progress, the new request will be rejected\. You can check the status of the current change with the `DescribeDomainChangeProgress` API\.
+
+When you upgrade domains, OpenSearch Dashboards might be unavailable during some or all of the upgrade\. The upgrade can take from 15 minutes to several hours to complete\. 
 
 ## Changes that usually don't cause blue/green deployments<a name="nobg"></a>
 
@@ -33,6 +36,7 @@ In *most* cases, the following operations do not cause blue/green deployments:
 + Changing the automated snapshot hour
 + Enabling Auto\-Tune or disabling it without rolling back its changes
 + If your domain has dedicated master nodes, changing data node or UltraWarm node count
++ Enabling or disabling the publication of error logs, audit logs, or slow logs to CloudWatch
 
 There are some exceptions depending on your service software version\. If you want to be absolutely sure that a change will not cause a blue/green deployment, [perform a dry run](#dryrun) before updating your domain\.
 
@@ -67,7 +71,7 @@ To validate a cluster configuration change, complete the following steps\.
 ------
 #### [ API ]
 
-You can perform a dry run validation through the configuration API\. To test your changes with the API, set `DryRun` to `true`, and `DryRunMode` to `Verbose`\. Verbose mode runs a validation check in addition to determining whether the change will initiate a blue/green deployment\. For example, this [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html) request tests the deployment type tha resulrs from enabling UltraWarm:
+You can perform a dry run validation through the configuration API\. To test your changes with the API, set `DryRun` to `true`, and `DryRunMode` to `Verbose`\. Verbose mode runs a validation check in addition to determining whether the change will initiate a blue/green deployment\. For example, this [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html) request tests the deployment type that results from enabling UltraWarm:
 
 ```
 POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/config
@@ -163,7 +167,7 @@ To prevent overloading dedicated master nodes, you can [monitor usage with the A
 
 ## Stages of a configuration change<a name="managedomains-config-stages"></a>
 
-After you initiate a configuration change, OpenSearch Service goes through a series of steps to update your domain\. You can view the progress of the configuration change under **Domain status** in the console\. The exact steps that an update goes through depends on the type of change you're making\. You can also monitor a configuration change using the [DescribeDomainChangeProgress](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_DescribeDomainChangeProgress.html)> API operation\.
+After you initiate a configuration change, OpenSearch Service goes through a series of steps to update your domain\. You can view the progress of the configuration change under **Domain status** in the console\. The exact steps that an update goes through depends on the type of change you're making\. You can also monitor a configuration change using the [DescribeDomainChangeProgress](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_DescribeDomainChangeProgress.html) API operation\.
 
 In some cases, such as during service software updates, you won't see progress information until the blue/green deployment actually starts\. During this time the domain status is `Pending Updates`\.
 
@@ -203,7 +207,7 @@ When you initiate a configuration change or perform an OpenSearch or Elasticsear
 | Unable to describe user and identity pool | CognitoPoolsNotDescribable | The specified Amazon Cognito role doesn't have permission to describe the user and identity pools associated with your domain\. Make sure the role permissions policy allows the cognito\-identity:DescribeIdentityPool and cognito\-identity:DescribeUserPool actions\. See [About the CognitoAccessForAmazonOpenSearch role](cognito-auth.md#cognito-auth-role) for the full permissions policy\. | 
 | KMS key not enabled | KMSKeyNotEnabled |  The AWS Key Management Service \(AWS KMS\) key used to encrypt your domain is disabled\. [Re\-enable the key](https://docs.aws.amazon.com/kms/latest/developerguide/enabling-keys) immediately\.  | 
 | Custom certificate not in ISSUED state | InvalidCertificate |  If your domain uses a custom endpoint, you secure it by either generating an SSL certificate in AWS Certificate Manager \(ACM\) or importing one of your own\. The certificate status must be **Issued**\. If you receive this error, [check the status of your certificate](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-describe.html) in the ACM console\. If the status is Expired, Failed, Inactive, or Pending validation, see the ACM [troubleshooting documentation](https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting.html) to resolve the issue\.  | 
-| Not enough capacity to launch chosen instance type | InsufficientInstanceCapacity |  The requested instance type capacity is not available\. For example, you might have requested five `i3.16xlarge.search` nodes, but OpenSearch Service doesn't have enough `i3.16xlarge.search` hosts available, so the request can't be fulfilled\. Check the [supported instance types](supported-instance-types.md) in OpenSearch Service and choose a different instance type\.  | 
+| Not enough capacity to launch chosen instance type | InsufficientInstanceCapacity |  The requested instance type capacity is not available\. For example, you might have requested five `i3.16xlarge.search` nodes, but OpenSearch Service doesn't have enough `i3.16xlarge.search` hosts available, so the request can't be fulfilled\. Check the [supported instance types](supported-instance-types.md) in OpenSearch Service and choose a different instance type\. If you want to use the same instance type, you can [reserve capacity in advance](ri.md)\.  | 
 | Red indexes in cluster | RedCluster |  One or more indexes in your cluster have a red status, leading to an overall red cluster status\. To troubleshoot and remediate this issue, see [Red cluster status](handling-errors.md#handling-errors-red-cluster-status)\.  | 
 | Memory circuit breaker, too many requests | TooManyRequests |  There are too many search and write requests to your domain, so OpenSearch Service can't update its configuration\. You can reduce the number of requests, scale instances vertically up to 64 GiB of RAM, or scale horizontally by adding instances\.  | 
 | New configuration can't hold data \(low disk space\) | InsufficientStorageCapacity |  The configured storage size can't hold all of the data on your domain\. To resolve this issue, [choose a larger volume](limits.md#ebsresource), [delete unused indexes](https://opensearch.org/docs/latest/opensearch/rest-api/index-apis/delete-index/), or increase the number of nodes in the cluster to immediately free up disk space\.  | 

@@ -30,6 +30,24 @@ Provides the minimum Amazon Cognito permissions necessary to enable [Cognito aut
 
 You can find the [AmazonOpenSearchServiceCognitoAccess](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceCognitoAccess) policy in the IAM console\.
 
+## AmazonOpenSearchIngestionServiceRolePolicy<a name="AmazonOpenSearchIngestionServiceRolePolicy"></a>
+
+You can't attach `AmazonOpenSearchIngestionServiceRolePolicy` to your IAM entities\. This policy is attached to a service\-linked role that allows OpenSearch Ingestion to enable VPC access for ingestion pipelines, create tags, and publish ingestion\-related CloudWatch metrics to your account\. For more information, see [Using service\-linked roles for Amazon OpenSearch Service](slr.md)\.
+
+You can find the [AmazonOpenSearchIngestionServiceRolePolicy](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchIngestionServiceRolePolicy) policy in the IAM console\.
+
+## AmazonOpenSearchIngestionFullAccess<a name="AmazonOpenSearchIngestionFullAccess"></a>
+
+Grants full access to the OpenSearch Ingestion API operations and resources for an AWS account\.
+
+You can find the [AmazonOpenSearchIngestionFullAccess](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchIngestionFullAccess) policy in the IAM console\.
+
+## AmazonOpenSearchIngestionReadOnlyAccess<a name="AmazonOpenSearchIngestionReadOnlyAccess"></a>
+
+Grants read\-only access to all OpenSearch Ingestion resources for an AWS account\.
+
+You can find the [AmazonOpenSearchIngestionReadOnlyAccess](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchIngestionReadOnlyAccess) policy in the IAM console\.
+
 ## AmazonOpenSearchServerlessServiceRolePolicy<a name="AmazonOpenSearchServerlessServiceRolePolicy"></a>
 
 Provides the minimum Amazon CloudWatch permissions necessary to send OpenSearch Serverless metric data to CloudWatch\.
@@ -43,6 +61,9 @@ View details about updates to AWS managed policies for OpenSearch Service since 
 
 | Change | Description | Date | 
 | --- | --- | --- | 
+|  Added `AmazonOpenSearchIngestionServiceRolePolicy`  |  A new policy that allows OpenSearch Ingestion to enable VPC access for ingestion pipelines, create tags, and publish ingestion\-related CloudWatch metrics to your account\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchIngestionServiceRolePolicy)\.  |  26 April 2023  | 
+|  Added `AmazonOpenSearchIngestionFullAccess`  |  A new policy that grants full access to the OpenSearch Ingestion API operations and resources for an AWS account\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchIngestionFullAccess)\.  |  26 April 2023  | 
+|  Added `AmazonOpenSearchIngestionReadOnlyAccess`  |  A new policy that grants read\-only access to all OpenSearch Ingestion resources for an AWS account\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchIngestionReadOnlyAccess)\.  |  26 April 2023  | 
 |  Added `AmazonOpenSearchServerlessServiceRolePolicy`  |  A new policy that provides the minimum permissions necessary to send OpenSearch Serverless metric data to Amazon CloudWatch\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServerlessServiceRolePolicy)\.  |  29 November 2022  | 
 |  Updated `AmazonOpenSearchServiceRolePolicy` and `AmazonElasticsearchServiceRolePolicy`  |  Added the permissions necessary for [the service\-linked role](slr-aos.md#slr-permissions) to create [OpenSearch Service\-managed VPC endpoints](slr-aos.md#slr-permissions)\. Some actions can only be performed when the request contains the tag `OpenSearchManaged=true`\. The deprecated Elasticsearch policy has also been updated to ensure backwards compatibility\.  |  7 November 2022  | 
 |  Updated `AmazonOpenSearchServiceRolePolicy` and `AmazonElasticsearchServiceRolePolicy`  |  Added support for the `PutMetricData` action, which is required to publish OpenSearch cluster metrics to Amazon CloudWatch\. The deprecated Elasticsearch policy has also been updated to ensure backwards compatibility\. For the policy JSON, see the [IAM console](https://console.aws.amazon.com/iam/home#/policies/arn:aws:iam::aws:policy/AmazonOpenSearchServiceRolePolicy)\.  |  12 September 2022  | 

@@ -2,7 +2,7 @@
 
 As a managed service, Amazon OpenSearch Service is protected by the AWS global network security procedures that are described in [Amazon Web Services: Overview of Security Processes](https://d0.awsstatic.com/whitepapers/Security/AWS_Security_Whitepaper.pdf)
 
-You use AWS published API calls to access the OpenSearch Service configuration API through the network\. Clients must support Transport Layer Security \(TLS\) 1\.0 or later\. We recommend TLS 1\.2 or later\. To configure the minimum required TLS version to accept, specify the `TLSSecurityPolicy` value in the domain endpoint options:
+You use AWS published API calls to access the OpenSearch Service configuration API through the network\. We require Transport Layer Security \(TLS\) 1\.2 and recommend TLS 1\.3\. To configure the minimum required TLS version to accept, specify the `TLSSecurityPolicy` value in the domain endpoint options: 
 
 ```
 aws opensearch update-domain-config --domain-name my-domain --domain-endpoint-options '{"TLSSecurityPolicy": "Policy-Min-TLS-1-2-2019-07"}'

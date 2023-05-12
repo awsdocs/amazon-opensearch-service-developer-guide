@@ -12,6 +12,7 @@ Currently, OpenSearch Service supports the following upgrade paths:
 
 | From version | To version | 
 | --- | --- | 
+| OpenSearch 1\.3 and 2\.3 |  OpenSearch 2\.5  | 
 | OpenSearch 1\.3 |  OpenSearch 2\.3 Version 2\.3 has the following breaking changes: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 
 | OpenSearch 1\.x | OpenSearch 1\.x | 
 | Elasticsearch 7\.x |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  OpenSearch 1\.*x* introduces numerous breaking changes\. For details, see [Amazon OpenSearch Service rename \- Summary of changes](rename.md)\.   | 

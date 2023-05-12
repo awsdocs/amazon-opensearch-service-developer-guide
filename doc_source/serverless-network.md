@@ -61,7 +61,7 @@ In this sample policy, the first rule specifies VPC access to both the collectio
 ]
 ```
 
-This policy provides public access only to OpenSearch Dashboards for collections beginning with "finance"\. Programmatic access is not provided, so any attempts to directly access the OpenSearch API will fail\.
+This policy provides public access only to OpenSearch Dashboards for collections beginning with "finance"\. Any attempts to directly access the OpenSearch API will fail\.
 
 ```
 [

@@ -2,7 +2,7 @@
 
 With SAML authentication for Amazon OpenSearch Serverless, you can use your existing identity provider to offer single sign\-on \(SSO\) for the OpenSearch Dashboards endpoints of serverless collections\.
 
-SAML authentication lets you use third\-party identity providers to sign in to OpenSearch Dashboards to index and search data\. OpenSearch Serverless supports providers that use the SAML 2\.0 standard, such as Okta, Keycloak, Active Directory Federation Services \(AD FS\), and Auth0\. 
+SAML authentication lets you use third\-party identity providers to sign in to OpenSearch Dashboards to index and search data\. OpenSearch Serverless supports providers that use the SAML 2\.0 standard, such as IAM Identity Center \(SAML\), Okta, Keycloak, Active Directory Federation Services \(AD FS\), and Auth0\. 
 
 **Note**  
 SAML authentication is only for accessing OpenSearch Dashboards through a web browser\. Authenticated users can only make requests to the OpenSearch API operations through **Dev Tools** in OpenSearch Dashboards\. Your SAML credentials do *not* let you make direct HTTP requests to the OpenSearch API operations\.
@@ -41,19 +41,22 @@ SAML authentication for OpenSearch Serverless uses the following AWS Identity an
 The following identity\-based access policy allows a user to manage all IdP configurations:
 
 ```
-[
-   {
-      "Action":[
-         "aoss:CreateSecurityConfig",
-         "aoss:DeleteSecurityConfig",
-         "aoss:GetSecurityConfig",
-         "aoss:UpdateSecurityConfig",
-         "aoss:ListSecurityConfigs"
-      ],
-      "Effect":"Allow",
-      "Resource":"*"
-   }
-]
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "aoss:CreateSecurityConfig",
+                "aoss:DeleteSecurityConfig",
+                "aoss:GetSecurityConfig",
+                "aoss:UpdateSecurityConfig",
+                "aoss:ListSecurityConfigs"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}
 ```
 
 Note that the `Resource` element must be a wildcard\.
@@ -109,7 +112,7 @@ The name that you specify is publicly accessible and will appear in a dropdown m
    </md:EntityDescriptor>
    ```
 
-1. Keep the **Custom user ID attribute** field empty to use the `NameID` element of the SAML assertion for the user name\. If your assertion doesn't use this standard element and instead includes the user name as a custom attribute, specify that attribute here\. Attributes are case\-sensitive\. Only a single user attribute is supported\.
+1. Keep the **Custom user ID attribute** field empty to use the `NameID` element of the SAML assertion for the username\. If your assertion doesn't use this standard element and instead includes the username as a custom attribute, specify that attribute here\. Attributes are case\-sensitive\. Only a single user attribute is supported\.
 
    The following example shows an override attribute for `NameID` in the SAML assertion:
 
@@ -139,14 +142,15 @@ The name that you specify is publicly accessible and will appear in a dropdown m
 
 ## Accessing OpenSearch Dashboards<a name="serverless-saml-dashboards"></a>
 
-After you configure a SAML provider, all users and groups associated with that provider can navigate to the OpenSearch Dashboards endpoint at `collection-endpoint/_dashboards/` *for all collections*\. They can then sign in using their SAML credentials\. First, use the dropdown to select an identity provider:
+After you configure a SAML provider, all users and groups associated with that provider can navigate to the OpenSearch Dashboards endpoint\. The Dashboards URL has the format `collection-endpoint/_dashboards/` *for all collections*\. 
+
+If you have SAML enabled, selecting the link in the AWS Management Console directs you to the IdP selection page, where you can sign in using your SAML credentials\. First, use the dropdown to select an identity provider:
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/idpList.png)
 
 Then sign in using your IdP credentials\. 
 
-**Note**  
-Although all SAML users and groups can sign in to OpenSearch Dashboards for all collections, they won't be able to view, create, edit, or delete any data until you grant them access through *data access policies*\. For the required steps, see the next section\.
+If you don't have SAML enabled, selecting the link in the AWS Management Console directs you to log in as an IAM user or role, with no option for SAML\.
 
 ## Granting SAML identities access to collection data<a name="serverless-saml-policies"></a>
 

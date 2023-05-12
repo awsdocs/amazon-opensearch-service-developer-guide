@@ -68,7 +68,7 @@ If you try to access the endpoint in a web browser, however, you might find that
 
 In addition to this connectivity requirement, VPCs let you manage access to the domain through [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)\. For many use cases, this combination of security features is sufficient, and you might feel comfortable applying an open access policy to the domain\.
 
-Operating with an open access policy does *not* mean that anyone on the internet can access the OpenSearch Service domain\. Rather, it means that if a request reaches the OpenSearch Service domain and the associated security groups permit it, the domain accepts the request\. The only exception is if you're using fine\-grained access control or an access policy that specifies IAM users or roles\. In these situations, for the domain to accept a request, the security groups must permit it *and* it must be signed with valid credentials\.
+Operating with an open access policy does *not* mean that anyone on the internet can access the OpenSearch Service domain\. Rather, it means that if a request reaches the OpenSearch Service domain and the associated security groups permit it, the domain accepts the request\. The only exception is if you're using fine\-grained access control or an access policy that specifies IAM roles\. In these situations, for the domain to accept a request, the security groups must permit it *and* it must be signed with valid credentials\.
 
 **Note**  
 Because security groups already enforce IP\-based access policies, you can't apply IP\-based access policies to OpenSearch Service domains that reside within a VPC\. If you use public access, IP\-based policies are still available\.

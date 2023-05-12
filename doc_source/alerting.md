@@ -31,11 +31,11 @@ OpenSearch notifications are separate from OpenSearch Service [notifications](ma
 
 Notification channels replaced alerting destinations starting with OpenSearch version 2\.0\. Destinations were officially deprecated, and all alerting notification will be managed through channels going forward\.
 
-When you upgrade your domains to version 2\.3 or later \(since OpenSearch Service support for 2\.x starts with 2\.3\), your existing destinations are automatically migrated to notification channels\. If a destination fails to migrate, the monitor will continue to use it until the monitor is migrated to a notification channel\. For more inforation, see [Questions about destinations](https://opensearch.org/docs/latest/monitoring-plugins/alerting/monitors/#questions-about-destinations) in the OpenSearch documentation\.
+When you upgrade your domains to version 2\.3 or later \(since OpenSearch Service support for 2\.x starts with 2\.3\), your existing destinations are automatically migrated to notification channels\. If a destination fails to migrate, the monitor will continue to use it until the monitor is migrated to a notification channel\. For more inforation, see [Questions about destinations](https://opensearch.org/docs/latest/observing-your-data/alerting/monitors/#questions-about-destinations) in the OpenSearch documentation\.
 
 To get started with notifications, sign in to OpenSearch Dashboards and choose **Notifications**, **Channels**, and **Create channel**\.
 
-Amazon Simple Notification Service \(Amazon SNS\) is a supported channel type for notifications\. In order to authenticate users, you either need to provide the user with full access to Amazon SNS, or let them assume an IAM role that has permissions to access Amazon SNS\. For instructions, see [Amazon SNS as a channel type](https://opensearch.org/docs/2.0/notifications-plugin/index/#amazon-sns-as-a-channel-type)\.
+Amazon Simple Notification Service \(Amazon SNS\) is a supported channel type for notifications\. In order to authenticate users, you either need to provide the user with full access to Amazon SNS, or let them assume an IAM role that has permissions to access Amazon SNS\. For instructions, see [Amazon SNS as a channel type](https://opensearch.org/docs/latest/observing-your-data/notifications/index/#amazon-sns-as-a-channel-type)\.
 
 ## Differences<a name="alerting-diff"></a>
 
@@ -43,7 +43,7 @@ Compared to the open\-source version of OpenSearch, alerting in Amazon OpenSearc
 
 ### Alerting settings<a name="alerting-diff-settings"></a>
 
-OpenSearch Service lets you modify the following [alerting settings](https://opensearch.org/docs/latest/monitoring-plugins/alerting/settings/):
+OpenSearch Service lets you modify the following [alerting settings](https://opensearch.org/docs/latest/observing-your-data/alerting/settings/#alerting-settings):
 + `plugins.scheduled_jobs.enabled`
 + `plugins.alerting.alert_history_enabled`
 + `plugins.alerting.alert_history_max_age`

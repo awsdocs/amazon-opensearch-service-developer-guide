@@ -1,4 +1,4 @@
-# Asynchronous search for Amazon OpenSearch Service<a name="asynchronous-search"></a>
+# Asynchronous search in Amazon OpenSearch Service<a name="asynchronous-search"></a>
 
 With asynchronous search for Amazon OpenSearch Service you can submit a search query that gets executed in the background, monitor the progress of the request, and retrieve results at a later stage\. You can retrieve partial results as they become available before the search has completed\. After the search finishes, save the results for later retrieval and analysis\.
 
@@ -148,7 +148,7 @@ POST https://src-domain.us-east-1.es.amazonaws.com/local_index,cluster_b:b_index
 }
 ```
 
-For more information, see [Cross\-cluster search for Amazon OpenSearch Service](cross-cluster-search.md)\.
+For more information, see [Cross\-cluster search in Amazon OpenSearch Service](cross-cluster-search.md)\.
 
 ## UltraWarm<a name="asynchronous-search-ultrawarm"></a>
 

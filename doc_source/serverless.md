@@ -6,7 +6,7 @@ OpenSearch Serverless provides a simple, cost\-effective option for infrequent, 
 
 OpenSearch Serverless collections have the same kind of high\-capacity, distributed, and highly available storage volume that is used by provisioned OpenSearch Service domains\.
 
-OpenSearch Serverless collections are always encrypted\. You can choose the encryption key, but you can't disable encryption\. For more information, see [Encryption at rest for Amazon OpenSearch Serverless](serverless-encryption.md)\.
+OpenSearch Serverless collections are always encrypted\. You can choose the encryption key, but you can't disable encryption\. For more information, see [Encryption in Amazon OpenSearch Serverless](serverless-encryption.md)\.
 
 **Topics**
 + [Benefits](#serverless-benefits)

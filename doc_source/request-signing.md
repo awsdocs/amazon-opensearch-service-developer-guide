@@ -1,6 +1,6 @@
 # Signing HTTP requests to Amazon OpenSearch Service<a name="request-signing"></a>
 
-This section includes examples of how to send signed HTTP requests to Amazon OpenSearch Service using Elasticsearch and OpenSearch clients and other common libraries\. These code examples are for interacting with the OpenSearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM users or roles \(or you use an IAM master user with [fine\-grained access control](fgac.md)\), you must sign requests to the OpenSearch APIs with your IAM credentials\. 
+This section includes examples of how to send signed HTTP requests to Amazon OpenSearch Service using Elasticsearch and OpenSearch clients and other common libraries\. These code examples are for interacting with the OpenSearch APIs, such as `_index`, `_bulk`, and `_snapshot`\. If your domain access policy includes IAM roles, or you use a user with [fine\-grained access control](fgac.md), you must sign requests to the OpenSearch APIs with your IAM credentials\. 
 
 For examples of how to interact with the configuration API, including operations like creating, updating, and deleting OpenSearch Service domains, see [Using the AWS SDKs to interact with Amazon OpenSearch Service](configuration-samples.md)\.
 
@@ -563,7 +563,7 @@ async function indexDocument(document) {
     var { response } =  await client.handle(signedRequest)
     console.log(response.statusCode + ' ' + response.body.statusMessage);
     var responseBody = '';
-    await new Promise(() => {
+    await new Promise((resolve) => {
       response.body.on('data', (chunk) => {
         responseBody += chunk;
       });

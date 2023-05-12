@@ -20,7 +20,7 @@ The following diagram illustrates the security components that make up a functio
 + [IAM and SAML authentication](#serverless-security-authentication)
 + [Getting started with security in Amazon OpenSearch Serverless](serverless-tutorials.md)
 + [Identity and Access Management for Amazon OpenSearch Serverless](security-iam-serverless.md)
-+ [Encryption at rest for Amazon OpenSearch Serverless](serverless-encryption.md)
++ [Encryption in Amazon OpenSearch Serverless](serverless-encryption.md)
 + [Network access for Amazon OpenSearch Serverless](serverless-network.md)
 + [Data access control for Amazon OpenSearch Serverless](serverless-data-access.md)
 + [Access Amazon OpenSearch Serverless using an interface endpoint \(AWS PrivateLink\)](serverless-vpc.md)
@@ -50,17 +50,17 @@ If you plan to configure VPC access within a network policy, you must first crea
 
 [Data access policies](serverless-data-access.md) define how your users access the data within your collections\. Data access policies help you manage collections at scale by automatically assigning access permissions to collections and indexes that match a specific pattern\. Multiple policies can apply to a single resource\.
 
-Data access policies consist of a set of rules, each with three components: a **resource type**, **granted resources**, and a set of **permissions**\. The resource type can be a collection or index\. The granted resources can be collection/index names or patterns with a wildcard \(\*\)\. The list of permissions specifies which [OpenSearch API operations](serverless-genref.md#serverless-operations) the policy grants access to\. In addition, the policy contains a list of **principals**, which specify the IAM users, roles, and SAML identities to grant access to\.
+Data access policies consist of a set of rules, each with three components: a **resource type**, **granted resources**, and a set of **permissions**\. The resource type can be a collection or index\. The granted resources can be collection/index names or patterns with a wildcard \(\*\)\. The list of permissions specifies which [OpenSearch API operations](serverless-genref.md#serverless-operations) the policy grants access to\. In addition, the policy contains a list of **principals**, which specify the IAM roles, users, and SAML identities to grant access to\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/serverless-data-access.png)
 
 For more information about the format of a data access policy, see the [policy syntax](serverless-data-access.md#serverless-data-access-syntax)\.
 
-Before you create a data access policy, you must have one or more IAM users or roles, or SAML identities, to provide access to in the policy\. For details, see the next section\.
+Before you create a data access policy, you must have one or more IAM roles or users, or SAML identities, to provide access to in the policy\. For details, see the next section\.
 
 ## IAM and SAML authentication<a name="serverless-security-authentication"></a>
 
- IAM principals and SAML identities are one of the building blocks of a data access policy\. Within the `principal` statement of an access policy, you can include IAM users, IAM roles, and SAML identities\. These principals are then granted the permissions that you specify in the associated policy rules\.
+ IAM principals and SAML identities are one of the building blocks of a data access policy\. Within the `principal` statement of an access policy, you can include IAM roles, users, and SAML identities\. These principals are then granted the permissions that you specify in the associated policy rules\.
 
 ```
 [

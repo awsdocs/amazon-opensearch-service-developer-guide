@@ -18,7 +18,7 @@ This tutorial presents a sample use case of handling time\-series data in daily 
 
 First, configure an ISM policy in OpenSearch Dashboards\.
 
-1. From your domain dashboard in the OpenSearch Service console, navigate to the OpenSearch Dashboards URL and sign in with your master user name and password\. The URL follows this format: `domain-endpoint/_dashboards/`\.
+1. From your domain dashboard in the OpenSearch Service console, navigate to the OpenSearch Dashboards URL and sign in with your master username and password\. The URL follows this format: `domain-endpoint/_dashboards/`\.
 
 1. In OpenSearch Dashboards, choose **Add sample data** and add one or more of the sample indexes to your domain\.
 

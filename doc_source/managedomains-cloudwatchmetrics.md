@@ -90,7 +90,7 @@ Amazon OpenSearch Service provides the following metrics for clusters\.
 | InvalidHostHeaderRequests |  The number of HTTP requests made to the OpenSearch cluster that included an invalid \(or missing\) host header\. Valid requests include the domain hostname as the host header value\. OpenSearch Service rejects invalid requests for public access domains that don't have a restrictive access policy\. We recommend applying a restrictive access policy to all domains\. If you see large values for this metric, confirm that your OpenSearch clients include the domain hostname \(and not, for example, its IP address\) in their requests\. Relevant statistics: Sum  | 
 | OpenSearchRequests\(previously ElasticsearchRequests\) |  The number of requests made to the OpenSearch cluster\. Relevant statistics: Sum  | 
 | 2xx, 3xx, 4xx, 5xx |  The number of requests to the domain that resulted in the given HTTP response code \(2*xx*, 3*xx*, 4*xx*, 5*xx*\)\. Relevant statistics: Sum  | 
-| ThroughputThrottle | Indicates whether requests are being throttled due to the throughput limitations of your EBS volumes\. A value of 1 indicates that some requests were throttled within the selected timeframe\. A value of 0 indicates normal behavior\.If you conistently see a value of 1 for this metric, you can scale up your instances by following AWS recommended best practices\.Relevant statistics: Minimum, Maximum | 
+| ThroughputThrottle |  Indicates whether or not disks have been throttled\. Throttling occurs when the combined throughput of `ReadThroughputMicroBursting` and `WriteThroughputMicroBursting` is higher than maximum throughput\. The maximum throughput is the lower value of the instance throughput or the provisioned volume throughput\. A value of 1 indicates that disks have been throttled\. A value of 0 indicates normal behavior\. For information on instance throughput, see [Amazon EBS–optimized instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html)\. For information on volume throughput, see [Amazon EBS volume types](https://aws.amazon.com/ebs/volume-types/)\. Relevant statistics: Minimum, Maximum | 
 
 ## Dedicated master node metrics<a name="managedomains-cloudwatchmetrics-master-node-metrics"></a>
 
@@ -104,7 +104,7 @@ Amazon OpenSearch Service provides the following metrics for [dedicated master n
 | MasterJVMMemoryPressure |  The maximum percentage of the Java heap used for all dedicated master nodes in the cluster\. We recommend moving to a larger instance type when this metric reaches 85 percent\. Relevant statistics: Maximum  The logic for this metric changed in service software R20220323\. For more information, see the [release notes](release-notes.md)\.   | 
 | MasterOldGenJVMMemoryPressure |  The maximum percentage of the Java heap used for the "old generation" per master node\. Relevant statistics: Maximum  | 
 | MasterCPUCreditBalance |  The remaining CPU credits available for dedicated master nodes in the cluster\. A CPU credit provides the performance of a full CPU core for one minute\. For more information, see [CPU credits](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-credits-baseline-concepts.html) in the *Amazon EC2 Developer Guide*\. This metric is available only for the T2 instance types\. Relevant statistics: Minimum  | 
-| MasterReachableFromNode |  A health check for `MasterNotDiscovered` exceptions\. A value of 1 indicates normal behavior\. A value of 0 indicates that `/_cluster/health/` is failing\. Failures mean that the master node stopped or is not reachable\. They are usually the result of a network connectivity issue or AWS dependency problem\. Relevant statistics: Minimum  | 
+| MasterReachableFromNode |  A health check for `MasterNotDiscovered` exceptions\. A value of 1 indicates normal behavior\. A value of 0 indicates that `/_cluster/health/` is failing\. Failures mean that the master node is unreachable from the source node\. They're usually the result of a network connectivity issue or an AWS dependency problem\. Relevant statistics: Maximum  | 
 | MasterSysMemoryUtilization |  The percentage of the master node's memory that is in use\. Relevant statistics: Maximum  | 
 
 ## EBS volume metrics<a name="managedomains-cloudwatchmetrics-master-ebs-metrics"></a>
@@ -117,7 +117,9 @@ Amazon OpenSearch Service provides the following metrics for EBS volumes\.
 | ReadLatency |  The latency, in seconds, for read operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
 | WriteLatency |  The latency, in seconds, for write operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
 | ReadThroughput |  The throughput, in bytes per second, for read operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
+| ReadThroughputMicroBursting |  The throughput, in bytes per second, for read operations on EBS volumes when [micro\-bursting](https://repost.aws/knowledge-center/ebs-identify-micro-bursting) is taken into consideration\. This metric is also available for individual nodes\. Micro\-bursting occurs when an EBS volume bursts high IOPS or throughput for significantly shorter periods of time \(less than one minute\)\. Relevant statistics: Minimum, Maximum, Average  | 
 | WriteThroughput |  The throughput, in bytes per second, for write operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
+| WriteThroughputMicroBursting |  The throughput, in bytes per second, for write operations on EBS volumes when [micro\-bursting](https://repost.aws/knowledge-center/ebs-identify-micro-bursting) is taken into consideration\. This metric is also available for individual nodes\. Micro\-bursting occurs when an EBS volume bursts high IOPS or throughput for significantly shorter periods of time \(less than one minute\)\. Relevant statistics: Minimum, Maximum, Average  | 
 | DiskQueueDepth |  The number of pending input and output \(I/O\) requests for an EBS volume\. Relevant statistics: Minimum, Maximum, Average  | 
 | ReadIOPS |  The number of input and output \(I/O\) operations per second for read operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
 | WriteIOPS |  The number of input and output \(I/O\) operations per second for write operations on EBS volumes\. This metric is also available for individual nodes\. Relevant statistics: Minimum, Maximum, Average  | 
@@ -287,6 +289,58 @@ Amazon OpenSearch Service provides the following metrics for [asynchronous searc
 | AsynchronousSearchStoreSize |  The size of the system index across all shards in the last minute\.  | 
 | AsynchronousSearchStoredResponseCount |  The numbers of stored responses in the system index in the last minute\.  | 
 
+## Multi\-AZ with Standby metrics<a name="managedomains-cloudwatchmetrics-multiaz"></a>
+
+Amazon OpenSearch Service provides the following metrics for [Multi\-AZ with Standby](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-multiaz.html#managedomains-za-no-standby)\.
+
+**Node\-level metrics for data nodes in active Availability Zones**
+
+
+| Metric | Description | 
+| --- | --- | 
+| CPUUtilization | The percentage of CPU usage for data nodes in the cluster\. Maximum shows the node with the highest CPU usage\. Average represents all nodes in the cluster\. This metric is also available for individual nodes\. | 
+| FreeStorageSpace |  The free space for data nodes in the cluster\. `Sum` shows total free space for the cluster, but you must leave the period at one minute to get an accurate value\. `Minimum` and `Maximum` show the nodes with the least and most free space, respectively\. This metric is also available for individual nodes\. OpenSearch Service throws a `ClusterBlockException` when this metric reaches `0`\. To recover, you must either delete indexes, add larger instances, or add EBS\-based storage to existing instances\. To learn more, see [Lack of available storage space](handling-errors.md#handling-errors-watermark)\. The OpenSearch Service console displays this value in GiB\. The Amazon CloudWatch console displays it in MiB\.  | 
+| JVMMemoryPressure | The maximum percentage of the Java heap used for all data nodes in the cluster\. OpenSearch Service uses half of an instance's RAM for the Java heap, up to a heap size of 32 GiB\. You can scale instances vertically up to 64 GiB of RAM, at which point you can scale horizontally by adding instances\. See [Recommended CloudWatch alarms for Amazon OpenSearch Service](cloudwatch-alarms.md)\. | 
+| SysMemoryUtilization | The percentage of the instance's memory that is in use\. High values for this metric are normal and usually do not represent a problem with your cluster\. For a better indicator of potential performance and stability issues, see the JVMMemoryPressure metric\. | 
+| IndexingLatency |  The average time, in milliseconds, that it takes a shard to complete an indexing operation\.  | 
+| IndexingRate | The number of indexing operations per minute\. | 
+| SearchLatency |  The average time, in milliseconds, that it takes a shard on a data node to complete a search operation\.  | 
+| SearchRate | The total number of search requests per minute for all shards on a data node\. | 
+| ThreadpoolSearchQueue | The number of queued tasks in the search thread pool\. If the queue size is consistently high, consider scaling your cluster\. The maximum search queue size is 1,000\. | 
+| ThreadpoolWriteQueue | The number of queued tasks in the write thread pool\. | 
+| ThreadpoolSearchRejected |  The number of rejected tasks in the search thread pool\. If this number continually grows, consider scaling your cluster\.  | 
+| ThreadpoolWriteRejected | The number of rejected tasks in the write thread pool\. | 
+
+**Cluster\-level metrics for clusters in active Availability Zones**
+
+
+| Metric | Description | 
+| --- | --- | 
+| DataNodes | The total number of active and standby shards\. | 
+| DataNodesShards\.active | The total number of active primary and replica shards\. | 
+| DataNodesShards\.unassigned |  The number of shards that are not allocated to nodes in the cluster\.  | 
+| DataNodesShards\.initializing | The number of shards that are under initialization\. | 
+| DataNodesShards\.relocating | The number of shards that are under relocation\. | 
+
+**Availability Zone rotation metrics**
+
+If `ActiveReads.Availability-Zone = 1`, then the zone is active\. If `ActiveReads.Availability-Zone = 0`, then the zone is in standby\.
+
+## Point in time metrics<a name="managedomains-cloudwatchmetrics-pit"></a>
+
+Amazon OpenSearch Service provides the following metrics for [point in time](pit.md) \(PIT\) searches\.
+
+**PIT coordinator node statistics \(per coordinator node\)**
+
+
+| Metric | Description | 
+| --- | --- | 
+| CurrentPointInTime | The number of active PIT search contexts in the node\. | 
+| TotalPointInTime | The number of expired PIT search contexts since the node up time\. | 
+| AvgPointInTimeAliveTime | The average keep alive of PIT search contexts since the node up time\. | 
+| HasActivePointInTime | A value of 1 indicates that there are active PIT contexts on nodes since the node up time\. A value of 0 means there are not\. | 
+| HasUsedPointInTime | A value of 1 indicates that there are expired PIT contexts on nodes since the node up time\. A value of 0 means there are not\. | 
+
 ## SQL metrics<a name="managedomains-cloudwatchmetrics-sql"></a>
 
 Amazon OpenSearch Service provides the following metrics for [SQL support](sql-support.md)\.
@@ -297,7 +351,7 @@ Amazon OpenSearch Service provides the following metrics for [SQL support](sql-s
 | SQLFailedRequestCountByCusErr |  The number of requests to the `_sql` API that failed due to a client issue\. For example, a request might return HTTP status code 400 due to an `IndexNotFoundException`\. Relevant statistics: Sum  | 
 | SQLFailedRequestCountBySysErr |  The number of requests to the `_sql` API that failed due to a server problem or feature limitation\. For example, a request might return HTTP status code 503 due to a `VerificationException`\. Relevant statistics: Sum  | 
 | SQLRequestCount |  The number of requests to the `_sql` API\. Relevant statistics: Sum  | 
-| SQLDefaultCursorRequestCount |   Similar to `SQLRequestCount` but only counts pagination requests\. Relevant statistics: Sum  | 
+| SQLDefaultCursorRequestCount |  Similar to `SQLRequestCount`, but only counts pagination requests\. Relevant statistics: Sum  | 
 | SQLUnhealthy |  A value of 1 indicates that, in response to certain requests, the SQL plugin is returning 5*xx* response codes or passing invalid query DSL to OpenSearch\. Other requests should continue to succeed\. A value of 0 indicates no recent failures\. If you see a sustained value of 1, troubleshoot the requests your clients are making to the plugin\. Relevant statistics: Maximum  | 
 
 ## k\-NN metrics<a name="managedomains-cloudwatchmetrics-knn"></a>

@@ -68,7 +68,7 @@ OpenSearch Dashboards is a popular open source visualization tool designed to wo
    domain-endpoint/_dashboards/
    ```
 
-1. Log in using your primary user name and password\.
+1. Log in using your primary username and password\.
 
 1. To use Dashboards, you need to create at least one index pattern\. Dashboards uses these patterns to identify which indexes you want to analyze\. Open the left navigation panel, choose **Stack Management**, choose **Index Patterns**, and then choose **Create index pattern**\. For this tutorial, enter *movies*\.
 

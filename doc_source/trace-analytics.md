@@ -20,155 +20,83 @@ For a Docker Compose file that demonstrates the end\-to\-end flow of data, see t
 
 ## OpenTelemetry Collector sample configuration<a name="trace-otc"></a>
 
-To use the OpenTelemetry Collector with Data Prepper, try the following sample configuration:
+To use the OpenTelemetry Collector with [Amazon OpenSearch Ingestion](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/ingestion.html), try the following sample configuration:
 
 ```
+extensions:
+  sigv4auth:
+    region: "us-east-1"
+    service: "osis"
+ 
 receivers:
   jaeger:
     protocols:
       grpc:
-  otlp:
-    protocols:
-      grpc:
-  zipkin:
-
+ 
 exporters:
-  otlp/data-prepper:
-    endpoint: data-prepper-host:21890
-    insecure: true
-
+  otlphttp:
+    traces_endpoint: "https://pipeline-endpoint.us-east-1.osis.amazonaws.com/opentelemetry.proto.collector.trace.v1.TraceService/Export"
+    auth:
+      authenticator: sigv4auth
+    compression: none
+ 
 service:
+  extensions: [sigv4auth]
   pipelines:
     traces:
-      receivers: [jaeger, otlp, zipkin]
-      exporters: [otlp/data-prepper]
+      receivers: [jaeger]
+      exporters: [otlphttp]
 ```
 
-## Data Prepper sample configuration<a name="trace-dp"></a>
+## OpenSearch Ingestion sample configuration<a name="trace-dp"></a>
 
-To send trace data to an OpenSearch Service domain, try the following sample configuration files\.
-
-**data\-prepper\-config\.yaml**
+To send trace data to an OpenSearch Service domain, try the following sample OpenSearch Ingestion pipeline configuration\. For instructions to create a pipeline, see [Creating Amazon OpenSearch Ingestion pipelines](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/creating-pipeline.html)
 
 ```
-ssl: true
-keyStoreFilePath: "/usr/share/data-prepper/keystore.jks" # required if ssl is true
-keyStorePassword: "password" # optional, defaults to empty string
-privateKeyPassword: "other_password" # optional, defaults to empty string
-serverPort: 4900 # port for administrative endpoints, default is 4900
-```
-
-**pipelines\.yaml**
-
-```
-entry-pipeline:
-  # Workers is the number of application threads.
-  # Try setting this value to the number of CPU cores on the machine.
-  # We recommend the same number of workers for all pipelines.
-  workers: 4
-  delay: "100" # milliseconds
+version: "2"
+otel-trace-pipeline:
   source:
     otel_trace_source:
-      ssl: true
-      sslKeyCertChainFile: "config/demo-data-prepper.crt"
-      sslKeyFile: "config/demo-data-prepper.key"
-  buffer:
-    bounded_blocking:
-      # Buffer size is the number of export requests to hold in memory.
-      # We recommend the same value for all pipelines.
-      # Batch size is the maximum number of requests each worker thread processes within the delay.
-      # Keep buffer size >= number of workers * batch size.
-      buffer_size: 1024
-      batch_size: 256
+      "/${pipelineName}/ingest"
+  processor:
+    - trace_peer_forwarder:
   sink:
     - pipeline:
-        name: "raw-pipeline"
+        name: "trace_pipeline"
     - pipeline:
-        name: "service-map-pipeline"
-raw-pipeline:
-  workers: 4
-  # We recommend the default delay for the raw pipeline.
-  delay: "3000"
+        name: "service_map_pipeline"
+trace-pipeline:
   source:
     pipeline:
-      name: "entry-pipeline"
-  prepper:
-    - otel_trace_raw_prepper:
-  buffer:
-    bounded_blocking:
-      buffer_size: 1024
-      batch_size: 256
+      name: "otel-trace-pipeline"
+  processor:
+    - otel_traces:
   sink:
     - opensearch:
         hosts: ["https://domain-endpoint"]
-        # # Basic authentication
-        # username: "ta-user"
-        # password: "ta-password"
-        # IAM signing
-        aws_sigv4: true
-        aws_region: "us-east-1"
-        trace_analytics_raw: true
+        index_type: trace-analytics-raw
+        aws:
+          # IAM role that OpenSearch Ingestion assumes to access the domain sink   
+          sts_role_arn: "arn:aws:iam::{account-id}:role/pipeline-role"
+          region: "us-east-1"
+        
 service-map-pipeline:
-  workers: 4
-  delay: "100"
   source:
     pipeline:
-      name: "entry-pipeline"
-  prepper:
-    - service_map_stateful:
-  buffer:
-    bounded_blocking:
-      buffer_size: 1024
-      batch_size: 256
+      name: "otel-trace-pipeline"
+  processor:
+    - service_map:
   sink:
     - opensearch:
         hosts: ["https://domain-endpoint"]
-        # # Basic authentication
-        # username: "ta-user"
-        # password: "ta-password"
-        # IAM signing
-        aws_sigv4: true
-        aws_region: "us-east-1"
-        trace_analytics_service_map: true
-```
-+ For IAM signing, run `aws configure` using the AWS CLI to set your credentials\.
-+ If you use [fine\-grained access control](fgac.md) with the internal user database, use the basic authentication lines instead\.
-
-If your domain uses fine\-grained access control, you must map the Data Prepper user or role to the [all\_access role](fgac.md#fgac-more-masters)\.
-
-If your domain doesn't use fine\-grained access control, the Data Prepper user or role must have write permissions to several indices and templates, along with permissions to access an Index State Management \(ISM\) policy and retrieve cluster settings\. The following policy shows the required permissions:
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [{
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::123456789012:user/data-prepper-sink-user"
-      },
-      "Action": "es:ESHttp*",
-      "Resource": [
-        "arn:aws:es:us-east-1:123456789012:domain/domain-name/otel-v1*",
-        "arn:aws:es:us-east-1:123456789012:domain/domain-name/_template/otel-v1*",
-        "arn:aws:es:us-east-1:123456789012:domain/domain-name/_plugins/_ism/policies/raw-span-policy",
-        "arn:aws:es:us-east-1:123456789012:domain/domain-name/_alias/otel-v1*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::123456789012:user/data-prepper-sink-user"
-      },
-      "Action": "es:ESHttpGet",
-      "Resource": "arn:aws:us-east-1:123456789012:domain/domain-name/_cluster/settings"
-    }
-  ]
-}
+        index_type: trace-analytics-service-map
+        aws:
+          # IAM role that the pipeline assumes to access the domain sink   
+          sts_role_arn: "arn:aws:iam::{account-id}:role/pipeline-role"
+          region: "us-east-1"
 ```
 
-Data Prepper uses port 21890 to receive data, and it must be able to connect to both the OpenTelemetry Collector and the OpenSearch cluster\. For performance tuning, adjust the worker count and buffer settings in your configuration file, along with the Java virtual machine \(JVM\) heap size for the machine\.
-
-Full documentation for Data Prepper is available in the [OpenSearch documentation](https://opensearch.org/docs/latest/clients/data-prepper/index/)\. For convenience, we also provide an [AWS CloudFormation template](https://github.com/opensearch-project/data-prepper/blob/main/deployment-template/ec2/data-prepper-ec2-deployment-cfn.yaml) that installs Data Prepper on an Amazon EC2 instance\.
+The pipeline role that you specify in the `sts_role_arn` option must have write permissions to the domain sink\. For instructions to configure permissions for the pipeline role, see [Allowing Amazon OpenSearch Ingestion pipelines to write to domains](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/pipeline-domain-access.html#pipeline-access-configure)\.
 
 ## Exploring trace data<a name="trace-dashboards"></a>
 

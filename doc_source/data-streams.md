@@ -86,7 +86,10 @@ GET logs-redis/_search
 You can set up an [Index State Management \(ISM\)](ism.md) policy to automate the rollover process for the data stream\. The ISM policy is applied to the backing indexes at the time of their creation\. When you associate a policy to a data stream, it only affects the future backing indexes of that data stream\. You also don’t need to provide the `rollover_alias` setting, because the ISM policy infers this information from the backing index\.
 
 **Note**  
-If you rollover a backing index to [cold storage](cold-storage.md), OpenSearch removes this index from the data stream\. Even if you move the index back to [UltraWarm](ultrawarm.md), the index remains independent and not part of the original data stream\.
+If you migrate a backing index to [cold storage](cold-storage.md), OpenSearch removes this index from the data stream\. Even if you move the index back to [UltraWarm](ultrawarm.md), the index remains independent and not part of the original data stream\. After an index has been removed from the data stream, searching against the stream won't return any data from the index\.
+
+**Warning**  
+The write index for a data stream can't be migrated to cold storage\. If you wish to migrate data in your data stream to cold storage, you must rollover the data stream before migration\.
 
 ### Step 6: Manage data streams in OpenSearch Dashboards<a name="data-streams-example-6"></a>
 

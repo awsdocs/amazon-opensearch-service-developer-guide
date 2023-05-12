@@ -70,7 +70,7 @@ A collection is a group of OpenSearch indexes that work together to support a sp
 
    Create a single rule that provides access to the *movies* collection\. Name the rule **Movies collection access**\.
 
-1. Choose **Add principals**, **IAM users and roles** and select the IAM user that you'll use to sign in to OpenSearch Dashboards and index data\. Choose **Save**\.
+1. Choose **Add principals**, **IAM users and roles** and select the user or role that you'll use to sign in to OpenSearch Dashboards and index data\. Choose **Save**\.
 
 1. Under **Index permissions**, select all of the permissions\.
 
@@ -91,8 +91,6 @@ You can upload data to an OpenSearch Serverless collection using Postman or curl
 1. Choose **Collections** in the left navigation pane and choose the **movies** collection to open its details page\.
 
 1. Choose the OpenSearch Dashboards URL for the collection\. The URL takes the format `https://collection-id.us-east-1.aoss.amazonaws.com/_dashboards`\. 
-
-1. Sign in using the [AWS access and secret keys](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html) for the user that you specified in your data access policy\.
 
 1. Within OpenSearch Dashboards, open the left navigation pane and choose **Dev Tools**\.
 
@@ -118,7 +116,7 @@ You can upload data to an OpenSearch Serverless collection using Postman or curl
 
 1. Choose **Next step** and then choose **Create index pattern**\. After the pattern is created, you can view the various document fields such as `title` and `genre`\.
 
-1. To begin searching your data, open the left navigation pane again and choose **Discover**, or use the [search API](https://opensearch.org/docs/latest/opensearch/rest-api/search/) within Dev Tools\.
+1. To begin searching your data, open the left navigation pane again and choose **Discover**, or use the [search API](https://opensearch.org/docs/latest/api-reference/search/) within Dev Tools\.
 
 ## Step 4: Delete the collection<a name="serverless-gsg-delete"></a>
 

@@ -5,7 +5,7 @@ This is a concise tutorial for uploading a small amount of test data to Amazon O
 
 You can upload data to an OpenSearch Service domain using the command line or most programming languages\.
 
-The following example requests use [curl](https://curl.haxx.se/) \(a common HTTP client\) for brevity and convenience\. Clients like curl can't perform the request signing that's required if your access policies specify IAM users or roles\. To successfully complete this process, you must use fine\-grained access control with a primary user name and password like you configured in [Step 1](gsgcreate-domain.md)\.
+The following example requests use [curl](https://curl.haxx.se/) \(a common HTTP client\) for brevity and convenience\. Clients like curl can't perform the request signing that's required if your access policies specify IAM users or roles\. To successfully complete this process, you must use fine\-grained access control with a primary username and password like you configured in [Step 1](gsgcreate-domain.md)\.
 
 You can install curl on Windows and use it from the command prompt, but we recommend a tool like [Cygwin](https://www.cygwin.com/) or the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)\. macOS and most Linux distributions come with curl preinstalled\.
 
@@ -17,7 +17,7 @@ Run the following command to add a single document to the *movies* domain:
 curl -XPUT -u 'master-user:master-user-password' 'domain-endpoint/movies/_doc/1' -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
 ```
 
-In the command, provide the user name and password that you created in [Step 1](gsgcreate-domain.md)\.
+In the command, provide the username and password that you created in [Step 1](gsgcreate-domain.md)\.
 
 For a detailed explanation of this command and how to make signed requests to OpenSearch Service, see [Indexing data in Amazon OpenSearch Service](indexing.md)\.
 

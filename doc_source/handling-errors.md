@@ -4,7 +4,7 @@ This topic describes how to identify and solve common Amazon OpenSearch Service 
 
 ## Can't access OpenSearch Dashboards<a name="troubleshooting-dashboards-configure-anonymous-access"></a>
 
-The OpenSearch Dashboards endpoint doesn't support signed requests\. If the access control policy for your domain only grants access to certain IAM users or roles and you haven't configured [Amazon Cognito authentication](cognito-auth.md), you might receive the following error when you attempt to access Dashboards:
+The OpenSearch Dashboards endpoint doesn't support signed requests\. If the access control policy for your domain only grants access to certain IAM roles and you haven't configured [Amazon Cognito authentication](cognito-auth.md), you might receive the following error when you attempt to access Dashboards:
 
 ```
 "User: anonymous is not authorized to perform: es:ESHttpGet"
@@ -145,6 +145,18 @@ In general, to avoid high JVM memory pressure in the future, follow these best p
 + Avoid aggregating on text fields, or change the [mapping type](https://opensearch.org/docs/latest/opensearch/mappings/#dynamic-mapping) for your indexes to `keyword`\.
 + Optimize search and indexing requests by [choosing the correct number of shards](sizing-domains.md#bp-sharding)\.
 + Set up Index State Management \(ISM\) policies to regularly [remove unused indexes](bp.md#bp-stability-remove)\.
+
+## Error migrating to Multi\-AZ with Standby<a name="troubleshooting-multi-az-standby"></a>
+
+The following issues might occur when you migrate an existing domain to Multi\-AZ with standby\.
+
+### Creating an index, index template, or ISM policy during migration from domains without standby to domains with standby<a name="index"></a>
+
+If you create an index while migrating a domain from Multi\-AZ without Standby to with Standby, and the index template or ISM policy doesn't follow the recommended data copy guidelines, this can cause a data inconsistency and the migration may fail\. To avoid this situation, create the new index with a data copy count \(including both primary nodes and replicas\) that is multiple of three\. You can check the migratation progress using the `DescribeDomainChangeProgress` API\. If you encounter a replica count error, fix the error and then contact [AWS Support](https://aws.amazon.com/premiumsupport/) to retry the migration\.
+
+### Incorrect number of data copies<a name="data-copy"></a>
+
+If you don't have the right number of data copies in your domain, the migrating to Multi\-AZ with Standby will fail\.
 
 ## JVM OutOfMemoryError<a name="handling-errors-jvm_out_of_memory_error"></a>
 
@@ -392,7 +404,9 @@ If you start seeing access denied errors after updating your domains to service 
 
 ## Can't connect from Alpine Linux<a name="troubleshooting-alpine"></a>
 
-Alpine Linux limits DNS response size to 512 bytes\. If you try to connect to your OpenSearch Service domain from Alpine Linux, DNS resolution can fail if the domain is in a VPC and has more than 20 nodes\. If your domain is in a VPC, we recommend using other Linux distributions, such as Debian, Ubuntu, CentOS, Red Hat Enterprise Linux, or Amazon Linux 2, to connect to it\.
+Alpine Linux limits DNS response size to 512 bytes\. If you try to connect to your OpenSearch Service domain from Alpine Linux version 3\.18\.0 or lower, DNS resolution can fail if the domain is in a VPC and has more than 20 nodes\. If you use Alpine Linux version 3\.18\.0 or higher, you should to be able to resolve more than 20 hosts\. For more information, see the [Alpine Linux 3\.18\.0 release notes](https://alpinelinux.org/posts/Alpine-3.18.0-released.html)\.
+
+If your domain is in a VPC, we recommend using other Linux distributions, such as Debian, Ubuntu, CentOS, Red Hat Enterprise Linux, or Amazon Linux 2, to connect to it\.
 
 ## Certificate error when using SDK<a name="troubleshooting-certificates"></a>
 

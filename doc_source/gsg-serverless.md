@@ -70,7 +70,7 @@ For a full list of OpenSearch Serverless permissions, see [Identity and Access M
 
 1. Choose **Create**\.
 
-## Step 4: Create a network policy<a name="gsg-network"></a>
+## Step 3: Create a network policy<a name="gsg-network"></a>
 
 [Network policies](serverless-network.md) determine whether your collection is accessible over the internet from public networks, or whether it must be accessed through OpenSearch Serverless–managed VPC endpoints\. In this tutorial, we'll configure public access\.
 
@@ -93,7 +93,7 @@ For a full list of OpenSearch Serverless permissions, see [Identity and Access M
 
 1. Choose **Create**\.
 
-## Step 5: Create a data access policy<a name="gsg-data-access"></a>
+## Step 4: Create a data access policy<a name="gsg-data-access"></a>
 
 Your collection data won't be accessible until you configure data access\. [Data access policies](serverless-data-access.md) are separate from the IAM identity\-based policy that you configured in step 1\. They allow users to access the actual data within a collection\.
 
@@ -139,7 +139,7 @@ In this tutorial, we'll provide a single user the permissions required to index 
 
 1. Choose **Create**\.
 
-## Step 3: Create a collection<a name="gsgcreate-collection"></a>
+## Step 5: Create a collection<a name="gsgcreate-collection"></a>
 
 Now that you configured encryption and network policies, you can create a matching collection and the security settings will be automatically applied to it\.
 
@@ -155,7 +155,13 @@ Now that you configured encryption and network policies, you can create a matchi
 
 1. Under **Network access settings**, OpenSearch Serverless informs you that the collection name matches the `books-policy` network policy\.
 
-1. Choose **Create**\. Collections typically take less than a minute to initialize\.
+1. Choose **Next**\.
+
+1. Under **Data access policy options**, OpenSearch Serverless informs you that the collection name matches the `books-policy` data access policy\.
+
+1. Choose **Next**\.
+
+1. Review the collection configuration and choose **Submit**\. Collections typically take less than a minute to initialize\.
 
 ## Step 6: Upload and search data<a name="gsgindex-collection"></a>
 

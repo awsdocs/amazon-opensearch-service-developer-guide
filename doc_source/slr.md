@@ -9,3 +9,4 @@ For information about other services that support service\-linked roles, see [AW
 **Topics**
 + [Using service\-linked roles to create VPC domains](slr-aos.md)
 + [Using service\-linked roles to create OpenSearch Serverless collections](serverless-service-linked-roles.md)
++ [Using service\-linked roles to create OpenSearch Ingestion pipelines](slr-osis.md)

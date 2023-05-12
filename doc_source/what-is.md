@@ -47,10 +47,18 @@ OpenSearch Service includes the following features:
 + Integration with Amazon S3, Amazon Kinesis, and Amazon DynamoDB for loading streaming data into OpenSearch Service
 + Alerts from Amazon SNS when your data exceeds certain thresholds
 
+## Amazon OpenSearch Serverless<a name="whatis-serverless"></a>
+
+Amazon OpenSearch Serverless is an on\-demand, auto scaling, serverless configuration for Amazon OpenSearch Service\. Serverless removes the operational complexities of provisioning, configuring, and tuning your OpenSearch clusters\. For more information, see [Amazon OpenSearch Serverless](serverless.md)\.
+
+## Amazon OpenSearch Ingestion<a name="whatis-osis"></a>
+
+Amazon OpenSearch Ingestion is a fully managed data collector, powered by [Data Prepper](https://opensearch.org/docs/latest/clients/data-prepper/index/), that delivers real\-time log and trace data to Amazon OpenSearch Service domains and OpenSearch Serverless collections\. It enables you to filter, enrich, transform, normalize, and aggregate data for downstream analysis and visualization\. For more information, see [Amazon OpenSearch Ingestion](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ingestion.html)\.
+
 ## Supported versions of OpenSearch and Elasticsearch<a name="choosing-version"></a>
 
 OpenSearch Service currently supports the following OpenSearch versions:
-+ 2\.3, 1\.3, 1\.2, 1\.1, 1\.0
++ 2\.5, 2\.3, 1\.3, 1\.2, 1\.1, 1\.0
 
 OpenSearch Service also supports the following legacy Elasticsearch OSS versions:
 + 7\.10, 7\.9, 7\.8, 7\.7, 7\.4, 7\.1
@@ -70,10 +78,6 @@ For OpenSearch Service, you pay for each hour of use of an EC2 instance and for 
 However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](managedomains-multiaz.md), OpenSearch Service does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. OpenSearch Service neither meters nor bills for this traffic\. Similarly, OpenSearch Service does not bill for data transfer between [UltraWarm](ultrawarm.md)/[cold](cold-storage.md) nodes and Amazon S3\.
 
 For full pricing details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for configuration changes](managedomains-configuration-changes.md#managedomains-config-charges)\.
-
-## Amazon OpenSearch Serverless<a name="whatis-serverless"></a>
-
-Amazon OpenSearch Serverless is an on\-demand, auto scaling, serverless configuration for Amazon OpenSearch Service\. Serverless removes the operational complexities of provisioning, configuring, and tuning your OpenSearch clusters\. For more information, see [Amazon OpenSearch Serverless](serverless.md)\.
 
 ## Getting started with Amazon OpenSearch Service<a name="get-started"></a>
 

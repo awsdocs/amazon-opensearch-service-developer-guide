@@ -13,7 +13,7 @@ Your AWS account has the following quotas related to OpenSearch Service domains:
 | --- | --- | --- | --- | 
 | Dedicated master instances per domain | 5 | No | You can use the T2 and T3 instance types for dedicated master nodes only if the number of data nodes is 10 or fewer\. | 
 | Domains per Region | 100 | [Yes](https://console.aws.amazon.com/servicequotas/home/services/es/quotas/L-076D529E) |  | 
-| Instances per domain | 80 | [Yes](https://console.aws.amazon.com/servicequotas/home/services/elasticloadbalancing/quotas/LL-6408ABDE) | You can request an increase up to 200 instances\. For example, your domain might have 80 data nodes and 120 warm nodes\. | 
+| Instances per domain | 80 | [Yes](https://console.aws.amazon.com/servicequotas/home/services/es/quotas/L-6408ABDE) | You can request an increase up to 200 instances\. For example, your domain might have 80 data nodes and 120 warm nodes\. | 
 | Instances per domain \(T2 instance type\) | 10 | No | We don't recommend T2 or t3\.small instance types for production domains\. | 
 | Warm instances per domain | 150 | No |  | 
 
@@ -30,26 +30,56 @@ For a list of the instance types that OpenSearch Service supports, see [Supporte
 
 ## OpenSearch Serverless quotas<a name="limits-serverless"></a>
 
-Your AWS account has the following quotas related to OpenSearch Serverless objects\. If you want to increase quotas for your account, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
+Your AWS account has the following quotas related to OpenSearch Serverless resources\.
+
+To view the quotas for OpenSearch Serverless, open the [Service Quotas console](https://console.aws.amazon.com/servicequotas/home)\. In the navigation pane, choose **AWS services** and select **Amazon OpenSearch Serverless**\. To request a quota increase, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
 
 
 | Name | Default | Adjustable | Notes | 
 | --- | --- | --- | --- | 
-|  Collection tags per account per Region  |  50  | No |  | 
-| Collections with unique KMS keys per account per Region | 25 | No |  | 
-|  VPC endpoints per account per Region  |  50  | No |  This limit only applies to [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md)\. It doesn't include OpenSearch Service\-managed VPC endpoints\.  | 
-| Data access policies per account per Region | 500 | No |  | 
-| Encryption policies per account per Region | 50 | No |  | 
-| Network policies per account per Region | 500 | No |  | 
-| SAML providers per account per Region | 50 | No |  | 
-| Index data per collection | 1 TiB | No | Each OCU includes enough hot ephemeral storage for 120 GiB of index data\. Collections can share OCUs, with the exception of collections with unique KMS keys\. | 
-| Index data per account | 6 TiB |  |  | 
-| Indexes within search collections per account | 20 | No |  | 
-| Indexes within time series collections per account | 120 | No |  | 
-| Search OCUs per account per Region | 50 | No |  | 
-| Indexing OCUs per account per Region | 50 | No |  | 
+|  Default indexing capacity \(OCUs\)  |  10  | No |  | 
+| Default search capacity \(OCUs\) | 10 | No |  | 
+|  Data access policies  |  500  | No |  | 
+| Encryption policies | 50 | No |  | 
+| Maximum indexing capacity \(OCUs\) | 50 | No |  | 
+| Network policies | 500 | No |  | 
+| SAML providers | 50 | No |  | 
+| Maximum search capacity \(OCUs\) | 50 | No |  | 
+| Data access policy size | 10,240 bytes | No |  | 
+| Network policy size | 10,240 bytes | No |  | 
+| SAML provider size | 20,480 bytes | No |  | 
+| Encryption policy size | 10,240 bytes | No |  | 
 
-## UltraWarm storage quotas<a name="limits-ultrawarm"></a>
+Your AWS account has the following additional OpenSearch Serverless limits:
+
+
+| Name | Default | Adjustable | Notes | 
+| --- | --- | --- | --- | 
+|  Collection tags  |  50  | No |  | 
+| Collections with unique KMS keys | 25 | No |  | 
+|  OpenSearch Serverless\-managed VPC endpoints  |  50  | No |  This limit only applies to [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md)\. It doesn't include OpenSearch Service\-managed VPC endpoints\.  | 
+| Indexes within search collections | 20 | No |  This limit means that each search collection can have no more than 20 indexes\.  | 
+| Indexes within time series collections | 120 | No |  This limit means that each time series collection can have no more than 120 indexes\.  | 
+
+## OpenSearch Ingestion quotas<a name="limits-ingestion"></a>
+
+Your AWS account has the following quotas related to Amazon OpenSearch Ingestion resources\. Unless otherwise noted, each quota is Region\-specific\. To request a quota increase, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
+
+
+| Name | Default | Adjustable | Notes | 
+| --- | --- | --- | --- | 
+| Memory per pipeline | 192 GiB | No |  | 
+| Connected VPCs per pipeline | 1 | No |  | 
+| Pipelines per Region | 25 | No |  | 
+| Sub\-pipelines per pipeline | 10 | No |  | 
+| Characters per pipeline | 12000 | No |  | 
+| Sources per pipeline | 1 | No |  This limit only applies to *plugin* sources, such as HTTP, OTel, or S3\. You can still chain sub\-pipelines together within a single OpenSearch Ingestion pipeline configuration\.  | 
+| Unique OpenSearch sinks per pipeline | 1 | No |  This limit only applies to OpenSearch *domain* and *collection* sinks\. You can still chain sub\-pipelines together within a single OpenSearch Ingestion pipeline configuration\.  | 
+| Total OpenSearch sinks per pipeline | 8 | No | This limit refers to the number of times that you can specify the same OpenSearch sink within a pipeline configuration file\. | 
+| Maximum Ingestion OCUs per stateless pipeline | 96 | No | See [Stateless versus stateful processors](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/pipeline-config-reference.html#processor-stateful-stateless)\. | 
+| Maximum Ingestion OCUs per stateful pipeline | 48 | No | See [Stateless versus stateful processors](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/pipeline-config-reference.html#processor-stateful-stateless)\. | 
+
+### UltraWarm storage quotas<a name="limits-ultrawarm"></a>
 
 The following table lists the UltraWarm instance types and the maximum amount of storage that each type can use\. For more information about UltraWarm, see [UltraWarm storage for Amazon OpenSearch Service](ultrawarm.md)\.
 
@@ -59,7 +89,7 @@ The following table lists the UltraWarm instance types and the maximum amount of
 | ultrawarm1\.medium\.search | 1\.5 TiB | 
 | ultrawarm1\.large\.search | 20 TiB | 
 
-## EBS volume size quotas<a name="ebsresource"></a>
+### EBS volume size quotas<a name="ebsresource"></a>
 
 The following table shows the minimum and maximum sizes for EBS volumes for each instance type that OpenSearch Service supports\. For information about which instance types include instance storage and additional hardware details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
 + If you choose magnetic storage under **EBS volume type** when creating your domain, the maximum volume size is 100 GiB for all instance types except `t2.small` and `t2.medium`, and all Graviton instances \(M6g, C6g, R6g, and R6gd\), which don't support magnetic storage\. For the maximum sizes listed in the following table, choose one of the SSD options\.
@@ -148,7 +178,7 @@ The following table shows the minimum and maximum sizes for EBS volumes for each
 | i3\.8xlarge\.search | N/A | N/A | N/A | 
 | i3\.16xlarge\.search | N/A | N/A | N/A | 
 
-## Network quotas<a name="network-limits"></a>
+### Network quotas<a name="network-limits"></a>
 
 The following table shows the maximum size of HTTP request payloads\.
 
@@ -237,10 +267,10 @@ The following table shows the maximum size of HTTP request payloads\.
 | i3\.8xlarge\.search | 100 MiB | 
 | i3\.16xlarge\.search | 100 MiB | 
 
-## Java process quota<a name="java-process-limit"></a>
+### Java process quota<a name="java-process-limit"></a>
 
 OpenSearch Service limits Java processes to a heap size of 32 GiB\. Advanced users can specify the percentage of the heap used for field data\. For more information, see [Advanced cluster settings](createupdatedomains.md#createdomain-configure-advanced-options) and [JVM OutOfMemoryError](handling-errors.md#handling-errors-jvm_out_of_memory_error)\.
 
-## Domain policy quota<a name="domain-policy-limit"></a>
+### Domain policy quota<a name="domain-policy-limit"></a>
 
 OpenSearch Service limits [access policies on domains](ac.md#ac-types-resource) to 100 KiB\.

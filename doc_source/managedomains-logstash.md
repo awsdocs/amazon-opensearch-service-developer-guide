@@ -52,9 +52,24 @@ output.logstash:
 
 ### IAM configuration<a name="logstash-config-iam"></a>
 
-If your domain uses an IAM\-based domain access policy or fine\-grained access control with an IAM master user, you must sign all requests to OpenSearch Service using IAM credentials\.
+If your domain uses an IAM\-based domain access policy or fine\-grained access control with a master user, you must sign all requests to OpenSearch Service using IAM credentials\. The following identity\-based policy grants all HTTP requests to your domain's subresources\.
 
-Change your configuration file to use the plugin for its output\. This example configuration file takes its input from files in an S3 bucket:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "es:ESHttp*"
+      ],
+      "Resource": "arn:aws:es:region:aws-account-id:domain/domain-name/*"
+    }
+  ]
+}
+```
+
+To set up your Logstash configuration, change your configuration file to use the plugin for its output\. This example configuration file takes its input from files in an S3 bucket:
 
 ```
 input {

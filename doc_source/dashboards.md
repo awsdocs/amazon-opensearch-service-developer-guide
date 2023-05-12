@@ -200,7 +200,7 @@ If you already invested significant time into configuring your own OpenSearch Da
    opensearch_security.multitenancy.enabled: false
    opensearch_security.readonly_mode.roles: [opensearch_dashboards_read_only']
    opensearch_security.auth.unauthenticated_routes: []
-   opensearch_security.basicauth.login.title: 'Please log in using your user name and password'
+   opensearch_security.basicauth.login.title: 'Please log in using your username and password'
    
    opensearch.username: 'username'
    opensearch.password: 'password'

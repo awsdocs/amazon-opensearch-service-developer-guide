@@ -1,14 +1,15 @@
 # Data access control for Amazon OpenSearch Serverless<a name="serverless-data-access"></a>
 
-With data access control in Amazon OpenSearch Serverless, you can allow users to access collections and indexes, regardless of their access mechanism or network source\. You can provide access to IAM users and [SAML identities](serverless-saml.md)\.
+With data access control in Amazon OpenSearch Serverless, you can allow users to access collections and indexes, regardless of their access mechanism or network source\. You can provide access to IAM roles and [SAML identities](serverless-saml.md)\.
 
-You manage access permissions through *data access policies*, which apply to collections and index resources\. Data access policies help you manage collections at scale by automatically assigning access permissions to collections and indexes that match a specific pattern\. Multiple data access policies can apply to a single resource\.
+You manage access permissions through *data access policies*, which apply to collections and index resources\. Data access policies help you manage collections at scale by automatically assigning access permissions to collections and indexes that match a specific pattern\. Multiple data access policies can apply to a single resource\. Note that you must have a data access policy for your collection in order to access your OpenSearch Dashboards URL\.
 
 **Topics**
 + [Data access policies versus IAM policies](#serverless-data-access-vs-iam)
 + [IAM permissions required](#serverless-data-access-permissions)
 + [Policy syntax](#serverless-data-access-syntax)
 + [Supported policy permissions](#serverless-data-supported-permissions)
++ [Sample datasets on OpenSearch Dashboards](#serverless-data-sample-index)
 + [Creating data access policies \(console\)](#serverless-data-access-console)
 + [Creating data access policies \(AWS CLI\)](#serverless-data-access-cli)
 + [Viewing data access policies](#serverless-data-access-list)
@@ -103,7 +104,7 @@ A data access policy includes a set of rules, each with the following elements:
 | ResourceType | The type of resource \(collection or index\) that the permissions apply to\. Alias and template permissions are at the collection level, while permissions for creating, modifying, and searching data are at the index level\. For more information, see [Supported policy permissions](#serverless-data-supported-permissions)\. | 
 | Resource | A list of resource names and/or patterns\. Patterns are prefixes followed by a wildcard \(\*\), which allow the associated permissions to apply to multiple resources\.[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-data-access.html) | 
 | Permission | A list of permissions to grant for the specified resources\. For a complete list of permissions and the API operations they allow, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\. | 
-| Principal | A list of one or more principals to grant access to\. Principals can be IAM user or role ARNs, or SAML identities\. These principals must be within the current AWS account\. Cross\-account access isn't supported\. | 
+| Principal | A list of one or more principals to grant access to\. Principals can be IAM role ARNs or SAML identities\. These principals must be within the current AWS account\. Cross\-account access isn't supported\. | 
 
 The following example policy grants alias and template permissions to the collection called `autopartsinventory`, as well as any collections that begin with the prefix `sales*`\. It also grants read and write permissions to all indexes within the `autopartsinventory` collection, and any indexes in the `salesorders` collection that begin with the prefix `orders*`\.
 
@@ -167,6 +168,33 @@ The following permissions are supported in data access policies\. For the OpenSe
 + `aoss:DescribeIndex`
 + `aoss:*`
 
+## Sample datasets on OpenSearch Dashboards<a name="serverless-data-sample-index"></a>
+
+OpenSearch Dashboards provides [sample datasets](https://opensearch.org/docs/latest/dashboards/quickstart-dashboards/#adding-sample-data) that come with visualizations, dashboards, and other tools to help you explore Dashboards before you add your own data\. To create indexes from this sample data, you need a data access policy that provides permissions to the dataset that you want to work with\. The following policy uses a wildcard \(`*`\) to provide permissions to all three sample datasets\.
+
+```
+[
+  {
+    "Rules": [
+      {
+        "Resource": [
+          "index/<collection-name>/opensearch_dashboards_sample_data_*"
+        ],
+        "Permission": [
+          "aoss:CreateIndex",
+          "aoss:DescribeIndex",
+          "aoss:ReadDocument"
+        ],
+        "ResourceType": "index"
+      }
+    ],
+    "Principal": [
+      "arn:aws:iam::<account-id>:user/<user>"
+    ]
+  }
+]
+```
+
 ## Creating data access policies \(console\)<a name="serverless-data-access-console"></a>
 
 You can create a data access policy using the visual editor, or in JSON format\. Any new collections that match one of the patterns defined in the policy will be assigned the corresponding permissions when you create the collection\.
@@ -183,7 +211,7 @@ You can create a data access policy using the visual editor, or in JSON format\.
 
 1. Provide a name for the first rule in your policy\. For example, "Logs collection access"\.
 
-1. Choose **Add principals** and select one or more IAM users and roles or [SAML users and groups](serverless-saml.md) to provide data access to\.
+1. Choose **Add principals** and select one or more IAM roles or [SAML users and groups](serverless-saml.md) to provide data access to\.
 **Note**  
 In order to select principals from the dropdown menus, you must have the `iam:ListUsers` and `iam:ListRoles` permissions \(for IAM principals\) and `aoss:ListSecurityConfigs` permission \(for SAML identities\)\. 
 

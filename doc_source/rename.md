@@ -1,6 +1,6 @@
 # Amazon OpenSearch Service rename \- Summary of changes<a name="rename"></a>
 
-On September 8, 2021, Amazon OpenSearch Service was renamed to replace "Elasticsearch" with "OpenSearch"\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the rename, and what actions you need to take to ensure that your domains continue to function properly\. 
+On September 8, 2021, our search and analytics suite was renamed to Amazon OpenSearch Service\. OpenSearch Service supports OpenSearch as well as legacy Elasticsearch OSS\. The following sections describe the different parts of the service that changed with the rename, and what actions you need to take to ensure that your domains continue to function properly\. 
 
 Some of these changes only apply when you upgrade your domains from Elasticsearch to OpenSearch\. In other cases, such as in the Billing and Cost Management console, the experience changes immediately\.
 

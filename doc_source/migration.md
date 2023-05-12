@@ -6,7 +6,7 @@ Index snapshots are a popular way to migrate from a self\-managed OpenSearch or 
 
 1. Create an OpenSearch Service domain\.
 
-1. Give OpenSearch Service permissions to access the bucket, and give your user account permissions to work with snapshots\.
+1. Give OpenSearch Service permissions to access the bucket, and ensure you have permissions to work with snapshots\.
 
 1. Restore the snapshot on the OpenSearch Service domain\.
 
@@ -82,7 +82,7 @@ As is, the command creates an internet\-accessible domain with two data nodes, e
 Before issuing the command, change the domain name, master user credentials, and account number\. Specify the same AWS Region that you used for the S3 bucket and an OpenSearch/Elasticsearch version that is compatible with your snapshot\.
 
 **Important**  
-Snapshots are only forward\-compatible, and only by one major version\. For example, you can't restore a snapshot from a 2\.*x* cluster on a 1\.*x* cluster or a 6\.*x* cluster, only a 2\.*x* or 5\.*x* cluster\. Minor version matters, too\. You can't restore a snapshot from a self\-managed 5\.3\.3 cluster on a 5\.3\.2 OpenSearch Service domain\. We recommend choosing the most recent version of OpenSearch or Elasticsearch that your snapshot supports\. For a table of compatible versions, see [Using a snapshot to migrate data](version-migration.md#snapshot-based-migration)\. 
+Snapshots are only forward\-compatible, and only by one major version\. For example, you can't restore a snapshot from an OpenSearch 1\.*x* cluster on an Elasticsearch 7\.*x* cluster, only an OpenSearch 1\.*x* or 2\.*x* cluster\. Minor version matters, too\. You can't restore a snapshot from a self\-managed 5\.3\.3 cluster on a 5\.3\.2 OpenSearch Service domain\. We recommend choosing the most recent version of OpenSearch or Elasticsearch that your snapshot supports\. For a table of compatible versions, see [Using a snapshot to migrate data](version-migration.md#snapshot-based-migration)\. 
 
 ## Provide permissions to the S3 bucket<a name="migration-permissions"></a>
 
@@ -133,7 +133,7 @@ In the AWS Identity and Access Management \(IAM\) console, [create a role](https
 }
 ```
 
-Then give your personal IAM user or role—whatever you used to configure the AWS CLI earlier—permissions to assume `OpenSearchSnapshotRole`\. Create the following policy and [attach it](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) to your identity:
+Then give your personal IAM role permissions to assume `OpenSearchSnapshotRole`\. Create the following policy and [attach it](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html) to your identity:
 
 **Permissions**
 
@@ -151,7 +151,7 @@ Then give your personal IAM user or role—whatever you used to configure the AW
 
 ### Map the snapshot role in OpenSearch Dashboards \(if using fine\-grained access control\)<a name="migration-snapshot-role"></a>
 
-If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM user or role so you can work with snapshots\.
+If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you use HTTP basic authentication for all other purposes, you need to map the `manage_snapshots` role to your IAM role so you can work with snapshots\.
 
 **To give your identity permissions to work with snapshots**
 
@@ -161,7 +161,7 @@ If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you
 
 1. Choose **Mapped users**, **Manage mapping**\. 
 
-1. Add the domain ARN of your personal IAM user or role in the appropriate field\. The ARN takes one of the following formats:
+1. Add the domain ARN of your personal IAM role in the appropriate field\. The ARN takes one of the following formats:
 
    ```
    arn:aws:iam::123456789123:user/user-name
@@ -171,7 +171,7 @@ If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you
    arn:aws:iam::123456789123:role/role-name
    ```
 
-1. Select **Map** and confirm the user or role shows up under **Mapped users**\.
+1. Select **Map** and confirm role shows up under **Mapped users**\.
 
 ## Restore the snapshot<a name="migration-restore"></a>
 

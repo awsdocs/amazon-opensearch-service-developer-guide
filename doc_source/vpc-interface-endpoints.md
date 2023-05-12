@@ -24,6 +24,7 @@ When using OpenSearch Service\-managed VPC endpoints, consider the following:
 + You can only create interface VPC endpoints through the OpenSearch Service console or using the [OpenSearch Service API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\. You can't create interface VPC endpoints for OpenSearch Service using the Amazon VPC console\.
 + OpenSearch Service\-managed VPC endpoints aren't accessible from the internet\. An OpenSearch Service\-managed VPC endpoint is accessible only within the VPC where the endpoint is provisioned or any VPCs peered with the VPC where the endpoint is provisioned, as permitted by the route tables and security groups\.
 + VPC endpoint policies are not supported for OpenSearch Service\. You can associate a security group with the endpoint network interfaces to control traffic to OpenSearch Service through the interface VPC endpoint\.
++ Your [service\-linked role](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/slr.html) must be in the same AWS account that you use to create the VPC endpoint\.
 
 ## Provide access to a domain<a name="vpc-endpoint-access"></a>
 
@@ -31,7 +32,7 @@ If the VPC that you want to access your domain is in another AWS account, you ne
 
 **To allow a VPC in another AWS account to access your domain**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home/](https://console.aws.amazon.com/aos/home/)\.
 
 1. In the navigation pane, choose **Domains** and open the domain that you want to provide access to\.
 
@@ -49,7 +50,7 @@ You can create an interface VPC endpoint for OpenSearch Service using either the
 
 **To create an interface VPC endpoint for an OpenSearch Service domain**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home/](https://console.aws.amazon.com/aos/home/)\.
 
 1. In the left navigation pane, choose **VPC endpoints**\.
 

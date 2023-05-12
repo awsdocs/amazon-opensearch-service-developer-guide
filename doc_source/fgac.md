@@ -39,7 +39,7 @@ The second security layer is the domain access policy\. After a request reaches 
 The third and final security layer is fine\-grained access control\. After a resource\-based access policy allows a request to reach a domain endpoint, fine\-grained access control evaluates the user credentials and either authenticates the user or denies the request\. If fine\-grained access control authenticates the user, it fetches all roles mapped to that user and uses the complete set of permissions to determine how to handle the request\.
 
 **Note**  
-If a resource\-based access policy contains IAM users or roles, clients must send signed requests using AWS Signature Version 4\. As such, access policies can conflict with fine\-grained access control, especially if you use the internal user database and HTTP basic authentication\. You can't sign a request with a user name and password *and* IAM credentials\. In general, if you enable fine\-grained access control, we recommend using a domain access policy that doesn't require signed requests\.
+If a resource\-based access policy contains IAM roles or users, clients must send signed requests using AWS Signature Version 4\. As such, access policies can conflict with fine\-grained access control, especially if you use the internal user database and HTTP basic authentication\. You can't sign a request with a username and password *and* IAM credentials\. In general, if you enable fine\-grained access control, we recommend using a domain access policy that doesn't require signed requests\.
 
 The following diagram illustrates a common configuration: a VPC access domain with fine\-grained access control enabled, an IAM\-based access policy, and an IAM master user\.
 
@@ -139,7 +139,7 @@ If a user provides invalid credentials, the cluster returns an `Unauthorized` ex
 
 After configuring a role, you *map* it to one or more users\. For example, you might map three roles to a single user: one role that provides access to Dashboards, one that provides read\-only access to `index1`, and one that provides write access to `index2`\. Or you could include all of those permissions in a single role\.
 
-*Users* are people or applications that make requests to the OpenSearch cluster\. Users have credentials—either IAM access keys or a user name and password—that they specify when they make requests\. With fine\-grained access control on Amazon OpenSearch Service, you choose one or the other for your *master user* when you configure your domain\. The master user has full permissions to the cluster and manages roles and role mappings\.
+*Users* are people or applications that make requests to the OpenSearch cluster\. Users have credentials—either IAM access keys or a username and password—that they specify when they make requests\. With fine\-grained access control on Amazon OpenSearch Service, you choose one or the other for your *master user* when you configure your domain\. The master user has full permissions to the cluster and manages roles and role mappings\.
 + If you choose IAM for your master user, all requests to the cluster must be signed using AWS Signature Version 4\. For sample code, see [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)\.
 
   We recommend IAM if you want to use the same users on multiple clusters, if you want to use Amazon Cognito to access Dashboards, or if you have OpenSearch clients that support Signature Version 4 signing\.
@@ -151,7 +151,7 @@ After configuring a role, you *map* it to one or more users\. For example, you m
 
 Enable fine\-grained access control using the console, AWS CLI, or configuration API\. For steps, see [Creating and managing Amazon OpenSearch Service domains](createupdatedomains.md)\. 
 
-Fine\-grained access control requires OpenSearch or Elasticsearch 6\.7 or later\. It also requires HTTPS for all traffic to the domain, [Encryption of data at rest](encryption-at-rest.md), and [node\-to\-node encryption](ntn.md)\. After you enable fine\-grained access control, you can't disable it\.
+Fine\-grained access control requires OpenSearch or Elasticsearch 6\.7 or later\. It also requires HTTPS for all traffic to the domain, [Encryption of data at rest](encryption-at-rest.md), and [node\-to\-node encryption](ntn.md)\. Depending on how you configure the advanced features of fine\-grained access control, additional processing of your requests may require compute and memory resources on individual data nodes\. After you enable fine\-grained access control, you can't disable it\.
 
 ### Enabling fine\-grained access control on existing domains<a name="fgac-enabling-existing"></a>
 
@@ -165,11 +165,11 @@ You can enable fine\-grained access control on existing domains running OpenSear
 
 1. Choose how to create the master user:
    + If you want to use IAM for user management, choose **Set IAM ARN as master user** and specify the ARN for an IAM role\.
-   + If you want to use the internal user database, choose **Create master user** and specify a user name and password\.
+   + If you want to use the internal user database, choose **Create master user** and specify a username and password\.
 
 1. \(Optional\) Select **Enable migration period for open/IP\-based access policy**\. This setting enables a 30\-day transition period during which your existing users can continue to access the domain without disruptions, and existing open and [IP\-based access policies](ac.md#ac-types-ip) will continue to work with your domain\. During this migration period, we recommend that administrators [create the necessary roles and map them to users](#fgac-access-control) for the domain\. If you use identity\-based policies instead of an open or IP\-based access policy, you can disable this setting\.
 
-   You also need to update your clients to work with fine\-grained access control during the migration period\. For example, if you map IAM users with fine\-grained access control, you must update your clients to start signing requests with AWS Signature Version 4\. If you configure HTTP basic authentication with fine\-grained access control, you must update your clients to provide appropriate basic authentication credentials in requests\.
+   You also need to update your clients to work with fine\-grained access control during the migration period\. For example, if you map IAM roles with fine\-grained access control, you must update your clients to start signing requests with AWS Signature Version 4\. If you configure HTTP basic authentication with fine\-grained access control, you must update your clients to provide appropriate basic authentication credentials in requests\.
 
    During the migration period, users who access the OpenSearch Dashboards endpoint for the domain will land directly on the **Discover** page rather than the login page\. Administrators and master users can choose **Login** to log in with admin credentials and configure role mappings\. 
 **Important**  
@@ -190,7 +190,7 @@ aws opensearch update-domain-config --domain-name test-domain --region us-east-1
 
 ### About the default\_role<a name="fgac-enabling-defaultrole"></a>
 
-Fine\-grained access control requires [role mapping](#fgac-mapping)\. If your domain uses [identity\-based access policies](ac.md#ac-types-identity), OpenSearch Service automatically maps your IAM users to a new role called **default\_role** in order to help you properly migrate existing users\. This temporary mapping ensures that your users can still successfully send IAM\-signed GET and PUT requests until you create your own role mappings\.
+Fine\-grained access control requires [role mapping](#fgac-mapping)\. If your domain uses [identity\-based access policies](ac.md#ac-types-identity), OpenSearch Service automatically maps your users to a new role called **default\_role** in order to help you properly migrate existing users\. This temporary mapping ensures that your users can still successfully send IAM\-signed GET and PUT requests until you create your own role mappings\.
 
 The role does not add any security vulnerabilities or flaws to your OpenSearch Service domain\. We recommend deleting the default role as soon as you set up your own roles and map them accordingly\.
 
@@ -201,7 +201,7 @@ The following table describes the behavior for each authentication method before
 
 | Authentication method | Before enabling fine\-grained access control | After enabling fine\-grained access control | Administrator tasks | 
 | --- | --- | --- | --- | 
-| Identity\-based policies |  All IAM users satisfying the IAM policy can access the domain\.  |  You don't need to enable the migration period\. OpenSearch Service automatically maps all IAM users that satisfy the IAM policy to the **[default\_role](#fgac-enabling-defaultrole)** so that they can continue to access the domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
+| Identity\-based policies |  All users satisfying the IAM policy can access the domain\.  |  You don't need to enable the migration period\. OpenSearch Service automatically maps all users that satisfy the IAM policy to the **[default\_role](#fgac-enabling-defaultrole)** so that they can continue to access the domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
 | IP\-based policies |  All users from the allowed IP addresses or CIDR blocks can access the domain\.  |  During the 30\-day migration period, all users from the allowed IP addresses or CIDR blocks can continue to access the domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
 | Open access policies |  All users over the internet can access the domain\.  |  During the 30\-day migration period, all users over the internet can continue to access to domain\.  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html)  | 
 
@@ -212,7 +212,7 @@ Fine\-grained access control has an OpenSearch Dashboards plugin that simplifies
 
   With Amazon Cognito authentication, one of the assumed roles from the identity pool must match the IAM role that you specified for the master user\. For more information about this configuration, see [\(Optional\) Configuring granular access](cognito-auth.md#cognito-auth-granular) and [Tutorial: Configure a domain with an IAM master user and Amazon Cognito authentication](fgac-walkthrough-iam.md)\.  
 ![\[Cognito sign-in page\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/cognito-auth.png)
-+ If you choose to use the internal user database, you can sign in to Dashboards with your master user name and password\. You must access Dashboards over HTTPS\. Amazon Cognito and SAML authentication for Dashboards both replace this login screen\.
++ If you choose to use the internal user database, you can sign in to Dashboards with your master username and password\. You must access Dashboards over HTTPS\. Amazon Cognito and SAML authentication for Dashboards both replace this login screen\.
 
   For more information about this configuration, see [Tutorial: Configure a domain with the internal user database and HTTP basic authentication](fgac-walkthrough-basic.md)\.  
 ![\[Basic authentication sign-in page\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/basic-auth-dashboards.png)
@@ -232,6 +232,19 @@ The permissions that you choose to grant to your users vary widely based on use 
 You can create new roles for fine\-grained access control using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Create roles](https://opensearch.org/docs/security-plugin/access-control/users-roles/#create-roles)\.
 
 Fine\-grained access control also includes a number of [predefined roles](https://opensearch.org/docs/security-plugin/access-control/users-roles/#predefined-roles)\. Clients such as OpenSearch Dashboards and Logstash make a wide variety of requests to OpenSearch, which can make it hard to manually create roles with the minimum set of permissions\. For example, the `opensearch_dashboards_user` role includes the permissions that a user needs to work with index patterns, visualizations, dashboards, and tenants\. We recommend [mapping it](#fgac-mapping) to any user or backend role that accesses Dashboards, along with additional roles that allow access to other indices\.
+
+Amazon OpenSearch Service doesn't offer the following OpenSearch roles:
++ `observability_full_access`
++ `observability_read_access`
++ `reports_read_access`
++ `reports_full_access`
+
+Amazon OpenSearch Service offers several roles that aren't available with OpenSearch:
++ `ultrawarm_manager`
++ `ml_full_access`
++ `cold_manager`
++ `notifications_full_access`
++ `notifications_read_access`
 
 #### Cluster\-level security<a name="fgac-cluster-level"></a>
 
@@ -268,14 +281,14 @@ If you apply the standard masking to a field, OpenSearch Service uses a secure, 
 
 If you enabled the internal user database, you can create users using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Create users](https://opensearch.org/docs/security-plugin/access-control/users-roles/#create-users)\.
 
-If you chose IAM for your master user, ignore this portion of Dashboards\. Create IAM users and IAM roles instead\. For more information, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/)\.
+If you chose IAM for your master user, ignore this portion of Dashboards\. Create IAM roles instead\. For more information, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/)\.
 
 ### Mapping roles to users<a name="fgac-mapping"></a>
 
 Role mapping is the most critical aspect of fine\-grained access control\. Fine\-grained access control has some predefined roles to help you get started, but unless you map roles to users, every request to the cluster ends in a permissions error\.
 
-*Backend roles* offer another way of mapping roles to users\. Rather than mapping the same role to dozens of different users, you can map the role to a single backend role, and then make sure that all users have that backend role\. Backend roles can be IAM roles or arbitrary strings\.
-+ Specify users, IAM user ARNs, and Amazon Cognito user strings in the **Users** section\. Cognito user strings take the form of `Cognito/user-pool-id/username`\.
+*Backend roles* can help simplify the role mapping process\. Rather than mapping the same role to 100 individual users, you can map the role to a single backend role that all 100 users share\. Backend roles can be IAM roles or arbitrary strings\. 
++ Specify users, user ARNs, and Amazon Cognito user strings in the **Users** section\. Cognito user strings take the form of `Cognito/user-pool-id/username`\.
 + Specify backend roles and IAM role ARNs in the **Backend roles** section\.
 
 ![\[Role mapping screen\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/role-mapping-edit.png)
@@ -308,10 +321,10 @@ Due to how fine\-grained access control [interacts with other security features]
 
 | Description | Master user | Domain access policy | 
 | --- | --- | --- | 
-|  Use IAM credentials for calls to the OpenSearch APIs, and use [SAML authentication](saml.md) to access Dashboards\. Manage fine\-grained access control roles using Dashboards or the REST API\.  | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
-|  Use IAM credentials or basic authentication for calls to the OpenSearch APIs\. Manage fine\-grained access control roles using Dashboards or the REST API\. This configuration offers a lot of flexiblity, especially if you have OpenSearch clients that only support basic authentication\. If you have an existing identity provider, use [SAML authentication](saml.md) to access Dashboards\. Otherwise, manage Dashboards users in the internal user database\.  | User name and password |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
-|  Use IAM credentials for calls to the OpenSearch APIs, and use Amazon Cognito to access Dashboards\. Manage fine\-grained access control roles using Dashboards or the REST API\.  | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
-|  Use IAM credentials for calls to the OpenSearch APIs, and block most access to Dashboards\. Manage fine\-grained access control roles using the REST API\.  | IAM user or role |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    },<br />    {<br />      "Effect": "Deny",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/_dashboards*"<br />    }<br />  ]<br />}</pre>  | 
+|  Use IAM credentials for calls to the OpenSearch APIs, and use [SAML authentication](saml.md) to access Dashboards\. Manage fine\-grained access control roles using Dashboards or the REST API\.  | IAM role or user |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
+|  Use IAM credentials or basic authentication for calls to the OpenSearch APIs\. Manage fine\-grained access control roles using Dashboards or the REST API\. This configuration offers a lot of flexiblity, especially if you have OpenSearch clients that only support basic authentication\. If you have an existing identity provider, use [SAML authentication](saml.md) to access Dashboards\. Otherwise, manage Dashboards users in the internal user database\.  | Username and password |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
+|  Use IAM credentials for calls to the OpenSearch APIs, and use Amazon Cognito to access Dashboards\. Manage fine\-grained access control roles using Dashboards or the REST API\.  | IAM role or user |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    }<br />  ]<br />}</pre>  | 
+|  Use IAM credentials for calls to the OpenSearch APIs, and block most access to Dashboards\. Manage fine\-grained access control roles using the REST API\.  | IAM role or user |  <pre>{<br />  "Version": "2012-10-17",<br />  "Statement": [<br />    {<br />      "Effect": "Allow",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/*"<br />    },<br />    {<br />      "Effect": "Deny",<br />      "Principal": {<br />        "AWS": "*"<br />      },<br />      "Action": "es:ESHttp*",<br />      "Resource": "domain-arn/_dashboards*"<br />    }<br />  ]<br />}</pre>  | 
 
 ## Limitations<a name="fgac-limitations"></a>
 
@@ -344,7 +357,7 @@ If you forget the details of the master user, you can reconfigure it using the c
 
 **To modify the master user \(console\)**
 
-1. Navigate to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Navigate to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home/](https://console.aws.amazon.com/aos/home/)\.
 
 1. Choose your domain and choose **Actions**, **Edit security configuration**\.
 

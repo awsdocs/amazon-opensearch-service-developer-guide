@@ -9,6 +9,16 @@ Amazon OpenSearch Service integrates with Amazon EventBridge to notify you of ce
 
 For more information, see [Get started with Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-get-started.html) in the *Amazon EventBridge User Guide*\.
 
+**Topics**
++ [Service software update events](#monitoring-events-sso)
++ [Auto\-Tune events](#monitoring-events-autotune)
++ [Cluster health events](#monitoring-events-cluster-health)
++ [VPC endpoint events](#monitoring-events-vpc)
++ [Node retirement events](#monitoring-events-nr)
++ [Domain error events](#monitoring-events-errors)
++ [Tutorial: Listening for Amazon OpenSearch Service EventBridge events](listening-events.md)
++ [Tutorial: Sending Amazon SNS alerts for available software updates](sns-events.md)
+
 ## Service software update events<a name="monitoring-events-sso"></a>
 
 OpenSearch Service sends events to EventBridge when one of the following [service software update](service-software.md) events occur\.
@@ -35,7 +45,68 @@ The following is an example event of this type:
     "event": "Service Software Update",
     "status": "Available",
     "severity": "Informational",
-    "description": "Service software update [R20200330-p1] available."
+    "description": "Service software update R20220928 available. Service Software Deployment Mechanism:
+                    Blue/Green. For more information on deployment configuration, please
+                    see: https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-configuration-changes.html"
+  }
+}
+```
+
+### Service software update scheduled<a name="monitoring-events-sso-scheduled"></a>
+
+OpenSearch Service sends this event when a service software update has been scheduled\. For *optional* updates, you receive the notification on the scheduled date and you have the option to reschedule at any time\. For *required* updates, you receive the notification three days before the scheduled date, and you have the option to reschedule it within the mandatory window\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Software Update Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2016-11-01T13:12:22Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Service Software Update",
+    "status": "Scheduled",
+    "severity": "High",
+    "description": "A new service software update [R20200330-p1] has been scheduled at [21st May 2023 12:40 GMT].
+                    Please see documentation for more information on scheduling software updates: 
+                    https://docs.aws.amazon.com/opensearch-service/latest/developerguide/service-software.html."
+  }
+}
+```
+
+### Service software update rescheduled<a name="monitoring-events-sso-rescheduled"></a>
+
+OpenSearch Service sends this event when an optional service software update has been rescheduled\. For more information, see [Optional versus required updates](service-software.md#service-software-optional-required)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Software Update Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2016-11-01T13:12:22Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Service Software Update",
+    "status": "Rescheduled",
+    "severity": "High",
+    "description": "The service software update [R20200330-p1], which was originally scheduled for 
+                    [21st May 2023 12:40 GMT], has been rescheduled to [23rd May 2023 12:40 GMT]. 
+                    Please see documentation for more information on scheduling software updates: 
+                    https://docs.aws.amazon.com/opensearch-service/latest/developerguide/service-software.html."
   }
 }
 ```
@@ -62,7 +133,7 @@ The following is an example event of this type:
     "event": "Service Software Update",
     "status": "Started",
     "severity": "Informational",
-    "description": "Service software update [R20200330-p1] started."
+    "description": "Service software update [R20200330-p1] started.
   }
 }
 ```
@@ -94,9 +165,91 @@ The following is an example event of this type:
 }
 ```
 
+### Service software update cancelled<a name="monitoring-events-sso-cancelled"></a>
+
+OpenSearch Service sends this event when a service software update has been cancelled\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Software Update Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2016-11-01T13:12:22Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Service Software Update",
+    "status": "Cancelled",
+    "severity": "Informational",
+    "description": "The scheduled service software update [R20200330-p1] has been cancelled as a 
+                    newer update is available. Please schedule the latest update."
+  }
+}
+```
+
+### Scheduled service software update cancelled<a name="monitoring-events-scheduled-sso-cancelled"></a>
+
+OpenSearch Service sends this event when a service software update that was previously scheduled for the domain has been cancelled\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Software Update Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2016-11-01T13:12:22Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Service Software Update",
+    "status": "Cancelled",
+    "severity": "Informational",
+    "description": "The scheduled service software update [R20200330-p1] has been cancelled."
+  }
+}
+```
+
+### Service software update unexecuted<a name="monitoring-events-sso-unexecuted"></a>
+
+OpenSearch Service sends this event when it can't initiate a service software update\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Software Update Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2016-11-01T13:12:22Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Service Software Update",
+    "status": "Unexecuted",
+    "severity": "Informational",
+    "description": "The scheduled service software update [R20200330-p1] cannot be started. Reason: [reason]"
+  }
+}
+```
+
 ### Service software update failed<a name="monitoring-events-sso-failed"></a>
 
-OpenSearch Service sends this event when a service software update failed\.
+OpenSearch Service sends this event when a service software update fails\.
 
 **Example**
 
@@ -115,15 +268,15 @@ The following is an example event of this type:
   "detail": {
     "event": "Service Software Update",
     "status": "Failed",
-    "severity": "Medium",
-    "description": "Service software update [R20200330-p1] failed."
+    "severity": "High",
+    "description": "Installation of service software update [R20200330-p1] failed. [reason].
   }
 }
 ```
 
 ### Service software update required<a name="monitoring-events-sso-required"></a>
 
-OpenSearch Service sends this event when a service software update is required\.
+OpenSearch Service sends this event when a service software update is required\. For more information, see [Optional versus required updates](service-software.md#service-software-optional-required)\.
 
 **Example**
 
@@ -143,8 +296,11 @@ The following is an example event of this type:
     "event": "Service Software Update",
     "status": "Required",
     "severity": "High",
-    "description": "Service software update [R20200330-p1] available. Update will be automatically 
-                    installed after [30/04/2020] if no action is taken."
+    "description": "Service software update [R20200330-p1] available. Update 
+                    will be automatically installed after [21st May 2023] if no
+                    action is taken. Service Software Deployment Mechanism: Blue/Green.
+                    For more information on deployment configuration, please see: 
+                    https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-configuration-changes.html"
   }
 }
 ```
@@ -596,6 +752,35 @@ The following is an example event of this type:
 }
 ```
 
+### Low disk watermark breach<a name="monitoring-events-watermark"></a>
+
+OpenSearch Service sends this event when all nodes in your cluster have less than 10% of available storage space, or less than 10 GB\. When all nodes breach the low disk watermark, any new index results in a yellow cluster, and when all nodes fall below the high disk watermark, it will lead to a red cluster\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"Low Disk Watermark Breach",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"Low Disk Watermark threshold is about to be breached. Once the threshold is breached, new index creation will be blocked on all
+                    nodes to prevent the cluster status from turning red. Please increase disk size to suit your storage needs. For more information, 
+                    see https://docs.aws.amazon.com/opensearch-service/latest/developerguide/handling-errors.html#troubleshooting-cluster-block".
+  }
+}
+```
+
 ### EBS burst balance below 70%<a name="monitoring-events-ebs-burst-70"></a>
 
 OpenSearch Service sends this event when the EBS burst balance on one or more data nodes falls below 70%\. EBS burst balance depletion can cause widespread cluster unavailability and throttling of I/O requests, which can lead to high latencies and timeouts on indexing and search requests\. For steps to fix this issue, see [Low EBS burst balance](handling-errors.md#handling-errors-low-ebs-burst)\.
@@ -656,7 +841,7 @@ The following is an example event of this type:
 
 ### Disk throughput throttle<a name="monitoring-events-throughput-throttle"></a>
 
-OpenSearch Service sends this event when read and write requests to your domain are being throttled due to the throughput limitations of your EBS volumes\. If you receive this notification, consider scaling up your instances following AWS recommended best practices\.
+OpenSearch Service sends this event when read and write requests to your domain are being throttled due to the throughput limitations of your EBS volumes or EC2 instance\. If you receive this notification, consider scaling up your volumes or instances following AWS recommended best practices\.
 
 **Example**
 
@@ -676,7 +861,7 @@ The following is an example event of this type:
      "event":"Disk Throughput Throttle",
      "status":"Warning",
      "severity":"Medium",
-     "description":"Your domain is experiencing throttling as you have hit disk throughout limits. 
+     "description":"Your domain is experiencing throttling due to instance or volume throughput limitations. 
                     Please consider scaling your domain to suit your throughput needs. Please refer to the documentation for more information."
   }
 }
@@ -776,6 +961,96 @@ The following is an example event of this type:
    }
 }
 ```
+
+## Node retirement events<a name="monitoring-events-nr"></a>
+
+OpenSearch Service sends events to EventBridge when one of the following node retirement events occur\.
+
+### Node retirement scheduled<a name="monitoring-events-nr-scheduled"></a>
+
+OpenSearch Service sends this event when a node retirement has been scheduled\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2023-04-07T10:07:33Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Node Retirement Notification",
+    "status": "Scheduled",
+    "severity": "Medium",
+    "description": "An automated action to retire and replace a node has been scheduled on your domain. 
+                    The node will be replaced in the next off-peak window. For more information, see 
+                    https://docs.aws.amazon.com/opensearch-service/latest/developerguide/monitoring-events.html."
+  }
+}
+```
+
+### Node retirement completed<a name="monitoring-events-nr-completed"></a>
+
+OpenSearch Service sends this event when a node retirement has completed\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2023-04-07T10:07:33Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Node Retirement Notification",
+    "status": "Completed",
+    "severity": "Medium",
+    "description": "The node has been retired and replaced with a new node."
+  }
+}
+```
+
+### Node retirement failed<a name="monitoring-events-nr-failed"></a>
+
+OpenSearch Service sends this event when a node retirement fails\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version": "0",
+  "id": "01234567-0123-0123-0123-012345678901",
+  "detail-type": "Amazon OpenSearch Service Notification",
+  "source": "aws.es",
+  "account": "123456789012",
+  "time": "2023-04-07T10:07:33Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail": {
+    "event": "Node Retirement Notification",
+    "status": "Failed",
+    "severity": "Medium",
+    "description": "Node retirement failed. No actions are required from your end. We will automatically 
+                    retry replacing the node."
+  }
+}
+```
+
+### <a name="monitoring-events-sso-required"></a>
 
 ## Domain error events<a name="monitoring-events-errors"></a>
 

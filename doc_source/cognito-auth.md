@@ -156,7 +156,7 @@ If `CognitoAccessForAmazonOpenSearch` already exists, you need fewer permissions
 
 **To configure Amazon Cognito authentication for Dashboards \(console\)**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home/](https://console.aws.amazon.com/aos/home/)\.
 
 1. Under **Domains**, select the domain you want to configure\.
 
@@ -206,8 +206,8 @@ After your domain finishes processing, see [Allowing the authenticated role](#co
 
 By default, the authenticated IAM role that you configured by following the guidelines in [About the identity pool](#cognito-auth-prereq-ip) does not have the necessary privileges to access OpenSearch Dashboards\. You must provide the role with additional permissions\.
 
-**Important**  
-If you configured [fine\-grained access control](fgac.md) and use an "open" or IP\-based access policy, you can skip this step\.
+**Note**  
+If you configured [fine\-grained access control](fgac.md) and use an open or IP\-based access policy, you can skip this step\.
 
 You can include these permissions in an [identity\-based](ac.md#ac-types-identity) policy, but unless you want authenticated users to have access to all OpenSearch Service domains, a [resource\-based](ac.md#ac-types-resource) policy attached to a single domain is the better approach\.
 
@@ -215,21 +215,21 @@ For the `Principal`, specify the ARN of the Cognito authenticated role that you 
 
 ```
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": [
-          "arn:aws:iam::123456789012:role/Cognito_identitypoolnameAuth_Role"
-        ]
-      },
-      "Action": [
-        "es:ESHttp*"
-      ],
-      "Resource": "arn:aws:es:region:123456789012:domain/domain-name/*"
-    }
-  ]
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Effect":"Allow",
+         "Principal":{
+            "AWS":[
+               "arn:aws:iam::123456789012:role/Cognito_identitypoolnameAuth_Role"
+            ]
+         },
+         "Action":[
+            "es:ESHttp*"
+         ],
+         "Resource":"arn:aws:es:region:123456789012:domain/domain-name/*"
+      }
+   ]
 }
 ```
 
@@ -346,7 +346,7 @@ Use the following procedure to disable Amazon Cognito authentication for Dashboa
 
 **To disable Amazon Cognito authentication for Dashboards \(console\)**
 
-1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home/](https://console.aws.amazon.com/aos/home/)\.
 
 1. Under **Domains**, choose the domain you want to configure\.
 

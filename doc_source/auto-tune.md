@@ -2,17 +2,20 @@
 
 Auto\-Tune in Amazon OpenSearch Service uses performance and usage metrics from your OpenSearch cluster to suggest memory\-related configuration changes, including queue and cache sizes and Java virtual machine \(JVM\) settings on your nodes\. These optional changes improve cluster speed and stability\. 
 
-Some changes deploy immediately, while others require you to schedule a maintenance window\. You can revert to the default OpenSearch Service settings at any time\.
-
-As Auto\-Tune gathers and analyzes performance metrics for your domain, you can view its recommendations in the OpenSearch Service console on the **Notifications** page\.
+Some changes deploy immediately, while others are scheduled during your domain's off\-peak window\. You can revert to the default OpenSearch Service settings at any time\. As Auto\-Tune gathers and analyzes performance metrics for your domain, you can view its recommendations in the OpenSearch Service console on the **Notifications** page\.
 
 Auto\-Tune is available in commercial AWS Regions on domains running any OpenSearch version, or Elasticsearch 6\.7 or later, with a [supported instance type](supported-instance-types.md)\.
+
+**Topics**
++ [Types of changes](#auto-tune-types)
++ [Enabling or disabling Auto\-Tune](#auto-tune-enable)
++ [Scheduling Auto\-Tune enhancements](#auto-tune-schedule)
 
 ## Types of changes<a name="auto-tune-types"></a>
 
 Auto\-Tune has two broad categories of changes:
-+ Nondisruptive changes that it applies as the cluster runs
-+ Changes that require a [blue/green deployment](managedomains-configuration-changes.md)
++ Nondisruptive changes that it applies as the cluster runs\.
++ Changes that require a [blue/green deployment](managedomains-configuration-changes.md), which it applies during the domain's off\-peak window\.
 
 Based on your domain's performance metrics, Auto\-Tune can suggest adjustments to the following settings:
 
@@ -25,81 +28,64 @@ Based on your domain's performance metrics, Auto\-Tune can suggest adjustments t
 |  Cache size  |  Nondisruptive  |  The *field cache* monitors on\-heap data structures, so it's important to monitor the cache's use\. Auto\-Tune scales the field data cache size to avoid out of memory and circuit breaker issues\.  The *shard request cache* is managed at the node level and has a default maximum size of 1% of the heap\. Auto\-Tune scales the shard request cache size to accept more search and index requests than what the configured cluster can handle\.  | 
 | Request size | Nondisruptive |  By default, when the aggregated size of in\-flight requests surpasses 10% of total JVM \(2% for `t2` instance types and 1% for `t3.small`\), OpenSearch throttles all new `_search` and `_bulk` requests until the existing requests complete\.  Auto\-Tune automatically tunes this threshold, typically between 5\-15%, based on the amount of JVM that is currently occupied on the system\. For example, if JVM memory pressure is high, Auto\-Tune might reduce the threshold to 5%, at which point you might see more rejections until the cluster stabilizes and the threshold increases\.  | 
 
-If you enable Auto\-Tune without setting a maintenance window, Auto\-Tune only applies nondisruptive changes\. The performance benefits over time are generally smaller, but you avoid the overhead associated with blue/green deployments\.
-
-For guidance on configuring maintenance windows, see [Scheduling changes](#auto-tune-schedule)\.
-
 ## Enabling or disabling Auto\-Tune<a name="auto-tune-enable"></a>
 
-OpenSearch Service enables Auto\-Tune by default on new domains\. To enable or disable Auto\-Tune on existing domains, we recommend using the console, which greatly simplifies the process\. In the console, choose your domain and go to the **Auto\-Tune** tab, then choose **Edit**\. Enabling Auto\-Tune doesn't cause a blue/green deployment\.
-
-**AWS CLI**
-
-To use the [AWS CLI](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/index.html), configure the `auto-tune-options` parameters\. The following sample command enables Auto\-Tune on an existing domain with a maintenance schedule that repeats every day at 12:00pm UTC:
-
-```
-aws opensearch update-domain-config \
-  --domain-name mylogs \
-  --auto-tune-options '{"DesiredState": "ENABLED","MaintenanceSchedules":[{"StartAt":"2021-12-19","Duration":{"Value":2,"Unit":"HOURS"},"CronExpressionForRecurrence": "cron(0 12 * * ? *)"}]}'
-```
-
-**Configuration API**
-
-To use the [configuration API](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html), configure the `AutoTuneOptions` settings: 
-
-```
-POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/domain-name/config
-{
-  "AutoTuneOptions": {
-    "DesiredState": "ENABLED",
-    "MaintenanceSchedules": [{
-      "StartAt": 4104152288000,
-      "Duration": {
-        "Value": 2,
-        "Unit": "HOURS"
-      },
-    "CronExpressionForRecurrence": "cron(0 12 * * ? *)"
-    }]
-  }
-}
-```
-
-**CloudFormation**
+OpenSearch Service enables Auto\-Tune by default on new domains\. To enable or disable Auto\-Tune on existing domains, we recommend using the console, which simplifies the process\. Enabling Auto\-Tune doesn't cause a blue/green deployment\.
 
 You currently can't enable or disable Auto\-Tune using AWS CloudFormation\.
 
-## Scheduling changes<a name="auto-tune-schedule"></a>
+### Console<a name="auto-tune-enable-console"></a>
 
-To apply changes that require a blue/green deployment, you schedule a maintenance window for your domain—for example, between 6:00 and 9:00 AM on a Friday morning\. We recommend scheduling maintenance windows for low\-traffic times\.
-+ To review all changes before deploying them, wait for Auto\-Tune to notify you of a suggested optimization\. Then schedule a one\-time maintenance window to deploy the changes\.
-+ For a more automated experience, set a weekly maintenance window, such as every Saturday at 2:00 AM, or use a custom [cron expression](#auto-tune-cron) for more complex schedules\.
+**To enable Auto\-Tune on an existing domain**
 
-To schedule changes in the console, choose your domain, go to the **Auto\-Tune** tab, choose **Edit**, and then select **Add maintenance window**\. This tab also shows your current maintenance window and whether Auto\-Tune will make any changes during the next window\.
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home )\.
 
-## Cron expressions<a name="auto-tune-cron"></a>
+1. In the navigation pane, under **Domains**, choose the domain name to open the cluster configuration\.
 
-Cron expressions for Auto\-Tune use the same six\-field syntax as [Amazon CloudWatch Events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions):
+1. Choose **Turn on** if Auto\-Tune isn't already enabled\.
+
+1. Optionally, select **Off\-peak window** to schedule optimizations that require a blue/green deployment during the domain's configured off\-peak window\. For more information, see [Scheduling Auto\-Tune enhancements](#auto-tune-schedule)\.
+
+1. Choose **Save changes**\.
+
+### CLI<a name="auto-tune-enable-cli"></a>
+
+To enable Auto\-Tune using the AWS CLI, send an [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html) request:
 
 ```
-minute hour day-of-month month day-of-week year
+aws opensearch update-domain-config \
+  --domain-name my-domain \
+  --auto-tune-options DesiredState=ENABLED
 ```
 
-For example, the following expression translates to "every Tuesday and Friday at 1:15 AM from 2021 through 2024":
+## Scheduling Auto\-Tune enhancements<a name="auto-tune-schedule"></a>
+
+Prior to February 16, 2023, Auto\-Tune used *maintenance windows* to schedule changes that required a blue/green deployment\. Maintenance windows are now deprecated in favor of the [off\-peak window](off-peak.md), which is a daily 10\-hour time block during which your domain typically experiences low traffic\. You can modify the default start time for the off\-peak window, but you can't modify the length\.
+
+Any domains that had Auto\-Tune maintenance windows enabled before the introduction of off\-peak windows on February 16, 2023 can continue to use legacy maintenance windows with no interruption\. However, we recommend that you migrate your existing domains to use the off\-peak window for domain maintenance instead\. For instructions, see [Migrating from Auto\-Tune maintenance windows](off-peak.md#off-peak-migrate)\.
+
+### Console<a name="auto-tune-schedule-console"></a>
+
+**To schedule Auto\-Tune actions the off\-peak window**
+
+1. Open the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home](https://console.aws.amazon.com/aos/home )\.
+
+1. In the navigation pane, under **Domains**, choose the domain name to open the cluster configuration\.
+
+1. Go to the **Auto\-Tune** tab and choose **Edit**\.
+
+1. Choose **Turn on** if Auto\-Tune isn't already enabled\.
+
+1. Under **Schedule optimizations during off\-peak window**, select **Off\-peak window**\.
+
+1. Choose **Save changes**\.
+
+### CLI<a name="auto-tune-schedule-cli"></a>
+
+To configure your domain to schedule Auto\-Tune actions during the configured off\-peak window, include `UseOffPeakWindow` in the [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html) request:
 
 ```
-15 1 ? * 3,6 2021-2024
+aws opensearch update-domain-config \
+  --domain-name my-domain \
+  --auto-tune-options DesiredState=ENABLED,UseOffPeakWindow=true,MaintenanceSchedules=null
 ```
-
-The following table includes valid values for each field\.
-
-
-| Field | Valid values | 
-| --- | --- | 
-|  Minute  |  0–59  | 
-|  Hour  |  0–23  | 
-|  Day of month  |  1–31  | 
-|  Month  |  1–12 or JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC  | 
-|  Day of week  |  1–7 or SUN, MON, TUE, WED, THU, FRI, SAT  | 
-|  Year  |  1970–2199  | 
-
-Day of month and day of week overlap, so you can specify one, but not both\. You must mark the other as `?`\. For a full summary of wildcard options, see the [Amazon CloudWatch Events User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)\.

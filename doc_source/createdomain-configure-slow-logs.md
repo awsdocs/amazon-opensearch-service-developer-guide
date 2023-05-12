@@ -191,7 +191,7 @@ Resources:
      PolicyDocument: "{ \"Version\": \"2012-10-17\", \"Statement\": [{ \"Sid\": \"\", \"Effect\": \"Allow\", \"Principal\": { \"Service\": \"es.amazonaws.com\"}, \"Action\":[ \"logs:PutLogEvents\",\"logs:CreateLogStream\"],\"Resource\": \"arn:aws:logs:us-east-1:123456789012:log-group:opensearch-logs:*\"}]}"
 ```
 
-Finally, create the following CloudFormation stack which generates an OpenSearch Service domain with log publishing enabled\. The access policy permits the root user for the AWS account to make all HTTP requests to the domain:
+Finally, create the following CloudFormation stack, which generates an OpenSearch Service domain with log publishing\. The access policy permits the user for the AWS account to make all HTTP requests to the domain\.
 
 ```
 Resources:

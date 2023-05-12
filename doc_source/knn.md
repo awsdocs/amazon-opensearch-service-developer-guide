@@ -9,6 +9,7 @@ Use the following tables to find the version of the k\-NN plugin running on your
 
 | OpenSearch version | k\-NN plugin version | Notable features | 
 | --- | --- | --- | 
+| 2\.5 | 2\.5\.0\.0 | Extended SystemIndexPlugin for k\-NN model system index, added Lucene\-specific file extensions to core HybridFS | 
 | 2\.3 | 2\.3\.0\.0 |  | 
 | 1\.3 | 1\.3\.0\.0 |  | 
 | 1\.2 | 1\.2\.0\.0 | Added support for the [Faiss](https://github.com/facebookresearch/faiss) library | 

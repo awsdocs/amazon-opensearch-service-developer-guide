@@ -8,13 +8,15 @@ The following sample requests work with OpenSearch APIs\. Some requests might no
 **Topics**
 + [URI searches](#searching-uri)
 + [Request body searches](#searching-dsl)
++ [Paginating search results](#searching-paginating)
 + [Dashboards Query Language](#DashboardsQueryLanguages)
 + [Custom packages for Amazon OpenSearch Service](custom-packages.md)
 + [Querying your Amazon OpenSearch Service data with SQL](sql-support.md)
 + [k\-Nearest Neighbor \(k\-NN\) search in Amazon OpenSearch Service](knn.md)
-+ [Cross\-cluster search for Amazon OpenSearch Service](cross-cluster-search.md)
++ [Cross\-cluster search in Amazon OpenSearch Service](cross-cluster-search.md)
 + [Learning to Rank for Amazon OpenSearch Service](learning-to-rank.md)
-+ [Asynchronous search for Amazon OpenSearch Service](asynchronous-search.md)
++ [Asynchronous search in Amazon OpenSearch Service](asynchronous-search.md)
++ [Point in time in Amazon OpenSearch Service](pit.md)
 
 ## URI searches<a name="searching-uri"></a>
 
@@ -152,24 +154,6 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search
 }
 ```
 
-### Paginating search results<a name="searching-dsl-pagination"></a>
-
-If you need to display a large number of search results, you can implement pagination using the `from` parameter\. The following request returns results 20–39 of the zero\-indexed list of search results:
-
-```
-POST https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search
-{
-  "from": 20,
-  "size": 20,
-  "query": {
-    "multi_match": {
-      "query": "house",
-      "fields": ["title^4", "plot^2", "actors", "directors"]
-    }
-  }
-}
-```
-
 ### Search result highlighting<a name="searching-dsl-highlighting"></a>
 
 The `highlight` option tells OpenSearch to return an additional object inside of the `hits` array if the query matched one or more fields:
@@ -284,6 +268,34 @@ A sample response might look like the following:
   }
 }
 ```
+
+## Paginating search results<a name="searching-paginating"></a>
+
+If you need to display a large number of search results, you can implement pagination using several different methods\. 
+
+### Point in time<a name="pag-pit"></a>
+
+The point in time \(PIT\) feature is a type of search that lets you run different queries against a dataset that's fixed in time\. This is the preferred pagination method in OpenSearch, especially for deep pagination\. You can use PIT with OpenSearch Service version 2\.5 and later\. For more information about PIT, see [Point in time in Amazon OpenSearch Service](pit.md)\.
+
+### The `from` and `size` parameters<a name="pag-from-size"></a>
+
+The simplest way to paginate is with the `from` and `size` parameters\. The following request returns results 20–39 of the zero\-indexed list of search results:
+
+```
+POST https://search-my-domain.us-west-1.es.amazonaws.com/movies/_search
+{
+  "from": 20,
+  "size": 20,
+  "query": {
+    "multi_match": {
+      "query": "house",
+      "fields": ["title^4", "plot^2", "actors", "directors"]
+    }
+  }
+}
+```
+
+For more information about search pagination, see [Paginate results](https://opensearch.org/docs/latest/opensearch/search/paginate/) in the OpenSearch documentation\.
 
 ## Dashboards Query Language<a name="DashboardsQueryLanguages"></a>
 

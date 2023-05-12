@@ -57,7 +57,7 @@ You can use the console or the AWS CLI to create a serverless collection\.
 
 **To create a collection using the console**
 
-1. Navigate to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ )\.
+1. Navigate to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home/](https://console.aws.amazon.com/aos/home/)\.
 
 1. Expand **Serverless** in the left navigation pane and choose **Collections**\. 
 
@@ -75,7 +75,7 @@ You can use the console or the AWS CLI to create a serverless collection\.
 
    For more information, see [Choosing a collection type](serverless-overview.md#serverless-usecase)\.
 
-1. Under **Encryption**, choose an AWS KMS key to encrypt your data with\. OpenSearch Serverless notifies you if the collection name that you entered matches a pattern defined in an encryption policy\. You can choose to keep this match or override it with unique encryption settings\. For more information, see [Encryption at rest for Amazon OpenSearch Serverless](serverless-encryption.md)\.
+1. Under **Encryption**, choose an AWS KMS key to encrypt your data with\. OpenSearch Serverless notifies you if the collection name that you entered matches a pattern defined in an encryption policy\. You can choose to keep this match or override it with unique encryption settings\. For more information, see [Encryption in Amazon OpenSearch Serverless](serverless-encryption.md)\.
 
 1. Under **Network access settings**, configure network access for the collection\.
    + For **Access type**, select public or VPC access\. If you choose to enable access through a virtual private cloud \(VPC\), select one or more VPC endpoints to allow access through\. To create a VPC endpoint, see [Access Amazon OpenSearch Serverless using an interface endpoint \(AWS PrivateLink\)](serverless-vpc.md)\.
@@ -88,10 +88,10 @@ You can use the console or the AWS CLI to create a serverless collection\.
 1. Choose **Next**\.
 
 1. Configure data access rules for the collection, which define who can access the data within the collection\. For each rule that you create, perform the following steps:
-   + Choose **Add principals** and select one or more IAM users and roles or [SAML users and groups](serverless-saml.md) to provide data access to\.
+   + Choose **Add principals** and select one or more IAM roles or [SAML users and groups](serverless-saml.md) to provide data access to\.
    + Under **Grant permissions**, select the alias, template, and index permissions to grant the associated principals\. For a full list of permissions and the access they allow, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
 
-    For more information about creating data access policies, see [Data access control for Amazon OpenSearch Serverless](serverless-data-access.md)\.
+   OpenSearch Serverless notifies you if the collection name that you entered matches a pattern defined in a data access policy\. You can choose to keep this match or override it with unique data access settings\. For more information, see [Data access control for Amazon OpenSearch Serverless](serverless-data-access.md)\.
 
 1. Choose **Next**\.
 
@@ -156,13 +156,12 @@ After you create a collection, you won't be able to access it unless it matches 
 
 ## Accessing OpenSearch Dashboards<a name="serverless-dashboards"></a>
 
-After you create a collection, you can navigate to the collection's OpenSearch Dashboards URL\. You can find the URL by choosing **Collections** in the left navigation pane and selecting the collection to open its details page\.
+After you create a collection with the AWS Management Console, you can navigate to the collection's OpenSearch Dashboards URL\. You can find the Dashboards URL by choosing **Collections** in the left navigation pane and selecting the collection to open its details page\. The URL takes the format `https://dashboards.us-east-1.aoss.amazonaws.com/_login/?collectionId=07tjusf2h91cunochc`\. Once you navigate to the URL, you'll automatically log into Dashboards\.
 
-The URL takes the following format:
+If you already have the OpenSearch Dashboards URL available but aren't on the AWS Management Console, calling the Dashboards URL from the browser will redirect to the console\. Once you enter your AWS credentials, you'll automatically log in to Dashboards\. For information about accessing collections for SAML, see [Accessing OpenSearch Dashboards with SAML](serverless-saml.md#serverless-saml-dashboards)\.
 
-`https://07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com/_dashboards`
-
-To sign in, you must provide your AWS access key and secret key\. For instructions to find your access key and secret key, see [AWS Account and Access Keys](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)\.
+**Note**  
+On May 10, 2023, OpenSearch introduced a common global endpoint for OpenSearch Dashboards\. You can now navigate to OpenSearch Dashboards in the browser with a URL that takes the format `https://dashboards.us-east-1.aoss.amazonaws.com/_login/?collectionId=07tjusf2h91cunochc`\. To ensure backward compatibility, we'll continue to support the existing collection specific OpenSearch Dashboards endpoints with the format `https://07tjusf2h91cunochc.us-east-1.aoss.amazonaws.com/_dashboards`\.
 
 ## Viewing collections<a name="serverless-list"></a>
 

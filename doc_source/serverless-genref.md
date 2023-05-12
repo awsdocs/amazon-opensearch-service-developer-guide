@@ -13,7 +13,7 @@ The following table lists the API operations that OpenSearch Serverless supports
 
 | Data access policy permission | OpenSearch API operations | Description | 
 | --- | --- | --- | 
-|  `aoss:CreateIndex`  | PUT <index> |  Create indexes\. For more information, see [Create index](https://opensearch.org/docs/latest/api-reference/index-apis/create-index/)\.  | 
+|  `aoss:CreateIndex`  | PUT <index> |  Create indexes\. For more information, see [Create index](https://opensearch.org/docs/latest/api-reference/index-apis/create-index/)\.  This permission also applies to creating indexes with the sample data on OpenSearch Dashboards\.   | 
 |  `aoss:DescribeIndex`  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-genref.html)  |  Describe indexes\. For more information, see the following resources: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-genref.html)  | 
 |  `aoss:WriteDocument`  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-genref.html)  |  Write and update documents\. For more information, see the following resources: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-genref.html)  Some operations are only allowed for collections of type `SEARCH`\. For more information, see [Choosing a collection type](serverless-overview.md#serverless-usecase)\.   | 
 |  `aoss:ReadDocument`  |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-genref.html)  | Read documents\. For more information, see the following resources:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-genref.html) | 
@@ -35,7 +35,7 @@ OpenSearch Serverless collections come prepackaged with the following plugins fr
 +  [Phonetic Analysis](https://www.elastic.co/guide/en/elasticsearch/plugins/7.10/analysis-phonetic.html) 
 +  [Smart Chinese Analysis](https://www.elastic.co/guide/en/elasticsearch/plugins/7.10/analysis-smartcn.html) 
 +  [Stempel Polish Analysis](https://www.elastic.co/guide/en/elasticsearch/plugins/7.10/analysis-stempel.html)
-+  [Ukranian Analysis](https://www.elastic.co/guide/en/elasticsearch/plugins/7.10/analysis-ukrainian.html)
++  [Ukrainian Analysis](https://www.elastic.co/guide/en/elasticsearch/plugins/7.10/analysis-ukrainian.html)
 
 **Mapper plugins**
 +  [Mapper Size](https://www.elastic.co/guide/en/elasticsearch/plugins/7.10/mapper-size.html) 

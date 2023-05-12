@@ -23,7 +23,7 @@ You'll complete the following steps in this tutorial:
 ## Prerequisites<a name="fgac-walkthrough-prereqs"></a>
 
 In order to perform the steps in this tutorial, you must complete the following prerequisites:
-+ [Create a Cognito user pool](https://docs.aws.amazon.com/cognito/latest/developerguide/tutorial-create-user-pool.html)\. For **Cognito user pool sign\-in options**, make sure **User name** is selected\.
++ [Create a Cognito user pool](https://docs.aws.amazon.com/cognito/latest/developerguide/tutorial-create-user-pool.html)\. For **Cognito user pool sign\-in options**, make sure **Username** is selected\.
 + [Create a Cognito identity pool](https://docs.aws.amazon.com/cognito/latest/developerguide/tutorial-create-identity-pool.html)\. Note the **Identity ID** of the pool, as you'll need it in the next step when you create your IAM roles\.
 
 The user pool and identity pool must be in the same AWS Region\.
@@ -64,7 +64,7 @@ Replace `identity-pool-id` with the unique identifier of your Amazon Cognito ide
 
 ## Step 2: Create a domain with Cognito authentication<a name="fgac-walkthrough-domain"></a>
 
-Navigate to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/esv3/](https://console.aws.amazon.com/esv3/ ) and [create a domain](createupdatedomains.md) with the following settings:
+Navigate to the Amazon OpenSearch Service console at [https://console\.aws\.amazon\.com/aos/home/](https://console.aws.amazon.com/aos/home/) and [create a domain](createupdatedomains.md) with the following settings:
 + OpenSearch 1\.0 or later, or Elasticsearch 7\.8 or later
 + Public access
 + Fine\-grained access control enabled with `MasterUserRole` as the master user \(created in the previous step\) 
@@ -102,7 +102,7 @@ While your domain is being created, configure the master and limited users and g
 
 1. Choose your user pool to open its configuration, then choose **Create user**\.
 
-1. Specify a user name of `master-user` and a password, and then choose **Create user**\.
+1. Specify a username of `master-user` and a password, and then choose **Create user**\.
 
 1. Create another user named `limited-user`\.
 

@@ -327,7 +327,7 @@ For a description of each audit log field, see [Audit log field reference](https
 
 ## Configuring audit logs using the REST API<a name="audit-log-rest-api"></a>
 
-We recommend using OpenSearch Dashboards to configure audit logs, but you can also use the fine\-grained access control REST API\. This section contains a sample request\. Full documentation on the REST API is available in the [OpenSearch documentation](https://opensearch.org/docs/security-plugin/access-control/api/)\.
+We recommend using OpenSearch Dashboards to configure audit logs, but you can also use the fine\-grained access control REST API\. This section contains a sample request\. Full documentation on the REST API is available in the [OpenSearch documentation](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/audit-logs.html#audit-log-rest-api)\.
 
 ```
 PUT _plugins/_security/api/audit/config

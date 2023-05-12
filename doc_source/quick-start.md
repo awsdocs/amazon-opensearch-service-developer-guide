@@ -25,7 +25,7 @@ To add a document to an index, you can use any HTTP tool, such as [Postman](http
    domain-endpoint/_dashboards/
    ```
 
-1. Sign in using your primary user name and password\.
+1. Sign in using your primary username and password\.
 
 1. Open the left navigation panel and choose **Dev Tools**\.
 

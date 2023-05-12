@@ -30,6 +30,25 @@ VPC access for OpenSearch Serverless uses the following AWS Identity and Access 
 + `aoss:UpdateVpcEndpoint` – Modify a VPC endpoint\.
 + `aoss:DeleteVpcEndpoint` – Delete a VPC endpoint\.
 
+In addition, you need the following Amazon EC2 and Route 53 permissions in order to create a VPC endpoint\.
++ `ec2:CreateTags`
++ `ec2:CreateVpcEndpoint`
++ `ec2:DeleteVpcEndPoints`
++ `ec2:DescribeSecurityGroups`
++ `ec2:DescribeSubnets`
++ `ec2:DescribeVpcEndpoints`
++ `ec2:DescribeVpcs`
++ `ec2:ModifyVpcEndPoint`
++ `route53:AssociateVPCWithHostedZone`
++ `route53:ChangeResourceRecordSets`
++ `route53:CreateHostedZone`
++ `route53:DeleteHostedZone`
++ `route53:GetChange`
++ `route53:GetHostedZone`
++ `route53:ListHostedZonesByName`
++ `route53:ListHostedZonesByVPC`
++ `route53:ListResourceRecordSets`
+
 ## Create an interface endpoint for OpenSearch Serverless<a name="serverless-vpc-create"></a>
 
 You can create an interface endpoint for OpenSearch Serverless using either the console or the OpenSearch Serverless API\. 
