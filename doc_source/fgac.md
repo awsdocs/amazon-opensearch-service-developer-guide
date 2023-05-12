@@ -229,9 +229,9 @@ The permissions that you choose to grant to your users vary widely based on use 
 
 ### Creating roles<a name="fgac-roles"></a>
 
-You can create new roles for fine\-grained access control using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Create roles](https://opensearch.org/docs/security-plugin/access-control/users-roles/#create-roles)\.
+You can create new roles for fine\-grained access control using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Create roles](https://opensearch.org/docs/latest/security/access-control/users-roles/#create-roles)\.
 
-Fine\-grained access control also includes a number of [predefined roles](https://opensearch.org/docs/security-plugin/access-control/users-roles/#predefined-roles)\. Clients such as OpenSearch Dashboards and Logstash make a wide variety of requests to OpenSearch, which can make it hard to manually create roles with the minimum set of permissions\. For example, the `opensearch_dashboards_user` role includes the permissions that a user needs to work with index patterns, visualizations, dashboards, and tenants\. We recommend [mapping it](#fgac-mapping) to any user or backend role that accesses Dashboards, along with additional roles that allow access to other indices\.
+Fine\-grained access control also includes a number of [predefined roles](https://opensearch.org/docs/latest/security/access-control/users-roles/#predefined-roles)\. Clients such as OpenSearch Dashboards and Logstash make a wide variety of requests to OpenSearch, which can make it hard to manually create roles with the minimum set of permissions\. For example, the `opensearch_dashboards_user` role includes the permissions that a user needs to work with index patterns, visualizations, dashboards, and tenants\. We recommend [mapping it](#fgac-mapping) to any user or backend role that accesses Dashboards, along with additional roles that allow access to other indices\.
 
 Amazon OpenSearch Service doesn't offer the following OpenSearch roles:
 + `observability_full_access`
@@ -248,27 +248,27 @@ Amazon OpenSearch Service offers several roles that aren't available with OpenSe
 
 #### Cluster\-level security<a name="fgac-cluster-level"></a>
 
-Cluster\-level permissions include the ability to make broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** section when creating a role\. For a full list of cluster\-level permissions, see [Cluster permissions](https://opensearch.org/docs/latest/security-plugin/access-control/permissions/#cluster-permissions)\.
+Cluster\-level permissions include the ability to make broad requests such as `_mget`, `_msearch`, and `_bulk`, monitor health, take snapshots, and more\. Manage these permissions using the **Cluster Permissions** section when creating a role\. For a full list of cluster\-level permissions, see [Cluster permissions](https://opensearch.org/docs/latest/security/access-control/permissions/#cluster-permissions)\.
 
-Rather than individual permissions, you can often achieve your desired security posture using a combination of the default action groups\. For a list of cluster\-level action groups, see [Cluster\-level](https://opensearch.org/docs/security-plugin/access-control/default-action-groups/#cluster-level)\.
+Rather than individual permissions, you can often achieve your desired security posture using a combination of the default action groups\. For a list of cluster\-level action groups, see [Cluster\-level](https://opensearch.org/docs/latest/security/access-control/default-action-groups/#cluster-level)\.
 
 #### Index\-level security<a name="fgac-index-level"></a>
 
-Index\-level permissions include the ability to create new indices, search indices, read and write documents, delete documents, manage aliases, and more\. Manage these permissions using the **Index Permissions** section when creating a role\. For a full list of index\-level permissions, see [Index permissions](https://opensearch.org/docs/latest/security-plugin/access-control/permissions/#index-permissions)\.
+Index\-level permissions include the ability to create new indices, search indices, read and write documents, delete documents, manage aliases, and more\. Manage these permissions using the **Index Permissions** section when creating a role\. For a full list of index\-level permissions, see [Index permissions](https://opensearch.org/docs/latest/security/access-control/permissions/#index-permissions)\.
 
-Rather than individual permissions, you can often achieve your desired security posture using a combination of the default action groups\. For a list of index\-level action groups, see [Index\-level](https://opensearch.org/docs/security-plugin/access-control/default-action-groups/#index-level)\.
+Rather than individual permissions, you can often achieve your desired security posture using a combination of the default action groups\. For a list of index\-level action groups, see [Index\-level](https://opensearch.org/docs/latest/security/access-control/default-action-groups/#index-level)\.
 
 #### Document\-level security<a name="fgac-document-level"></a>
 
 Document\-level security lets you restrict which documents in an index a user can see\. When creating a role, specify an index pattern and an OpenSearch query\. Any users that you map to that role can see only the documents that match the query\. Document\-level security affects [the number of hits that you receive when you search](#fgac-example)\.
 
-For more information, see [Document\-level security](https://opensearch.org/docs/security-plugin/access-control/document-level-security/)\.
+For more information, see [Document\-level security](https://opensearch.org/docs/latest/security/access-control/document-level-security/)\.
 
 #### Field\-level security<a name="fgac-field-level"></a>
 
 Field\-level security lets you control which document fields a user can see\. When creating a role, add a list of fields to either include or exclude\. If you include fields, any users you map to that role can see only those fields\. If you exclude fields, they can see all fields *except* the excluded ones\. Field\-level security affects [the number of fields included in hits when you search](#fgac-example)\.
 
-For more information, see [Field\-level security](https://opensearch.org/docs/security-plugin/access-control/field-level-security/)\.
+For more information, see [Field\-level security](https://opensearch.org/docs/latest/security/access-control/field-level-security/)\.
 
 #### Field masking<a name="fgac-field-masking"></a>
 
@@ -279,7 +279,7 @@ If you apply the standard masking to a field, OpenSearch Service uses a secure, 
 
 ### Creating users<a name="fgac-users"></a>
 
-If you enabled the internal user database, you can create users using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Create users](https://opensearch.org/docs/security-plugin/access-control/users-roles/#create-users)\.
+If you enabled the internal user database, you can create users using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Create users](https://opensearch.org/docs/latest/security/access-control/users-roles/#create-users)\.
 
 If you chose IAM for your master user, ignore this portion of Dashboards\. Create IAM roles instead\. For more information, see the [IAM User Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/)\.
 
@@ -293,15 +293,15 @@ Role mapping is the most critical aspect of fine\-grained access control\. Fine\
 
 ![\[Role mapping screen\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/role-mapping-edit.png)
 
-You can map roles to users using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Map users to roles](https://opensearch.org/docs/security-plugin/access-control/users-roles/#map-users-to-roles)\.
+You can map roles to users using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API\. For more information, see [Map users to roles](https://opensearch.org/docs/latest/security/access-control/users-roles/#map-users-to-roles)\.
 
 ### Creating action groups<a name="fgac-ag"></a>
 
-Action groups are sets of permissions that you can reuse across different resources\. You can create new action groups using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API, although the default action groups suffice for most use cases\. For more information about the default action groups, see [Default action groups](https://opensearch.org/docs/security-plugin/access-control/default-action-groups/)\.
+Action groups are sets of permissions that you can reuse across different resources\. You can create new action groups using OpenSearch Dashboards or the `_plugins/_security` operation in the REST API, although the default action groups suffice for most use cases\. For more information about the default action groups, see [Default action groups](https://opensearch.org/docs/latest/security/access-control/default-action-groups/)\.
 
 ### OpenSearch Dashboards multi\-tenancy<a name="fgac-multitenancy"></a>
 
-Tenants are spaces for saving index patterns, visualizations, dashboards, and other Dashboards objects\. Dashboards multi\-tenancy lets you safely share your work with other Dashboards users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. The Global tenant is the default\. To learn more, see [OpenSearch Dashboards multi\-tenancy](https://opensearch.org/docs/security-plugin/access-control/multi-tenancy/)\.
+Tenants are spaces for saving index patterns, visualizations, dashboards, and other Dashboards objects\. Dashboards multi\-tenancy lets you safely share your work with other Dashboards users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. The Global tenant is the default\. To learn more, see [OpenSearch Dashboards multi\-tenancy](https://opensearch.org/docs/latest/security/multi-tenancy/tenant-index/)\.
 
 **To view your current tenant or change tenants**
 
@@ -498,7 +498,7 @@ GET _plugins/_security/api/tenants
 }
 ```
 
-For documentation on the OpenSearch REST API, see the [Security plugin API reference](https://opensearch.org/docs/security-plugin/access-control/api/)\.
+For documentation on the OpenSearch REST API, see the [Security plugin API reference](https://opensearch.org/docs/latest/security/access-control/api/)\.
 
 **Tip**  
 If you use the internal user database, you can use [curl](https://curl.haxx.se/) to make requests and test your domain\. Try the following sample commands:  

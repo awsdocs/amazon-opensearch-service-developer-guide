@@ -48,7 +48,7 @@ Use the following best practices to determine shard and data node counts for you
 
 **Shard count** – The distribution of shards to data nodes has a large impact on a domain’s performance\. When you have indexes with multiple shards, try to make the shard count an even multiple of the data node count\. This helps to ensure that shards are evenly distributed across data nodes, and prevents hot nodes\. For example, if you have 12 primary shards, your data node count should be 2, 3, 4, 6, or 12\. However, shard count is secondary to shard size—if you have 5 GiB of data, you should still use a single shard\. 
 
-**Shards per data node** – The total number of shards that a node can hold is proportional to the node’s Java virtual machine \(JVM\) heap memory\. Aim for 25 shards or fewer per GiB of heap memory\. For example, a node with 32 GiB of heap memory should hold no more than 800 shards\. Although shard distribution can vary based on your workload patterns, there's a limit of 1,000 shards per node\. The [cat/allocation](https://opensearch.org/docs/latest/opensearch/rest-api/cat/cat-allocation/) API provides a quick view of the number of shards and total shard storage across data nodes\.
+**Shards per data node** – The total number of shards that a node can hold is proportional to the node’s Java virtual machine \(JVM\) heap memory\. Aim for 25 shards or fewer per GiB of heap memory\. For example, a node with 32 GiB of heap memory should hold no more than 800 shards\. Although shard distribution can vary based on your workload patterns, there's a limit of 1,000 shards per node\. The [cat/allocation](https://opensearch.org/docs/latest/api-reference/cat/cat-allocation/) API provides a quick view of the number of shards and total shard storage across data nodes\.
 
 **Shard to CPU ratio** – When a shard is involved in an indexing or search request, it uses a vCPU to process the request\. As a best practice, use an initial scale point of 1\.5 vCPU per shard\. If your instance type has 8 vCPUs, set your data node count so that each node has no more than six shards\. Note that this is an approximation\. Be sure to test your workload and scale your cluster accordingly\.
 
@@ -102,7 +102,7 @@ Availability Zones are isolated locations within each Region\. With a two\-AZ co
 
 ### Control ingest flow and buffering<a name="bp-stability-ingest"></a>
 
-We recommend that you limit the overall request count using the [\_bulk](https://opensearch.org/docs/latest/opensearch/rest-api/document-apis/bulk/) API operation\. It's more efficient to send one `_bulk` request that contains 5,000 documents than it is to send 5,000 requests that contain a single document\.
+We recommend that you limit the overall request count using the [\_bulk](https://opensearch.org/docs/latest/api-reference/document-apis/bulk/) API operation\. It's more efficient to send one `_bulk` request that contains 5,000 documents than it is to send 5,000 requests that contain a single document\.
 
 For optimal operational stability, it's sometimes necessary to limit or even pause the upstream flow of indexing requests\. Limiting the rate of index requests is an important mechanism for dealing with unexpected or occasional spikes in requests that might otherwise overwhelm the cluster\. Consider building a flow control mechanism into your upstream architecture\.
 
@@ -112,7 +112,7 @@ The following diagram shows multiple component options for a log ingest architec
 
 ### Create mappings for search workloads<a name="bp-stability-mappings"></a>
 
-For search workloads, create [mappings](https://opensearch.org/docs/latest/opensearch/mappings/) that define how OpenSearch stores and indexes documents and their fields\. Set `dynamic` to `strict` in order to prevent new fields from being added accidentally\.
+For search workloads, create [mappings](https://opensearch.org/docs/latest/field-types/index/) that define how OpenSearch stores and indexes documents and their fields\. Set `dynamic` to `strict` in order to prevent new fields from being added accidentally\.
 
 ```
 PUT my-index

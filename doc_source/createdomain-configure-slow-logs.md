@@ -2,8 +2,7 @@
 
 Amazon OpenSearch Service exposes the following OpenSearch logs through Amazon CloudWatch Logs: 
 + Error logs
-+ [Search slow logs](https://opensearch.org/docs/latest/opensearch/logs/#slow-logs)
-+ [Indexing slow logs](https://opensearch.org/docs/latest/opensearch/logs/#slow-logs)
++ [Slow logs](https://opensearch.org/docs/latest/monitoring-your-cluster/logs/#slow-logs)
 + [Audit logs](audit-logs.md)
 
 Search slow logs, indexing slow logs, and error logs are useful for troubleshooting performance and stability issues\. Audit logs track user activity for compliance purposes\. All the logs are *disabled* by default\. If enabled, [standard CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) applies\.

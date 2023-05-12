@@ -289,7 +289,7 @@ If your domain has a public endpoint and doesn't use [fine\-grained access contr
 
 ## Making and signing OpenSearch Service requests<a name="managedomains-signing-service-requests"></a>
 
-Even if you configure a completely open resource\-based access policy, *all* requests to the OpenSearch Service configuration API must be signed\. If your policies specify IAMroles or users, requests to the OpenSearch APIs also must be signed using AWS Signature Version 4\. The signing method differs by API:
+Even if you configure a completely open resource\-based access policy, *all* requests to the OpenSearch Service configuration API must be signed\. If your policies specify IAM roles or users, requests to the OpenSearch APIs also must be signed using AWS Signature Version 4\. The signing method differs by API:
 + To make calls to the OpenSearch Service configuration API, we recommend that you use one of the [AWS SDKs](https://aws.amazon.com/tools/#sdk)\. The SDKs greatly simplify the process and can save you a significant amount of time compared to creating and signing your own requests\. The configuration API endpoints use the following format:
 
   ```
