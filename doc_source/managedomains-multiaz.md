@@ -37,7 +37,7 @@ When you set up a domain with Multi\-AZ with Standby, consider the following lim
 
 ## Multi\-AZ without Standby<a name="managedomains-za-no-standby"></a>
 
-OpenSearch Service still supports multi\-AZ without Standby, which offers 99\.9% availability\. Nodes are distributed across Availability Zone\(s\), and availability depends on the number of Availability Zones and copies of data\. Whereas with with standby you have to configure your domain with best practices, without standby you can choose your own number of Availability Zones, nodes, and replicas\. We don't recommend this option unless you have existing workflows that would be disrupted by creating domains with standby\.
+OpenSearch Service still supports multi\-AZ without Standby, which offers 99\.9% availability\. Nodes are distributed across Availability Zone\(s\), and availability depends on the number of Availability Zones and copies of data\. Whereas with standby you have to configure your domain with best practices, without standby you can choose your own number of Availability Zones, nodes, and replicas\. We don't recommend this option unless you have existing workflows that would be disrupted by creating domains with standby\.
 
 If you choose this option, we still recommend that you select three Availability Zones in order to remain resilient to node, disk, and single\-AZ failures\. When a failure occurs, the cluster redistributes data across the remaining resources to maintain availability and redundancy\. This data movement increases resource usage on the cluster, and can have an impact on the performance\. If the cluster isn't sized properly, it can experience degraded availability, which largely defeats the purpose of multi\-AZ\.
 
