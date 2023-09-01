@@ -1,6 +1,8 @@
 # Making configuration changes in Amazon OpenSearch Service<a name="managedomains-configuration-changes"></a>
 
-Amazon OpenSearch Service uses a *blue/green* deployment process when updating domains\. Blue/green typically refers to the practice of running two production environments, one live and one idle, and switching the two as you make software changes\. In the case of OpenSearch Service, it refers to the practice of creating a new environment for domain updates and routing users to the new environment after those updates are complete\. The practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
+Amazon OpenSearch Service uses a *blue/green* deployment process when updating domains\. A blue/green deployment creates an idle environment for domain updates that copies the production environment, and routes users to the new environment after those updates are complete\. In a blue/green deployment, the blue environment is the current production environment\. The green environment is the idle environment\. 
+
+Data is migrated from the blue environment to the green environment\. When the new environment is ready, OpenSearch Service switches over the environments to promote the green environment to be the new production environment\. The switchover happens with no data loss\. This practice minimizes downtime and maintains the original environment in the event that deployment to the new environment is unsuccessful\.
 
 ## Changes that usually cause blue/green deployments<a name="bg"></a>
 
@@ -10,7 +12,6 @@ The following operations cause blue/green deployments:
 + Performing service software updates
 + If your domain *doesn't* have dedicated master nodes, changing data instance count
 + Enabling or disabling dedicated master nodes
-+ Changing to Multi\-AZ with Standby only accepts one change request at a time
 + Enabling or disabling Multi\-AZ without Standby
 + Changing storage type, volume type, or volume size
 + Choosing different VPC subnets
@@ -19,11 +20,10 @@ The following operations cause blue/green deployments:
 + Choosing a different Amazon Cognito user pool or identity pool
 + Modifying advanced settings
 + Upgrading to a new OpenSearch version
-+ Enabling or disabling **Require HTTPS**
 + Enabling encryption of data at rest or node\-to\-node encryption
 + Enabling or disabling UltraWarm or cold storage
 + Disabling Auto\-Tune and rolling back its changes
-+ Modifying the custom endpoint
++ Increasing dedicated master node count for domains with two dedicated master nodes and zone awareness enabled
 
 For Multi\-AZ with Standby domains, you can only make one change request at a time\. If a change is already in progress, the new request will be rejected\. You can check the status of the current change with the `DescribeDomainChangeProgress` API\.
 
@@ -33,9 +33,13 @@ When you upgrade domains, OpenSearch Dashboards might be unavailable during some
 
 In *most* cases, the following operations do not cause blue/green deployments:
 + Changing access policy
++ Modifying the custom endpoint
++ Changing the Transport Layer Security \(TLS\) policy
 + Changing the automated snapshot hour
++ Enabling or disabling **Require HTTPS**
 + Enabling Auto\-Tune or disabling it without rolling back its changes
-+ If your domain has dedicated master nodes, changing data node or UltraWarm node count
++ If your domain has dedicated master nodes, changing data node or UltraWarm node count 
++ If your domain has dedicated master nodes, changing dedicated master instance type or node count \(except for domains with two dedicated masters and zone awareness enabled\)
 + Enabling or disabling the publication of error logs, audit logs, or slow logs to CloudWatch
 
 There are some exceptions depending on your service software version\. If you want to be absolutely sure that a change will not cause a blue/green deployment, [perform a dry run](#dryrun) before updating your domain\.
@@ -131,7 +135,7 @@ If the validation fails, it returns a list of [validation failures](#validation)
 If the status is still `pending`, you can use the dry run ID in your UpdateDomainConfig response in subsequent [DescribeDryRunProgress](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_DescribeDryRunProgress.html) calls to check the status of the validation\.
 
 ```
-POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/dryRun?dryRunId=my-dry-run-id
+GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/dryRun?dryRunId=my-dry-run-id
 {
     "DryRunConfig": null,
     "DryRunProgressStatus": {
@@ -149,6 +153,60 @@ POST https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/domain/my-domain/d
 ```
 
 To run a dry run analysis without a validation check, set `DryRunMode` to `Basic` when you use the configuration API\.
+
+------
+#### [ Python ]
+
+The following Python code uses the [UpdateDomainConfig](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdateDomainConfig.html) API to perform a dry run validation check and, if the check succeeds, calls the same API without a dry run to start the update\. If the check fails, the script prints out the error and stops\.
+
+```
+import time
+import boto3
+
+client = boto3.client('opensearch')
+
+response = client.UpdateDomainConfig(
+    ClusterConfig={
+        'WarmCount': 3,
+        'WarmEnabled': True,
+        'WarmCount': 123,
+    },
+    DomainName='test-domain',
+    DryRun=True,
+    DryRunMode='Verbose'
+)
+
+dry_run_id = response.DryRunProgressStatus.DryRunId
+
+retry_count = 0
+
+while True:
+
+    if retry_count == 5:
+        print('An error occured')
+        break
+
+    dry_run_progress_response = client.DescribeDryRunProgress('test-domain', dry_run_id)
+    dry_run_status = dry_run_progress_response.DryRunProgressStatus.DryRunStatus
+
+    if dry_run_status == 'succeeded':
+        client.UpdateDomainConfig(
+            ClusterConfig={
+            'WarmCount': 3,
+            'WarmEnabled': True,
+            'WarmCount': 123,
+        })
+        break
+
+    elif dry_run_status == 'failed':
+        validation_failures_list = dry_run_progress_response.DryRunProgressStatus.ValidationFailures
+        for item in validation_failures_list:
+            print(f"Code: {item['Code']}, Message: {item['Message']}")
+        break
+
+    retry_count += 1
+    time.sleep(30)
+```
 
 ------
 
@@ -186,6 +244,7 @@ The following are possible stages an update can go through during a configuratio
 |  Terminating nodes  | Terminating and deleting old nodes after shards are removed\. | 
 |  Deleting older resources  |  Deleting resources associated with the old environment \(e\.g\. load balancer\)\.  | 
 |  Dynamic update  |  Displayed when the update does not require a blue/green deployment and can be dynamically applied\.  | 
+|  Applying dedicated master related changes  |  Displayed when the dedicated master instance type or count is changed\.  | 
 
 ## Troubleshooting validation errors<a name="validation"></a>
 
@@ -207,7 +266,7 @@ When you initiate a configuration change or perform an OpenSearch or Elasticsear
 | Unable to describe user and identity pool | CognitoPoolsNotDescribable | The specified Amazon Cognito role doesn't have permission to describe the user and identity pools associated with your domain\. Make sure the role permissions policy allows the cognito\-identity:DescribeIdentityPool and cognito\-identity:DescribeUserPool actions\. See [About the CognitoAccessForAmazonOpenSearch role](cognito-auth.md#cognito-auth-role) for the full permissions policy\. | 
 | KMS key not enabled | KMSKeyNotEnabled |  The AWS Key Management Service \(AWS KMS\) key used to encrypt your domain is disabled\. [Re\-enable the key](https://docs.aws.amazon.com/kms/latest/developerguide/enabling-keys) immediately\.  | 
 | Custom certificate not in ISSUED state | InvalidCertificate |  If your domain uses a custom endpoint, you secure it by either generating an SSL certificate in AWS Certificate Manager \(ACM\) or importing one of your own\. The certificate status must be **Issued**\. If you receive this error, [check the status of your certificate](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-describe.html) in the ACM console\. If the status is Expired, Failed, Inactive, or Pending validation, see the ACM [troubleshooting documentation](https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting.html) to resolve the issue\.  | 
-| Not enough capacity to launch chosen instance type | InsufficientInstanceCapacity |  The requested instance type capacity is not available\. For example, you might have requested five `i3.16xlarge.search` nodes, but OpenSearch Service doesn't have enough `i3.16xlarge.search` hosts available, so the request can't be fulfilled\. Check the [supported instance types](supported-instance-types.md) in OpenSearch Service and choose a different instance type\. If you want to use the same instance type, you can [reserve capacity in advance](ri.md)\.  | 
+| Not enough capacity to launch chosen instance type | InsufficientInstanceCapacity |  The requested instance type capacity is not available\. For example, you might have requested five `i3.16xlarge.search` nodes, but OpenSearch Service doesn't have enough `i3.16xlarge.search` hosts available, so the request can't be fulfilled\. Check the [supported instance types](supported-instance-types.md) in OpenSearch Service and choose a different instance type\.  | 
 | Red indexes in cluster | RedCluster |  One or more indexes in your cluster have a red status, leading to an overall red cluster status\. To troubleshoot and remediate this issue, see [Red cluster status](handling-errors.md#handling-errors-red-cluster-status)\.  | 
 | Memory circuit breaker, too many requests | TooManyRequests |  There are too many search and write requests to your domain, so OpenSearch Service can't update its configuration\. You can reduce the number of requests, scale instances vertically up to 64 GiB of RAM, or scale horizontally by adding instances\.  | 
 | New configuration can't hold data \(low disk space\) | InsufficientStorageCapacity |  The configured storage size can't hold all of the data on your domain\. To resolve this issue, [choose a larger volume](limits.md#ebsresource), [delete unused indexes](https://opensearch.org/docs/latest/opensearch/rest-api/index-apis/delete-index/), or increase the number of nodes in the cluster to immediately free up disk space\.  | 

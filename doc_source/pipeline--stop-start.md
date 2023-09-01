@@ -44,7 +44,7 @@ aws osis stop-pipeline --pipeline-name my-pipeline
 
 ### OpenSearch Ingestion API<a name="stop-pipeline-api"></a>
 
-To stop a pipeline using the OpenSearch Ingestion API, call the [StopPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_StopPipeline.html) operation with the following parameter: 
+To stop a pipeline using the OpenSearch Ingestion API, call the [StopPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_StopPipeline.html) operation with the following parameter: 
 + `PipelineName` – the name of the pipeline\. 
 
 ## Starting an OpenSearch Ingestion pipeline<a name="pipeline--start"></a>
@@ -76,5 +76,5 @@ aws osis start-pipeline --pipeline-name my-pipeline
 
 ### OpenSearch Ingestion API<a name="start-pipeline-api"></a>
 
-To start an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [StartPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_StartPipeline.html) operation with the following parameter: 
+To start an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [StartPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_StartPipeline.html) operation with the following parameter: 
 + `PipelineName` – the name of the pipeline\.

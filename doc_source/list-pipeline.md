@@ -98,4 +98,4 @@ The request returns configuration information for the specified pipeline:
 
 ## OpenSearch Ingestion API<a name="list-pipelines-api"></a>
 
-To view OpenSearch Ingestion pipelines using the OpenSearch Ingestion API, call the [ListPipelines](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_ListPipelines.html) and [GetPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_GetPipeline.html) operations\.
+To view OpenSearch Ingestion pipelines using the OpenSearch Ingestion API, call the [ListPipelines](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_ListPipelines.html) and [GetPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_GetPipeline.html) operations\.

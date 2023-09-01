@@ -54,11 +54,13 @@ For information about how you're billed for these OCUs, see [Pricing for OpenSea
 
 ## Choosing a collection type<a name="serverless-usecase"></a>
 
-OpenSearch Serverless supports two primary collection types:
+OpenSearch Serverless supports three primary collection types:
 
 **Time series** – The log analytics segment that focuses on analyzing large volumes of semi\-structured, machine\-generated data in real\-time for operational, security, user behavior, and business insights\.
 
 **Search** – Full\-text search that powers applications in your internal networks \(content management systems, legal documents\) and internet\-facing applications, such as ecommerce website search and content search\. 
+
+**Vector search** – Semantic search on vector embeddings that simplifies vector data management and powers machine learning \(ML\) augmented search experiences and generative AI applications, such as chatbots, personal assistants, and fraud detection\. 
 
 You choose a collection type when you first create a collection:
 
@@ -67,8 +69,9 @@ You choose a collection type when you first create a collection:
 The collection type that you choose depends on the kind of data that you plan to ingest into the collection, and how you plan to query it\. You can't change the collection type after you create it\.
 
 The collection types have the following notable **differences**:
-+ For *search* collections, all data is stored in hot storage to ensure fast query response times\. *Time series* collections use a combination of hot and warm caches, where the most recent data is kept in the hot cache to optimize query response times for more frequently accessed data\.
-+ For *time series* collections, you can't index by custom document ID\. This operation is reserved for search use cases\. For more information, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
++ For *search* and *vector search* collections, all data is stored in hot storage to ensure fast query response times\. *Time series* collections use a combination of hot and warm caches, where the most recent data is kept in the hot cache to optimize query response times for more frequently accessed data\.
++ For *time series* and *vector search* collections, you can't index by custom document ID or update by upsert requests\. This operation is reserved for search use cases\. You can update by document ID instead\. For more information, see [Supported OpenSearch API operations and permissions](serverless-genref.md#serverless-operations)\.
++ For *search* and *time series* collections, you can't use k\-NN type indexes\.
 
 ## Pricing for OpenSearch Serverless<a name="serverless-pricing"></a>
 
@@ -103,11 +106,12 @@ OpenSearch Serverless has the following limitations:
 + You can't take or restore snapshots of OpenSearch Serverless collections\.
 + Cross\-Region search and replication aren't supported\.
 + There are limits on the number of serverless resources that you can have in a single account and Region\. See [OpenSearch Serverless quotas](limits.md#limits-serverless)\.
-+ The refresh interval for indexes might be between 10 and 30 seconds depending on the size of your requests\.
++ The refresh interval for indexes might be between 10 and 60 seconds depending on the size of your requests\.
++ Geospatial features available on OpenSearch versions up to 2\.1 are supported\.
 
 ## Comparing OpenSearch Service and OpenSearch Serverless<a name="serverless-comparison"></a>
 
-In OpenSearch Serverless, some concepts and features are different than their corresponding feature for a provisioned OpenSearch Service domain\. For example, one importand difference is that OpenSearch Serverless doesn't have the concept of a cluster or node\.
+In OpenSearch Serverless, some concepts and features are different than their corresponding feature for a provisioned OpenSearch Service domain\. For example, one important difference is that OpenSearch Serverless doesn't have the concept of a cluster or node\.
 
 The following table describes how important features and concepts in OpenSearch Serverless differ from the equivalent feature in a provisioned OpenSearch Service domain\.
 
@@ -123,7 +127,7 @@ The following table describes how important features and concepts in OpenSearch 
 | Dashboards sign\-in |  Sign in with a username and password\. For more information, see [Accessing OpenSearch Dashboards as the master user](fgac.md#fgac-dashboards)\.  |  If you're logged into the AWS console and navigate to your Dashboard URL, you'll automatically log in\. For more information, see [Accessing OpenSearch Dashboards](serverless-manage.md#serverless-dashboards)\.  | 
 | APIs |  Interact programmatically with OpenSearch Service using the [OpenSearch Service API operations](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/Welcome.html)\.  |  Interact programmatically with OpenSearch Serverless using the [OpenSearch Serverless API operations](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/Welcome.html)\.  | 
 | Network access |  Network settings for a domain apply to the domain endpoint as well as the OpenSearch Dashboards endpoint\. Network access for both is tightly coupled\.  |  Network settings for the domain endpoint and the OpenSearch Dashboards endpoint are decoupled\. You can choose to not configure network access for OpenSearch Dashboards\. For more information, see [Network access for Amazon OpenSearch Serverless](serverless-network.md)\.  | 
-| Signing requests |  Use the OpenSearch high and low\-level REST clients to sign requests\. Specify the service name as `es`\. For more information, see [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)\.  |  At this time, OpenSearch Serverless supports a subset of clients that OpenSearch Service supports\. When you sign requests, specify the service name as `aoss`\. The `x-amz-content-sha256` header is required\. For more information, see [Signing HTTP requests with other clients](serverless-clients.md#serverless-signing)\.  | 
+| Signing requests |  Use the OpenSearch high and low\-level REST clients to sign requests\. Specify the service name as `es`\.  |  At this time, OpenSearch Serverless supports a subset of clients that OpenSearch Service supports\. When you sign requests, specify the service name as `aoss`\. The `x-amz-content-sha256` header is required\. For more information, see [Signing HTTP requests with other clients](serverless-clients.md#serverless-signing)\.  | 
 | OpenSearch version upgrades |  You manually upgrade your domains as new versions of OpenSearch become available\. You're responsible for ensuring that your domain meets the upgrade requirements, and that you've addressed any breaking changes\.  |  OpenSearch Serverless automatically upgrades your collections to new OpenSearch versions\. Upgrades don't necessarily happen as soon as a new version is available\.  | 
 | Service software updates |  You manually apply service software updates to your domain as they become available\.  |  OpenSearch Serverless automatically updates your collections to consume the latest bug fixes, features, and performance improvements\.  | 
 | VPC access |  You can [provision your domain within a VPC](vpc.md)\. You can also create additional [OpenSearch Service\-managed VPC endpoints](vpc-interface-endpoints.md) to access the domain\.  |  You create one or more [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md) for your account\. Then, you include these endpoints within [network policies](serverless-network.md)\.  | 

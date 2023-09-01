@@ -90,7 +90,7 @@ Any time you make a change to your pipeline that initiates a blue/green deployme
 
 ## Specifying the ingestion path<a name="pipeline-path"></a>
 
-For pull\-based sources like [HTTP](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/http-source/), [OTel trace](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-raw/), and [OTel metrics](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-metrics/), OpenSearch Ingestion requires the additional `path` option in your source configuration\. The path is a string such as `/log/ingest`, which represents the URI path for ingestion\. This path defines the URI that you use to send data to the pipeline\. 
+For pull\-based sources like [OTel trace](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-trace/) and [OTel metrics](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-metrics-source/), OpenSearch Ingestion requires the additional `path` option in your source configuration\. The path is a string such as `/log/ingest`, which represents the URI path for ingestion\. This path defines the URI that you use to send data to the pipeline\. 
 
 For example, say you specify the following entry sub\-pipeline for an ingestion pipeline named `logs`:
 
@@ -101,7 +101,7 @@ entry-pipeline:
       path: "/my/test_path"
 ```
 
-When you [ingest data](configure-client.md) into the pipeline, you must specify the following endpoint in your client configuration: `https://logs.us-west-2.osis.amazonaws.com/my/test_path`\.
+When you [ingest data](configure-client.md) into the pipeline, you must specify the following endpoint in your client configuration: `https://logs-abcdefgh.us-west-2.osis.amazonaws.com/my/test_path`\.
 
 The path must start with a slash \(/\) and can contain the special characters '\-', '\_', '\.', and '/', as well as the `${pipelineName}` placeholder\. If you use `${pipelineName}` \(such as `path: "/${pipelineName}/test_path"`\), the variable is replaced with the name of the associated sub\-pipeline\. In this example, it would be `https://logs.us-west-2.osis.amazonaws.com/entry-pipeline/test_path`\.
 
@@ -189,13 +189,13 @@ aws osis create-pipeline \
   --pipeline-configuration-body "file://pipeline-config.yaml"
 ```
 
-OpenSearch Ingestion runs an asynchronous process to build the pipeline\. Once the pipeline status is `Active`, you can start ingesting data\. To check the status of the pipeline, use the [GetPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_GetPipeline.html) command\.
+OpenSearch Ingestion runs an asynchronous process to build the pipeline\. Once the pipeline status is `Active`, you can start ingesting data\. To check the status of the pipeline, use the [GetPipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_GetPipeline.html) command\.
 
 ### OpenSearch Ingestion API<a name="create-pipeline-api"></a>
 
-To create an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [CreatePipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_CreatePipeline.html) operation\.
+To create an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [CreatePipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_CreatePipeline.html) operation\.
 
-After your pipeline is successfully created, you can configure your client and start ingesting data into your OpenSearch Service domain\. For more information, see [Sending data to Amazon OpenSearch Ingestion pipelines](configure-client.md)\.
+After your pipeline is successfully created, you can configure your client and start ingesting data into your OpenSearch Service domain\. For more information, see [Working with Amazon OpenSearch Ingestion pipeline integrations](configure-client.md)\.
 
 ## Tracking the status of pipeline creation<a name="get-pipeline-progress"></a>
 
@@ -243,7 +243,7 @@ aws osis get-pipeline-change-progress \
 
 ### OpenSearch Ingestion API<a name="get-pipeline-progress-api"></a>
 
-To track the status of pipeline creation using the OpenSearch Ingestion API, call the [GetPipelineChangeProgress](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_GetPipelineChangeProgress.html) operation\.
+To track the status of pipeline creation using the OpenSearch Ingestion API, call the [GetPipelineChangeProgress](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_GetPipelineChangeProgress.html) operation\.
 
 ## Using blueprints to create a pipeline<a name="pipeline-blueprint"></a>
 
@@ -259,6 +259,7 @@ OpenSearch Ingestion includes the following blueprints:
 + **Log aggregation with conditional routing** – Aggregates various logs received in a time window and conditionally routes them to different indexes\.
 + **Log to metric anomaly pipeline** – Derives metrics from incoming logs and identifies anomalies\.
 + **Log to metric pipeline** – Derives metrics from incoming logs\.
++ **Security Lake S3 parquet OCSF pipeline** – Parses Open Cybersecurity Schema Framework \(OCSF\) parquet files from Security Lake\.
 + **S3 log pipeline** – Listens to S3 Amazon SQS notifications and pulls data from S3 buckets\.
 + **S3 select pipeline** – Performs selective download from an S3 bucket\.
 + **Trace Analytics pipeline** – Enriches spans and generates a service\-map \(dependency graph of services\)\.
@@ -298,7 +299,7 @@ To get more detailed information about a specific blueprint, use the [get\-pipel
 aws osis get-pipeline-blueprint --blueprint-name AWS-ApacheLogPipeline
 ```
 
-This request returns the contents of the Apache Logs pipeline blueprint:
+This request returns the contents of the Apache log pipeline blueprint:
 
 ```
 {
@@ -311,4 +312,4 @@ This request returns the contents of the Apache Logs pipeline blueprint:
 
 ### OpenSearch Ingestion API<a name="pipeline-blueprint-api"></a>
 
-To get information about pipeline blueprints using the OpenSearch Ingestion API, use the the [ListPipelineBlueprints](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_ListPipelineBlueprints.html) and [GetPipelineBlueprint](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_GetPipelineBlueprint.html) operations\.
+To get information about pipeline blueprints using the OpenSearch Ingestion API, use the the [ListPipelineBlueprints](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_ListPipelineBlueprints.html) and [GetPipelineBlueprint](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_GetPipelineBlueprint.html) operations\.

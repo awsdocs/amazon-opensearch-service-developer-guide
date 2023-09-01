@@ -41,13 +41,13 @@ To view the quotas for OpenSearch Serverless, open the [Service Quotas console](
 | Default search capacity \(OCUs\) | 10 | No |  | 
 |  Data access policies  |  500  | No |  | 
 | Encryption policies | 50 | No |  | 
-| Maximum indexing capacity \(OCUs\) | 50 | No |  | 
+| Maximum indexing capacity \(OCUs\) | 100 \(search and time series collections\)20 \(*vector search* collections\) | No |  | 
+| Maximum search capacity \(OCUs\) | 100 \(search and time series collections\)20 \(*vector search* collections\) | No |  | 
 | Network policies | 500 | No |  | 
 | SAML providers | 50 | No |  | 
-| Maximum search capacity \(OCUs\) | 50 | No |  | 
 | Data access policy size | 10,240 bytes | No |  | 
 | Network policy size | 10,240 bytes | No |  | 
-| SAML provider size | 20,480 bytes | No |  | 
+| SAML provider size | 51,200 bytes | No |  | 
 | Encryption policy size | 10,240 bytes | No |  | 
 
 Your AWS account has the following additional OpenSearch Serverless limits:
@@ -58,8 +58,9 @@ Your AWS account has the following additional OpenSearch Serverless limits:
 |  Collection tags  |  50  | No |  | 
 | Collections with unique KMS keys | 25 | No |  | 
 |  OpenSearch Serverless\-managed VPC endpoints  |  50  | No |  This limit only applies to [OpenSearch Serverless\-managed VPC endpoints](serverless-vpc.md)\. It doesn't include OpenSearch Service\-managed VPC endpoints\.  | 
-| Indexes within search collections | 20 | No |  This limit means that each search collection can have no more than 20 indexes\.  | 
-| Indexes within time series collections | 120 | No |  This limit means that each time series collection can have no more than 120 indexes\.  | 
+| Indexes within search collections | 800 | No |  This limit means that each search collection can have no more than 800 indexes\.  | 
+| Indexes within time series collections | 1280 | No |  This limit means that each time series collection can have no more than 1280 indexes\.  | 
+| Indexes within vector search collections | 1280 | No |  This limit means that each vector search collection can have no more than 1280 indexes\.  | 
 
 ## OpenSearch Ingestion quotas<a name="limits-ingestion"></a>
 
@@ -76,8 +77,8 @@ Your AWS account has the following quotas related to Amazon OpenSearch Ingestion
 | Sources per pipeline | 1 | No |  This limit only applies to *plugin* sources, such as HTTP, OTel, or S3\. You can still chain sub\-pipelines together within a single OpenSearch Ingestion pipeline configuration\.  | 
 | Unique OpenSearch sinks per pipeline | 1 | No |  This limit only applies to OpenSearch *domain* and *collection* sinks\. You can still chain sub\-pipelines together within a single OpenSearch Ingestion pipeline configuration\.  | 
 | Total OpenSearch sinks per pipeline | 8 | No | This limit refers to the number of times that you can specify the same OpenSearch sink within a pipeline configuration file\. | 
-| Maximum Ingestion OCUs per stateless pipeline | 96 | No | See [Stateless versus stateful processors](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/pipeline-config-reference.html#processor-stateful-stateless)\. | 
-| Maximum Ingestion OCUs per stateful pipeline | 48 | No | See [Stateless versus stateful processors](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/pipeline-config-reference.html#processor-stateful-stateless)\. | 
+| Maximum Ingestion OCUs per stateless pipeline | 96 | No | See [Stateless versus stateful processors](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/pipeline-config-reference.html#processor-stateful-stateless)\. | 
+| Maximum Ingestion OCUs per stateful pipeline | 48 | No | See [Stateless versus stateful processors](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/pipeline-config-reference.html#processor-stateful-stateless)\. | 
 
 ### UltraWarm storage quotas<a name="limits-ultrawarm"></a>
 

@@ -33,7 +33,7 @@ If you have problems migrating an existing domain to Multi\-AZ with Standby, see
 When you set up a domain with Multi\-AZ with Standby, consider the following limitations: 
 + The total number of shards on a node can't exceed 1000, the total number of shards on a cluster can't exceed 75000, and the size of a single shard can't exceed 65 GB\.
 + Multi\-AZ with Standby only works with the `m5`, `c5`, `r5`, `r6g`, `c6g`, `m6g`, `r6gd` and `i3` instance types\. For more information on supported instances, see [Supported instance types](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/supported-instance-types.html)\.
-+ You can only used GP3 and instance\-backed storage with standby\.
++ You can only use Provisioned IOPs SSD, General Purpose SSD \(GP3\), or instance\-backed storage with standby\.
 
 ## Multi\-AZ without Standby<a name="managedomains-za-no-standby"></a>
 

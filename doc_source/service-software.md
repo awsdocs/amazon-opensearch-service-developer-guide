@@ -26,7 +26,7 @@ Optional service software updates generally include enhancements and support for
 
 Regardless of whether or not you schedule an update, if you make a change on the domain that causes a [blue/green deployment](managedomains-configuration-changes.md), OpenSearch Service automatically updates your domain for you\.
 
-You can configure your domain to automatically apply optional updates during [off\-peak hours](off-peak.md)\. When this option is turned on, OpenSearch Service waits 13 days from when an optional update is available and then schedules the update after 72 hours \(three days\)\. You receive a console notification when the update is scheduled and you can choose to reschedule it for a later date\.
+You can configure your domain to automatically apply optional updates during [off\-peak hours](off-peak.md)\. When this option is turned on, OpenSearch Service waits at least 13 days from when an optional update is available and then schedules the update after 72 hours \(three days\)\. You receive a console notification when the update is scheduled and you can choose to reschedule it for a later date\.
 
 To turn on automatic software updates, select **Enable automatic software update** when you create or update your domain\. To configure the same setting using the AWS CLI, set `--software-update-options` to `true` when you create or update your domain\.
 

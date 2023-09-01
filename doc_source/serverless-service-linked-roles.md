@@ -2,13 +2,13 @@
 
 OpenSearch Serverless uses AWS Identity and Access Management \(IAM\) [service\-linked roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role)\. A service\-linked role is a unique type of IAM role that is linked directly to OpenSearch Service\. Service\-linked roles are predefined by OpenSearch Service and include all the permissions that the service requires to call other AWS services on your behalf\.
 
-OpenSearch Serverless uses the service\-linked role named **AmazonOpenSearchServerlessServiceRole**, which provides the permissions necessary for the role to publish serverless\-related CloudWatch metrics to your account\.
+OpenSearch Serverless uses the service\-linked role named **AWSServiceRoleForAmazonOpenSearchServerless**, which provides the permissions necessary for the role to publish serverless\-related CloudWatch metrics to your account\.
 
 ## Service\-linked role permissions for OpenSearch Serverless<a name="serverless-slr-permissions"></a>
 
-OpenSearch Serverless uses the service\-linked role named AmazonOpenSearchServerlessServiceRole, which allows OpenSearch Serverless to call AWS services on your behalf\.
+OpenSearch Serverless uses the service\-linked role named AWSServiceRoleForAmazonOpenSearchServerless, which allows OpenSearch Serverless to call AWS services on your behalf\.
 
-The AmazonOpenSearchServerlessServiceRole service\-linked role trusts the following services to assume the role:
+The AWSServiceRoleForAmazonOpenSearchServerless service\-linked role trusts the following services to assume the role:
 + `observability.aoss.amazonaws.com`
 
 The role permissions policy named `AmazonOpenSearchServerlessServiceRolePolicy` allows OpenSearch Serverless to complete the following actions on the specified resources:
@@ -39,21 +39,21 @@ For more information, see [Creating a service\-linked role](https://docs.aws.ama
 
 ## Editing the service\-linked role for OpenSearch Serverless<a name="edit-serverless-slr"></a>
 
-OpenSearch Serverless does not allow you to edit the AmazonOpenSearchServerlessServiceRole service\-linked role\. After you create a service\-linked role, you can't change the name of the role because various entities might reference the role\. However, you can edit the description of the role using IAM\. For more information, see [Editing a service\-linked role](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#edit-service-linked-role) in the *IAM User Guide*\.
+OpenSearch Serverless does not allow you to edit the AWSServiceRoleForAmazonOpenSearchServerless service\-linked role\. After you create a service\-linked role, you can't change the name of the role because various entities might reference the role\. However, you can edit the description of the role using IAM\. For more information, see [Editing a service\-linked role](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#edit-service-linked-role) in the *IAM User Guide*\.
 
 ## Deleting the service\-linked role for OpenSearch Serverless<a name="delete-serverless-slr"></a>
 
 If you no longer need to use a feature or service that requires a service\-linked role, we recommend that you delete that role\. This prevents you from having an unused entity that isn't actively monitored or maintained\. However, you must clean up the resources for your service\-linked role before you can manually delete it\.
 
-To delete the AmazonOpenSearchServerlessServiceRole, you must first [delete all OpenSearch Serverless collections](serverless-manage.md#serverless-delete) in your AWS account\.
+To delete the AWSServiceRoleForAmazonOpenSearchServerless, you must first [delete all OpenSearch Serverless collections](serverless-manage.md#serverless-delete) in your AWS account\.
 
 **Note**  
 If OpenSearch Serverless is using the role when you try to delete the resources, then the deletion might fail\. If that happens, wait for a few minutes and try the operation again\.
 
 **To manually delete the service\-linked role using IAM**
 
-Use the IAM console, the AWS CLI, or the AWS API to delete the AmazonOpenSearchServerlessServiceRole service\-linked role\. For more information, see [Deleting a service\-linked role](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#delete-service-linked-role) in the *IAM User Guide*\.
+Use the IAM console, the AWS CLI, or the AWS API to delete the AWSServiceRoleForAmazonOpenSearchServerless service\-linked role\. For more information, see [Deleting a service\-linked role](https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html#delete-service-linked-role) in the *IAM User Guide*\.
 
 ## Supported Regions for OpenSearch Serverless service\-linked roles<a name="serverless-slr-regions"></a>
 
-OpenSearch Serverless supports using the AmazonOpenSearchServerlessServiceRole service\-linked role in every Region where OpenSearch Serverless is available\. For a list of supported Regions, see [Amazon OpenSearch Serverless endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/opensearch-service.html) in the *AWS General Reference*\.
+OpenSearch Serverless supports using the AWSServiceRoleForAmazonOpenSearchServerless service\-linked role in every Region where OpenSearch Serverless is available\. For a list of supported Regions, see [Amazon OpenSearch Serverless endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/opensearch-service.html) in the *AWS General Reference*\.

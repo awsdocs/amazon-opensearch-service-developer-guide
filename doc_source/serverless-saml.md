@@ -136,7 +136,7 @@ The name that you specify is publicly accessible and will appear in a dropdown m
    </saml2:Attribute>
    ```
 
-1. By default, OpenSearch Dashboards signs users out after 24 hours\. You can configure this value to any number between 1 and 12 hours \(5 and 720 minutes\) by specifying the **Session time to live**\.
+1. By default, OpenSearch Dashboards signs users out after 24 hours\. You can configure this value to any number between 1 and 12 hours \(15 and 720 minutes\) by specifying the **OpenSearch Dashboards timeout**\. If you try to set the timeout equal to or less than 15 minutes, your session will be reset to one hour\.
 
 1. Choose **Create SAML provider**\.
 

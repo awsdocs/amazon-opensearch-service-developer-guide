@@ -2,9 +2,6 @@
 
 This section includes examples of how to use the AWS SDKs to interact with the Amazon OpenSearch Service configuration API\. These code samples show how to create, update, and delete OpenSearch Service domains\.
 
-**Important**  
-For examples of how to interact with the OpenSearch APIs, such as `_index`, `_bulk`, `_search`, and `_snapshot`, see [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)\.
-
 ## Java<a name="configuration-samples-java"></a>
 
 This section includes examples for versions 1 and 2 of the AWS SDK for Java\.

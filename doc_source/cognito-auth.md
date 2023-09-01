@@ -79,7 +79,7 @@ If you use the AWS CLI or one of the AWS SDKs, you must create your own role, at
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "es.amazonaws.com"
+        "Service": "opensearchservice.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }

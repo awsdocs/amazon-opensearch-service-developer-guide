@@ -346,7 +346,7 @@ Now that you have some data in OpenSearch Service, you can visualize it using Op
 
 ## Step 5: Clean up resources and next steps<a name="walkthrough-next-steps"></a>
 
-To avoid unnecessary charges, delete the S3 bucket and OpenSearch Service domain\. To learn more, see [Delete a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html#delete-bucket) in the *Amazon Simple Storage Service User Guide* and [Delete an OpenSearch Service domain](gsgdeleting.md) in this guide\.
+To avoid unnecessary charges, delete the S3 bucket and OpenSearch Service domain\. To learn more, see [Delete a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/delete-or-empty-bucket.html#delete-bucket) in the *Amazon Simple Storage Service User Guide* and [Delete an OpenSearch Service domain](gsg.md#gsgdeleting) in this guide\.
 
 Transcripts require much less disk space than MP3 files\. You might be able to shorten your MP3 retention window—for example, from three months of call recordings to one month—retain years of transcripts, and still save on storage costs\.
 

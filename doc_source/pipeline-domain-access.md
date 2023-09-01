@@ -82,7 +82,7 @@ The following sample domain access policy allows the pipeline role named `pipeli
       "Principal": {
         "AWS": "arn:aws:iam::{your-account-id}:role/pipeline-role"
       },
-      "Action": "es:*",
+      "Action": ["es:DescribeDomain", "es:ESHttp*"],
       "Resource": "arn:aws:es:us-east-1:{your-account-id}:domain/ingestion-domain/*"
     }
   ]

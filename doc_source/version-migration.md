@@ -12,8 +12,7 @@ Currently, OpenSearch Service supports the following upgrade paths:
 
 | From version | To version | 
 | --- | --- | 
-| OpenSearch 1\.3 and 2\.3 |  OpenSearch 2\.5  | 
-| OpenSearch 1\.3 |  OpenSearch 2\.3 Version 2\.3 has the following breaking changes: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 
+| OpenSearch 1\.3 or 2\.x |  OpenSearch 2\.*x* Version 2\.3 has the following breaking changes: [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 
 | OpenSearch 1\.x | OpenSearch 1\.x | 
 | Elasticsearch 7\.x |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  OpenSearch 1\.*x* introduces numerous breaking changes\. For details, see [Amazon OpenSearch Service rename \- Summary of changes](rename.md)\.   | 
 |  Elasticsearch 6\.8  |  Elasticsearch 7\.*x* or OpenSearch 1\.*x*  Elasticsearch 7\.0 and OpenSearch 1\.0 include numerous breaking changes\. Before initiating an in\-place upgrade, we recommend [taking a manual snapshot](managedomains-snapshots.md) of the 6\.*x* domain, restoring it on a test 7\.*x* or OpenSearch 1\.*x* domain, and using that test domain to identify potential upgrade issues\. For breaking changes in OpenSearch 1\.0, see [Amazon OpenSearch Service rename \- Summary of changes](rename.md)\. Like Elasticsearch 6\.*x*, indexes can only contain one mapping type, but that type must now be named `_doc`\. As a result, certain APIs no longer require a mapping type in the request body \(such as the `_bulk` API\)\. For new indexes, self\-hosted Elasticsearch 7\.*x* and OpenSearch 1\.*x* have a default shard count of one\. OpenSearch Service domains on Elasticsearch 7\.*x* and later retain the previous default of five\.   | 
@@ -175,6 +174,8 @@ The following table shows how to use snapshots to migrate data to a domain that 
 
 | From version | To version | Migration process | 
 | --- | --- | --- | 
+| OpenSearch 1\.3 or 2\.x | OpenSearch 2\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 
+| OpenSearch 1\.x | OpenSearch 1\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 
 | Elasticsearch 6\.x or 7\.x | OpenSearch 1\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 
 | Elasticsearch 6\.x | Elasticsearch 7\.x |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 
 | Elasticsearch 6\.x | Elasticsearch 6\.8 |  [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html)  | 

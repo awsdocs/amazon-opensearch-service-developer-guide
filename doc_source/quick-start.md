@@ -172,17 +172,17 @@ Taken together, the metadata and the data represent a single action in a bulk op
 
 ```
 POST /_bulk
-{ "create" : { "_index" : "veggies", "_type" : "_doc", "_id" : "35" } }
+{ "create" : { "_index" : "veggies", "_id" : "35" } }
 { "name":"kale", "color":"green", "classification":"leafy-green" }
-{ "create" : { "_index" : "veggies", "_type" : "_doc", "_id" : "36" } }
+{ "create" : { "_index" : "veggies", "_id" : "36" } }
 { "name":"spinach", "color":"green", "classification":"leafy-green" }
-{ "create" : { "_index" : "veggies", "_type" : "_doc", "_id" : "37" } }
+{ "create" : { "_index" : "veggies", "_id" : "37" } }
 { "name":"arugula", "color":"green", "classification":"leafy-green" }
-{ "create" : { "_index" : "veggies", "_type" : "_doc", "_id" : "38" } }
+{ "create" : { "_index" : "veggies", "_id" : "38" } }
 { "name":"endive", "color":"green", "classification":"leafy-green" }
-{ "create" : { "_index" : "veggies", "_type" : "_doc", "_id" : "39" } }
+{ "create" : { "_index" : "veggies", "_id" : "39" } }
 { "name":"lettuce", "color":"green", "classification":"leafy-green" }
-{ "delete" : { "_index" : "vegetables", "_type" : "_doc", "_id" : "1" } }
+{ "delete" : { "_index" : "vegetables", "_id" : "1" } }
 ```
 
 Notice that the last action is a `delete`\. There’s no data following the `delete` action\.

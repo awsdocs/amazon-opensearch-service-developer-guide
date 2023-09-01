@@ -177,7 +177,7 @@ If you enabled [fine\-grained access control](fgac.md#fgac-mapping), even if you
 
 At this point, you have two ways to access your OpenSearch Service domain: HTTP basic authentication with your master user credentials or AWS authentication using your IAM credentials\. Because snapshots use Amazon S3, which has no concept of the master user, you must use your IAM credentials to register the snapshot repository with your OpenSearch Service domain\.
 
-Most programming languages have libraries to assist with [signing requests](request-signing.md), but the simpler approach is to use a tool like [Postman](https://www.postman.com/downloads/) and put your IAM credentials into the **Authorization** section\.
+Most programming languages have libraries to assist with signing requests, but the simpler approach is to use a tool like [Postman](https://www.postman.com/downloads/) and put your IAM credentials into the **Authorization** section\.
 
 ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/images/migration2.png)
 

@@ -60,7 +60,7 @@ When the group finishes 30 seconds after when the first log is received by the A
 
 ## Removing duplicates<a name="use-cases-log-aggregation-duplicates"></a>
 
-You can remove duplicate entries by deriving keys from incoming events and specifying the `remove_duplictes` option for the Aggregate processor\. This action immediately processes the first event for a group, and drops all following events in that group\. 
+You can remove duplicate entries by deriving keys from incoming events and specifying the `remove_duplicates` option for the Aggregate processor\. This action immediately processes the first event for a group, and drops all following events in that group\. 
 
 In the following example, the first event is processed with the identification keys `sourceIp` and `destinationIp`:
 

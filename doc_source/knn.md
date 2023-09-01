@@ -9,6 +9,7 @@ Use the following tables to find the version of the k\-NN plugin running on your
 
 | OpenSearch version | k\-NN plugin version | Notable features | 
 | --- | --- | --- | 
+| 2\.7 | 2\.7\.0\.0 |  | 
 | 2\.5 | 2\.5\.0\.0 | Extended SystemIndexPlugin for k\-NN model system index, added Lucene\-specific file extensions to core HybridFS | 
 | 2\.3 | 2\.3\.0\.0 |  | 
 | 1\.3 | 1\.3\.0\.0 |  | 
@@ -122,6 +123,18 @@ GET my-index/_search
   }
 }
 ```
+
+If you need to handle a large volume of queries while maintaining optimal performance, you can use the [https://opensearch.org/docs/latest/api-reference/multi-search/](https://opensearch.org/docs/latest/api-reference/multi-search/) API to construct a bulk search with JSON and send a single request to perform multiple searches:
+
+```
+GET _msearch
+{ "index": "my-index"}
+{ "query": { "knn": {"my_vector2":{"vector": [2, 3, 5, 6],"k":2 }} } }
+{ "index": "my-index", "search_type": "dfs_query_then_fetch"}
+{ "query": { "knn": {"my_vector1":{"vector": [2, 3],"k":2 }} } }
+```
+
+The following video demonstrates how to set up bulk vector searches for K\-NN queries\.
 
 ## k\-NN differences, tuning, and limitations<a name="knn-settings"></a>
 

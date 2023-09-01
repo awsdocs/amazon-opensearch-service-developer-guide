@@ -198,7 +198,7 @@ If you already invested significant time into configuring your own OpenSearch Da
    opensearch_security.session.ttl: 3600000
    opensearch_security.session.keepalive: false
    opensearch_security.multitenancy.enabled: false
-   opensearch_security.readonly_mode.roles: [opensearch_dashboards_read_only']
+   opensearch_security.readonly_mode.roles: ['opensearch_dashboards_read_only']
    opensearch_security.auth.unauthenticated_routes: []
    opensearch_security.basicauth.login.title: 'Please log in using your username and password'
    

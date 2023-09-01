@@ -24,5 +24,5 @@ aws osis delete-pipeline --pipeline-name "my-pipeline"
 
 ## OpenSearch Ingestion API<a name="delete-pipeline-api"></a>
 
-To delete an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [DeletePipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_DeletePipeline.html) operation with the following parameter: 
+To delete an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [DeletePipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_DeletePipeline.html) operation with the following parameter: 
 + `PipelineName` – the name of the pipeline\.

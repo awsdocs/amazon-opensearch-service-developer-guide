@@ -140,7 +140,7 @@ If a user provides invalid credentials, the cluster returns an `Unauthorized` ex
 After configuring a role, you *map* it to one or more users\. For example, you might map three roles to a single user: one role that provides access to Dashboards, one that provides read\-only access to `index1`, and one that provides write access to `index2`\. Or you could include all of those permissions in a single role\.
 
 *Users* are people or applications that make requests to the OpenSearch cluster\. Users have credentials—either IAM access keys or a username and password—that they specify when they make requests\. With fine\-grained access control on Amazon OpenSearch Service, you choose one or the other for your *master user* when you configure your domain\. The master user has full permissions to the cluster and manages roles and role mappings\.
-+ If you choose IAM for your master user, all requests to the cluster must be signed using AWS Signature Version 4\. For sample code, see [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)\.
++ If you choose IAM for your master user, all requests to the cluster must be signed using AWS Signature Version 4\.
 
   We recommend IAM if you want to use the same users on multiple clusters, if you want to use Amazon Cognito to access Dashboards, or if you have OpenSearch clients that support Signature Version 4 signing\.
 + If you choose the internal user database, you can use HTTP basic authentication \(as well as IAM credentials\) to make requests to the cluster\. Most clients support basic authentication, including [curl](https://curl.haxx.se/), which also supports AWS Signature Version 4 with the [\-\-aws\-sigv4 option](https://curl.se/docs/manpage.html)\. The internal user database is stored in an OpenSearch index, so you can't share it with other clusters\.
@@ -301,7 +301,7 @@ Action groups are sets of permissions that you can reuse across different resour
 
 ### OpenSearch Dashboards multi\-tenancy<a name="fgac-multitenancy"></a>
 
-Tenants are spaces for saving index patterns, visualizations, dashboards, and other Dashboards objects\. Dashboards multi\-tenancy lets you safely share your work with other Dashboards users \(or keep it private\)\. You can control which roles have access to a tenant and whether those roles have read or write access\. The Global tenant is the default\. To learn more, see [OpenSearch Dashboards multi\-tenancy](https://opensearch.org/docs/latest/security/multi-tenancy/tenant-index/)\.
+Tenants are spaces for saving index patterns, visualizations, dashboards, and other Dashboards objects\. Dashboards multi\-tenancy lets you safely share your work with other Dashboards users \(or keep it private\) and dynamically configure tenants\. You can control which roles have access to a tenant and whether those roles have read or write access\. The Global tenant is the default\. To learn more, see [OpenSearch Dashboards multi\-tenancy](https://opensearch.org/docs/latest/security/multi-tenancy/tenant-index/)\.
 
 **To view your current tenant or change tenants**
 

@@ -1,6 +1,8 @@
 # Cross\-cluster replication for Amazon OpenSearch Service<a name="replication"></a>
 
-With cross\-cluster replication in Amazon OpenSearch Service, you can replicate indexes, mappings, and metadata from one OpenSearch Service domain to another\. It follows an active\-passive replication model where the follower index \(where the data is replicated\) pulls data from the leader index\. Using cross\-cluster replication helps to ensure disaster recovery if there is an outage, and allows you to replicate data across geographically distant data centers to reduce latency\. You pay [standard AWS data transfer charges](https://aws.amazon.com/opensearch-service/pricing/) for the data transferred between domains\. 
+With cross\-cluster replication in Amazon OpenSearch Service, you can replicate indexes, mappings, and metadata from one OpenSearch Service domain to another\. Using cross\-cluster replication helps to ensure disaster recovery if there is an outage, and allows you to replicate data across geographically distant data centers to reduce latency\. You pay [standard AWS data transfer charges](https://aws.amazon.com/opensearch-service/pricing/) for the data transferred between domains\. 
+
+Cross\-cluster replication follows an active\-passive replication model where the *local* or *follower* index pulls data from the *remote* or *leader* index\. The leader index refers to the source of the data, or the index that you want to replicate data from\. The follower index refers to the target for the data, or the index that you want to replicate data to\.
 
 Cross\-cluster replication is available on domains running Elasticsearch 7\.10 or OpenSearch 1\.1 or later\. Full documentation for cross\-cluster replication is available in the [OpenSearch documentation](https://opensearch.org/docs/replication-plugin/index/)\.
 
@@ -8,12 +10,13 @@ Cross\-cluster replication is available on domains running Elasticsearch 7\.10 o
 
 Cross\-cluster replication has the following limitations:
 + You can't replicate data between Amazon OpenSearch Service domains and self\-managed OpenSearch or Elasticsearch clusters\.
++ You can't replicate an index from a follower domain to another follower domain\. If you want to replicate an index to multiple follower domains, you can only replicate it from the single leader domain\.
 + A domain can be connected, through a combination of inbound and outbound connections, to a maximum of 20 other domains\.
 + Domains must either share the same major version, or be on the final minor version and the next major version\.
 + You can't use AWS CloudFormation to connect domains\.
 + You can't use cross\-cluster replication on M3 or burstable \(T2 and T3\) instances\.
 + You can't replicate data between UltraWarm or cold indexes\. Both indexes must be in hot storage\.
-+ Cross\-cluster replication doesn't work with [data streams](https://opensearch.org/docs/latest/opensearch/data-streams/) or the [k\-NN plugin](knn.md)\.
++ Starting with OpenSearch 2\.7, cross\-cluster replication works with the [k\-NN plugin](knn.md)\.
 
 ## Prerequisites<a name="replication-prereqs"></a>
 
@@ -24,7 +27,7 @@ Before you set up cross\-cluster replication, make sure that your domains meet t
 
 ## Permissions requirements<a name="replication-permissions"></a>
 
-In order to start replication, you must include the `es:ESCrossClusterGet` permission on the remote \(leader\) domain\. We recommend the following IAM policy on the remote domain \(which also lets you perform other operations, such as indexing documents and performing standard searches\):
+In order to start replication, you must include the `es:ESCrossClusterGet` permission on the remote \(leader\) domain\. We recommend the following IAM policy on the remote domain\. This policy also lets you perform other operations, such as indexing documents and performing standard searches:
 
 ```
 {

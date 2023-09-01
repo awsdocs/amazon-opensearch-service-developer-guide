@@ -35,7 +35,7 @@ In this sample policy, the first rule specifies VPC access to both the collectio
             ]
          },
          {
-            "ResourceType":"dashboards",
+            "ResourceType":"dashboard",
             "Resource":[
                "collection/marketing*"
             ]
@@ -269,11 +269,11 @@ Before you create a collection, you might want to preview the existing network p
 aws opensearchserverless list-security-policies --type network
 ```
 
-The request returns information about all configured network policies\. To view the pattern rules defined in the policy, use the contents of the `policy` element:
+The request returns information about all configured network policies\. To view the pattern rules defined in the one specific policy, find the policy information in the contents of the `securityPolicySummaries` element in the response\. Note the `name` and `type` of this policy and use these properties in a [GetSecurityPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_GetSecurityPolicy.html) request to receive a response with the following policy details: 
 
 ```
 {
-    "securityPolicyDetails": [
+    "securityPolicyDetail": [
         {
             "type": "network",
             "name": "my-policy",

@@ -70,9 +70,10 @@ First, create a role that the pipeline will assume in order to access the OpenSe
            {
                "Effect": "Allow",
                "Action": [
+                   "aoss:APIAccessAll",
                    "aoss:BatchGetCollection"
                ],
-               "Resource": "*"
+               "Resource": "arn:aws:aoss:{region}:{your-account-id}:collection/{collection-id}"
            }
        ]
    }

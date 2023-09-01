@@ -28,7 +28,8 @@ OpenSearch Ingestion is a subset of Amazon OpenSearch Service\. It's powered by 
 + [Stopping and starting Amazon OpenSearch Ingestion pipelines](pipeline--stop-start.md)
 + [Deleting Amazon OpenSearch Ingestion pipelines](delete-pipeline.md)
 + [Supported plugins and options for Amazon OpenSearch Ingestion pipelines](pipeline-config-reference.md)
-+ [Sending data to Amazon OpenSearch Ingestion pipelines](configure-client.md)
++ [Working with Amazon OpenSearch Ingestion pipeline integrations](configure-client.md)
++ [Using the AWS SDKs to interact with Amazon OpenSearch Ingestion](osis-sdk.md)
 + [Use cases for Amazon OpenSearch Ingestion](use-cases-overview.md)
 + [Security in Amazon OpenSearch Ingestion](pipeline-security-model.md)
 + [Tagging Amazon OpenSearch Ingestion pipelines](tag-pipeline.md)
@@ -44,10 +45,10 @@ From an OpenSearch Ingestion perspective, a *pipeline* refers to a single provis
 
 **Sub\-pipeline**  
 You define sub\-pipelines *within* a YAML configuration file\. Each sub\-pipeline is a combination of a source, a buffer, zero or more processors, and one or more sinks\. You can define multiple sub\-pipelines in a single YAML file, each with unique sources, processors, and sinks\. To aid in monitoring with CloudWatch and other services, we recommend that you specify a pipeline name that's distinct from all of its sub\-pipelines\.  
-You can string multiple sub\-pipelines together within a single YAML file, so that the source for one sub\-pipeline is another sub\-pipeline, and its sink is a third sub\-pipeline\. For an example, see [Writing from OpenTelemetry Collector](configure-client.md#configure-client-otel)\.
+You can string multiple sub\-pipelines together within a single YAML file, so that the source for one sub\-pipeline is another sub\-pipeline, and its sink is a third sub\-pipeline\. For an example, see [OpenTelemetry Collector](configure-client-otel.md)\.
 
 **Source**  
-The input component of a sub\-pipeline\. It defines the mechanism through which a pipeline consumes records\. The source can consume events either by receiving them over HTTPS, or by reading from external endpoints such as Amazon S3\. There are two types of sources: *push\-based* and *pull\-based*\. Push\-based sources, such as [HTTP](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/http-source/) and [OTel logs](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-logs-source/), stream records to ingestion endpoints\. Pull\-based sources, such as [OTel trace group](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-group/) and [S3](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/s3/), pull data from the source\.
+The input component of a sub\-pipeline\. It defines the mechanism through which a pipeline consumes records\. The source can consume events either by receiving them over HTTPS, or by reading from external endpoints such as Amazon S3\. There are two types of sources: *push\-based* and *pull\-based*\. Push\-based sources, such as [HTTP](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/http-source/) and [OTel logs](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-logs-source/), stream records to ingestion endpoints\. Pull\-based sources, such as [OTel trace](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-trace/) and [S3](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/s3/), pull data from the source\.
 
 **Processors**  
 Intermediate processing units that can filter, transform, and enrich records into a desired format before publishing them to the sink\. The processor is an optional component of a pipeline\. If you don't define a processor, records are published in the format defined in the source\. You can have more than one processor\. A pipeline runs processors in the order that you define them\.
@@ -96,7 +97,7 @@ OpenSearch Ingestion currently supports the following major versions of Data Pre
 
 When you create a pipeline, use the required `version` option to specify the major version of Data Prepper to use\. For example, `version: "2"`\. OpenSearch Ingestion retrieves the latest supported *minor* version of that major version and provisions the pipeline with that version\. For more information, see [Specifying the pipeline version](creating-pipeline.md#pipeline-version)\.
 
-For information about the features and bug fixes that are in each version of Data Prepper, see the [Releases](https://github.com/opensearch-project/data-prepper/releases) page\. Not every minor version of a particular major version is supported by OpenSearch Ingestion\.
+For information about the latest version that OpenSearch Ingestion supports, see [2\.4 release notes](https://github.com/opensearch-project/data-prepper/releases/tag/2.4.0)\. For information about the features and bug fixes that are in each version of Data Prepper, see the [Releases](https://github.com/opensearch-project/data-prepper/releases) page\. Not every minor version of a particular major version is supported by OpenSearch Ingestion\.
 
 ## Scaling pipelines<a name="ingestion-scaling"></a>
 

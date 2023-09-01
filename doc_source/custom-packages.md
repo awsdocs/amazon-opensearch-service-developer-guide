@@ -305,7 +305,7 @@ To update analyzers with the new package files, you have two options:
   POST my-index/_close
   POST my-index/_open
   ```
-+ Reindex the indexes\. First, create an index that uses the updated synonyms file \(or an entirely new file\):
++ Reindex the indexes\. First, create an index that uses the updated synonyms file \(or an entirely new file\)\. Note that only UTF\-8 is supported\.
 
   ```
   PUT my-new-index

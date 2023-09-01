@@ -1,17 +1,24 @@
 # Loading streaming data into Amazon OpenSearch Service<a name="integrations"></a>
 
-You can load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon OpenSearch Service domain from many different sources\. Some sources, like Amazon Kinesis Data Firehose and Amazon CloudWatch Logs, have built\-in support for OpenSearch Service\. Others, like Amazon S3, Amazon Kinesis Data Streams, and Amazon DynamoDB, use AWS Lambda functions as event handlers\. The Lambda functions respond to new data by processing it and streaming it to your domain\.
+You can use OpenSearch Ingestion to directly load [streaming data](http://aws.amazon.com/streaming-data/) into your Amazon OpenSearch Service domain, without needing to use third\-party solutions\. To send data to OpenSearch Ingestion, you configure your data producers and the service automatically delivers the data to the domain or collection that you specify\. To get started with OpenSearch Ingestion, see [Tutorial: Ingesting data into a collection using Amazon OpenSearch Ingestion](osis-serverless-get-started.md)\.
+
+You can still use other sources to load streaming data, such as Amazon Kinesis Data Firehose and Amazon CloudWatch Logs, which have built\-in support for OpenSearch Service\. Others, like Amazon S3, Amazon Kinesis Data Streams, and Amazon DynamoDB, use AWS Lambda functions as event handlers\. The Lambda functions respond to new data by processing it and streaming it to your domain\.
 
 **Note**  
 Lambda supports several popular programming languages and is available in most AWS Regions\. For more information, see [Getting started with Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-app.html) in the *AWS Lambda Developer Guide* and [AWS service endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#lambda_region) in the *AWS General Reference*\.
 
 **Topics**
++ [Loading streaming data from OpenSearch Ingestion](#integrations-osis)
 + [Loading streaming data from Amazon S3](#integrations-s3-lambda)
 + [Loading streaming data from Amazon Kinesis Data Streams](#integrations-kinesis)
 + [Loading streaming data from Amazon DynamoDB](#integrations-dynamodb)
 + [Loading streaming data from Amazon Kinesis Data Firehose](#integrations-fh)
 + [Loading streaming data from Amazon CloudWatch](#integrations-cloudwatch)
 + [Loading streaming data from AWS IoT](#integrations-cloudwatch-iot)
+
+## Loading streaming data from OpenSearch Ingestion<a name="integrations-osis"></a>
+
+You can use Amazon OpenSearch Ingestion to load data into an OpenSearch Service domain\. You configure your data producers to send data to OpenSearch Ingestion, and it automatically delivers the data to the collection that you specify\. You can also configure OpenSearch Ingestion to transform your data before delivering it\. For more information, see [Amazon OpenSearch Ingestion](ingestion.md)\. 
 
 ## Loading streaming data from Amazon S3<a name="integrations-s3-lambda"></a>
 

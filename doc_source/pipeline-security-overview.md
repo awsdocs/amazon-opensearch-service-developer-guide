@@ -22,13 +22,12 @@ For a simple setup guide, see [Tutorial: Ingesting data into a domain using Amaz
 + [Ingestion role](#pipeline-security-same-account)
 + [Pipeline role](#pipeline-security-sink)
 + [Cross\-account ingestion](#pipeline-security-different-account)
-+ [Reading from Amazon S3](#pipeline-security-read-data)
 
 ## Management role<a name="pipeline-security-create"></a>
 
 In addition to the basic `osis:*` permissions needed to create and modify a pipeline, you also need the `iam:PassRole` permission for the pipeline role resource\. Any AWS service that accepts a role must use this permission\. OpenSearch Ingestion assumes the role every time it needs to write data to a sink\. This helps administrators ensure that only approved users can configure OpenSearch Ingestion with a role that grants permissions\. For more information, see [Granting a user permissions to pass a role to an AWS service](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html)\.
 
-You need the following permissions to create and update a pipeline:
+If you're using the AWS Management Console \(using blueprints and later checking on your pipeline\), you need the following permissions to create and update a pipeline:
 
 ```
 {
@@ -39,8 +38,39 @@ You need the following permissions to create and update a pipeline:
          "Resource":"*",
          "Action":[
             "osis:CreatePipeline",
+            "osis:GetPipelineBlueprint",
             "osis:ListPipelineBlueprints",
+            "osis:GetPipeline",
+            "osis:ListPipelines",
+            "osis:GetPipelineChangeProgress",
             "osis:ValidatePipeline",
+            "osis:UpdatePipeline"
+         ]
+      },
+      {
+         "Resource":[
+            "arn:aws:iam::{your-account-id}:role/pipeline-role"
+         ],
+         "Effect":"Allow",
+         "Action":[
+            "iam:PassRole"
+         ]
+      }
+   ]
+}
+```
+
+If you're using the AWS CLI \(not prevalidating your pipeline or using blueprints\), you need the following permissions to create and update a pipeline:
+
+```
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Effect":"Allow",
+         "Resource":"*",
+         "Action":[
+            "osis:CreatePipeline",
             "osis:UpdatePipeline"
          ]
       },
@@ -66,7 +96,6 @@ In addition, a pipeline might need permissions to pull from the source applicati
 **Topics**
 + [Writing to a domain sink](#pipeline-security-domain-sink)
 + [Writing to a collection sink](#pipeline-security--collection-sink)
-+ [Reading from Amazon S3](#pipeline-security-read-data)
 + [Writing to a dead\-letter queue](#pipeline-security-dlq)
 
 ### Writing to a domain sink<a name="pipeline-security-domain-sink"></a>
@@ -100,57 +129,6 @@ An OpenSearch Ingestion pipeline needs permission to write to an OpenSearch Serv
 First, create an IAM role that has the `aoss:BatchGetCollection` permission against all resources \(`*`\)\. Then, include this role in a data access policy and provide it permissions to create indexes, update indexes, describe indexes, and write documents within the collection\. Finally, specify the role ARN as the value of the **sts\_role\_arn** option within the pipeline configuration\.
 
 For instructions to complete each of these steps, see [Allowing pipelines to access collections](pipeline-collection-access.md)\.
-
-### Reading from Amazon S3<a name="pipeline-security-read-data"></a>
-
-Unlike other source plugins that *push* data to a pipeline, the [S3 source plugin](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/s3/) has a read\-based architecture in which the pipeline *pulls* data from the source\. Therefore, in order for a pipeline to read from S3, you must specify a role within the pipeline's S3 source configuration that has access to both the S3 bucket and the Amazon SQS queue\. The pipeline will assume this role in order to read data from the queue\.
-
-**Note**  
-The S3 access role that you specify must be the same as the [pipeline role]()\. Therefore, your pipeline role must contain two separate permissions policies—one to write to a sink, and one to pull from the S3 source\. You must use the same `sts_role_arn` in all pipeline components\.
-
-The following sample policy shows the required permissions for using S3 as a source:
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "ReadFromS3",
-      "Effect": "Allow",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::my-bucket/*"
-    },
-    {
-      "Sid": "ReceiveAndDeleteSqsMessages",
-      "Effect": "Allow",
-      "Action": [
-        "sqs:DeleteMessage",
-        "sqs:ReceiveMessage"
-      ],
-      "Resource": "arn:aws:sqs:us-west-2:{your-account-id}:MyS3EventSqsQueue"
-    }
-  ]
-}
-```
-
- You must attach these permissions to the IAM role that you specify in the `sts_role_arn` option within the S3 source plugin configuration:
-
-```
-version: "2"
-source:
-  s3:
-    ...
-    aws:
-      ...
-      sts_role_arn: arn:aws:iam::{your-account-id}:role/pipeline-role
-processor:
-  ...
-sink:
-  - opensearch:
-      ...
-```
-
-For a more complete example, see [Writing from Amazon S3](configure-client.md#configure-client-s3)\.
 
 ### Writing to a dead\-letter queue<a name="pipeline-security-dlq"></a>
 
@@ -208,7 +186,7 @@ The following example policy allows the associated principal to ingest data into
 }
 ```
 
-For more information, see [Sending data to Amazon OpenSearch Ingestion pipelines](configure-client.md)\.
+For more information, see [Working with Amazon OpenSearch Ingestion pipeline integrations](configure-client.md)\.
 
 ### Cross\-account ingestion<a name="pipeline-security-different-account"></a>
 

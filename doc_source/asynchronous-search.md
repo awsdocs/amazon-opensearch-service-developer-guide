@@ -73,8 +73,8 @@ For domains with fine\-grained access control disabled, use your IAM access and 
 ## Asynchronous search settings<a name="asynchronous-search-diff"></a>
 
 OpenSearch lets you change all available [asynchronous search settings](https://opensearch.org/docs/search-plugins/async/settings/) using the `_cluster/settings` API\. In OpenSearch Service, you can only change the following settings: 
-+ `opensearch.asynchronous_search.node_concurrent_running_searches`
-+ `opensearch.asynchronous_search.persist_search_failures`
++ `plugins.asynchronous_search.node_concurrent_running_searches`
++ `plugins.asynchronous_search.persist_search_failures`
 
 ## Cross\-cluster search<a name="asynchronous-search-ccs"></a>
 

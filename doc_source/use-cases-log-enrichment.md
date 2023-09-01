@@ -136,7 +136,7 @@ The processor will transform a string such as `a&b&c` into `["a", "b", "c"].`
 
 ## Converting lists to maps<a name="use-cases-log-enrichment-list-map"></a>
 
-The [List\-to\-map](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/mutate-string/) processor, which is one of the Mutate events processors, converts a list of objects in an event to a map\.
+The [List\-to\-map](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/list-to-map/) processor, which is one of the Mutate events processors, converts a list of objects in an event to a map\.
 
 For example, consider the following processor configuration: 
 
@@ -402,7 +402,7 @@ The Date processor can generate timestamps for incoming events if you specify `@
 
 ### Deriving punctuation patterns<a name="use-cases-log-enrichment-timestamps-deriving"></a>
 
-[Substitute string](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/date/) processor \(which is one of the Mutate events processors\) lets you derive a punctuation pattern from incoming events\. In the following example pipeline, the processor will scan incoming Apache log events and derive punctuation patterns from them\. 
+The [Substitute string](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/substitute-string/) processor \(which is one of the Mutate string processors\) lets you derive a punctuation pattern from incoming events\. In the following example pipeline, the processor will scan incoming Apache log events and derive punctuation patterns from them\. 
 
 ```
 processor:                                                                                                                                              

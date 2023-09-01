@@ -191,7 +191,7 @@ sink:
 
 ### Generating index names and patterns<a name="osis-features-index-management-patterns"></a>
 
-You can generate dynamic index names by using variables from the fields of incoming events\. In the sink configuration, specify `index_type` as `custom` and use the format `string${}` to signal string interpolation, and use a JSON pointer to extract fields from events\.
+You can generate dynamic index names by using variables from the fields of incoming events\. In the sink configuration, use the format `string${}` to signal string interpolation, and use a JSON pointer to extract fields from events\. The options for `index_type` are `custom` or `management_disabled`\. Because `index_type` defaults to `custom` for OpenSearch domains and `management_disabled` for OpenSearch Serverless collections, it can be left unset\.
 
 For example, the following pipeline selects the `metadataType` field from incoming events to generate index names\.
 
@@ -200,7 +200,6 @@ pipeline:
   ...
   sink:
     opensearch:
-      index_type: custom
       index: "metadata-${metadataType}"
 ```
 
@@ -211,14 +210,12 @@ pipeline:
   ...
   sink:
     opensearch:
-      index_type: custom
       index: "metadata-${metadataType}-%{yyyy.MM.dd}"
 
 pipeline:
   ...
   sink:
     opensearch:
-      index_type: custom
       index: "metadata-${metadataType}-%{yyyy.MM.dd.HH}"
 ```
 

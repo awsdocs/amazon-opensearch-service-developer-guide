@@ -61,7 +61,7 @@ To modify the off\-peak window using the AWS CLI, send an [UpdateDomainConfig](h
 ```
 aws opensearch update-domain-config \
   --domain-name my-domain \
-  --off-peak-window-options Enabled=true,OffPeakWindow={WindowStartTime={Hours=02,Minutes=00}}
+  --off-peak-window-options 'Enabled=true, OffPeakWindow={WindowStartTime={Hours=02,Minutes=00}}'
 ```
 
 If you don't specify a custom window start time, it defaults to 00:00 UTC\.
@@ -93,7 +93,7 @@ For example, the following request changes the window start time to 2:00 A\.M\. 
 ```
 aws opensearch update-domain-config \
   --domain-name my-domain \
-  --off-peak-window-options OffPeakWindow={WindowStartTime={Hours=02,Minutes=00}}
+  --off-peak-window-options 'OffPeakWindow={WindowStartTime={Hours=02,Minutes=00}}'
 ```
 
 If you don't specify a window start time, it defaults to 10:00 P\.M\. local time for the AWS Region that the domain is created in\. 

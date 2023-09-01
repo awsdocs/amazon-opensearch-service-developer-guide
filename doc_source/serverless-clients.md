@@ -53,7 +53,7 @@ Rather than using a third\-party client to send data directly to an OpenSearch S
 
 An OpenSearch Ingestion pipeline needs permission to write to an OpenSearch Serverless collection that is configured as its sink\. These permissions include the ability to describe the collection and send HTTP requests to it\.
 
-First, create an IAM role that has the `aoss:BatchGetCollection` permission against all resources \(`*`\)\. Then, include this role in a data access policy and provide it permissions to create indexes, update indexes, describe indexes, and write documents within the collection\. Finally, specify the role ARN as the value of the **sts\_role\_arn** option within the pipeline configuration\.
+First, create an IAM role that has the `aoss:BatchGetCollection` and `aoss:APIAccessAll` permissions against all resources \(`*`\)\. Then, include this role in a data access policy and provide it permissions to create indexes, update indexes, describe indexes, and write documents within the collection\. Finally, specify the role ARN as the value of the **sts\_role\_arn** option within the pipeline configuration\.
 
 For instructions to complete each of these steps, see [Allowing Amazon OpenSearch Ingestion pipelines to write to collections](pipeline-collection-access.md)\.
 

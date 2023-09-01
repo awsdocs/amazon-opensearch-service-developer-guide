@@ -13,7 +13,7 @@ Before you specify the role in your pipeline configuration, you must configure i
 ## Limitations<a name="pipeline-collection-access-limitations"></a>
 
 The following limitations apply for pipelines that write to OpenSearch Serverless collections:
-+ The [OTel trace group](hhttps://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-group/) processor doesn't currently work with OpenSearch Serverless collection sinks\.
++ The [OTel trace group](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-group/) processor doesn't currently work with OpenSearch Serverless collection sinks\.
 + The collection sink must have public [network access](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-network.html) for both the OpenSearch endpoint and OpenSearch Dashboards\. A pipeline can't write to a collection that must be accessed through OpenSearch Serverless–managed VPC endpoints\.
 + Currently, OpenSearch Ingestion only supports the legacy `_template` operation, while OpenSearch Serverless supports the composable `_index_template` operation\. Therefore, if your pipeline configuration includes the `index_type` option, it must be set to `management_disabled`\.
 

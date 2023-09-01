@@ -841,7 +841,7 @@ The following is an example event of this type:
 
 ### Disk throughput throttle<a name="monitoring-events-throughput-throttle"></a>
 
-OpenSearch Service sends this event when read and write requests to your domain are being throttled due to the throughput limitations of your EBS volumes or EC2 instance\. If you receive this notification, consider scaling up your volumes or instances following AWS recommended best practices\.
+OpenSearch Service sends this event when read and write requests to your domain are being throttled due to the throughput limitations of your EBS volumes or EC2 instance\. If you receive this notification, consider scaling up your volumes or instances following AWS recommended best practices\. If your volume type is `gp2`, increase the volume size\. If your volume type is `gp3`, provision more throughput\. You can also check that your instance base and maximum EBS throughput are greater than or equal to the provisioned volume throughput, and can scale up accordingly\. 
 
 **Example**
 
@@ -862,8 +862,151 @@ The following is an example event of this type:
      "status":"Warning",
      "severity":"Medium",
      "description":"Your domain is experiencing throttling due to instance or volume throughput limitations. 
-                    Please consider scaling your domain to suit your throughput needs. Please refer to the documentation for more information."
+                    Please consider scaling your domain to suit your throughput needs. In July 2023, we improved 
+                    the accuracy of throughput throttle calculation by replacing ‘Max volume throughput’ with 
+                    ‘Provisioned volume throughput’. Please refer to the documentation for more information."
   }
+}
+```
+
+### Large shard size<a name="monitoring-events-large-shard-size"></a>
+
+OpenSearch Service sends this event when one or more of the shards in your cluster has exceeded either 60GiB or 75GiB\. To fix this issue, see the [sharding best practices](bp.md#bp-sharding-strategy)\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"Large Shard Size",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"One or more shards are larger than either 60GiB or 75GiB. To ensure optimum cluster performance and stability, reduce shard sizes.
+                    For more information, see https://docs.aws.amazon.com/opensearch-service/latest/developerguide/monitoring-events.html#monitoring-events-large-shard-size."
+  }
+}
+```
+
+### High JVM usage<a name="monitoring-events-high-jvm"></a>
+
+OpenSearch Service sends this event when the `JVMMemoryPressure` metric for your domain has exceeded 80%\. If it exceeds 92% for 30 minutes, all write operations to your cluster will be blocked\. To ensure optimum cluster stability, reduce traffic to the cluster or scale your domain to provide sufficient memory for your workload\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"High JVM Usage",
+     "status":"Warning",
+     "severity":"High",
+     "description":"JVM memory pressure has exceeded 80%. If it exceeds 92% for 30 minutes, all write operations to your cluster
+                    will be blocked. To ensure optimum cluster stability, reduce traffic to the cluster or use larger instance types.
+                    For more information, see https://docs.aws.amazon.com/opensearch-service/latest/developerguide/monitoring-events.html#monitoring-events-high-jvm."
+  }
+}
+```
+
+### Insufficient GC<a name="monitoring-events-insufficient-gc"></a>
+
+OpenSearch Service sends this event when maximum JVM is above 70% and difference between the maximum and minimum is less than 30%\. This may indicate that the JVM is unable to reclaim sufficient memory during garbage collection cycles for your workload\. This can lead to increasingly slower responses and higher latencies; and in some cases even node drops due to timed out health checks\. To ensure optimum cluster stability, reduce traffic to the cluster or scale your domain to provide sufficient memory for your workload\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"Insufficient GC",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"Maximum JVM is above 70% and JVM range is less than 30%. This may indicate insufficient garbage collection for your workload.
+                    For more information, see https://docs.aws.amazon.com/opensearch-service/latest/developerguide/monitoring-events.html#monitoring-events-insufficient-gc."
+  }
+}
+```
+
+### Custom index routing warning<a name="monitoring-events-index-routing"></a>
+
+OpenSearch Service sends this event when your domain is in processing state and contains indices with custom index\.routing\.allocation settings which can cause blue\-green deployments to get stuck\. Verify settings are applied properly\.
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"Custom Index Routing Warning",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"Your domain is in processing state and contains indice(s) with custom index.routing.allocation 
+                    settings which can cause blue-green deployments to get stuck. Verify settings are applied properly.
+                    For more information, see https://docs.aws.amazon.com/opensearch-service/latest/developerguide/monitoring-events.html#monitoring-events-index-routing."
+  }
+}
+```
+
+### Failed shard lock<a name="monitoring-events-failed-shard-lock"></a>
+
+OpenSearch Service sends this event when your domain is unhealthy due to unassigned shards with `[ShardLockObtainFailedException]`\. For more information, see [How do I resolve the in\-memory shard lock exception in Amazon OpenSearch Service?](https://aws.amazon.com/premiumsupport/knowledge-center/opensearch-in-memory-shard-lock/)
+
+**Example**
+
+The following is an example event of this type:
+
+```
+{
+  "version":"0",
+  "id":"01234567-0123-0123-0123-012345678901",
+  "detail-type":"Amazon OpenSearch Service Notification",
+  "source":"aws.es",
+  "account":"123456789012",
+  "time":"2017-12-01T13:12:22Z",
+  "region":"us-east-1",
+  "resources":["arn:aws:es:us-east-1:123456789012:domain/test-domain"],
+  "detail":{
+     "event":"Failed Shard Lock",
+     "status":"Warning",
+     "severity":"Medium",
+     "description":"Your domain is unhealthy due to unassigned shards with [ShardLockObtainFailedException]. For more information, 
+                    see https://docs.aws.amazon.com/opensearch-service/latest/developerguide/monitoring-events.html#monitoring-events-failed-shard-lock."
 }
 ```
 

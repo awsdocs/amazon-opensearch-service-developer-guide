@@ -249,7 +249,7 @@ Before you create a collection, you might want to preview the existing data acce
 aws opensearchserverless list-access-policies --type data
 ```
 
-The request returns information about all configured data access policies\. Use the contents of the `policy` element to view the collection\-matching rules that are defined in the policy:
+The request returns information about all configured data access policies\. To view the pattern rules defined in the one specific policy, find the policy information in the contents of the `accessPolicySummaries` element in the response\. Note the `name` and `type` of this policy and use these properties in a [GetAccessPolicy](https://docs.aws.amazon.com/opensearch-service/latest/ServerlessAPIReference/API_GetAccessPolicy.html) request to receive a response with the following policy details: 
 
 ```
 {

@@ -58,7 +58,7 @@ Amazon OpenSearch Ingestion is a fully managed data collector, powered by [Data 
 ## Supported versions of OpenSearch and Elasticsearch<a name="choosing-version"></a>
 
 OpenSearch Service currently supports the following OpenSearch versions:
-+ 2\.5, 2\.3, 1\.3, 1\.2, 1\.1, 1\.0
++ 2\.7, 2\.5, 2\.3, 1\.3, 1\.2, 1\.1, 1\.0
 
 OpenSearch Service also supports the following legacy Elasticsearch OSS versions:
 + 7\.10, 7\.9, 7\.8, 7\.7, 7\.4, 7\.1

@@ -7,7 +7,7 @@ When you create your first collection, OpenSearch Serverless instantiates a tota
 **Note**  
 Although capacity can scale up to accomodate data, it can't currently scale up *search* replicas\. OpenSearch Serverless functions with two search replicas running in active\-active mode\. If you need more replicas for your workload, contact [AWS Support](https://console.aws.amazon.com/support/home)\.
 
-For *search* collections, most data is stored in the hot cache to ensure fast query response times\. Some data is stored in S3 and is pulled to hot disks when it's queried\. For *time series* collections, we use a combination of hot and warm caches, keeping the most recent data in the hot cache to optimize query response times for more frequently accessed data\. For more information, see [Choosing a collection type](serverless-overview.md#serverless-usecase)\.
+For *search* and *vector search* collections, all data is stored in the hot cache to ensure fast query response times\. For *time series* collections, we use a combination of hot and warm caches, keeping the most recent data in the hot cache to optimize query response times for more frequently accessed data\. For more information, see [Choosing a collection type](serverless-overview.md#serverless-usecase)\.
 
 To manage capacity for your collections and to control costs, you can specify the overall maximum indexing and search capacity for the current account and Region, and OpenSearch Serverless scales out your collection resources automatically based on these specifications\.
 
@@ -40,9 +40,9 @@ aws opensearchserverless update-account-settings \
 
 ## Maximum capacity limits<a name="serverless-scaling-limits"></a>
 
-The default maximum capacity for both indexing and search is 10 OCUs\. The minimum allowed capacity for an account is 2 OCUs for indexing and 2 OCUs for search\. The maximum allowed capacity is 50 OCUs for indexing and 50 OCUs for search\.
+For all three types of collections, the default maximum capacity is 10 OCUs for indexing and 10 OCUs for search\. The minimum allowed capacity for an account is 2 OCUs for indexing and 2 OCUs for search\. For *search* and *time series* collections, the maximum allowed capacity is 100 OCUs for indexing and 100 OCUs for search\. For *vector search* collections, the maximum allowed capacity is 20 OCUs for indexing and 20 OCUs for search\. You can configure the OCU count to be any number from 2 to the maximum allowed capacity according to collection type, in multiples of 2\. 
 
-Each OCU includes enough hot ephemeral storage for 120 GiB of index data\. OpenSearch Serverless supports up to 1 TiB of index data per collection, and 6 TiB of index data per account\. You can still ingest more data, which can be stored in S3\.
+Each OCU includes enough hot ephemeral storage for 120 GiB of index data\. OpenSearch Serverless supports up to 1 TiB of index data per *search* and *vector search* collections, 6 TiB of index data per *time series* collection, and 6 TiB of index data per account\. You can still ingest more data, which can be stored in S3\.
 
 For a list of all quotas, see [OpenSearch Serverless quotas](limits.md#limits-serverless)\.
 

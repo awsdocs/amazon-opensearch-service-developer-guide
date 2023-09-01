@@ -292,7 +292,7 @@ This example policy allows a user to view details for all Amazon OpenSearch Serv
 To access Amazon OpenSearch Serverless data\-plane APIs and OpenSearch Dashboards from the browser, you need to add two IAM permissions for collection resources\. These permissions are `aoss:APIAccessAll` and `aoss:DashboardsAccessAll`\. 
 
 **Note**  
-Starting May 10, 2023, Amazon OpenSearch Serverless requires these two new IAM permissions for collection resources\. The `aoss:APIAccessAll` permission allows data\-plane access \(to be distinguished from control\-place access\), and the `aoss:DashboardsAccessAll` permission allows OpenSearch Dashboards from the browser\.You must complete this action by May 9, 2023\. Failure to add the two new IAM permissions will result in a 403 error starting May 10\. 
+Starting May 10, 2023, OpenSearch Serverless requires these two new IAM permissions for collection resources\. The `aoss:APIAccessAll` permission allows data\-plane access \(to be distinguished from control\-place access\), and the `aoss:DashboardsAccessAll` permission allows OpenSearch Dashboards from the browser\. Failure to add the two new IAM permissions will result in a 403 error\. 
 
 This example policy allows a user to access data\-plane APIs for a specified collection in their account, and access OpenSearch Dashboards for all collections in their account\.
 
@@ -313,5 +313,17 @@ This example policy allows a user to access data\-plane APIs for a specified col
             "Resource": "arn:aws:aoss:region:account-id:dashboards/default"
         }
     ]
+}
+```
+
+Both `aoss:APIAccessAll` and `aoss:DashboardsAccessAll` give full IAM permission to the collection resources, while the Dashboards permission also provides OpenSearch Dashboards access\. Each permission works independently, so an explicit deny on `aoss:APIAccessAll` doesn't block `aoss:DashboardsAccessAll` access to the resources, including Dev Tools\. The same is true for a deny on `aoss:DashboardsAccessAll`\.
+
+OpenSearch Serverless only supports the source IP address in the condition setting in the principal's IAM policy for data\-plane calls:
+
+```
+"Condition": {
+    "IpAddress": {
+         "aws:SourceIp": "52.95.4.14"
+    }
 }
 ```

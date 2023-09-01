@@ -50,7 +50,7 @@ service:
 
 ## OpenSearch Ingestion sample configuration<a name="trace-dp"></a>
 
-To send trace data to an OpenSearch Service domain, try the following sample OpenSearch Ingestion pipeline configuration\. For instructions to create a pipeline, see [Creating Amazon OpenSearch Ingestion pipelines](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/creating-pipeline.html)
+To send trace data to an OpenSearch Service domain, try the following sample OpenSearch Ingestion pipeline configuration\. For instructions to create a pipeline, see [Creating Amazon OpenSearch Ingestion pipelines](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/creating-pipeline.html)\.
 
 ```
 version: "2"
@@ -96,7 +96,7 @@ service-map-pipeline:
           region: "us-east-1"
 ```
 
-The pipeline role that you specify in the `sts_role_arn` option must have write permissions to the domain sink\. For instructions to configure permissions for the pipeline role, see [Allowing Amazon OpenSearch Ingestion pipelines to write to domains](https://docs.aws.amazon.com/opensearch-service/latest/ingestion/pipeline-domain-access.html#pipeline-access-configure)\.
+The pipeline role that you specify in the `sts_role_arn` option must have write permissions to the domain sink\. For instructions to configure permissions for the pipeline role, see [Allowing Amazon OpenSearch Ingestion pipelines to write to domains](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/pipeline-domain-access.html)\.
 
 ## Exploring trace data<a name="trace-dashboards"></a>
 

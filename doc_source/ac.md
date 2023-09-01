@@ -322,7 +322,7 @@ Even if you configure a completely open resource\-based access policy, *all* req
   ```
 
   For a Java code sample, see [Using the AWS SDKs to interact with Amazon OpenSearch Service](configuration-samples.md)\.
-+ To make calls to the OpenSearch APIs, you must sign your own requests\. For sample code in a variety of languages, see [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)\. The OpenSearch APIs use the following format:
++ To make calls to the OpenSearch APIs, you must sign your own requests\. The OpenSearch APIs use the following format:
 
   ```
   domain-id.region.es.amazonaws.com

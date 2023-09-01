@@ -48,7 +48,7 @@ The following sample policies demonstrate how to automate common ISM use cases\.
 
 ### Hot to warm to cold storage<a name="ism-example-cold"></a>
 
-This sample policy moves an index from hot storage to [UltraWarm](ultrawarm.md), and eventually to  [cold storage](cold-storage.md), then deletes the index\.
+This sample policy moves an index from hot storage to [UltraWarm](ultrawarm.md), and eventually to  [cold storage](cold-storage.md)\. Then, it deletes the index\.
 
 The index is initially in the `hot` state\. After ten days, ISM moves it  to the `warm` state\. 80 days later, after the index is 90 days old, ISM moves the index to the  `cold` state\. After a year, the service sends a notification to an Amazon Chime room that the index is being deleted and then permanently deletes it\. 
 

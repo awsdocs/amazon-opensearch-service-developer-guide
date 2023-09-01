@@ -16,6 +16,7 @@ OpenSearch Ingestion supports the following Data Prepper plugins:
 
 **Sources**:
 + [HTTP](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/http-source/)
++ [Kafka](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/kafka/)
 + [OTel logs](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-logs-source/)
 + [OTel metrics](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-metrics-source/)
 + [OTel trace](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-trace/)
@@ -24,6 +25,7 @@ OpenSearch Ingestion supports the following Data Prepper plugins:
 **Processors**:
 + [Aggregate](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/aggregate/)
 + [Anomaly detector](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/anomaly-detector/)
++ [CIDR](https://opensearch.org/docs/latest/data-prepper/pipelines/expression-syntax/#cidrcontains)
 + [CSV](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/csv/)
 + [Date](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/date/)
 + [Drop events](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/drop-events/)
@@ -31,15 +33,24 @@ OpenSearch Ingestion supports the following Data Prepper plugins:
 + [Key value](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/key-value/)
 + [Mutate event](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/mutate-event/)
 + [Mutate string](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/mutate-string/)
++ [Obfuscate](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/obfuscate/)
 + [OTel metrics](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-metrics/)
 + [OTel trace group](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-group/)
 + [OTel trace](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-raw/)
 + [Parse JSON](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/parse-json/)
 + [Service\-map](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/service-map-stateful/)
 + [Trace peer forwarder](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/trace-peer-forwarder/)
++ [User agent](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/user-agent/)
 
 **Sinks**:
-+ [OpenSearch](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/opensearch/) \(supports OpenSearch Service and OpenSearch Serverless\)
++ [OpenSearch](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/opensearch/) \(supports OpenSearch Service, OpenSearch Serverless, and Elasticsearch 6\.8 or later\)
++ [S3](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/s3/)
+
+**Sink codecs**:
++ [Avro](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/s3/#avro-codec)
++ [NDJSON](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/s3/#ndjson-codec)
++ [JSON](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/s3/#json-codec)
++ [Parquet](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/s3/#parquet-codec)
 
 ## Stateless versus stateful processors<a name="processor-stateful-stateless"></a>
 

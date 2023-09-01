@@ -408,6 +408,12 @@ Alpine Linux limits DNS response size to 512 bytes\. If you try to connect to yo
 
 If your domain is in a VPC, we recommend using other Linux distributions, such as Debian, Ubuntu, CentOS, Red Hat Enterprise Linux, or Amazon Linux 2, to connect to it\.
 
+## Too many requests for Search Backpressure<a name="troubleshooting-search-backpressure"></a>
+
+CPU\-based admission control is a gatekeeping mechanism that proactively limits the number of requests to a node based on its current capacity, both for organic increases and spikes in traffic\. Excessive requests return an HTTP 429 “Too Many Requests” status code upon rejection\. This errors indicates either insufficient cluster resources, resource\-intensive search requests, or an unintended spike in the workload\.
+
+Search Backpressure provides the reason for rejection, which can help fine\-tune resource\-intensive search requests\. For traffic spikes, we recommend client\-side retries with exponential backoff and jitter\.
+
 ## Certificate error when using SDK<a name="troubleshooting-certificates"></a>
 
 Because AWS SDKs use the CA certificates from your computer, changes to the certificates on the AWS servers can cause connection failures when you attempt to use an SDK\. Error messages vary, but typically contain the following text:

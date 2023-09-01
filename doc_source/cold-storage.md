@@ -13,12 +13,12 @@ Similar to [UltraWarm](ultrawarm.md) storage, cold storage is backed by Amazon S
 + [Migrating indexes to cold storage](#coldstorage-migrating)
 + [Automating migrations to cold storage](#coldstorage-ism)
 + [Canceling migrations to cold storage](#coldstorage-cancel)
-+ [Listing cold indices](#coldstorage-list)
++ [Listing cold indexes](#coldstorage-list)
 + [Migrating cold indexes to warm storage](#coldstorage-migrating-back)
 + [Restoring cold indexes from snapshots](#cold-snapshot)
 + [Canceling migrations from cold to warm storage](#coldtowarm-cancel)
 + [Updating cold index metadata](#cold-update-metadata)
-+ [Deleting cold indices](#cold-delete)
++ [Deleting cold indexes](#cold-delete)
 + [Disabling cold storage](#coldstorage-disable)
 
 ## Prerequisites<a name="coldstorage-pp"></a>
@@ -29,14 +29,14 @@ Cold storage has the following prerequisites:
 + To use cold storage, domains must have [dedicated master nodes](managedomains-dedicatedmasternodes.md)\.
 + If your domain uses a T2 or T3 instance type for your data nodes, you can't use cold storage\.
 + If your index uses [approximate k\-NN](https://opensearch.org/docs/latest/search-plugins/knn/approximate-knn/) \(`"index.knn": true`\), you can't move it to cold storage\.
-+ If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be [mapped](fgac.md#fgac-mapping) to the `cold_manager` role in OpenSearch Dashboards in order to manage cold indices\.
++ If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be [mapped](fgac.md#fgac-mapping) to the `cold_manager` role in OpenSearch Dashboards in order to manage cold indexes\.
 
 **Note**  
 The `cold_manager` role might not exist on some preexisting OpenSearch Service domains\. If you don't see the role in Dashboards, you need to [manually create it](#coldstorage-create-role)\.
 
 ### Configure permissions<a name="coldstorage-create-role"></a>
 
-If you enable cold storage on a preexisting OpenSearch Service domain, the `cold_manager` role might not be defined on the domain\. If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be mapped to this role in order to manage cold indices\. To manually create the `cold_manager` role, perform the following steps:
+If you enable cold storage on a preexisting OpenSearch Service domain, the `cold_manager` role might not be defined on the domain\. If the domain uses [fine\-grained access control](fgac.md), non\-admin users must be mapped to this role in order to manage cold indexes\. To manually create the `cold_manager` role, perform the following steps:
 
 1. In OpenSearch Dashboards, go to **Security** and choose **Permissions**\.
 
@@ -55,7 +55,7 @@ If you enable cold storage on a preexisting OpenSearch Service domain, the `cold
 
 1. Choose **Create**\.
 
-1. After you create the role, [map it](fgac.md#fgac-mapping) to any user or backend role that manages cold indices\.
+1. After you create the role, [map it](fgac.md#fgac-mapping) to any user or backend role that manages cold indexes\.
 
 ## Cold storage requirements and performance considerations<a name="coldstorage-calc"></a>
 
@@ -218,9 +218,9 @@ POST _ultrawarm/migration/_cancel/my-index
 
 If your domain uses fine\-grained access control, you need the `indices:admin/ultrawarm/migration/cancel` permission to make this request\.
 
-## Listing cold indices<a name="coldstorage-list"></a>
+## Listing cold indexes<a name="coldstorage-list"></a>
 
-Before querying, you can list the indexes in cold storage to decide which ones to migrate to UltraWarm for further analysis\. The following request lists all cold indices, sorted by index name:
+Before querying, you can list the indexes in cold storage to decide which ones to migrate to UltraWarm for further analysis\. The following request lists all cold indexes, sorted by index name:
 
 ```
 GET _cold/indices/_search
@@ -378,7 +378,7 @@ Other valid sort keys are `start_time:asc/desc`, `end_time:asc/desc`, and `index
 
 ### Pagination<a name="coldstorage-pagination"></a>
 
-You can paginate a list of cold indices\. Configure the number of indexes to be returned per page with the `page_size` parameter \(default is 10\)\. Every `_search` request on your cold indexes returns a `pagination_id` which you can use for subsequent calls\.
+You can paginate a list of cold indexes\. Configure the number of indexes to be returned per page with the `page_size` parameter \(default is 10\)\. Every `_search` request on your cold indexes returns a `pagination_id` which you can use for subsequent calls\.
 
 The following request paginates the results of a `_search` request of your cold indexes and displays the next 100 results:
 
@@ -458,7 +458,7 @@ FAILED_INDEX_CREATION - Failed to create an index in the warm tier.
 
 ## Restoring cold indexes from snapshots<a name="cold-snapshot"></a>
 
-Contact [AWS Support](https://console.aws.amazon.com/support/home) if you need to restore cold indexes from an automated snapshot, including in situations where an entire domain was accidentally deleted\. OpenSearch Service retains cold indexes for 14 days after they've been deleted\.
+If you need to restore a deleted cold index, you can restore it back to the warm tier by following the instructions in [Restoring warm indexes from snapshots](ultrawarm.md#ultrawarm-snapshot) and then migrating the index back to cold tier again\. You can't restore a deleted cold index directly back to the cold tier\. OpenSearch Service retains cold indexes for 14 days after they've been deleted\.
 
 ## Canceling migrations from cold to warm storage<a name="coldtowarm-cancel"></a>
 
@@ -501,7 +501,7 @@ You can't update the `timestamp_field` of an index in cold storage\.
 **Note**  
 OpenSearch Dashboards doesn't support the PATCH method\. Use [curl](https://curl.haxx.se/), [Postman](https://www.getpostman.com/), or some other method to update cold metadata\.
 
-## Deleting cold indices<a name="cold-delete"></a>
+## Deleting cold indexes<a name="cold-delete"></a>
 
 If you're not using an ISM policy you can delete cold indexes manually\. The following request deletes a cold index:
 

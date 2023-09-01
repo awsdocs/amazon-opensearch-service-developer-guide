@@ -4,7 +4,6 @@ This chapter contains common sample code for working with Amazon OpenSearch Serv
 
 **Topics**
 + [Elasticsearch client compatibility](#client-compatibility)
-+ [Signing HTTP requests to Amazon OpenSearch Service](request-signing.md)
 + [Compressing HTTP requests in Amazon OpenSearch Service](gzip.md)
 + [Using the AWS SDKs to interact with Amazon OpenSearch Service](configuration-samples.md)
 

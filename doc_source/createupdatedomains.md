@@ -53,7 +53,7 @@ Not all Availability Zones support all instance types\. If you choose Multi\-AZ 
 1. For **EBS** storage, configure the following additional settings\. Some settings might not appear depending on the type of volume you choose\.    
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/createupdatedomains.html)
 
-1. \(Optional\) If you selected a `gp3` volume type, expand **Advanced settings** and specify additional IOPS \(up to 1,000 MiB/s\) and throughput \(up to 16,000\) to provision for each node, beyond what is included with the price of storage, for an additional cost\. For more information, see the [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/)\.
+1. \(Optional\) If you selected a `gp3` volume type, expand **Advanced settings** and specify additional IOPS \(up to 1,000 MiB/s for every 3 TiB volume size provisioned per data node\) and throughput \(up to 16,000 for every 3 TiB volume size provisioned per data node\) to provision for each node, beyond what is included with the price of storage, for an additional cost\. For more information, see the [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/)\.
 
 1. \(Optional\) To enable [UltraWarm storage](ultrawarm.md), choose **Enable UltraWarm data nodes**\. Each instance type has a [maximum amount of storage](limits.md#limits-ultrawarm) that it can address\. Multiply that amount by the number of warm data nodes for the total addressable warm storage\.
 

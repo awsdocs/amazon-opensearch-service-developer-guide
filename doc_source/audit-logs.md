@@ -113,7 +113,7 @@ For more information, see the [Amazon OpenSearch Service API reference](https://
 ## Audit log layers and categories<a name="audit-log-layers"></a>
 
 Cluster communication occurs over two separate *layers*: the REST layer and the transport layer\.
-+ The REST layer covers communication with HTTP clients such as curl, Logstash, OpenSearch Dashboards, the [Java high\-level REST client](request-signing.md#request-signing-java), the Python [Requests](https://2.python-requests.org/) library—all HTTP requests that arrive at the cluster\.
++ The REST layer covers communication with HTTP clients such as curl, Logstash, OpenSearch Dashboards, the Java high\-level REST client, the Python [Requests](https://2.python-requests.org/) library—all HTTP requests that arrive at the cluster\.
 + The transport layer covers communication between nodes\. For example, after a search request arrives at the cluster \(over the REST layer\), the coordinating node serving the request sends the query to other nodes, receives their responses, gathers the necessary documents, and collates them into the final response\. Operations such as shard allocation and rebalancing also occur over the transport layer\.
 
 You can enable or disable audit logs for entire layers, as well as individual audit categories for a layer\. The following table contains a summary of audit categories and the layers for which they are available\.

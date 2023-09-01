@@ -12,7 +12,7 @@ The following are *not* encrypted when you enable encryption of data at rest, bu
 + Slow logs and error logs: If you [publish logs](createdomain-configure-slow-logs.md) and want to encrypt them, you can encrypt their CloudWatch Logs log group using the same AWS KMS key as the OpenSearch Service domain\. For more information, see [Encrypt log data in CloudWatch Logs using AWS KMS](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html) in the *Amazon CloudWatch Logs User Guide*\.
 
 **Note**  
-You can't enable encryption at rest on an existing domain if UltraWarm is enabled on the domain\. You must first disable UltraWarm storage, enable encryption at rest, and then re\-enable UltraWarm\.
+You can't enable encryption at rest on an existing domain if UltraWarm or cold storage is enabled on the domain\. You must first disable UltraWarm or cold storage, enable encryption at rest, and then re\-enable UltraWarm or cold storage\. If you want to retain indexes in UltraWarm or cold storage, you must move them to hot storage before disabling UltraWarm or cold storage\.
 
 OpenSearch Service supports only symmetric encryption KMS keys, not asymmetric ones\. To learn how to create symmetric keys, see [Creating keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\.
 

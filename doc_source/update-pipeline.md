@@ -82,7 +82,7 @@ aws osis update-pipeline \
 
 ### OpenSearch Ingestion API<a name="update-pipeline-api"></a>
 
-To update an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [UpdatePipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_UpdatePipeline.html) operation\.
+To update an OpenSearch Ingestion pipeline using the OpenSearch Ingestion API, call the [UpdatePipeline](https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_osis_UpdatePipeline.html) operation\.
 
 ## Blue/green deployments for pipeline updates<a name="pipeline-bg"></a>
 

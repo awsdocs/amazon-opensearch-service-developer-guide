@@ -11,7 +11,7 @@ We're currently building out these code samples\. If you want to contribute a co
 
 ## Python<a name="serverless-sdk-python"></a>
 
-The following sample script uses the [AWS SDK for Python \(Boto3\)](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/opensearchserverless.html#id31), as well as the [opensearch\-py](https://pypi.org/project/opensearch-py/) client for Python, to create encryption, network, and data access policies, create a matching collection, and index some sample data\.
+The following sample script uses the [AWS SDK for Python \(Boto3\)](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/opensearchserverless.html), as well as the [opensearch\-py](https://pypi.org/project/opensearch-py/) client for Python, to create encryption, network, and data access policies, create a matching collection, and index some sample data\.
 
 To install the required dependencies, run the following commands:
 

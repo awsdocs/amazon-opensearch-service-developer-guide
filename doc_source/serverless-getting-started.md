@@ -1,16 +1,18 @@
 # Getting started with Amazon OpenSearch Serverless<a name="serverless-getting-started"></a>
 
-This tutorial walks you through the basic steps to get an Amazon OpenSearch Serverless collection up and running quickly\. For more detailed information, see [Creating, listing, and deleting Amazon OpenSearch Serverless collections](serverless-manage.md) and the other topics within this guide\.
+This tutorial walks you through the basic steps to get an Amazon OpenSearch Serverless *search* collection up and running quickly\. A search collection allows you to power applications in your internal networks and internet\-facing applications, such as ecommerce website search and content search\. 
+
+To learn how to use a *vector search* collection, see [Working with vector search collections](serverless-vector-search.md)\. For more detailed information about using collections, see [Creating, listing, and deleting Amazon OpenSearch Serverless collections](serverless-manage.md) and the other topics within this guide\.
 
 You'll complete the following steps in this tutorial:
 
-1. [Configure permissions](#serverless-gsg-permissions)
+1. [Configure permissions](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-getting-started-search.html#serverless-gsg-permissions)
 
-1. [Create a collection](#serverless-gsg-create)
+1. [Create a collection](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-getting-started-search.html#serverless-gsg-create)
 
-1. [Upload and search data](#serverless-gsg-index)
+1. [Upload and search data](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-getting-started-search.html#serverless-gsg-index)
 
-1. [Delete the collection](#serverless-gsg-delete)
+1. [Delete the collection](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-getting-started-search.html#serverless-gsg-delete)
 
 ## Step 1: Configure permissions<a name="serverless-gsg-permissions"></a>
 

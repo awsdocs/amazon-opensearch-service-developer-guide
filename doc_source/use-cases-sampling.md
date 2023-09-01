@@ -62,7 +62,7 @@ The following example pipeline sends all OpenTelemetry traces with an error cond
           tail_sampler:                                                                                                                                   
             percent: 20                                                                                                                                   
             wait_period: "10s"                                                                                                                            
-            error_condition: "/status == 2"                                                                                                              
+            condition: "/status == 2"                                                                                                              
           
 ...
 ```

@@ -17,7 +17,7 @@ In OpenSearch, warm indexes behave just like any other index\. You can query the
 + [Cancelling migrations](#ultrawarm-cancel)
 + [Listing hot and warm indexes](#ultrawarm-api)
 + [Returning warm indexes to hot storage](#ultrawarm-migrating-back)
-+ [Restoring warm indexes from automated snapshots](#ultrawarm-snapshot)
++ [Restoring warm indexes from snapshots](#ultrawarm-snapshot)
 + [Manual snapshots of warm indexes](#ultrawarm-manual-snapshot)
 + [Migrating warm indexes to cold storage](#ultrawarm-cold)
 + [Disabling UltraWarm](#ultrawarm-disable)
@@ -264,15 +264,17 @@ Indexes in warm storage are read\-only unless you [return them to hot storage](#
 
 ```
 {
-  "error": {
-    "root_cause": [{
-      "type": "cluster_block_exception",
-      "reason": "blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];"
-    }],
-    "type": "cluster_block_exception",
-    "reason": "blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];"
+  "error" : {
+    "root_cause" : [
+      {
+        "type" : "cluster_block_exception",
+        "reason" : "index [indexname] blocked by: [TOO_MANY_REQUESTS/12/disk usage exceeded flood-stage watermark, index has read-only-allow-delete block];"
+      }
+    ],
+    "type" : "cluster_block_exception",
+    "reason" : "index [indexname] blocked by: [TOO_MANY_REQUESTS/12/disk usage exceeded flood-stage watermark, index has read-only-allow-delete block];"
   },
-  "status": 403
+  "status" : 429
 }
 ```
 
@@ -341,7 +343,7 @@ You can have up to 10 simultaneous migrations from warm to hot storage\. To chec
 
 After the migration finishes, check the index settings to make sure they meet your needs\. Indexes return to hot storage with one replica\.
 
-## Restoring warm indexes from automated snapshots<a name="ultrawarm-snapshot"></a>
+## Restoring warm indexes from snapshots<a name="ultrawarm-snapshot"></a>
 
 In addition to the standard repository for automated snapshots, UltraWarm adds a second repository for warm indexes, `cs-ultrawarm`\. Each snapshot in this repository contains only one index\. If you delete a warm index, its snapshot remains in the `cs-ultrawarm` repository for 14 days, just like any other automated snapshot\.
 

@@ -9,6 +9,7 @@ Use the following table to find the version of the SQL plugin that's supported b
 
 | OpenSearch version | SQL plugin version | Notable features | 
 | --- | --- | --- | 
+| 2\.7\.0 | [2\.7\.0\.0](https://github.com/opensearch-project/sql/releases/tag/2.7.0.0) |  Add datasource API  | 
 | 2\.5\.0 | [2\.5\.0\.0](https://github.com/opensearch-project/sql/releases/tag/2.5.0.0) |    | 
 | 2\.3\.0 | [2\.3\.0\.0](https://github.com/opensearch-project/sql/releases/tag/2.3.0.0) |  Add `maketime` and `makedate` datetime functions  | 
 | 1\.3\.0 | [1\.3\.0\.0](https://github.com/opensearch-project/sql/releases/tag/1.3.0.0) |  Support default query limit size, and IN clause to select from within a value list  | 
@@ -91,6 +92,7 @@ The following tables summarize version compatibility for the driver\.
 
 | OpenSearch version | JDBC driver version | 
 | --- | --- | 
+| 2\.7 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 2\.5 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 2\.3 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 
 | 1\.3 | [1\.1\.0\.1](https://artifacts.opensearch.org/opensearch-clients/jdbc/opensearch-sql-jdbc-1.1.0.1.jar) | 

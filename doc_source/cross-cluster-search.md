@@ -65,7 +65,9 @@ The source domain creates an "outbound" connection to the destination domain\. T
    + To connect to a cluster in your AWS account and Region, select the domain from the dropdown menu and choose **Request**\.
    + To connect to a cluster in another AWS account or Region, select the ARN of the remote domain and choose **Request**\. To connect domains across Regions, both domains must be running Elasticsearch version 7\.10 or later or OpenSearch\.
 
-1. Cross\-cluster connection request first validates the connection request to make sure the prerequisites are met\. If the domains are found to be incompatible, the connection request enters the `Validation failed` state\.
+1. To skip unavailable clusters for cluster queries, select **Skip unavailable**\. This setting ensures that your cross\-cluster queries return partial results despite failures on one or more remote clusters\.
+
+1. Cross\-cluster search first validates the connection request to make sure the prerequisites are met\. If the domains are found to be incompatible, the connection request enters the `Validation failed` state\.
 
 1. After the connection request is validated successfully, it is sent to the destination domain, where it needs to be approved\. Until this approval happens, the connection remains in a `Pending acceptance` state\. When the connection request is accepted at the destination domain, the state changes to `Active` and the destination domain becomes available for queries\.
    + The domain page shows you the overall domain health and instance health details of your destination domain\. Only domain owners have the flexibility to create, view, remove, and monitor connections to or from their domains\.
@@ -302,7 +304,7 @@ All cross\-cluster search requests between domains are encrypted in transit by d
      }
      ```
 
-     All destination clusters that you search need to be available for your search request to run successfully\. Otherwise, the whole request fails—even if one of the domains is not available, no search results are returned\.
+     If you did not choose to skip unavailable clusters in your connection setup, all destination clusters that you search must be available for your search request to run successfully\. Otherwise, the whole request fails—even if one of the domains is not available, no search results are returned\.
 
 ## OpenSearch Dashboards<a name="cross-cluster-search-dashboards"></a>
 

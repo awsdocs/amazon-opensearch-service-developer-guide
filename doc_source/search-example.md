@@ -11,7 +11,7 @@ Standard API Gateway and Lambda pricing applies, but within the limited usage of
 
 ## Prerequisites<a name="search-example-prereq"></a>
 
-A prerequisite for this tutorial is an OpenSearch Service domain\. If you don't already have one, follow the steps in [Create an OpenSearch Service domain](gsgcreate-domain.md) to create one\.
+A prerequisite for this tutorial is an OpenSearch Service domain\. If you don't already have one, follow the steps in [Create an OpenSearch Service domain](gsg.md#gsgcreate-domain) to create one\.
 
 ## Step 1: Index sample data<a name="search-example-index"></a>
 
@@ -26,7 +26,7 @@ POST https://search-my-domain.us-west-1.es.amazonaws.com/_bulk
 ...
 ```
 
-Note that the above is an example command with a small subset of the available data\. To perform the `_bulk` operation, you need to copy and paste the entire contents of the `sample-movies` file\. For futher instructions, see [Option 2: Upload multiple documents](gsgupload-data.md#gsgmultiple-document)\.
+Note that the above is an example command with a small subset of the available data\. To perform the `_bulk` operation, you need to copy and paste the entire contents of the `sample-movies` file\. For futher instructions, see [Option 2: Upload multiple documents](gsg.md#gsgmultiple-document)\.
 
 You can also use the following curl command to achieve the same result: 
 
