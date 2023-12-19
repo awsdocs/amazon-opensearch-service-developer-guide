@@ -9,15 +9,17 @@ The [Otel trace source](https://opensearch.org/docs/latest/data-prepper/pipeline
 ## Processors<a name="use-cases-trace-analytics-processors"></a>
 
 You can use the following processors for Trace Analytics:
-+ [OTel trace](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-raw/) – Receives a collection of span records from the source and performs stateful processing, extraction, and completion of fields\.
-+ [OTel trace group](https://github.com/opensearch-project/data-prepper/tree/main/data-prepper-plugins/otel-trace-group-processor) – Fills in missing trace group fields in the collection of span records\.
-+ [Service\-map](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/service-map-stateful/) – Performs preprocessing for trace data and builds metadata to display service\-map dashboards\.
+
+- [OTel trace](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/otel-trace-raw/) – Receives a collection of span records from the source and performs stateful processing, extraction, and completion of fields\.
+- [OTel trace group](https://github.com/opensearch-project/data-prepper/tree/main/data-prepper-plugins/otel-trace-group-processor) – Fills in missing trace group fields in the collection of span records\.
+- [Service\-map](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/service-map-stateful/) – Performs preprocessing for trace data and builds metadata to display service\-map dashboards\.
 
 ## OpenSearch sink<a name="use-cases-trace-analytics-sink"></a>
 
 The [OpenSearch sink](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sinks/opensearch/) plugin provides indexes and index templates that are specific to Trace Analytics\. The following OpenSearch indexes are specific to Trace Analytics:
-+ `otel-v1-apm-span` – Stores the output from the OTel trace processor\.
-+ `otel-v1-apm-service-map` – Stores the output from the Service\-map processor\.
+
+- `otel-v1-apm-span` – Stores the output from the OTel trace processor\.
+- `otel-v1-apm-service-map` – Stores the output from the Service\-map processor\.
 
 ## Pipeline configuration<a name="use-cases-trace-analytics-config"></a>
 
@@ -31,8 +33,8 @@ entry-pipeline:
   source:
     otel_trace_source:
       # Provide the path for ingestion. This will be the endpoint URI path in the OpenTelemetry Exporter configuration.
-      # ${pipelineName} will be replaced with the sub-pipeline name. In this case it would be "/entry-pipeline/v1/traces". 
-      path: "/${pipelineName}/v1/traces"
+      # ${pipelineName} will be replaced with the sub-pipeline name. In this case it would be "/entry-pipeline/ingest".
+      path: "/${pipelineName}/ingest"
   processor:
     - trace_peer_forwarder
   sink:

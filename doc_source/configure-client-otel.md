@@ -3,27 +3,28 @@
 This sample [OpenTelemetry configuration file](https://opentelemetry.io/docs/collector/configuration/) exports trace data from the OpenTelemetry Collector and sends it to an OpenSearch Ingestion pipeline\. For more information about ingesting trace data, see [Trace Analytics](https://github.com/opensearch-project/data-prepper/blob/main/docs/trace_analytics.md) in the Data Prepper documentation\.
 
 Note the following:
-+ The `endpoint` value must include your pipeline endpoint\. For example, `https://pipeline-endpoint.us-east-1.osis.amazonaws.com`\.
-+ The `service` value must be `osis`\.
+
+- The `endpoint` value must include your pipeline endpoint\. For example, `https://pipeline-endpoint.us-east-1.osis.amazonaws.com`\.
+- The `service` value must be `osis`\.
 
 ```
 extensions:
   sigv4auth:
     region: "us-east-1"
     service: "osis"
- 
+
 receivers:
   jaeger:
     protocols:
       grpc:
- 
+
 exporters:
   otlphttp:
-    traces_endpoint: "https://pipeline-endpoint.us-east-1.osis.amazonaws.com/v1/traces"
+    traces_endpoint: "https://pipeline-endpoint.us-east-1.osis.amazonaws.com/opentelemetry.proto.collector.trace.v1.TraceService/Export"
     auth:
       authenticator: sigv4auth
     compression: none
- 
+
 service:
   extensions: [sigv4auth]
   pipelines:
@@ -39,7 +40,7 @@ version: "2"
 otel-trace-pipeline:
   source:
     otel_trace_source:
-      path: "/v1/traces"
+      "/${pipelineName}/ingest"
   processor:
     - trace_peer_forwarder:
   sink:
@@ -58,10 +59,10 @@ trace-pipeline:
         hosts: ["https://search-domain-endpoint.us-east-1.es.amazonaws.com"]
         index_type: trace-analytics-raw
         aws:
-          # IAM role that OpenSearch Ingestion assumes to access the domain sink   
+          # IAM role that OpenSearch Ingestion assumes to access the domain sink
           sts_role_arn: "arn:aws:iam::{account-id}:role/pipeline-role"
           region: "us-east-1"
-        
+
 service-map-pipeline:
   source:
     pipeline:
@@ -73,7 +74,7 @@ service-map-pipeline:
         hosts: ["https://search-domain-endpoint.us-east-1.es.amazonaws.com"]
         index_type: trace-analytics-service-map
         aws:
-          # IAM role that the pipeline assumes to access the domain sink   
+          # IAM role that the pipeline assumes to access the domain sink
           sts_role_arn: "arn:aws:iam::{account-id}:role/pipeline-role"
           region: "us-east-1"
 ```

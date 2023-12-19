@@ -1,15 +1,16 @@
 # Anomaly detection with Amazon OpenSearch Ingestion<a name="use-cases-anomaly-detection"></a>
 
-You can use Amazon OpenSearch Ingestion to train models and generate anomalies in near real\-time on timeseries aggregated events\. You can generate anomalies either on events generated within the pipeline, or on events coming directly into the pipeline, like OpenTelemetry metrics\. 
+You can use Amazon OpenSearch Ingestion to train models and generate anomalies in near real\-time on timeseries aggregated events\. You can generate anomalies either on events generated within the pipeline, or on events coming directly into the pipeline, like OpenTelemetry metrics\.
 
 You can feed these tumbling window aggregated timeseries events to the [Anomaly detector](https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/processors/anomaly-detector/) processor, which trains a model and generate anomalies with a grade score\. Then, write the anomalies to a separate index to create document monitors and trigger fast alerting\.
 
 In addition to these examples, you can also use the **Log to metric anomaly pipeline** and **Trace to metric anomaly pipeline** blueprints\. For more information about blueprints, see [Using blueprints to create a pipeline](creating-pipeline.md#pipeline-blueprint)\.
 
 **Topics**
-+ [Metrics from logs](#use-cases-anomaly-detection-metrics-logs)
-+ [Metrics from traces](#use-cases-anomaly-detection-metrics-traces)
-+ [OpenTelemetry metrics](#use-cases-anomaly-detection-otel)
+
+- [Metrics from logs](#use-cases-anomaly-detection-metrics-logs)
+- [Metrics from traces](#use-cases-anomaly-detection-metrics-traces)
+- [OpenTelemetry metrics](#use-cases-anomaly-detection-otel)
 
 ## Metrics from logs<a name="use-cases-anomaly-detection-metrics-logs"></a>
 
@@ -81,9 +82,10 @@ log-to-metrics-anomaly-detector-pipeline:
 ## Metrics from traces<a name="use-cases-anomaly-detection-metrics-traces"></a>
 
 You can derive metrics from traces and find anomalies in these generated metrics\. In this example, the `entry-pipeline` sub\-pipeline receives trace data from the OpenTelemetry Collector and forwards it to the following sub\-pipelines:
-+ `span-pipeline` – Extracts the raw spans from the traces\. It sends the raw spans to any indexes OpenSearch prefixed with `otel-v1-apm-span`\.
-+ `service-map-pipeline` – Aggregates and analyzes it to create documents that represent connections between services\. It sends these documents to an OpenSearch index named `otel-v1-apm-service-map`\. You can then see a visualization of the service map through the Trace Analytics plugin for OpenSearch Dashboards\.
-+ `trace-to-metrics-pipeline` \-–Aggregates and derives histogram metrics from the traces based on the value of the `serviceName`\. It then sends the derived metrics to an OpenSearch index named `metrics_for_traces`, as well as to the `trace-to-metrics-anomaly-detector-pipeline` sub\-pipeline\.
+
+- `span-pipeline` – Extracts the raw spans from the traces\. It sends the raw spans to any indexes OpenSearch prefixed with `otel-v1-apm-span`\.
+- `service-map-pipeline` – Aggregates and analyzes it to create documents that represent connections between services\. It sends these documents to an OpenSearch index named `otel-v1-apm-service-map`\. You can then see a visualization of the service map through the Trace Analytics plugin for OpenSearch Dashboards\.
+- `trace-to-metrics-pipeline` \-–Aggregates and derives histogram metrics from the traces based on the value of the `serviceName`\. It then sends the derived metrics to an OpenSearch index named `metrics_for_traces`, as well as to the `trace-to-metrics-anomaly-detector-pipeline` sub\-pipeline\.
 
 The `trace-to-metrics-anomaly-detector-pipeline` sub\-pipeline receives the aggregated histogram metrics from the `trace-to-metrics-pipeline` and sends them to the Anomaly detector processor to detect anomalies using the Random Cut Forest algorithm\. If it detects any anomalies, it sends them to an OpenSearch index named `trace-metric-anomalies`\.
 
@@ -93,9 +95,9 @@ entry-pipeline:
   source:
     otel_trace_source:
       # Provide the path for ingestion. ${pipelineName} will be replaced with pipeline name configured for this pipeline.
-      # In this case it would be "/entry-pipeline/v1/traces". This will be endpoint URI path in OpenTelemetry Exporter 
+      # In this case it would be "/entry-pipeline/ingest". This will be endpoint URI path in OpenTelemetry Exporter
       # configuration.
-      # path: "/${pipelineName}/v1/traces"
+      # path: "/${pipelineName}/ingest"
   processor:
     - trace_peer_forwarder:
   sink:
