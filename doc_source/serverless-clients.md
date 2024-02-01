@@ -238,6 +238,10 @@ The following sample code uses the [opensearch\-java](https://search.maven.org/a
 The important difference compared to OpenSearch Service *domains* is the service name \(`aoss` instead of `es`\)\.
 
 ```
+// import OpenSearchClient to establish connection to OpenSearch Serverless collection
+import org.opensearch.client.opensearch.OpenSearchClient;
+
+
 SdkHttpClient httpClient = ApacheHttpClient.builder().build();
 
 // create an opensearch client and use the request-signer
@@ -259,7 +263,7 @@ CreateIndexResponse createIndexResponse = client.indices().create(createIndexReq
 System.out.println("Create index reponse: " + createIndexResponse);
 
 // delete the index
-DeleteIndexRequest deleteIndexRequest = new DeleteRequest.Builder().index(index).build();
+DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest.Builder().index(index).build();
 DeleteIndexResponse deleteIndexResponse = client.indices().delete(deleteIndexRequest);
 System.out.println("Delete index reponse: " + deleteIndexResponse);
 
