@@ -1,9 +1,5 @@
-# Amazon OpenSearch Service Developer Guide
+# Notice
 
-Content for the [Amazon OpenSearch Service Developer Guide](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/). Issues and pull requests appreciated.
+This repository is archived, read-only, and no longer updated. For more information, see [Retiring the AWS Documentation on GitHub](https://aws.amazon.com/blogs/aws/retiring-the-aws-documentation-on-github/).
 
-# License Summary
-
-The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License. See the LICENSE file.
-
-The sample code within this documentation is made available under a modified MIT license. See the LICENSE-SAMPLECODE file.
+You can find up-to-date AWS technical documentation on the [AWS documentation website](https://docs.aws.amazon.com/), where you can also submit feedback and suggestions for improvement.
