@@ -99,6 +99,10 @@ Because the remote reindex operation is performed from the remote OpenSearch Ser
 
 If your local domain uses OpenSearch version 1\.0 or later, you can use the console or the AWS CLI to create an AWS PrivateLink connection\. An AWS PrivateLink connection allows resources in the local VPC to privately connect to resources in the remote VPC within the same AWS Region\.
 
+**Prerequisites for creating VPC endpoint connection**
+- Source domain from the data is to be reindexed must be in a local VPC.
+- Source and destination domain must be in same AWS region.
+
 ### Reindex data with the AWS Management Console<a name="reindex-console"></a>
 
 You can use remote reindex with the console to copy indexes between two domains that share a VPC endpoint connection\.
