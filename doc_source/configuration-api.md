@@ -792,8 +792,8 @@ GET https://es.us-east-1.amazonaws.com/2021-01-01/opensearch/instanceTypeLimits/
 
 | Parameter | Data type | Required? | Description | 
 | --- | --- | --- | --- | 
-| EngineVersion | String | Yes | Version of OpenSearch or Elasticsearch, in the format Elasticsearch\_X\.Y or OpenSearch\_X\.Y\. Defaults to the latest version of OpenSearch\. For a full list of supported versions, see [Supported versions of OpenSearch and Elasticsearch](what-is.md#choosing-version)\. version\. For a list of supported versions, see [Supported versions of OpenSearch and Elasticsearch](what-is.md#choosing-version)\. | 
-| InstanceType | String | Yes | Instance type\. To view instance types by Region, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. | 
+| EngineVersion | String | Yes | Version of OpenSearch or Elasticsearch, in the format Elasticsearch\_X\.Y or OpenSearch\_X\.Y\. Defaults to the latest version of OpenSearch\. For a full list of supported versions, see [Supported versions of OpenSearch and Elasticsearch](what-is.md#choosing-version)\. | 
+| InstanceType | String | Yes | Instance type\. To view instance types by Region, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/)\. | 
 | DomainName | [DomainName](#configuration-api-datatypes-domainname) | No | The name of an existing domain\. Only specify if you need the limits for an existing domain\. | 
 
 

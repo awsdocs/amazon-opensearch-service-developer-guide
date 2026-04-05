@@ -9,7 +9,7 @@ OpenSearch Service RIs require one\- or three\-year terms and have three payment
 
 Generally speaking, a larger upfront payment means a larger discount\. You can't cancel Reserved Instances—when you reserve them, you commit to paying for the entire term—and upfront payments are nonrefundable\.
 
-RIs are not flexible; they only apply to the exact instance type that you reserve\. For example, a reservation for eight `c5.2xlarge.search` instances does not apply to sixteen `c5.xlarge.search` instances or four `c5.4xlarge.search` instances\. For full details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/) and [FAQ](https://aws.amazon.com/elasticsearch-service/faqs/)\.
+RIs are not flexible; they only apply to the exact instance type that you reserve\. For example, a reservation for eight `c5.2xlarge.search` instances does not apply to sixteen `c5.xlarge.search` instances or four `c5.4xlarge.search` instances\. For full details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/) and [FAQ](https://aws.amazon.com/opensearch-service/faqs/)\.
 
 **Topics**
 + [Purchasing Reserved Instances \(console\)](#ri-console)
@@ -87,7 +87,7 @@ For an explanation of each return value, see the following table\.
 | UsagePrice | A legacy field\. For OpenSearch Service, this value is always 0\. | 
 | PaymentOption | No Upfront, Partial Upfront, or All Upfront\. | 
 | Duration | Length of the term in seconds:[\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/opensearch-service/latest/developerguide/ri.html) | 
-| InstanceType | The instance type for the reservation\. For information about the hardware resources that are allocated to each instance type, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. | 
+| InstanceType | The instance type for the reservation\. For information about the hardware resources that are allocated to each instance type, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/)\. | 
 | CurrencyCode | The currency for FixedPrice and RecurringChargeAmount\. | 
 
 This next example purchases a reservation:
