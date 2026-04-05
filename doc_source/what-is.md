@@ -77,7 +77,7 @@ For OpenSearch Service, you pay for each hour of use of an EC2 instance and for 
 
 However, some notable data transfer exceptions exist\. If a domain uses [multiple Availability Zones](managedomains-multiaz.md), OpenSearch Service does not bill for traffic between the Availability Zones\. Significant data transfer occurs within a domain during shard allocation and rebalancing\. OpenSearch Service neither meters nor bills for this traffic\. Similarly, OpenSearch Service does not bill for data transfer between [UltraWarm](ultrawarm.md)/[cold](cold-storage.md) nodes and Amazon S3\.
 
-For full pricing details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for configuration changes](managedomains-configuration-changes.md#managedomains-config-charges)\.
+For full pricing details, see [Amazon OpenSearch Service pricing](https://aws.amazon.com/opensearch-service/pricing/)\. For information about charges incurred during configuration changes, see [Charges for configuration changes](managedomains-configuration-changes.md#managedomains-config-charges)\.
 
 ## Getting started with Amazon OpenSearch Service<a name="get-started"></a>
 

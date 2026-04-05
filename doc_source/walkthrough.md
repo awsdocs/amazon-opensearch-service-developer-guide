@@ -18,7 +18,7 @@ In general, performing the steps in this walkthrough should cost less than $2\. 
   To learn more, see [Amazon S3 Pricing](https://aws.amazon.com/s3/pricing/)\.
 + OpenSearch Service domain with one `t2.medium` instance and 10 GiB of EBS storage for several hours
 
-  To learn more, see [Amazon OpenSearch Service Pricing](https://aws.amazon.com/elasticsearch-service/pricing/)\.
+  To learn more, see [Amazon OpenSearch Service Pricing](https://aws.amazon.com/opensearch-service/pricing/)\.
 + Several calls to Amazon Transcribe
 
   To learn more, see [Amazon Transcribe Pricing](https://aws.amazon.com/transcribe/pricing/)\.
