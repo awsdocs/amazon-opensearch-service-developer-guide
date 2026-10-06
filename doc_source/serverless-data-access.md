@@ -226,7 +226,7 @@ If your policy only includes index permissions \(and no collection permissions\)
 
 ## Creating data access policies \(AWS CLI\)<a name="serverless-data-access-cli"></a>
 
-To create a data access policy using the OpenSearch Serverless API, use the `CreateAccessPolicy` command\. The command accepts both inline policies and \.json files\. Inline policies must be encoded as a [JSON escaped string](https://www.freeformatter.com/json-escape.html)\.
+To create a data access policy using the OpenSearch Serverless API, use the `CreateAccessPolicy` command\. The command accepts both inline policies and \.json files\. Inline policies must be encoded as a [JSON escaped string](https://jsonviewertool.com/json-escape)\. The linked tool escapes string contents without adding surrounding quotes; add the quotes required by the AWS CLI parameter\.
 
 The following request creates a data access policy:
 

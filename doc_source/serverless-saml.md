@@ -185,7 +185,7 @@ aws opensearchserverless create-security-config \
     --saml-options file://saml-auth0.json
 ```
 
-Specify `saml-options`, including the metadata XML, as a key\-value map within a \.json file\. The metadata XML must be encoded as a [JSON escaped string](https://www.freeformatter.com/json-escape.html)\.
+Specify `saml-options`, including the metadata XML, as a key\-value map within a \.json file\. The metadata XML must be encoded as a [JSON escaped string](https://jsonviewertool.com/json-escape)\. The linked tool escapes string contents without adding surrounding quotes; add the quotes required for the `metadata` value\.
 
 ```
 {
